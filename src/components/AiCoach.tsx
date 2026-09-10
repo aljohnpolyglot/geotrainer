@@ -42,12 +42,12 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
     setLoading(mode); setError('');
     try {
       let { response, value } = await requestCoach(mode, { view });
-      if (!response.ok && /Street View capture|Static API/i.test(value.error || '')) {
+      if (mode !== 'analyze360' && !response.ok && /Street View capture|Static API/i.test(value.error || '')) {
         const frame = await captureStreetViewScreen();
         ({ response, value } = await requestCoach(mode, { mimeType: 'image/jpeg', imageData: frame.split(',')[1] }));
       }
       if (!response.ok || !value.analysis) throw new Error(value.error || 'Coach returned an invalid response.');
-      setResult(value.analysis); setModel(value.model || 'Gemini'); setResultMode(mode); setGeneratedAt(value.generatedAt || Date.now()); setSaved(false);
+      setResult(value.analysis); setModel(value.model || 'Gemini'); setResultMode(mode); setGeneratedAt(value.generatedAt || Date.now()); setSaved(false); if (appMode === 'play') onClueAnalyzed?.();
     } catch (caught) {
       if (caught instanceof Error && caught.name !== 'AbortError') setError(caught.message);
     } finally {
@@ -55,15 +55,15 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
     }
   };
 
-  const modes: CoachMode[] = appMode === 'play' ? [] : revealed ? ['explain', 'cards'] : ['hints', 'analyze'];
-  const labels: Record<CoachMode, string> = { hints: 'Hints', analyze: 'Analyze', explain: 'Explain', cards: 'Generate Cards', clue: 'Clue', 'clue-safe': 'Clue' };
-  const loadingLabels: Record<CoachMode, string> = { hints: 'Finding hints…', analyze: 'Analyzing…', explain: 'Explaining…', cards: 'Generating cards…', clue: 'Analyzing clue…', 'clue-safe': 'Analyzing clue…' };
+  const modes: CoachMode[] = appMode === 'play' ? ['analyze360'] : revealed ? ['explain', 'cards'] : ['hints', 'analyze', 'analyze360'];
+  const labels: Record<CoachMode, string> = { hints: 'Hints', analyze: 'Analyze', analyze360: 'Analyze 360°', explain: 'Explain', cards: 'Generate Cards', clue: 'Clue', 'clue-safe': 'Clue' };
+  const loadingLabels: Record<CoachMode, string> = { hints: 'Finding hints…', analyze: 'Analyzing…', analyze360: 'Analyzing 360°…', explain: 'Explaining…', cards: 'Generating cards…', clue: 'Analyzing clue…', 'clue-safe': 'Analyzing clue…' };
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
 
   return <div className={`ai-coach ${open ? 'open' : ''}`}>
     {!open ? <button className="coach-launch" onClick={() => setOpen(true)}><Sparkles size={15} /> Coach</button> : <aside aria-label="AI Coach">
       <header><span><Sparkles size={15} /> AI Coach</span><button onClick={() => { controller.current?.abort(); setOpen(false); }} aria-label="Close Coach"><X size={16} /></button></header>
-      <p className="coach-note">{appMode === 'play' ? 'Save a visual clue without revealing the location. This marks the round AI-assisted.' : 'Automatic analysis images are transient. Saved clue images stay in your local trainer data.'}</p>
+      <p className="coach-note">{appMode === 'play' ? 'AI analysis marks this round assisted. Analyze 360° uploads four transient views automatically.' : 'Automatic analysis images are transient. Saved clue images stay in your local trainer data.'}</p>
       {!!modes.length && <div className="coach-modes">{(loading ? [loading] : modes).map((mode) => <button key={mode} disabled={!!loading} onClick={() => void run(mode)}>{loading === mode ? loadingLabels[mode] : labels[mode]}</button>)}{loading && <button onClick={() => controller.current?.abort()}>Cancel</button>}</div>}
       <ClueCapture onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />
       {error && <p className="coach-error" role="alert">{error}</p>}
@@ -77,7 +77,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
         {list('Inspect next', result.nextThingsToInspect)}
         {result.coreCard && <section className="coach-card"><strong>Core card</strong><em>Front</em><ul>{result.coreCard.front.map((line) => <li key={line}>{line}</li>)}</ul><em>Back</em><p>{result.coreCard.backExplanation}</p></section>}
         {result.extraCards.map((card) => <section className="coach-card" key={card.category}><strong>{card.category} · {'★'.repeat(card.clueStrength)}</strong><em>Front</em><ul>{card.front.map((line) => <li key={line}>{line}</li>)}</ul><em>Back</em><p>{card.back}</p></section>)}
-        {onSave && resultMode && <button className="coach-save" disabled={saved} onClick={() => { onSave({ mode: resultMode, model, generatedAt, analysis: result }); setSaved(true); }}>{saved ? 'Saved' : 'Save coaching note'}</button>}
+        {appMode !== 'play' && onSave && resultMode && <button className="coach-save" disabled={saved} onClick={() => { onSave({ mode: resultMode, model, generatedAt, analysis: result }); setSaved(true); }}>{saved ? 'Saved' : 'Save coaching note'}</button>}
         <small className="coach-model">{model}</small>
       </div>}
     </aside>}

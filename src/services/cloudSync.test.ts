@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { mergeBackups } from './cloudSync';
+import { mergeBackups, shouldSyncAuthEvent } from './cloudSync';
 
 const backup = (id: string, score: number): TrainerBackup => ({
   format: 'street-view-trainer',
@@ -22,4 +22,9 @@ test('cloud merge preserves unique progress and lets the current device win conf
     { id: 'cloud', score: 30 },
     { id: 'local', score: 20 },
   ]);
+});
+
+test('token refresh does not trigger a visible full sync', () => {
+  assert.equal(shouldSyncAuthEvent('TOKEN_REFRESHED'), false);
+  assert.equal(shouldSyncAuthEvent('SIGNED_IN'), true);
 });

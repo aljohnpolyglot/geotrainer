@@ -62,6 +62,7 @@ import type { HubTab } from './components/TrainerHub';
 import { MainMenu } from './components/MainMenu';
 import { ReviewResultPanel } from './components/ReviewResultPanel';
 import { AiCoach } from './components/AiCoach';
+import { CoverageStudyModal } from './components/CoverageStudyModal';
 import {
   Shuffle,
   ChevronDown,
@@ -139,6 +140,7 @@ export default function App() {
   const [dbReady, setDbReady] = useState(false);
   const [trainerRefreshKey, setTrainerRefreshKey] = useState(0);
   const [trainerStartTab, setTrainerStartTab] = useState<HubTab>('progress');
+  const [coveragePreview, setCoveragePreview] = useState<TrainerLocation | null>(null);
   const [showHome, setShowHome] = useState(true);
   const [mapsReady, setMapsReady] = useState(false);
   const [temporaryCollection, setTemporaryCollection] = useState<Collection | null>(null);
@@ -960,10 +962,7 @@ export default function App() {
   };
 
   const handleOpenCoverageLocation = (location: TrainerLocation) => {
-    setCurrentLocation(location);
-    setAppMode('study');
-    setShowHome(false);
-    setIsRevealed(true);
+    setCoveragePreview(location);
   };
 
   const handleBookmarkCoverageLocation = (location: TrainerLocation) => {
@@ -1220,28 +1219,9 @@ export default function App() {
 
         {/* Right Section: Mode-specific actions */}
         <div className="flex items-center space-x-1.5 sm:space-x-2">
-          {!showHome && (appMode !== 'play' || isGameActive) && (
-            <button
-              type="button"
-              role="switch"
-              aria-checked={activeCompass}
-              disabled={appMode === 'play' && isGameActive}
-              onClick={toggleCompass}
-              title={appMode === 'play' && isGameActive ? 'Fixed for this game' : 'Toggle compass'}
-              className={`compass-toggle ${activeCompass ? 'enabled' : ''}`}
-            ><Compass size={14} /><span>Compass</span><strong>{activeCompass ? 'ON' : 'OFF'}</strong></button>
-          )}
           {/* Study Mode Controls */}
           {!showHome && appMode === 'study' && (
             <>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={sunTrainingHints}
-                onClick={() => { const next = !sunTrainingHints; setSunTrainingHints(next); localStorage.setItem(SUN_HINTS_STORAGE_KEY, String(next)); }}
-                className={`compass-toggle sun-toggle ${sunTrainingHints ? 'enabled' : ''}`}
-                title="Show orientation guidance after reveal"
-              ><Sun size={14} /><span>Sun hints</span><strong>{sunTrainingHints ? 'ON' : 'OFF'}</strong></button>
               {/* Reveal Exact Location Toggle */}
               <button
                 id="reveal-location-btn"
@@ -1451,6 +1431,11 @@ export default function App() {
           onPanoramaChanged={!showHome && appMode === 'study' ? (location) => void handleStudyPanoramaChanged(location) : undefined}
         />
 
+        {!showHome && currentLocation && appMode !== 'play' && <div className="map-training-toggles" aria-label="Map training aids">
+          <button type="button" role="switch" aria-checked={activeCompass} onClick={toggleCompass} title={`Compass ${activeCompass ? 'on' : 'off'}`} className={activeCompass ? 'enabled' : ''}><Compass size={15} /></button>
+          {appMode === 'study' && <button type="button" role="switch" aria-checked={sunTrainingHints} onClick={() => { const next = !sunTrainingHints; setSunTrainingHints(next); localStorage.setItem(SUN_HINTS_STORAGE_KEY, String(next)); }} title={`Sun hints ${sunTrainingHints ? 'on' : 'off'}`} className={sunTrainingHints ? 'enabled' : ''}><Sun size={15} /></button>}
+        </div>}
+
         {showHome && (
           <MainMenu
             refreshKey={trainerRefreshKey}
@@ -1596,6 +1581,8 @@ export default function App() {
           advancing={reviewGradingRef.current} onNext={() => void handleReviewNext()}
         />
       )}
+
+      {coveragePreview && <CoverageStudyModal location={coveragePreview} onClose={() => setCoveragePreview(null)} />}
 
       {reviewComplete && (() => {
         const improved = reviewStats.filter((item) => item.current > item.previous).length;

@@ -98,7 +98,7 @@ Server normalization removes country names, flag emoji, and explicit broad geogr
 ## Known limitations
 
 - The current Maps key returned `REQUEST_DENIED` for Street View Static API during live QA. Until that API is enabled, native browser capture requires approval of the displayed tab/window.
-- Current-view analysis is implemented; four-heading Analyze 360° remains intentionally deferred.
+- Current-view analysis and four-heading Analyze 360° are implemented; the latter fetches four transient quarter-turn frames without persisting Street View imagery.
 - Play Coach is intentionally unavailable rather than silently creating assisted competitive history.
 - A controllable automation browser was unavailable during QA, so mobile interaction and DevTools storage checks were not automated. User-provided live screenshots verified the desktop Coach and Statistics entry points; type, build, server, bundle, and request-path checks passed.
 - Live Gemini availability still depends on key quotas and model access. Failure is bounded and isolated.

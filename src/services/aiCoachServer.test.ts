@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { callGeminiCoach, fetchStreetViewFrame, GeminiKeyCarousel, normalizeCoachAnalysis } from '../../server/aiCoach';
+import { callGeminiCoach, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, normalizeCoachAnalysis } from '../../server/aiCoach';
 
 const validAnalysis = {
   confidence: 'medium', region: 'Central Europe',
@@ -55,6 +55,15 @@ test('clue analysis ranks countries while safe Review clues cannot reveal one', 
   assert.deepEqual(safeClue.strongClues, ['Black rectangular reflector']);
 });
 
+test('candidate confidence is deduplicated, ranked, and never exceeds a total of one', () => {
+  const analysis = normalizeCoachAnalysis({
+    ...validAnalysis,
+    candidates: [{ countryCode: 'de', confidence: .7 }, { countryCode: 'HU', confidence: .9 }, { countryCode: 'hu', confidence: .4 }],
+  }, 'analyze');
+  assert.deepEqual(analysis.candidates.map(({ countryCode }) => countryCode), ['HU', 'DE']);
+  assert.ok(Math.abs(analysis.candidates.reduce((sum, candidate) => sum + candidate.confidence, 0) - 1) < Number.EPSILON);
+});
+
 test('automatic Coach capture requests the exact pano and current orientation without storing imagery', async () => {
   let requested = '';
   const fetcher = (async (url: string | URL | Request) => {
@@ -65,4 +74,21 @@ test('automatic Coach capture requests the exact pano and current orientation wi
   assert.match(requested, /pano=pano-exact/);
   assert.match(requested, /heading=212/);
   assert.equal(frame.imageData, 'AQID');
+});
+
+test('360 Coach capture requests four quarter-turn views of the same panorama', async () => {
+  const requested: string[] = [];
+  const fetcher = (async (url: string | URL | Request) => { requested.push(String(url)); return new Response(new Uint8Array([1]), { headers: { 'content-type': 'image/jpeg' } }); }) as typeof fetch;
+  await fetchStreetViewFrames({ panoId: 'pano-360', heading: 15, pitch: 0, zoom: 3 }, 'maps-key', fetcher);
+  assert.deepEqual(requested.map((url) => new URL(url).searchParams.get('heading')), ['15', '105', '195', '285']);
+  assert.ok(requested.every((url) => url.includes('pano=pano-360') && url.includes('fov=90')));
+});
+
+test('360 Coach sends all views in one low-latency Gemini request', async () => {
+  let body: Record<string, any> = {};
+  const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => { body = JSON.parse(String(init?.body)); return geminiResponse(JSON.stringify(validAnalysis)); }) as typeof fetch;
+  const frames = [1, 2, 3, 4].map((value) => ({ mimeType: 'image/jpeg', imageData: String(value) }));
+  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze360', ...frames[0], frames }, fetcher);
+  assert.equal(body.contents[0].parts.filter((part: Record<string, unknown>) => part.inlineData).length, 4);
+  assert.equal(body.generationConfig.thinkingConfig.thinkingBudget, 0);
 });

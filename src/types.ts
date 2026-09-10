@@ -191,7 +191,7 @@ export interface Attempt {
   aiAssisted?: boolean;
 }
 
-export type CoachMode = 'hints' | 'analyze' | 'explain' | 'cards' | 'clue' | 'clue-safe';
+export type CoachMode = 'hints' | 'analyze' | 'analyze360' | 'explain' | 'cards' | 'clue' | 'clue-safe';
 export interface CoachAnalysis {
   confidence: 'low' | 'medium' | 'high';
   region: string;

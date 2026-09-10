@@ -621,13 +621,13 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
                           <td>{item.played ? Math.round(item.average).toLocaleString() : "—"}</td>
                           <td>{item.best || "—"}</td>
                           <td>{date(item.lastSeen)}</td>
-                          <td><button className="table-link" onClick={(event) => { event.stopPropagation(); setClueCountry(item.code); }}>{item.clues || "Add"}</button></td>
+                          <td>{item.clues ? <button className="table-link" onClick={(event) => { event.stopPropagation(); setClueCountry(item.code); }}>{item.clues}</button> : "—"}</td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
               </div>
-              {clueCountry && <ClueGallery country={countryName(clueCountry)} clues={clues.filter((item) => item.countryCode === clueCountry)} onClose={() => setClueCountry("")} onDelete={(id) => void trainerDb.deleteClue(id).then(load)} />}
+              {clueCountry && <ClueGallery country={countryName(clueCountry)} clues={clues.filter((item) => item.countryCode === clueCountry)} onClose={() => setClueCountry("")} onDelete={(id) => void trainerDb.deleteClue(id).then(() => { if (clues.filter((item) => item.countryCode === clueCountry).length === 1) setClueCountry(""); return load(); })} />}
             </>
           )}
           {tab === "history" && (

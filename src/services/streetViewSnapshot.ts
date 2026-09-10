@@ -24,7 +24,9 @@ export function getCaptureCrop(video: { width: number; height: number }, viewpor
 
 export async function captureStreetViewScreen() {
   if (!navigator.mediaDevices?.getDisplayMedia) throw new Error('Screen capture is not supported by this browser.');
-  const stream = await navigator.mediaDevices.getDisplayMedia({ video: { displaySurface: 'browser' }, audio: false });
+  const stream = await navigator.mediaDevices.getDisplayMedia({
+    video: { displaySurface: 'browser' }, audio: false, selfBrowserSurface: 'include', preferCurrentTab: true,
+  } as DisplayMediaStreamOptions);
   const coach = document.querySelector<HTMLElement>('.ai-coach');
   const visibility = coach?.style.visibility;
   try {

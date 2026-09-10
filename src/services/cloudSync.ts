@@ -1,4 +1,4 @@
-import type { Session } from '@supabase/supabase-js';
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import {
   createBackup,
   importBackup,
@@ -59,6 +59,8 @@ let state: CloudSyncState = supabase
 const listeners = new Set<() => void>();
 let activeUserId: string | undefined;
 let uploadTimer: ReturnType<typeof setTimeout> | undefined;
+let uploadPromise: Promise<void> | undefined;
+let uploadPending = false;
 let applyingCloud = false;
 let started = false;
 
@@ -67,18 +69,35 @@ const update = (next: Partial<CloudSyncState>) => {
   listeners.forEach((listener) => listener());
 };
 
-async function upload(userId = activeUserId): Promise<void> {
+export const shouldSyncAuthEvent = (event: AuthChangeEvent) => event === 'SIGNED_IN' || event === 'SIGNED_OUT';
+
+async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
-  update({ phase: 'syncing', message: 'Saving progress…' });
-  const backup = await createBackup(false);
-  const syncedAt = new Date().toISOString();
-  const { error } = await supabase.from('user_backups').upsert({
-    user_id: userId,
-    backup,
-    updated_at: syncedAt,
-  });
-  if (error) throw error;
-  update({ phase: 'synced', message: 'Progress backed up.', lastSyncedAt: syncedAt });
+  if (uploadPromise) {
+    uploadPending = true;
+    return uploadPromise;
+  }
+  if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
+  uploadPromise = (async () => {
+    const backup = await createBackup(false);
+    const syncedAt = new Date().toISOString();
+    const { error } = await supabase.from('user_backups').upsert({
+      user_id: userId,
+      backup,
+      updated_at: syncedAt,
+    });
+    if (error) throw error;
+    update({ phase: 'synced', message: 'Progress backed up.', lastSyncedAt: syncedAt });
+  })();
+  try {
+    await uploadPromise;
+  } finally {
+    uploadPromise = undefined;
+  }
+  if (uploadPending) {
+    uploadPending = false;
+    await upload(userId);
+  }
 }
 
 async function syncSession(session: Session | null): Promise<void> {
@@ -105,7 +124,7 @@ async function syncSession(session: Session | null): Promise<void> {
         importedCloud = true;
       }
     }
-    await upload(session.user.id);
+    await upload(session.user.id, true);
     if (importedCloud) window.location.reload();
   } catch (error) {
     applyingCloud = false;
@@ -133,13 +152,24 @@ export const cloudSync = {
       });
       const { data } = await supabase.auth.getSession();
       await syncSession(data.session);
-      supabase.auth.onAuthStateChange((_event, session) => setTimeout(() => void syncSession(session), 0));
+      supabase.auth.onAuthStateChange((event, session) => {
+        activeUserId = session?.user.id;
+        if (shouldSyncAuthEvent(event)) setTimeout(() => void syncSession(session), 0);
+      });
       window.addEventListener('online', () => void upload().catch(() => {}));
     } catch (error) {
       update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync could not start.' });
     }
   },
-  syncNow: () => upload(),
+  syncNow: () => upload(activeUserId, true),
+  async signInWithGoogle() {
+    if (!supabase) throw new Error('Supabase is not configured.');
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) throw error;
+  },
   async signIn(email: string, password: string) {
     if (!supabase) throw new Error('Supabase is not configured.');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -147,7 +177,11 @@ export const cloudSync = {
   },
   async signUp(email: string, password: string) {
     if (!supabase) throw new Error('Supabase is not configured.');
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    });
     if (error) throw error;
     return !data.session;
   },

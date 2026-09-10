@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
-import { ArrowRight, BookOpen, Cloud, Database, Gamepad2, LogOut, MapPinned, RefreshCw, Target } from 'lucide-react';
+import { ArrowRight, BookOpen, ChevronRight, Cloud, Database, Gamepad2, MapPinned, Target } from 'lucide-react';
 import { trainerDb } from '../data/trainerDb';
 import { cloudSync } from '../services/cloudSync';
+import { CloudAccountDialog } from './CloudAccountDialog';
 
 interface MainMenuProps {
   refreshKey: number;
@@ -14,10 +15,7 @@ interface MainMenuProps {
 export function MainMenu({ refreshKey, onStudy, onPlay, onReview, onData }: MainMenuProps) {
   const [status, setStatus] = useState({ locations: 0, attempts: 0, due: 0, minutes: 0 });
   const sync = useSyncExternalStore(cloudSync.subscribe, cloudSync.getSnapshot);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [authMessage, setAuthMessage] = useState('');
-  const [authBusy, setAuthBusy] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   useEffect(() => {
     void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions()])
@@ -29,22 +27,6 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview, onData }: Main
       }))
       .catch(() => {});
   }, [refreshKey]);
-
-  const authenticate = async (create: boolean) => {
-    setAuthBusy(true);
-    setAuthMessage('');
-    try {
-      const needsConfirmation = create
-        ? await cloudSync.signUp(email, password)
-        : (await cloudSync.signIn(email, password), false);
-      setAuthMessage(needsConfirmation ? 'Check your email to confirm the account.' : 'Signed in. Your progress is syncing.');
-      setPassword('');
-    } catch (error) {
-      setAuthMessage(error instanceof Error ? error.message : 'Could not sign in.');
-    } finally {
-      setAuthBusy(false);
-    }
-  };
 
   return (
     <section className="main-menu">
@@ -68,32 +50,15 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview, onData }: Main
           <span><strong>{status.attempts.toLocaleString()}</strong> attempts retained</span>
           <span><strong>{status.minutes.toLocaleString()}</strong> active minutes</span>
         </div>
-        <section className="cloud-account" aria-labelledby="cloud-account-title">
-          <div className="cloud-account-heading">
-            <Cloud size={17} />
-            <strong id="cloud-account-title">Cloud backup</strong>
-            <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? 'Synced' : sync.phase.replace('-', ' ')}</span>
-          </div>
-          {sync.email ? (
-            <div className="cloud-session">
-              <span><small>Signed in as</small><strong>{sync.email}</strong></span>
-              <button type="button" onClick={() => void cloudSync.syncNow().catch((error) => setAuthMessage(error.message))} disabled={sync.phase === 'syncing'}><RefreshCw size={15} />Sync now</button>
-              <button type="button" onClick={() => void cloudSync.signOut().catch((error) => setAuthMessage(error.message))}><LogOut size={15} />Sign out</button>
-            </div>
-          ) : sync.configured ? (
-            <form onSubmit={(event) => { event.preventDefault(); void authenticate(false); }}>
-              <label>Email<input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
-              <label>Password<input type="password" autoComplete="current-password" minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
-              <button type="submit" disabled={authBusy}>{authBusy ? 'Working…' : 'Sign in'}</button>
-              <button type="button" disabled={authBusy} onClick={() => void authenticate(true)}>Create account</button>
-            </form>
-          ) : (
-            <p>Cloud backup is being set up. Your local progress remains available.</p>
-          )}
-          <p className="cloud-message" aria-live="polite">{authMessage || sync.message}</p>
-        </section>
-        <p className="local-note">Sign in to keep progress available across your devices.</p>
+        <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>
+          <span className="account-entry-icon"><Cloud size={19} /></span>
+          <span><strong>{sync.email ? 'Cloud account' : 'Protect your progress'}</strong><small>{sync.email || 'Sign in or create an account'}</small></span>
+          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? 'Synced' : sync.phase.replace('-', ' ')}</span>
+          <ChevronRight size={18} />
+        </button>
+        <p className="local-note">Your field log stays available offline and syncs when you sign in.</p>
       </div>
+      <CloudAccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
     </section>
   );
 }

@@ -66,6 +66,8 @@ const responseSchema = {
 
 const rules = `You are a concise GeoGuessr teacher. Analyze only visible evidence.
 Never manufacture certainty. Prefer a broad region and ranked candidates when uncertain.
+Systematically check road lines and surface, driving side, bollards, poles and wires, signs and language, plates and vehicles, Google car or camera meta, architecture, terrain, vegetation, climate, and sun.
+Weigh distinctive clues against contradictions before ranking candidates. Do not use Street View coverage prevalence as geographic evidence or default to commonly covered countries.
 Separate strong evidence from generic or weak clues. Generic vegetation is never country-specific.
 After reveal, always give realistic confusion countries.
 Normal card fronts contain only visible non-spoiler clues: no country, flag, coordinates, city, explicit region, or readable language that reveals the answer.
@@ -73,6 +75,7 @@ Create at most two extra cards, and only when a clue has real geographic value. 
 
 function prompt(mode: CoachMode, context?: Record<string, unknown>) {
   if (mode === 'hints') return `${rules}\nGive only spoiler-free things to inspect. Do not name any country, city, region, coordinate, or likely answer. Put hints in nextThingsToInspect; leave region, candidates, confusions and cards empty.`;
+  if (mode === 'analyze360') return `${rules}\nSynthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe, up to four ranked candidate countries with honest confidence, strong clues, weak clues, and what to inspect next. Do not treat repeated features across views as independent evidence.`;
   if (mode === 'clue-safe') return `${rules}\nIdentify and describe the central visible clue. Put a detailed visual description in description, useful observable traits in strongClues, limitations in weakClues, and comparison features in nextThingsToInspect. Do not name or infer a country, city, region, coordinate, or likely answer. Leave region, candidates, confusions and cards empty.`;
   if (mode === 'clue') return `${rules}\nIdentify and describe the central visible clue in detail. Explain its geographic value, give a broad region, up to four ranked candidate countries with honest numeric confidence, realistic confusions, limitations, and the exact features to compare next. Leave cards empty.`;
   if (mode === 'analyze') return `${rules}\nGive a short region/vibe, up to four ranked candidate countries with honest confidence, strong clues, weak clues, and what to inspect next.`;
@@ -89,11 +92,16 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   if (!value || typeof value !== 'object') throw new Error('Coach returned malformed JSON.');
   const item = value as Record<string, unknown>;
   const confidence = ['low', 'medium', 'high'].includes(String(item.confidence)) ? item.confidence as CoachAnalysis['confidence'] : 'low';
-  const candidates = Array.isArray(item.candidates) ? item.candidates.flatMap((candidate) => {
+  const candidateMap = new Map<string, number>();
+  if (Array.isArray(item.candidates)) item.candidates.forEach((candidate) => {
     if (!candidate || typeof candidate !== 'object') return [];
     const entry = candidate as Record<string, unknown>;
-    return typeof entry.countryCode === 'string' && Number.isFinite(entry.confidence) ? [{ countryCode: entry.countryCode.toUpperCase().slice(0, 2), confidence: Math.max(0, Math.min(1, Number(entry.confidence))) }] : [];
-  }).slice(0, 4) : [];
+    const countryCode = typeof entry.countryCode === 'string' ? entry.countryCode.trim().toUpperCase() : '';
+    if (/^[A-Z]{2}$/.test(countryCode) && Number.isFinite(entry.confidence)) candidateMap.set(countryCode, Math.max(candidateMap.get(countryCode) || 0, Math.max(0, Math.min(1, Number(entry.confidence)))));
+  });
+  const candidates = [...candidateMap].map(([countryCode, candidateConfidence]) => ({ countryCode, confidence: candidateConfidence })).sort((a, b) => b.confidence - a.confidence).slice(0, 4);
+  const candidateTotal = candidates.reduce((sum, candidate) => sum + candidate.confidence, 0);
+  if (candidateTotal > 1) candidates.forEach((candidate) => { candidate.confidence /= candidateTotal; });
   const core = item.coreCard && typeof item.coreCard === 'object' ? item.coreCard as Record<string, unknown> : undefined;
   const banned = [actualCountry.toLowerCase(), ...countryNames].filter(Boolean);
   const safe = (line: string) => !frontGiveaway.test(line) && !banned.some((name) => name.length > 2 && line.toLowerCase().includes(name));
@@ -118,9 +126,9 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   return analysis;
 }
 
-export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; context?: Record<string, unknown> }, fetcher: typeof fetch = fetch) {
+export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown> }, fetcher: typeof fetch = fetch) {
   if (!carousel.size) throw new Error('No Gemini keys are configured.');
-  const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash,gemini-2.5-flash-lite').split(',').map((model) => model.trim()).filter(Boolean);
+  const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
   const deadline = Date.now() + 30_000;
   let lastError = new Error('Gemini Coach is unavailable.');
   for (const model of models) {
@@ -129,7 +137,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
       const state = carousel.next();
       if (!state) throw new Error('All Gemini keys are cooling down.');
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), Math.min(12_000, deadline - Date.now()));
+      const timeout = setTimeout(() => controller.abort(), Math.min(request.mode === 'analyze360' ? 20_000 : 12_000, deadline - Date.now()));
       try {
         const context = ['hints', 'analyze', 'clue', 'clue-safe'].includes(request.mode) ? undefined : request.context;
         const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
@@ -137,8 +145,8 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
           headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
-            contents: [{ role: 'user', parts: [{ text: prompt(request.mode, context) }, { inlineData: { mimeType: request.mimeType, data: request.imageData } }] }],
-            generationConfig: { temperature: 0.25, maxOutputTokens: 1800, responseMimeType: 'application/json', responseSchema },
+            contents: [{ role: 'user', parts: [{ text: prompt(request.mode, context) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
+            generationConfig: { temperature: 0.25, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
           }),
         });
         if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
@@ -150,7 +158,8 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
         const analysis = normalizeCoachAnalysis(JSON.parse(text), request.mode, String(context?.actualCountry || ''));
         return { analysis, model, generatedAt: Date.now() };
       } catch (error) {
-        lastError = error instanceof Error && error.name === 'AbortError' ? new Error('Gemini request timed out.') : error as Error;
+        if (error instanceof Error && error.name === 'AbortError') { lastError = new Error('Gemini request timed out.'); break; }
+        lastError = error as Error;
       } finally {
         clearTimeout(timeout);
       }
@@ -179,6 +188,13 @@ export async function fetchStreetViewFrame(view: unknown, googleKey: string, fet
   return { mimeType, imageData: Buffer.from(await response.arrayBuffer()).toString('base64') };
 }
 
+export async function fetchStreetViewFrames(view: unknown, googleKey: string, fetcher: typeof fetch = fetch) {
+  const item = view && typeof view === 'object' ? view as Record<string, unknown> : {};
+  const heading = Number(item.heading);
+  if (!Number.isFinite(heading)) throw new Error('Current Street View orientation is invalid.');
+  return Promise.all([0, 90, 180, 270].map((offset) => fetchStreetViewFrame({ ...item, heading: heading + offset, zoom: 1 }, googleKey, fetcher)));
+}
+
 export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = process.env.GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY || '') {
   const carousel = new GeminiKeyCarousel(keys);
   return async (req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse, next: () => void) => {
@@ -193,13 +209,10 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
       const mode = value.mode as CoachMode;
       const suppliedMime = String(value.mimeType || '');
       const suppliedData = String(value.imageData || '');
-      const frame = ['image/jpeg', 'image/png', 'image/webp'].includes(suppliedMime) && /^[A-Za-z0-9+/=]+$/.test(suppliedData)
-        ? { mimeType: suppliedMime, imageData: suppliedData }
-        : await fetchStreetViewFrame(value.view, googleKey);
-      const mimeType = frame.mimeType;
-      const imageData = frame.imageData;
-      if (!['hints', 'analyze', 'explain', 'cards', 'clue', 'clue-safe'].includes(mode) || !['image/jpeg', 'image/png', 'image/webp'].includes(mimeType) || !/^[A-Za-z0-9+/=]+$/.test(imageData)) throw new Error('Invalid Coach request.');
-      const result = await callGeminiCoach(carousel, { mode, mimeType, imageData, context: value.context && typeof value.context === 'object' ? value.context as Record<string, unknown> : undefined });
+      const supplied = ['image/jpeg', 'image/png', 'image/webp'].includes(suppliedMime) && /^[A-Za-z0-9+/=]+$/.test(suppliedData);
+      const frames = supplied ? [{ mimeType: suppliedMime, imageData: suppliedData }] : mode === 'analyze360' ? await fetchStreetViewFrames(value.view, googleKey) : [await fetchStreetViewFrame(value.view, googleKey)];
+      if (!['hints', 'analyze', 'analyze360', 'explain', 'cards', 'clue', 'clue-safe'].includes(mode) || frames.some((frame) => !['image/jpeg', 'image/png', 'image/webp'].includes(frame.mimeType) || !/^[A-Za-z0-9+/=]+$/.test(frame.imageData))) throw new Error('Invalid Coach request.');
+      const result = await callGeminiCoach(carousel, { mode, ...frames[0], frames, context: value.context && typeof value.context === 'object' ? value.context as Record<string, unknown> : undefined });
       res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(result));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Coach unavailable.';
