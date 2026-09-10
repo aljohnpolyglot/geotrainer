@@ -1,0 +1,6 @@
+{
+  "name": "Street View Randomizer",
+  "description": "Spoiler-free random Google Street View immersion and GeoGuessr pinpointing game with study and play modes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

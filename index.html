@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>GeoTrainer — Personal Street View Trainer</title>
+    <meta name="description" content="A private Street View study, play, and spaced-review trainer with durable progress and personal coverage." />
+    <meta property="og:title" content="GeoTrainer — Personal Street View Trainer" />
+    <meta property="og:description" content="Study places, retain every attempt, and review weak Street View locations." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        try {
+          var _fetch = window.fetch;
+          var defineFetch = function(target) {
+            Object.defineProperty(target, 'fetch', {
+              configurable: true,
+              enumerable: true,
+              get: function() {
+                return _fetch;
+              },
+              set: function(val) {
+                _fetch = val;
+              }
+            });
+          };
+          try {
+            defineFetch(window);
+          } catch (e1) {
+            try {
+              if (window.Window && window.Window.prototype) {
+                defineFetch(window.Window.prototype);
+              }
+            } catch (e2) {}
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
