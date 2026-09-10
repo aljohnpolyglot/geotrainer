@@ -69,7 +69,8 @@ const update = (next: Partial<CloudSyncState>) => {
   listeners.forEach((listener) => listener());
 };
 
-export const shouldSyncAuthEvent = (event: AuthChangeEvent) => event === 'SIGNED_IN' || event === 'SIGNED_OUT';
+export const shouldSyncAuthEvent = (event: AuthChangeEvent, previousUserId?: string, nextUserId?: string) =>
+  event === 'SIGNED_OUT' ? !!previousUserId : event === 'SIGNED_IN' && !!nextUserId && nextUserId !== previousUserId;
 
 async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
@@ -153,8 +154,9 @@ export const cloudSync = {
       const { data } = await supabase.auth.getSession();
       await syncSession(data.session);
       supabase.auth.onAuthStateChange((event, session) => {
+        const previousUserId = activeUserId;
         activeUserId = session?.user.id;
-        if (shouldSyncAuthEvent(event)) setTimeout(() => void syncSession(session), 0);
+        if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session), 0);
       });
       window.addEventListener('online', () => void upload().catch(() => {}));
     } catch (error) {
@@ -187,7 +189,7 @@ export const cloudSync = {
   },
   async signOut() {
     if (!supabase) return;
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
   },
 };

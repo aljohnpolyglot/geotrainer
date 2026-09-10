@@ -25,6 +25,8 @@ test('cloud merge preserves unique progress and lets the current device win conf
 });
 
 test('token refresh does not trigger a visible full sync', () => {
-  assert.equal(shouldSyncAuthEvent('TOKEN_REFRESHED'), false);
-  assert.equal(shouldSyncAuthEvent('SIGNED_IN'), true);
+  assert.equal(shouldSyncAuthEvent('TOKEN_REFRESHED', 'user-1', 'user-1'), false);
+  assert.equal(shouldSyncAuthEvent('SIGNED_IN', 'user-1', 'user-1'), false);
+  assert.equal(shouldSyncAuthEvent('SIGNED_IN', undefined, 'user-1'), true);
+  assert.equal(shouldSyncAuthEvent('SIGNED_OUT', 'user-1'), true);
 });
