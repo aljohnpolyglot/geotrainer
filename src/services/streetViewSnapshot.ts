@@ -1,14 +1,18 @@
 export type StreetViewSnapshot = {
+  locationPanoId?: string;
   panoId: string;
   heading: number;
   pitch: number;
   zoom: number;
 };
 
-let current: StreetViewSnapshot | null = null;
+const snapshots = new Map<string, StreetViewSnapshot>();
 
-export const setStreetViewSnapshot = (snapshot: StreetViewSnapshot) => { current = snapshot; };
-export const getStreetViewSnapshot = (panoId: string) => current?.panoId === panoId ? current : null;
+export const setStreetViewSnapshot = (snapshot: StreetViewSnapshot) => {
+  snapshots.set(snapshot.panoId, snapshot);
+  if (snapshot.locationPanoId) snapshots.set(snapshot.locationPanoId, snapshot);
+};
+export const getStreetViewSnapshot = (panoId: string) => snapshots.get(panoId) || null;
 
 export async function captureStreetViewImage(panoId: string): Promise<string | undefined> {
   const view = getStreetViewSnapshot(panoId);

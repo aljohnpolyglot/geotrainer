@@ -199,14 +199,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         setHeading(((current.getPov().heading % 360) + 360) % 360);
         const panoId = current.getPano();
         const pov = current.getPov();
-        if (panoId) setStreetViewSnapshot({ panoId, heading: pov.heading, pitch: pov.pitch, zoom: current.getZoom() ?? 1 });
+        if (panoId) setStreetViewSnapshot({ locationPanoId: currentLocationRef.current?.panoId, panoId, heading: pov.heading, pitch: pov.pitch, zoom: current.getZoom() ?? 1 });
         queueViewSave();
       });
       panorama.addListener('pano_changed', () => {
         const details = panorama.getLocation();
         const panoId = panorama.getPano();
         const pov = panorama.getPov();
-        if (panoId) setStreetViewSnapshot({ panoId, heading: pov.heading, pitch: pov.pitch, zoom: panorama.getZoom() ?? 1 });
+        if (panoId) setStreetViewSnapshot({ locationPanoId: currentLocationRef.current?.panoId, panoId, heading: pov.heading, pitch: pov.pitch, zoom: panorama.getZoom() ?? 1 });
         queueViewSave();
         const position = details?.latLng;
         const origin = currentLocationRef.current;
