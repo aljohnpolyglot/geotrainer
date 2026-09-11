@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Added an authenticated Supabase Edge Function backend for AI Coach and 360° Street View capture on the deployed app.
 - Added custom 1–100-round games, per-mode performance statistics, and navigation-connected panorama checks for movable games.
 - Separated Review from Statistics, folded location/history views into Statistics, and made saved game sessions open their summaries.
 - Expanded review-card maturity into New, Learning, Relearning, Young, and Mature states with long-term mastery ranks.

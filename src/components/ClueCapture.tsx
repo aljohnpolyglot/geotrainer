@@ -6,6 +6,7 @@ import { COUNTRIES } from '../data/countries';
 import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { postCoach } from '../services/coachClient';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 
@@ -56,7 +57,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
     setStatus(t('analyzingClue')); setSaved(false);
     await run(async (signal, isCurrent) => {
       const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
-      const response = await fetch('/api/coach', { method: 'POST', signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: preferences.ai, gameLanguage: preferences.game }) });
+      const response = await postCoach({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: preferences.ai, gameLanguage: preferences.game }, signal);
       const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
       if (!response.ok || !value.analysis) throw new Error(value.error || t('coachNoClue'));
       if (!isCurrent()) return;
@@ -71,7 +72,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
     const view = getStreetViewSnapshot(panoId);
     if (!view) throw new Error(t('streetViewLoading'));
     setStatus(t('capturingView'));
-    const response = await fetch('/api/coach', { method: 'POST', signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'capture', view }) });
+    const response = await postCoach({ mode: 'capture', view }, signal);
     const value = await response.json() as { imageDataUrl?: string; error?: string };
     if (!response.ok || !value.imageDataUrl) throw new Error(value.error || t('captureFailed'));
     if (!isCurrent()) return;

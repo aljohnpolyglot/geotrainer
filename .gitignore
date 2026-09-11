@@ -10,3 +10,4 @@ coverage/
 *.pem
 gemini-keys.json
 .gemini-keys-path
+supabase/.temp/

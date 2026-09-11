@@ -8,6 +8,7 @@ import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
+import { postCoach } from '../services/coachClient';
 
 type CoachContext = {
   actualCountry?: string;
@@ -53,7 +54,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
 
   const requestCoach = async (mode: CoachMode, body: Record<string, unknown>) => {
     const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
-    const response = await fetch('/api/coach', { method: 'POST', signal: controller.current!.signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode, ...body, language: preferences.ai, gameLanguage: preferences.game, context: revealed ? context : undefined }) });
+    const response = await postCoach({ mode, ...body, language: preferences.ai, gameLanguage: preferences.game, context: revealed ? context : undefined }, controller.current!.signal);
     const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
     return { response, value };
   };
