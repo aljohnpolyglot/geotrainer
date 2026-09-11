@@ -196,6 +196,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
         if (data && data.location && data.location.latLng && data.location.pano) {
+          if (context.requireNavigation && !data.links?.length) continue;
           const lat = data.location.latLng.lat();
           const lng = data.location.latLng.lng();
           if (context.excludedPanoIds?.has(data.location.pano)) {

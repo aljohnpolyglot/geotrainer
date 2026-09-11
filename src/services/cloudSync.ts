@@ -58,11 +58,18 @@ let state: CloudSyncState = supabase
   : { configured: false, phase: 'disabled', message: 'Connect a Supabase project to enable cloud backup.' };
 const listeners = new Set<() => void>();
 let activeUserId: string | undefined;
-let uploadTimer: ReturnType<typeof setTimeout> | undefined;
 let uploadPromise: Promise<void> | undefined;
 let uploadPending = false;
 let applyingCloud = false;
 let started = false;
+
+export function createQuietSyncScheduler(task: () => void, delayMs = 1200) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(task, delayMs);
+  };
+}
 
 const update = (next: Partial<CloudSyncState>) => {
   state = { ...state, ...next };
@@ -144,13 +151,11 @@ export const cloudSync = {
     started = true;
     try {
       await initTrainerDb();
-      onTrainerDbChange(() => {
+      const scheduleUpload = createQuietSyncScheduler(() => {
         if (!activeUserId || applyingCloud) return;
-        clearTimeout(uploadTimer);
-        uploadTimer = setTimeout(() => {
-          void upload().catch((error) => update({ phase: 'error', message: error.message }));
-        }, 1200);
+        void upload().catch((error) => update({ phase: 'error', message: error.message }));
       });
+      onTrainerDbChange(scheduleUpload);
       const { data } = await supabase.auth.getSession();
       await syncSession(data.session);
       supabase.auth.onAuthStateChange((event, session) => {

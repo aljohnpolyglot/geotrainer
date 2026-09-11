@@ -10,6 +10,8 @@ import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../
 import { COUNTRIES } from "../data/countries";
 import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock } from "lucide-react";
 import { ResultMap } from "./ResultMap";
+import { translate } from "../services/language";
+import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
 interface RoundResultModalProps {
   round: GameRound;
@@ -20,6 +22,8 @@ interface RoundResultModalProps {
 }
 
 export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, totalRounds, onNextRound, isLastRound, rounds }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [viewIndex, setViewIndex] = useState(rounds.length - 1);
   const viewedRound = rounds[viewIndex] || round;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
@@ -59,7 +63,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         {/* Top Header Card */}
         <div className="p-4 sm:p-5 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            {flag1x && <img src={flag1x} srcSet={`${flag1x} 1x, ${flag2x} 2x`} alt={`${countryName} flag`} width="36" height="24" className="w-9 h-6 rounded-xs object-cover border border-stone-700 shadow-sm" referrerPolicy="no-referrer" />}
+            {flag1x && <img src={flag1x} srcSet={`${flag1x} 1x, ${flag2x} 2x`} alt={`${countryName} ${t('flag')}`} width="36" height="24" className="w-9 h-6 rounded-xs object-cover border border-stone-700 shadow-sm" referrerPolicy="no-referrer" />}
             <div>
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{countryName}</h2>
@@ -85,20 +89,20 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
           <div className="flex items-center space-x-4 sm:space-x-6">
             <div className="text-right">
               <span className="text-[11px] text-stone-400 uppercase tracking-wider block font-medium">
-                <Clock className="w-3 h-3 inline" /> Time
+                <Clock className="w-3 h-3 inline" /> {t('time')}
               </span>
               <span className="text-base sm:text-lg font-bold font-mono text-stone-200">{Math.round(viewedRound.timeSpentSeconds)}s</span>
             </div>
             {viewedRound.distanceKm !== null && (
               <div className="text-right">
-                <span className="text-[11px] text-stone-400 uppercase tracking-wider block font-medium">Distance</span>
+                <span className="text-[11px] text-stone-400 uppercase tracking-wider block font-medium">{t('distance')}</span>
                 <span className="text-base sm:text-lg font-bold font-mono text-stone-200">{formatDistance(viewedRound.distanceKm)}</span>
               </div>
             )}
 
             <div className="text-right pl-3 border-l border-stone-800">
               <span className="text-[11px] text-stone-400 uppercase tracking-wider block font-medium flex items-center justify-end gap-1">
-                <Trophy className="w-3 h-3 text-amber-400" /> Round Score
+                <Trophy className="w-3 h-3 text-amber-400" /> {t('roundScore')}
               </span>
               <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-400">
                 +{viewedRound.score.toLocaleString()} <span className="text-xs text-stone-500 font-normal font-sans">/ 5,000</span>
@@ -113,25 +117,25 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         {/* Footer Action Bar */}
         <div className="p-4 bg-stone-950 border-t border-stone-800 flex items-center justify-between">
           <div className="text-xs text-stone-400">
-            Round <strong className="text-white">{viewedRound.roundNumber}</strong> of <strong className="text-white">{totalRounds}</strong>
+            {t('round')} <strong className="text-white">{viewedRound.roundNumber}</strong> {t('of')} <strong className="text-white">{totalRounds}</strong>
           </div>
 
-          <div className="round-history-nav" aria-label="Completed round history">
+          <div className="round-history-nav" aria-label={t('completedRoundHistory')}>
             <button disabled={viewIndex === 0} onClick={() => setViewIndex((value) => value - 1)}>
-              <ArrowLeft size={15} /> Previous
+              <ArrowLeft size={15} /> {t('previous')}
             </button>
             <span>
-              {viewIndex + 1} / {rounds.length} played
+              {viewIndex + 1} / {rounds.length} {t('played')}
             </span>
             <button disabled={viewIndex === rounds.length - 1} onClick={() => setViewIndex((value) => value + 1)}>
-              Next <ArrowRight size={15} />
+              {t('next')} <ArrowRight size={15} />
             </button>
           </div>
 
           <button onClick={onNextRound} className="inline-flex items-center gap-2 px-6 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98">
-            <span>{isLastRound ? "View Game Summary" : "Continue Game"}</span>
+            <span>{isLastRound ? t('viewGameSummary') : t('continueGame')}</span>
             <ArrowRight className="w-4 h-4 text-stone-900" />
-            <span className="text-[10px] text-stone-600 bg-stone-200 px-1.5 py-0.5 rounded font-mono">Space</span>
+            <span className="text-[10px] text-stone-600 bg-stone-200 px-1.5 py-0.5 rounded font-mono">{t('Space')}</span>
           </button>
         </div>
       </div>

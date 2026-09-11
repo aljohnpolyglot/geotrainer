@@ -7,6 +7,8 @@ import React, { useState, useMemo } from 'react';
 import { Collection } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { X, Search, Check, Trash2 } from 'lucide-react';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface CustomCollectionModalProps {
   isOpen: boolean;
@@ -23,6 +25,8 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
   onDelete,
   initialCollection,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [name, setName] = useState<string>(initialCollection?.name || '');
   const [selectedCodes, setSelectedCodes] = useState<Set<string>>(
     new Set(initialCollection?.countryCodes || [])
@@ -69,11 +73,11 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Please provide a collection name');
+      setError(t('Please provide a collection name'));
       return;
     }
     if (selectedCodes.size === 0) {
-      setError('Please select at least one country');
+      setError(t('Please select at least one country'));
       return;
     }
 
@@ -98,12 +102,12 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-stone-800">
           <h2 className="text-base font-semibold text-stone-100">
-            {initialCollection ? 'Edit Custom Collection' : 'Create Custom Collection'}
+            {initialCollection ? t('Edit Custom Collection') : t('Create Custom Collection')}
           </h2>
           <button
             onClick={onClose}
             className="p-1 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors"
-            title="Close"
+            title={t('Close')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -115,7 +119,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
             {/* Name Input */}
             <div>
               <label className="block text-xs font-medium text-stone-300 mb-1.5">
-                Collection Name
+                {t('collectionName')}
               </label>
               <input
                 id="custom-collection-name-input"
@@ -125,7 +129,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                   setName(e.target.value);
                   setError(null);
                 }}
-                placeholder="e.g., Central Europe Practice"
+                placeholder={t('e.g., Central Europe Practice')}
                 className="w-full bg-stone-950 border border-stone-700 rounded-lg px-3.5 py-2 text-sm text-stone-100 placeholder-stone-500 focus:outline-hidden focus:border-stone-400"
                 autoFocus
               />
@@ -135,7 +139,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
             <div className="space-y-2 flex-1 flex flex-col min-h-0">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium text-stone-300">
-                  Select Countries ({selectedCodes.size} selected)
+                  {t('selectCountries')} ({selectedCodes.size} {t('selected')})
                 </label>
                 <div className="space-x-2 text-xs">
                   <button
@@ -143,7 +147,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                     onClick={selectAllFiltered}
                     className="text-stone-400 hover:text-stone-200 underline cursor-pointer"
                   >
-                    Select visible
+                    {t('selectVisible')}
                   </button>
                   <span className="text-stone-600">|</span>
                   <button
@@ -151,7 +155,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                     onClick={deselectAllFiltered}
                     className="text-stone-400 hover:text-stone-200 underline cursor-pointer"
                   >
-                    Clear visible
+                    {t('clearVisible')}
                   </button>
                 </div>
               </div>
@@ -163,7 +167,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Filter countries..."
+                  placeholder={t('filterCountries')}
                   className="w-full bg-stone-950 border border-stone-800 rounded-lg pl-9 pr-3.5 py-1.5 text-xs text-stone-100 placeholder-stone-500 focus:outline-hidden focus:border-stone-500"
                 />
               </div>
@@ -202,7 +206,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
 
                 {filteredCountries.length === 0 && (
                   <p className="text-center py-6 text-xs text-stone-500">
-                    No countries matching "{searchQuery}"
+                    {t('No countries matching')} "{searchQuery}"
                   </p>
                 )}
               </div>
@@ -225,7 +229,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                 className="inline-flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 font-medium cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                Delete
+                {t('Delete')}
               </button>
             ) : (
               <div />
@@ -237,13 +241,13 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                 onClick={onClose}
                 className="px-3.5 py-1.5 text-xs font-medium text-stone-400 hover:text-stone-200 cursor-pointer"
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 type="submit"
                 className="px-4 py-2 bg-stone-100 hover:bg-white text-stone-950 text-xs font-semibold rounded-lg shadow cursor-pointer transition-colors"
               >
-                Save Collection
+                {t('saveCollection')}
               </button>
             </div>
           </div>

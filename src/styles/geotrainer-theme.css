@@ -1,0 +1,273 @@
+/* GeoTrainer / Synoptic field-station visual system */
+:root {
+  color-scheme: dark;
+  --ink: #061d2b;
+  --storm: #082f49;
+  --storm-2: #0d405d;
+  --paper: #f2f0e7;
+  --paper-2: #e7e9e2;
+  --carbon: #102734;
+  --rule: #b7c4c8;
+  --muted: #5d727c;
+  --blue: #0868f2;
+  --vermilion: #ed4b2f;
+  --lime: #c9f05b;
+  --sky: #8ad7e8;
+  --shadow-sheet: 0 18px 50px rgba(1, 13, 20, .32);
+  font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
+}
+
+body { background: var(--ink); }
+::selection { background: var(--lime); color: var(--carbon); }
+* { scrollbar-color: #6f8791 var(--paper-2); }
+button, select, input { letter-spacing: normal; }
+button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible {
+  outline: 3px solid var(--lime); outline-offset: 2px;
+}
+
+.geotrainer-shell { background: var(--ink) !important; }
+#app-topbar {
+  height: 62px;
+  background: var(--storm) !important;
+  border-bottom: 1px solid rgba(138, 215, 232, .34) !important;
+  box-shadow: 0 8px 24px rgba(0, 12, 20, .24);
+}
+#app-topbar > div:first-child > div:first-child {
+  background: #051c2a !important;
+  border: 1px solid rgba(138, 215, 232, .28) !important;
+  border-radius: 4px !important;
+  padding: 2px !important;
+}
+#app-topbar > div:first-child > div:first-child button { border-radius: 2px !important; }
+#app-topbar > div:first-child > div:first-child button.bg-stone-800 {
+  background: var(--paper) !important; color: var(--carbon) !important; box-shadow: none !important;
+}
+#app-topbar svg.text-amber-400,
+#app-topbar svg.text-stone-400 { color: var(--sky) !important; }
+#app-topbar select,
+#app-topbar button:not(.home-button) {
+  border-radius: 3px !important;
+}
+#app-topbar select {
+  background: #051c2a !important; border-color: rgba(138, 215, 232, .3) !important; color: #f8fbf5 !important;
+}
+#app-topbar [class*="bg-amber"] { background: var(--lime) !important; color: var(--carbon) !important; border-color: var(--lime) !important; }
+#app-topbar [class*="bg-stone-100"] { background: var(--lime) !important; color: var(--carbon) !important; box-shadow: none !important; }
+#app-topbar [class*="bg-stone-950"] { background: #051c2a !important; border-color: rgba(138, 215, 232, .28) !important; }
+.home-button { width: 36px; height: 36px; color: var(--storm) !important; background: var(--lime) !important; border: 0 !important; border-radius: 3px !important; }
+.home-button:hover { background: #ddff7d !important; }
+
+/* Home: a live synoptic desk, not a dashboard. */
+.main-menu { color: var(--carbon); background: var(--paper); }
+.menu-mast {
+  color: #f8fbf5;
+  background: var(--storm);
+  border-right: 1px solid rgba(138, 215, 232, .36);
+}
+.menu-mast::before {
+  content: ""; position: absolute; left: clamp(30px, 5vw, 74px); right: clamp(30px, 5vw, 74px); top: 112px;
+  height: 1px; background: rgba(138, 215, 232, .28);
+}
+.menu-mast::after {
+  inset: auto -10% -34% 38%; background: var(--vermilion); opacity: 1;
+}
+.wordmark { color: #fffef7; }
+.wordmark small { color: var(--sky); }
+.menu-orbit { border-color: rgba(138, 215, 232, .34); }
+.menu-orbit::before, .menu-orbit::after, .menu-orbit i { border-color: rgba(138, 215, 232, .25); }
+.menu-orbit i:first-child { background: var(--lime); }
+.menu-orbit i:nth-child(2) { background: var(--vermilion); }
+.menu-intro h1 { color: #fffef7; font-size: clamp(48px, 6vw, 88px); letter-spacing: -.035em; }
+.menu-intro p { color: #c5e4ea; }
+.menu-primary {
+  color: #fff; background: var(--blue); border-radius: 4px; box-shadow: 0 14px 30px rgba(0, 12, 20, .3);
+}
+.menu-primary small { color: #d8e8ff; }
+.menu-primary:hover { background: #2379f4; transform: translateY(-2px); }
+.departure-board { background: var(--paper); }
+.board-heading { color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 12px; }
+.departure-board > button { color: var(--carbon); border-color: var(--rule); }
+.departure-board > button:hover { color: var(--carbon); background: #dfeaf0; padding-inline: 14px 2px; }
+.departure-board > button small { color: var(--muted); }
+.route-code { color: #fff; background: var(--blue); border: 0; border-radius: 2px; }
+.menu-status { border-color: var(--rule); }
+.menu-status span { color: var(--muted); border-color: var(--rule); }
+.menu-status strong { color: var(--carbon); }
+.local-note { color: var(--muted); }
+/* Shared observation sheets */
+:is(#new-game-modal-backdrop, #bookmarks-modal-backdrop, #custom-collection-modal-backdrop, #game-history-modal-backdrop, #round-result-modal, #game-summary-modal) {
+  background: rgba(3, 20, 30, .82) !important;
+  backdrop-filter: none !important;
+}
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div) {
+  color: var(--carbon) !important;
+  background: var(--paper) !important;
+  border: 0 !important;
+  border-radius: 13px !important;
+  box-shadow: var(--shadow-sheet) !important;
+}
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  :is([class*="text-stone-100"], [class*="text-stone-200"], [class*="text-stone-300"], [class*="text-white"]) { color: var(--carbon) !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  :is([class*="text-stone-400"], [class*="text-stone-500"], [class*="text-stone-600"]) { color: var(--muted) !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  [class*="text-amber"] { color: var(--blue) !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  [class*="border-stone"] { border-color: var(--rule) !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  :is([class*="bg-stone-950"], [class*="bg-stone-900"], [class*="bg-stone-800"]) { background-color: transparent !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog, #round-result-modal > div, #game-summary-modal > div)
+  input,
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) select {
+  min-height: 42px; color: var(--carbon) !important; background: #fff !important; border: 1px solid #8fa3aa !important; border-radius: 3px !important;
+}
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) button { border-radius: 3px !important; box-shadow: none !important; }
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) [class*="bg-stone-100"] {
+  color: #fff !important; background: var(--blue) !important;
+}
+:is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) [class*="bg-amber"] {
+  color: #fff !important; background: var(--blue) !important; border-color: var(--blue) !important;
+}
+
+/* New game is one configuration record with clearly separated fields. */
+#new-game-dialog { max-width: 680px !important; }
+#new-game-dialog > div:first-child {
+  min-height: 78px; padding: 18px 24px !important; background: var(--storm) !important; border: 0 !important;
+}
+#new-game-dialog > div:first-child h2 { color: #fff !important; font-size: 18px; }
+#new-game-dialog > div:first-child p { color: #b9d9e2 !important; }
+#new-game-dialog > div:first-child > div > div:first-child {
+  color: var(--storm) !important; background: var(--lime) !important; border: 0 !important; border-radius: 3px !important;
+}
+#new-game-dialog > div:first-child button { color: #b9d9e2 !important; }
+#new-game-dialog > div:nth-child(2) { padding: 22px 24px !important; }
+#new-game-dialog > div:nth-child(2) > div { padding-top: 18px; border-top: 1px solid var(--rule); }
+#new-game-dialog > div:nth-child(2) > div:first-child { padding-top: 0; border-top: 0; }
+#new-game-dialog label { color: #375463 !important; font-size: 10px !important; letter-spacing: .11em !important; }
+#new-game-dialog label svg { color: var(--blue) !important; }
+#new-game-dialog button[class*="bg-stone-950"] { background: #fff !important; border-color: var(--rule) !important; color: #415a65 !important; }
+#new-game-dialog button[class*="bg-amber"] { background: var(--blue) !important; border-color: var(--blue) !important; color: #fff !important; }
+#new-game-dialog button[class*="bg-stone-800"] { background: #dfe8ea !important; border-color: #a6b7bc !important; color: var(--carbon) !important; }
+#new-game-dialog button[class*="opacity-60"] { background: #e8e9e3 !important; color: #7a898d !important; }
+#new-game-dialog > div:last-child { padding: 16px 24px !important; background: #e2e7e4 !important; border-color: var(--rule) !important; }
+#new-game-dialog > div:last-child > button:last-child { color: #fff !important; background: var(--blue) !important; min-height: 44px; }
+
+/* Reveal card and guess instrument float over the panorama. */
+#revealed-location-card,
+#guess-map-widget {
+  color: var(--carbon) !important; background: var(--paper) !important; border: 0 !important; border-radius: 12px !important;
+  box-shadow: var(--shadow-sheet) !important; backdrop-filter: none !important;
+}
+#revealed-location-card [class*="text-white"],
+#revealed-location-card [class*="text-stone-100"],
+#revealed-location-card [class*="text-stone-200"],
+#guess-map-widget [class*="text-stone-200"] { color: var(--carbon) !important; }
+#revealed-location-card [class*="text-stone-3"],
+#revealed-location-card [class*="text-stone-4"],
+#revealed-location-card [class*="text-stone-5"],
+#guess-map-widget [class*="text-stone-4"] { color: var(--muted) !important; }
+#revealed-location-card > div:nth-child(2) {
+  background: #fff !important; border-color: var(--rule) !important; border-radius: 4px !important;
+}
+#revealed-location-card [class*="text-amber"], #revealed-location-card svg.text-stone-400 { color: var(--blue) !important; }
+#revealed-location-card button, #revealed-location-card a { border-radius: 3px !important; }
+#revealed-location-card button[class*="bg-stone-800"] { background: #dce5e7 !important; color: var(--carbon) !important; border-color: var(--rule) !important; }
+#revealed-location-card button[class*="bg-amber"] { background: var(--blue) !important; color: #fff !important; border-color: var(--blue) !important; }
+#guess-map-widget > div:first-child,
+#guess-map-widget > div:last-child { color: var(--carbon) !important; background: var(--paper) !important; border-color: var(--rule) !important; }
+#guess-map-widget > div:first-child { border-top: 1px solid var(--rule) !important; }
+#guess-map-widget button { border-radius: 3px !important; }
+#guess-map-widget button[class*="bg-emerald"] { color: #fff !important; background: var(--blue) !important; }
+#guess-map-widget button[class*="bg-stone-800"] { color: #6e7d82 !important; background: #d7dedf !important; border-color: var(--rule) !important; }
+
+/* Lists are ruled records instead of nested cards. */
+:is(#bookmarks-dialog, #game-history-dialog) > div:first-child,
+#custom-collection-dialog > div:first-child { background: var(--storm) !important; border: 0 !important; }
+:is(#bookmarks-dialog, #game-history-dialog, #custom-collection-dialog) > div:first-child h2 { color: #fff !important; }
+:is(#bookmarks-dialog, #game-history-dialog) > div:first-child p { color: #b9d9e2 !important; }
+:is(#bookmarks-dialog, #game-history-dialog) > div:first-child svg,
+#custom-collection-dialog > div:first-child svg { color: var(--sky) !important; }
+:is(#bookmarks-dialog, #game-history-dialog) > div:nth-child(2) > div,
+#bookmarks-dialog > div:nth-child(3) > div {
+  border-width: 0 0 1px !important; border-color: var(--rule) !important; border-radius: 0 !important; background: transparent !important;
+}
+#bookmarks-dialog > div:last-child,
+#game-history-dialog > div:last-child,
+#custom-collection-dialog form > div:last-child { background: #e2e7e4 !important; border-color: var(--rule) !important; }
+#custom-collection-dialog form > div:first-child > div:nth-child(2) > div:last-child { background: #fff !important; border-color: var(--rule) !important; border-radius: 3px !important; }
+#custom-collection-dialog form > div:first-child > div:nth-child(2) > div:last-child button { border-radius: 2px !important; }
+
+/* Results: map first, record strip around it. */
+:is(#round-result-modal, #game-summary-modal) > div > div:first-child {
+  color: var(--carbon) !important; background: var(--paper) !important; border-color: var(--rule) !important;
+}
+:is(#round-result-modal, #game-summary-modal) > div > div:first-child::before {
+  content: "OBSERVATION RESULT"; align-self: stretch; display: grid; place-items: center; padding: 0 12px;
+  color: #fff; background: var(--blue); font: 800 9px/1 ui-monospace, Consolas, monospace; letter-spacing: .1em;
+}
+#game-summary-modal > div > div:first-child::before { content: "SESSION COMPLETE"; }
+:is(#round-result-modal, #game-summary-modal) [class*="text-amber"] { color: var(--blue) !important; }
+:is(#round-result-modal, #game-summary-modal) [class*="bg-stone-100"] { color: #fff !important; background: var(--blue) !important; }
+:is(#round-result-modal, #game-summary-modal) button { border-radius: 3px !important; box-shadow: none !important; }
+:is(#round-result-modal, #game-summary-modal) > div > div:last-child {
+  background: var(--paper) !important; border-color: var(--rule) !important;
+}
+#game-summary-modal > div > div:nth-child(2) > div:last-child { background: var(--paper) !important; border-color: var(--rule) !important; }
+#game-summary-modal > div > div:nth-child(2) > div:last-child > div:first-child { background: #dfe7e6 !important; border-color: var(--rule) !important; }
+#game-summary-modal > div > div:nth-child(2) > div:last-child button { border-radius: 0 !important; border-bottom: 1px solid var(--rule) !important; }
+
+/* Review, Coverage, History and Data workbench */
+.trainer-hub { color: var(--carbon); background: var(--paper); }
+.hub-header { background: var(--storm); border-color: rgba(138, 215, 232, .32); }
+.hub-header h1 { color: #fff; }
+.hub-header p, .queue-head p { color: #b9d9e2; }
+.hub-tabs { border-color: rgba(138, 215, 232, .3); }
+.hub-tabs button { color: #a9ced7; }
+.hub-tabs button:hover, .hub-tabs button.active { color: #fff; border-bottom-color: var(--lime); }
+.hub-content { color: var(--carbon); }
+.metric-strip, .metric-strip.all-time { background: transparent; border-color: var(--rule); }
+.metric-strip > div { border-color: var(--rule); }
+.metric-strip span { color: var(--muted); }
+.metric-strip strong { color: var(--carbon); }
+.metric-strip:first-child strong { color: var(--blue); }
+.data-row, .attempt-row { color: var(--carbon); border-color: var(--rule); }
+.data-row:hover span { color: var(--blue); }
+button.attempt-row:hover, tbody tr:hover { background: #dfe9ec; }
+.attempt-row small, .attempt-row > span:nth-last-of-type(1), .empty { color: var(--muted); }
+.country-code { color: #fff; background: var(--blue); border: 0; border-radius: 2px; }
+.filter-bar select, .table-tools select, .table-tools input, .preset-list button {
+  color: var(--carbon); background: #fff; border-color: #8fa3aa; border-radius: 3px;
+}
+.filter-bar label, .table-tools label, .coverage-legend, .table-tools > span { color: var(--muted); }
+.preset-list button:hover, .preset-list button.active { color: #fff; background: var(--blue); border-color: var(--blue); }
+.queue-head, .smart-collections, .history-switch, .table-scroll, th, td { border-color: var(--rule); }
+.history-switch button { color: var(--muted); }
+.history-switch button:hover, .history-switch button.active { color: var(--carbon); border-bottom-color: var(--blue); }
+.coverage-map-wrap { background: #dfe7e6; border-color: var(--rule); }
+.map-inspector { color: var(--muted); background: var(--paper); border: 0; border-radius: 8px; box-shadow: var(--shadow-sheet); }
+.map-inspector strong { color: var(--carbon); }
+thead th { color: #415d69; background: var(--paper); }
+tbody tr.never-seen { color: #73848b; }
+.data-panel { background: transparent; border-color: var(--rule); }
+.data-panel > svg { color: var(--blue); }
+.data-panel p { color: var(--muted); }
+.data-panel .export-status { color: var(--carbon); }
+.button { border-radius: 3px; }
+.button.primary { color: #fff; background: var(--blue); border-color: var(--blue); }
+.button.primary:hover { background: #2379f4; }
+.button.secondary { color: var(--carbon); background: #fff; border-color: #8fa3aa; }
+.button.secondary:hover { border-color: var(--blue); }
+.button.danger { color: #fff; background: var(--vermilion); border-color: var(--vermilion); }
+.icon-button { color: var(--muted); border-radius: 3px; }
+.icon-button:hover { color: var(--carbon); background: #dce6e8; border-color: var(--rule); }
+.review-grade-backdrop { background: rgba(3, 20, 30, .82); }
+.review-grade-panel { color: var(--carbon); background: var(--paper); border: 0; border-radius: 12px; box-shadow: var(--shadow-sheet); }
+.review-grade-panel p { color: var(--muted); }
+.grade-actions button { color: var(--carbon); background: #fff; border-radius: 3px; }
+.grade-actions button span { color: var(--muted); }
+.grade-actions .grade-again { border-color: var(--vermilion); }
+.grade-actions .grade-hard { border-color: #cc8614; }
+.grade-actions .grade-good { border-color: #679b21; }
+.grade-actions .grade-easy { border-color: var(--blue); }
+.grade-actions button:hover { background: #e0eaec; }
+

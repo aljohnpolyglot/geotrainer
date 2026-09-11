@@ -51,9 +51,9 @@ export function retentionAndLapses(attempts: Attempt[]) {
   return { retention: thresholds.map((days) => ({ days, ...accuracy(totals.get(days)!.correct, totals.get(days)!.eligible) })), lapseCountries: sorted(lapseCountries), lapseLocations: sorted(lapseLocations) };
 }
 
-export function exposurePerformance(visits: StudyVisit[], attempts: Attempt[]) {
+export function exposurePerformance(visits: StudyVisit[], attempts: Attempt[], includeAssisted = false) {
   const visitGroups = groupBy(visits, (item) => item.countryCode);
-  const attemptGroups = groupBy(performanceAttempts(attempts), (item) => item.countryCode);
+  const attemptGroups = groupBy(performanceAttempts(attempts, false, includeAssisted), (item) => item.countryCode);
   const codes = new Set([...visitGroups.keys(), ...attemptGroups.keys()]);
   return [...codes].map((code) => {
     const exposure = visitGroups.get(code) || []; const played = attemptGroups.get(code) || [];
@@ -67,17 +67,17 @@ export function coverageByContinent(locations: TrainerLocation[]) {
   return [...supported].map(([continent, codes]) => ({ continent, supported: codes.length, seen: seen.get(continent)?.length || 0 })).sort((a, b) => a.continent.localeCompare(b.continent));
 }
 
-export function collectionStatistics(attempts: Attempt[], reviews: ReviewRecord[], collections: Collection[]) {
+export function collectionStatistics(attempts: Attempt[], reviews: ReviewRecord[], collections: Collection[], includeAssisted = false) {
   const names = new Map(collections.map((item) => [item.id, item.name]));
-  return breakdown(performanceAttempts(attempts), (item) => item.collectionId).map((item) => ({ ...item, name: names.get(item.key) || item.key, reviewed: attempts.filter((attempt) => attempt.source === 'review' && attempt.collectionId === item.key).length, due: reviews.filter((review) => review.dueAt <= Date.now() && attempts.some((attempt) => attempt.collectionId === item.key && attempt.panoId === review.panoId)).length }));
+  return breakdown(performanceAttempts(attempts, false, includeAssisted), (item) => item.collectionId).map((item) => ({ ...item, name: names.get(item.key) || item.key, reviewed: attempts.filter((attempt) => attempt.source === 'review' && attempt.collectionId === item.key).length, due: reviews.filter((review) => review.dueAt <= Date.now() && attempts.some((attempt) => attempt.collectionId === item.key && attempt.panoId === review.panoId)).length }));
 }
 
-export function sessionStatistics(sessions: TrainingSession[], attempts: Attempt[], visits: StudyVisit[]) {
-  const ordered = [...sessions].sort((a, b) => a.startedAt - b.startedAt);
+export function sessionStatistics(sessions: TrainingSession[], attempts: Attempt[], visits: StudyVisit[], includeAssisted = false) {
+  const ordered = sessions.filter((item) => item.activeTimeSeconds >= 5).sort((a, b) => a.startedAt - b.startedAt);
   const rows = ordered.map((session, index) => {
     const to = session.endedAt || ordered[index + 1]?.startedAt || Date.now();
     const within = (stamp: number) => stamp >= session.startedAt && stamp <= to;
-    const play = performanceAttempts(attempts).filter((item) => within(item.createdAt));
+    const play = performanceAttempts(attempts, false, includeAssisted).filter((item) => within(item.createdAt));
     const review = attempts.filter((item) => item.source === 'review' && within(item.createdAt));
     const study = visits.filter((item) => within(item.openedAt));
     return { ...session, endedAt: to, play: play.length, reviews: review.length, study: study.length, countries: new Set([...play, ...review].map((item) => item.countryCode)).size, accuracy: recognition(play).country, averageScore: metrics(play).averageScore };
@@ -91,18 +91,18 @@ export function activitySeries(sessions: TrainingSession[], attempts: Attempt[],
   return [...keys].sort().map((day) => ({ day, minutes: Math.round(sessions.filter((item) => localDayKey(item.startedAt) === day).reduce((sum, item) => sum + item.activeTimeSeconds, 0) / 60), interactions: attempts.filter((item) => localDayKey(item.createdAt) === day).length + visits.filter((item) => localDayKey(item.openedAt) === day).length }));
 }
 
-export function personalBests(attempts: Attempt[], sessions: TrainingSession[], visits: StudyVisit[]) {
-  const play = performanceAttempts(attempts);
+export function personalBests(attempts: Attempt[], sessions: TrainingSession[], visits: StudyVisit[], includeAssisted = false) {
+  const play = performanceAttempts(attempts, false, includeAssisted);
   const inverseDistance = rollingBest(play, 20, (items) => { const value = metrics(items).medianDistance; return value === null ? null : -value; });
-  return { best20: rollingBest(play, 20, (items) => recognition(items).country.rate), best50: rollingBest(play, 50, (items) => recognition(items).country.rate), lowestMedian20: inverseDistance === null ? null : -inverseDistance, fastestAccurateSession: sessionStatistics(sessions, attempts, visits).fastestAccurate };
+  return { best20: rollingBest(play, 20, (items) => recognition(items).country.rate), best50: rollingBest(play, 50, (items) => recognition(items).country.rate), lowestMedian20: inverseDistance === null ? null : -inverseDistance, fastestAccurateSession: sessionStatistics(sessions, attempts, visits, includeAssisted).fastestAccurate };
 }
 
-export function learningVelocity(attempts: Attempt[], locations: TrainerLocation[], now = Date.now()) {
+export function learningVelocity(attempts: Attempt[], locations: TrainerLocation[], now = Date.now(), includeAssisted = false) {
   const date = new Date(now);
   const weekStart = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() + 6) % 7).getTime();
   const monthStart = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
   const previousMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1).getTime();
-  const play = performanceAttempts(attempts).sort((a, b) => a.createdAt - b.createdAt);
+  const play = performanceAttempts(attempts, false, includeAssisted).sort((a, b) => a.createdAt - b.createdAt);
   const current = metrics(play.filter((item) => item.createdAt >= monthStart));
   const previous = metrics(play.filter((item) => item.createdAt >= previousMonth && item.createdAt < monthStart));
   const mastered = [...groupBy(play, (item) => item.countryCode)].filter(([, items]) => {
@@ -121,8 +121,8 @@ export function learningVelocity(attempts: Attempt[], locations: TrainerLocation
   };
 }
 
-export function targetedTrainingComparisons(attempts: Attempt[], visits: StudyVisit[], collections: Collection[]) {
-  const play = performanceAttempts(attempts);
+export function targetedTrainingComparisons(attempts: Attempt[], visits: StudyVisit[], collections: Collection[], includeAssisted = false) {
+  const play = performanceAttempts(attempts, false, includeAssisted);
   const collectionById = new Map(collections.map((item) => [item.id, item]));
   const firstTargets = new Map<string, StudyVisit>();
   visits.forEach((visit) => {

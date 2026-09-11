@@ -35,8 +35,14 @@ Run type-check, tests, and build before handing off user-visible changes.
 
 ## Implementation
 
+- Keep this guide current autonomously when a change creates a durable contributor rule, data invariant, supported locale, or required QA step. Do not record temporary task status or implementation trivia here.
+- Record every user-visible change in `CHANGELOG.md` under the local date of the work session (`YYYY-MM-DD`), not only under an undated Unreleased heading.
+- Supported UI/game/AI locales are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Do not add Tagalog, Bisaya, or Indonesian unless explicitly requested later.
 - Use TypeScript and existing project patterns; add no dependency when the platform or current stack is sufficient.
 - Never let a source file exceed 500 lines. Split it before adding code that would cross the limit.
 - Put shared logic in the existing service/data layer and keep React components focused on UI.
 - Add one focused runnable test for non-trivial branches and failure handling.
+- For language changes, browser-check every supported locale for untranslated visible copy, overflow, reload persistence, and independent UI/game/AI selections.
+- For panels and modals, browser-check scroll containment at desktop and mobile sizes. Keep scrollbars thin and unobtrusive, never hide scrolling, and keep primary actions reachable without nested page scroll traps.
+- Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.
 - For deployment handoffs, generate `.gz` copies of `dist` text assets with Node's built-in zlib after the build; add no compression dependency.

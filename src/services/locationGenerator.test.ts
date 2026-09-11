@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string };
+type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[] };
 let results: Result[] = [];
 let panoramaCalls = 0;
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
@@ -16,7 +16,7 @@ class StreetViewService {
   getPanorama(_request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
     const result = results.shift()!;
-    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) } }, result.status || 'OK'), result.delay || 0);
+    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links }, result.status || 'OK'), result.delay || 0);
   }
 }
 
@@ -83,6 +83,17 @@ test('recent panorama exclusion turns A, A, B into visible A, B', async () => {
   const first = await generator.findRandomLocation(['IT'], undefined, undefined, rural);
   const second = await generator.findRandomLocation(['IT'], undefined, undefined, rural, { excludedPanoIds: new Set([first.panoId]) });
   assert.deepEqual([first.panoId, second.panoId], ['pano-a', 'pano-b']);
+});
+
+test('movable games reject isolated panoramas', async () => {
+  currentResults = [
+    { lat: 7.1, lng: 7, pano: 'isolated', countryCode: 'IT', links: [] },
+    { lat: 7.2, lng: 7, pano: 'connected', countryCode: 'IT', links: [{}] },
+  ];
+  results = [...currentResults];
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, rural, { requireNavigation: true });
+  assert.equal(found.panoId, 'connected');
 });
 
 test('an aborted lookup cannot return a stale panorama', async () => {

@@ -6,6 +6,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Maximize2, Minimize2, MapPin, Check, RotateCcw, Clock } from 'lucide-react';
 import { formatTime } from '../services/gameLogic';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
@@ -20,6 +22,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   timeRemaining,
   elapsedTimeSeconds,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
@@ -160,7 +164,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       <div className="flex items-center justify-between px-3.5 py-2 bg-stone-950/80 border-b border-stone-800 text-stone-200">
         <div className="flex items-center space-x-2">
           <MapPin className="w-4 h-4 text-rose-500 flex-shrink-0" />
-          <span className="text-xs font-semibold tracking-tight">Pinpoint Location</span>
+          <span className="text-xs font-semibold tracking-tight">{t('pinpointLocation')}</span>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -179,7 +183,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           )}
           {elapsedTimeSeconds !== undefined && (
             <div className="flex items-center space-x-1 font-mono text-xs font-bold text-amber-300">
-              <Clock className="w-3 h-3" /><span>{formatTime(elapsedTimeSeconds)} elapsed</span>
+              <Clock className="w-3 h-3" /><span>{formatTime(elapsedTimeSeconds)} {t('elapsed')}</span>
             </div>
           )}
 
@@ -187,7 +191,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           {currentGuess && (
             <button
               onClick={handleResetPin}
-              title="Clear pin"
+              title={t('clearPin')}
               className="p-1 rounded text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -197,7 +201,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           {/* Expand/Collapse Toggle */}
           <button
             onClick={() => setIsExpanded((prev) => !prev)}
-            title={isExpanded ? 'Minimize map' : 'Enlarge map for precision'}
+          title={isExpanded ? t('Minimize map') : t('Enlarge map for precision')}
             className="p-1 rounded text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -210,23 +214,23 @@ export const GuessMap: React.FC<GuessMapProps> = ({
 
       {/* Bottom Submit Action Bar */}
       <div className="p-2.5 bg-stone-950/90 border-t border-stone-800 flex items-center justify-between gap-2">
-        <span className="text-[11px] text-stone-400 truncate pl-1">
+        <span className="min-w-0 flex-1 text-[11px] text-stone-400 truncate pl-1">
           {currentGuess
             ? `${currentGuess.lat.toFixed(3)}°, ${currentGuess.lng.toFixed(3)}°`
-            : 'Click map to place guess'}
+            : t('clickToPlaceGuess')}
         </span>
 
         <button
           onClick={handleSubmit}
           disabled={!currentGuess || isSubmitting}
-          className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-md ${
+          className={`shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-md ${
             currentGuess && !isSubmitting
               ? 'bg-blue-600 hover:bg-blue-500 text-white active:scale-95'
               : 'bg-stone-800 text-stone-500 cursor-not-allowed border border-stone-700/50'
           }`}
         >
           <Check className="w-3.5 h-3.5" />
-          <span>{currentGuess ? 'CONFIRM GUESS' : 'PLACE PIN'}</span>
+          <span>{currentGuess ? t('confirmGuess') : t('placePin')}</span>
         </button>
       </div>
     </div>

@@ -16,6 +16,8 @@ import {
   Layers,
   Calendar,
 } from 'lucide-react';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface GameHistoryModalProps {
   isOpen: boolean;
@@ -34,6 +36,8 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
   onDeleteGame,
   onClearAll,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [showConfirmClear, setShowConfirmClear] = useState(false);
 
   if (!isOpen) return null;
@@ -54,7 +58,7 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
               <History className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">Game Collection History</h2>
+              <h2 className="text-base font-bold text-white tracking-tight">{t('gameHistory')}</h2>
               <p className="text-[11px] text-stone-400">
                 {games.length} {games.length === 1 ? 'game' : 'games'} recorded
               </p>
@@ -76,7 +80,7 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
               <div className="w-12 h-12 rounded-full bg-stone-800 flex items-center justify-center mx-auto text-stone-500">
                 <Trophy className="w-6 h-6" />
               </div>
-              <p className="text-sm font-semibold text-stone-300">No games played yet</p>
+                <p className="text-sm font-semibold text-stone-300">{t('noGames')}</p>
               <p className="text-xs text-stone-500 max-w-xs mx-auto">
                 Switch to Play mode and complete your first match to start building your game collection and tracking performance.
               </p>
@@ -148,9 +152,9 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
                       </div>
                     </div>
 
-                    <button
+                      <button
                       onClick={() => onDeleteGame(g.id)}
-                      title="Delete game"
+                      title={t('Delete game')}
                       className="p-1.5 text-stone-600 hover:text-rose-400 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -178,7 +182,7 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
             <div>
               {showConfirmClear ? (
                 <div className="flex items-center space-x-2">
-                  <span className="text-rose-400 text-[11px]">Clear all games?</span>
+                  <span className="text-rose-400 text-[11px]">{t('Clear all games?')}</span>
                   <button
                     onClick={() => {
                       onClearAll();
@@ -186,13 +190,13 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
                     }}
                     className="px-2 py-0.5 bg-rose-600 text-white rounded text-[11px] font-semibold cursor-pointer"
                   >
-                    Yes
+                    {t('Yes')}
                   </button>
                   <button
                     onClick={() => setShowConfirmClear(false)}
                     className="px-2 py-0.5 bg-stone-800 text-stone-300 rounded text-[11px] cursor-pointer"
                   >
-                    Cancel
+                    {t('cancel')}
                   </button>
                 </div>
               ) : (
@@ -200,7 +204,7 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
                   onClick={() => setShowConfirmClear(true)}
                   className="text-stone-500 hover:text-rose-400 transition-colors cursor-pointer"
                 >
-                  Clear History
+                  {t('clearHistory')}
                 </button>
               )}
             </div>
@@ -210,7 +214,7 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
             onClick={onClose}
             className="ml-auto px-4 py-1.5 bg-stone-800 hover:bg-stone-750 text-stone-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
           >
-            Close
+            {t('close')}
           </button>
         </div>
       </div>

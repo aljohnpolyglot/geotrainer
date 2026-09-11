@@ -15,7 +15,7 @@ For cloud backup, create a Supabase project, run [`supabase/migrations/001_user_
 
 Google sign-in requires enabling **Authentication → Providers → Google** in Supabase with a Google Web OAuth client. Use the callback URL shown on that provider page and allow `http://localhost:3000` during development. For branded confirmation mail, paste [`supabase/templates/confirmation.html`](supabase/templates/confirmation.html) into **Authentication → Email Templates → Confirm signup** and set the subject to `Confirm your GeoTrainer account`.
 
-The Google Cloud browser key must have **Maps JavaScript API** enabled. Automatic AI Coach frames also use **Street View Static API** when available; Analyze 360° sends four transient quarter-turn views, while single-view analysis can fall back to native screen capture. Restrict keys to local/deployed origins; never commit `.env`. Reverse geocoding uses the geocoder supplied by Maps JavaScript API.
+The Google Cloud key must have **Maps JavaScript API** and **Street View Static API** enabled. AI Coach captures the current panorama automatically; Analyze 360° sends four transient quarter-turn views without opening a screen-sharing picker. Restrict keys to local/deployed origins; never commit `.env`. Reverse geocoding uses the geocoder supplied by Maps JavaScript API.
 
 ## Checks
 
@@ -23,4 +23,4 @@ The Google Cloud browser key must have **Maps JavaScript API** enabled. Automati
 - `npm run lint` — TypeScript validation.
 - `npm run build` — production Vite build.
 
-Progress is stored in the browser's `street-view-trainer` IndexedDB database. Use **Review → Data → Export progress** for portable backups.
+Progress is stored in the browser's `street-view-trainer` IndexedDB database and quietly backed up after changes when a cloud account is connected.

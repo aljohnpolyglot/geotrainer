@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Camera, Clipboard, Upload } from 'lucide-react';
 import type { CoachAnalysis } from '../types';
-import { captureStreetViewScreen } from '../services/streetViewSnapshot';
+import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { COUNTRIES } from '../data/countries';
+import { trainerDb } from '../data/trainerDb';
+import { normalizeLanguagePreferences, translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 
@@ -19,49 +22,82 @@ async function prepareImage(file: File) {
   } finally { URL.revokeObjectURL(source); }
 }
 
-export function ClueCapture({ onSave, onAnalyze, spoilerFree }: { onSave: (clue: SavedClue) => Promise<void> | void; onAnalyze?: () => void; spoilerFree?: boolean }) {
+export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze, spoilerFree }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<void> | void; onAnalyze?: () => void; spoilerFree?: boolean }) {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [image, setImage] = useState('');
   const [analysis, setAnalysis] = useState<CoachAnalysis>();
-  const [model, setModel] = useState('');
-  const [generatedAt, setGeneratedAt] = useState(0);
   const [status, setStatus] = useState('');
   const [saved, setSaved] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const controller = useRef<AbortController | null>(null);
+  const requestId = useRef(0);
+  useEffect(() => () => controller.current?.abort(), []);
+  useEffect(() => { requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false); }, [panoId]);
+
+  const run = async (task: (signal: AbortSignal, isCurrent: () => boolean) => Promise<void>) => {
+    controller.current?.abort();
+    const active = new AbortController(); controller.current = active;
+    const currentRequest = ++requestId.current;
+    setBusy(true); onBusyChange?.(true);
+    try { await task(active.signal, () => currentRequest === requestId.current && !active.signal.aborted); }
+    catch (error) { if (currentRequest === requestId.current && !(error instanceof Error && error.name === 'AbortError')) setStatus(error instanceof Error ? error.message : t('clueActionFailed')); }
+    finally { if (currentRequest === requestId.current) { setBusy(false); onBusyChange?.(false); } }
+  };
 
   const choose = async (file?: File) => {
-    if (!file) return;
+    if (!file || disabled || busy) return;
     try { setImage(await prepareImage(file)); setAnalysis(undefined); setSaved(false); setStatus(''); }
-    catch (error) { setStatus(error instanceof Error ? error.message : 'Could not read that image.'); }
+    catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
   const analyze = async () => {
-    if (!image) return;
-    setStatus('Analyzing clue…');
-    try {
-      const response = await fetch('/api/coach', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: image.split(',')[1] }) });
+    if (!image || disabled || busy) return;
+    const sourceImage = image;
+    setStatus(t('analyzingClue')); setSaved(false);
+    await run(async (signal, isCurrent) => {
+      const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
+      const response = await fetch('/api/coach', { method: 'POST', signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: preferences.ai, gameLanguage: preferences.game }) });
       const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
-      if (!response.ok || !value.analysis) throw new Error(value.error || 'Coach returned no clue description.');
-      setAnalysis(value.analysis); setModel(value.model || 'Gemini'); setGeneratedAt(value.generatedAt || Date.now()); setStatus(''); onAnalyze?.();
-    } catch (error) { setStatus(error instanceof Error ? error.message : 'Could not analyze this clue.'); }
+      if (!response.ok || !value.analysis) throw new Error(value.error || t('coachNoClue'));
+      if (!isCurrent()) return;
+      const completedAt = value.generatedAt || Date.now();
+      const completedModel = value.model || 'Gemini';
+      setAnalysis(value.analysis); onAnalyze?.();
+      await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
+      setSaved(true); setStatus('');
+    });
   };
+  const capture = async () => run(async (signal, isCurrent) => {
+    const view = getStreetViewSnapshot(panoId);
+    if (!view) throw new Error(t('streetViewLoading'));
+    setStatus(t('capturingView'));
+    const response = await fetch('/api/coach', { method: 'POST', signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'capture', view }) });
+    const value = await response.json() as { imageDataUrl?: string; error?: string };
+    if (!response.ok || !value.imageDataUrl) throw new Error(value.error || t('captureFailed'));
+    if (!isCurrent()) return;
+    setImage(value.imageDataUrl); setAnalysis(undefined); setSaved(false); setStatus('');
+  });
   return <details className="clue-capture">
-    <summary><Clipboard size={14} /> Clue notebook</summary>
+<summary><Clipboard size={14} /> {t('knownClues')}</summary>
     <div className="clue-drop" tabIndex={0} onPaste={(event) => void choose(event.clipboardData.files[0])}>
-      {image ? <img src={image} alt="Clue to analyze" /> : <p>Paste an image here, upload one, or capture the current Street View.</p>}
+      {image ? <img src={image} alt={t('clueToAnalyze')} /> : <p>{t('clueDropHint')}</p>}
     </div>
     <div className="clue-actions">
-      <label><Upload size={14} /> Upload<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void choose(event.target.files?.[0])} /></label>
-      <button onClick={() => void captureStreetViewScreen().then((value) => { setImage(value); setAnalysis(undefined); setSaved(false); }).catch((error: Error) => setStatus(error.message))}><Camera size={14} /> Capture</button>
-      <button disabled={!image || status === 'Analyzing clue…'} onClick={() => void analyze()}>Analyze clue</button>
+      <label><Upload size={14} /> {t('upload')}<input disabled={disabled || busy} type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void choose(event.target.files?.[0])} /></label>
+      <button disabled={disabled || busy} onClick={() => void capture()}><Camera size={14} /> {t('capture')}</button>
+<button disabled={disabled || busy || !image} onClick={() => void analyze()}>{t('Analyze clue')}</button>
     </div>
     {status && <p className="coach-status" role="status">{status}</p>}
     {analysis && <div className="clue-analysis">
-      {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} confidence</small></h3>}
+      {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><b>{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
       {analysis.description && <p>{analysis.description}</p>}
-      {!!analysis.strongClues.length && <><strong>Useful traits</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.weakClues.length && <><strong>Limitations</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.confusions.length && <><strong>Confusable with</strong><ul>{analysis.confusions.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.nextThingsToInspect.length && <><strong>Inspect next</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      <button className="coach-save" disabled={saved} onClick={() => void Promise.resolve(onSave({ imageDataUrl: image, model, generatedAt, analysis })).then(() => setSaved(true))}>{saved ? 'Clue saved' : 'Save to country clues'}</button>
+      {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.weakClues.length && <><strong>{t('limitations')}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.contradictions?.length && <><strong>{t('contradictionsGaps')}</strong><ul>{analysis.contradictions.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.confusions.length && <><strong>{t('confusableWith')}</strong><ul>{analysis.confusions.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.nextThingsToInspect.length && <><strong>{t('inspectNext')}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {saved && <p className="coach-autosaved" role="status">{t('savedAutomatically')}</p>}
     </div>}
   </details>;
 }

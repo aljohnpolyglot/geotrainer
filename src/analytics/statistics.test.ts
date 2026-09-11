@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Attempt } from '../types';
 import { breakdown, confusions, environmentOf, filterByRange, metrics, performanceAttempts, rangeBounds, reviewAnalytics } from './statistics';
+import { sessionStatistics } from './advanced';
 
 let serial = 0;
 const attempt = (actual: string, guess?: string, extra: Partial<Attempt> = {}): Attempt => ({
@@ -37,6 +38,12 @@ test('filters exclude Study, Review, and AI-assisted Play by default and respect
   assert.equal(filterByRange([new Date(2026, 8, 10, 0).getTime(), new Date(2026, 8, 9, 23, 59).getTime()], (value) => value, bounds).length, 1);
   const custom = rangeBounds('custom', noon, { from: '2026-09-01', to: '2026-09-10' });
   assert.equal(filterByRange([new Date(2026, 8, 1).getTime(), new Date(2026, 8, 11).getTime()], (value) => value, custom).length, 1);
+});
+
+test('AI-assisted Play is opt-in for performance statistics', () => {
+  const assisted = attempt('EE', 'EE', { aiAssisted: true });
+  assert.deepEqual(performanceAttempts([assisted]), []);
+  assert.deepEqual(performanceAttempts([assisted], false, true).map((item) => item.id), [assisted.id]);
 });
 
 test('7, 30, and 90 day ranges include their local boundary and environment filters stay exact', () => {
@@ -77,4 +84,13 @@ test('large deterministic fixture covers at least twenty countries without NaN',
   assert.equal(new Set(items.map((item) => item.countryCode)).size >= 20, true);
   assert.equal(Number.isFinite(value.averageScore), true);
   assert.equal(Number.isNaN(value.ladder.country.rate), false);
+});
+
+test('session statistics ignore empty reload and HMR records', () => {
+  const rows = sessionStatistics([
+    { id: 'empty-a', startedAt: 1, endedAt: 2, activeTimeSeconds: 0 },
+    { id: 'real', startedAt: 3, endedAt: 13, activeTimeSeconds: 10 },
+    { id: 'empty-b', startedAt: 14, endedAt: 15, activeTimeSeconds: 0 },
+  ], [], []).rows;
+  assert.deepEqual(rows.map((item) => item.id), ['real']);
 });

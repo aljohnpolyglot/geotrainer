@@ -4,11 +4,13 @@ import type {
   ClueRecord,
   Collection,
   GameRecord,
+  GameSettings,
   LocationResult,
   ReviewFilters,
   ReviewGrade,
   ReviewRecord,
   SettingRecord,
+  SchedulerPreferences,
   StudyVisit,
   TrainerLocation,
   TrainingSession,
@@ -23,8 +25,61 @@ export const STORE_NAMES = [
 export type StoreName = (typeof STORE_NAMES)[number];
 const changeListeners = new Set<() => void>();
 const notifyChange = () => changeListeners.forEach((listener) => listener());
-const intervalsFor = (oldInterval: number): Record<ReviewGrade, number> => ({
-  again: 5 / 1440,
+const detectedTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 20, maximumReviewsPerDay: 200, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'due', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
+export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
+  const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
+  const rounds = Number(source.roundCount);
+  return {
+    roundCount: Number.isInteger(rounds) && rounds >= 1 && rounds <= 100 ? rounds : 5,
+    collectionId: typeof source.collectionId === 'string' ? source.collectionId : 'world',
+    canMove: typeof source.canMove === 'boolean' ? source.canMove : true,
+    canPan: typeof source.canPan === 'boolean' ? source.canPan : true,
+    canZoom: typeof source.canZoom === 'boolean' ? source.canZoom : true,
+    showCompass: typeof source.showCompass === 'boolean' ? source.showCompass : showCompass,
+    aiCoachEnabled: typeof source.aiCoachEnabled === 'boolean' ? source.aiCoachEnabled : true,
+    environment: source.environment === 'urban' || source.environment === 'suburban' || source.environment === 'rural' ? source.environment : 'mixed',
+    urbanLevel: source.urbanLevel === 1 || source.urbanLevel === 2 ? source.urbanLevel : 3,
+    samplingMode: source.samplingMode === 'balanced' ? 'balanced' : 'natural',
+    timeLimitSeconds: [0, 30, 60, 90, 120].includes(Number(source.timeLimitSeconds)) ? Number(source.timeLimitSeconds) : 0,
+  };
+};
+export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferences => {
+  const source = value && typeof value === 'object' ? value as Partial<SchedulerPreferences> : {};
+  const number = (key: keyof SchedulerPreferences, min: number, max: number) => Math.min(max, Math.max(min, Number(source[key]) || DEFAULT_SCHEDULER_PREFERENCES[key] as number));
+  const auto = source.reviewTimeZoneAuto !== false;
+  let timeZone = typeof source.reviewTimeZone === 'string' ? source.reviewTimeZone.trim() : '';
+  try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
+  return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'random' ? 'random' : 'due', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
+};
+
+const zonedParts = (value: number, timeZone: string) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
+const utcForZonedDateTime = (parts: Record<string, number>, timeZone: string) => {
+  let candidate = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const local = zonedParts(candidate, timeZone);
+    candidate += Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute) - Date.UTC(local.year, local.month - 1, local.day, local.hour, local.minute);
+  }
+  return candidate;
+};
+export const reviewDayStart = (value = Date.now(), preferences: SchedulerPreferences = DEFAULT_SCHEDULER_PREFERENCES) => {
+  const timeZone = preferences.reviewTimeZone || detectedTimeZone();
+  const reset = preferences.reviewDayResetMinutes ?? 0;
+  const current = zonedParts(value, timeZone);
+  const beforeReset = current.hour * 60 + current.minute < reset;
+  const base = Date.UTC(current.year, current.month - 1, current.day - (beforeReset ? 1 : 0));
+  const date = new Date(base);
+  return utcForZonedDateTime({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: Math.floor(reset / 60), minute: reset % 60 }, timeZone);
+};
+export const nextReviewDayBoundary = (value = Date.now(), preferences: SchedulerPreferences = DEFAULT_SCHEDULER_PREFERENCES) => {
+  const start = reviewDayStart(value, preferences);
+  const parts = zonedParts(start, preferences.reviewTimeZone || detectedTimeZone());
+  const next = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + 1));
+  return utcForZonedDateTime({ year: next.getUTCFullYear(), month: next.getUTCMonth() + 1, day: next.getUTCDate(), hour: parts.hour, minute: parts.minute }, preferences.reviewTimeZone || detectedTimeZone());
+};
+const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
+const intervalsFor = (oldInterval: number, preferences = DEFAULT_SCHEDULER_PREFERENCES): Record<ReviewGrade, number> => ({
+  again: preferences.relearningMinutes / 1440,
   hard: Math.max(1, oldInterval * 1.5),
   good: Math.max(3, oldInterval * 2),
   easy: Math.max(7, oldInterval * 2.5),
@@ -32,6 +87,23 @@ const intervalsFor = (oldInterval: number): Record<ReviewGrade, number> => ({
 
 export const reviewGradeForScore = (score: number): ReviewGrade =>
   score < 2000 ? 'again' : score < 3000 ? 'hard' : score < 4500 ? 'good' : 'easy';
+
+const scoreThresholds = { beginner: [1500, 2500, 4200], balanced: [2000, 3000, 4500], pro: [4800, 4900, 5000] } as const;
+const correctionThresholds = { beginner: 1500, balanced: 3000, pro: 4800 } as const;
+export const passingScoreFor = (strictness: SchedulerPreferences['strictness']) => correctionThresholds[strictness];
+export const reviewGradeForPerformance = (score: number, timeSpentSeconds: number, correctCountry = true, maximumAnswerSeconds = 60, strictness: SchedulerPreferences['strictness'] = 'balanced'): ReviewGrade => {
+  const [againBelow, hardBelow, easyAt] = scoreThresholds[strictness];
+  if (!correctCountry || score < againBelow) return 'again';
+  if (score < hardBelow || timeSpentSeconds > maximumAnswerSeconds) return 'hard';
+  if (score < easyAt || timeSpentSeconds > maximumAnswerSeconds / 2) return 'good';
+  return 'easy';
+};
+
+export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced') =>
+  guessedCountryCode !== countryCode || score < passingScoreFor(strictness);
+
+export const reviewGradeForCorrection = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced'): ReviewGrade =>
+  isCountryMistake(score, countryCode, guessedCountryCode, strictness) ? 'again' : 'hard';
 
 let database: Promise<IDBDatabase> | undefined;
 
@@ -207,6 +279,7 @@ export const trainerDb = {
   sessions: () => all<TrainingSession>('sessions'),
   clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
+  schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   setSetting: (key: string, value: unknown) => put('settings', { key, value }),
   saveGame: (game: GameRecord) => put('games', game),
   deleteGame: (id: string) => remove('games', id),
@@ -246,14 +319,15 @@ export const trainerDb = {
   },
 
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {
-    const [attempts, reviews, bookmarks] = await Promise.all([
-      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<BookmarkLocation>('bookmarks'),
+    const [attempts, reviews, bookmarks, storedPreferences] = await Promise.all([
+      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
     ]);
+    const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
     const reviewByPano = new Map(reviews.map((item) => [item.panoId, item]));
     const bookmarked = new Set(bookmarks.map((item) => item.panoId));
     const now = Date.now();
     const recentCutoff = now - 30 * 864e5;
-    return attempts
+    const queue = attempts
       .filter((attempt) => !filters.countryCodes?.length || filters.countryCodes.includes(attempt.countryCode))
       .filter((attempt) => !filters.environment || (attempt.environmentRequested ?? attempt.environment ?? 'mixed') === filters.environment)
       .filter((attempt) => filters.minScore === undefined || attempt.score >= filters.minScore)
@@ -262,15 +336,29 @@ export const trainerDb = {
       .filter((attempt) => !filters.recent || (attempt.createdAt >= recentCutoff && attempt.score < 4000))
       .filter((attempt) => !filters.neverReviewed || !reviewByPano.has(attempt.panoId))
       .filter((attempt) => !filters.bookmarked || bookmarked.has(attempt.panoId))
-      .filter((attempt) => !filters.due || (!!reviewByPano.get(attempt.panoId) && reviewByPano.get(attempt.panoId)!.dueAt <= now))
-      .sort((a, b) => a.score - b.score || b.createdAt - a.createdAt)
+      .filter((attempt) => !filters.due || (!!reviewByPano.get(attempt.panoId) && isReviewDue(reviewByPano.get(attempt.panoId)!, now, preferences)))
+      .sort((a, b) => filters.due
+        ? (reviewByPano.get(a.panoId)?.dueAt || 0) - (reviewByPano.get(b.panoId)?.dueAt || 0)
+        : a.score - b.score || b.createdAt - a.createdAt)
       .filter((attempt, index, values) => values.findIndex((other) => other.panoId === attempt.panoId) === index);
+    if (!filters.due) return queue;
+    if (preferences.reviewOrder === 'random') queue.sort(() => Math.random() - .5);
+    const today = reviewDayStart(now, preferences); const nowForLimits = now;
+    const reviewsToday = reviews.reduce((total, review) => total + (review.gradingHistory?.filter(({ at }) => at >= today && at <= nowForLimits).length || (review.lastReviewedAt && review.lastReviewedAt >= today && review.lastReviewedAt <= nowForLimits ? 1 : 0)), 0);
+    const newCardsToday = reviews.filter((review) => {
+      if (!review.reviewCount) return false;
+      const firstReviewAt = review.gradingHistory?.[0]?.at ?? (review.reviewCount === 1 ? review.lastReviewedAt : undefined);
+      return firstReviewAt !== undefined && firstReviewAt >= today && firstReviewAt <= nowForLimits;
+    }).length;
+    const newIds = new Set(queue.filter((attempt) => !reviewByPano.get(attempt.panoId)?.reviewCount).slice(0, Math.max(0, preferences.newCardsPerDay - newCardsToday)).map((attempt) => attempt.id));
+    return queue.filter((attempt) => reviewByPano.get(attempt.panoId)?.reviewCount || newIds.has(attempt.id)).slice(0, Math.max(0, preferences.maximumReviewsPerDay - reviewsToday));
   },
 
-  async gradeReview(panoId: string, grade: ReviewGrade): Promise<ReviewRecord> {
+  async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number): Promise<ReviewRecord> {
     const previous = await get<ReviewRecord>('reviews', panoId);
+    const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     const oldInterval = previous?.intervalDays || 0;
-    const intervalDays = intervalsFor(oldInterval)[grade];
+    const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(oldInterval, preferences)[grade]);
     const now = Date.now();
     const next: ReviewRecord = {
       id: panoId,
@@ -286,6 +374,18 @@ export const trainerDb = {
     return next;
   },
 
+  async scheduleFirstPlay(panoId: string, grade: ReviewGrade): Promise<ReviewRecord> {
+    const existing = await get<ReviewRecord>('reviews', panoId);
+    if (existing) return existing;
+    const now = Date.now();
+    const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
+    const intervalDays: Record<ReviewGrade, number> = { again: preferences.firstReviewDays, hard: preferences.firstReviewDays, good: 7, easy: preferences.easyFirstIntervalDays };
+    const days = Math.min(preferences.maximumIntervalDays, intervalDays[grade]);
+    const created: ReviewRecord = { id: panoId, panoId, dueAt: now + days * 864e5, intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    await put('reviews', created);
+    return created;
+  },
+
   async queueForReview(panoId: string, dueNow = false): Promise<ReviewRecord> {
     const existing = await get<ReviewRecord>('reviews', panoId);
     if (existing) {
@@ -294,14 +394,17 @@ export const trainerDb = {
       await put('reviews', queued);
       return queued;
     }
-    const created: ReviewRecord = { id: panoId, panoId, dueAt: Date.now(), intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    const now = Date.now();
+    const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
+    const created: ReviewRecord = { id: panoId, panoId, dueAt: dueNow ? now : now + preferences.firstReviewDays * 864e5, intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
     await put('reviews', created);
     return created;
   },
 
   async reviewIntervals(panoId: string): Promise<Record<ReviewGrade, number>> {
     const oldInterval = (await get<ReviewRecord>('reviews', panoId))?.intervalDays || 0;
-    return intervalsFor(oldInterval);
+    const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
+    return intervalsFor(oldInterval, preferences);
   },
 };
 

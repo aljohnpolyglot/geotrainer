@@ -16,6 +16,8 @@ import {
   Clock,
   MapPin,
 } from 'lucide-react';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface BookmarksModalProps {
   isOpen: boolean;
@@ -34,6 +36,8 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
   onDeleteBookmark,
   activePanoId,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredBookmarks = useMemo(() => {
@@ -65,7 +69,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-stone-800">
           <div className="flex items-center space-x-2.5">
             <BookmarkCheck className="w-5 h-5 text-amber-400" />
-            <h2 className="text-base font-semibold text-stone-100">Saved Bookmarks</h2>
+            <h2 className="text-base font-semibold text-stone-100">{t('savedBookmarks')}</h2>
             <span className="text-xs bg-stone-800 text-stone-300 px-2 py-0.5 rounded-full font-mono">
               {bookmarks.length}
             </span>
@@ -73,7 +77,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
           <button
             onClick={onClose}
             className="p-1 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
-            title="Close"
+            title={t('close')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -88,7 +92,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by country, city, or address..."
+                placeholder={t('searchBookmarks')}
                 className="w-full bg-stone-950 border border-stone-800 rounded-lg pl-9 pr-3.5 py-1.5 text-xs text-stone-100 placeholder-stone-500 focus:outline-hidden focus:border-stone-500"
               />
             </div>
@@ -103,7 +107,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
                 <BookmarkCheck className="w-6 h-6" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium text-stone-300">No bookmarks saved yet</p>
+                <p className="text-sm font-medium text-stone-300">{t('noBookmarks')}</p>
                 <p className="text-xs text-stone-500 max-w-xs mx-auto">
                   Click the bookmark button on any Street View panorama to collect and revisit it anytime.
                 </p>
@@ -153,7 +157,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
                       </span>
                       {isActive && (
                         <span className="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-medium">
-                          Active View
+                          {t('activeView')}
                         </span>
                       )}
                     </div>
@@ -194,14 +198,14 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-white text-stone-950 text-xs font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
                     >
                       <Navigation className="w-3 h-3 text-stone-900" />
-                      <span>Reopen</span>
+                      <span>{t('reopen')}</span>
                     </button>
 
                     <a
                       href={`https://www.google.com/maps/@?api=1&map_action=pano&pano=${b.panoId}`}
                       target="_blank"
                       rel="noreferrer"
-                      title="Open in Google Maps"
+                      title={t('Open in Google Maps')}
                       className="p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -209,7 +213,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
 
                     <button
                       onClick={() => onDeleteBookmark(b.id)}
-                      title="Delete bookmark"
+                      title={t('Delete bookmark')}
                       className="p-1.5 text-stone-500 hover:text-rose-400 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -227,7 +231,7 @@ export const BookmarksModal: React.FC<BookmarksModalProps> = ({
             onClick={onClose}
             className="px-4 py-1.5 text-xs font-medium text-stone-300 hover:text-white cursor-pointer"
           >
-            Close
+            {t('close')}
           </button>
         </div>
       </div>

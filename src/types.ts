@@ -67,9 +67,32 @@ export interface LocationRequestContext {
   requestId?: number;
   collectionId?: string;
   excludedPanoIds?: ReadonlySet<string>;
+  requireNavigation?: boolean;
 }
 
 export type AppMode = 'study' | 'play' | 'review';
+export type ReviewSessionKind = 'practice' | 'due' | 'correction';
+export type SupportedLanguage = 'en' | 'es' | 'pt' | 'fr' | 'de' | 'it' | 'ru' | 'sv';
+export interface LanguagePreferences {
+  ui: SupportedLanguage;
+  game: SupportedLanguage;
+  ai: SupportedLanguage;
+}
+export interface SchedulerPreferences {
+  strictness: 'beginner' | 'balanced' | 'pro';
+  newCardsPerDay: number;
+  maximumReviewsPerDay: number;
+  firstReviewDays: number;
+  relearningMinutes: number;
+  easyFirstIntervalDays: number;
+  maximumIntervalDays: number;
+  maximumAnswerSeconds: number;
+  reviewOrder: 'due' | 'random';
+  /** Optional migration-safe daily boundary settings. */
+  reviewDayResetMinutes?: number;
+  reviewTimeZone?: string;
+  reviewTimeZoneAuto?: boolean;
+}
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
@@ -82,6 +105,7 @@ export interface GameSettings {
   canPan: boolean;  // 360 camera rotation
   canZoom: boolean; // Zoom in / out
   showCompass?: boolean; // Optional for backwards-compatible saved games
+  aiCoachEnabled?: boolean; // Optional for backwards-compatible saved games
   environment?: Environment;
   urbanLevel?: UrbanLevel;
   samplingMode?: SamplingMode;
@@ -95,6 +119,7 @@ export interface GameRound {
   distanceKm: number | null;
   score: number;
   timeSpentSeconds: number;
+  guessedCountryCode?: string;
   locality?: string;
   adminArea?: string;
   formattedAddress?: string;
@@ -199,6 +224,7 @@ export interface CoachAnalysis {
   candidates: Array<{ countryCode: string; confidence: number }>;
   strongClues: string[];
   weakClues: string[];
+  contradictions?: string[];
   confusions: string[];
   nextThingsToInspect: string[];
   coreCard?: { front: string[]; backExplanation: string };
@@ -209,6 +235,8 @@ export interface ClueRecord {
   id: string;
   countryCode: string;
   panoId: string;
+  lat?: number;
+  lng?: number;
   createdAt: number;
   imageDataUrl: string;
   model: string;

@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type Point = { lat: number; lng: number };
 
@@ -8,6 +10,8 @@ export function ResultMap({ actual, guess, previousGuess, className = '' }: {
   previousGuess?: Point | null;
   className?: string;
 }) {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,12 +31,12 @@ export function ResultMap({ actual, guess, previousGuess, className = '' }: {
         icon: { path: google.maps.SymbolPath.CIRCLE, scale, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3 },
       }));
     };
-    addMarker(actual, 'Original location', '#22c55e', 8);
+    addMarker(actual, t('originalLocation'), '#22c55e', 8);
     if (guess) {
-      addMarker(guess, 'Current review guess', '#ef4444');
+      addMarker(guess, t('currentGuess'), '#ef4444');
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
-    if (previousGuess) addMarker(previousGuess, 'Previous guess', '#2563eb', 6);
+    if (previousGuess) addMarker(previousGuess, t('previousGuess'), '#2563eb', 6);
     map.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
     const idle = map.addListener('idle', () => {
       if ((map.getZoom() || 0) > 15) map.setZoom(14);
@@ -46,7 +50,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '' }: {
   }, [actual.lat, actual.lng, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng]);
 
   return <div className={`result-map-wrap ${className}`}>
-    <div ref={element} className="result-map-canvas" aria-label="Result map: original location, current guess, and previous guess" />
-    <div className="result-map-legend" aria-hidden="true"><span className="actual">Actual</span>{guess && <span className="current">Today</span>}{previousGuess && <span className="previous">Previous</span>}</div>
+    <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
+    <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuess && <span className="previous">{t('previous')}</span>}</div>
   </div>;
 }

@@ -1,10 +1,10 @@
-.account-entry { width: 100%; min-height: 68px; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto 18px; align-items: center; gap: 12px; margin-top: 24px; padding: 12px 14px; color: var(--carbon); background: #fff; border: 1px solid var(--rule); border-radius: 8px; text-align: left; cursor: pointer; }
+.account-entry { width: 100%; min-height: 68px; display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, auto) 18px; align-items: center; gap: 12px; margin-top: 24px; padding: 12px 14px; overflow: hidden; color: var(--carbon); background: #fff; border: 1px solid var(--rule); border-radius: 8px; text-align: left; cursor: pointer; }
 .account-entry:hover { background: #e7eef0; border-color: #8fa3aa; }
 .account-entry-icon { display: grid; width: 40px; height: 40px; place-items: center; color: #fff; background: var(--storm); border-radius: 4px; }
 .account-entry > span:nth-child(2) { min-width: 0; display: grid; gap: 4px; }
 .account-entry strong { font-size: 13px; }
 .account-entry small { overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.sync-state { padding: 5px 7px; color: var(--muted); background: #dfe7e8; border-radius: 2px; font: 750 9px/1 ui-monospace, SFMono-Regular, Consolas, monospace; text-transform: uppercase; }
+.sync-state { max-width: 100%; padding: 5px 7px; overflow: hidden; color: var(--muted); background: #dfe7e8; border-radius: 2px; font: 750 9px/1 ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
 .sync-state.synced { color: #17390b; background: var(--lime); }
 .sync-state.error { color: #fff; background: var(--vermilion); }
 .account-dialog { position: fixed; inset: 0; width: min(520px, calc(100vw - 28px)); max-height: calc(100vh - 28px); margin: auto; padding: 0; color: var(--carbon); background: var(--paper); border: 0; border-radius: 14px; box-shadow: 0 24px 70px rgba(0, 18, 29, .38); overflow: auto; }

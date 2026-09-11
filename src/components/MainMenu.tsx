@@ -1,28 +1,34 @@
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
-import { ArrowRight, BookOpen, ChevronRight, Cloud, Database, Gamepad2, MapPinned, Target } from 'lucide-react';
-import { trainerDb } from '../data/trainerDb';
+import { ArrowRight, BookOpen, ChevronRight, Cloud, Gamepad2, MapPinned, Target } from 'lucide-react';
+import { reviewDayStart, trainerDb } from '../data/trainerDb';
 import { cloudSync } from '../services/cloudSync';
 import { CloudAccountDialog } from './CloudAccountDialog';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { translate } from '../services/language';
 
 interface MainMenuProps {
   refreshKey: number;
   onStudy: () => void;
   onPlay: () => void;
   onReview: () => void;
-  onData: () => void;
 }
 
-export function MainMenu({ refreshKey, onStudy, onPlay, onReview, onData }: MainMenuProps) {
-  const [status, setStatus] = useState({ locations: 0, attempts: 0, due: 0, minutes: 0 });
+export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProps) {
+  const [status, setStatus] = useState({ locations: 0, attempts: 0, due: 0, nextDue: null as number | null, scheduled: false, timeZone: undefined as string | undefined, minutes: 0 });
   const sync = useSyncExternalStore(cloudSync.subscribe, cloudSync.getSnapshot);
   const [accountOpen, setAccountOpen] = useState(false);
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
 
   useEffect(() => {
-    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions()])
-      .then(([locations, attempts, reviews, sessions]) => setStatus({
+    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.schedulerPreferences()])
+      .then(([locations, attempts, reviews, sessions, scheduler]) => setStatus({
         locations: locations.length,
         attempts: attempts.length,
-        due: reviews.filter((review) => review.dueAt <= Date.now()).length,
+        due: reviews.filter((review) => review.intervalDays < 1 ? review.dueAt <= Date.now() : reviewDayStart(review.dueAt, scheduler) <= reviewDayStart(Date.now(), scheduler)).length,
+        nextDue: reviews.reduce<number | null>((next, review) => { const today = reviewDayStart(Date.now(), scheduler); const candidate = review.intervalDays < 1 ? review.dueAt : reviewDayStart(review.dueAt, scheduler); return candidate > today && (next === null || candidate < next) ? candidate : next; }, null),
+        scheduled: reviews.length > 0,
+        timeZone: scheduler.reviewTimeZone,
         minutes: Math.round(sessions.reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
       }))
       .catch(() => {});
@@ -31,32 +37,31 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview, onData }: Main
   return (
     <section className="main-menu">
       <div className="menu-mast">
-        <div className="wordmark"><MapPinned size={24} /><span>GEOTRAINER</span><small>personal street view practice</small></div>
+        <div className="wordmark"><MapPinned size={24} /><span>GEOTRAINER</span><small>{t('personal street view practice')}</small></div>
         <div className="menu-orbit" aria-hidden="true"><i /><i /><i /></div>
         <div className="menu-intro">
-          <h1>Build a world<br />you can recognize.</h1>
-          <p>Study unfamiliar roads, test your recall, then return to the places that fooled you.</p>
+          <h1>{t('Build a world')}<br />{t('you can recognize.')}</h1>
+          <p>{t('Study unfamiliar roads, test your recall, then return to the places that fooled you.')}</p>
         </div>
-        <button className="menu-primary" onClick={onStudy}><span><BookOpen size={18} /><strong>Continue Study</strong><small>Open a fresh panorama</small></span><ArrowRight size={20} /></button>
+        <button className="menu-primary" onClick={onStudy}><span><BookOpen size={18} /><strong>{t('Continue Study')}</strong><small>{t('Open a fresh panorama')}</small></span><ArrowRight size={20} /></button>
       </div>
 
       <div className="departure-board">
-        <div className="board-heading"><span>Field desk</span><span>Local · Private</span></div>
-        <button onClick={onPlay}><span className="route-code">PLY</span><span><strong>Start a game</strong><small>3–15 scored rounds · Standard / No Move / NMPZ</small></span><Gamepad2 size={19} /></button>
-        <button onClick={onReview}><span className="route-code">REV</span><span><strong>Review weak places</strong><small>{status.due ? `${status.due} scheduled now` : 'Build a queue from past mistakes'}</small></span><Target size={19} /></button>
-        <button onClick={onData}><span className="route-code">DAT</span><span><strong>Back up progress</strong><small>Export or restore the complete trainer database</small></span><Database size={19} /></button>
+        <div className="board-heading"><span>{t('Field desk')}</span><span>{t('Local · Private')}</span></div>
+        <button onClick={onPlay}><span className="route-code">PLY</span><span><strong>{t('Start a game')}</strong><small>{t('1–100 scored rounds · Standard / No Move / NMPZ')}</small></span><Gamepad2 size={19} /></button>
+        <button onClick={onReview}><span className="route-code">REV</span><span><strong>{t('Review weak places')}</strong><small>{status.due ? `${status.due} ${t('reviewsDueToday')}` : status.nextDue ? `${t('dailyReviewsComplete')} · ${t('tryAgainAt')}: ${new Date(status.nextDue).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short', ...(status.timeZone ? { timeZone: status.timeZone } : {}) })}` : status.scheduled ? t('dailyReviewsComplete') : t('noReviewsScheduled')}</small></span><Target size={19} /></button>
         <div className="menu-status">
-          <span><strong>{status.locations.toLocaleString()}</strong> places encountered</span>
-          <span><strong>{status.attempts.toLocaleString()}</strong> attempts retained</span>
-          <span><strong>{status.minutes.toLocaleString()}</strong> active minutes</span>
+          <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>
+          <span><strong>{status.attempts.toLocaleString()}</strong> {t('attempts retained')}</span>
+          <span><strong>{status.minutes.toLocaleString()}</strong> {t('active minutes')}</span>
         </div>
         <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>
           <span className="account-entry-icon"><Cloud size={19} /></span>
-          <span><strong>{sync.email ? 'Cloud account' : 'Protect your progress'}</strong><small>{sync.email || 'Sign in or create an account'}</small></span>
-          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? 'Synced' : sync.phase.replace('-', ' ')}</span>
+          <span><strong>{sync.email ? t('Cloud account') : t('Protect your progress')}</strong><small>{sync.email || t('Sign in or create an account')}</small></span>
+          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase.replace('-', ' ')}</span>
           <ChevronRight size={18} />
         </button>
-        <p className="local-note">Your field log stays available offline and syncs when you sign in.</p>
+        <p className="local-note">{t('Your field log stays available offline and syncs when you sign in.')}</p>
       </div>
       <CloudAccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
     </section>

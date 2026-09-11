@@ -8,7 +8,9 @@ import { GameRecord, LocationResult } from '../types';
 import { formatDistance, getScoreRating } from '../services/gameLogic';
 import { getFlagCdnUrl } from '../services/geocoding';
 import { COUNTRIES } from '../data/countries';
-import { Trophy, RotateCcw, ListRestart, History, X, ExternalLink, MapPin } from 'lucide-react';
+import { Trophy, RotateCcw, ListRestart, History, X, ExternalLink, MapPin, Target } from 'lucide-react';
+import { translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface GameSummaryModalProps {
   game: GameRecord;
@@ -16,6 +18,7 @@ interface GameSummaryModalProps {
   onNewGame: () => void;
   onViewHistory: () => void;
   onClose: () => void;
+  onPracticeMistakes?: () => void;
   onGoToLocation?: (location: LocationResult) => void;
 }
 
@@ -25,8 +28,11 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
   onNewGame,
   onViewHistory,
   onClose,
+  onPracticeMistakes,
   onGoToLocation,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   const percentage = game.totalScore / (game.maxPossibleScore || 1);
@@ -150,14 +156,14 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">Game Completed</h1>
+                <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t('gameCompleted')}</h1>
                 <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-800 border border-stone-700 ${rating.color}`}>
                   {rating.title}
                 </span>
               </div>
               <p className="text-xs text-stone-400 mt-0.5">
-                Collection: <span className="text-stone-200 font-medium">{game.collectionName}</span> •{' '}
-                {game.rounds.length} rounds • {game.settings.canMove ? 'Move allowed' : 'No move'}
+                {t('Collection')}: <span className="text-stone-200 font-medium">{game.collectionName}</span> •{' '}
+                {game.rounds.length} {t('rounds')} • {game.settings.canMove ? t('Move allowed') : t('No Move')}
                 {game.settings.timeLimitSeconds > 0 && ` • ${game.settings.timeLimitSeconds}s timer`}
               </p>
             </div>
@@ -167,7 +173,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
           <div className="flex items-center space-x-4">
             <div className="text-right">
               <span className="text-xs text-stone-400 uppercase tracking-wider block font-semibold">
-                Final Score
+                {t('finalScore')}
               </span>
               <div className="text-2xl sm:text-3xl font-black font-mono text-amber-400">
                 {game.totalScore.toLocaleString()}{' '}
@@ -181,7 +187,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
             <button
               id="game-summary-exit-btn-top"
               onClick={onClose}
-              title="Exit modal (Esc)"
+              title={t('Exit modal (Esc)')}
               className="p-2 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white rounded-xl transition-colors cursor-pointer border border-stone-700/60"
             >
               <X className="w-5 h-5" />
@@ -199,10 +205,10 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
             <div className="px-4 py-3 bg-stone-950/60 border-b border-stone-800 flex items-center justify-between">
               <div>
                 <span className="text-xs font-semibold text-stone-300 uppercase tracking-wider block">
-                  Round Breakdown
+                  {t('roundBreakdown')}
                 </span>
                 <span className="text-[10px] text-stone-400">
-                  Click any round to open in Street View
+                  {t('Click any round to open in Street View')}
                 </span>
               </div>
               <MapPin className="w-3.5 h-3.5 text-amber-400" />
@@ -222,7 +228,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
                         onGoToLocation(r.location);
                       }
                     }}
-                    title={`Go to Round ${r.roundNumber} (${countryName}) in Street View`}
+                    title={`${t('Open')} ${t('Round')} ${r.roundNumber} (${countryName})`}
                     className="w-full text-left p-3.5 hover:bg-stone-800/70 transition-all cursor-pointer group border-l-3 border-transparent hover:border-amber-400 relative"
                   >
                     <div className="flex items-center justify-between mb-1.5">
@@ -255,12 +261,12 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
 
                     <div className="flex items-center justify-between text-[11px] text-stone-400 font-mono pl-7">
                       <span>
-                        {r.distanceKm !== null ? formatDistance(r.distanceKm) : 'No guess'}
+                        {r.distanceKm !== null ? formatDistance(r.distanceKm) : t('noGuess')}
                       </span>
                       <div className="flex items-center space-x-1.5">
                         <span className="text-stone-500 font-sans">{r.timeSpentSeconds}s</span>
                         <span className="text-[10px] text-amber-400/90 font-sans hidden group-hover:inline">
-                          View →
+                          {t('View')} →
                         </span>
                       </div>
                     </div>
@@ -279,7 +285,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white text-xs font-medium rounded-lg border border-stone-800 transition-colors cursor-pointer"
             >
               <History className="w-3.5 h-3.5 text-amber-400" />
-              <span>Past Games Collection</span>
+              <span>{t('Past Games Collection')}</span>
             </button>
 
             {/* Footer Exit Button */}
@@ -289,17 +295,24 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white text-xs font-medium rounded-lg border border-stone-800 transition-colors cursor-pointer"
             >
               <X className="w-3.5 h-3.5 text-stone-400" />
-              <span>Exit</span>
+              <span>{t('Exit')}</span>
             </button>
           </div>
 
           <div className="flex items-center space-x-2.5">
+            {onPracticeMistakes && <button
+              onClick={onPracticeMistakes}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+            >
+              <Target className="w-3.5 h-3.5" />
+              <span>{t('practiceMistakes')}</span>
+            </button>}
             <button
               onClick={onNewGame}
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-stone-800 hover:bg-stone-750 text-stone-200 text-xs font-medium rounded-lg transition-colors cursor-pointer border border-stone-700/60"
             >
               <ListRestart className="w-3.5 h-3.5" />
-              <span>Change Settings</span>
+              <span>{t('changeSettings')}</span>
             </button>
 
             <button
@@ -307,7 +320,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               className="inline-flex items-center gap-2 px-5 py-2 bg-stone-100 hover:bg-white text-stone-950 text-xs sm:text-sm font-bold rounded-lg shadow-md transition-all cursor-pointer active:scale-98"
             >
               <RotateCcw className="w-3.5 h-3.5 text-stone-900" />
-              <span>Play Again</span>
+              <span>{t('playAgain')}</span>
             </button>
           </div>
         </div>

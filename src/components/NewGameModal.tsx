@@ -6,6 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Collection, Environment, GameSettings, SamplingMode, UrbanLevel } from '../types';
 import { BUILT_IN_COLLECTION_GROUPS, TRAINING_PRESETS } from '../data/collections';
+import { normalizeGamePreferences, trainerDb } from '../data/trainerDb';
 import {
   Gamepad2,
   X,
@@ -18,6 +19,8 @@ import {
   Layers,
   Sparkles,
 } from 'lucide-react';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { translate } from '../services/language';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -38,18 +41,33 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   pastGamesCount,
   defaultShowCompass,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [roundCount, setRoundCount] = useState<number>(5);
+  const [customRounds, setCustomRounds] = useState(false);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('world');
   const [canMove, setCanMove] = useState<boolean>(true);
   const [canPan, setCanPan] = useState<boolean>(true);
   const [canZoom, setCanZoom] = useState<boolean>(true);
   const [timeLimitSeconds, setTimeLimitSeconds] = useState<number>(0); // 0 = unlimited
   const [showCompass, setShowCompass] = useState(defaultShowCompass);
+  const [aiCoachEnabled, setAiCoachEnabled] = useState(true);
   const [environment, setEnvironment] = useState<Environment>('mixed');
   const [urbanLevel, setUrbanLevel] = useState<UrbanLevel>(3);
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
 
-  useEffect(() => { if (isOpen) setShowCompass(defaultShowCompass); }, [isOpen, defaultShowCompass]);
+  useEffect(() => {
+    if (!isOpen) return;
+    let active = true;
+    void trainerDb.setting<GameSettings>('gamePreferences').then((stored) => {
+      if (!active) return;
+      const value = normalizeGamePreferences(stored, defaultShowCompass);
+      setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
+      setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setTimeLimitSeconds(value.timeLimitSeconds);
+    });
+    return () => { active = false; };
+  }, [isOpen, defaultShowCompass, collections]);
 
   if (!isOpen) return null;
 
@@ -71,18 +89,21 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   };
 
   const handleStart = () => {
-    onStartGame({
+    const settings = {
       roundCount,
       collectionId: selectedCollectionId,
       canMove,
       canPan,
       canZoom,
       showCompass,
+      aiCoachEnabled,
       environment,
       urbanLevel,
       samplingMode,
       timeLimitSeconds,
-    });
+    };
+    void trainerDb.setSetting('gamePreferences', settings);
+    onStartGame(settings);
   };
 
   const isNmpz = !canMove && !canPan && !canZoom;
@@ -105,8 +126,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               <Gamepad2 className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">New Game Setup</h2>
-              <p className="text-[11px] text-stone-400">Configure rounds, rules, and timers</p>
+              <h2 className="text-base font-bold text-white tracking-tight">{t('New Game Setup')}</h2>
+              <p className="text-[11px] text-stone-400">{t('Configure rounds, rules, and timers')}</p>
             </div>
           </div>
 
@@ -124,7 +145,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           <div className="space-y-1.5">
             <label className="text-stone-300 font-semibold uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-amber-400" />
-              <span>Map Collection</span>
+              <span>{t('Map Collection')}</span>
             </label>
             <select
               value={selectedCollectionId}
@@ -136,53 +157,61 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                   {c.name} ({c.countryCodes.length} countries)
                 </option>
               ))}</optgroup>)}
-              {collections.some((item) => item.isCustom) && <optgroup label="Custom collections">{collections.filter((item) => item.isCustom).map((c) => <option key={c.id} value={c.id}>{c.name} ({c.countryCodes.length} countries)</option>)}</optgroup>}
+              {collections.some((item) => item.isCustom) && <optgroup label={t('Custom collections')}>{collections.filter((item) => item.isCustom).map((c) => <option key={c.id} value={c.id}>{c.name} ({c.countryCodes.length} {t('countries')})</option>)}</optgroup>}
             </select>
           </div>
 
           <div className="environment-game-settings">
-            <label>Environment
+            <label>{t('Environment')}
               <select value={environment} onChange={(event) => setEnvironment(event.target.value as Environment)}>
-                <option value="mixed">Mixed</option><option value="urban">Urban</option><option value="suburban">Suburban</option><option value="rural">Rural</option>
+                <option value="mixed">{t('Mixed')}</option><option value="urban">{t('Urban')}</option><option value="suburban">{t('Suburban')}</option><option value="rural">{t('Rural')}</option>
               </select>
             </label>
-            {(environment === 'urban' || environment === 'suburban') && <label>Urban Level
+            {(environment === 'urban' || environment === 'suburban') && <label>{t('Urban Level')}
               <select value={urbanLevel} onChange={(event) => setUrbanLevel(Number(event.target.value) as UrbanLevel)}>
-                <option value="1">1 — Major Cities</option><option value="2">2 — Major + Regional</option><option value="3">3 — All Available Seeds</option>
+                <option value="1">1 — {t('Major Cities')}</option><option value="2">2 — {t('Major + Regional')}</option><option value="3">3 — {t('All Available Seeds')}</option>
               </select>
             </label>}
-            <label>Sampling<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">Natural</option><option value="balanced">Balanced</option></select></label>
+            <label>{t('Sampling')}<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option></select></label>
           </div>
-          <div className="preset-list" aria-label="Training presets">{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
+          <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
 
           {/* 2. Number of Rounds / Batch Size */}
           <div className="space-y-1.5">
-            <label className="text-stone-300 font-semibold uppercase tracking-wider block">
-              Round Count (Batch Size)
+              <label className="text-stone-300 font-semibold uppercase tracking-wider block">
+              {t('Round Count (Batch Size)')}
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {[3, 5, 10, 15].map((count) => (
                 <button
                   key={count}
                   type="button"
-                  onClick={() => setRoundCount(count)}
+                  onClick={() => { setRoundCount(count); setCustomRounds(false); }}
                   className={`py-2 px-3 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer border ${
                     roundCount === count
                       ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-xs'
                       : 'bg-stone-950 text-stone-400 border-stone-800 hover:border-stone-700 hover:text-stone-200'
                   }`}
                 >
-                  {count} Rounds
+                  {count} {t('Rounds')}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => setCustomRounds(true)}
+                className={`py-2 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ${customRounds ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-stone-950 text-stone-400 border-stone-800 hover:border-stone-700 hover:text-stone-200'}`}
+              >
+                {t('Custom')}
+              </button>
             </div>
+            {customRounds && <input aria-label={t('Round Count (Batch Size)')} type="number" min="1" max="100" value={roundCount} onChange={(event) => setRoundCount(Math.min(100, Math.max(1, Math.trunc(Number(event.target.value) || 1))))} className="w-full bg-white border border-stone-300 rounded px-3 py-2 text-stone-900 text-base font-mono" />}
           </div>
 
           {/* 3. Movement & Camera Rules */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-stone-300 font-semibold uppercase tracking-wider block">
-                Movement & Camera Rules
+                {t('Movement & Camera Rules')}
               </label>
 
               {/* Quick Presets */}
@@ -194,7 +223,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                     isStandard ? 'bg-blue-600 text-white font-bold' : 'bg-stone-800 text-white/70'
                   }`}
                 >
-                  Standard
+                  {t('Standard')}
                 </button>
                 <button
                   type="button"
@@ -203,7 +232,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                     isNoMove ? 'bg-blue-600 text-white font-bold' : 'bg-stone-800 text-white/70'
                   }`}
                 >
-                  No Move
+                  {t('No Move')}
                 </button>
                 <button
                   type="button"
@@ -229,8 +258,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                 }`}
               >
                 <Navigation className={`w-4 h-4 ${canMove ? 'text-amber-400' : 'text-stone-600'}`} />
-                <span className="font-semibold text-[11px]">Walk / Move</span>
-                <span className="text-[10px] text-stone-400">{canMove ? 'Allowed' : 'Disabled'}</span>
+                <span className="font-semibold text-[11px]">{t('Walk / Move')}</span>
+                <span className="text-[10px] text-stone-400">{canMove ? t('Allowed') : t('Disabled')}</span>
               </button>
 
               {/* Pan / 360 Rotation */}
@@ -244,8 +273,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                 }`}
               >
                 <RotateCw className={`w-4 h-4 ${canPan ? 'text-amber-400' : 'text-stone-600'}`} />
-                <span className="font-semibold text-[11px]">Pan / Rotate</span>
-                <span className="text-[10px] text-stone-400">{canPan ? 'Allowed' : 'Locked'}</span>
+                <span className="font-semibold text-[11px]">{t('Pan / Rotate')}</span>
+                <span className="text-[10px] text-stone-400">{canPan ? t('Allowed') : t('Locked')}</span>
               </button>
 
               {/* Zoom */}
@@ -259,32 +288,43 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                 }`}
               >
                 <ZoomIn className={`w-4 h-4 ${canZoom ? 'text-amber-400' : 'text-stone-600'}`} />
-                <span className="font-semibold text-[11px]">Zoom In/Out</span>
-                <span className="text-[10px] text-stone-400">{canZoom ? 'Allowed' : 'Locked'}</span>
+                <span className="font-semibold text-[11px]">{t('Zoom In/Out')}</span>
+                <span className="text-[10px] text-stone-400">{canZoom ? t('Allowed') : t('Locked')}</span>
               </button>
             </div>
           </div>
 
           {/* 4. Timer Option */}
-          <button
-            type="button"
-            role="switch"
-            aria-checked={showCompass}
-            onClick={() => setShowCompass((value) => !value)}
-            className={`game-compass-setting ${showCompass ? 'enabled' : ''}`}
-          >
-            <span>Compass</span><strong>{showCompass ? 'Enabled' : 'Disabled'}</strong>
-          </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showCompass}
+              onClick={() => setShowCompass((value) => !value)}
+              className={`game-compass-setting ${showCompass ? 'enabled' : ''}`}
+            >
+              <span>{t('Compass')}</span><strong>{showCompass ? t('Enabled') : t('Disabled')}</strong>
+            </button>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={aiCoachEnabled}
+              onClick={() => setAiCoachEnabled((value) => !value)}
+              className={`game-compass-setting ${aiCoachEnabled ? 'enabled' : ''}`}
+            >
+              <span className="inline-flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" />{t('AI Coach')}</span><strong>{aiCoachEnabled ? t('Enabled') : t('Disabled')}</strong>
+            </button>
+          </div>
 
           {/* 5. Timer Option */}
           <div className="space-y-1.5">
             <label className="text-stone-300 font-semibold uppercase tracking-wider flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-amber-400" />
-              <span>Time Limit Per Round</span>
+              <span>{t('Time Limit Per Round')}</span>
             </label>
             <div className="grid grid-cols-5 gap-1.5">
               {[
-                { label: 'Unlimited', seconds: 0 },
+                { label: t('Unlimited'), seconds: 0 },
                 { label: '30s', seconds: 30 },
                 { label: '60s', seconds: 60 },
                 { label: '90s', seconds: 90 },
@@ -315,7 +355,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             className="inline-flex items-center gap-1.5 text-xs text-stone-400 hover:text-stone-200 transition-colors cursor-pointer px-2 py-1.5 rounded-lg hover:bg-stone-800"
           >
             <History className="w-3.5 h-3.5 text-amber-400" />
-            <span>Past Games ({pastGamesCount})</span>
+            <span>{t('Past Games')} ({pastGamesCount})</span>
           </button>
 
           <button
@@ -324,7 +364,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
           >
             <Play className="w-4 h-4 fill-white text-white" />
-            <span>START GAME</span>
+            <span>{t('START GAME')}</span>
           </button>
         </div>
       </div>

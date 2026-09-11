@@ -9,6 +9,9 @@ import { LocationResult } from '../types';
 import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucide-react';
 import { compassDirection } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
+import { trainerDb } from '../data/trainerDb';
+import { normalizeLanguagePreferences, translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface StreetViewContainerProps {
   currentLocation: LocationResult | null;
@@ -25,7 +28,7 @@ interface StreetViewContainerProps {
   showSunTrainingHint?: boolean;
 }
 
-let isMapsLoaderConfigured = false;
+const mapsLoaderState = globalThis as typeof globalThis & { __geotrainerMapsLoaderConfigured?: boolean };
 
 export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   currentLocation,
@@ -41,6 +44,8 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   showCompass = true,
   showSunTrainingHint = false,
 }) => {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panoInstanceRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const lockedPovRef = useRef<{ heading: number; pitch: number }>({ heading: 0, pitch: 0 });
@@ -112,16 +117,16 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     }
 
     let isMounted = true;
-    try {
-      if (!isMapsLoaderConfigured) {
-        setOptions({
-          key: apiKey,
-          v: 'weekly',
-        });
-        isMapsLoaderConfigured = true;
+    const load = async () => {
+      if (!mapsLoaderState.__geotrainerMapsLoaderConfigured) {
+        const languages = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
+        setOptions({ key: apiKey, v: 'weekly', language: languages.game });
+        mapsLoaderState.__geotrainerMapsLoaderConfigured = true;
       }
-
-      Promise.all([importLibrary('maps'), importLibrary('streetView')])
+      return Promise.all([importLibrary('maps'), importLibrary('streetView')]);
+    };
+    try {
+      void load()
         .then(() => {
           if (isMounted) {
             setMapsLoaded(true);
@@ -253,7 +258,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         <div className="max-w-md w-full bg-stone-800/90 border border-stone-700 rounded-xl p-6 shadow-2xl space-y-4">
           <div className="flex items-center space-x-3 text-amber-400">
             <KeyRound className="w-7 h-7 flex-shrink-0" />
-            <h2 className="text-lg font-semibold tracking-tight text-white">Google Maps API Key Required</h2>
+            <h2 className="text-lg font-semibold tracking-tight text-white">{t('Google Maps API Key Required')}</h2>
           </div>
           <p className="text-sm text-stone-300 leading-relaxed">
             To explore official Google Street View panoramas, configure{' '}
@@ -263,9 +268,9 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
             in your environment or Settings.
           </p>
           <div className="bg-stone-900/80 rounded-lg p-3.5 border border-stone-700/70 text-xs text-stone-300 space-y-2">
-            <p className="font-medium text-stone-200">Zero-cost Prototyping Option:</p>
+            <p className="font-medium text-stone-200">{t('Zero-cost Prototyping Option:')}</p>
             <p className="text-stone-400">
-              You can generate a free <strong>Maps Demo Key</strong> instantly without billing or Cloud project setup.
+              {t('You can generate a free')} <strong>{t('Maps Demo Key')}</strong> {t('instantly without billing or Cloud project setup.')}
             </p>
             <a
               href="https://mapsplatform.google.com/maps-demo-key?utm_campaign=gmp_mcp_codeassist_v1_aistudio"
@@ -273,7 +278,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 font-medium underline mt-1"
             >
-              Get Free Maps Demo Key
+              {t('Get Free Maps Demo Key')}
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -288,7 +293,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       <div className="flex-1 w-full h-full flex items-center justify-center bg-stone-900 text-stone-100 p-6">
         <div className="max-w-md bg-stone-800 border border-rose-800/60 rounded-xl p-6 text-center space-y-3 shadow-2xl">
           <AlertCircle className="w-8 h-8 text-rose-400 mx-auto" />
-          <h2 className="text-base font-semibold text-rose-200">Google Maps Error</h2>
+          <h2 className="text-base font-semibold text-rose-200">{t('Google Maps Error')}</h2>
           <p className="text-sm text-stone-300 leading-relaxed">{loadError}</p>
         </div>
       </div>
@@ -318,7 +323,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       )}
 
       {showCompass && currentLocation && !isLoading && (
-        <div className="street-compass" aria-label={`Compass, facing ${Math.round(heading)} degrees ${compassDirection(heading)}`}>
+        <div className="street-compass" aria-label={`${t('Compass')}, ${t('facing')} ${Math.round(heading)} ${t('degrees')} ${compassDirection(heading)}`}>
           <div className="street-compass-dial" style={{ transform: `rotate(${-heading}deg)` }}>
             <b>N</b><span className="east">E</span><span className="south">S</span><span className="west">W</span><i />
           </div>
@@ -327,7 +332,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       )}
 
       {showSunTrainingHint && currentLocation && !isLoading && (
-        <div className="sun-training-hint"><strong>Facing: {Math.round(heading)}° {compassDirection(heading)}</strong><span>Compare sun and shadows with the compass. Hemisphere tendency varies by season and latitude.</span></div>
+        <div className="sun-training-hint"><strong>{t('Facing')}: {Math.round(heading)}° {compassDirection(heading)}</strong><span>{t('Compare sun and shadows with the compass. Hemisphere tendency varies by season and latitude.')}</span></div>
       )}
 
       {tileRateLimited && !isLoading && (
@@ -348,7 +353,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
               }}
               className="px-3 py-2 text-xs font-semibold border border-[#8fa3aa] rounded-sm bg-white hover:border-[#0868f2] cursor-pointer"
             >
-              Try another
+              {t('Try another')}
             </button>
             <a
               href="https://randomstreetview.com/#fullscreen"
@@ -356,7 +361,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-sm bg-[#0868f2] text-white hover:bg-[#2379f4]"
             >
-              Open fallback <ExternalLink className="w-3.5 h-3.5" />
+              {t('Open fallback')} <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
@@ -370,7 +375,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
               <AlertCircle className="w-6 h-6" />
             </div>
             <div className="space-y-1.5">
-              <h2 className="text-base font-semibold text-stone-100">Location Search Failed</h2>
+              <h2 className="text-base font-semibold text-stone-100">{t('Location Search Failed')}</h2>
               <p className="text-xs text-stone-400 leading-relaxed">{errorMessage}</p>
             </div>
             <button
@@ -378,7 +383,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-xs font-semibold rounded-lg shadow transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Retry Next Location</span>
+              <span>{t('Retry Next Location')}</span>
             </button>
           </div>
         </div>

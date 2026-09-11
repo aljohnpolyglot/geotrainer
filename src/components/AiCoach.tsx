@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Sparkles, X } from 'lucide-react';
 import type { AppMode, CoachAnalysis, CoachMode } from '../types';
-import { captureStreetViewScreen, getStreetViewSnapshot } from '../services/streetViewSnapshot';
+import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { COUNTRIES } from '../data/countries';
 import { ClueCapture } from './ClueCapture';
+import { trainerDb } from '../data/trainerDb';
+import { normalizeLanguagePreferences, translate } from '../services/language';
+import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type CoachContext = {
   actualCountry?: string;
@@ -15,70 +18,92 @@ type CoachContext = {
 };
 
 export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue, onClueAnalyzed }: { panoId: string; appMode: AppMode; revealed: boolean; context?: CoachContext; onSave?: (value: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => void; onSaveClue: (value: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis }) => Promise<void> | void; onClueAnalyzed?: () => void }) {
+  const { ui } = useLanguagePreferences();
+  const t = (key: string) => translate(ui, key);
   const [open, setOpen] = useState(false);
   const [result, setResult] = useState<CoachAnalysis | null>(null);
-  const [model, setModel] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState<CoachMode | null>(null);
-  const [resultMode, setResultMode] = useState<CoachMode | null>(null);
-  const [generatedAt, setGeneratedAt] = useState(0);
   const [saved, setSaved] = useState(false);
+  const [clueBusy, setClueBusy] = useState(false);
   const controller = useRef<AbortController | null>(null);
+  const requestId = useRef(0);
+  const initialPano = useRef(panoId);
 
   useEffect(() => () => controller.current?.abort(), []);
-  useEffect(() => { setResult(null); setError(''); setOpen(false); }, [panoId]);
+  useEffect(() => {
+    void trainerDb.setting<{ coachOpen?: boolean }>('workspace.panels').then((saved) => {
+      if (panoId === initialPano.current && typeof saved?.coachOpen === 'boolean') setOpen(saved.coachOpen);
+    });
+  }, [panoId]);
+  useEffect(() => {
+    requestId.current += 1;
+    controller.current?.abort();
+    controller.current = null;
+    if (panoId !== initialPano.current) void trainerDb.setting<Record<string, unknown>>('workspace.panels').then((saved) => trainerDb.setSetting('workspace.panels', { ...saved, coachOpen: false }));
+    setResult(null); setError(''); setOpen(false); setLoading(null); setSaved(false);
+  }, [panoId]);
+
+  const setCoachOpen = (value: boolean) => {
+    setOpen(value);
+    void trainerDb.setting<{ tab?: string; historyKind?: string; statisticsSection?: string; coachOpen?: boolean }>('workspace.panels').then((saved) => trainerDb.setSetting('workspace.panels', { ...saved, coachOpen: value }));
+  };
 
   const requestCoach = async (mode: CoachMode, body: Record<string, unknown>) => {
-    const response = await fetch('/api/coach', { method: 'POST', signal: controller.current!.signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode, ...body, context: revealed ? context : undefined }) });
+    const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
+    const response = await fetch('/api/coach', { method: 'POST', signal: controller.current!.signal, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode, ...body, language: preferences.ai, gameLanguage: preferences.game, context: revealed ? context : undefined }) });
     const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
     return { response, value };
   };
 
   const run = async (mode: CoachMode) => {
+    if (loading || clueBusy) return;
     const view = getStreetViewSnapshot(panoId);
-    if (!view) return setError('Street View is still loading. Try again in a moment.');
+    if (!view) return setError(t('streetViewLoading'));
     controller.current?.abort();
     controller.current = new AbortController();
-    setLoading(mode); setError('');
+    const currentRequest = ++requestId.current;
+    setLoading(mode); setSaved(false); setError('');
     try {
-      let { response, value } = await requestCoach(mode, { view });
-      if (mode !== 'analyze360' && !response.ok && /Street View capture|Static API/i.test(value.error || '')) {
-        const frame = await captureStreetViewScreen();
-        ({ response, value } = await requestCoach(mode, { mimeType: 'image/jpeg', imageData: frame.split(',')[1] }));
-      }
-      if (!response.ok || !value.analysis) throw new Error(value.error || 'Coach returned an invalid response.');
-      setResult(value.analysis); setModel(value.model || 'Gemini'); setResultMode(mode); setGeneratedAt(value.generatedAt || Date.now()); setSaved(false); if (appMode === 'play') onClueAnalyzed?.();
+      const { response, value } = await requestCoach(mode, { view });
+      if (currentRequest !== requestId.current) return;
+      if (!response.ok || !value.analysis) throw new Error(value.error || t('coachInvalidResponse'));
+      const completedAt = value.generatedAt || Date.now();
+      const completedModel = value.model || 'Gemini';
+      setResult(value.analysis); setSaved(true);
+      onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
+      if (appMode === 'play') onClueAnalyzed?.();
     } catch (caught) {
-      if (caught instanceof Error && caught.name !== 'AbortError') setError(caught.message);
+      if (currentRequest === requestId.current && caught instanceof Error && caught.name !== 'AbortError') setError(caught.message);
     } finally {
-      setLoading(null);
+      if (currentRequest === requestId.current) setLoading(null);
     }
   };
 
   const modes: CoachMode[] = appMode === 'play' ? ['analyze360'] : revealed ? ['explain', 'cards', 'analyze360'] : ['hints', 'analyze', 'analyze360'];
-  const labels: Record<CoachMode, string> = { hints: 'Hints', analyze: 'Analyze', analyze360: 'Analyze 360°', explain: 'Explain', cards: 'Generate Cards', clue: 'Clue', 'clue-safe': 'Clue' };
-  const loadingLabels: Record<CoachMode, string> = { hints: 'Finding hints…', analyze: 'Analyzing…', analyze360: 'Analyzing 360°…', explain: 'Explaining…', cards: 'Generating cards…', clue: 'Analyzing clue…', 'clue-safe': 'Analyzing clue…' };
+  const labels: Record<CoachMode, string> = { hints: t('hints'), analyze: t('analyze'), analyze360: t('analyze360'), explain: t('explain'), cards: t('generateCards'), clue: t('clue'), 'clue-safe': t('clue') };
+  const loadingLabels: Record<CoachMode, string> = { hints: t('findingHints'), analyze: t('analyzing'), analyze360: t('analyzing360'), explain: t('explaining'), cards: t('generatingCards'), clue: t('analyzingClue'), 'clue-safe': t('analyzingClue') };
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
 
   return <div className={`ai-coach ${open ? 'open' : ''}`}>
-    {!open ? <button className="coach-launch" onClick={() => setOpen(true)}><Sparkles size={15} /> Coach</button> : <aside aria-label="AI Coach">
-      <header><span><Sparkles size={15} /> AI Coach</span><button onClick={() => { controller.current?.abort(); setOpen(false); }} aria-label="Close Coach"><X size={16} /></button></header>
-      <p className="coach-note">{appMode === 'play' ? 'AI analysis marks this round assisted. Analyze 360° uploads four transient views automatically.' : 'Automatic analysis images are transient. Saved clue images stay in your local trainer data.'}</p>
-      {!!modes.length && <div className="coach-modes">{(loading ? [loading] : modes).map((mode) => <button key={mode} disabled={!!loading} onClick={() => void run(mode)}>{loading === mode ? loadingLabels[mode] : labels[mode]}</button>)}{loading && <button onClick={() => controller.current?.abort()}>Cancel</button>}</div>}
-      <ClueCapture onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />
+{!open ? <button className="coach-launch" onClick={() => setCoachOpen(true)} aria-label={t('AI Coach')} title={t('AI Coach')}><Sparkles size={15} aria-hidden="true" /></button> : <aside aria-label={t('AI Coach')}>
+<header><span><Sparkles size={15} /> {t('AI Coach')}</span><button onClick={() => { requestId.current += 1; controller.current?.abort(); setLoading(null); setCoachOpen(false); }} aria-label={t('close')}><X size={16} /></button></header>
+      <p className="coach-note">{appMode === 'play' ? t('aiAssistedNote') : t('transientImagesNote')}</p>
+      {!!modes.length && <div className="coach-modes">{(loading ? [loading] : modes).map((mode) => <button key={mode} disabled={!!loading || clueBusy} onClick={() => void run(mode)}>{loading === mode ? loadingLabels[mode] : labels[mode]}</button>)}{loading && <button onClick={() => controller.current?.abort()}>{t('cancel')}</button>}</div>}
+      <ClueCapture panoId={panoId} disabled={!!loading} onBusyChange={setClueBusy} onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />
       {error && <p className="coach-error" role="alert">{error}</p>}
       {result && <div className="coach-result">
-        <h4>Geographic clue analysis</h4>
-        {result.region && <h3>{result.region}<small>{result.confidence} confidence</small></h3>}
+        <h4>{t('geographicClueAnalysis')}</h4>
+        {result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
         {result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><b>{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode} <small>{candidate.countryCode}</small></b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
-        {list('Strong clues', result.strongClues)}
-        {list('Weak / generic', result.weakClues)}
-        {list('Confusable with', result.confusions)}
-        {list('Inspect next', result.nextThingsToInspect)}
-        {result.coreCard && <section className="coach-card"><strong>Core card</strong><em>Front</em><ul>{result.coreCard.front.map((line) => <li key={line}>{line}</li>)}</ul><em>Back</em><p>{result.coreCard.backExplanation}</p></section>}
-        {result.extraCards.map((card) => <section className="coach-card" key={card.category}><strong>{card.category} · {'★'.repeat(card.clueStrength)}</strong><em>Front</em><ul>{card.front.map((line) => <li key={line}>{line}</li>)}</ul><em>Back</em><p>{card.back}</p></section>)}
-        {appMode !== 'play' && onSave && resultMode && <button className="coach-save" disabled={saved} onClick={() => { onSave({ mode: resultMode, model, generatedAt, analysis: result }); setSaved(true); }}>{saved ? 'Saved' : 'Save coaching note'}</button>}
-        <small className="coach-model">{model}</small>
+        {list(t('strongClues'), result.strongClues)}
+        {list(t('weakGeneric'), result.weakClues)}
+        {list(t('contradictionsGaps'), result.contradictions || [])}
+        {list(t('confusableWith'), result.confusions)}
+        {list(t('inspectNext'), result.nextThingsToInspect)}
+        {result.coreCard && <section className="coach-card"><strong>{t('coreCard')}</strong><em>{t('front')}</em><ul>{result.coreCard.front.map((line) => <li key={line}>{line}</li>)}</ul><em>{t('back')}</em><p>{result.coreCard.backExplanation}</p></section>}
+        {result.extraCards.map((card) => <section className="coach-card" key={card.category}><strong>{card.category} · {'★'.repeat(card.clueStrength)}</strong><em>{t('front')}</em><ul>{card.front.map((line) => <li key={line}>{line}</li>)}</ul><em>{t('back')}</em><p>{card.back}</p></section>)}
+        {saved && <p className="coach-autosaved" role="status">{appMode === 'study' ? t('savedAutomatically') : t('savedAutomatically')}</p>}
       </div>}
     </aside>}
   </div>;
