@@ -231,6 +231,8 @@ Analyze samples the panorama around you and evaluates the visible evidence toget
 3. Check the preview, then choose **Analyze clue**.
 4. GeoTrainer analyzes the pasted image and automatically saves the image, evidence, and learning note in **Clues**. In Review before a guess, the analysis stays spoiler-safe.
 
+When the crop has one obvious foreground subject, Coach analyzes that object first and uses the surroundings as supporting or contradictory context. Unreadable details remain explicitly uncertain.
+
 ### Before and after reveal
 
 Before a guess, Coach responses are spoiler-safe and do not receive answer metadata. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.

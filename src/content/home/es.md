@@ -51,6 +51,8 @@ Analizar reúne automáticamente varias direcciones y vuelve a la vista actual s
 3. Comprueba la vista previa y elige **Analizar pista**.
 4. GeoTrainer guarda automáticamente la imagen, las pruebas y la nota de aprendizaje en **Pistas**. Antes de responder en Repaso, el análisis no revela la solución.
 
+Si el recorte tiene un objeto principal claro en primer plano, el entrenador lo analiza primero y usa el entorno como contexto de apoyo o contradicción. Los detalles ilegibles se mantienen explícitamente inciertos.
+
 ## Colecciones y preferencias
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa.

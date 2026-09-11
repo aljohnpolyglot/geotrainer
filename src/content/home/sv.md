@@ -51,6 +51,8 @@ Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som
 3. Kontrollera förhandsvisningen och välj **Analysera ledtråd**.
 4. GeoTrainer sparar automatiskt bilden, beläggen och läranteckningen under **Ledtrådar**. Före en gissning i Repetition avslöjar analysen inte svaret.
 
+När beskärningen har ett tydligt huvudobjekt i förgrunden analyserar coachen det först och använder omgivningen som stödjande eller motsägande sammanhang. Oläsliga detaljer förblir uttryckligen osäkra.
+
 ## Samlingar och inställningar
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp.

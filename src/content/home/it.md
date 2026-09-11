@@ -51,6 +51,8 @@ Analizza raccoglie automaticamente più direzioni e usa la vista corrente come a
 3. Controlla l’anteprima e scegli **Analizza indizio**.
 4. GeoTrainer salva automaticamente immagine, prove e nota di apprendimento in **Indizi**. Prima della risposta in Ripasso, l’analisi non svela la soluzione.
 
+Se il ritaglio mostra un soggetto principale evidente in primo piano, il Coach analizza prima quello e usa l’ambiente come contesto di supporto o contraddizione. I dettagli illeggibili restano esplicitamente incerti.
+
 ## Raccolte e preferenze
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa.

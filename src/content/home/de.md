@@ -205,6 +205,8 @@ Die Analyse prüft automatisch mehrere Blickrichtungen und nutzt die aktuelle An
 3. Prüfe die Vorschau und wähle **Hinweis analysieren**.
 4. GeoTrainer speichert Bild, Belege und Lernnotiz automatisch unter **Hinweise**. Vor einem Tipp in der Wiederholung bleibt die Analyse lösungssicher.
 
+Hat der Ausschnitt ein klares Vordergrundmotiv, untersucht der Coach dieses zuerst und nutzt die Umgebung als stützenden oder widersprechenden Kontext. Unlesbare Details bleiben ausdrücklich unsicher.
+
 ### Schutz vor Lösungen
 
 Vor einem Tipp erhält der Coach keine Antwortmetadaten. Eine Regions-, Stadt- oder genaue Ortsschätzung erscheint nur bei mehreren starken sichtbaren Hinweisen. Nach Aufdecken oder Abgabe wird **Analysieren** zu **Erklären**; der Coach nutzt nur Hinweise zum richtigen Land und sagt offen, wenn das Bild allein nicht ausreichte.

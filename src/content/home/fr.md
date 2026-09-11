@@ -51,6 +51,8 @@ Analyser rassemble automatiquement plusieurs directions et revient à la vue act
 3. Vérifiez l’aperçu puis choisissez **Analyser l’indice**.
 4. GeoTrainer enregistre automatiquement l’image, les preuves et la note d’apprentissage dans **Indices**. Avant une réponse en Révision, l’analyse ne révèle pas la solution.
 
+Si le recadrage montre un sujet principal évident au premier plan, le Coach l’analyse d’abord et utilise l’environnement comme contexte favorable ou contradictoire. Les détails illisibles restent explicitement incertains.
+
 ## Collections et préférences
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques.

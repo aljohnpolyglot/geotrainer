@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Pasted-clue analysis now prioritizes an obvious foreground subject while still considering surrounding context, and avoids guessing the object type when the crop is unreadable.
 - After a location is revealed, AI Coach now switches from guessing to an honest explanation, clears stale candidate rankings, and states when the imagery was insufficient; strong location estimates appear only before reveal and without metadata. Explain can consult bounded GeoMetas facts for the revealed country but may mention only features visible in the image. Added Learnable Meta to the learning resources.
 - Preserved the active AI Coach analysis and clue preview/result across reloads without carrying them into another panorama, and kept the guess map rendered after mid-round language changes.
 - Added a localized Print Screen → paste → Analyze clue workflow to the user guide.

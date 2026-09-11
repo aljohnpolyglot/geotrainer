@@ -80,6 +80,19 @@ test('clue analysis ranks countries while safe Review clues cannot reveal one', 
   assert.deepEqual(safeClue.strongClues, ['Black rectangular reflector']);
 });
 
+test('pasted clue prompts prioritize an obvious foreground subject without discarding context', async () => {
+  const prompts: string[] = [];
+  const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => {
+    prompts.push(JSON.parse(String(init?.body)).contents[0].parts[0].text);
+    return geminiResponse(JSON.stringify(validAnalysis));
+  }) as typeof fetch;
+  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'clue', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
+  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
+  assert.match(prompts[0], /foreground object.*intended subject|intended subject.*foreground object/);
+  assert.match(prompts[0], /surrounding scene.*supporting or contradictory context/);
+  assert.doesNotMatch(prompts[1], /user-selected clue crop/);
+});
+
 test('specific location estimates require strong visual evidence and no answer metadata', () => {
   const input = { ...validAnalysis, locationEstimate: { level: 'city', label: 'Central Monrovia', confidence: 'high', basis: ['Readable Sekou Toure Avenue sign', 'Distinctive coastal street grid'] } };
   assert.equal(normalizeCoachAnalysis(input, 'analyze').locationEstimate?.label, 'Central Monrovia');

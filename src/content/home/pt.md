@@ -51,6 +51,8 @@ Analisar reúne automaticamente várias direções e usa a vista atual como alte
 3. Confira a prévia e escolha **Analisar pista**.
 4. O GeoTrainer salva automaticamente a imagem, as evidências e a nota de estudo em **Pistas**. Antes do palpite na Revisão, a análise não revela a resposta.
 
+Quando o recorte tem um objeto principal claro em primeiro plano, o Coach o analisa primeiro e usa o entorno como contexto de apoio ou contradição. Detalhes ilegíveis permanecem explicitamente incertos.
+
 ## Coleções e preferências
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa.
