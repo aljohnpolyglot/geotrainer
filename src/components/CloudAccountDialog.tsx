@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Check, Cloud, LogOut, MapPinned, RefreshCw, ShieldCheck, X } from 'lucide-react';
+import { Check, Cloud, LogOut, MapPinned, RefreshCw, X } from 'lucide-react';
 import { cloudSync } from '../services/cloudSync';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -34,7 +34,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       const needsConfirmation = mode === 'signup'
         ? await cloudSync.signUp(email, password)
         : (await cloudSync.signIn(email, password), false);
-      setMessage(needsConfirmation ? t('Check your inbox to confirm your GeoTrainer account.') : t('Signed in. Your field log is syncing now.'));
+      setMessage(needsConfirmation ? t('Check your inbox to confirm your GeoTrainer account.') : t('Signed in. Your progress is syncing now.'));
       setPassword('');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : t('Authentication failed. Please try again.'));
@@ -61,7 +61,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
     }}>
       <header className="account-dialog-header">
-        <div><MapPinned size={20} /><strong>GEOTRAINER</strong><span>{t('Cloud field log')}</span></div>
+        <div><MapPinned size={20} /><strong>GEOTRAINER</strong><span>{t('Cloud progress')}</span></div>
         <button type="button" onClick={onClose} aria-label={t('Close account window')}><X size={18} /></button>
       </header>
 
@@ -69,7 +69,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
         <div className="account-signed-in">
           <span className="account-success-mark"><Check size={24} /></span>
           <h2>{t('Your progress is protected.')}</h2>
-          <p>{t('GeoTrainer merges this browser’s field log with your private cloud backup.')}</p>
+          <p>{t('GeoTrainer syncs progress from this browser with your account.')}</p>
           <div className="account-identity"><small>{t('Signed in as')}</small><strong>{sync.email}</strong></div>
           <div className="account-sync-row">
             <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase.replace('-', ' ')}</span>
@@ -83,7 +83,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
         </div>
       ) : (
         <div className="account-auth">
-          <h2>{mode === 'signin' ? t('Welcome back.') : t('Protect your field log.')}</h2>
+          <h2>{mode === 'signin' ? t('Welcome back.') : t('Sync your progress.')}</h2>
           <p>{mode === 'signin' ? t('Sign in to continue the same training history on every device.') : t('Create one private account for your attempts, clues, reviews, and collections.')}</p>
 
           <button type="button" className="google-signin" disabled={busy} onClick={() => void accountAction(cloudSync.signInWithGoogle)}>
@@ -101,11 +101,10 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
             <button className="auth-primary" type="submit" disabled={busy}>{busy ? t('Please wait…') : mode === 'signin' ? t('Sign in to GeoTrainer') : t('Create GeoTrainer account')}</button>
           </form>
           <p className="auth-message" aria-live="polite">{message || sync.message}</p>
-          <div className="auth-trust"><ShieldCheck size={16} /><span>{t('Your Street View imagery is never uploaded. Google sign-in only identifies your account.')}</span></div>
         </div>
       )}
 
-      <footer><Cloud size={14} />{t('Local-first. Your IndexedDB copy remains available offline.')}</footer>
+      <footer><Cloud size={14} />{t('Your progress stays available when you return.')}</footer>
     </dialog>
   );
 }

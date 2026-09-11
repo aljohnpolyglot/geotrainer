@@ -103,6 +103,8 @@ export interface EnvironmentSettings { environment: Environment; urbanLevel: Urb
 export interface GameSettings {
   roundCount: number;
   collectionId: string;
+  countryCode?: string; // Optional single-country pool; omitted for saved-game compatibility
+  countryCodes?: string[]; // Optional focused comparison pool; omitted for saved-game compatibility
   canMove: boolean; // Walking along roads
   canPan: boolean;  // 360 camera rotation
   canZoom: boolean; // Zoom in / out
@@ -145,6 +147,7 @@ export interface TrainerLocation extends LocationResult {
   encounterCount: number;
   isFallback?: boolean;
   originalPanoId?: string;
+  imageDataUrl?: string;
 }
 
 export interface StudyVisit {

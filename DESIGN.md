@@ -18,6 +18,7 @@ Operate. Fast scanning, repeat use, clear state, and data trust outrank decorati
 
 ## Composition
 
+- The homepage keeps its established layout; rich product documentation opens in a separate `/docs/` browser tab from a clearly labeled Guide route.
 - A compact storm-blue station bar keeps mode, collection, and game state in one predictable line above the panorama.
 - Study, Play, and Review are equal primary destinations, labeled with names and short route codes.
 - Street View owns the remaining viewport. Context controls form a compact horizontal instrument bar.

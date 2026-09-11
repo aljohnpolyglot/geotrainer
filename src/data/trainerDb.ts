@@ -15,6 +15,7 @@ import type {
   TrainerLocation,
   TrainingSession,
 } from '../types';
+import { COUNTRIES } from './countries';
 
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
@@ -30,9 +31,12 @@ export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness:
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
+  const countryCodes = Array.isArray(source.countryCodes) ? [...new Set(source.countryCodes.filter((code): code is string => typeof code === 'string' && code in COUNTRIES))] : [];
   return {
     roundCount: Number.isInteger(rounds) && rounds >= 1 && rounds <= 100 ? rounds : 5,
     collectionId: typeof source.collectionId === 'string' ? source.collectionId : 'world',
+    ...(typeof source.countryCode === 'string' && source.countryCode in COUNTRIES ? { countryCode: source.countryCode } : {}),
+    ...(countryCodes.length ? { countryCodes } : {}),
     canMove: typeof source.canMove === 'boolean' ? source.canMove : true,
     canPan: typeof source.canPan === 'boolean' ? source.canPan : true,
     canZoom: typeof source.canZoom === 'boolean' ? source.canZoom : true,
@@ -300,7 +304,7 @@ export const trainerDb = {
   saveCollection: (collection: Collection) => put('collections', { ...collection, isCustom: true }),
   deleteCollection: (id: string) => remove('collections', id),
 
-  async encounter(location: LocationResult, seenAt = Date.now()): Promise<TrainerLocation> {
+  async encounter(location: LocationResult & { imageDataUrl?: string }, seenAt = Date.now()): Promise<TrainerLocation> {
     const previous = await get<TrainerLocation>('locations', location.panoId);
     const next: TrainerLocation = previous ? {
       ...previous,
@@ -316,6 +320,11 @@ export const trainerDb = {
     };
     await put('locations', next);
     return next;
+  },
+
+  async saveLocationImage(panoId: string, imageDataUrl: string): Promise<void> {
+    const location = await get<TrainerLocation>('locations', panoId);
+    if (location) await put('locations', { ...location, imageDataUrl });
   },
 
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {

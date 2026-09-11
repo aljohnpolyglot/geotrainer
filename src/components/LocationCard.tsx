@@ -92,7 +92,6 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
           <div>
             <div className="flex items-center space-x-1.5">
               <h3 className="text-base font-bold text-white tracking-tight leading-none">{countryName}</h3>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-300 border border-stone-700">{resolvedCountryCode}</span>
             </div>
           </div>
         </div>
@@ -142,7 +141,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
 
       <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" />
 
-      {onSaveForReview && (
+      {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">
           <button disabled={reviewSaving || reviewSaved} onClick={onSaveForReview}>
             {reviewSaved ? t('savedForReview') : reviewSaving ? t('saving') : t('saveForReview')}

@@ -5,6 +5,7 @@ import type { Attempt, GameRound } from '../types';
 import { ResultMap } from './ResultMap';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { CountryFlag } from './CountryFlag';
 
 export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, advancing, onNext }: {
   round: GameRound;
@@ -28,7 +29,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         <header className="review-result-header">
           <div>
             <span className="review-context">{position} / {total} · {sourceLabel}</span>
-            <h2 id="review-result-title">{country}</h2>
+            <h2 id="review-result-title"><CountryFlag code={sourceAttempt.countryCode} />{country}</h2>
             <p className="review-coordinates">{round.location.lat.toFixed(5)}°, {round.location.lng.toFixed(5)}°</p>
           </div>
           <div className="review-comparison" aria-label={t('previousCurrentScores')}>
@@ -48,7 +49,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
 
         <details className="review-history" data-no-shortcuts>
           <summary>{t('previousAttempts')} ({history.length})</summary>
-          <div>{history.map((attempt) => <p key={attempt.id}><time>{new Date(attempt.createdAt).toLocaleDateString()}</time><span>{attempt.guessedCountryCode ? COUNTRIES[attempt.guessedCountryCode]?.name || attempt.guessedCountryCode : t('noCountry')}</span><strong>{attempt.score.toLocaleString()} {t('pts')}</strong></p>)}</div>
+          <div>{history.map((attempt) => <p key={attempt.id}><time>{new Date(attempt.createdAt).toLocaleDateString()}</time><span>{attempt.guessedCountryCode ? <><CountryFlag code={attempt.guessedCountryCode} />{COUNTRIES[attempt.guessedCountryCode]?.name || attempt.guessedCountryCode}</> : t('noCountry')}</span><strong>{attempt.score.toLocaleString()} {t('pts')}</strong></p>)}</div>
         </details>
       </section>
     </div>

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { callGeminiCoach, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
+import { callGeminiCoach, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
 import { getCountryKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
@@ -12,6 +12,10 @@ const validAnalysis = {
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {
   status, headers: { 'content-type': 'application/json' },
+});
+
+test('Coach decodes escaped Unicode before rendering localized evidence', () => {
+  assert.equal(decodeCoachText('La strada \\u00e8 stretta.'), 'La strada è stretta.');
 });
 
 test('Gemini carousel cools down a 429 key and fails over without exposing it', async () => {

@@ -172,4 +172,7 @@ test('saved game preferences are normalized before reuse', async () => {
     environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
+  assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');
+  assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);
+  assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);
 });

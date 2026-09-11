@@ -5,6 +5,8 @@ import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { isLatestRequest } from '../services/requestIntegrity';
 import { reviewGradeForPerformance, trainerDb } from '../data/trainerDb';
+import { COUNTRIES } from '../data/countries';
+import { captureStreetViewImage } from '../services/streetViewSnapshot';
 
 export function usePlayMode(ctx: any) {
   const { allCollections, currentLocation, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed,
@@ -26,12 +28,13 @@ export function usePlayMode(ctx: any) {
 
   const fetchLocationForRound = useCallback(async (settings: GameSettings) => {
     const col = allCollections.find((item: any) => item.id === settings.collectionId) || allCollections[0];
-    if (!col || col.countryCodes.length === 0) { setErrorMessage('Game collection has no valid countries.'); return; }
+    const countryCodes = settings.countryCodes?.length ? settings.countryCodes : settings.countryCode ? [settings.countryCode] : col?.countryCodes;
+    if (!col || !countryCodes?.length) { setErrorMessage('Game collection has no valid countries.'); return; }
     const requestId = ++latestGenerationRequestRef.current; generationPendingRef.current = true; abortControllerRef.current?.abort();
     const abortController = new AbortController(); abortControllerRef.current = abortController;
     setCurrentLocation(null); setIsLoading(true); setErrorMessage(null); setIsRevealed(false); ctx.setStatusMessage('Finding round location...');
     try {
-      const result = await defaultLocationGenerator.findRandomLocation(col.countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural' }, { requestId, collectionId: col.id, requireNavigation: settings.canMove });
+      const result = await defaultLocationGenerator.findRandomLocation(countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural' }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, requireNavigation: settings.canMove });
       if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
     } catch (err: unknown) { if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (err instanceof Error && err.name === 'AbortError')) return; setErrorMessage(err instanceof Error ? err.message : 'Failed to generate game location'); }
     finally { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); ctx.setStatusMessage(''); } }
@@ -61,11 +64,11 @@ export function usePlayMode(ctx: any) {
     roundSubmittedRef.current = true; setSubmitting(true);
     const timeSpent = Math.max(1, Math.round((Date.now() - roundStartTimeRef.current) / 1000));
     const distanceKm = guess ? calculateDistanceKm(guess.lat, guess.lng, currentLocation.lat, currentLocation.lng) : null; const score = distanceKm === null ? 0 : calculateRoundScore(distanceKm);
-    const guessedCountryCode = guess ? (await reverseGeocodeLocation(guess.lat, guess.lng))?.countryCode : undefined;
+    const [guessedCountryCode, imageDataUrl] = await Promise.all([guess ? reverseGeocodeLocation(guess.lat, guess.lng).then((value) => value?.countryCode) : undefined, captureStreetViewImage(currentLocation.panoId)]);
     const roundRecord: GameRound = { roundNumber: currentRoundIndex + 1, location: currentLocation, guess, distanceKm, score, timeSpentSeconds: timeSpent, guessedCountryCode };
     const attempt: Attempt = { id: `${gameIdRef.current}:${roundRecord.roundNumber}`, gameId: gameIdRef.current, roundNumber: roundRecord.roundNumber, panoId: currentLocation.panoId, actualLat: currentLocation.lat, actualLng: currentLocation.lng, countryCode: currentLocation.countryCode, guessedLat: guess?.lat ?? null, guessedLng: guess?.lng ?? null, distanceKm, score, timeSpentSeconds: timeSpent, collectionId: gameSettings.collectionId, canMove: gameSettings.canMove, canPan: gameSettings.canPan, canZoom: gameSettings.canZoom, showCompass: gameSettings.showCompass ?? true, environment: gameSettings.environment ?? 'mixed', environmentRequested: gameSettings.environment ?? 'mixed', urbanLevel: gameSettings.urbanLevel ?? 3, samplingMode: gameSettings.samplingMode ?? 'natural', createdAt: Date.now(), source: 'play', aiAssisted: playAiAssistedRef.current || undefined, guessedCountryCode, ...(coachNote ? { coachUsed: true, coachMode: coachNote.mode, coachModel: coachNote.model, coachGeneratedAt: coachNote.generatedAt, coachAnalysis: coachNote.analysis } : {}) };
     const scheduler = await trainerDb.schedulerPreferences(); const grade = reviewGradeForPerformance(score, timeSpent, guessedCountryCode === currentLocation.countryCode, scheduler.maximumAnswerSeconds, scheduler.strictness);
-    await Promise.all([trainerDb.encounter(currentLocation), trainerDb.saveAttempt(attempt), trainerDb.scheduleFirstPlay(currentLocation.panoId, grade)]);
+    await Promise.all([trainerDb.encounter({ ...currentLocation, ...(imageDataUrl ? { imageDataUrl } : {}) }), trainerDb.saveAttempt(attempt), trainerDb.scheduleFirstPlay(currentLocation.panoId, grade)]);
     setGameRounds((rounds) => [...rounds, roundRecord]); setActiveRoundResult(roundRecord); setSubmitting(false); setTrainerRefreshKey((key: number) => key + 1);
   }, [activeRoundResult, coachNote, currentLocation, currentRoundIndex, gameSettings, playAiAssistedRef, roundStartTimeRef, setTrainerRefreshKey]);
 
@@ -76,7 +79,8 @@ export function usePlayMode(ctx: any) {
     if (!gameSettings) return;
     if (currentRoundIndex + 1 < gameSettings.roundCount) { setCurrentRoundIndex((index) => index + 1); setActiveRoundResult(null); void fetchLocationForRound(gameSettings); return; }
     const totalScore = gameRounds.reduce((acc, round) => acc + round.score, 0); const col = allCollections.find((item: any) => item.id === gameSettings.collectionId) || allCollections[0];
-    const completedGame: GameRecord = { id: gameIdRef.current, createdAt: Date.now(), collectionId: gameSettings.collectionId, collectionName: col.name, settings: gameSettings, totalScore, maxPossibleScore: gameSettings.roundCount * 5000, rounds: gameRounds };
+    const focus = gameSettings.countryCodes?.length ? gameSettings.countryCodes : gameSettings.countryCode ? [gameSettings.countryCode] : [];
+    const completedGame: GameRecord = { id: gameIdRef.current, createdAt: Date.now(), collectionId: gameSettings.collectionId, collectionName: focus.length ? focus.map((code) => COUNTRIES[code]?.name || code).join(' + ') : col.name, settings: gameSettings, totalScore, maxPossibleScore: gameSettings.roundCount * 5000, rounds: gameRounds };
     setPastGames(dbReady ? [completedGame, ...pastGames] : ctx.saveGameRecord(completedGame)); void trainerDb.saveGame(completedGame); setIsGameActive(false); setActiveRoundResult(null); setSummaryGameRecord(completedGame);
   }, [allCollections, currentRoundIndex, dbReady, fetchLocationForRound, gameRounds, gameSettings, pastGames, setPastGames, ctx]);
 

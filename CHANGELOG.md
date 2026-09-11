@@ -2,7 +2,20 @@
 
 ## 2026-09-11
 
-- Added an authenticated Supabase Edge Function backend for AI Coach and 360° Street View capture on the deployed app.
+- Study and Play setup now support focused multi-country mixes with removable flag pills for confusion drills.
+- Country-mix drafts now remain intact when focus leaves the picker, and native dropdown type-ahead remains available for keyboard navigation.
+- Saved Study locations and submitted Play rounds now retain the current view for richer coverage previews; existing records remain compatible.
+- Clue details now open as a centered, dimmed workspace with country flag, live Street View, saved capture, and direct Google Maps links.
+- Fixed Review panoramas that could remain black until reload and improved dark-mode controls and coverage preview contrast.
+- Updated the guide across all supported languages for country mixes, Clues, saved-view previews, and keyboard dropdown navigation, and removed implementation-specific storage wording from the account dialog.
+
+- Added a Markdown-driven `/docs/` guide that opens in a separate browser tab from the main menu and explains active recall, spaced repetition, and the Study–Play–Review loop.
+- Expanded the guide into a searchable, nested manual with detailed workflows, scheduling behavior, limitations, recovery steps, and FAQs.
+- Added Plonk It and GeoHints as localized external learning references in the guide.
+- Added GeoMetas as a localized external learning and quiz reference.
+- Replaced field-operations jargon with direct learning and sync language across the main menu and account dialog.
+- Opened AI Coach to guest sessions, merged the redundant pre-answer Hints action into Analyze, and removed unnecessary sign-in privacy copy.
+- Added a Supabase Edge Function backend for AI Coach and 360° Street View capture on the deployed app.
 - Added custom 1–100-round games, per-mode performance statistics, and navigation-connected panorama checks for movable games.
 - Separated Review from Statistics, folded location/history views into Statistics, and made saved game sessions open their summaries.
 - Expanded review-card maturity into New, Learning, Relearning, Young, and Mature states with long-term mastery ranks.
@@ -19,6 +32,17 @@
 - Clarified Street View Static API key-restriction failures and kept long table headings visible while scrolling.
 - Reworked coverage-map hover labels to remove clipped Google popup chrome and nested scrolling.
 - Added a persisted opt-in AI-assisted Play filter to Statistics, surfaced the assisted-round count, and marked assisted attempts in History.
+- Polished phone layouts with a hamburger header, correct route highlighting, contained navigation and filters, a compact pinpoint-map toggle, and internally scrolling statistics tables.
+- Added a cloud-synced Light/Dark color-palette selector under Display preferences.
+- Moved Study reveal/next controls into a centered action dock and removed the sun-direction hint and toggle.
+- Docked the closed AI Coach launcher below the right-side tools while keeping its open panel draggable, and restored enabled Play-lobby action contrast.
+- Added FlagCDN flags throughout country statistics, review/history rows, and AI Coach probability results.
+- Stopped statistics table headers from sticking over rows while the page scrolls.
+- Rephrased the saved-clue prompt as a user action and removed redundant ISO codes beside AI Coach flags.
+- Added a first-class Clues library with country browsing, summaries, full-detail cards, and direct practice actions.
+- Added matching Study setup and single-country selection to Study and Play, retiring the crowded Study header controls.
+- Simplified AI Coach to one continuous Analyze action, retained evidence while moving or revealing, decoded escaped localized text, and replaced card-front/back output with learning notes.
+- Automatically created a Review source when a Study clue is saved and removed the now-redundant action afterward.
 
 - Replaced the floating AI Coach launcher with a compact map icon, added a Play setup toggle, and kept model names out of the UI.
 - Improved AI Coach evidence quality, confidence calibration, contradiction handling, 360° analysis, and GeoGuessr hint retrieval.

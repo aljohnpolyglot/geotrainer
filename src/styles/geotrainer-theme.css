@@ -32,14 +32,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
   border-bottom: 1px solid rgba(138, 215, 232, .34) !important;
   box-shadow: 0 8px 24px rgba(0, 12, 20, .24);
 }
-#app-topbar > div:first-child > div:first-child {
+.primary-route-nav {
   background: #051c2a !important;
   border: 1px solid rgba(138, 215, 232, .28) !important;
   border-radius: 4px !important;
   padding: 2px !important;
 }
-#app-topbar > div:first-child > div:first-child button { border-radius: 2px !important; }
-#app-topbar > div:first-child > div:first-child button.bg-stone-800 {
+.primary-route-nav button { border-radius: 2px !important; }
+.primary-route-nav button.bg-stone-800 {
   background: var(--paper) !important; color: var(--carbon) !important; box-shadow: none !important;
 }
 #app-topbar svg.text-amber-400,
@@ -234,7 +234,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
 .data-row:hover span { color: var(--blue); }
 button.attempt-row:hover, tbody tr:hover { background: #dfe9ec; }
 .attempt-row small, .attempt-row > span:nth-last-of-type(1), .empty { color: var(--muted); }
-.country-code { color: #fff; background: var(--blue); border: 0; border-radius: 2px; }
+.country-code { color: #fff; background: transparent; border: 0; border-radius: 2px; }
 .filter-bar select, .table-tools select, .table-tools input, .preset-list button {
   color: var(--carbon); background: #fff; border-color: #8fa3aa; border-radius: 3px;
 }
@@ -270,4 +270,3 @@ tbody tr.never-seen { color: #73848b; }
 .grade-actions .grade-good { border-color: #679b21; }
 .grade-actions .grade-easy { border-color: var(--blue); }
 .grade-actions button:hover { background: #e0eaec; }
-

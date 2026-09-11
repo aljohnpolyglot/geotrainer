@@ -36,8 +36,6 @@
 .auth-secondary { color: var(--carbon); background: #dfe7e8; }
 .auth-primary:disabled, .auth-secondary:disabled, .google-signin:disabled { opacity: .55; cursor: wait; }
 .auth-message { min-height: 17px; margin: 13px 0 0 !important; color: #49626d !important; font-size: 11px !important; }
-.auth-trust { display: flex; align-items: flex-start; gap: 9px; margin-top: 20px; padding-top: 16px; color: #49626d; border-top: 1px solid var(--rule); font-size: 11px; line-height: 1.45; }
-.auth-trust svg { flex: none; color: #317056; }
 .account-success-mark { display: grid; width: 50px; height: 50px; place-items: center; margin-bottom: 22px; color: #17390b; background: var(--lime); border-radius: 5px; }
 .account-identity { display: grid; gap: 5px; padding: 16px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; }
 .account-identity small { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }

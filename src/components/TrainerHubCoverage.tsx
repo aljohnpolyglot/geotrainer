@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import type { Attempt, ReviewRecord, TrainerLocation } from "../types";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
+import { CountryFlag } from "./CountryFlag";
 
 interface CoverageMapProps {
   locations: TrainerLocation[];
@@ -56,7 +57,9 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
           const content = document.createElement("div");
           content.className = "map-cluster-preview";
           const metric = overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString()} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
-          content.textContent = `${group.length} ${group.length === 1 ? t("panorama") : t("panoramas")} · ${metric} · ${countries.slice(0, 4).join(", ")}${countries.length > 4 ? ` +${countries.length - 4}` : ""}`;
+          const text = document.createElement("span"); text.textContent = `${group.length} ${group.length === 1 ? t("panorama") : t("panoramas")} · ${metric} · ${countries.slice(0, 4).join(", ")}${countries.length > 4 ? ` +${countries.length - 4}` : ""}`;
+          if (location.imageDataUrl) { const image = document.createElement("img"); image.src = location.imageDataUrl; image.alt = ""; content.append(image); }
+          content.append(text);
           preview.current?.setContent(content);
           preview.current?.open({ map: map.current, anchor: marker });
         });
@@ -88,7 +91,8 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
       <div ref={element} className="coverage-map" aria-label={t("mapAria")} />
       {selected && <aside className="map-inspector">
         <button className="icon-button inspector-close" onClick={() => setSelected(undefined)} aria-label={t("closeLocation")}><X size={16} /></button>
-        <strong>{countryName(selected.countryCode)}</strong>
+        <strong className="country-name"><CountryFlag code={selected.countryCode} />{countryName(selected.countryCode)}</strong>
+        {selected.imageDataUrl && <img className="map-inspector-image" src={selected.imageDataUrl} alt="" />}
         <span>{date(selected.firstSeenAt)} → {date(selected.lastSeenAt)}</span>
         <span>{selected.encounterCount} {t("encounters")} · {selectedAttempts.length} {t("attemptsCount")}</span>
         <span>{t("best")} {Math.max(0, ...selectedAttempts.map((item) => item.score)).toLocaleString()} · {t("latest")} {selectedAttempts.at(-1)?.score.toLocaleString() || "—"}</span>

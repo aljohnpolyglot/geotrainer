@@ -9,20 +9,22 @@ const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'Am
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 type SettingsTab = 'language' | 'review' | 'display';
 
-export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle) => void }) {
+export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void }) {
   const [languages, setLanguages] = useState<LanguagePreferences>(DEFAULT_LANGUAGE_PREFERENCES);
   const [scheduler, setScheduler] = useState<SchedulerPreferences>(DEFAULT_SCHEDULER_PREFERENCES);
   const [loadedGameLanguage, setLoadedGameLanguage] = useState<SupportedLanguage>('en');
   const [compassStyle, setCompassStyle] = useState<CompassStyle>('bar');
+  const [darkMode, setDarkMode] = useState(false);
   const [tab, setTab] = useState<SettingsTab>('language');
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
       setCompassStyle(savedCompassStyle === 'dial' ? 'dial' : 'bar');
+      setDarkMode(savedDarkMode === true);
       if (savedTab === 'language' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
   }, [open]);
@@ -33,9 +35,9 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const save = async () => {
     const nextLanguages = normalizeLanguagePreferences(languages);
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
-    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle)]);
+    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode)]);
     announceLanguagePreferences(nextLanguages);
-    onChange?.(nextLanguages, compassStyle);
+    onChange?.(nextLanguages, compassStyle, darkMode);
     if (nextLanguages.game !== loadedGameLanguage) window.location.reload();
     else onClose();
   };
@@ -52,7 +54,8 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
           </select></span>
         </label>)}
       </fieldset>}
-      {tab === 'display' && <fieldset><legend>{translate(languages.ui, 'Compass')}</legend>
+      {tab === 'display' && <fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
+        <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>
         <label>{translate(languages.ui, 'Compass style')}<select value={compassStyle} onChange={(event) => setCompassStyle(event.target.value as CompassStyle)}><option value="bar">{translate(languages.ui, 'Heading bar')}</option><option value="dial">{translate(languages.ui, 'Compass dial')}</option></select></label>
       </fieldset>}
       {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>

@@ -28,7 +28,6 @@ interface StreetViewContainerProps {
   compassStyle?: CompassStyle;
   restoredView?: StreetViewState;
   onViewChanged?: (view: StreetViewState) => void;
-  showSunTrainingHint?: boolean;
 }
 
 const mapsLoaderState = globalThis as typeof globalThis & { __geotrainerMapsLoaderConfigured?: boolean };
@@ -48,7 +47,6 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   compassStyle = 'bar',
   restoredView,
   onViewChanged,
-  showSunTrainingHint = false,
 }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -246,6 +244,8 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       isLockingPovRef.current = !canPan;
       const savedView = restoredView?.locationPanoId === currentLocation.panoId ? restoredView : undefined;
       const targetPano = savedView?.panoId || currentLocation.panoId;
+      panorama.setVisible(true);
+      google.maps.event.trigger(panorama, 'resize');
       if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; return; }
       pendingPanoRef.current = targetPano;
       panorama.setPano(targetPano);
@@ -354,10 +354,6 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           <div>{[0, 45, 90, 135, 180, 225, 270, 315].map((bearing, index) => { const delta = ((bearing - heading + 540) % 360) - 180; return Math.abs(delta) <= 82 ? <span key={bearing} style={{ left: `calc(50% + ${delta * 1.55}px)` }}>{['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][index]}</span> : null; })}</div>
           <i /><small>{Math.round(heading)}°</small>
         </div>
-      )}
-
-      {showSunTrainingHint && currentLocation && !isLoading && (
-        <div className="sun-training-hint"><strong>{t('Facing')}: {Math.round(heading)}° {compassDirection(heading)}</strong><span>{t('Compare sun and shadows with the compass. Hemisphere tendency varies by season and latitude.')}</span></div>
       )}
 
       {tileRateLimited && !isLoading && (

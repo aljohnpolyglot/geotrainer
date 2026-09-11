@@ -3,6 +3,7 @@ import type { Environment } from "../types";
 import { formatDistance } from "../services/gameLogic";
 import type { ReviewPanelProps } from "./trainerHubTypes";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
+import { CountryFlag } from "./CountryFlag";
 
 export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
@@ -26,7 +27,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
       </div>
     </div>
     <div className="queue-head"><div><h2>{queue.length} {t("locationsReady")}</h2><p>{filters.due ? t("dueDescription") : t("customDescription")}</p></div>{queue[0] && <button className="button primary" onClick={() => startReview(queue[0])}><Target size={16} /> {t("reviewAction")}</button>}</div>
-    <div className="attempt-list">{queue.slice(0, 30).map((item) => <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code">{item.countryCode}</span><span><strong>{countryName(item.countryCode)}</strong><small>{date(item.createdAt)} · {item.source === "play" ? t("play") : t("review")}</small></span><span>{item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{item.score.toLocaleString()}</strong><ArrowUpRight size={15} /></button>)}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t("dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
+    <div className="attempt-list">{queue.slice(0, 30).map((item) => <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code"><CountryFlag code={item.countryCode} /></span><span><strong>{countryName(item.countryCode)}</strong><small>{date(item.createdAt)} · {item.source === "play" ? t("play") : t("review")}</small></span><span>{item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{item.score.toLocaleString()}</strong><ArrowUpRight size={15} /></button>)}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t("dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
     <section className="smart-collections"><h2>{t("smartCollections")}</h2><p className="smart-collection-note">{t("smartCollectionDescription")}</p><div className="preset-list">
       <button onClick={() => onTrainCountries(weakCountries.map((item) => item.code), t("weakCountriesAction"))}>{t("weakCountriesAction")}</button>
       <button onClick={() => onTrainCountries([...new Set<string>(confusions.flatMap((item) => item.codes))], t("mostConfused"))}>{t("mostConfused")}</button>

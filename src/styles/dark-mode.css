@@ -1,0 +1,35 @@
+:root.dark {
+  color-scheme: dark;
+  --paper: #0b2231;
+  --paper-2: #102b3b;
+  --carbon: #edf7f7;
+  --rule: #3b5664;
+  --muted: #abc0c8;
+  --blue: #4c9cff;
+  --shadow-sheet: 0 18px 50px rgba(0, 8, 14, .52);
+}
+
+.dark :is(.stats-summary, .stats-card, .stats-trend, .activity-heatmap, .daily-review-block, .coach-card, .clue-drop, .clue-actions button, .clue-actions label, .round-history-nav button, .review-location-button, .account-entry, .account-identity) { background: #102b3b; }
+.dark :is(.stats-mini span, .stats-callouts span, .sync-state, .auth-tabs, .auth-secondary) { background: #173747; }
+.dark :is(.filter-bar select, .table-tools select, .table-tools input, .preset-list button, .country-detail-select select, .custom-score-range input, .language-settings select, .preferences-modal input, .account-auth input) { color: var(--carbon); background: #071c29; border-color: var(--rule); }
+.dark :is(.setup-body select, .game-country-choice select, .environment-game-settings select, .clue-tools select) { color: var(--carbon); background: #071c29; border-color: var(--rule); }
+.dark :is(.stats-ai-control, .review-fallback) { color: #f7d88c; background: #302718; border-color: #705c2c; }
+.dark .stats-ai-count, .dark .stats-ai-count strong { color: #f7d88c; }
+.dark :is(.sample, .sample.low) { color: #d6eadf; background: #244336; }
+.dark :is(.activity-heatmap i, .anki-outcome i, .anki-calendar i, .anki-calendar-label .level-0) { background: #284453; }
+.dark :is(button.attempt-row:hover, tbody tr:hover) { background: #173747; }
+.dark :is(.coverage-map-wrap, .review-result-map) { background: #102b3b; }
+.dark :is(.button.secondary, .grade-actions button) { color: var(--carbon); background: #102b3b; border-color: var(--rule); }
+.dark :is(.button.secondary:hover, .grade-actions button:hover, .icon-button:hover) { background: #1a3b4c; }
+.dark .coach-error { color: #ffc2ba; background: #421f20; border-color: #8d4949; }
+
+.dark :is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) :is(input, select),
+.dark #new-game-dialog button[class*="bg-stone-950"],
+.dark #revealed-location-card > div:nth-child(2),
+.dark #custom-collection-dialog form > div:first-child > div:nth-child(2) > div:last-child { color: var(--carbon) !important; background: #071c29 !important; border-color: var(--rule) !important; }
+.dark :is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) > div:last-child,
+.dark #new-game-dialog > div:last-child,
+.dark #custom-collection-dialog form > div:last-child { background: #102b3b !important; }
+.dark #play-lobby-card > div:nth-child(3), .dark #play-lobby-card > div:last-child button:last-child { color: var(--carbon) !important; background: #102b3b !important; }
+.dark #new-game-dialog button[class*="bg-stone-800"] { color: #edf7f7 !important; background: #102b3b !important; border-color: #3b5664 !important; }
+.dark #new-game-dialog button[class*="bg-stone-950"] { color: #abc0c8 !important; background: #071c29 !important; }

@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Attempt, ClueRecord, Collection, GameRecord, ReviewFilters, ReviewRecord, ReviewSessionKind, StudyVisit, TrainerLocation } from "../types";
 
-export type HubTab = "progress" | "statistics" | "review" | "coverage" | "history";
+export type HubTab = "progress" | "statistics" | "review" | "clues" | "coverage" | "history";
 export type HistoryKind = "games" | "attempts" | "study" | "reviews";
 export type StatisticsSection = "overview" | "geography" | "progress" | "reviews" | "confusions" | "coverage" | "sessions" | "locations" | "history";
 

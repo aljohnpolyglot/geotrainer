@@ -8,14 +8,13 @@ import { GameRecord, LocationResult } from '../types';
 import { formatDistance, getScoreRating } from '../services/gameLogic';
 import { getFlagCdnUrl } from '../services/geocoding';
 import { COUNTRIES } from '../data/countries';
-import { Trophy, RotateCcw, ListRestart, History, X, ExternalLink, MapPin, Target } from 'lucide-react';
+import { Trophy, RotateCcw, History, X, ExternalLink, MapPin, Target } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface GameSummaryModalProps {
   game: GameRecord;
   onPlayAgain: () => void;
-  onNewGame: () => void;
   onViewHistory: () => void;
   onClose: () => void;
   onPracticeMistakes?: () => void;
@@ -25,7 +24,6 @@ interface GameSummaryModalProps {
 export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
   game,
   onPlayAgain,
-  onNewGame,
   onViewHistory,
   onClose,
   onPracticeMistakes,
@@ -288,15 +286,6 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               <span>{t('Past Games Collection')}</span>
             </button>
 
-            {/* Footer Exit Button */}
-            <button
-              id="game-summary-exit-btn-footer"
-              onClick={onClose}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white text-xs font-medium rounded-lg border border-stone-800 transition-colors cursor-pointer"
-            >
-              <X className="w-3.5 h-3.5 text-stone-400" />
-              <span>{t('Exit')}</span>
-            </button>
           </div>
 
           <div className="flex items-center space-x-2.5">
@@ -307,14 +296,6 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               <Target className="w-3.5 h-3.5" />
               <span>{t('practiceMistakes')}</span>
             </button>}
-            <button
-              onClick={onNewGame}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-stone-800 hover:bg-stone-750 text-stone-200 text-xs font-medium rounded-lg transition-colors cursor-pointer border border-stone-700/60"
-            >
-              <ListRestart className="w-3.5 h-3.5" />
-              <span>{t('changeSettings')}</span>
-            </button>
-
             <button
               onClick={onPlayAgain}
               className="inline-flex items-center gap-2 px-5 py-2 bg-stone-100 hover:bg-white text-stone-950 text-xs sm:text-sm font-bold rounded-lg shadow-md transition-all cursor-pointer active:scale-98"

@@ -104,8 +104,9 @@ function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: G
   return `${languageInstruction} Known result context (answer key only): ${facts}${reference}\nExplain briefly which visible clues support the known country, which clues were generic, and realistic confusions. Do not claim the answer key or location metadata was visible.`;
 }
 
+export const decodeCoachText = (value: string) => value.replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)));
 function strings(value: unknown, max = 6): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string').map((item) => item.trim()).filter(Boolean).slice(0, max) : [];
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string').map((item) => decodeCoachText(item).trim()).filter(Boolean).slice(0, max) : [];
 }
 
 export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCountry = ''): CoachAnalysis {
@@ -134,13 +135,13 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
     const entry = card as Record<string, unknown>;
     if (!allowedCardCategories.has(String(entry.category))) return [];
     const front = strings(entry.front, 5).filter(safe);
-    return front.length && typeof entry.back === 'string' ? [{ category: String(entry.category), front, back: entry.back.slice(0, 700), clueStrength: Math.max(1, Math.min(5, Number(entry.clueStrength) || 1)) }] : [];
+    return front.length && typeof entry.back === 'string' ? [{ category: String(entry.category), front, back: decodeCoachText(entry.back).slice(0, 700), clueStrength: Math.max(1, Math.min(5, Number(entry.clueStrength) || 1)) }] : [];
   }).slice(0, 2) : [];
   const analysis: CoachAnalysis = {
-    confidence, region: typeof item.region === 'string' ? item.region.slice(0, 120) : '', description: typeof item.description === 'string' ? item.description.slice(0, 1200) : undefined, candidates,
+    confidence, region: typeof item.region === 'string' ? decodeCoachText(item.region).slice(0, 120) : '', description: typeof item.description === 'string' ? decodeCoachText(item.description).slice(0, 1200) : undefined, candidates,
     strongClues: strings(item.strongClues).filter(visible), weakClues: strings(item.weakClues).filter(visible), contradictions: strings(item.contradictions).filter(visible), confusions: strings(item.confusions),
     nextThingsToInspect: strings(item.nextThingsToInspect).filter(visible),
-    coreCard: core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? core.backExplanation.slice(0, 900) : '' } : undefined,
+    coreCard: core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? decodeCoachText(core.backExplanation).slice(0, 900) : '' } : undefined,
     extraCards,
   };
   if (mode === 'hints') return { ...analysis, region: '', candidates: [], strongClues: [], weakClues: [], contradictions: [], confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };

@@ -9,6 +9,7 @@ import { COUNTRIES } from '../data/countries';
 import { X, Search, Check, Trash2 } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { CountryFlag } from './CountryFlag';
 
 interface CustomCollectionModalProps {
   isOpen: boolean;
@@ -197,7 +198,7 @@ export const CustomCollectionModal: React.FC<CustomCollectionModalProps> = ({
                         >
                           {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
                         </div>
-                        <span className="font-mono text-stone-400 text-[10px] w-6">{country.code}</span>
+                        <CountryFlag code={country.code} />
                         <span>{country.name}</span>
                       </div>
                     </button>

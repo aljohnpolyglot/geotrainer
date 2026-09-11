@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
-import { ArrowRight, BookOpen, ChevronRight, Cloud, Gamepad2, MapPinned, Target } from 'lucide-react';
+import { ArrowRight, BookOpen, BookOpenText, ChevronRight, Cloud, Gamepad2, MapPinned, Target } from 'lucide-react';
 import { reviewDayStart, trainerDb } from '../data/trainerDb';
 import { cloudSync } from '../services/cloudSync';
 import { CloudAccountDialog } from './CloudAccountDialog';
@@ -47,9 +47,10 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       </div>
 
       <div className="departure-board">
-        <div className="board-heading"><span>{t('Field desk')}</span><span>{t('Local · Private')}</span></div>
+        <div className="board-heading"><span>{t('Choose a mode')}</span></div>
         <button onClick={onPlay}><span className="route-code">PLY</span><span><strong>{t('Start a game')}</strong><small>{t('1–100 scored rounds · Standard / No Move / NMPZ')}</small></span><Gamepad2 size={19} /></button>
         <button onClick={onReview}><span className="route-code">REV</span><span><strong>{t('Review weak places')}</strong><small>{status.due ? `${status.due} ${t('reviewsDueToday')}` : status.nextDue ? `${t('dailyReviewsComplete')} · ${t('tryAgainAt')}: ${new Date(status.nextDue).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short', ...(status.timeZone ? { timeZone: status.timeZone } : {}) })}` : status.scheduled ? t('dailyReviewsComplete') : t('noReviewsScheduled')}</small></span><Target size={19} /></button>
+        <button onClick={() => window.open(`${import.meta.env.BASE_URL}docs/`, '_blank', 'noopener,noreferrer')}><span className="route-code">DOC</span><span><strong>{t('Guide')}</strong><small>{t('Learn how GeoTrainer builds durable recall')}</small></span><BookOpenText size={19} /></button>
         <div className="menu-status">
           <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>
           <span><strong>{status.attempts.toLocaleString()}</strong> {t('attempts retained')}</span>
@@ -61,7 +62,6 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
           <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase.replace('-', ' ')}</span>
           <ChevronRight size={18} />
         </button>
-        <p className="local-note">{t('Your field log stays available offline and syncs when you sign in.')}</p>
       </div>
       <CloudAccountDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
     </section>

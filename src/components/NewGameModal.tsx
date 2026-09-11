@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
+import { CountryMixPicker } from './CountryMixPicker';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -46,6 +47,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [roundCount, setRoundCount] = useState<number>(5);
   const [customRounds, setCustomRounds] = useState(false);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('world');
+  const [countryCodes, setCountryCodes] = useState<string[]>([]);
   const [canMove, setCanMove] = useState<boolean>(true);
   const [canPan, setCanPan] = useState<boolean>(true);
   const [canZoom, setCanZoom] = useState<boolean>(true);
@@ -63,6 +65,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       if (!active) return;
       const value = normalizeGamePreferences(stored, defaultShowCompass);
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
+      setCountryCodes([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
       setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setTimeLimitSeconds(value.timeLimitSeconds);
     });
@@ -92,6 +95,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
     const settings = {
       roundCount,
       collectionId: selectedCollectionId,
+      ...(countryCodes.length ? { countryCodes } : {}),
       canMove,
       canPan,
       canZoom,
@@ -109,6 +113,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const isNmpz = !canMove && !canPan && !canZoom;
   const isNoMove = !canMove && canPan && canZoom;
   const isStandard = canMove && canPan && canZoom;
+  const selectedCollection = collections.find((item) => item.id === selectedCollectionId);
 
   return (
     <div
@@ -149,7 +154,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </label>
             <select
               value={selectedCollectionId}
-              onChange={(e) => setSelectedCollectionId(e.target.value)}
+              onChange={(e) => { setSelectedCollectionId(e.target.value); setCountryCodes([]); }}
               className="w-full bg-stone-950 border border-stone-800 hover:border-stone-700 rounded-xl px-3.5 py-2.5 text-stone-100 text-xs font-medium focus:outline-hidden focus:border-amber-500 transition-colors cursor-pointer"
             >
               {BUILT_IN_COLLECTION_GROUPS.map((group) => <optgroup label={group.label} key={group.label}>{group.collections.map((c) => (
@@ -159,6 +164,11 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               ))}</optgroup>)}
               {collections.some((item) => item.isCustom) && <optgroup label={t('Custom collections')}>{collections.filter((item) => item.isCustom).map((c) => <option key={c.id} value={c.id}>{c.name} ({c.countryCodes.length} {t('countries')})</option>)}</optgroup>}
             </select>
+          </div>
+
+          <div className="game-country-choice">
+            <label>{t('Country mix')}</label>
+            <CountryMixPicker value={countryCodes} availableCodes={selectedCollection?.countryCodes || []} onChange={setCountryCodes} />
           </div>
 
           <div className="environment-game-settings">
@@ -174,7 +184,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </label>}
             <label>{t('Sampling')}<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option></select></label>
           </div>
-          <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
+          <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
 
           {/* 2. Number of Rounds / Batch Size */}
           <div className="space-y-1.5">
