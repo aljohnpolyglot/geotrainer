@@ -261,6 +261,16 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     }
   }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!mapsLoaded || !container || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => {
+      if (panoInstanceRef.current) google.maps.event.trigger(panoInstanceRef.current, 'resize');
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [mapsLoaded]);
+
   useEffect(() => () => {
     if (viewSaveTimerRef.current !== null) window.clearTimeout(viewSaveTimerRef.current);
     if (panoInstanceRef.current) {
@@ -323,7 +333,6 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     <div className="relative flex-1 w-full h-full overflow-hidden bg-black select-none">
       {/* Street View Container Element */}
       <div
-        id="streetview-viewport"
         ref={containerRef}
         className="w-full h-full absolute inset-0"
         style={{ width: '100%', height: '100%' }}

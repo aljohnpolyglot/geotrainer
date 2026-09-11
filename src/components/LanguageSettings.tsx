@@ -62,7 +62,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
         <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
       </fieldset>
-      <fieldset><legend>{translate(languages.ui, 'scheduling')}</legend>
+      <fieldset className="scheduling-settings"><legend>{translate(languages.ui, 'scheduling')}</legend>
         <label>{translate(languages.ui, 'strictness')}<select value={scheduler.strictness} onChange={(event) => setScheduler((current) => ({ ...current, strictness: event.target.value as SchedulerPreferences['strictness'] }))}><option value="beginner">{translate(languages.ui, 'beginner')}</option><option value="balanced">{translate(languages.ui, 'balanced')}</option><option value="pro">{translate(languages.ui, 'pro')}</option></select></label>
         <label>{translate(languages.ui, 'firstReview')}<input type="number" min="1" max="30" value={scheduler.firstReviewDays} onChange={(event) => number('firstReviewDays', event.target.value)} /></label>
         <label>{translate(languages.ui, 'relearning')}<input type="number" min="1" max="1440" value={scheduler.relearningMinutes} onChange={(event) => number('relearningMinutes', event.target.value)} /></label>

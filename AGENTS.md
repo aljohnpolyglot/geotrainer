@@ -39,6 +39,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.
+- Render every collection selector with the shared World, Continents, Trainer drills, regions, and custom-collections hierarchy.
 
 ## Implementation
 

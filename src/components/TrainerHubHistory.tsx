@@ -3,6 +3,7 @@ import { formatDistance } from "../services/gameLogic";
 import type { HistoryPanelProps } from "./trainerHubTypes";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
+import { CollectionOptions } from "./CollectionOptions";
 
 export function HistoryPanel({ historyKind, setHistoryKind, countryFilter, setCountryFilter, collectionFilter, setCollectionFilter, dateFilter, setDateFilter, minScore, setMinScore, maxDistance, setMaxDistance, correctness, setCorrectness, sourceFilter, setSourceFilter, collections, countries, games, filteredAttempts, visits, reviews, locations, startReview, onSelectGame }: HistoryPanelProps) {
   const t = useHubTranslate();
@@ -13,7 +14,7 @@ export function HistoryPanel({ historyKind, setHistoryKind, countryFilter, setCo
     <div className="table-tools history-filters">
       <label>{t("tableCountry")}<select value={countryFilter} onChange={(event) => setCountryFilter(event.target.value)}><option value="">{t("all")}</option>{countries.map((item) => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
       {historyKind === "attempts" && <>
-        <label>{t("collectionFilter")}<select value={collectionFilter} onChange={(event) => setCollectionFilter(event.target.value)}><option value="">{t("all")}</option>{collections.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+        <label>{t("collectionFilter")}<select value={collectionFilter} onChange={(event) => setCollectionFilter(event.target.value)}><CollectionOptions collections={collections} allLabel={t("all")} customLabel={t("Custom collections")} /></select></label>
         <label>{t("from")}<input type="date" value={dateFilter} onChange={(event) => setDateFilter(event.target.value)} /></label>
         <label>{t("minScore")}<input type="number" min="0" max="5000" placeholder="0" value={minScore} onChange={(event) => setMinScore(event.target.value)} /></label>
         <label>{t("maxKm")}<input type="number" min="0" placeholder={t("any")} value={maxDistance} onChange={(event) => setMaxDistance(event.target.value)} /></label>

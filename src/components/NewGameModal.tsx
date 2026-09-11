@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Collection, Environment, GameSettings, SamplingMode, UrbanLevel } from '../types';
-import { BUILT_IN_COLLECTION_GROUPS, TRAINING_PRESETS } from '../data/collections';
+import { TRAINING_PRESETS } from '../data/collections';
 import { normalizeGamePreferences, trainerDb } from '../data/trainerDb';
 import {
   Gamepad2,
@@ -22,6 +22,7 @@ import {
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
 import { CountryMixPicker } from './CountryMixPicker';
+import { CollectionOptions } from './CollectionOptions';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -157,12 +158,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               onChange={(e) => { setSelectedCollectionId(e.target.value); setCountryCodes([]); }}
               className="w-full bg-stone-950 border border-stone-800 hover:border-stone-700 rounded-xl px-3.5 py-2.5 text-stone-100 text-xs font-medium focus:outline-hidden focus:border-amber-500 transition-colors cursor-pointer"
             >
-              {BUILT_IN_COLLECTION_GROUPS.map((group) => <optgroup label={group.label} key={group.label}>{group.collections.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.countryCodes.length} countries)
-                </option>
-              ))}</optgroup>)}
-              {collections.some((item) => item.isCustom) && <optgroup label={t('Custom collections')}>{collections.filter((item) => item.isCustom).map((c) => <option key={c.id} value={c.id}>{c.name} ({c.countryCodes.length} {t('countries')})</option>)}</optgroup>}
+              <CollectionOptions collections={collections} customLabel={t('Custom collections')} />
             </select>
           </div>
 

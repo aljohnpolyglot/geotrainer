@@ -10,6 +10,7 @@ import { translate } from '../services/language';
 import { sortRows, type SortDirection } from '../analytics/tableSorting';
 import { trainerDb } from '../data/trainerDb';
 import type { StatisticsSection } from './trainerHubTypes';
+import { CollectionOptions } from './CollectionOptions';
 type Props = { attempts: Attempt[]; visits: StudyVisit[]; locations: TrainerLocation[]; reviews: ReviewRecord[]; sessions: TrainingSession[]; collections: Collection[]; onTrainCountries: (codes: string[], name: string) => void; initialSection?: StatisticsSection; onSectionChange?: (section: StatisticsSection) => void; locationsPanel?: ReactNode; historyPanel?: ReactNode };
 const percent = (value: number | null) => (value === null ? "—" : `${Math.round(value * 100)}%`);
 const number = (value: number | null, digits = 0) => (value === null ? "—" : value.toLocaleString(undefined, { maximumFractionDigits: digits }));
@@ -197,12 +198,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, sessions
         <label>
           {t('Collection')}
           <select value={collection} onChange={(event) => setCollection(event.target.value)}>
-            <option value="">{t('All')}</option>
-            {collections.map((item) => (
-              <option value={item.id} key={item.id}>
-                {item.name}
-              </option>
-            ))}
+            <CollectionOptions collections={collections} allLabel={t('All')} customLabel={t('Custom collections')} />
           </select>
         </label>
       </div>

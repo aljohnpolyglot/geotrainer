@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Unified collection dropdown hierarchy across Study, Play, Review, History, and Statistics, made Review scheduling settings fill a responsive two-column layout, and normalized clue details around a compact live Street View.
 - Fixed Google sign-in returning to the GitHub Pages account root instead of the deployed GeoTrainer app.
 - Added a localized guide section explaining how GeoTrainer supplements GeoGuessr with durable retention, targeted confusion practice, and automatic review.
 - Aligned the closed AI Coach launcher with the adjacent compass control.

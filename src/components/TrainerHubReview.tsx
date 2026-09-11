@@ -4,6 +4,7 @@ import { formatDistance } from "../services/gameLogic";
 import type { ReviewPanelProps } from "./trainerHubTypes";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
+import { CollectionOptions } from "./CollectionOptions";
 
 export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
@@ -15,7 +16,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
       <button className="button primary daily-review-action" disabled={!queue[0]} onClick={() => queue[0] && startReview(queue[0])}><Target size={20} /> {t("reviewAction")}</button>
     </section>
     <div className="filter-bar">
-      <label>{t("collection")}<select value={reviewCollection} onChange={(event) => setReviewCollection(event.target.value)}><option value="all">{t("allCountries")}</option>{collections.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+      <label>{t("collection")}<select value={reviewCollection} onChange={(event) => setReviewCollection(event.target.value)}><CollectionOptions collections={collections} allValue="all" allLabel={t("allCountries")} customLabel={t("Custom collections")} /></select></label>
       <label>{t("environment")}<select value={filters.environment || ""} onChange={(event) => setFilters((current) => ({ ...current, environment: (event.target.value || undefined) as Environment | undefined }))}><option value="">{t("any")}</option><option value="urban">{t("urban")}</option><option value="suburban">{t("suburban")}</option><option value="rural">{t("rural")}</option><option value="mixed">{t("mixed")}</option></select></label>
       <div className="preset-list" aria-label={t("review")}>
         <button onClick={() => setFilters({ due: true })} className={filters.due ? "active" : ""}>{t("dueToday")}</button>
