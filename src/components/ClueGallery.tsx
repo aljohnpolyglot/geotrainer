@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowLeft, Eye, ExternalLink, Trash2, X } from 'lucide-react';
+import { Eye, ExternalLink, Trash2, X } from 'lucide-react';
 import type { ClueRecord } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { translate } from '../services/language';
@@ -16,7 +16,7 @@ export function ClueGallery({ country, clues, initialSelectedId, onClose, onDele
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
   const location = selected?.lat !== undefined && selected.lng !== undefined ? { countryCode: selected.countryCode, lat: selected.lat, lng: selected.lng, panoId: selected.panoId } : null;
   return createPortal(<div className="clue-gallery-backdrop"><aside className={`clue-gallery${selected ? ' detail-open' : ''}`} aria-label={`${country} ${t('knownClues')}`}>
-    <header>{selected ? <button className="icon-button" onClick={() => initialSelectedId || clues.length === 1 ? onClose() : setSelected(null)} aria-label={t('Back')}><ArrowLeft size={17} /></button> : <span />}<div><h2><CountryFlag code={selected?.countryCode || clues[0]?.countryCode} />{country}</h2><p>{selected ? t('Details') : `${clues.length} ${t('knownClues')}`}</p></div><button className="icon-button" onClick={onClose} aria-label={t('close')}><X size={17} /></button></header>
+    <header><span /><div><h2><CountryFlag code={selected?.countryCode || clues[0]?.countryCode} />{country}</h2><p>{selected ? t('Details') : `${clues.length} ${t('knownClues')}`}</p></div><button className="icon-button" onClick={onClose} aria-label={t('close')}><X size={17} /></button></header>
     {selected ? <div className="clue-gallery-detail">{location ? <div className="clue-gallery-streetview"><StreetViewContainer currentLocation={location} isLoading={false} onNextLocation={() => {}} canMove canPan canZoom showCompass={false} /></div> : <img src={selected.imageDataUrl} alt={t('savedVisualClue')} />}
       {selected.analysis.description && <p>{selected.analysis.description}</p>}
       <CoachLocationEstimate estimate={selected.analysis.locationEstimate} />
