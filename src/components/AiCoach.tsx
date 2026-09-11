@@ -20,6 +20,8 @@ type CoachContext = {
   previousAttempts?: Array<{ guessedCountry?: string; score: number }>;
 };
 
+type SavedCoachAnalysis = { panoId: string; mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis };
+
 export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue, onClueAnalyzed }: { panoId: string; appMode: AppMode; revealed: boolean; context?: CoachContext; onSave?: (value: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => void; onSaveClue: (value: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis }) => Promise<void> | void; onClueAnalyzed?: () => void }) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -40,7 +42,14 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       if (panoId === initialPano.current && typeof saved?.coachOpen === 'boolean') setOpen(saved.coachOpen);
     });
   }, [panoId]);
-  useEffect(() => { requestId.current += 1; controller.current?.abort(); controller.current = null; setError(''); setLoading(null); setSaved(false); }, [panoId]);
+  useEffect(() => {
+    let active = true;
+    requestId.current += 1; controller.current?.abort(); controller.current = null; setError(''); setLoading(null); setResult(null); setSaved(false);
+    void trainerDb.setting<SavedCoachAnalysis>('workspace.coachAnalysis').then((stored) => {
+      if (active && stored?.panoId === panoId) { setResult(stored.analysis); setSaved(true); onSave?.(stored); }
+    });
+    return () => { active = false; };
+  }, [panoId]);
 
   const setCoachOpen = (value: boolean) => {
     setOpen(value);
@@ -71,6 +80,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       const completedModel = value.model || 'Gemini';
       const merged = result ? { ...value.analysis, strongClues: [...new Set([...result.strongClues, ...value.analysis.strongClues])], weakClues: [...new Set([...result.weakClues, ...value.analysis.weakClues])], contradictions: [...new Set([...(result.contradictions || []), ...(value.analysis.contradictions || [])])], confusions: [...new Set([...result.confusions, ...value.analysis.confusions])], nextThingsToInspect: [...new Set([...result.nextThingsToInspect, ...value.analysis.nextThingsToInspect])] } : value.analysis;
       setResult(merged); setSaved(true);
+      void trainerDb.setSetting('workspace.coachAnalysis', { panoId, mode, model: completedModel, generatedAt: completedAt, analysis: merged } satisfies SavedCoachAnalysis);
       onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: merged });
       if (appMode === 'play') onClueAnalyzed?.();
     } catch (caught) {

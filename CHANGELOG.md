@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Preserved the active AI Coach analysis and clue preview/result across reloads without carrying them into another panorama, and kept the guess map rendered after mid-round language changes.
 - Added a localized Print Screen → paste → Analyze clue workflow to the user guide.
 - Fixed AI Coach falsely reporting that Street View was still loading after moving away from the round's starting panorama or opening another live panorama.
 - Unified collection dropdown hierarchy across Study, Play, Review, History, and Statistics, made Review scheduling settings fill a responsive two-column layout, and normalized clue details around a compact live Street View.

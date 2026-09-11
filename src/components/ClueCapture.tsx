@@ -10,6 +10,7 @@ import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
+type ClueDraft = { panoId: string; imageDataUrl: string; analysis?: CoachAnalysis; saved: boolean };
 
 async function prepareImage(file: File) {
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10_000_000) throw new Error('Paste a JPEG, PNG, or WebP image under 10 MB.');
@@ -35,7 +36,14 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
   useEffect(() => () => controller.current?.abort(), []);
-  useEffect(() => { requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false); }, [panoId]);
+  useEffect(() => {
+    let active = true;
+    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false);
+    void trainerDb.setting<ClueDraft>('workspace.clueDraft').then((draft) => {
+      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.saved && draft.analysis) onAnalyze?.(); }
+    });
+    return () => { active = false; };
+  }, [panoId]);
 
   const run = async (task: (signal: AbortSignal, isCurrent: () => boolean) => Promise<void>) => {
     controller.current?.abort();
@@ -49,7 +57,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
 
   const choose = async (file?: File) => {
     if (!file || disabled || busy) return;
-    try { setImage(await prepareImage(file)); setAnalysis(undefined); setSaved(false); setStatus(''); }
+    try { const prepared = await prepareImage(file); setImage(prepared); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
     catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
   const analyze = async () => {
@@ -66,7 +74,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
       const completedModel = value.model || 'Gemini';
       setAnalysis(value.analysis); onAnalyze?.();
       await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
-      setSaved(true); setStatus('');
+      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, analysis: value.analysis, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -77,7 +85,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
     const value = await response.json() as { imageDataUrl?: string; error?: string };
     if (!response.ok || !value.imageDataUrl) throw new Error(value.error || t('captureFailed'));
     if (!isCurrent()) return;
-    setImage(value.imageDataUrl); setAnalysis(undefined); setSaved(false); setStatus('');
+    setImage(value.imageDataUrl); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: value.imageDataUrl, saved: false } satisfies ClueDraft);
   });
   return <details className="clue-capture">
 <summary><Clipboard size={14} /> {t('knownClues')}</summary>

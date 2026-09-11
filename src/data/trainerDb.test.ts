@@ -126,6 +126,20 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.attempts()).length, beforeMalformed);
 });
 
+test('workspace settings preserve Coach analysis and clue drafts', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  await initTrainerDb();
+  await clearTrainerDbForTesting();
+  const analysis = { confidence: 'low', region: '', candidates: [], strongClues: ['red soil'], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] };
+  const coach = { panoId: 'pano-workspace', mode: 'analyze', model: 'test', generatedAt: 10, analysis };
+  const clue = { panoId: 'pano-workspace', imageDataUrl: 'data:image/jpeg;base64,AQID', analysis, saved: true };
+
+  await Promise.all([trainerDb.setSetting('workspace.coachAnalysis', coach), trainerDb.setSetting('workspace.clueDraft', clue)]);
+
+  assert.deepEqual(await trainerDb.setting('workspace.coachAnalysis'), coach);
+  assert.deepEqual(await trainerDb.setting('workspace.clueDraft'), clue);
+});
+
 test('due queue enforces same-day limits and persists review session kind', async () => {
   const { clearTrainerDbForTesting, createBackup, importBackup, initTrainerDb, trainerDb } = await import('./trainerDb');
   await initTrainerDb();

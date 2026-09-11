@@ -13,6 +13,7 @@ import { useDraggablePanel } from '../hooks/useDraggablePanel';
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
   isSubmitting: boolean;
+  mapsReady: boolean;
   timeRemaining: number | null; // null if unlimited
   elapsedTimeSeconds?: number;
 }
@@ -20,6 +21,7 @@ interface GuessMapProps {
 export const GuessMap: React.FC<GuessMapProps> = ({
   onGuess,
   isSubmitting,
+  mapsReady,
   timeRemaining,
   elapsedTimeSeconds,
 }) => {
@@ -35,7 +37,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
 
   // Initialize Map
   useEffect(() => {
-    if (!mapContainerRef.current || mapInstanceRef.current) return;
+    if (!mapsReady || !mapContainerRef.current || mapInstanceRef.current) return;
     if (typeof google === 'undefined' || !google.maps || !google.maps.Map) return;
 
     const map = new google.maps.Map(mapContainerRef.current, {
@@ -109,6 +111,16 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       markerRef.current = null;
       mapInstanceRef.current = null;
     };
+  }, [mapsReady]);
+
+  useEffect(() => {
+    const container = mapContainerRef.current;
+    if (!container || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => {
+      if (mapInstanceRef.current) google.maps.event.trigger(mapInstanceRef.current, 'resize');
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
   }, []);
 
   // Resize listener when expanding/collapsing map
