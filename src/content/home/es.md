@@ -42,7 +42,7 @@ Repaso oculta la respuesta hasta tu conjetura. La distancia y la puntuación cal
 
 ## Entrenador de IA y pistas
 
-Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Conserva las observaciones al moverte o revelar el lugar. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps.
+Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Solo muestra una estimación de región, ciudad o lugar exacto cuando varias pistas visuales sólidas la respaldan. Tras revelar la respuesta, **Analizar** se convierte en **Explicar**: usa solo referencias del país correcto y admite si la imagen no bastaba para identificarlo. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps.
 
 ### Capturar, pegar y analizar una pista
 
@@ -87,3 +87,4 @@ Combina marcas viales, lado de conducción, alfabetos, postes, relieve, arquitec
 - [Plonk It](https://www.plonkit.net/) — guías estructuradas por países, regiones, mapas y práctica.
 - [GeoHints](https://geohints.com/) — catálogo visual de bolardos, líneas, matrículas, señales, postes, cámaras y otras pistas.
 - [GeoMetas](https://geometas.com/) — lecciones gratuitas de metas por país, región y categoría, con cuestionarios dinámicos.
+- [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizaje de GeoGuessr, documentación y recursos para crear mapas.

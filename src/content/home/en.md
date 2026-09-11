@@ -233,7 +233,7 @@ Analyze samples the panorama around you and evaluates the visible evidence toget
 
 ### Before and after reveal
 
-Before a guess, Coach responses are spoiler-safe and do not receive answer metadata. After a Study reveal or submitted guess, answer context may support explanation and comparison.
+Before a guess, Coach responses are spoiler-safe and do not receive answer metadata. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
 
 ### Reliability
 
@@ -472,5 +472,6 @@ Learn why a clue varies by region, where it stops being reliable, and what it is
 - [Plonk It](https://www.plonkit.net/) — structured country guides that progress from identification to regional clues, spotlights, maps, and further resources.
 - [GeoHints](https://geohints.com/) — a searchable visual catalog for bollards, road lines, plates, signs, utility poles, camera generations, driving side, landscapes, and other clue families.
 - [GeoMetas](https://geometas.com/) — free country and regional meta lessons organized by clue category, with dynamic quizzes for recall practice.
+- [Learnable Meta](https://learnablemeta.com/) — GeoGuessr learning maps plus documentation and map-making resources.
 
 External guides are community references. Check several clues together and allow for outdated imagery, regional exceptions, and Street View changes.

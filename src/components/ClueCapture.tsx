@@ -8,6 +8,7 @@ import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
+import { CoachLocationEstimate } from './CoachLocationEstimate';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 type ClueDraft = { panoId: string; imageDataUrl: string; analysis?: CoachAnalysis; saved: boolean };
@@ -100,6 +101,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
     {status && <p className="coach-status" role="status">{status}</p>}
     {analysis && <div className="clue-analysis">
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
+      <CoachLocationEstimate estimate={analysis.locationEstimate} />
       {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
       {analysis.description && <p>{analysis.description}</p>}
       {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}

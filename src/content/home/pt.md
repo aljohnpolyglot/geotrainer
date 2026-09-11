@@ -42,7 +42,7 @@ A resposta fica oculta até o palpite. Distância e pontuação calculam o próx
 
 ## Coach de IA e pistas
 
-Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. As observações continuam disponíveis ao mover ou revelar. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps.
+Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. Só mostra uma estimativa de região, cidade ou local exato quando várias pistas visuais fortes a sustentam. Após revelar a resposta, **Analisar** vira **Explicar**: usa apenas referências do país correto e admite quando a imagem não bastava para identificá-lo. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps.
 
 ### Capturar, colar e analisar uma pista
 
@@ -87,3 +87,4 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 - [Plonk It](https://www.plonkit.net/) — guias estruturados por países, regiões, mapas e prática.
 - [GeoHints](https://geohints.com/) — catálogo visual de balizadores, linhas, placas, sinais, postes, câmeras e outras pistas.
 - [GeoMetas](https://geometas.com/) — lições gratuitas de metas por país, região e categoria, com quizzes dinâmicos.
+- [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizagem do GeoGuessr, documentação e recursos para criar mapas.

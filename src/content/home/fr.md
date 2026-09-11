@@ -42,7 +42,7 @@ La réponse reste cachée jusqu’à votre estimation. Distance et score calcule
 
 ## Coach IA et indices
 
-Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Les observations restent disponibles après un déplacement ou la révélation. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps.
+Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Une estimation de région, ville ou lieu exact n’apparaît que si plusieurs indices visuels forts la soutiennent. Après la révélation, **Analyser** devient **Expliquer** : le Coach utilise uniquement les références du bon pays et reconnaît si l’image ne suffisait pas à l’identifier. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps.
 
 ### Capturer, coller et analyser un indice
 
@@ -87,3 +87,4 @@ Croisez marquages routiers, sens de circulation, écritures, poteaux, relief, ar
 - [Plonk It](https://www.plonkit.net/) — guides structurés par pays, régions, cartes et exercices.
 - [GeoHints](https://geohints.com/) — catalogue visuel de bornes, lignes, plaques, panneaux, poteaux, caméras et autres indices.
 - [GeoMetas](https://geometas.com/) — leçons gratuites de métas par pays, région et catégorie, avec des quiz dynamiques.
+- [Learnable Meta](https://learnablemeta.com/) — cartes d’apprentissage GeoGuessr, documentation et ressources de création de cartes.

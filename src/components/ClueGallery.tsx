@@ -7,6 +7,7 @@ import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CountryFlag } from './CountryFlag';
 import { StreetViewContainer } from './StreetViewContainer';
+import { CoachLocationEstimate } from './CoachLocationEstimate';
 
 export function ClueGallery({ country, clues, initialSelectedId, onClose, onDelete }: { country: string; clues: ClueRecord[]; initialSelectedId?: string; onClose: () => void; onDelete: (id: string) => void }) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
@@ -18,6 +19,7 @@ export function ClueGallery({ country, clues, initialSelectedId, onClose, onDele
     <header>{selected ? <button className="icon-button" onClick={() => clues.length === 1 ? onClose() : setSelected(null)} aria-label={t('Back')}><ArrowLeft size={17} /></button> : <span />}<div><h2><CountryFlag code={selected?.countryCode || clues[0]?.countryCode} />{country}</h2><p>{selected ? t('Details') : `${clues.length} ${t('knownClues')}`}</p></div><button className="icon-button" onClick={onClose} aria-label={t('close')}><X size={17} /></button></header>
     {selected ? <div className="clue-gallery-detail">{location ? <div className="clue-gallery-streetview"><StreetViewContainer currentLocation={location} isLoading={false} onNextLocation={() => {}} canMove canPan canZoom showCompass={false} /></div> : <img src={selected.imageDataUrl} alt={t('savedVisualClue')} />}
       {selected.analysis.description && <p>{selected.analysis.description}</p>}
+      <CoachLocationEstimate estimate={selected.analysis.locationEstimate} />
       {!!selected.analysis.candidates.length && <ol>{selected.analysis.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
       {list(t('strongClues'), selected.analysis.strongClues)}{list(t('weakGeneric'), selected.analysis.weakClues)}{list(t('contradictionsGaps'), selected.analysis.contradictions || [])}{list(t('confusableWith'), selected.analysis.confusions)}{list(t('inspectNext'), selected.analysis.nextThingsToInspect)}
       {selected.analysis.coreCard && <section><strong>{t('coreCard')}</strong><ul>{selected.analysis.coreCard.front.map((item) => <li key={item}>{item}</li>)}</ul><p>{selected.analysis.coreCard.backExplanation}</p></section>}

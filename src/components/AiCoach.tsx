@@ -10,6 +10,7 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
 import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
+import { CoachLocationEstimate } from './CoachLocationEstimate';
 
 type CoachContext = {
   actualCountry?: string;
@@ -58,7 +59,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
 
   const requestCoach = async (mode: CoachMode, body: Record<string, unknown>) => {
     const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
-    const response = await postCoach({ mode, ...body, language: preferences.ai, gameLanguage: preferences.game, context: revealed ? context : undefined }, controller.current!.signal);
+    const response = await postCoach({ mode, ...body, language: preferences.ai, gameLanguage: preferences.game, context: revealed ? { ...context, previousCoachCandidates: result?.candidates.map(({ countryCode }) => countryCode) } : undefined }, controller.current!.signal);
     const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
     return { response, value };
   };
@@ -78,7 +79,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       if (!response.ok || !value.analysis) throw new Error(value.error || t('coachInvalidResponse'));
       const completedAt = value.generatedAt || Date.now();
       const completedModel = value.model || 'Gemini';
-      const merged = result ? { ...value.analysis, strongClues: [...new Set([...result.strongClues, ...value.analysis.strongClues])], weakClues: [...new Set([...result.weakClues, ...value.analysis.weakClues])], contradictions: [...new Set([...(result.contradictions || []), ...(value.analysis.contradictions || [])])], confusions: [...new Set([...result.confusions, ...value.analysis.confusions])], nextThingsToInspect: [...new Set([...result.nextThingsToInspect, ...value.analysis.nextThingsToInspect])] } : value.analysis;
+      const merged = result && mode !== 'explain' ? { ...value.analysis, strongClues: [...new Set([...result.strongClues, ...value.analysis.strongClues])], weakClues: [...new Set([...result.weakClues, ...value.analysis.weakClues])], contradictions: [...new Set([...(result.contradictions || []), ...(value.analysis.contradictions || [])])], confusions: [...new Set([...result.confusions, ...value.analysis.confusions])], nextThingsToInspect: [...new Set([...result.nextThingsToInspect, ...value.analysis.nextThingsToInspect])] } : value.analysis;
       setResult(merged); setSaved(true);
       void trainerDb.setSetting('workspace.coachAnalysis', { panoId, mode, model: completedModel, generatedAt: completedAt, analysis: merged } satisfies SavedCoachAnalysis);
       onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: merged });
@@ -96,13 +97,14 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
 {!open ? <button className="coach-launch" onClick={() => setCoachOpen(true)} aria-label={t('AI Coach')} title={t('AI Coach')}><img src={`${import.meta.env.BASE_URL}assets/ai-coach-mark.png`} alt="" /></button> : <aside aria-label={t('AI Coach')}>
 <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><img src={`${import.meta.env.BASE_URL}assets/ai-coach-mark.png`} alt="" /> {t('AI Coach')}</span><button onClick={() => { requestId.current += 1; controller.current?.abort(); setLoading(null); setCoachOpen(false); }} aria-label={t('close')}><X size={16} /></button></header>
       <p className="coach-note">{appMode === 'play' ? t('aiAssistedNote') : t('transientImagesNote')}</p>
-      <div className="coach-modes"><button disabled={!!loading || clueBusy} onClick={() => void run('analyze360')}>{loading ? t('analyzing') : t('analyze')}</button>{loading && <button onClick={() => controller.current?.abort()}>{t('cancel')}</button>}</div>
+      <div className="coach-modes"><button disabled={!!loading || clueBusy} onClick={() => void run(revealed ? 'explain' : 'analyze360')}>{loading ? t(loading === 'explain' ? 'explaining' : 'analyzing') : t(revealed ? 'explain' : 'analyze')}</button>{loading && <button onClick={() => controller.current?.abort()}>{t('cancel')}</button>}</div>
       <ClueCapture panoId={panoId} disabled={!!loading} onBusyChange={setClueBusy} onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />
       {error && <p className="coach-error" role="alert">{error}</p>}
       {result && <div className="coach-result">
         <h4>{t('geographicClueAnalysis')}</h4>
-        {result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
-        {result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
+        {!revealed && result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
+        {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
+        {!revealed && result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
         {list(t('strongClues'), result.strongClues)}
         {list(t('weakGeneric'), result.weakClues)}
         {list(t('contradictionsGaps'), result.contradictions || [])}

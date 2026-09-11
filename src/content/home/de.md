@@ -207,7 +207,7 @@ Die Analyse prüft automatisch mehrere Blickrichtungen und nutzt die aktuelle An
 
 ### Schutz vor Lösungen
 
-Vor einem Tipp erhält der Coach keine Antwortmetadaten. Nach Aufdecken oder Abgabe kann Ortskontext zur Erklärung verwendet werden.
+Vor einem Tipp erhält der Coach keine Antwortmetadaten. Eine Regions-, Stadt- oder genaue Ortsschätzung erscheint nur bei mehreren starken sichtbaren Hinweisen. Nach Aufdecken oder Abgabe wird **Analysieren** zu **Erklären**; der Coach nutzt nur Hinweise zum richtigen Land und sagt offen, wenn das Bild allein nicht ausreichte.
 
 ### Zuverlässigkeit
 
@@ -412,5 +412,6 @@ Lerne, warum ein Hinweis regional variiert, wo er unzuverlässig wird und womit 
 - [Plonk It](https://www.plonkit.net/) — strukturierte Länderleitfäden von der grundlegenden Erkennung über regionale Hinweise bis zu Übungen, Karten und weiterführenden Quellen.
 - [GeoHints](https://geohints.com/) — durchsuchbarer Bildkatalog für Leitpfosten, Straßenlinien, Kennzeichen, Schilder, Strommasten, Kameragenerationen, Fahrseite, Landschaften und weitere Hinweisarten.
 - [GeoMetas](https://geometas.com/) — kostenlose Länder- und Regionallektionen nach Hinweisart mit dynamischen Quizzen zum aktiven Erinnern.
+- [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-Lernkarten sowie Dokumentation und Ressourcen zur Kartenerstellung.
 
 Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechne mit veralteten Bildern, regionalen Ausnahmen und Änderungen in Street View.

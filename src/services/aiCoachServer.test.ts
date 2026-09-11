@@ -80,6 +80,16 @@ test('clue analysis ranks countries while safe Review clues cannot reveal one', 
   assert.deepEqual(safeClue.strongClues, ['Black rectangular reflector']);
 });
 
+test('specific location estimates require strong visual evidence and no answer metadata', () => {
+  const input = { ...validAnalysis, locationEstimate: { level: 'city', label: 'Central Monrovia', confidence: 'high', basis: ['Readable Sekou Toure Avenue sign', 'Distinctive coastal street grid'] } };
+  assert.equal(normalizeCoachAnalysis(input, 'analyze').locationEstimate?.label, 'Central Monrovia');
+  assert.equal(normalizeCoachAnalysis(input, 'analyze', 'Liberia').locationEstimate, undefined);
+  assert.equal(normalizeCoachAnalysis({ ...input, locationEstimate: { ...input.locationEstimate, basis: ['Tropical vegetation'] } }, 'analyze').locationEstimate, undefined);
+  const explained = normalizeCoachAnalysis(input, 'explain', 'Liberia');
+  assert.deepEqual(explained.candidates, []);
+  assert.equal(explained.region, '');
+});
+
 test('candidate confidence is deduplicated, ranked, and never exceeds a total of one', () => {
   const analysis = normalizeCoachAnalysis({
     ...validAnalysis,
@@ -147,8 +157,9 @@ test('revealed Coach retrieves a bounded country knowledge pack without leaking 
 });
 
 test('Coach bounds user context before inserting it into a prompt', () => {
-  const context = sanitizeCoachContext({ actualCountry: 'A'.repeat(500), ignored: 'secret', previousAttempts: Array.from({ length: 20 }, (_, score) => ({ guessedCountry: 'B'.repeat(500), score })) });
+  const context = sanitizeCoachContext({ actualCountry: 'A'.repeat(500), ignored: 'secret', previousAttempts: Array.from({ length: 20 }, (_, score) => ({ guessedCountry: 'B'.repeat(500), score })), previousCoachCandidates: ['GH', 'NG', 'CI', 'CM', 'SN'] });
   assert.equal(String(context?.actualCountry).length, 120);
   assert.equal((context?.previousAttempts as unknown[]).length, 5);
+  assert.deepEqual(context?.previousCoachCandidates, ['GH', 'NG', 'CI', 'CM']);
   assert.equal('ignored' in context!, false);
 });

@@ -225,6 +225,7 @@ export type CoachMode = 'hints' | 'analyze' | 'analyze360' | 'explain' | 'cards'
 export interface CoachAnalysis {
   confidence: 'low' | 'medium' | 'high';
   region: string;
+  locationEstimate?: { level: 'region' | 'city' | 'exact'; label: string; confidence: 'medium' | 'high'; basis: string[] };
   description?: string;
   candidates: Array<{ countryCode: string; confidence: number }>;
   strongClues: string[];

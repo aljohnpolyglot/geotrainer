@@ -37,6 +37,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Country and city datasets are local data files, not UI-component constants.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
+- Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
 - Persist the active Coach analysis and clue draft across reloads, scope both to the current panorama, and never carry them into another location.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.

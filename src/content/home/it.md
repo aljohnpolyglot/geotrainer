@@ -42,7 +42,7 @@ La soluzione resta nascosta fino alla stima. Distanza e punteggio calcolano auto
 
 ## Coach IA e indizi
 
-Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Le osservazioni restano disponibili dopo lo spostamento o la rivelazione. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps.
+Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps.
 
 ### Catturare, incollare e analizzare un indizio
 
@@ -87,3 +87,4 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 - [Plonk It](https://www.plonkit.net/) — guide strutturate per paesi, regioni, mappe ed esercizi.
 - [GeoHints](https://geohints.com/) — catalogo visivo di delineatori, linee, targhe, segnali, pali, fotocamere e altri indizi.
 - [GeoMetas](https://geometas.com/) — lezioni gratuite sui meta per paese, regione e categoria, con quiz dinamici.
+- [Learnable Meta](https://learnablemeta.com/) — mappe didattiche per GeoGuessr, documentazione e risorse per creare mappe.

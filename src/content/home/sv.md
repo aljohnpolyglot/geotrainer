@@ -42,7 +42,7 @@ Svaret döljs tills du gissar. Avstånd och poäng beräknar nästa intervall au
 
 ## AI-coach och ledtrådar
 
-Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. Observationerna finns kvar efter förflyttning eller visat facit. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar.
+Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. En uppskattning av region, stad eller exakt plats visas bara när flera starka synliga ledtrådar stöder den. Efter visat facit blir **Analysera** **Förklara**: coachen använder bara referenser för rätt land och säger öppet när bilden inte räckte för att identifiera det. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar.
 
 ### Ta skärmbild, klistra in och analysera
 
@@ -87,3 +87,4 @@ Kombinera vägmarkeringar, körsida, skriftsystem, stolpar, terräng, arkitektur
 - [Plonk It](https://www.plonkit.net/) — strukturerade guider för länder, regioner, kartor och träning.
 - [GeoHints](https://geohints.com/) — visuell katalog över kantstolpar, linjer, registreringsskyltar, vägmärken, stolpar, kameror och andra ledtrådar.
 - [GeoMetas](https://geometas.com/) — kostnadsfria metaguider efter land, region och kategori, med dynamiska quiz.
+- [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-lärkartor, dokumentation och resurser för att skapa kartor.
