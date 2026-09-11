@@ -38,12 +38,14 @@ test('malformed Gemini JSON retries and Hints strips geographic answers', async 
   assert.deepEqual(hints.nextThingsToInspect, ['Inspect the bollards']);
 });
 
-test('card fronts remove countries, flags, and explicit broad regions', () => {
+test('Coach removes answer leaks and non-visual metadata claims', () => {
   const cards = normalizeCoachAnalysis({
     ...validAnalysis,
-    coreCard: { front: ['Wet narrow road', 'Italy', 'Northern Europe', '🇮🇹 flag'], backExplanation: 'Italy fits.' },
+    strongClues: ['Location metadata states Italy', 'Concrete utility poles'],
+    coreCard: { front: ['Wet narrow road', 'Italy', 'Northern Europe', '🇮🇹 flag', '41.9028° N, 12.4964° E'], backExplanation: 'Italy fits.' },
   }, 'cards', 'Italy');
   assert.deepEqual(cards.coreCard?.front, ['Wet narrow road']);
+  assert.deepEqual(cards.strongClues, ['Concrete utility poles']);
 });
 
 test('clue analysis ranks countries while safe Review clues cannot reveal one', () => {

@@ -55,7 +55,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
     }
   };
 
-  const modes: CoachMode[] = appMode === 'play' ? ['analyze360'] : revealed ? ['explain', 'cards'] : ['hints', 'analyze', 'analyze360'];
+  const modes: CoachMode[] = appMode === 'play' ? ['analyze360'] : revealed ? ['explain', 'cards', 'analyze360'] : ['hints', 'analyze', 'analyze360'];
   const labels: Record<CoachMode, string> = { hints: 'Hints', analyze: 'Analyze', analyze360: 'Analyze 360°', explain: 'Explain', cards: 'Generate Cards', clue: 'Clue', 'clue-safe': 'Clue' };
   const loadingLabels: Record<CoachMode, string> = { hints: 'Finding hints…', analyze: 'Analyzing…', analyze360: 'Analyzing 360°…', explain: 'Explaining…', cards: 'Generating cards…', clue: 'Analyzing clue…', 'clue-safe': 'Analyzing clue…' };
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;

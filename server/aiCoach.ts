@@ -66,6 +66,7 @@ const responseSchema = {
 
 const rules = `You are a concise GeoGuessr teacher. Analyze only visible evidence.
 Never manufacture certainty. Prefer a broad region and ranked candidates when uncertain.
+Known result context is an answer key, never evidence. Never cite location metadata, coordinates, panorama IDs, geocoding, or API data as clues, and never invent an exact locality from them.
 Systematically check road lines and surface, driving side, bollards, poles and wires, signs and language, plates and vehicles, Google car or camera meta, architecture, terrain, vegetation, climate, and sun.
 Weigh distinctive clues against contradictions before ranking candidates. Do not use Street View coverage prevalence as geographic evidence or default to commonly covered countries.
 Separate strong evidence from generic or weak clues. Generic vegetation is never country-specific.
@@ -80,8 +81,8 @@ function prompt(mode: CoachMode, context?: Record<string, unknown>) {
   if (mode === 'clue') return `${rules}\nIdentify and describe the central visible clue in detail. Explain its geographic value, give a broad region, up to four ranked candidate countries with honest numeric confidence, realistic confusions, limitations, and the exact features to compare next. Leave cards empty.`;
   if (mode === 'analyze') return `${rules}\nGive a short region/vibe, up to four ranked candidate countries with honest confidence, strong clues, weak clues, and what to inspect next.`;
   const facts = JSON.stringify(context || {});
-  if (mode === 'cards') return `${rules}\nKnown result context: ${facts}\nGenerate one core card plus only genuinely useful specialized cards. Explain why the real location fits and realistic confusions.`;
-  return `${rules}\nKnown result context: ${facts}\nExplain briefly why the actual location makes sense, which clues were useful or generic, and realistic confusions.`;
+  if (mode === 'cards') return `${rules}\nKnown result context (answer key only): ${facts}\nGenerate one core card plus only genuinely useful specialized cards from visible clues. Explain why the known country fits and realistic confusions without claiming the answer key was visible.`;
+  return `${rules}\nKnown result context (answer key only): ${facts}\nExplain briefly which visible clues support the known country, which clues were generic, and realistic confusions. Do not claim the answer key or location metadata was visible.`;
 }
 
 function strings(value: unknown, max = 6): string[] {
@@ -104,7 +105,9 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   if (candidateTotal > 1) candidates.forEach((candidate) => { candidate.confidence /= candidateTotal; });
   const core = item.coreCard && typeof item.coreCard === 'object' ? item.coreCard as Record<string, unknown> : undefined;
   const banned = [actualCountry.toLowerCase(), ...countryNames].filter(Boolean);
-  const safe = (line: string) => !frontGiveaway.test(line) && !banned.some((name) => name.length > 2 && line.toLowerCase().includes(name));
+  const nonVisualEvidence = /\b(?:location\s+metadata|coordinates?|latitude|longitude|pano(?:rama)?\s*(?:id)?|geocod(?:e|ing)|api)\b|[-+]?\d{1,2}\.\d{3,}\s*[°º]?\s*[NS]?\s*[,/]\s*[-+]?\d{1,3}\.\d{3,}/iu;
+  const visible = (line: string) => !nonVisualEvidence.test(line);
+  const safe = (line: string) => visible(line) && !frontGiveaway.test(line) && !banned.some((name) => name.length > 2 && line.toLowerCase().includes(name));
   const safeFront = strings(core?.front, 6).filter(safe);
   const extraCards = Array.isArray(item.extraCards) ? item.extraCards.flatMap((card) => {
     if (!card || typeof card !== 'object') return [];
@@ -115,8 +118,8 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   }).slice(0, 2) : [];
   const analysis: CoachAnalysis = {
     confidence, region: typeof item.region === 'string' ? item.region.slice(0, 120) : '', description: typeof item.description === 'string' ? item.description.slice(0, 1200) : undefined, candidates,
-    strongClues: strings(item.strongClues), weakClues: strings(item.weakClues), confusions: strings(item.confusions),
-    nextThingsToInspect: strings(item.nextThingsToInspect),
+    strongClues: strings(item.strongClues).filter(visible), weakClues: strings(item.weakClues).filter(visible), confusions: strings(item.confusions),
+    nextThingsToInspect: strings(item.nextThingsToInspect).filter(visible),
     coreCard: core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? core.backExplanation.slice(0, 900) : '' } : undefined,
     extraCards,
   };
