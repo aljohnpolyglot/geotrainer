@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Back from a clue opened in the main Clues library now closes the compact, centered detail overlay directly instead of exposing a redundant country-list modal. The library’s country filter shows clue counts, sorts countries by count, and has a dedicated clear button.
 - Pasted-clue analysis now prioritizes an obvious foreground subject while still considering surrounding context, and avoids guessing the object type when the crop is unreadable.
 - After a location is revealed, AI Coach now switches from guessing to an honest explanation, clears stale candidate rankings, and states when the imagery was insufficient; strong location estimates appear only before reveal and without metadata. Explain can consult bounded GeoMetas facts for the revealed country but may mention only features visible in the image. Added Learnable Meta to the learning resources.
 - Preserved the active AI Coach analysis and clue preview/result across reloads without carrying them into another panorama, and kept the guess map rendered after mid-round language changes.

@@ -243,7 +243,7 @@ Treat Coach output as a hypothesis. Prefer multiple independent clues, notice co
 
 ## Saved clues
 
-Useful Coach analysis can be saved with its clue image and notes. Saved clues help build a personal reference for countries and clue families. Open Clues from the main navigation to search the library, browse it by country, inspect confidence summaries, open full clue details, or start country practice.
+Useful Coach analysis can be saved with its clue image and notes. Saved clues help build a personal reference for countries and clue families. Open Clues from the main navigation to search the library, filter by country, inspect confidence summaries, open full clue details, or start country practice. Country options show clue totals and are ordered from most clues to least; × clears the filter. Back from a detail returns directly to the library.
 
 ### Good clue notes
 

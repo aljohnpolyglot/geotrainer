@@ -151,6 +151,7 @@ const REMAINING_UI: Record<string, Partial<Record<SupportedLanguage, string>>> =
   placePin: { en: 'PLACE PIN', es: 'COLOCAR PIN', pt: 'COLOCAR PIN', fr: 'PLACER LE REPÈRE', de: 'PIN SETZEN', it: 'POSIZIONA PIN', ru: 'ПОСТАВИТЬ МЕТКУ', sv: 'PLACERA NÅL' },
   elapsed: { en: 'elapsed', es: 'transcurrido', pt: 'decorrido', fr: 'écoulé', de: 'verstrichen', it: 'trascorso', ru: 'прошло', sv: 'förflutet' },
   clearPin: { en: 'Clear pin', es: 'Borrar pin', pt: 'Limpar pin', fr: 'Effacer le repère', de: 'Pin löschen', it: 'Cancella pin', ru: 'Удалить метку', sv: 'Rensa nål' },
+  clearCountryFilter: { en: 'Clear country filter', es: 'Borrar filtro de país', pt: 'Limpar filtro de país', fr: 'Effacer le filtre de pays', de: 'Länderfilter löschen', it: 'Cancella filtro paese', ru: 'Очистить фильтр страны', sv: 'Rensa landsfilter' },
   savedBookmarks: { en: 'Saved Bookmarks', es: 'Marcadores guardados', pt: 'Favoritos salvos', fr: 'Signets enregistrés', de: 'Gespeicherte Lesezeichen', it: 'Segnalibri salvati', ru: 'Сохранённые закладки', sv: 'Sparade bokmärken' },
   activeView: { en: 'Active View', es: 'Vista activa', pt: 'Vista ativa', fr: 'Vue active', de: 'Aktive Ansicht', it: 'Vista attiva', ru: 'Текущий вид', sv: 'Aktiv vy' },
   reopen: { en: 'Reopen', es: 'Reabrir', pt: 'Reabrir', fr: 'Rouvrir', de: 'Erneut öffnen', it: 'Riapri', ru: 'Открыть снова', sv: 'Öppna igen' },

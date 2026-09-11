@@ -224,7 +224,7 @@ Behandle jede Aussage als Hypothese. Mehrere unabhängige Hinweise sind stärker
 - Typische Verwechslungen und Grenzen notieren.
 - Sicherheit an die Belegstärke anpassen.
 
-Gespeicherte Hinweise lassen sich vollständig öffnen und löschen. Die Detailansicht enthält gespeichertes Bild, interaktives Street View, Länderwahrscheinlichkeiten, Belege, Grenzen, Widersprüche und nächste Prüfschritte. Ortslinks öffnen das Panorama in Google Maps. Das Löschen entfernt weder Panorama noch Besuche oder Versuche.
+Gespeicherte Hinweise lassen sich vollständig öffnen und löschen. Der Länderfilter zeigt Hinweiszahlen und ist nach den meisten Hinweisen sortiert; × hebt den Filter auf. Zurück aus einem Detail führt direkt zur Bibliothek. Die Detailansicht enthält gespeichertes Bild, interaktives Street View, Länderwahrscheinlichkeiten, Belege, Grenzen, Widersprüche und nächste Prüfschritte. Ortslinks öffnen das Panorama in Google Maps. Das Löschen entfernt weder Panorama noch Besuche oder Versuche.
 
 ## Sammlungen und Ortsauswahl
 
