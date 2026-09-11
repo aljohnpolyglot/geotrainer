@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Aligned the closed AI Coach launcher with the adjacent compass control.
 - Study and Play setup now support focused multi-country mixes with removable flag pills for confusion drills.
 - Country-mix drafts now remain intact when focus leaves the picker, and native dropdown type-ahead remains available for keyboard navigation.
 - Saved Study locations and submitted Play rounds now retain the current view for richer coverage previews; existing records remain compatible.
