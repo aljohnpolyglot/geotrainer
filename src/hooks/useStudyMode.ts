@@ -13,6 +13,12 @@ const ENVIRONMENT_STORAGE_KEY = 'sv_environment';
 const URBAN_LEVEL_STORAGE_KEY = 'sv_urban_level';
 const SAMPLING_STORAGE_KEY = 'sv_sampling_mode';
 
+export const consumeRestoredStudyPano = (restored: { current: string | null }, panoId: string) => {
+  if (restored.current !== panoId) return false;
+  restored.current = null;
+  return true;
+};
+
 export function useStudyMode(ctx: any) {
   const { appMode, showHome, dbReady, currentLocation, setCurrentLocation, isLoading, setIsLoading, setErrorMessage,
     selectedCollectionId, setSelectedCollectionId, customCollections, setCustomCollections, bookmarks, setBookmarks,
@@ -22,14 +28,14 @@ export function useStudyMode(ctx: any) {
     setIsRevealed, setCoachNote, setEditingCollection, setIsModalOpen, temporaryCollection, setTemporaryCollection,
     compassPreference, setCompassPreference, reviewAttempt, reviewCompass, setReviewCompass, reviewQueue, reviewSource, reviewKind,
     reviewInitialTotal, sunTrainingHints, setSunTrainingHints, setStudyReviewSaving, studyReviewSaving, setStudyReviewSaved,
-    setAppMode, setShowHome, isGameActive, gameSettings, setCurrentLocationForReview, fetchNextLocationForReview } = ctx;
+    setAppMode, setShowHome, isGameActive, gameSettings, setCurrentLocationForReview, fetchNextLocationForReview, restoredStudyPanoRef } = ctx;
   const flushStudyActive = useCallback((resume = false) => {
     const startedAt = activeStartedAtRef.current; const visit = currentVisitRef.current;
     if (startedAt && visit) { const elapsed = Math.max(0, (Date.now() - startedAt) / 1000); visit.activeTimeSeconds += elapsed; sessionRef.current.activeTimeSeconds += elapsed; void trainerDb.saveVisit({ ...visit }); if (sessionRef.current.activeTimeSeconds >= 5) void trainerDb.saveSession({ ...sessionRef.current }); }
     activeStartedAtRef.current = resume && document.visibilityState === 'visible' && !!visit ? Date.now() : null;
   }, [activeStartedAtRef, currentVisitRef, sessionRef]);
   const closeStudyVisit = useCallback(() => { flushStudyActive(false); if (currentVisitRef.current) { currentVisitRef.current.closedAt = Date.now(); void trainerDb.saveVisit({ ...currentVisitRef.current }); currentVisitRef.current = null; } }, [currentVisitRef, flushStudyActive]);
-  useEffect(() => { if (!dbReady) return; closeStudyVisit(); if (showHome || appMode !== 'study' || !currentLocation || isLoading) return; const openedAt = Date.now(); const visit: StudyVisit = { id: `visit-${crypto.randomUUID()}`, panoId: currentLocation.panoId, lat: currentLocation.lat, lng: currentLocation.lng, countryCode: currentLocation.countryCode, collectionId: selectedCollectionId, environment: currentLocation.environment ?? studyEnvironment, environmentRequested: currentLocation.environmentRequested ?? studyEnvironment, urbanLevel: currentLocation.urbanLevel ?? studyUrbanLevel, samplingMode: studySampling, openedAt, activeTimeSeconds: 0, wasRevealed: false, bookmarked: bookmarks.some((item: BookmarkLocation) => item.panoId === currentLocation.panoId) }; currentVisitRef.current = visit; activeStartedAtRef.current = document.visibilityState === 'visible' ? openedAt : null; void Promise.all([trainerDb.encounter(currentLocation), trainerDb.saveVisit(visit)]).then(() => setTrainerRefreshKey((key: number) => key + 1)); }, [appMode, bookmarks, closeStudyVisit, currentLocation?.panoId, dbReady, isLoading, selectedCollectionId, setTrainerRefreshKey, showHome, studyEnvironment, studySampling, studyUrbanLevel]);
+  useEffect(() => { if (!dbReady) return; closeStudyVisit(); if (showHome || appMode !== 'study' || !currentLocation || isLoading) return; const openedAt = Date.now(); const visit: StudyVisit = { id: `visit-${crypto.randomUUID()}`, panoId: currentLocation.panoId, lat: currentLocation.lat, lng: currentLocation.lng, countryCode: currentLocation.countryCode, collectionId: selectedCollectionId, environment: currentLocation.environment ?? studyEnvironment, environmentRequested: currentLocation.environmentRequested ?? studyEnvironment, urbanLevel: currentLocation.urbanLevel ?? studyUrbanLevel, samplingMode: studySampling, openedAt, activeTimeSeconds: 0, wasRevealed: false, bookmarked: bookmarks.some((item: BookmarkLocation) => item.panoId === currentLocation.panoId) }; currentVisitRef.current = visit; activeStartedAtRef.current = document.visibilityState === 'visible' ? openedAt : null; const restored = consumeRestoredStudyPano(restoredStudyPanoRef, currentLocation.panoId); const saved = trainerDb.saveVisit(visit); void (restored ? saved : Promise.all([trainerDb.encounter(currentLocation), saved])).then(() => setTrainerRefreshKey((key: number) => key + 1)); }, [appMode, closeStudyVisit, currentLocation?.panoId, dbReady, isLoading, setTrainerRefreshKey, showHome]);
   useEffect(() => { const onVisibility = () => flushStudyActive(document.visibilityState === 'visible'); const onBlur = () => flushStudyActive(false); const onFocus = () => flushStudyActive(true); document.addEventListener('visibilitychange', onVisibility); window.addEventListener('blur', onBlur); window.addEventListener('focus', onFocus); return () => { document.removeEventListener('visibilitychange', onVisibility); window.removeEventListener('blur', onBlur); window.removeEventListener('focus', onFocus); closeStudyVisit(); sessionRef.current.endedAt = Date.now(); if (sessionRef.current.activeTimeSeconds >= 5) void trainerDb.saveSession({ ...sessionRef.current }); }; }, [closeStudyVisit, flushStudyActive, sessionRef]);
   useEffect(() => { if (!ctx.isRevealed || !currentVisitRef.current) return; currentVisitRef.current.wasRevealed = true; void trainerDb.saveVisit({ ...currentVisitRef.current }); }, [ctx.isRevealed, currentVisitRef]);
 

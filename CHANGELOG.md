@@ -5,7 +5,13 @@
 - Added custom 1–100-round games, per-mode performance statistics, and navigation-connected panorama checks for movable games.
 - Separated Review from Statistics, folded location/history views into Statistics, and made saved game sessions open their summaries.
 - Expanded review-card maturity into New, Learning, Relearning, Young, and Mature states with long-term mastery ranks.
-- Fixed narrow guess-button wrapping and AI Coach overlap with Street View controls and the guess map.
+- Fixed narrow guess-button wrapping and independently anchored the AI Coach and guess map without either panel pushing the other.
+- Made the AI Coach and guess map draggable within the viewport, and stopped restored Study panoramas from counting as new encounters.
+- Centered a high-contrast round clock over Street View: elapsed time counts up for unlimited rounds, while timed rounds count down with a clear urgent state.
+- Added a cloud-synced compass-style preference with a compact heading bar inspired by the gameplay reference and the existing dial as an alternative.
+- Split Preferences into persistent Language, Review, and Display tabs.
+- Improved Coach-analysis bullets and added a full saved-clue detail view for every stored analysis field.
+- Restored elapsed/countdown clocks and the active Street View panorama, camera angle, and zoom after reloads.
 - Localized remaining Statistics labels and Street View, location, collection, result, summary, and cloud-account UI copy across all supported languages.
 - Made every Geography statistics table column sortable and localized its headers, labels, and sample statuses across all supported languages.
 - Retired redundant bookmark and coordinate-copy controls while preserving existing saved bookmark data for compatibility.

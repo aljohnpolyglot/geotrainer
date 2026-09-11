@@ -2,23 +2,28 @@ import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, trainerDb } from '../data/trainerDb';
 import { DEFAULT_LANGUAGE_PREFERENCES, LANGUAGE_OPTIONS, normalizeLanguagePreferences, translate } from '../services/language';
-import type { LanguagePreferences, SchedulerPreferences, SupportedLanguage } from '../types';
+import type { CompassStyle, LanguagePreferences, SchedulerPreferences, SupportedLanguage } from '../types';
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+type SettingsTab = 'language' | 'review' | 'display';
 
-export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences) => void }) {
+export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle) => void }) {
   const [languages, setLanguages] = useState<LanguagePreferences>(DEFAULT_LANGUAGE_PREFERENCES);
   const [scheduler, setScheduler] = useState<SchedulerPreferences>(DEFAULT_SCHEDULER_PREFERENCES);
   const [loadedGameLanguage, setLoadedGameLanguage] = useState<SupportedLanguage>('en');
+  const [compassStyle, setCompassStyle] = useState<CompassStyle>('bar');
+  const [tab, setTab] = useState<SettingsTab>('language');
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences')]).then(([languageValue, schedulerValue]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
+      setCompassStyle(savedCompassStyle === 'dial' ? 'dial' : 'bar');
+      if (savedTab === 'language' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
   }, [open]);
 
@@ -28,9 +33,9 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const save = async () => {
     const nextLanguages = normalizeLanguagePreferences(languages);
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
-    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler)]);
+    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle)]);
     announceLanguagePreferences(nextLanguages);
-    onChange?.(nextLanguages);
+    onChange?.(nextLanguages, compassStyle);
     if (nextLanguages.game !== loadedGameLanguage) window.location.reload();
     else onClose();
   };
@@ -39,14 +44,18 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="language-settings preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
       <header><h2 id="preferences-title">{translate(languages.ui, 'preferences')}</h2><button type="button" onClick={onClose} aria-label={translate(languages.ui, 'close')}><X size={17} /></button></header>
-      <fieldset><legend>{translate(languages.ui, 'settings')}</legend><p>{translate(languages.ui, 'description')}</p>
+      <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'review', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{translate(languages.ui, item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
+      {tab === 'language' && <fieldset><legend>{translate(languages.ui, 'settings')}</legend><p>{translate(languages.ui, 'description')}</p>
         {(['ui', 'game', 'ai'] as const).map((key) => <label key={key}>{translate(languages.ui, key)}
           <span className="language-choice"><img src={`https://flagcdn.com/w40/${LANGUAGE_OPTIONS.find((option) => option.code === languages[key])!.flagCode}.png`} alt="" width="24" height="18" referrerPolicy="no-referrer" /><select value={languages[key]} onChange={(event) => language(key, event.target.value as SupportedLanguage)}>
             {LANGUAGE_OPTIONS.map((option) => <option key={option.code} value={option.code}>{option.nativeLabel} · {option.label}</option>)}
           </select></span>
         </label>)}
-      </fieldset>
-      <fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
+      </fieldset>}
+      {tab === 'display' && <fieldset><legend>{translate(languages.ui, 'Compass')}</legend>
+        <label>{translate(languages.ui, 'Compass style')}<select value={compassStyle} onChange={(event) => setCompassStyle(event.target.value as CompassStyle)}><option value="bar">{translate(languages.ui, 'Heading bar')}</option><option value="dial">{translate(languages.ui, 'Compass dial')}</option></select></label>
+      </fieldset>}
+      {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
         <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
         <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
       </fieldset>
@@ -62,7 +71,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label>{translate(languages.ui, 'reviewTimeZone')}<input list="review-time-zones" value={scheduler.reviewTimeZone || ''} disabled={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZone: event.target.value, reviewTimeZoneAuto: false }))} /><datalist id="review-time-zones">{COMMON_TIME_ZONES.map((zone) => <option key={zone} value={zone} />)}</datalist></label>
         <label className="settings-checkbox"><input type="checkbox" checked={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZoneAuto: event.target.checked }))} />{translate(languages.ui, 'autoDetectTimeZone')}</label>
         <p>{translate(languages.ui, 'reviewResetDescription')}</p>
-      </fieldset>
+      </fieldset></>}
       <footer><button type="button" className="button secondary" onClick={onClose}>{translate(languages.ui, 'close')}</button><button type="button" className="button primary" onClick={() => void save()}>{translate(languages.ui, 'save')}</button></footer>
     </section>
   </div>;

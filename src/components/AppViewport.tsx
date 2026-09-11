@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppMode, Collection, GameRecord, GameRound, LocationResult, ReviewGrade, ReviewSessionKind, TrainerLocation } from '../types';
+import { AppMode, Collection, CompassStyle, GameRecord, GameRound, LocationResult, ReviewGrade, ReviewSessionKind, StreetViewState, TrainerLocation } from '../types';
 import { StreetViewContainer } from './StreetViewContainer';
 import { MainMenu } from './MainMenu';
 import { TrainerHub, HubTab } from './TrainerHub';
@@ -11,7 +11,8 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 interface AppViewportProps {
   appMode: AppMode; showHome: boolean; currentLocation: LocationResult | null; isLoading: boolean;
-  statusMessage: string; errorMessage: string | null; mapsReady: boolean; activeCompass: boolean;
+  statusMessage: string; errorMessage: string | null; mapsReady: boolean; activeCompass: boolean; compassStyle: CompassStyle;
+  restoredStreetView?: StreetViewState;
   sunTrainingHints: boolean; isRevealed: boolean;
   isGameActive: boolean; gameSettings: { roundCount: number } | null; activeRoundResult: GameRound | null;
   playElapsed: number; timeRemaining: number | null; isSubmittingGuess: boolean; reviewAttempt: { id: string } | null;
@@ -26,21 +27,22 @@ interface AppViewportProps {
   onSelectGame: (game: GameRecord) => void;
   onHideReveal: () => void; onMetadata: (details: any) => void; onSaveForReview: () => void;
   onGuess: (guess: { lat: number; lng: number } | null) => void;
+  onStreetViewChanged: (view: StreetViewState) => void;
 }
 
 export function AppViewport({
-  appMode, showHome, currentLocation, isLoading, statusMessage, errorMessage, mapsReady, activeCompass,
+  appMode, showHome, currentLocation, isLoading, statusMessage, errorMessage, mapsReady, activeCompass, compassStyle, restoredStreetView,
   sunTrainingHints, isRevealed, isGameActive, gameSettings, activeRoundResult,
   playElapsed, timeRemaining, isSubmittingGuess, reviewAttempt, reviewResult, reviewElapsed, pastGames,
   allCollections, trainerRefreshKey, trainerStartTab, studyReviewSaving, studyReviewSaved,
   canMove, canPan, canZoom, onNextLocation, onMapsLoaded, onPanoramaChanged, onToggleCompass,
   onToggleSunHints, onStudy, onPlay, onReview, onOpenNewGame, onOpenHistory, onOpenReview, onOpenCoverage, onTrainCountries,
-  onDataChanged, onSelectGame, onHideReveal, onMetadata, onSaveForReview, onGuess,
+  onDataChanged, onSelectGame, onHideReveal, onMetadata, onSaveForReview, onGuess, onStreetViewChanged,
 }: AppViewportProps) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   return <main className="flex-1 w-full h-[calc(100vh-3.5rem)] relative overflow-hidden bg-black">
-    <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} canMove={canMove} canPan={canPan} canZoom={canZoom} showCompass={!showHome && activeCompass} showSunTrainingHint={!showHome && appMode === 'study' && isRevealed && sunTrainingHints} onPanoramaChanged={!showHome && appMode === 'study' ? onPanoramaChanged : undefined} />
+    <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} canMove={canMove} canPan={canPan} canZoom={canZoom} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={restoredStreetView} onViewChanged={onStreetViewChanged} showSunTrainingHint={!showHome && appMode === 'study' && isRevealed && sunTrainingHints} onPanoramaChanged={!showHome && appMode === 'study' ? onPanoramaChanged : undefined} />
     {!showHome && currentLocation && appMode !== 'play' && <div className="map-training-toggles" aria-label={t('mapTrainingAids')}><button type="button" role="switch" aria-checked={activeCompass} onClick={onToggleCompass} title={`${t('compass')} ${activeCompass ? t('on') : t('off')}`} className={activeCompass ? 'enabled' : ''}><Compass size={15} /></button>{appMode === 'study' && <button type="button" role="switch" aria-checked={sunTrainingHints} onClick={onToggleSunHints} title={`${t('sunHints')} ${sunTrainingHints ? t('on') : t('off')}`} className={sunTrainingHints ? 'enabled' : ''}><Sun size={15} /></button>}</div>}
     {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
     {!showHome && appMode === 'review' && !reviewAttempt && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}

@@ -8,6 +8,7 @@ import { Maximize2, Minimize2, MapPin, Check, RotateCcw, Clock } from 'lucide-re
 import { formatTime } from '../services/gameLogic';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { useDraggablePanel } from '../hooks/useDraggablePanel';
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
@@ -27,6 +28,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
+  const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [currentGuess, setCurrentGuess] = useState<{ lat: number; lng: number } | null>(null);
@@ -139,6 +141,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   };
 
   const isUrgent = timeRemaining !== null && timeRemaining <= 10;
+  const displayedTime = timeRemaining ?? elapsedTimeSeconds;
 
   useEffect(() => {
     const submitWithEnter = (event: KeyboardEvent) => {
@@ -151,42 +154,31 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     return () => window.removeEventListener('keydown', submitWithEnter);
   }, [currentGuess, isSubmitting, onGuess]);
 
-  return (
+  return (<>
+    {displayedTime !== undefined && (
+      <div className={`round-timer guess-timer ${isUrgent ? 'urgent' : ''}`} role="timer" aria-live={isUrgent ? 'polite' : 'off'}>
+        <Clock className="w-4 h-4" />
+        <span>{formatTime(displayedTime)}</span>
+      </div>
+    )}
     <div
+      ref={panelRef}
       id="guess-map-widget"
-      className={`absolute bottom-5 right-5 z-20 transition-all duration-300 ease-out flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
+      style={dragStyle}
+      className={`absolute bottom-5 right-5 z-20 ${dragging ? '' : 'transition-[width,height] duration-300 ease-out'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
         isExpanded
           ? 'w-[92vw] max-w-2xl h-[65vh] max-h-[560px]'
           : 'w-72 sm:w-88 h-56 sm:h-64 opacity-90 hover:opacity-100'
       }`}
     >
       {/* Top Header bar of Guess Map */}
-      <div className="flex items-center justify-between px-3.5 py-2 bg-stone-950/80 border-b border-stone-800 text-stone-200">
+      <div {...dragHandleProps} className={`flex items-center justify-between px-3.5 py-2 bg-stone-950/80 border-b border-stone-800 text-stone-200 touch-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}>
         <div className="flex items-center space-x-2">
           <MapPin className="w-4 h-4 text-rose-500 flex-shrink-0" />
           <span className="text-xs font-semibold tracking-tight">{t('pinpointLocation')}</span>
         </div>
 
         <div className="flex items-center space-x-2">
-          {/* Timer Display if enabled */}
-          {timeRemaining !== null && (
-            <div
-              className={`flex items-center space-x-1 font-mono text-xs font-bold px-2 py-0.5 rounded-full border ${
-                isUrgent
-                  ? 'bg-rose-950/80 border-rose-600 text-rose-400 animate-pulse'
-                  : 'bg-stone-900 border-stone-700 text-amber-300'
-              }`}
-            >
-              <Clock className="w-3 h-3" />
-              <span>{formatTime(timeRemaining)}</span>
-            </div>
-          )}
-          {elapsedTimeSeconds !== undefined && (
-            <div className="flex items-center space-x-1 font-mono text-xs font-bold text-amber-300">
-              <Clock className="w-3 h-3" /><span>{formatTime(elapsedTimeSeconds)} {t('elapsed')}</span>
-            </div>
-          )}
-
           {/* Reset pin button */}
           {currentGuess && (
             <button
@@ -234,5 +226,6 @@ export const GuessMap: React.FC<GuessMapProps> = ({
         </button>
       </div>
     </div>
+  </>
   );
 };

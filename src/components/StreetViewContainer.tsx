@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
-import { LocationResult } from '../types';
+import { CompassStyle, LocationResult, StreetViewState } from '../types';
 import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucide-react';
 import { compassDirection } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
@@ -25,6 +25,9 @@ interface StreetViewContainerProps {
   canZoom?: boolean;
   onPanoramaChanged?: (location: LocationResult) => void;
   showCompass?: boolean;
+  compassStyle?: CompassStyle;
+  restoredView?: StreetViewState;
+  onViewChanged?: (view: StreetViewState) => void;
   showSunTrainingHint?: boolean;
 }
 
@@ -42,6 +45,9 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   canZoom = true,
   onPanoramaChanged,
   showCompass = true,
+  compassStyle = 'bar',
+  restoredView,
+  onViewChanged,
   showSunTrainingHint = false,
 }) => {
   const { ui } = useLanguagePreferences();
@@ -52,11 +58,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const isLockingPovRef = useRef<boolean>(false);
   const currentLocationRef = useRef(currentLocation);
   const onPanoramaChangedRef = useRef(onPanoramaChanged);
+  const onViewChangedRef = useRef(onViewChanged);
+  const viewSaveTimerRef = useRef<number | null>(null);
   const lastReportedPanoRef = useRef('');
   const pendingPanoRef = useRef('');
   const tileFailuresRef = useRef<number[]>([]);
   currentLocationRef.current = currentLocation;
   onPanoramaChangedRef.current = onPanoramaChanged;
+  onViewChangedRef.current = onViewChanged;
   const [mapsLoaded, setMapsLoaded] = useState<boolean>(() => {
     return typeof google !== 'undefined' && !!google.maps && !!google.maps.StreetViewPanorama;
   });
@@ -175,6 +184,10 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         // @ts-expect-error internalUsageAttributionIds is required by GMP governance
         internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
       });
+      const queueViewSave = () => {
+        if (viewSaveTimerRef.current !== null) window.clearTimeout(viewSaveTimerRef.current);
+        viewSaveTimerRef.current = window.setTimeout(() => { const origin = currentLocationRef.current; const panoId = panorama.getPano(); const pov = panorama.getPov(); if (origin && panoId) onViewChangedRef.current?.({ locationPanoId: origin.panoId, panoId, heading: pov.heading, pitch: pov.pitch, zoom: panorama.getZoom() ?? 1 }); }, 200);
+      };
 
       // Handle locked camera (no panning)
       panorama.addListener('pov_changed', () => {
@@ -189,12 +202,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         const panoId = current.getPano();
         const pov = current.getPov();
         if (panoId) setStreetViewSnapshot({ panoId, heading: pov.heading, pitch: pov.pitch, zoom: current.getZoom() ?? 1 });
+        queueViewSave();
       });
       panorama.addListener('pano_changed', () => {
         const details = panorama.getLocation();
         const panoId = panorama.getPano();
         const pov = panorama.getPov();
         if (panoId) setStreetViewSnapshot({ panoId, heading: pov.heading, pitch: pov.pitch, zoom: panorama.getZoom() ?? 1 });
+        queueViewSave();
         const position = details?.latLng;
         const origin = currentLocationRef.current;
         if (!panoId || !position || !origin || panoId === lastReportedPanoRef.current) return;
@@ -210,6 +225,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           countryCode: origin.countryCode,
         });
       });
+      panorama.addListener('zoom_changed', queueViewSave);
 
       panoInstanceRef.current = panorama;
     } else {
@@ -228,22 +244,25 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     if (currentLocation && panoInstanceRef.current) {
       const panorama = panoInstanceRef.current;
       isLockingPovRef.current = !canPan;
-      if (panorama.getPano() === currentLocation.panoId) { pendingPanoRef.current = ''; return; }
-      pendingPanoRef.current = currentLocation.panoId;
-      panorama.setPano(currentLocation.panoId);
+      const savedView = restoredView?.locationPanoId === currentLocation.panoId ? restoredView : undefined;
+      const targetPano = savedView?.panoId || currentLocation.panoId;
+      if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; return; }
+      pendingPanoRef.current = targetPano;
+      panorama.setPano(targetPano);
 
       const initialPov = {
-        heading: Math.floor(Math.random() * 360),
-        pitch: 0,
+        heading: savedView?.heading ?? Math.floor(Math.random() * 360),
+        pitch: savedView?.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;
       panorama.setPov(initialPov);
-      panorama.setZoom(1);
+      panorama.setZoom(savedView?.zoom ?? 1);
       panorama.setVisible(true);
     }
-  }, [mapsLoaded, currentLocation, canMove, canPan, canZoom]);
+  }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView]);
 
   useEffect(() => () => {
+    if (viewSaveTimerRef.current !== null) window.clearTimeout(viewSaveTimerRef.current);
     if (panoInstanceRef.current) {
       google.maps.event.clearInstanceListeners(panoInstanceRef.current);
       panoInstanceRef.current.setVisible(false);
@@ -322,12 +341,18 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         </div>
       )}
 
-      {showCompass && currentLocation && !isLoading && (
+      {showCompass && currentLocation && !isLoading && compassStyle === 'dial' && (
         <div className="street-compass" aria-label={`${t('Compass')}, ${t('facing')} ${Math.round(heading)} ${t('degrees')} ${compassDirection(heading)}`}>
           <div className="street-compass-dial" style={{ transform: `rotate(${-heading}deg)` }}>
             <b>N</b><span className="east">E</span><span className="south">S</span><span className="west">W</span><i />
           </div>
           <small>{Math.round(heading)}°</small>
+        </div>
+      )}
+      {showCompass && currentLocation && !isLoading && compassStyle === 'bar' && (
+        <div className="street-compass-bar" aria-label={`${t('Compass')}, ${t('facing')} ${Math.round(heading)} ${t('degrees')} ${compassDirection(heading)}`}>
+          <div>{[0, 45, 90, 135, 180, 225, 270, 315].map((bearing, index) => { const delta = ((bearing - heading + 540) % 360) - 180; return Math.abs(delta) <= 82 ? <span key={bearing} style={{ left: `calc(50% + ${delta * 1.55}px)` }}>{['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][index]}</span> : null; })}</div>
+          <i /><small>{Math.round(heading)}°</small>
         </div>
       )}
 

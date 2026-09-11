@@ -7,6 +7,7 @@ import { ClueCapture } from './ClueCapture';
 import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { useDraggablePanel } from '../hooks/useDraggablePanel';
 
 type CoachContext = {
   actualCountry?: string;
@@ -29,6 +30,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
   const initialPano = useRef(panoId);
+  const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
@@ -85,9 +87,9 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
   const loadingLabels: Record<CoachMode, string> = { hints: t('findingHints'), analyze: t('analyzing'), analyze360: t('analyzing360'), explain: t('explaining'), cards: t('generatingCards'), clue: t('analyzingClue'), 'clue-safe': t('analyzingClue') };
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
 
-  return <div className={`ai-coach ${open ? 'open' : ''}`}>
+  return <div ref={panelRef} style={dragStyle} className={`ai-coach ${open ? 'open' : ''}`}>
 {!open ? <button className="coach-launch" onClick={() => setCoachOpen(true)} aria-label={t('AI Coach')} title={t('AI Coach')}><Sparkles size={15} aria-hidden="true" /></button> : <aside aria-label={t('AI Coach')}>
-<header><span><Sparkles size={15} /> {t('AI Coach')}</span><button onClick={() => { requestId.current += 1; controller.current?.abort(); setLoading(null); setCoachOpen(false); }} aria-label={t('close')}><X size={16} /></button></header>
+<header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Sparkles size={15} /> {t('AI Coach')}</span><button onClick={() => { requestId.current += 1; controller.current?.abort(); setLoading(null); setCoachOpen(false); }} aria-label={t('close')}><X size={16} /></button></header>
       <p className="coach-note">{appMode === 'play' ? t('aiAssistedNote') : t('transientImagesNote')}</p>
       {!!modes.length && <div className="coach-modes">{(loading ? [loading] : modes).map((mode) => <button key={mode} disabled={!!loading || clueBusy} onClick={() => void run(mode)}>{loading === mode ? loadingLabels[mode] : labels[mode]}</button>)}{loading && <button onClick={() => controller.current?.abort()}>{t('cancel')}</button>}</div>}
       <ClueCapture panoId={panoId} disabled={!!loading} onBusyChange={setClueBusy} onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />

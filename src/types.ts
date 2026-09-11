@@ -73,6 +73,8 @@ export interface LocationRequestContext {
 export type AppMode = 'study' | 'play' | 'review';
 export type ReviewSessionKind = 'practice' | 'due' | 'correction';
 export type SupportedLanguage = 'en' | 'es' | 'pt' | 'fr' | 'de' | 'it' | 'ru' | 'sv';
+export type CompassStyle = 'bar' | 'dial';
+export type StreetViewState = { locationPanoId: string; panoId: string; heading: number; pitch: number; zoom: number };
 export interface LanguagePreferences {
   ui: SupportedLanguage;
   game: SupportedLanguage;

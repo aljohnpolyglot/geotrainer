@@ -23,6 +23,8 @@ import {
   CoachAnalysis,
   CoachMode,
   SchedulerPreferences,
+  CompassStyle,
+  StreetViewState,
 } from './types';
 import {
   BUILT_IN_COLLECTIONS,
@@ -143,6 +145,8 @@ export default function App() {
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [bookmarks, setBookmarks] = useState<BookmarkLocation[]>([]);
   const [compassPreference, setCompassPreference] = useState(() => localStorage.getItem(COMPASS_STORAGE_KEY) !== 'false');
+  const [compassStyle, setCompassStyle] = useState<CompassStyle>('bar');
+  const [restoredStreetView, setRestoredStreetView] = useState<StreetViewState>();
   const [sunTrainingHints, setSunTrainingHints] = useState(() => localStorage.getItem(SUN_HINTS_STORAGE_KEY) === 'true');
   const [reviewCompass, setReviewCompass] = useState(true);
   const [studyEnvironment, setStudyEnvironment] = useState<Environment>(() => (localStorage.getItem(ENVIRONMENT_STORAGE_KEY) as Environment) || 'mixed');
@@ -189,6 +193,7 @@ export default function App() {
   const studySamplingRef = useRef(studySampling);
   const workspaceRestoreAttemptedRef = useRef(false);
   const restoredPlayPanoRef = useRef<string | null>(null);
+  const restoredStudyPanoRef = useRef<string | null>(null);
   studyEnvironmentRef.current = studyEnvironment;
   studyUrbanLevelRef.current = studyUrbanLevel;
   studySamplingRef.current = studySampling;
@@ -206,7 +211,7 @@ export default function App() {
     setAppMode, mapsReady, isLoading, setStatusMessage, setIsNewGameModalOpen, saveGameRecord, restoredPlayPanoRef,
   });
   const { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex,
-    timeRemaining, setTimeRemaining, playElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord,
+    timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord,
     setSummaryGameRecord, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound,
     handleAbandonGame, gameIdRef, roundSubmittedRef } = play;
 
@@ -230,7 +235,7 @@ export default function App() {
     compassPreference, setCompassPreference, reviewAttempt, reviewCompass, setReviewCompass, reviewQueue, reviewSource, reviewKind,
     reviewInitialTotal, sunTrainingHints, setSunTrainingHints, setStudyReviewSaving, studyReviewSaving, setStudyReviewSaved,
     setAppMode, setShowHome, isGameActive, gameSettings, setCoveragePreview, setIsFullscreen, setStatusMessage,
-    isRevealed,
+    isRevealed, restoredStudyPanoRef,
   });
   const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handleMapsLoaded, handleSelectCollection,
     handleSaveStudyForReview, handleTrainCountries,
@@ -258,11 +263,11 @@ export default function App() {
     }
     void initTrainerDb()
       .then(async () => {
-        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedSunHints, savedEnvironment, savedUrbanLevel, savedSampling, workspace, savedReview] = await Promise.all([
+        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedSunHints, savedEnvironment, savedUrbanLevel, savedSampling, workspace, savedReview, savedCompassStyle, savedStreetView] = await Promise.all([
           trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'), trainerDb.schedulerPreferences(),
           trainerDb.setting<boolean>('preference.compass'), trainerDb.setting<boolean>('preference.sunHints'),
           trainerDb.setting<Environment>('preference.environment'), trainerDb.setting<UrbanLevel>('preference.urbanLevel'), trainerDb.setting<SamplingMode>('preference.sampling'),
-          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'),
+          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'),
         ]);
         setCustomCollections(dbCollections);
         setBookmarks(dbBookmarks);
@@ -273,6 +278,8 @@ export default function App() {
         if (savedEnvironment === 'mixed' || savedEnvironment === 'urban' || savedEnvironment === 'suburban' || savedEnvironment === 'rural') setStudyEnvironment(savedEnvironment);
         if (savedUrbanLevel === 1 || savedUrbanLevel === 2 || savedUrbanLevel === 3) setStudyUrbanLevel(savedUrbanLevel);
         if (savedSampling === 'natural' || savedSampling === 'balanced') setStudySampling(savedSampling);
+        if (savedCompassStyle === 'bar' || savedCompassStyle === 'dial') setCompassStyle(savedCompassStyle);
+        if (savedStreetView?.panoId && Number.isFinite(savedStreetView.heading)) setRestoredStreetView(savedStreetView);
         await Promise.all([
           savedCompass === undefined && localStorage.getItem(COMPASS_STORAGE_KEY) !== null && trainerDb.setSetting('preference.compass', compassPreference),
           savedSunHints === undefined && localStorage.getItem(SUN_HINTS_STORAGE_KEY) !== null && trainerDb.setSetting('preference.sunHints', sunTrainingHints),
@@ -286,13 +293,14 @@ export default function App() {
         else if (workspace?.mode === 'play' && workspace.gameId && workspace.settings) {
           setAppMode('play'); setShowHome(false); setIsGameActive(true); setGameSettings(workspace.settings);
           setGameRounds(Array.isArray(workspace.rounds) ? workspace.rounds : []); setCurrentRoundIndex(Number.isInteger(workspace.currentRoundIndex) ? workspace.currentRoundIndex : 0);
-          setActiveRoundResult(workspace.activeRoundResult || null); setTimeRemaining(workspace.timeRemaining ?? null);
+          setActiveRoundResult(workspace.activeRoundResult || null);
           gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult;
           const restoredLocation = workspace.currentLocation && isLocation(workspace.currentLocation) ? workspace.currentLocation : null;
           setCurrentLocation(restoredLocation); restoredPlayPanoRef.current = restoredLocation?.panoId || null;
           roundStartTimeRef.current = Number.isFinite(workspace.roundStartedAt) ? workspace.roundStartedAt : Date.now();
+          const restoredElapsed = Math.max(0, Math.floor((Date.now() - roundStartTimeRef.current) / 1000)); setPlayElapsed(restoredElapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - restoredElapsed) : null);
         } else if (workspace?.mode === 'study' && isLocation(workspace.location)) {
-          setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
+          restoredStudyPanoRef.current = workspace.location.panoId; setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
         }
         workspaceRestoreAttemptedRef.current = true;
         setDbReady(true);
@@ -411,7 +419,7 @@ export default function App() {
       />
       <AppViewport
         appMode={appMode} showHome={showHome} currentLocation={currentLocation} isLoading={isLoading}
-        statusMessage={statusMessage} errorMessage={errorMessage} mapsReady={mapsReady} activeCompass={activeCompass}
+        statusMessage={statusMessage} errorMessage={errorMessage} mapsReady={mapsReady} activeCompass={activeCompass} compassStyle={compassStyle} restoredStreetView={restoredStreetView}
         sunTrainingHints={sunTrainingHints} isRevealed={isRevealed}
         isGameActive={isGameActive} gameSettings={gameSettings} activeRoundResult={activeRoundResult}
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
@@ -437,6 +445,7 @@ export default function App() {
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
         onSaveForReview={() => void handleSaveStudyForReview()}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
+        onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
       <AppOverlays
         appMode={appMode} showHome={showHome} currentLocation={currentLocation} isRevealed={isRevealed}
@@ -453,7 +462,7 @@ export default function App() {
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
         onClueAnalyzed={() => { if (appMode === 'play') playAiAssistedRef.current = true; }}
         onNextReview={() => void handleReviewNext()} onCloseCoverage={() => setCoveragePreview(null)}
-        onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={() => { void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
+        onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style) => { setCompassStyle(style); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}
         onNextRound={handleNextRound}
         onPracticeMistakes={summaryGameRecord ? () => { void trainerDb.attempts().then((attempts) => { const mistakes = attempts.filter((attempt) => attempt.gameId === summaryGameRecord.id && isCountryMistake(attempt.score, attempt.countryCode, attempt.guessedCountryCode, schedulerStrictness)).sort((a, b) => a.roundNumber - b.roundNumber); if (!mistakes.length) return; setSummaryGameRecord(null); return handleStartReview(mistakes[0], mistakes, 'Game mistakes', 'correction'); }); } : undefined}

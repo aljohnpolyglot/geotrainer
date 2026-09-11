@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppMode, Attempt, CoachAnalysis, GameRecord, GameRound, LocationResult, ReviewGrade, TrainerLocation } from '../types';
+import { AppMode, Attempt, CoachAnalysis, CompassStyle, GameRecord, GameRound, LanguagePreferences, LocationResult, ReviewGrade, TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { AiCoach } from './AiCoach';
 import { ReviewResultPanel } from './ReviewResultPanel';
@@ -27,7 +27,7 @@ interface AppOverlaysProps {
   compassPreference: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
   reviewGrading: boolean; roundIsMistake: boolean;
   onSaveCoach: (note: any) => void; onSaveClue: (clue: any) => void; onClueAnalyzed: () => void;
-  onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: () => void;
+  onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle) => void;
   onCloseReviewComplete: () => void; onPracticeMistakes?: () => void; onPlayAgain: () => void; onNewGame: () => void;
   onNextRound: () => void;
   onViewHistory: () => void; onCloseSummary: () => void; onGoToLocation: (location: LocationResult) => void; onCloseHistory: () => void;
