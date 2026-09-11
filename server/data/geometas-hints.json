@@ -1,0 +1,3863 @@
+{
+  "schema": "geometas_country_hints_v1",
+  "source": "https://geometas.com/",
+  "exportedAt": "2026-09-11T13:09:24.596Z",
+  "countries": [
+    {
+      "name": "Andorra",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Andorran license plates are less elongated than typical European plates. They also lack the blue vertical stripe of standard European plates. The left side of Andorran plates feature an orange blotch."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Buildings in Andorra are typically multi-storey, constructed with compressed gray stones, giving them a distinctive, affluent look. This stone construction style is a key identifier for the region."
+        }
+      ]
+    },
+    {
+      "name": "Austria",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The reflectors on the front of Austrian bollards are either blackish or dark red in colour. Seeing this black reflector and the black hat on the bollard is one of the easiest ways to tell that you are in Austria. No other countries have both of these features on their bollards."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Vienna in Austria can be distinguished by its blue coloured street name signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In major Austrian cities, the word ‘EINBAHN’ is written on these blue signs everywhere."
+        }
+      ]
+    },
+    {
+      "name": "Belgium",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "The easiest way to identify Belgium is via its license plates. Belgium has the standard European plates with a unique red lettering. This appears as a faint red blur on Street View."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "In Belgium cities, it is common to have the city’s name on street signs. In the above example, the city name ‘Liege’ is written on the street sign."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "This is the most common type of Belgian utility pole. It is square shaped and contains small holes running up it- much like the Thai utility poles."
+        }
+      ]
+    },
+    {
+      "name": "France",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "There are two types of French bollard, both are the same distinct shape and different from typical European bollard shapes. This is the first type with a gray reflector strip running around it. The second type has a red reflector strip."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Many French roads have these very long, white dashes along both sides of the road. Nowhere else in Europe has such long side dashes as French dashes."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "The French island of Corsica often has shorter, white dashes on the sides of the road. It also has mountains in the centre of the island and a Mediterranean feel elsewhere."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The word ‘rue’ translates from French to English as ‘street’. On metropolitan street corners, it’s standard to see the word ‘rue’ on signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The French region of Brittany in north-western France has bilingual road signs featuring both French and Breton."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Minor roads in France are known as ‘D’ roads (departmental roads). They are denoted by the letter ‘D’ and a number inside a yellow rectangle."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "France has these utility poles with no holes but rather indents."
+        }
+      ]
+    },
+    {
+      "name": "Germany",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In 2023, Google released new, generation 4 Street View coverage across virtually the entire Germany. This means you should see the blue tinge of the Street View car if you pan down."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "German is spoken across Germany and Austria. It’s also spoken in most of Switzerland, north Italy and a tiny speck of eastern Belgium. The umlaut appears regularly in German: ä, ü and ö. If you see the letter ß you are in Germany or Austria, not Switzerland which uses ‘ss’ in place of ß."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Germany has these bollards featuring a white, vertical strip on the front and two white dots on the rear."
+        }
+      ]
+    },
+    {
+      "name": "Greece",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Greek language has a unique alphabet. It can look a bit like Cyrillic, but generally has softer shaped letters."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Taxis in Greece have yellow license plates. All other vehicles have standard EU white license plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Greece has wedge-shaped bollards with a rectangular reflector, which is red in the front and white on the back."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Many Greek roads feature a double white or yellow center line."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Greek directional signs are blue and have Greek written in yellow and English in white. They are a very distinct Greece feature."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Greek warning signs are yellow with a red border."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "You can often find miniature churches along Greek roads."
+        }
+      ]
+    },
+    {
+      "name": "Ireland",
+      "hints": [
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Yellow, dashed edge lines on the road are quite common in Ireland but very rare in the U. K.. This is a good method to tell Ireland apart from the U.K."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Ireland stands out as it is the only place in Europe with yellow, diamond shaped warning signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Irish road signs will typically contain both English and Gaelic."
+        }
+      ]
+    },
+    {
+      "name": "Isle of Man",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Like the UK, the Isle of Man has yellow rear plates. Unlike the UK, the plates have a red stripe on the left."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "The Isle of Man has a small vertical red stripe on the left side of the plate."
+        }
+      ]
+    },
+    {
+      "name": "Italy",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Italian is spoken across Italy and in southern Switzerland. Italian can be recognised as most of its words end in a vowel. In some cases, every single word in Italian sentences ends in a vowel."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Italy's license plates are recognizable by the light blue vertical stripes on both the left and right edges."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Italian bollards have a unique design with a vertical red rectangle inside a black diagonal strip on the front, where the black part extends to the top of the bollard, a rarity in bollard designs. The rear of these bollards features a white rectangle instead of the front's red one."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "In Italian towns and cities, the street signs often have the word ‘VIA’ on them. This translates to English as ‘street’."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional arrows that point to Italian towns are blue with a white end. These arrows look relatively similar to the Czechia town directional arrows however they are distinct."
+        }
+      ]
+    },
+    {
+      "name": "Luxembourg",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Luxembourg uses yellow license plates (front and back) with the EU strip on the left side."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Bollards in Luxembourg are wedge-shaped with a grey rectangular reflector in the front and two circular reflectors in the rear."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in Luxembourg are yellow with black, all-caps text. The sign is completely surrounded by a frame."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Across most of Luxembourg, the country has undulating terrain. It's rarely steep and often consists of gentle slopes. It is rare to see flat land in Luxembourg (something that the Netherlands has a lot of). Much of the Luxembourg landscape consists of green grass fields."
+        }
+      ]
+    },
+    {
+      "name": "Malta",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "In Malta, the cars drive on the left. The only other countries within Europe that drive on the left are the U.K. and Ireland. Malta looks much more Mediterranean than these places."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Cars in Malta have a mixture of standard European plates and plates that are less elongated with a blue section in the upper-left corner."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "‘Triq’ means ‘street’ in Maltese and this word appears all over Malta on signs."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "A typical Maltese scene comprises little vegetation other than grass, fields of different colours, a rock wall and everything in the landscape being close to the ground."
+        }
+      ]
+    },
+    {
+      "name": "Monaco",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "Monaco, the second smallest country in the world, also has Geoguessr coverage. The city has tons of yachts, expensive buildings, as well as the distinctive harbor in the center and mountains in the background."
+        }
+      ]
+    },
+    {
+      "name": "Netherlands",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Dutch language appears across the Netherlands. It can often be recognised due to an abundance of ‘z’ and ‘w’ letters as well as double letters such as ‘ee’. The letters ‘i’ and ‘j’ also commonly appear together as ‘ij.’"
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "A license plate from the Netherlands with yellow European front and rear plates."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "In Dutch, the ‘weg’ suffix means ‘road’ and the ‘straat’ suffix means ‘street’."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In the Netherlands, it is common to see these blue arrow signs with white lettering. They point to the nearest town or city and make pinpointing much easier."
+        }
+      ]
+    },
+    {
+      "name": "Portugal",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Portugal can be recognised because drivers normally have a yellow vertical stripe on the right hand side of the license plates to go with the vertical blue stripe on the left hand side of the plate."
+        }
+      ]
+    },
+    {
+      "name": "Spain",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Spain uses wedge-shaped bollards with an orange rectangular reflector in the front and two white circular reflectors in the back. They are typically hollow."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The word ‘CALLE’ means ‘STREET’ in Spanish and often appears throughout Spain and Latin America."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Spain, borders on red road signs extend to the edge of the sign - there is no outline. This is a great way to identify Spain as there are many of these signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Spanish pedestrian crossing signs have 8 stripes - the highest number in Europe!"
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Spain has a variety of different poles. Ladder-style poles are one of the more common ones."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "Guardrails in Spain typically have orange reflectors. They are fairly common in Spain."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Spanish road markers are bright green, red, or yellow and show the road number on top of the sign."
+        }
+      ]
+    },
+    {
+      "name": "Switzerland",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "In this image, there is a German word with ‘ss’ used as opposed to ‘ß’. The ‘ss’ is used in Switzerland whilst the ‘ß’ is used in Austria and Germany."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Switzerland is one of the rare European countries that lack the blue vertical stripe of Europe on their license plates. Front Swiss license plates are typically less elongated than the rest of Europe."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "A number of cars in Switzerland have these ‘CH’ stickers on their rear. CH stands for ‘Confoederatio Helvetica’ which are the Latin words for ‘Swiss Federation’."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Swiss bollards are often this curved-cylindrical shape. This is the front of the bollard."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Switzerland are known for their high number of window shutters. This house is so Swiss they have six pairs of them! Wooden houses are one of the more common types of Swiss houses."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Tall mountains are a common fixture in Switzerland. The houses in Switzerland are often wooden and multi-storey with terracotta-coloured slanting roofs."
+        }
+      ]
+    },
+    {
+      "name": "United Kingdom (UK)",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Although bollards are relatively rare in the UK compared to some other European countries, they are rather unique looking and consist of black and white sections with a large red rectangle on top."
+        }
+      ]
+    },
+    {
+      "name": "Albania",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "In Albania, when panning upwards in the sky, rifts are often visible."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Albanian language is distinctive for its frequent use of the letters q, j, and k, and it includes the distinct characters ç and ë."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Some of Albania’s license plates are recognizable by the light blue vertical stripes on both the left and right edges. Note that Albania also has license plates with a red vertical stripe on the left edge."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "The second most common license plate in Albania has a red section on the left. The most common Albanian plates have a blue strip on each side."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Albanian bollards have a unique design with a vertical red rectangle inside a black diagonal strip on the front, where the black part extends to the top of the bollard, a rarity in bollard designs. The rear of these bollards features a white rectangle instead of the front's red one."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The Albanian word for street is rruga."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The font of Albanian street signs is uniquely bold with short, rounded corners."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Albania's directional signs have white text on blue background with an arrow forming the side of the sign."
+        }
+      ]
+    },
+    {
+      "name": "Bulgaria",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Bulgaria predominantly uses Cyrillic. There are no distinguishing Cyrillic letters unique to Bulgarian Cyrillic."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Bulgarian bollards have a red rectangle on the front. The back side has the same rectangle but in white."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The Bulgarian term for street is \"улица\"."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Bulgarian signs are written in both Cyrillic and Latin scripts, and they are typically colored blue or green."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Bulgarian settlement signs often feature names in both Latin and Cyrillic scripts, but sometimes they display only the Cyrillic name."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Eiffel Tower-like poles are a common sight throughout Bulgaria."
+        }
+      ]
+    },
+    {
+      "name": "Croatia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Croatian is a slavic language with unique characters such as ž, š, and ć. There are a high occurrence of j and z in Croatian."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Before 2016, Croatia used purely white license plates. In 2016, they switched to European-style plates with a blue stripe on the left. However, not all Street View coverage in Croatia is updated, so many vehicles still display the older, white, long plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Croatian bollards have a red rectangle on the front. The back side has the same rectangle but in white."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The Croatian word for street is Ulica. Croatian street signs are blue with white lettering."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Croatia, direction signs are characterized by a yellow background and black outline, often featuring a pencil-shaped tip."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Croatia, narrow and distinctive blue fire hydrants are a common sight. Newer fire hydrants seen in Generation 4 have a smaller top but are still recognizable due to the blue paint."
+        }
+      ]
+    },
+    {
+      "name": "Czech Republic",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Only Czechia uses the letters Ř, Ě, and Ů."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The is a Czech bollard. It has unique fluro orange stripes in the black section of the bollard. The back of the bollard has a white rectangle in the black section."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Czechia, roads often have solid outer lines with no center line, a feature useful for distinguishing Czechia from Slovakia."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Czechia, unique blue signs with white arrows indicate directions to the nearest towns."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Town name signs in Czechia have a thick black outline around them. This contrasts town name signs in Slovakia that have a thinner black outline around them."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Czech road signs typically have borders set apart from the edge by a strip matching the sign's background color. In contrast, Slovakian signs more commonly feature borders directly on the edge of the sign."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "Czechia uses a special type B guardrail that is wider in the middle section."
+        }
+      ]
+    },
+    {
+      "name": "Hungary",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Hungarian language is notable for its vowels marked with one or two lines, resembling apostrophes. The letters ő and ű are unique to Hungarian, featuring double italic lines. However, ö and ü also appear in Hungarian, similar to their use in other languages like German."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Hungary, commercial vehicles like taxis and some trucks have yellow license plates, while regular vehicles use standard European plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Hungarian bollards have a red rectangle on the front. The back side has the same rectangle but in white."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The Hungarian word for street is \"utca\"."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Hungary, signs are typically attached to posts using four bolts, arranged in a tall rectangular shape, passing through the sign."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Hungary, directional signs are mostly green with a white inner border and a green outer border. On M-numbered highways, these signs are blue with a white inner border and a blue outer border."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Concrete utility poles with large holes extending down to the ground are often found in Hungary. The Geoguessr community calls them \"holey poles\"."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Hungary has unique red fire hydrants, which are prevalent throughout the country."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "These green kilometre markers are commonly found along most roads in Hungary."
+        }
+      ]
+    },
+    {
+      "name": "Montenegro",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "In Montenegro, when panning upwards in the sky, rifts are often visible."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "In Montenegro, while both Cyrillic and Latin scripts appear on the GeoGuessr map, Latin script is more commonly seen on signs. Latin Montenegrin features the letters: Č, Š, and Ž, as well as Ć, Ś, and Ž."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "This is the front view of the Montenegrin bollard."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Montenegro’s directional road signs are often yellow with black lettering."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Montenegro also has many brown signs with white lettering."
+        }
+      ]
+    },
+    {
+      "name": "North Macedonia",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "A key way to identify North Macedonia is by the absence of an antenna on the Google Streetview car, a feature that is usually visible in most of Eastern Europe."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Macedonian, written in the Cyrillic script, includes road signs with Latin text, although most other signs are exclusively in Cyrillic. Unique to Macedonian are the letters ‘Ѓ’ and ‘Ќ’. The letters ‘Љ’, ‘Њ’, and ‘Џ’ are shared only with Serbian."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "North Macedonia has a mixture of some cars with the standard European license plate and other cars with the rare white, elongated plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "North Macedonian bollards have a red rectangle on the front. The back side has the same rectangle but in white."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "North Macedonia have some warning signs with yellow coloring."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in North Macedonia are yellow with black lettering, featuring the Cyrillic town name on top and its Latin translation beneath."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In North Macedonia, utility poles are often equipped with distinctive lamps."
+        }
+      ]
+    },
+    {
+      "name": "Poland",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Polish language is identifiable by frequent use of the letter \"z\" and the unique \"ł\" (Ł). Other commonly seen letters include j, w, and y. Additionally, Polish includes letters like ó, ż, ś, ę, and ń."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Polish bollards have a red diagonal stripe wrapping around the bollard."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Poland’s double middle lines are very common and usually a good clue for Poland."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Poland has green coloured directional signs with white lettering."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Polish pedestrian signs are the only ones in Europe to have just one horizontal line behind the person."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Poland, a unique type of warning sign can be found, characterized by a thin red outline and a yellow background."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Poland has concrete utility poles with holes in them. Polish poles are distinct from the utility poles of Hungary and Romania as the holes don’t go all the way to the ground- they stop about half a metre above the ground."
+        }
+      ]
+    },
+    {
+      "name": "Romania",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Romanian, a Romance language similar to Italian, includes special letters such as ă, ș, and ț."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Romanian directional signs have white text on blue background. Major roads are indicated by these distinctive red shields."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Some Romanian signs have a yellow edge such as this pedestrian sign."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Romania, the most common type of town entry sign features a yellow section displaying a speed limit and a city skyline, with a white sign below showing the town name. The upper part of the sign can also be white or completely absent."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Many of Romania's holey poles have a white painted bottom and/or some sort of yellow marking on them."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Concrete utility poles with large holes extending down to the ground are often found in Romania. The Geoguessr community calls them \"holey poles\"."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Roadside markers in Romania display road numbers and distances to the nearest towns, serving as useful identifiers for the country. These markers can also appear in blue, red, or white."
+        }
+      ]
+    },
+    {
+      "name": "Russia",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "In Eastern Russia, most cars have the steering wheel on the right-hand side, contrasting with Western Russia and almost all of Europe, where steering wheels are on the left side of the car."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Russian language uses the Cyrillic script."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "One of the best ways to identify Russia is via its license plates. Russian plates are elongated and completely white- a rarity in Europe."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "This is a Russian bollard."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The Russian term for street is улица."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Russian directional signs are blue with white lettering, most commonly displaying only Cyrillic words, though sometimes they include both Latin and Cyrillic."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Russian Federal Highways have either an M, A or P/R prefixing the road number. M surrounds Moscow. Look for signs like this in Russia. This one says road M-7 in smallish writing."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "In Russia, small blue road markers indicate the distance a road has extended in kilometers."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Russian poles are often white with a distinctive black base, a feature rarely seen in other countries."
+        }
+      ]
+    },
+    {
+      "name": "Serbia",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "A key way to identify Serbia is by the absence of an antenna on the Google Streetview car, a feature that is usually visible in most of Eastern Europe."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Serbian uses both Cyrillic and Latin scripts. Unique to Serbian Cyrillic are these letters: Ђ ђ Ћ ћ"
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The main type of Serbian bollard resembles those in Slovenia and Montenegro, with the key difference being that the red rectangle on Serbian bollards is always positioned to one side, not in the center."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Some warning signs in Serbia have a yellow background color."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Serbian signs are often yellow with black lettering. They can feature Latin lettering, Cyrillic, or both."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Serbia uses the internet suffix '.rs', representing 'Republic of Serbia', one of the more unique and non-intuitive internet suffixes globally."
+        }
+      ]
+    },
+    {
+      "name": "Slovakia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Slovak language, similar in appearance to Czech for non-speakers, has distinct letters unique to it:\nSlovak includes Ľ, Ô, Ä, Ŕ, and Ĺ;\nCzech, on the other hand, uses Ř, Ě, and Ů."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The is a Slovakian bollard. It has unique fluro orange stripes in the black section of the bollard. The back of the bollard has a white rectangle in the black section."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Slovakian road signs typically feature borders directly on the edge of the sign. In contrast, Czech signs more commonly have borders set apart from the edge by a strip matching the sign's background color."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Town name signs in Slovakia have a thinner black outline around them compared to Czechia’s signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in Slovakia are rectangular with small white arrows. This contrasts directional signs in Czechia which have a large arrow that forms the shape of the sign."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "Slovakia uses a special type B guardrail that is wider in the middle section."
+        }
+      ]
+    },
+    {
+      "name": "Slovenia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Slovene includes special letters Č, Š, and Ž and is closely related to Croatian, Serbian, and Montenegrin."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "This is the front view of the Slovenian bollard."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Slovenian directional signs have black text on yellow background."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Many Slovenian signs have a white or yellow sticker on the back of them."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Slovenian settlement signs have black text on yellow background."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Slovenian kilometre markers have a distinct design, featuring the road number in a yellow rectangle at the top left."
+        }
+      ]
+    },
+    {
+      "name": "Ukraine",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Most of Ukraine has a red Google car with a long antenna visible."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Ukrainian language, written in the Cyrillic script, includes several letters unique to it, as compared to Russian: ґ, і, ї, and є (distinct from э in Russian and Belarusian)"
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Ukraine (and Russia) public transport vehicles have yellow license plates."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "A Ukrainian license plate features a small section of yellow and blue on the left side."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The most common type of Ukrainian bollard features a red rectangle wider than those in Hungary, Bulgaria, Croatia, and North Macedonia. Typically, these bollards in Ukraine appear run-down, with the red rectangle often damaged."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "The Ukrainian word for street is вулиця (vulytsya), abbreviated as вул. (vul.)."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in Ukraine are blue with white lettering They typically feature Cyrillic on top and its Latin equivalent below, or just Cyrillic."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Ukraine uses white town entry signs."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Many Ukrainian utility poles have their base section painted white."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Ukraine, many streetside objects, including fences, are often painted in the colors of the Ukrainian flag: blue and yellow."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "In Ukraine, it's common to see the base of tree trunks painted white."
+        }
+      ]
+    },
+    {
+      "name": "Denmark",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Danish language uses the special characters å, æ, and ø."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Denmark, commercial vehicles feature yellow license plates on the front and back, while regular vehicles have standard European white plates with a blue stripe on the left."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In Denmark, bollards have a distinctive appearance and are abundant throughout the country. The front of these bollards features a yellow section, which is absent on the rear."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Denmark, main roads often feature distinct short-dashed edge markings."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Danish street names tend to have the suffixes ‘…vej’ and ‘…gade’."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Danish directional signs are often blue and white and in the same style as the red and white directional signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in Denmark are unique with their white background and red writing. This color scheme is a clear indicator of being in Denmark."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Danish settlement signs are black on white with a little village illustration on it."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Warning signs in Denmark feature a triangular shape with a red border and white background. Give-way signs specifically have NO outline outside the red border."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Danish direction signs are typically white with a metal border around them."
+        }
+      ]
+    },
+    {
+      "name": "Faroe Islands",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The Faroe Islands have a unique jagged green mountain landscape without trees."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In the Faroe Islands you will see the Google Car with plain grey roof racks and side mirrors."
+        }
+      ]
+    },
+    {
+      "name": "Finland",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "When you see a dirt or gravel road in a Nordic country without other meaningful clues, Finland typically is the best option."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Finnish language uses the special characters ä and ö. It often has double vowels and many long words."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Finnish bollards appear cylindrical from the front, a shape not shared with bollards in other Nordic countries."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Finland, road lines usually consist of solid white side lines (when present) and a center line that can be white or yellow, sometimes accompanied by a secondary line or stripes."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Finnish street names typically end in \"...katu\" or \"…ntie\"."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Finland, minor directional signs have white text on blue background with a bold arrow on the sides."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Warning signs in Finland feature a triangular shape with a red border and yellow background. Give-way signs specifically have an additional outline outside the red border."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Finnish directional signs on highways can be blue or green colored."
+        }
+      ]
+    },
+    {
+      "name": "Greenland",
+      "hints": [
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Greenland tends to have a range of colourfully painted houses."
+        }
+      ]
+    },
+    {
+      "name": "Iceland",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Iceland, the Street View car often has an aerial visible, and sometimes a section of the car painted in white, red, and blue can also be seen."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Icelandic language is fairly unique and uses the unique characters Þ and ð, amongst other special characters."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Iceland stands out as one of the few European countries where license plates lack the blue vertical strip on the left side. Icelandic license plates are elongated and white."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In Iceland, bollards are recognizable for their distinct yellow color and top edge."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Iceland, some roads feature white, dashed edge markings, with grass often extending right up to the edge of the road. Additionally, roads in Iceland often have a distinctive dark color."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Iceland's warning signs, such as give-way signs, have yellow background with a red border with no outline around the red border."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Iceland is the only European country to have a yellow background behind its pedestrian signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Iceland has these yellow and black directional signs. Some signs, especially in cities, can have a white background instead."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "The Icelandic landscape is characterized by an absence of vegetation other than grass. Roads are usually flat, with hills and mountains visible in the distance and undulating terrain surrounding the roads."
+        }
+      ]
+    },
+    {
+      "name": "Norway",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Norwegian language uses the special characters å, æ, and ø."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Norway, commercial vehicles use green license plates."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Norway often has dashed white lines on the side of the road."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Norway, roads often feature yellow center lines and white side lines."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "In Norway, street signs often end with \"...vei\" / \"...veien\" or \"...gate\" / \"...gata\"."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Warning signs in Norway feature a triangular shape with a red border and white background. Give-way signs specifically have an additional outline outside the red border."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Norway uses yellow directional signs."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Norway's landscape is predominantly undulating, hilly, or mountainous, setting it apart from other Nordic countries, which are generally flat."
+        }
+      ]
+    },
+    {
+      "name": "Sweden",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Swedish language uses the special characters å, ä, and ö."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In Sweden, bollards are typically black-and-white, often featuring a grey reflector. Near intersections, reflectors can be orange. These bollards come in various shapes, including wedge-shaped, round, or thin and curved."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Sweden, roads typically have white dashed side lines and a white center line, with the gaps between the side dashes being longer than the dashes themselves."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "In Sweden, street names often end with the suffixes '...gatan' or '...vägen'."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Swedish directional signs are white on blue background with a thin arrow on the sides."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Swedish directional signs are blue with white writing"
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Warning signs in Sweden feature a triangular shape with a red border and yellow background. Give-way signs specifically have NO outline outside the red border."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Swedish chevrons use yellow and blue colors, making them distinctive in the Nordics."
+        }
+      ]
+    },
+    {
+      "name": "Estonia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Estonian is similar to Finnish. Compared to the Baltic languages, the Õ and Ä characters are unique. Compared to Finnish, the Õ is unique."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Estonian bollards are cylindrical with a rectangular reflector in the front and two circular ones in the back."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Estonian warning signs have a thin red border without any additional outline."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Estonia, pedestrian crossing signs have 3 stripes. The person's head is attached and rather detailed, for instance with visible shoes."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "If you're on a dirt road in an open European-style field and you have no other clues, Estonia tends to be a good bet."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "In Estonia, chevrons have red background with white arrows."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Kilometer markers in Estonia are perpendicular to the road."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Estonian signposts are sometimes wrapped in blue/white wrappers on the base."
+        }
+      ]
+    },
+    {
+      "name": "Latvia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Latvian is a Baltic language with special characters that have a horizontal line on top, like ā, ē, ī, ō, ū. It also has the special characters š, ļ, ķ, and ņ."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Latvian bollards are thin with a white rectangle on the front and two white circles on the back."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Direction signs in Latvia are blue with white text. The arrow has a diagonal side edge and looks slightly more stylized than in Lithuana and Estonia."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The pedestrian crossing sign in Latvia has 5 stripes."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Bus stop signs in Latvia have 5 windows."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Warning signs in Latvia have a much thicker red border than those found in Estonia and Lithuania."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "In Latvia, guardrail reflectors are white or red."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Latvian kilometer markers are parallel to the road."
+        }
+      ]
+    },
+    {
+      "name": "Lithuania",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Lithuanian is a Baltic language. It has the unique special character ė. It shares the special characters š, ž, and č with Latvian."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Lithuania has wedge-style bollards, similar to many other European countries, with orange rectangular reflectors on the front and white ones on the back."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Pedestrian crossing signs in Lithuania have 3 stripes. The person has a detached head."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Lithuanian warning signs have a thin red border with a thin white outline."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "Lithuania's guardrail reflectors are orange. They are not present on all guardrails though."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Kilometer markers in Lithuania have two sides, arranged at a 45° angle towards the road, forming a V-shape."
+        }
+      ]
+    },
+    {
+      "name": "Argentina",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The front of the Street View car is normally this ghostly, black colour in Argentina."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Many Argentine cars have a black blob on their license plates."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Argentina, road lines frequently consist of white dashes in the center alongside a continuous yellow line."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Argentina, it's common to see round concrete poles supporting three electricity lines arranged in an alternating pattern."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "These double up poles can be a good clue for Argentina."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "The major gas station in Argentina is YPF."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Argentinian cities tend to have trees between the footpath and the road."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Argentina mostly uses red-on-white chevrons. This is unique in South America."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Argentinian roads have these small black and white milestone signs on small posts. They always show the kilometre of the road, and sometimes show \"RN\" (Argentinian National Roads) or \"RP: (Provincial Road)."
+        }
+      ]
+    },
+    {
+      "name": "Bolivia",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Cars in Bolivia have license plates with a faint, blue colour."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In many parts of Bolivia, road signs are mounted on thick, unpainted posts."
+        }
+      ]
+    },
+    {
+      "name": "Brazil",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Brazil uses the Portuguese language. To distinguish it from Spanish, note that it includes the 'Ç' and 'ã' symbols, which do not occur in Spanish. Also, many Portuguese words end in 'ção'."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Standard license plates in Brazil are either entirely white (pre-2018) or white with a blue strip on top."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Brazil, commercial vehicles use distinctive red license plates, a helpful feature for recognizing the country, particularly on long, remote roads frequented by trucks."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Brazil, roads typically have double yellow lines in the middle and white outer lines."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Most Brazilian road signs have the backs painted black."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Brazil, the most common utility poles resemble a ladder at the bottom portion. They are rectangular with long segments running along the bottom and have small holes near the top."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "The major gas station in Brazil is BR Petrobras."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Transparent satellite dishes are fairly common in Brazil and are generally a unique feature within Latin America."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "In Brazil, particularly in the northern regions and central states like Goias, the soil often has a distinctive reddish color."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Brazil uses yellow-on-black chevrons."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Brazilian highways are labeled \"BR-XXX\". Regional highways are labeled \"YY-XXX\" with YY being the state abbreviation."
+        }
+      ]
+    },
+    {
+      "name": "Chile",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "A large part of Chile can be recognized by the white rear of the Google car being visible."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Chilean taxis and commercial vehicles have orange license plates."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Chile sometimes has all-yellow road lines. In South America, this is unique to Chile."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Chile, all-white road lines are common. This is a good clue for Chile when in South America, but it's not unique. Argentina also sometimes has all-white roads."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Chile, square concrete poles with indents on both sides are common. They are similar to Brazilian poles but have fewer horizontal supports in the indent. The upper part usually features small pinholes."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Bus stop shelters like this are found throughout Chile."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "This is a kilometer milestone marker in Chile."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Chilean road signs are mounted on poles that are quite thin and often have a slot at the top of the signpost."
+        }
+      ]
+    },
+    {
+      "name": "Colombia",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Colombia's Generation 3 Streetview coverage, a short, thick antenna is sometimes visible on black, white, or grey cars. In Generation 4 coverage, white or silver cars are common."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Colombia uses yellow license plates."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Colombia often has yellow and black stripes on its poles."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Colombia is the only country in Latin America, apart from Mexico and rarely Ecuador, where octagonal poles can be found."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Sidewalks in Colombia often use reddish tiles."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Colombia, especially in rural areas, these rudimentary wooden fences are common. They are made of irregularly shaped wooden branches spaced out and connected by wire."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "In Colombia, taxis often have license plates printed on their side. These plates may sometimes be blurred, but if they are clear, they display the name of the city or area."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "In Colombia, two types of kilometer markers are used: a tall green version with \"Pr\" at the top and a traditional stone marker with black lettering, both unique to the country."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Colombia, it's common to see crosses on the backs of road signs."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Colombia, signs are typically mounted on very narrow poles that are painted white."
+        }
+      ]
+    },
+    {
+      "name": "Costa Rica",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "Street View coverage in Costa Rica is limited to footpaths as it was captured by a person walking around and not a car. A big clue in identifying Costa Rica is that you won’t be able to leave the footpath."
+        }
+      ]
+    },
+    {
+      "name": "Dominican Republic",
+      "hints": [
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "These distinctive, green street signs with a white border and white lettering are common throughout the Dominican Republic."
+        }
+      ]
+    },
+    {
+      "name": "Ecuador",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Ecuador has a white Google car equipped with a short and thick (\"stubby\") antenna."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Ecuador, commercial vehicles have license plates that are either solid orange or have an orange bar at the top."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In Ecuador, bollards are quite common, which is unique in Latin America. Bollards are either round with two red stripes or flat with two red reflectors on a black background. While various other styles of bollards can be found in Ecuador, they typically maintain a consistent color scheme and style."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Ecuador frequently uses road signs that are square with white background."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Ecuador, most utility poles have a generic round and concrete design. However, there's another type of pole (the 'ladder pole') with numerous small indents resembling ladder steps. This type of pole is more or less unique to Ecuador within Latin America."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In the Galapagos Islands, there is limited trekker coverage, where occasionally, Galapagos tortoises can be seen."
+        },
+        {
+          "tags": [
+            "Guardrails"
+          ],
+          "text": "Ecuador frequently uses double guardrails, a feature that is much less common in other South American countries."
+        }
+      ]
+    },
+    {
+      "name": "Guatemala",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Guatemala has the bars visible as well as the black mirrors."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "These signs, which are found right across Guatemala, indicate how far away Guatemala City is. If you see a high number (typically over 300km), you will be in the north of the country as this extends further from Guatemala City. If you see a lower number (less than 200km) and note a flatter landscape, you should be in the southern part of Guatemala."
+        }
+      ]
+    },
+    {
+      "name": "Mexico",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Mexican bollards are typically white and cigarette-shaped, with a black section near the base of the bollard and a yellow section at the back."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Mexican stop signs use the word \"ALTO\"."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Octagonal shaped utility poles are common in Mexico."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Mexico, a common type of utility pole resembles the shape of a crucifix."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "Pink-colored taxis are unique to Mexico City, often marked with the letters 'CDMX', which stands for 'Ciudad de México'. This phrase is also frequently seen on various signs throughout Mexico City."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Large, black water tanks are frequently seen atop houses in Mexico."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "In Mexico, circular-shaped electricity meters are commonly visible on the outer walls of most houses."
+        }
+      ]
+    },
+    {
+      "name": "Panama",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The Street View car in Panama has this unique antenna that is found nowhere else on Earth. It should be visible when you pan down- although not necessarily as visible as this image."
+        }
+      ]
+    },
+    {
+      "name": "Peru",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The most common bollards in Peru look like cigarettes. Sometimes they feature black stripes, but in other instances like here, they lack these stripes."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Peruvian poles have 3 arms sticking out like this."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Peruvian houses have these rectangular electricity counters with a rectangular section within them."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "If you're in Latin America and you see Tuktuks, you're in Peru. No other Latin American country has them."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Peru, sign poles are distinctively striped in black and white, making them one of the best visual indicators to recognize the country."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Peru, sign poles are notable for often being set in solid concrete blocks that are elevated above ground level."
+        }
+      ]
+    },
+    {
+      "name": "Puerto Rico",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Cars in Puerto Rico typically have no front license plate."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "These red and white ‘Clasificados Online’ signs are everywhere in Puerto Rico."
+        }
+      ]
+    },
+    {
+      "name": "U.S. Virgin Islands",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "Cars drive on the left in the US Virgin Islands, contrasting the US."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "If you pan down in the US Virgin Islands, you will see a bulky ute (pick-up truck) that has the bars visible and a tray in the rear."
+        }
+      ]
+    },
+    {
+      "name": "Uruguay",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The front of the Street View car is normally this ghostly, black colour in Uruguay."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Uruguayan bollards are distinctive, with the front painted white and a rectangular reflector near the top."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Uruguay, roads often feature triple lines, consisting of double yellow lines with white dashes in between. This design is not found elsewhere in the Americas."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Uruguay, road lines frequently consist of white dashes in the center alongside a continuous yellow line. copy"
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Uruguayan cities, it's common to see black and white arrows affixed to walls and poles."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "The most common type of utility pole in Uruguay features three upward-facing bulbs that makes the pole resemble a trident."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Cities in Uruguay tend to have trees between the footpath and the road. copy"
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "A typical scenario in Uruguay often includes overcast weather and landscapes dominated by open grasslands with gentle hills. The roads here are generally in poorer condition compared to those in neighboring countries."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "The green-painted stone kilometre marker is a unique feature found in Uruguay."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Traffic lights in Uruguay are often mounted on poles with black/white or black/yellow stripes."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Sign posts in Uruguay are typically thick, white, and wooden."
+        }
+      ]
+    },
+    {
+      "name": "Bermuda",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "Vehicles drive on the left side of the road in Bermuda and there is most commonly a single, yellow centre line on the roads."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "There is some boat coverage in one of the eastern harbors of Bermuda."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Bermuda’s official Street View coverage, you will see either a black truck, a jagged blurred car or both, as pictured below. This is all the same vehicle taking the Street View imagery, just sometimes the black truck has been completely blurred out."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Houses in Bermuda are rather unique looking. They are typically painted a semi-faded shade of a bright colour. In addition, the roofs are almost always completely white. The roofs look like they are newly painted and they are so white, they blend in with the sky. The houses’ window frames are also painted with this same white colour."
+        }
+      ]
+    },
+    {
+      "name": "Canada",
+      "hints": [
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The Canadian province of New Brunswick has words on signs in both English and French. On this sign we can see the English word ‘West’ and the French equivalent ‘Ouest’."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "This checkerboard black and yellow sign is unique to Canada."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Canada, road signs are typically held up by wooden poles that are sometimes painted white. This contrasts poles from the US which are metal."
+        }
+      ]
+    },
+    {
+      "name": "United States of America (USA)",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Cars sometimes lack a front license plate in the southeastern US, extending up to Michigan and across southern states to Arizona."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In the USA, they write the words ‘SPEED LIMIT’ on their signs indicating the maximum speed in the area. This contrasts Canada which writes ‘MAXIMUM’ on their equivalent signs."
+        }
+      ]
+    },
+    {
+      "name": "Bangladesh",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The bars underneath the Street View car and side view mirrors are visible in many parts of Bangladesh however they don’t appear everywhere."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The main language spoken in Bangladesh is Bengali. Bengali is notable for having a horizontal line over its letters. The written language is different from Hindi as it sometimes has small triangles that point to the left."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Bangladeshi bollards look like chimneys and are painted in alternating red and white sections. Sometimes the bollards are shorter than this image and thus have less red and white sections."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "As well as red and white bollards, Bangladeshi fences near water also feature these colours."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "Rickshaws featuring a bike at the front and two wheels at the back are common across other parts of Asia but they are especially common in Bangladesh. Bangladeshi vehicles drive on the left."
+        }
+      ]
+    },
+    {
+      "name": "Bhutan",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Plates from Bhutan have a unique red colour."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "These white and yellow stone markers indicate how far away the nearest village, town or city is in Bhutan. In this example, the village of Dewathang is 1km away. The other side of the stone also has information about how far away the nearest village is for those travelling in the opposite direction."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "You will regularly see a long row of these stone slabs in Bhutan. Sometimes you will see more elongated road side markers made from stone slabs."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Bhutanese houses and apartments can be quite elaborate looking. They often feature flat roofs that extend beyond the walls, white walls, arch windows and detailed wooden elements."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Bhutan is the most mountainous country in GeoGuessr. If you see tall mountains, mainly covered in trees, then there is a good chance you are in Bhutan."
+        }
+      ]
+    },
+    {
+      "name": "Cambodia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Khmer, the language in Cambodia, can be identified by the small hooks on the top of almost every symbol, which point to the right."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Cambodian bollards are red and white. They can be striped or divided into just two sections as shown here."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Cambodia has lots of advertisements for beer brands. Angkor and Ganzberg are two common ones, both featuring red signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Cambodia's yellow warning signs often have a white outline."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Cambodia has two common types of poles. This one is a square ladder-style pole, with the indents not extending to the bottom or top. The other type of pole is a round pole with small holes."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Cambodia has two common types of poles. This one is a round pole with small holes on the side. The other is a ladder-type pole."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "In Cambodia, wooden houses on stilts are common, often with multiple roof sections and featuring red-brown, light-blue, or orange wall colors."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Cambodian roadside markers are white with a red top section and show the distance to the nearest town."
+        }
+      ]
+    },
+    {
+      "name": "Christmas Island",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "If you pan down in Christmas Island, you will see the tray of a ute (pick-up truck). The tray is a light silver colour."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Both front and rear license plates on Christmas Island are yellow colour."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Christmas Island is known for its red crabs. You can find a trekker walking among hundreds of these crabs near Ethel Beach in the north-east of the island."
+        }
+      ]
+    },
+    {
+      "name": "India",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "India’s Street View footage was taken by an unofficial camera. It therefore appears different from all the standard generation imagery. The Indian camera is of low-quality, unique and easily recognisable. Everything appears slightly ‘foggy’."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "When you pan down in India, one of the more common things you will see is a very large circular blur. You can sometimes see the rectangular car, as in this image."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The primary language in India is Hindi. This language is rather similar to Bengali however there are some subtle differences. You can recognise Hindi for letters that resemble upside-down and backwards lowercase ‘h’. Hindi also tends to have letters that look like backwards capital ‘F’."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Regular vehicles in India have white license plates that are elongated. Electric vehicles have green license plates and transport and trucks have yellow license plates."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "India can also be recognised thanks to some of its residents wearing traditional Indian attire."
+        }
+      ]
+    },
+    {
+      "name": "Indonesia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Indonesian language is very similar to Malaysian. Indonesian is influenced by Dutch and Malaysian by English. It's often hard to distinguish the two though."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "In Indonesia, many signs display the abbreviation 'Jl.', which stands for 'Jalan', meaning street."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Indonesian license plates typically feature black areas dividing the plate into three white sections. In contrast, Malaysian plates are typically divided into two white sections."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "In Indonesia, the outer road lines are always white. The center line is white or yellow."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Poles in Indonesia sometimes feature the Indonesian red-white flag as stripes on the lower section."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In the Lesser Sunda Islands, east of Java, utility poles are identifiable by one or two long support beams running diagonally from the end of the horizontal crossbar to the main pole, distinguishing them from the standard Indonesian poles with no or shorter diagonal supports."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Indonesia, most utility poles have three upward-facing bulbs. The tops of these poles are either even or uneven, varying by region. Many steel poles are painted black and feature the red and white colors of the Indonesian flag."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "TV satellite dishes are commonly seen in Indonesia."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Indonesia, many company signs begin with 'PT', an abbreviation unique to the country."
+        }
+      ]
+    },
+    {
+      "name": "Laos",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In the few locations in Laos that are covered by Street View, you will see the bars and side view mirrors of the Street View car. These aren’t visible in Vientiane."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This language is spoken in Laos. It is fairly similar visually to the Thai language as it contains small circles in some characters. You can distinguish it from Thai by looking for curved letters. The Lao written language has virtually every part of every character curved. This contrasts the Thai written language that contains a straight component to almost every character."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Laos typically has yellow license plates."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Stop signs in Laos feature the Laos script plus the English word ‘STOP’."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "A common style of utility pole in Laos is this asymmetric type. Two ‘pine cones’ are on one side and one on the other. Many Laos utility poles also have small holes in them, much like the Thai utility poles."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Although Laos’ urban areas, where the Street View coverage exists, are flat, there are often visible hills or mountains in the background."
+        }
+      ]
+    },
+    {
+      "name": "Malaysia",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Malaysian language is very similar to Indonesian. Malaysian is influenced by English and Indonesian by Dutch. It's often hard to distinguish the two though."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Malaysia, license plates typically have a black background with two blocks of white text."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Some Malaysian license plates, less commonly seen, feature a more unified block of white and black markings."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Malaysian bollards will often have the colours black, white, grey and red. Here is an example of a black & white bollard."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Malaysian bollards will often have the colours black, white, grey and red. Here is an example of a white & red bollard."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Malaysia often has black-and-white street markings and guardrails."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Malaysia occasionally features a unique road characteristic: thick, yellow lines that run perpendicular to the road."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Malaysia sometimes has these double, white, continuous road lines. These are fairly rare around the rest of the world."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Malaysia, the acronym 'AWAS' is commonly seen on road warning signs, signifying their road safety system."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In Malaysia, road numbers are indicated by distinctive yellow, irregular hexagon shapes. The sign background can be green or blue."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Stop signs in Malaysia display the word 'BERHENTI'."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In mainland Malaysia, utility poles often have black rectangles with white lettering."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Many signs in Malaysia include the letters 'Sdn Bhd'."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "In Malaysia, many houses feature vertical columns as part of their structure, a fairly unique characteristic not commonly found in other countries."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Street signs are often mounted on black and white striped poles in Malaysia."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Malaysia is notable for its many black and white striped street sign poles, a feature that is rare globally."
+        }
+      ]
+    },
+    {
+      "name": "Pakistan",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Pakistan’s coverage in unique as it wasn’t captured by a car but rather a person. This means when you pan down, you should see the outline pictured above. A number of other countries around the world also have trekker coverage."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Most Pakistani coverage is in and around religious monuments/temples. Pakistan is a majority Muslim country."
+        }
+      ]
+    },
+    {
+      "name": "Philippines",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "English words are common in the Philippines because English is one of the country's two official languages."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Some license plates in the Philippines have green and blue shades. Others are mostly white."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Street markings in the Philippines are typically white but can sometimes be single or double yellow lines."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The Philippines uses these European-style warning signs with thin red borders."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "The most common type of utility pole in the Philippines is the wooden crucifix-style pole."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Many roads in the Philippines are built with rectangular concrete blocks."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "These brightly colored mini buses are common in the Philippines."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "The Philippines have many of these distinct rickshaw bikes with side cars."
+        }
+      ]
+    },
+    {
+      "name": "Singapore",
+      "hints": [
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "There are two useful tips to help you pinpoint in Singapore. Firstly, three letter highway names (such as TPE, SLE and CTE above) are generally easy to find on the map. Secondly, other highways in Singapore are commonly named after the district they are located in. In the above example, Upper Changi Road East is located in Changi, a district whose name is clearly visible on the map."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Singapore street signs are distinctive, featuring pale green color, spaced-out and bold font."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Singaporean warning signs look like standard European signs however the shape of the actual white sign is square, not triangular. This is unique in the world."
+        }
+      ]
+    },
+    {
+      "name": "Sri Lanka",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Sri Lanka’s Google car in Generation 3 coverage has blue, white and red stripes, resembling the French flag."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Sri Lanka's Gen 4 coverage uses low-cam, meaning that (1) objects around you are seen from a lower vantage point, (2) roads look wider, (3) the Google car generally looks bigger and has a wide circular blur."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Sinhala, the primary language in Sri Lanka, has many letters that look like a \"C\" forwards, backwards, or upside down. It appears quite \"curvy\"."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Rear license plates in Sri Lanka are yellow. Front license plates are white."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Sri Lanka uses small white and black stone bollards."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Sri Lanka has two common types of poles. This one has see-through holes in the lower part of the pole (\"holey pole\"). The other type has small holes in the top part of the pole."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Sri Lanka has two common types of poles. This one has small holes in the top part of the pole. The other type is a holey pole in the lower part of the pole."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Sri Lanka has a very tropical feel with many palm trees. It also can have distinct reddish soil. Generally, if you see palm trees with few other clues, Sri Lanka can be a reasonable guess."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Sri Lanka often has black-and-white striped signposts."
+        }
+      ]
+    },
+    {
+      "name": "Thailand",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The Thai language can easily be identified by its abundance of small circles on the ends of many letters."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In Thailand, standard vehicles have white license plates, and commercial vehicles have yellow license plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "Thai bollards have alternating black-and-white colors and have a square shape."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Thailand sometimes has yellow middle lines, striped or solid. However, white middle lines are common too."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Poles in Thailand have small holes in them running up the pole vertically."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Street light poles in Thailand have black-and-red or black-and-white paintings on the bottom."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Many streetlights in Thailand are very thin and long."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Thailand is characterized by its tropical ambiance, with palm trees, thick green vegetation, and visible dirt common throughout the country."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Thai milestones are white with script on 3 sides. The side facing the street shows a bird with the road number on it (1303 in this example)."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Signposts in Thailand are typically wooden and are painted white with a black section on their base."
+        }
+      ]
+    },
+    {
+      "name": "Vietnam",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Street View coverage in Vietnam was recorded on a motorbike. In Vietnam you will either see the motorbike, the blurred outline of the motorbike or a helmet."
+        }
+      ]
+    },
+    {
+      "name": "China",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This language is spoken in Taiwan, Hong Kong, Macau and China. Chinese tends to have more complicated characters than Japanese and Korean. Chinese characters tend to be made up of more strokes than Japanese. For example, 麼 and 名."
+        }
+      ]
+    },
+    {
+      "name": "Hong Kong",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "Hong Kong is easily recognizable due to its many skyscrapers along the large bay of water, combined with its many Chinese language signs."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This language is spoken in Taiwan, Hong Kong, Macau and China. Chinese tends to have more complicated characters than Japanese and Korean. Chinese characters tend to be made up of more strokes than Japanese. For example, 麼 and 名."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Hong Kong license plates are almost square shaped. They have yellow rear plates and white front plates."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "A scene from bustling Hong Kong. The major Hong Kong roads are denoted by a yellow shield enclosing a number."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Hong Kong’s signs often feature both English and Traditional Chinese."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "Hong Kong has a large number of these green and red taxis. You won’t have to travel too far before seeing one."
+        }
+      ]
+    },
+    {
+      "name": "Japan",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Japanese is different in that is uses many simple curved strokes that make up their characters such as ノ, シ, い and く."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Japan often has yellow plates."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "The front and back view of Japanese bollards."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Japanese directional signs are blue with white lettering."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Japan uses the yellow coloured, diamond-shaped warning signs that are common in North and South America as well as Australia and New Zealand."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The red and white striped arrow pointing downwards indicates that you are in Japan, most likely on the northern island of Hokkaido or possibly on the main island of Honshu, near mountains."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Japan, many poles are characterized by unique vertical yellow and black stripes."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "The best way to region guess in Japan is to look at the small plates that are affixed to the utility poles. These plates have different design based on the region in Japan."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "Most Japanese cars have a boxy shape."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Japan’s northern most island- Hokkaido (and sometimes northern Honshu) house this unique cabbage looking vegetation."
+        }
+      ]
+    },
+    {
+      "name": "Kyrgyzstan",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In south-western Kyrgyzstan, around the city of Osh, if you look in the left side-view mirror, you will see approximately 90% of the Kyrgyzstan silver car being reflected. In the remainder of Kyrgyzstan, you will only see approximately 60% of the Kyrgyzstan silver car being reflected."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Kyrgyzstan has the bars under the car visible as well as black/white side mirrors."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Kyrgyzstan plates typically have a red vertical stripe on the left side of the plate."
+        }
+      ]
+    },
+    {
+      "name": "Mongolia",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The second variant of the Mongolian Street View car is the visible bars along with the red side view mirrors."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "There is a simple meta that can typically inform you of whether you are in the western or eastern half of Mongolia. If the bars are filled in with black, rubber, you should be in Western Mongolia (or Ulan Bataar). If the bars aren’t filled in with black rubber, then you should be in the eastern half of Mongolia."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "This ‘camping equipment’ look is often found under the Street View car in Mongolia along with the bars."
+        }
+      ]
+    },
+    {
+      "name": "South Korea",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "The key aspect distinguishing Korean from other East Asian written languages is their usage of circles for instance 요 and 안. Other than the idiosyncratic circles, Korean looks quite blocky and rigid in its writing."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Green signs with white lettering provide highway information in South Korea. The expressway shields used by South Korea look similar to US Interstate shields. Expressway numbers are shown on the map in South Korea however you need to zoom in significantly to see them."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "South Korea and Vietnam are the only Asian countries to use warning signs featuring a triangle with a red border and yellow fill."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Many utility poles in South Korea feature diagonal yellow and black stripes that do not extend all the way to the ground.."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "South Korean utility poles stand out as they mainly have what resembles a long, sharp, pointed spike extending upwards from the top of the main pole."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "One of the most distinctive features of the island of Jeju, which belongs to South Korea and lies off its south coast, is the rock walls."
+        }
+      ]
+    },
+    {
+      "name": "Taiwan",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This language is spoken in Taiwan, Hong Kong, Macau and China. Chinese tends to have more complicated characters than Japanese and Korean. Chinese characters tend to be made up of more strokes than Japanese. For example, 麼 and 名."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Directional signs in Taiwan are green with white lettering. The major National Freeways are numbered in a white shape that resembles a flower. Taiwanese signs either feature Mandarin and English or just Mandarin."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Taiwan, utility poles are a common sight. They are cylindrical and often have their lower section adorned with diagonal black and yellow stripes extending all the way to the ground."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "A large number of Taiwanese utility poles feature a blue rectangle above the stripes. The bottom half of the blue rectangle should contain two rows of letter and number combinations. We are only concerned with the first letter in the first row- in the above image, this is a ‘K’. This letter alone can tell us fairly accurately where in Taiwan we are located. The map explains how to use this letter."
+        }
+      ]
+    },
+    {
+      "name": "American Samoa",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "Cars drive on the right in American Samoa (which is rare for an island) and there is often a double yellow line in the centre of the road. The most populated island in American Samoa is Tutuila. This island features coverage along lots of roads and the island is more inhabited."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "A car will often be beneath you in Tutuila, American Samoa. Other locations in American Samoa feature a person holding the Street View camera."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In American Samoa, you will commonly just see the back of a black ute if you pan down."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "American Samoa has blue license plates."
+        }
+      ]
+    },
+    {
+      "name": "Australia",
+      "hints": [
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "License plates in the Northern Territory of Australia generally have a reddish tinge."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "In the state of New South Wales, Australia, some cars feature yellow license plates, which are displayed on both the front and rear of the vehicle."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In Australia, bollards are typically white, featuring a red reflector on the front and a grey reflector on the back."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Australia typically has white street signs."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Australian give-way signs are written in black writing."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Australian speed limit signs are displayed on a white rectangular sign."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "'C' roads are designated in the Australian states of Tasmania and Victoria."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Australia, these metal utility poles with holes in them are unique to the Northern Territory."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Some utility poles in Tasmania have olive-colored metal wrappings around the pole, approximately 2 meters above the ground."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In Australia, Stobie poles are unique to the state of South Australia. They are utility poles made with steel on both sides and concrete in the center."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "In Australia, Eucalyptus trees are a prominent feature, typically tall with white bark."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "In Australia, rolling hills suggest you are most likely in Tasmania or Victoria. The rest of the country is predominantly flat."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Australia uses black-on-yellow chevrons without a border around them. White-on-black chevrons also exist."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "In Australia, a reliable way to identify the state of Western Australia is through its yellow sign posts. The rest of the country uses mainly silver poles."
+        }
+      ]
+    },
+    {
+      "name": "Guam",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "If you look at the rear-left of the Guam car (right-side on the above picture), you will see a tiny bit of a bar sticking out- this distinguishes Guam from the Northern Mariana Islands."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Guam uses these blue highway shields that helpfully say ‘Guam’."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Guam has these large octagonal, concrete utility poles, in contrast to the Northern Mariana Islands which generally has wooden utility poles."
+        }
+      ]
+    },
+    {
+      "name": "New Zealand",
+      "hints": [
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "In New Zealand, bollards have a red strip around the upper part of the bollard."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "New Zealand street signs are blue or green."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In New Zealand, give-way signs have red text."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In New Zealand, speed signs are typically circular."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "New Zealand has green direction signs with unique red highway number shields."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "In New Zealand many give-way intersections also have a white give-way triangle painted on the street."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "In New Zealand, most utility poles have a lone piece of metal, usually silver or white, wrapping around them."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "It's common to see fern growing in forested areas in New Zealand."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Chevrons in New Zealand are black-on-white colored with a black outline."
+        }
+      ]
+    },
+    {
+      "name": "Northern Mariana Islands",
+      "hints": [
+        {
+          "tags": [
+            "Driving Direction"
+          ],
+          "text": "The Northern Mariana landscape features a large number of palm trees. The territory is very tropical feeling and there are often hills nearby. Cars drive on the right in the Northern Mariana Islands which is rare for an island area."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "If you pan down in the Northern Mariana Islands you should see a thick blur beneath you. There is also an antenna extending from the front-right section of the Street View car."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "This image shows three signs that are visible in the Northern Mariana Islands. Depicted are: the leftmost stop sign (they have English as their language), the highway shield sign (we are on route 308) and the US Speed Limit sign (the US own this territory). Also note the US style metal poles with small holes holding up these signs."
+        }
+      ]
+    },
+    {
+      "name": "U.S. Minor Outlying Islands",
+      "hints": [
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Midway Atoll is instantly recognizable thanks to the thousands of albatrosses that swarm the entire area."
+        }
+      ]
+    },
+    {
+      "name": "Botswana",
+      "hints": [
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Botswana’s highway signage are green with white text and yellow highway numbers. Botswana uses the letter A for all of their national roads."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Botswana also uses these red and white chevrons, but they are much more common in South Africa."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Botswana’s main roads are typically of high quality and the landscape across the country is dry and flat."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "Botswana’s sign poles have black and yellow stripes."
+        }
+      ]
+    },
+    {
+      "name": "Eswatini",
+      "hints": [
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Eswatini street signs, same as the other South African countries, has white text and yellow road numbers on green background. Road numbers in Eswatini start with MR."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "The most common Eswatini pole is wooden with three insulators on the side and has an overall simple design."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Eswatini is green, very hilly, and typically has trees visible."
+        }
+      ]
+    },
+    {
+      "name": "Ghana",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Ghana's Google car has a visible roof rack with a black tape on the right end of the front bar."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Commercial vehicles in Ghana have yellow license plates and are pretty common."
+        }
+      ]
+    },
+    {
+      "name": "Kenya",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Kenya has a snorkel on the front of the Google Streetview car."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "New Kenya coverage (since 2022) has a different Google Streetview car than before. The truck can appear with a snorkel, antenna, both, or neither."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Kenya has yellow, square rear license plates. Front license plates are long & white."
+        }
+      ]
+    },
+    {
+      "name": "Lesotho",
+      "hints": [
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Lesotho steeet signs have green background with white text and yellow highway numbers. National road numbers start with A, but are often not printed on the sign."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Lesotho, you can find many people wearing blankets - the traditional \"Basotho blanket\"."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "In Lesotho, you will often see these traditional round huts with thatched roofs."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "A key identifier of Lesotho is its characteristic 'Lesotho mountains', which are bare and treeless, often showcasing tabletop-like shapes and distinct horizontal rocky ridgelines. Grass tends to be short in Lesotho."
+        }
+      ]
+    },
+    {
+      "name": "Madagascar",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "Madagascar has a small area of trekker coverage in the middle of the country that's fairly common on the Geoguessr \"World\" map."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Madagascar, Streetview includes boat coverage. This coverage is particularly common on the Geoguessr World map."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Part of Madagascar’s coverage includes a person walking, carrying the Street View camera around an elevated part of the capital, Antananarivo, with the city visible below."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In the area inland from Andavadoaka, the Street View coverage was captured on ox."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "A portion of the Madagascar’s limited coverage includes the beach. This is mainly found along small parts of the east coast."
+        }
+      ]
+    },
+    {
+      "name": "Nigeria",
+      "hints": [
+        {
+          "tags": [
+            "Coverage"
+          ],
+          "text": "In Nigeria, a white police car will often be following you. The following car can alternatively be a black police car, or a silver, white, black, or red SUV."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Nigera's generation 3 coverage, you can sometimes see the Google car's roof rack. It sometimes shows the yellow-and-black rack pattern, which is unique to Nigeria."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The Nigerian Google car is a large pickup truck with the cab and bed often visible. It can be white or red."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Nigerian license plates have a green/blue tinge."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Nigeria has many of these ladder-style poles."
+        }
+      ]
+    },
+    {
+      "name": "Rwanda",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "This is the Rwandan Google car. It can be white, black, or grey/brown. It's almost always visible, including its camera mount."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Rwanda license plates are yellow in the back and white in the front."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "The paved road quality in Rwanda is high. Roads typically feature a yellow center line and white sidelines. Black-and-white curbs are common."
+        },
+        {
+          "tags": [
+            "Cars"
+          ],
+          "text": "In Rwanda, motorcyclists have to wear a red vest and helmet."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Many properties in Rwanda have high walls around them."
+        }
+      ]
+    },
+    {
+      "name": "Senegal",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Senegal a silver or white truck cab is visible in the Generation 4 coverage. This is the white truck."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Senegal's generation 3 coverage, you can see the Google car's roof rack."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Senegal a silver or white truck cab is visible in the Generation 4 coverage. This is the silver truck."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Senegal's official language is French."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Senegal uses license plates with blue background."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "As a former French colony, Senegal has the same ladder-style poles as parts of France."
+        }
+      ]
+    },
+    {
+      "name": "South Africa",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "South Africa has Gen 2 camera coverage. You will often see the halo in the sky and/or the circular blur beneath the Street View car."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "These narrow, red and white chevrons are very common in South Africa."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "South African highway signs are green with white lettering and yellow highway numbers. Highways start with the letters R, M, or N."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "South Africa's landscape is quite diverse. You can find anything from rocky, treeless mountains to dry landscape with red soil to vineyards and sugarcane plantations."
+        }
+      ]
+    },
+    {
+      "name": "Uganda",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "In Uganda's national parks, the Google car has a black bar on the front of the car."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The Google car in Uganda is a boxy white SUV with square side mirrors."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "License plates in Uganda are white in the front and yellow in the back. The back license plate can be square, as pictured, or long."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "In Uganda you may see this man holding a gun whilst following the Street View car."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Ugandan soil is typically very red."
+        }
+      ]
+    },
+    {
+      "name": "Israel",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This is Hebrew, a language is spoken in Israel."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Israel has yellow license plates, both front and back. They have a blue vertical stripe on the left of their yellow plates."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "This Israeli directional signs features Hebrew, Arabic and Latin lettering. Israeli roads are broken into four main categories- each logo denoted by a colour. Blue = national roads, red = inner city roads, green = regional roads, and black = local roads. In this image, the green denotes regional roads and the road number is 352."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Israeli street lights often feature these black and white stripes on their base."
+        }
+      ]
+    },
+    {
+      "name": "Jordan",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The Jordan car is black if you pan down. This contrasts the white car of the UAE."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Jordan’s directional signs are blue with white lettering. They sometimes contain just Arabic but on other occasions feature both Arabic and English. Standard highways in Jordan are denoted by a green rectangle and a number in yellow lettering."
+        }
+      ]
+    },
+    {
+      "name": "Palestine",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Palestine has Arabic as its dominant language. Arabic looks similar to calligraphy and many letters have horizontal lines underneath them. This language contrasts Hebrew which is predominant in Israel."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Palestine has elongated white plates that help distinguish it from Israel."
+        }
+      ]
+    },
+    {
+      "name": "Qatar",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "Qatar features a white truck beneath you, similar to the UAE and Senegal."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "If you look carefully, Qatari plates have a narrow band of maroon on their left. The plates are long and elongated."
+        },
+        {
+          "tags": [
+            "Street Markings"
+          ],
+          "text": "Qatari roads are mainly surrounded by these black and white curbs that look like they have been freshly painted."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Signs in Qatar are typically written in both Arabic and English. This includes street signs, stop signs and directional signs."
+        }
+      ]
+    },
+    {
+      "name": "Tunisia",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "This lighter green Toyota follows the Street View car in Tunis and indeed everywhere in the northern part of Tunisia- north of Hammamet."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "This dark green Mazda follows the Street View car in central and southern Tunisia- anywhere south of Hammamet. Also note the red and black license plate."
+        },
+        {
+          "tags": [
+            "License Plate"
+          ],
+          "text": "Tunisia has black plates that are narrow and long."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "The official language of Tunisia is Arabic however French is also widely spoken and appears on signs alongside Arabic."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Roundabouts are common at Tunisian intersections. They often have directional signs around them, providing useful information."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Tunisia most commonly uses these metallic wire-style poles as utility poles."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Palm trees are common in Tunisia. The architecture is normally white and has Mediterranean elements fused with Middle-Eastern elements. The sky is normally blue in Tunisia."
+        },
+        {
+          "tags": [
+            "Flora"
+          ],
+          "text": "Tunisia’s landscape has a real Middle-Eastern vibe."
+        }
+      ]
+    },
+    {
+      "name": "Turkey",
+      "hints": [
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "Seeing the letter ‘ş’ or the letter ‘c’ with a hook underneath in a useful way to confirm that you are in Turkey."
+        },
+        {
+          "tags": [
+            "Bollards"
+          ],
+          "text": "These bollards are a common sight throughout Turkey and resemble the Australian and Netherlands bollards however they have a slightly fatter rectangle in Turkey."
+        },
+        {
+          "tags": [
+            "Street Name"
+          ],
+          "text": "Ankara is the only city in Turkey to have these unique-looking street signs that feature a curved top-middle section of the sign."
+        },
+        {
+          "tags": [
+            "Street Sign"
+          ],
+          "text": "Turkey uses either blue or green coloured directional signs."
+        },
+        {
+          "tags": [
+            "Poles"
+          ],
+          "text": "Turkey uses a wide range of utility poles. Some of the more recognisable poles have large holes in them. These poles are different to the poles in Romania, Hungary and Poland as they are made out of metal and have larger holes."
+        },
+        {
+          "tags": [
+            "Other"
+          ],
+          "text": "Turkey typically has wide roads with undulating land throughout most of the country, including urban areas."
+        },
+        {
+          "tags": [
+            "Chevrons"
+          ],
+          "text": "Turkey has these fairly unique red and white road arrows indicating corners."
+        },
+        {
+          "tags": [
+            "Milestone Markers"
+          ],
+          "text": "Turkish kilometre markers are pictured above. The number (sometimes a letter) in the top left corner indicates what road you are on. If you see the letter ‘o’ followed by a number you are on that road, e.g. the o-5 road in this example. If you see just a number in the top left corner, you are on a D road. For example, 360 indicates the road D360."
+        }
+      ]
+    },
+    {
+      "name": "United Arab Emirates (UAE)",
+      "hints": [
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "The generation 4 coverage in UEA was taken with this truck. It can only be found in Dubai and Sharjah."
+        },
+        {
+          "tags": [
+            "Google Car"
+          ],
+          "text": "If you pan down in the UAE, you will almost always see a white Street View car. This can be an easy way to tell the country apart from Jordan which has a black Street View car."
+        },
+        {
+          "tags": [
+            "Language"
+          ],
+          "text": "This is Arabic, a language is largely spoken across the middle-east and northern Africa. You can recognise this written language due to its similarity to calligraphy and many of the words having a line underneath them."
+        },
+        {
+          "tags": [
+            "Buildings"
+          ],
+          "text": "Due to the majority of the UAE coverage being centred around greater Dubai, there is often the possibility of seeing the world’s tallest skyscrapers in the background."
+        },
+        {
+          "tags": [
+            "Sign Posts"
+          ],
+          "text": "The UAE is one of only a few countries in the world to have some black and white striped poles. Although Jordan sometimes has these too however they are much rarer in Jordan."
+        }
+      ]
+    }
+  ]
+}

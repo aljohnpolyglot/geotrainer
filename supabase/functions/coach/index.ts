@@ -1,5 +1,6 @@
 import countryCatalog from '../../../src/data/countryCatalog.json' with { type: 'json' };
 import hintsData from '../../../server/data/geoguessr-hints.json' with { type: 'json' };
+import geometasData from '../../../server/data/geometas-hints.json' with { type: 'json' };
 
 type Mode = 'hints' | 'analyze' | 'analyze360' | 'explain' | 'cards' | 'clue' | 'clue-safe';
 type Frame = { mimeType: string; imageData: string };
@@ -37,6 +38,11 @@ function knowledge(countryName = '') {
   const country = (hintsData.countries as Array<{ name: string; hints?: Array<{ cat?: string; type?: string; text?: string; uniq?: string }> }>).find((item) => key(item.name) === key(countryName));
   return (country?.hints || []).sort((a, b) => Number(b.uniq === 'unique') - Number(a.uniq === 'unique')).filter((hint) => hint.text).slice(0, 6).map((hint) => ({ category: hint.cat || 'country', type: hint.type || 'general', text: hint.text!.replace(/\*\*/g, '').slice(0, 500) }));
 }
+function metaKnowledge(countryName = '') {
+  const key = (value: string) => value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').replace(/^the\s+/, '').trim();
+  const country = (geometasData.countries as Array<{ name: string; hints?: Array<{ tags?: string[]; text?: string }> }>).find((item) => key(item.name) === key(countryName)); const hints = country?.hints || []; const diverse = [...new Map(hints.map((hint) => [hint.tags?.[0] || 'general', hint])).values(), ...hints];
+  return [...new Set(diverse)].slice(0, 8).flatMap((hint) => typeof hint.text === 'string' ? [{ type: hint.tags?.join(', ') || 'general', text: hint.text.slice(0, 700), source: 'https://geometas.com/' }] : []);
+}
 function instruction(mode: Mode, language: string, known?: Record<string, unknown>) {
   const lead = `Write all explanatory text in ${languages[language] || 'English'}. Return every candidate countryCode as an uppercase ISO 3166-1 alpha-2 code and confidence as a probability from 0 to 1. Keep card categories unchanged. `;
   if (mode === 'hints') return lead + 'Give only spoiler-free things to inspect in nextThingsToInspect. Name no country, city, region, coordinate, or likely answer; leave all other fields empty.';
@@ -45,7 +51,9 @@ function instruction(mode: Mode, language: string, known?: Record<string, unknow
   if (mode === 'clue') return lead + 'Describe the central visible clue and its geographic value, broad region, up to four candidates, realistic confusions, limitations, contradictions, and comparison features. Add locationEstimate only when its strict visible-evidence threshold is met. Leave cards empty.';
   if (mode === 'analyze') return lead + 'Give a short region or vibe, up to four candidate countries, direct strong clues, generic weak clues, contradictions, and what to inspect next. Add locationEstimate only when its strict visible-evidence threshold is met.';
   const reference = known ? knowledge(String(known.actualCountry || '')) : [];
-  return lead + `Known result context is an answer key only: ${JSON.stringify(known || {})}. Reference facts for only that country: ${JSON.stringify(reference)}. ` + (mode === 'cards' ? 'Create one core card plus only genuinely useful specialized cards from visible clues.' : 'Explain which visible clues fit, which are generic, and realistic confusions. If the image alone was insufficient, say so plainly. If previous Coach candidates missed the answer, acknowledge why; never retrofit generic clues as proof. Leave region, locationEstimate, and candidates empty.');
+  const metas = mode === 'explain' ? metaKnowledge(String(known?.actualCountry || '')) : [];
+  const metaReference = mode === 'explain' ? ` GeoMetas facts for only that country: ${JSON.stringify(metas)}. Mention a reference fact only when its described feature is clearly visible in the supplied image; otherwise ignore it completely.` : '';
+  return lead + `Known result context is an answer key only: ${JSON.stringify(known || {})}. Reference facts for only that country: ${JSON.stringify(reference)}.${metaReference} ` + (mode === 'cards' ? 'Create one core card plus only genuinely useful specialized cards from visible clues.' : 'Explain which visible clues fit, which are generic, and realistic confusions. If the image alone was insufficient, say so plainly. If previous Coach candidates missed the answer, acknowledge why; never retrofit generic clues as proof. Leave region, locationEstimate, and candidates empty.');
 }
 function normalize(value: unknown, mode: Mode, actualCountry = '') {
   if (!value || typeof value !== 'object') throw new Error('Coach returned malformed JSON.');

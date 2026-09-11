@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import countryCatalog from '../src/data/countryCatalog.json';
 import type { CoachAnalysis, CoachMode } from '../src/types';
-import { getCountryKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge';
+import { getCountryKnowledge, getCountryMetaKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge';
 
 export type { CoachAnalysis, CoachMode } from '../src/types';
 
@@ -94,7 +94,7 @@ export function sanitizeCoachContext(value: unknown): Record<string, unknown> | 
   return { actualCountry: text('actualCountry'), actualRegion: text('actualRegion'), guessedCountry: text('guessedCountry'), score: number('score'), distanceKm: number('distanceKm'), previousAttempts, previousCoachCandidates };
 }
 
-function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], language = 'en') {
+function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en') {
   const languageInstruction = `Write all explanatory text in ${aiLanguageNames[language] || 'English'}. Keep country codes and card category names unchanged.`;
   if (mode === 'hints') return `${languageInstruction} Give only spoiler-free things to inspect. Do not name any country, city, region, coordinate, or likely answer. Put hints in nextThingsToInspect; leave region, candidates, confusions and cards empty.`;
   if (mode === 'analyze360') return `${languageInstruction} Synthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Do not treat repeated features across views as independent evidence. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold.`;
@@ -103,8 +103,9 @@ function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: G
   if (mode === 'analyze') return `${languageInstruction} Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold.`;
   const facts = JSON.stringify(context || {});
   const reference = knowledge.length ? `\nRetrieved GeoGuessr reference facts for the known country: ${JSON.stringify(knowledge)}\nUse only facts that match visible evidence; ignore irrelevant entries.` : '';
+  const metaReference = mode === 'explain' && metaKnowledge.length ? `\nGeoMetas facts for only the known country: ${JSON.stringify(metaKnowledge)}\nMention a fact only when its described feature is clearly visible in the supplied image; otherwise ignore it completely.` : '';
   if (mode === 'cards') return `${languageInstruction} Known result context (answer key only): ${facts}${reference}\nGenerate one core card plus only genuinely useful specialized cards from visible clues. Explain why the known country fits and realistic confusions without claiming the answer key was visible.`;
-  return `${languageInstruction} Known result context (answer key only): ${facts}${reference}\nExplain briefly which visible clues support the known country, which clues were generic, and realistic confusions. If the image alone was insufficient to identify the known country, say so plainly. If previous Coach candidates missed it, acknowledge the mismatch and explain which ambiguous evidence caused it; never retrofit generic clues as proof. Do not claim the answer key or location metadata was visible. Leave region, locationEstimate, and candidates empty.`;
+  return `${languageInstruction} Known result context (answer key only): ${facts}${reference}${metaReference}\nExplain briefly which visible clues support the known country, which clues were generic, and realistic confusions. If the image alone was insufficient to identify the known country, say so plainly. If previous Coach candidates missed it, acknowledge the mismatch and explain which ambiguous evidence caused it; never retrofit generic clues as proof. Do not claim the answer key or location metadata was visible. Leave region, locationEstimate, and candidates empty.`;
 }
 
 export const decodeCoachText = (value: string) => value.replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)));
@@ -177,12 +178,13 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
       try {
         const context = ['hints', 'analyze', 'clue', 'clue-safe'].includes(request.mode) ? undefined : request.context;
         const knowledge = context ? getCountryKnowledge(String(context.actualCountry || ''), 6) : [];
+        const metaKnowledge = context && request.mode === 'explain' ? getCountryMetaKnowledge(String(context.actualCountry || ''), 8) : [];
         const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
           method: 'POST', signal: controller.signal,
           headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
-            contents: [{ role: 'user', parts: [{ text: prompt(request.mode, context, knowledge, request.language) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
+            contents: [{ role: 'user', parts: [{ text: prompt(request.mode, context, knowledge, metaKnowledge, request.language) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
             generationConfig: { temperature: 0.25, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
           }),
         });

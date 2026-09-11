@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { callGeminiCoach, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
-import { getCountryKnowledge } from '../../server/geoguessrKnowledge';
+import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
   confidence: 'medium', region: 'Central Europe',
@@ -143,6 +143,8 @@ test('360 Coach sends all views in one low-latency Gemini request', async () => 
 test('revealed Coach retrieves a bounded country knowledge pack without leaking it before reveal', async () => {
   assert.ok(getCountryKnowledge('Albania', 6).some((hint) => hint.type === 'bollards'));
   assert.equal(getCountryKnowledge('The Netherlands', 20).length, 12);
+  assert.ok(getCountryMetaKnowledge('Albania', 8).length > 0);
+  assert.ok(getCountryMetaKnowledge('Albania', 20).length <= 12);
 
   const prompts: string[] = [];
   const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => {
@@ -152,8 +154,11 @@ test('revealed Coach retrieves a bounded country knowledge pack without leaking 
   }) as typeof fetch;
   await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'explain', mimeType: 'image/jpeg', imageData: 'YWJj', context: { actualCountry: 'Albania' } }, fetcher);
   await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj', context: { actualCountry: 'Albania' } }, fetcher);
+  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'cards', mimeType: 'image/jpeg', imageData: 'YWJj', context: { actualCountry: 'Albania' } }, fetcher);
   assert.match(prompts[0], /Retrieved GeoGuessr reference facts/);
-  assert.doesNotMatch(prompts[1], /Retrieved GeoGuessr reference facts|Albania/);
+  assert.match(prompts[0], /GeoMetas facts for only the known country/);
+  assert.doesNotMatch(prompts[1], /Retrieved GeoGuessr reference facts|GeoMetas facts|Albania/);
+  assert.doesNotMatch(prompts[2], /GeoMetas facts/);
 });
 
 test('Coach bounds user context before inserting it into a prompt', () => {

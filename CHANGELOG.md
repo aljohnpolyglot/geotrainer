@@ -2,7 +2,7 @@
 
 ## 2026-09-11
 
-- After a location is revealed, AI Coach now switches from guessing to an honest explanation, clears stale candidate rankings, and states when the imagery was insufficient; strong location estimates appear only before reveal and without metadata. Added Learnable Meta to the learning resources.
+- After a location is revealed, AI Coach now switches from guessing to an honest explanation, clears stale candidate rankings, and states when the imagery was insufficient; strong location estimates appear only before reveal and without metadata. Explain can consult bounded GeoMetas facts for the revealed country but may mention only features visible in the image. Added Learnable Meta to the learning resources.
 - Preserved the active AI Coach analysis and clue preview/result across reloads without carrying them into another panorama, and kept the guess map rendered after mid-round language changes.
 - Added a localized Print Screen → paste → Analyze clue workflow to the user guide.
 - Fixed AI Coach falsely reporting that Street View was still loading after moving away from the round's starting panorama or opening another live panorama.
