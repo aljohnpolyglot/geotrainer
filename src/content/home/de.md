@@ -198,6 +198,13 @@ Analysieren bewertet die aktuelle Ansicht: Straßengestaltung, Schrift, Infrastr
 
 Die Analyse prüft automatisch mehrere Blickrichtungen und nutzt die aktuelle Ansicht als Ersatz, wenn Rundum-Bilder nicht verfügbar sind. Beim Bewegen am selben Ort und nach dem Aufdecken bleiben frühere Beobachtungen erhalten.
 
+### Screenshot einfügen und analysieren
+
+1. Richte den sichtbaren Hinweis aus und drücke **Druck** oder **Windows + Umschalt + S**, um einen Screenshot zu kopieren.
+2. Öffne **KI-Coach → Bekannte Hinweise**, wähle das Hinweisfeld und drücke **Strg + V** (unter macOS **Befehl + V**).
+3. Prüfe die Vorschau und wähle **Hinweis analysieren**.
+4. GeoTrainer speichert Bild, Belege und Lernnotiz automatisch unter **Hinweise**. Vor einem Tipp in der Wiederholung bleibt die Analyse lösungssicher.
+
 ### Schutz vor Lösungen
 
 Vor einem Tipp erhält der Coach keine Antwortmetadaten. Nach Aufdecken oder Abgabe kann Ortskontext zur Erklärung verwendet werden.

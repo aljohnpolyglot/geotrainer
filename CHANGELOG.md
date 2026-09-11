@@ -2,6 +2,7 @@
 
 ## 2026-09-11
 
+- Added a localized Print Screen → paste → Analyze clue workflow to the user guide.
 - Fixed AI Coach falsely reporting that Street View was still loading after moving away from the round's starting panorama or opening another live panorama.
 - Unified collection dropdown hierarchy across Study, Play, Review, History, and Statistics, made Review scheduling settings fill a responsive two-column layout, and normalized clue details around a compact live Street View.
 - Fixed Google sign-in returning to the GitHub Pages account root instead of the deployed GeoTrainer app.

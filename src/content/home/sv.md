@@ -44,6 +44,13 @@ Svaret döljs tills du gissar. Avstånd och poäng beräknar nästa intervall au
 
 Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. Observationerna finns kvar efter förflyttning eller visat facit. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar.
 
+### Ta skärmbild, klistra in och analysera
+
+1. Rama in ledtråden och tryck **Print Screen** eller **Windows + Skift + S** för att kopiera en skärmbild.
+2. Öppna **AI-coach → Kända ledtrådar**, välj ledtrådsrutan och tryck **Ctrl + V** (eller **Kommando + V** i macOS).
+3. Kontrollera förhandsvisningen och välj **Analysera ledtråd**.
+4. GeoTrainer sparar automatiskt bilden, beläggen och läranteckningen under **Ledtrådar**. Före en gissning i Repetition avslöjar analysen inte svaret.
+
 ## Samlingar och inställningar
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp.

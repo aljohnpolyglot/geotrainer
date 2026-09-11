@@ -224,6 +224,13 @@ AI Coach looks for visible geographic evidence in the current panorama. Guest us
 
 Analyze samples the panorama around you and evaluates the visible evidence together. If the full panorama cannot be sampled, Coach falls back to the current view. Moving along the same location or revealing the answer keeps earlier observations in the same analysis, so another Analyze adds evidence instead of starting over.
 
+### Print Screen, paste, and analyze a clue
+
+1. Frame the visual clue, then press **PrtScn** or **Windows + Shift + S** to copy a screenshot.
+2. Open **AI Coach → Known clues**, select the clue box, and press **Ctrl + V** (or **Command + V** on macOS).
+3. Check the preview, then choose **Analyze clue**.
+4. GeoTrainer analyzes the pasted image and automatically saves the image, evidence, and learning note in **Clues**. In Review before a guess, the analysis stays spoiler-safe.
+
 ### Before and after reveal
 
 Before a guess, Coach responses are spoiler-safe and do not receive answer metadata. After a Study reveal or submitted guess, answer context may support explanation and comparison.

@@ -44,6 +44,13 @@ La soluzione resta nascosta fino alla stima. Distanza e punteggio calcolano auto
 
 Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Le osservazioni restano disponibili dopo lo spostamento o la rivelazione. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps.
 
+### Catturare, incollare e analizzare un indizio
+
+1. Inquadra l’indizio e premi **Stamp** o **Windows + Maiusc + S** per copiare uno screenshot.
+2. Apri **Coach IA → Indizi conosciuti**, seleziona il riquadro dell’indizio e premi **Ctrl + V** (o **Comando + V** su macOS).
+3. Controlla l’anteprima e scegli **Analizza indizio**.
+4. GeoTrainer salva automaticamente immagine, prove e nota di apprendimento in **Indizi**. Prima della risposta in Ripasso, l’analisi non svela la soluzione.
+
 ## Raccolte e preferenze
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa.

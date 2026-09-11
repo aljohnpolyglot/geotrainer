@@ -44,6 +44,13 @@ Repaso oculta la respuesta hasta tu conjetura. La distancia y la puntuación cal
 
 Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Conserva las observaciones al moverte o revelar el lugar. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps.
 
+### Capturar, pegar y analizar una pista
+
+1. Encuadra la pista y pulsa **Impr Pant** o **Windows + Mayús + S** para copiar una captura.
+2. Abre **Entrenador de IA → Pistas conocidas**, selecciona el cuadro de pista y pulsa **Ctrl + V** (o **Comando + V** en macOS).
+3. Comprueba la vista previa y elige **Analizar pista**.
+4. GeoTrainer guarda automáticamente la imagen, las pruebas y la nota de aprendizaje en **Pistas**. Antes de responder en Repaso, el análisis no revela la solución.
+
 ## Colecciones y preferencias
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa.

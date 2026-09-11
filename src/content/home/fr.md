@@ -44,6 +44,13 @@ La réponse reste cachée jusqu’à votre estimation. Distance et score calcule
 
 Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Les observations restent disponibles après un déplacement ou la révélation. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps.
 
+### Capturer, coller et analyser un indice
+
+1. Cadrez l’indice puis appuyez sur **Impr. écran** ou **Windows + Maj + S** pour copier une capture.
+2. Ouvrez **Coach IA → Indices connus**, sélectionnez la zone d’indice et appuyez sur **Ctrl + V** (ou **Commande + V** sous macOS).
+3. Vérifiez l’aperçu puis choisissez **Analyser l’indice**.
+4. GeoTrainer enregistre automatiquement l’image, les preuves et la note d’apprentissage dans **Indices**. Avant une réponse en Révision, l’analyse ne révèle pas la solution.
+
 ## Collections et préférences
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques.

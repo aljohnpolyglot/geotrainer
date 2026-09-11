@@ -44,6 +44,13 @@ A resposta fica oculta até o palpite. Distância e pontuação calculam o próx
 
 Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. As observações continuam disponíveis ao mover ou revelar. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps.
 
+### Capturar, colar e analisar uma pista
+
+1. Enquadre a pista e pressione **Print Screen** ou **Windows + Shift + S** para copiar uma captura.
+2. Abra **Coach de IA → Pistas conhecidas**, selecione a área da pista e pressione **Ctrl + V** (ou **Command + V** no macOS).
+3. Confira a prévia e escolha **Analisar pista**.
+4. O GeoTrainer salva automaticamente a imagem, as evidências e a nota de estudo em **Pistas**. Antes do palpite na Revisão, a análise não revela a resposta.
+
 ## Coleções e preferências
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa.
