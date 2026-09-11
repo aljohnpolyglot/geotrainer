@@ -24,6 +24,10 @@ Un tentativo debole torna prima, una risposta solida più tardi. Distanza e punt
 2. Gioca — Fai un tentativo senza aiuti per misurare ciò che ricordi.
 3. Ripassa — Torna sui luoghi deboli secondo il programma finché li riconosci stabilmente.
 
+## Come GeoTrainer completa GeoGuessr
+
+[GeoGuessr](https://www.geoguessr.com/) eccelle nell’esplorazione, nella varietà delle mappe, nelle sfide in singolo, nel multigiocatore e nella competizione. GeoTrainer si concentra sul tempo tra le partite: trasforma incontri ed errori in un piano duraturo con studio senza voto, cronologia dei tentativi, ripetizione dilazionata automatica, gruppi di paesi confondibili e indizi salvati. Usa GeoGuessr per esplorare e competere; usa GeoTrainer per capire gli errori, allenare le confusioni e consolidare ciò che impari. È un complemento, non un sostituto.
+
 ## Modalità Studio
 
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio.

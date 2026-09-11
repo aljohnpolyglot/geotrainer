@@ -24,6 +24,10 @@ Un mal intento vuelve antes y una respuesta sólida espera más. La distancia y 
 2. Juega — Haz una conjetura sin ayuda para medir lo que recuerdas.
 3. Repasa — Vuelve a los lugares débiles según su calendario hasta reconocerlos con seguridad.
 
+## Cómo complementa GeoTrainer a GeoGuessr
+
+[GeoGuessr](https://www.geoguessr.com/) destaca en exploración, variedad de mapas, retos individuales, multijugador y competición. GeoTrainer se centra en lo que ocurre entre partidas: convierte encuentros y errores en un plan duradero con estudio sin nota, historial de intentos, repetición espaciada automática, mezclas de países confundibles y pistas guardadas. Usa GeoGuessr para explorar y competir; usa GeoTrainer para entender errores, practicar confusiones y consolidar lo aprendido. Es un complemento, no un sustituto.
+
 ## Modo Estudio
 
 Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación.

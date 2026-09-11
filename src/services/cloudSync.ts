@@ -173,7 +173,7 @@ export const cloudSync = {
     if (!supabase) throw new Error('Supabase is not configured.');
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: new URL(import.meta.env.BASE_URL, window.location.origin).href },
     });
     if (error) throw error;
   },

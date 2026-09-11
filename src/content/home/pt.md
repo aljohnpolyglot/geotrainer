@@ -24,6 +24,10 @@ Um palpite fraco retorna mais cedo; uma resposta forte espera mais. Distância e
 2. Jogue — Faça um palpite sem ajuda para medir o que você lembra.
 3. Revise — Retorne aos lugares fracos no momento certo até reconhecê-los com segurança.
 
+## Como o GeoTrainer complementa o GeoGuessr
+
+O [GeoGuessr](https://www.geoguessr.com/) se destaca em exploração, variedade de mapas, desafios solo, multijogador e competição. O GeoTrainer foca no intervalo entre partidas: transforma encontros e erros em um plano duradouro com estudo sem nota, histórico de tentativas, repetição espaçada automática, misturas de países confundíveis e pistas salvas. Use o GeoGuessr para explorar e competir; use o GeoTrainer para entender erros, treinar confusões e fixar o aprendizado. É um complemento, não um substituto.
+
 ## Modo Estudo
 
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação.

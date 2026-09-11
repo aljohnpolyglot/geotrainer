@@ -24,6 +24,10 @@ Une réponse faible revient plus tôt ; une réponse solide attend plus longtemp
 2. Jouer — Répondez sans aide afin de mesurer ce dont vous vous souvenez.
 3. Réviser — Retrouvez les lieux faibles selon leur calendrier jusqu’à les reconnaître durablement.
 
+## Comment GeoTrainer complète GeoGuessr
+
+[GeoGuessr](https://www.geoguessr.com/) excelle dans l’exploration, la variété des cartes, les défis solo, le multijoueur et la compétition. GeoTrainer se concentre sur l’intervalle entre les parties : il transforme rencontres et erreurs en plan durable avec étude non notée, historique des tentatives, répétition espacée automatique, groupes de pays confondus et indices enregistrés. Utilisez GeoGuessr pour explorer et vous mesurer aux autres ; utilisez GeoTrainer pour comprendre vos erreurs, travailler vos confusions et ancrer vos acquis. C’est un complément, pas un remplacement.
+
 ## Mode Étude
 
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif.

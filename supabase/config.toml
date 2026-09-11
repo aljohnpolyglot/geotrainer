@@ -1,4 +1,8 @@
 project_id = "esvjxronmlaizbvmwftz"
 
+[auth]
+site_url = "https://aljohnpolyglot.github.io/geotrainer/"
+additional_redirect_urls = ["https://aljohnpolyglot.github.io/geotrainer/", "https://aljohnpolyglot.github.io/geotrainer/**", "https://geotrainer.com/**", "https://www.geotrainer.com/**", "http://localhost:3000/**"]
+
 [functions.coach]
 verify_jwt = false

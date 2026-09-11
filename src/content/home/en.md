@@ -79,6 +79,12 @@ A review card schedules a reusable location. Play mistakes can create cards auto
 
 Collections limit the countries used for generation. Built-in collections cover broad geographic groupings. Custom collections let you choose a reusable set of countries without duplicating locations or history.
 
+## How GeoTrainer complements GeoGuessr
+
+[GeoGuessr](https://www.geoguessr.com/) is excellent for discovery, varied maps, solo challenges, multiplayer, and competition. GeoTrainer focuses on what happens between those games: turning encounters and mistakes into a durable learning plan.
+
+A result tells you how one round went. GeoTrainer carries weak locations forward with ungraded Study, immutable attempt history, automatic spaced repetition, focused country-confusion drills, saved clues, and personal coverage. Use GeoGuessr to explore and compete; use GeoTrainer to unpack mistakes, target recurring confusion, and make what you noticed stick. It is a supplement, not a replacement.
+
 ## Study mode
 
 Study is an ungraded first encounter. It is the right mode for observation, comparison, and learning new clue systems without score pressure.

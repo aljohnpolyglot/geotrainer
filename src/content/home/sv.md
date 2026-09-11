@@ -24,6 +24,10 @@ En svag gissning återkommer tidigare, ett säkert svar senare. Avstånd och po�
 2. Spela — Gissa utan hjälp så att tränaren kan mäta vad du minns.
 3. Repetera — Återvänd till svaga platser enligt schemat tills igenkänningen sitter.
 
+## Så kompletterar GeoTrainer GeoGuessr
+
+[GeoGuessr](https://www.geoguessr.com/) är utmärkt för utforskning, varierade kartor, soloutmaningar, flerspelarlägen och tävling. GeoTrainer fokuserar på tiden mellan spelen: möten och misstag blir en långsiktig plan med obetygsatta studier, försökshistorik, automatisk repetition, landsmixar för vanliga förväxlingar och sparade ledtrådar. Använd GeoGuessr för att utforska och tävla; använd GeoTrainer för att förstå misstag, träna förväxlingar och befästa kunskapen. Det är ett komplement, inte en ersättning.
+
 ## Studieläge
 
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng.

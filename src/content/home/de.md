@@ -71,6 +71,12 @@ Spiel-Fehler können automatisch eine Karte anlegen. Lernen erstellt mit Für Wi
 
 Sammlungen begrenzen die Länder der Panoramasuche. Eigene Sammlungen speichern eine wiederverwendbare Länderauswahl, ohne Orte oder Verlauf zu duplizieren.
 
+## Wie GeoTrainer GeoGuessr ergänzt
+
+[GeoGuessr](https://www.geoguessr.com/) eignet sich besonders für Entdeckung, vielfältige Karten, Solo-Herausforderungen, Mehrspieler und Wettbewerb. GeoTrainer konzentriert sich auf die Zeit zwischen diesen Spielen: Begegnungen und Fehler werden zu einem dauerhaften Lernplan.
+
+Ein Ergebnis zeigt, wie eine Runde lief. GeoTrainer nimmt schwache Orte mit in unbewertetes Lernen, unveränderte Versuchsverläufe, automatische verteilte Wiederholung, gezielte Länderverwechslungen, gespeicherte Hinweise und persönliche Abdeckung. Nutze GeoGuessr zum Erkunden und Messen mit anderen; nutze GeoTrainer, um Fehler zu zerlegen, Verwechslungen zu üben und Wissen zu festigen. Es ist eine Ergänzung, kein Ersatz.
+
 ## Lernmodus
 
 Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisarten ohne Punktedruck.
