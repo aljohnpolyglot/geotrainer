@@ -37,6 +37,7 @@ export interface LocationResult {
   environment?: Environment;
   environmentRequested?: Environment;
   urbanLevel?: UrbanLevel;
+  heading?: number;
 }
 
 export interface BookmarkLocation {
@@ -71,6 +72,7 @@ export interface LocationRequestContext {
 }
 
 export type AppMode = 'study' | 'play' | 'review';
+export type LearnSource = 'custom' | 'meta' | 'map';
 export type ReviewSessionKind = 'practice' | 'due' | 'correction';
 export type SupportedLanguage = 'en' | 'es' | 'pt' | 'fr' | 'de' | 'it' | 'ru' | 'sv';
 export type CompassStyle = 'bar' | 'dial';
@@ -98,7 +100,7 @@ export interface SchedulerPreferences {
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
-export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; }
+export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; allowContributors?: boolean; }
 
 export interface GameSettings {
   roundCount: number;
@@ -113,6 +115,7 @@ export interface GameSettings {
   environment?: Environment;
   urbanLevel?: UrbanLevel;
   samplingMode?: SamplingMode;
+  allowContributors?: boolean; // Optional for backwards-compatible saved games
   timeLimitSeconds: number; // 0 = unlimited, or 30, 60, 90, 120, 180
 }
 
@@ -175,6 +178,8 @@ export interface StudyVisit {
   coachModel?: string;
   coachGeneratedAt?: number;
   coachAnalysis?: CoachAnalysis;
+  learnSource?: LearnSource;
+  metaLessonId?: string;
 }
 
 export interface Attempt {
@@ -219,6 +224,20 @@ export interface Attempt {
   coachGeneratedAt?: number;
   coachAnalysis?: CoachAnalysis;
   aiAssisted?: boolean;
+  learnSource?: LearnSource;
+  metaLessonId?: string;
+}
+
+export interface MetaLesson {
+  id: string;
+  panoId: string;
+  lat: number;
+  lng: number;
+  heading: number;
+  text: string;
+  note?: string;
+  imageUrl: string;
+  temporallySensitive?: boolean;
 }
 
 export type CoachMode = 'hints' | 'analyze' | 'analyze360' | 'explain' | 'cards' | 'clue' | 'clue-safe';
@@ -245,7 +264,35 @@ export interface ClueRecord {
   lng?: number;
   createdAt: number;
   imageDataUrl: string;
+  imagePath?: string;
   model: string;
+  analysis: CoachAnalysis;
+  origin?: 'personal' | 'coach';
+}
+
+export interface LearnedMeta {
+  id: string;
+  countryCode: string;
+  learnedAt: number;
+}
+
+export interface NotebookNote {
+  id?: string;
+  panoId: string;
+  countryCode: string;
+  text: string;
+  category?: string;
+  clueId?: string;
+  updatedAt: number;
+}
+
+export interface CoachHistoryNote {
+  id: string;
+  panoId: string;
+  countryCode: string;
+  mode: CoachMode;
+  model: string;
+  generatedAt: number;
   analysis: CoachAnalysis;
 }
 

@@ -38,7 +38,7 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 ## Repaso y programación
 
-Repaso oculta la respuesta hasta tu conjetura. La distancia y la puntuación calculan automáticamente el siguiente intervalo; la práctica personalizada no cambia las fechas previstas.
+Repaso oculta la respuesta hasta tu conjetura. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
 ## Entrenador de IA y pistas
 
@@ -77,7 +77,7 @@ La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al 
 1. ¿Necesito una cuenta? — No, solo para sincronizar.
 2. ¿Estudio cambia mi puntuación? — No.
 3. ¿Puedo calificar manualmente? — No; decide el resultado geográfico.
-4. ¿La práctica extra aplaza tarjetas? — No.
+4. ¿La práctica extra aplaza tarjetas? — No; las futuras no cambian y las ya pendientes avanzan al completarlas.
 5. ¿Cobertura incluye todos los lugares? — No, solo los visitados.
 
 ## Recursos de aprendizaje
@@ -90,3 +90,17 @@ Combina marcas viales, lado de conducción, alfabetos, postes, relieve, arquitec
 - [GeoHints](https://geohints.com/) — catálogo visual de bolardos, líneas, matrículas, señales, postes, cámaras y otras pistas.
 - [GeoMetas](https://geometas.com/) — lecciones gratuitas de metas por país, región y categoría, con cuestionarios dinámicos.
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizaje de GeoGuessr, documentación y recursos para crear mapas.
+
+## Aprender, Meta y Cuaderno
+
+Aprender ofrece tres rutas. **Personalizado** conserva colecciones y entornos. **Meta** abre lecciones guiadas en el panorama y rumbo guardados. **Explorar mapa** muestra la cobertura de Street View. En Meta y el mapa, Revelar abre la tarjeta normal, donde Guardar para repasar programa la práctica de ubicación. El mapa usa Volver al mapa mundial en lugar de Siguiente. Aprender personalizado y Juego pueden incluir panoramas de colaboradores o limitar la generación nueva a imágenes oficiales de Google.
+
+La bombilla superior derecha abre o cierra la explicación. El aviso inicial puede cerrarse una vez u ocultarse para siempre sin eliminar lecciones. Un Meta entra en **Mis pistas** solo al guardar explícitamente su ubicación para repasar. Durante el repaso, antes de responder solo se muestra la imagen; el texto completo aparece después.
+
+El **Cuaderno** guarda cualquier cantidad de notas personales por panorama. La categoría y el texto son opcionales; una entrada vacía también puede guardar el lugar para repasar. También admite imágenes analizadas por Coach. Las entradas personales, de IA y Meta abren una vista detallada con Street View y una imagen superpuesta cuando existe. **Notas disponibles** muestra un contador y el historial desplazable completo; los nuevos análisis de Coach aparecen allí de inmediato y no vuelven a abrirse como resultado activo tras recargar. Mis pistas permite filtrar **Personales**, **Con ayuda de IA** y **Lecciones Meta**; el texto revelador permanece oculto antes de responder.
+
+Un resultado bajo vuelve automáticamente al final de la sesión de repaso actual hasta que lo superes. Cada intento se guarda por separado.
+
+El estudio Meta incluye 359 lecciones alojadas localmente, normalizadas de la captura emparejada de OpenGuessr y de ejemplos adicionales de GeoMetas con coordenadas de Street View utilizables. Las explicaciones Meta siguen el idioma de la interfaz en los ocho idiomas compatibles. Usar el entrenador de IA o guardar una entrada del Cuaderno crea o reutiliza automáticamente la tarjeta de Repaso; si no, la tarjeta de ubicación revelada conserva Guardar para repasar. **Notas disponibles** contiene solo el historial personal y asistido por IA, con análisis completo, hora exacta y la captura enviada cuando existe; Meta permanece en su bombilla. El texto personal y de IA finalizado conserva el idioma en que se creó. Repasar una tarjeta ya pendiente avanza su programación incluso desde la práctica personalizada y persiste tras recargar.
+
+Una sesión de Estudio o Juego sin terminar se conserva. Al volver puedes elegir **Reanudar**, **Empezar de nuevo** o **Atrás**. La cobertura incluye un mapa de calor continuo de **Dominio**: muchos repasos correctos e intervalos largos iluminan poco a poco países y lugares, mientras que los fallos reducen la intensidad. Las pistas Meta dependientes de imágenes muestran una advertencia porque las actualizaciones de Street View pueden volverlas obsoletas.

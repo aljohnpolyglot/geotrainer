@@ -9,6 +9,6 @@ test('language preferences keep only supported community languages and migrate m
   assert.equal(new Set(LANGUAGE_OPTIONS.map((option) => option.flagCode)).size, LANGUAGE_OPTIONS.length);
   const preferenceKeys = ['preferences', 'dailyLimits', 'newCardsDay', 'maximumReviewsDay', 'scheduling', 'strictness', 'beginner', 'balanced', 'pro', 'firstReview', 'relearning', 'excellentInterval', 'maximumInterval', 'maximumAnswer', 'dueOrder', 'oldestDue', 'random'];
   for (const { code } of LANGUAGE_OPTIONS) for (const key of preferenceKeys) assert.notEqual(translate(code, key), key);
-  const visibleKeys = ['History', 'Relearning', 'Young', 'mature locations', 'until next rank', 'Coverage by continent', 'Study scenes', '1–100 scored rounds · Standard / No Move / NMPZ', 'Major Cities'];
+  const visibleKeys = ['History', 'Relearning', 'Young', 'Mastery', 'Continue saved session?', 'Resume', 'Start new', 'mature locations', 'until next rank', 'Coverage by continent', 'Study scenes', '1–100 scored rounds · Standard / No Move / NMPZ', 'Major Cities'];
   for (const { code } of LANGUAGE_OPTIONS.filter(({ code }) => code !== 'en')) for (const key of visibleKeys) assert.notEqual(translate(code, key), key);
 });

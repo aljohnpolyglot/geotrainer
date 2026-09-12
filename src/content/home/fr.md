@@ -38,7 +38,7 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 ## Révision et planification
 
-La réponse reste cachée jusqu’à votre estimation. Distance et score calculent automatiquement le prochain intervalle ; la pratique personnalisée ne modifie pas les échéances.
+La réponse reste cachée jusqu’à votre estimation. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices
 
@@ -77,7 +77,7 @@ Le compte est facultatif et l’entraînement local fonctionne sans connexion. U
 1. Un compte est-il obligatoire ? — Non, seulement pour synchroniser.
 2. Étude affecte-t-il le score ? — Non.
 3. Puis-je noter manuellement ? — Non, le résultat géographique décide.
-4. La pratique libre reporte-t-elle une carte ? — Non.
+4. La pratique libre reporte-t-elle une carte ? — Non ; les cartes futures restent inchangées et une carte déjà due avance une fois terminée.
 5. Couverture montre-t-elle tous les lieux ? — Non, seulement ceux rencontrés.
 
 ## Ressources d’apprentissage
@@ -90,3 +90,17 @@ Croisez marquages routiers, sens de circulation, écritures, poteaux, relief, ar
 - [GeoHints](https://geohints.com/) — catalogue visuel de bornes, lignes, plaques, panneaux, poteaux, caméras et autres indices.
 - [GeoMetas](https://geometas.com/) — leçons gratuites de métas par pays, région et catégorie, avec des quiz dynamiques.
 - [Learnable Meta](https://learnablemeta.com/) — cartes d’apprentissage GeoGuessr, documentation et ressources de création de cartes.
+
+## Apprendre, Méta et Carnet
+
+Apprendre propose trois parcours. **Personnalisé** conserve collections et environnements. **Méta** ouvre des leçons guidées au panorama et à l’orientation enregistrés. **Explorer la carte** affiche la couverture Street View. Dans Méta et la carte, Révéler ouvre la fiche normale, où Enregistrer pour révision programme le futur exercice de localisation. La carte remplace Suivant par Retour à la carte du monde. Apprendre personnalisé et Jeu peuvent inclure les panoramas de contributeurs ou limiter les nouvelles recherches aux images officielles Google.
+
+L’ampoule en haut à droite affiche ou masque l’explication. Le conseil initial peut être fermé une fois ou définitivement sans retirer les leçons. Une Méta rejoint **Mes indices** uniquement après l’enregistrement explicite de son lieu pour révision. En révision, seule l’image apparaît avant la réponse ; le texte complet vient ensuite.
+
+Le **Carnet** conserve autant de notes personnelles que souhaité par panorama. Catégorie et texte sont facultatifs ; une entrée vide peut aussi enregistrer le lieu à réviser. Il accepte également les images analysées par Coach. Les entrées personnelles, IA et Méta ouvrent une vue détaillée avec Street View et une image superposée lorsqu’elle existe. **Notes disponibles** affiche un compteur et tout l’historique défilant ; les nouvelles analyses Coach y entrent immédiatement et ne se rouvrent pas comme résultat actif après rechargement. Mes indices filtre **Personnel**, **Assisté par IA** et **Leçons Méta** ; le texte révélateur reste masqué avant la réponse.
+
+Un résultat faible revient automatiquement à la fin de la session de révision jusqu’à sa réussite. Chaque essai reste un enregistrement distinct.
+
+L’étude Méta contient 359 leçons hébergées localement, normalisées depuis la capture OpenGuessr appariée et des exemples GeoMetas supplémentaires disposant de coordonnées Street View utilisables. Les explications Méta suivent la langue de l’interface dans les huit langues prises en charge. Utiliser Coach IA ou enregistrer une entrée du Carnet crée ou réutilise automatiquement la carte de révision ; sinon, la fiche du lieu révélé conserve Enregistrer pour révision. **Notes disponibles** contient uniquement l’historique personnel et assisté par IA, avec l’analyse complète, l’heure exacte et la capture soumise lorsqu’elle existe ; Méta reste sous son ampoule. Le texte personnel et IA finalisé conserve sa langue de création. Réviser une carte déjà due avance son calendrier même depuis la pratique personnalisée et persiste après rechargement.
+
+Une session Étude ou Jeu inachevée est conservée. À votre retour, choisissez **Reprendre**, **Recommencer** ou **Retour**. La couverture propose une carte thermique continue de **Maîtrise** : de nombreuses révisions réussies et de longs intervalles éclaircissent progressivement les pays et lieux, tandis que les échecs réduisent l’intensité. Les indices Méta dépendant de l’imagerie affichent un avertissement, car les mises à jour Street View peuvent les rendre obsolètes.

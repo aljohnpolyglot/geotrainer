@@ -9,7 +9,7 @@ export type { CoachAnalysis, CoachMode } from '../src/types';
 
 type KeyState = { key: string; cooldownUntil: number };
 const allowedCardCategories = new Set(['RoadLines', 'Bollards', 'Poles', 'Plates', 'Signs', 'Architecture', 'Plants', 'Vehicles', 'Roads', 'CoverageMeta']);
-const countryNames = Object.values(countryCatalog).map((item) => item.name.toLowerCase());
+const countryNames = Object.entries(countryCatalog).flatMap(([code, item]) => [item.name, ...['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'].map((locale) => new Intl.DisplayNames(locale, { type: 'region' }).of(code) || '')]).map((name) => name.toLowerCase());
 const frontGiveaway = /\p{Regional_Indicator}{2}|\b(?:northern|southern|central|eastern|western)\s+(?:europe|asia|africa|america|oceania)\b/iu;
 
 export class GeminiKeyCarousel {
@@ -18,6 +18,7 @@ export class GeminiKeyCarousel {
 
   constructor(keys: string[], private readonly cooldownMs = 60_000) {
     this.keys = [...new Set(keys.map((key) => key.trim()).filter(Boolean))].map((key) => ({ key, cooldownUntil: 0 }));
+    this.cursor = this.keys.length ? Math.floor(Math.random() * this.keys.length) : 0;
   }
 
   get size() { return this.keys.length; }
@@ -67,9 +68,9 @@ const responseSchema = {
   required: ['confidence', 'region', 'candidates', 'strongClues', 'weakClues', 'contradictions', 'confusions', 'nextThingsToInspect', 'extraCards'],
 };
 
-const rules = `You are a concise, evidence-grounded GeoGuessr teacher. Analyze only visible evidence.
+const rules = `You are a concise, evidence-grounded GeoGuessr teacher viewing imagery inside a GeoGuessr-style app. Analyze only visible geographic scene evidence. Ignore all app and browser interface elements, including GeoGuessr or GeoTrainer text and buttons, navigation arrows, compass overlays, cursors, Google attribution, map controls, and screenshot-tool chrome; never use their language or design as location evidence.
 Never manufacture certainty. Prefer a broad region and ranked candidates when uncertain, and say when the image is insufficient.
-Only when no known-result metadata is provided, you may add locationEstimate if at least two independent visible clues strongly support a region, city, landmark, or exact place. Omit it for generic scenes. City or exact estimates require high confidence plus readable or uniquely identifying visual evidence.
+Only when no known-result metadata is provided, you may add locationEstimate if at least two independent visible clues strongly support a region, city, landmark, or exact place narrower than a country. Country guesses belong only in candidates. Omit it for generic scenes. City or exact estimates require high confidence plus readable or uniquely identifying visual evidence.
 Known result context is an answer key, never evidence. Never cite location metadata, coordinates, panorama IDs, geocoding, or API data as clues, and never invent an exact locality from them.
 Systematically check road lines and surface, driving side, bollards, poles and wires, signs and language, plates and vehicles, Google car or camera meta, architecture, terrain, vegetation, climate, and sun. State which categories were actually visible; do not imply that an unseen feature supports a guess.
 Separate direct observations from geographic inferences. If text is blurry or partially hidden, call it unreadable instead of guessing what it says. Weigh distinctive clues against contradictions before ranking candidates. A brand, billboard, bottled product, shop, or vehicle model is weak evidence unless the image visibly contains a genuinely location-specific marker; ordinary international brands are not country evidence. Generic buildings, clouds, tropical vegetation, and road quality are weak evidence. Do not use Street View coverage prevalence as geographic evidence or default to commonly covered countries.
@@ -97,10 +98,10 @@ export function sanitizeCoachContext(value: unknown): Record<string, unknown> | 
 function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en') {
   const languageInstruction = `Write all explanatory text in ${aiLanguageNames[language] || 'English'}. Keep country codes and card category names unchanged.`;
   if (mode === 'hints') return `${languageInstruction} Give only spoiler-free things to inspect. Do not name any country, city, region, coordinate, or likely answer. Put hints in nextThingsToInspect; leave region, candidates, confusions and cards empty.`;
-  if (mode === 'analyze360') return `${languageInstruction} Synthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Do not treat repeated features across views as independent evidence. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold.`;
-  if (mode === 'clue-safe') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify and describe that object first and do not mistake it for a different object when details are unreadable. Use the surrounding scene only as supporting or contradictory context. Put a detailed visual description in description, useful observable traits in strongClues, limitations in weakClues, and comparison features in nextThingsToInspect. Do not name or infer a country, city, region, coordinate, or likely answer. Leave region, candidates, confusions and cards empty.`;
-  if (mode === 'clue') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify and describe that object first and do not mistake it for a different object when details are unreadable. Use the surrounding scene only as supporting or contradictory context. Separate what is directly visible from what it may imply. Explain its geographic value, give a broad region, up to four ranked candidate countries with honest numeric confidence, realistic confusions, limitations, contradictions, and the exact features to compare next. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
-  if (mode === 'analyze') return `${languageInstruction} Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold.`;
+  if (mode === 'analyze360') return `${languageInstruction} Synthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Do not treat repeated features across views as independent evidence. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
+  if (mode === 'clue-safe') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify it at the narrowest visually defensible level and describe it first. For a sign, explain the visible symbol, letter, number, color, and restriction or instruction it communicates; do not stop at its shape. For a readable brand or organization, explain what it is and the clue's reliability, including whether its products or presence can cross borders. For vegetation, attempt a plant family or species and cite visible identifying traits. For road furniture, name the feature type and its exact colors, shape, reflector, stripe, border, and mounting pattern. If resolution is insufficient, say the exact identity is unreadable and name the detail needed; never invent specificity. Use the surrounding scene only as supporting or contradictory context. Put a detailed visual description in description, useful observable traits in strongClues, limitations in weakClues, and comparison features in nextThingsToInspect. Do not name or infer a country, city, region, coordinate, or likely answer. Leave region, candidates, confusions and cards empty.`;
+  if (mode === 'clue') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify it at the narrowest visually defensible level and describe it first. For a sign, explain the visible symbol, letter, number, color, and restriction or instruction it communicates; do not stop at its shape or possible countries. For a readable brand or organization, explain what it is, where it originates or primarily operates, and whether its products or presence cross borders so the evidence strength makes sense. For vegetation, attempt a plant family or species and cite visible identifying traits. For road furniture, name the feature type and its exact colors, shape, reflector, stripe, border, and mounting pattern. If resolution is insufficient, say the exact identity is unreadable and name the detail needed; never invent specificity. Use the surrounding scene only as supporting or contradictory context. Separate direct observation from inference. Explain where that specific variant is commonly found, where it also occurs, and how reliable it is; do not turn a broad plant range into country-level confidence. Give a broad region, up to four ranked candidate countries with honest numeric confidence, realistic confusions, limitations, contradictions, and exact comparison features. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
+  if (mode === 'analyze') return `${languageInstruction} Give a short region/vibe, up to four ranked candidate countries with honest confidence, direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
   const facts = JSON.stringify(context || {});
   const reference = knowledge.length ? `\nRetrieved GeoGuessr reference facts for the known country: ${JSON.stringify(knowledge)}\nUse only facts that match visible evidence; ignore irrelevant entries.` : '';
   const metaReference = mode === 'explain' && metaKnowledge.length ? `\nGeoMetas facts for only the known country: ${JSON.stringify(metaKnowledge)}\nMention a fact only when its described feature is clearly visible in the supplied image; otherwise ignore it completely.` : '';
@@ -108,7 +109,9 @@ function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: G
   return `${languageInstruction} Known result context (answer key only): ${facts}${reference}${metaReference}\nExplain briefly which visible clues support the known country, which clues were generic, and realistic confusions. If the image alone was insufficient to identify the known country, say so plainly. If previous Coach candidates missed it, acknowledge the mismatch and explain which ambiguous evidence caused it; never retrofit generic clues as proof. Do not claim the answer key or location metadata was visible. Leave region, locationEstimate, and candidates empty.`;
 }
 
-export const decodeCoachText = (value: string) => value.replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)));
+export const decodeCoachText = (value: string) => value
+  .replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
+  .replace(/(\p{L})(?:u)?(00[89a-f][0-9a-f])(?=$|[^\p{L}\p{N}])/giu, (_, lead: string, hex: string) => lead + String.fromCharCode(Number.parseInt(hex, 16)));
 function strings(value: unknown, max = 6): string[] {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string').map((item) => decodeCoachText(item).trim()).filter(Boolean).slice(0, max) : [];
 }
@@ -138,11 +141,11 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   const estimateConfidence = String(rawEstimate?.confidence);
   const estimateBasis = strings(rawEstimate?.basis, 4).filter(visible);
   const estimateLabel = typeof rawEstimate?.label === 'string' ? decodeCoachText(rawEstimate.label).trim().slice(0, 160) : '';
-  const locationEstimate = !actualCountry && ['analyze', 'analyze360', 'clue'].includes(mode) && ['region', 'city', 'exact'].includes(estimateLevel) && ['medium', 'high'].includes(estimateConfidence) && estimateLabel && visible(estimateLabel) && estimateBasis.length >= 2 && (estimateLevel === 'region' || estimateConfidence === 'high')
+  const locationEstimate = !actualCountry && ['analyze', 'analyze360', 'clue'].includes(mode) && ['region', 'city', 'exact'].includes(estimateLevel) && ['medium', 'high'].includes(estimateConfidence) && estimateLabel && !countryNames.includes(estimateLabel.toLowerCase()) && visible(estimateLabel) && estimateBasis.length >= 2 && (estimateLevel === 'region' || estimateConfidence === 'high')
     ? { level: estimateLevel as 'region' | 'city' | 'exact', label: estimateLabel, confidence: estimateConfidence as 'medium' | 'high', basis: estimateBasis }
     : undefined;
   const safeFront = strings(core?.front, 6).filter(safe);
-  const extraCards = Array.isArray(item.extraCards) ? item.extraCards.flatMap((card) => {
+  const extraCards = mode === 'cards' && Array.isArray(item.extraCards) ? item.extraCards.flatMap((card) => {
     if (!card || typeof card !== 'object') return [];
     const entry = card as Record<string, unknown>;
     if (!allowedCardCategories.has(String(entry.category))) return [];
@@ -153,7 +156,7 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
     confidence, region: typeof item.region === 'string' ? decodeCoachText(item.region).slice(0, 120) : '', locationEstimate, description: typeof item.description === 'string' ? decodeCoachText(item.description).slice(0, 1200) : undefined, candidates,
     strongClues: strings(item.strongClues).filter(visible), weakClues: strings(item.weakClues).filter(visible), contradictions: strings(item.contradictions).filter(visible), confusions: strings(item.confusions),
     nextThingsToInspect: strings(item.nextThingsToInspect).filter(visible),
-    coreCard: core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? decodeCoachText(core.backExplanation).slice(0, 900) : '' } : undefined,
+    coreCard: mode === 'cards' && core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? decodeCoachText(core.backExplanation).slice(0, 900) : '' } : undefined,
     extraCards,
   };
   if (mode === 'hints') return { ...analysis, region: '', candidates: [], strongClues: [], weakClues: [], contradictions: [], confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };
@@ -169,7 +172,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
   const deadline = Date.now() + 30_000;
   let lastError = new Error('Gemini Coach is unavailable.');
   for (const model of models) {
-    for (let attempt = 0; attempt < Math.min(3, Math.max(1, carousel.size)); attempt++) {
+    for (let attempt = 0; attempt < Math.max(1, carousel.size); attempt++) {
       if (Date.now() >= deadline) throw new Error('Gemini request timed out.');
       const state = carousel.next();
       if (!state) throw new Error('All Gemini keys are cooling down.');

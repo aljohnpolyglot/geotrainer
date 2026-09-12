@@ -200,6 +200,7 @@ button.attempt-row:hover { background: var(--panel); }
 .coverage-map-wrap { position: relative; height: min(56vh, 540px); border: 1px solid var(--line); background: var(--panel); }
 .coverage-map-overlay { position: absolute; z-index: 2; top: 10px; left: 10px; display: flex; gap: 7px; align-items: center; padding: 7px 9px; color: #edf7f7; background: rgba(4, 34, 49, .92); border-radius: 5px; font-size: 11px; }
 .coverage-map-overlay select { padding: 4px; color: inherit; background: #082d40; border: 1px solid #5a7482; }
+.coverage-mastery-legend { position: absolute; z-index: 2; right: 10px; bottom: 10px; display: flex; align-items: center; gap: 7px; padding: 7px 9px; color: #edf7f7; background: rgba(4,34,49,.92); border-radius: 5px; font: 700 10px/1 ui-monospace,monospace; }.coverage-mastery-legend i { width: min(220px,30vw); height: 8px; background: linear-gradient(90deg,hsl(220 82% 38%),hsl(177 82% 44%),hsl(134 82% 50%),hsl(91 82% 56%),hsl(48 82% 62%)); border-radius: 2px; }
 .coverage-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 9px; color: var(--muted); font-size: 11px; }
 .coverage-legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--signal); }
 .coverage-legend .correct::before { background: var(--mint); }

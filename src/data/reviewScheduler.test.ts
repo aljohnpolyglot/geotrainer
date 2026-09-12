@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULT_SCHEDULER_PREFERENCES, isCountryMistake, reviewDayStart, reviewGradeForPerformance } from './trainerDb';
+import { DEFAULT_SCHEDULER_PREFERENCES, isCountryMistake, reconcileReviewAttempt, reviewDayStart, reviewGradeForPerformance, shouldScheduleReview } from './trainerDb';
 
 test('automatic grading scales from country-first beginner to 4800-point pro', () => {
   assert.equal(reviewGradeForPerformance(1600, 20, true, 60, 'beginner'), 'hard');
@@ -24,4 +24,21 @@ test('daily review boundary follows configured timezone and reset time', () => {
 test('interday due dates become available at the configured boundary', () => {
   const preferences = { ...DEFAULT_SCHEDULER_PREFERENCES, reviewTimeZone: 'UTC', reviewDayResetMinutes: 0 };
   assert.equal(new Date(reviewDayStart(Date.parse('2026-09-12T10:41:00.000Z'), preferences)).toISOString(), '2026-09-12T00:00:00.000Z');
+});
+
+test('practicing a card that is already due advances its persisted schedule', () => {
+  const now = Date.parse('2026-09-12T10:00:00.000Z');
+  const due = { id: 'pano', panoId: 'pano', dueAt: now - 1, intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 1 };
+  assert.equal(shouldScheduleReview('practice', due, now, DEFAULT_SCHEDULER_PREFERENCES), true);
+  assert.equal(shouldScheduleReview('practice', { ...due, dueAt: now + 60_000 }, now, DEFAULT_SCHEDULER_PREFERENCES), false);
+});
+
+test('a saved review attempt repairs a stale due record', () => {
+  const reviewedAt = Date.parse('2026-09-12T10:00:00.000Z');
+  const review = { id: 'pano', panoId: 'pano', dueAt: reviewedAt - 1, intervalDays: 1, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+  const attempt = { source: 'review', panoId: 'pano', createdAt: reviewedAt, reviewedAt, score: 4872, timeSpentSeconds: 20, countryCode: 'BZ', guessedCountryCode: 'BZ', intervalDays: 7, nextDueAt: reviewedAt + 7 * 864e5, grade: 'easy' };
+  const repaired = reconcileReviewAttempt(review, attempt as never, DEFAULT_SCHEDULER_PREFERENCES);
+  assert.equal(repaired.dueAt, attempt.nextDueAt);
+  assert.equal(repaired.reviewCount, 1);
+  assert.equal(repaired.lastReviewedAt, reviewedAt);
 });

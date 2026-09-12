@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[] };
+type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
@@ -16,7 +16,7 @@ class StreetViewService {
   getPanorama(_request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
     const result = results.shift()!;
-    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links }, result.status || 'OK'), result.delay || 0);
+    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright }, result.status || 'OK'), result.delay || 0);
   }
 }
 
@@ -94,6 +94,17 @@ test('movable games reject isolated panoramas', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
   const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, rural, { requireNavigation: true });
   assert.equal(found.panoId, 'connected');
+});
+
+test('official-only generation rejects contributor panoramas', async () => {
+  currentResults = [
+    { lat: 7.3, lng: 7, pano: 'contributor', countryCode: 'IT', copyright: '© Ada Example' },
+    { lat: 7.4, lng: 7, pano: 'official', countryCode: 'IT', copyright: '© 2026 Google' },
+  ];
+  results = [...currentResults];
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, { ...rural, allowContributors: false });
+  assert.equal(found.panoId, 'official');
 });
 
 test('an aborted lookup cannot return a stale panorama', async () => {

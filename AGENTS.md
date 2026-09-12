@@ -6,6 +6,8 @@
 - Prefer small changes that reuse existing components and services; do not redesign unrelated UI.
 - Keep Street View imagery transient. Never download or persist it unless the user explicitly asks.
 - Persist one current-view screenshot when the user explicitly saves a location or submits a Play answer; treat older records without screenshots as valid.
+- Compress explicitly uploaded or captured Notebook and AI Coach clue images, sync them to private per-user Supabase Storage, and render that exact hosted image in Available notes and My Clues. Preserve local-only fallback for signed-out or offline saves.
+- My Clues rows and details must show the hosted preview, note type, note text, and exact creation time when present; never substitute a general panorama screenshot for a submitted clue image.
 
 ## Commands
 
@@ -20,6 +22,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 ## Security
 
 - Gemini and Google API secrets stay server-side or in ignored environment files.
+- Shuffle the starting Gemini key and exhaust all available non-cooling keys on retryable Coach failures before surfacing an error.
 - Never place secrets in `src`, browser storage, IndexedDB, logs, reports, or committed examples.
 - The browser may call only the local coach endpoint; it must never call Gemini with a private key.
 
@@ -34,21 +37,28 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card and never invents a score.
 - Environment is a generator/filter dimension, not a duplicate collection system.
+- The contributor-panorama toggle filters only newly generated Custom Learn and Play locations; it does not alter Meta, Explore Map, saved locations, History, or Review.
 - Country and city datasets are local data files, not UI-component constants.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
+- Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
 - Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
 - Supply country-specific external reference facts only during post-reveal Coach explanations, and mention a fact only when its feature is visibly present in the submitted imagery.
 - In pasted-clue analysis, prioritize an obvious foreground subject selected by the user and treat the surrounding scene as supporting or contradictory context; state when the subject is unreadable instead of misidentifying it.
-- Persist the active Coach analysis and clue draft across reloads, scope both to the current panorama, and never carry them into another location.
+- AI Coach knows imagery is shown inside a GeoGuessr-style app and must ignore all app/browser chrome, controls, navigation arrows, attribution, cursors, and interface language as geographic evidence.
+- When a submitted clue centers on a sign, AI Coach must explain what its visible symbol, letter, number, color, or restriction means before discussing geographic likelihood.
+- When a readable brand or organization is central to a clue, explain what it is, its geographic origin or main operation, cross-border availability, and resulting evidence strength.
+- Persist clue-image and unsaved Notebook drafts across reloads, scoped to the current panorama. Completed Coach analyses belong in Available notes rather than the active Coach panel.
+- Preserve paused Learn and Play workspaces separately. When a saved workspace exists, entering that mode must offer Resume and Start new, with Back returning to the prior screen.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
+- Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.
 - Render every collection selector with the shared World, Continents, Trainer drills, regions, and custom-collections hierarchy.
 
 ## Implementation
 
 - Keep this guide current autonomously when a change creates a durable contributor rule, data invariant, supported locale, or required QA step. Do not record temporary task status or implementation trivia here.
-- Keep user-facing documentation thorough and current whenever behavior changes. Update the relevant concepts, workflows, settings, limitations, edge cases, troubleshooting, and FAQ material rather than adding only a release-note summary.
+- Keep user-facing documentation thorough and current whenever behavior changes, including new modes and learning aids such as Notebook, Meta, and Review hints. Update the relevant concepts, workflows, settings, limitations, edge cases, troubleshooting, and FAQ material rather than adding only a release-note summary.
 - Record every user-visible change in `CHANGELOG.md` under the local date of the work session (`YYYY-MM-DD`), not only under an undated Unreleased heading.
 - Supported UI/game/AI locales are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Do not add Tagalog, Bisaya, or Indonesian unless explicitly requested later.
 - Use TypeScript and existing project patterns; add no dependency when the platform or current stack is sufficient.
@@ -56,6 +66,11 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Put shared logic in the existing service/data layer and keep React components focused on UI.
 - Add one focused runnable test for non-trivial branches and failure handling.
 - For language changes, browser-check every supported locale for untranslated visible copy, overflow, reload persistence, and independent UI/game/AI selections.
+- For localized or AI-generated text changes, QA accented Latin and Cyrillic output in every supported locale; reject visible escape fragments or mojibake such as `00e0`, `\\u00e0`, or replacement characters.
 - For panels and modals, browser-check scroll containment at desktop and mobile sizes. Keep scrollbars thin and unobtrusive, never hide scrolling, and keep primary actions reachable without nested page scroll traps.
+- Keep AI Coach, Notebook, Meta, and saved-clue learning panels draggable by their headers and bounded inside the viewport.
+- Keep the AI Coach launcher visible while its draggable panel is open.
+- Keep the revealed location card draggable by its header, use a minimize affordance for hiding it, and expose the embedded result map's fullscreen control.
+- Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
 - Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.
 - For deployment handoffs, generate `.gz` copies of `dist` text assets with Node's built-in zlib after the build; add no compression dependency.

@@ -105,6 +105,9 @@ test('migration is idempotent and backup/import protects history', async () => {
   await trainerDb.saveClue({ id: 'clue-1', panoId: 'pano-new', countryCode: 'DE', lat: 52.5, lng: 13.4, createdAt: 500, imageDataUrl: 'data:image/jpeg;base64,AQID', model: 'test', analysis: { confidence: 'low', region: '', candidates: [], strongClues: ['Black reflector'], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] } });
   assert.equal((await trainerDb.clues())[0].countryCode, 'DE');
   assert.deepEqual([(await trainerDb.clues())[0].lat, (await trainerDb.clues())[0].lng], [52.5, 13.4]);
+  await trainerDb.setSetting('notebook.notes', [{ id: 'note-1', panoId: 'pano-new', countryCode: 'DE', text: '', clueId: 'clue-1', updatedAt: 500 }]);
+  const note = (await trainerDb.setting<Array<{ clueId?: string }>>('notebook.notes'))![0];
+  assert.equal((await trainerDb.clues()).find((clue) => clue.id === note.clueId)?.imageDataUrl, 'data:image/jpeg;base64,AQID');
 
   const backup = await createBackup();
   const expected = Object.fromEntries(await Promise.all(['locations', 'attempts', 'games', 'studyVisits', 'reviews', 'bookmarks', 'collections', 'sessions'].map(async (name) => [name, backup.data[name as keyof typeof backup.data].length])));
@@ -126,7 +129,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.attempts()).length, beforeMalformed);
 });
 
-test('workspace settings preserve Coach analysis and clue drafts', async () => {
+test('workspace settings preserve Coach history and scoped drafts', async () => {
   const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
   await initTrainerDb();
   await clearTrainerDbForTesting();
@@ -134,9 +137,9 @@ test('workspace settings preserve Coach analysis and clue drafts', async () => {
   const coach = { panoId: 'pano-workspace', mode: 'analyze', model: 'test', generatedAt: 10, analysis };
   const clue = { panoId: 'pano-workspace', imageDataUrl: 'data:image/jpeg;base64,AQID', analysis, saved: true };
 
-  await Promise.all([trainerDb.setSetting('workspace.coachAnalysis', coach), trainerDb.setSetting('workspace.clueDraft', clue)]);
+  await Promise.all([trainerDb.setSetting('coach.notes', [coach]), trainerDb.setSetting('workspace.clueDraft', clue), trainerDb.setSetting('workspace.noteDraft', { panoId: 'pano-a', text: 'bollard', category: 'Bollards' })]);
 
-  assert.deepEqual(await trainerDb.setting('workspace.coachAnalysis'), coach);
+  assert.deepEqual(await trainerDb.setting('coach.notes'), [coach]);
   assert.deepEqual(await trainerDb.setting('workspace.clueDraft'), clue);
 });
 
@@ -183,7 +186,7 @@ test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: 17, environment: 'ocean' }, false), {
     roundCount: 5, collectionId: 'world', canMove: false, canPan: true, canZoom: true, showCompass: false, aiCoachEnabled: true,
-    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', timeLimitSeconds: 0,
+    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', allowContributors: true, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');

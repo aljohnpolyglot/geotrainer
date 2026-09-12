@@ -9,6 +9,7 @@ import type {
   ReviewFilters,
   ReviewGrade,
   ReviewRecord,
+  ReviewSessionKind,
   SettingRecord,
   SchedulerPreferences,
   StudyVisit,
@@ -16,7 +17,7 @@ import type {
   TrainingSession,
 } from '../types';
 import { COUNTRIES } from './countries';
-
+import { resolveClueImages } from '../services/clueImages';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [
@@ -45,6 +46,7 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     environment: source.environment === 'urban' || source.environment === 'suburban' || source.environment === 'rural' ? source.environment : 'mixed',
     urbanLevel: source.urbanLevel === 1 || source.urbanLevel === 2 ? source.urbanLevel : 3,
     samplingMode: source.samplingMode === 'balanced' ? 'balanced' : 'natural',
+    allowContributors: source.allowContributors !== false,
     timeLimitSeconds: [0, 30, 60, 90, 120].includes(Number(source.timeLimitSeconds)) ? Number(source.timeLimitSeconds) : 0,
   };
 };
@@ -56,7 +58,6 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
   try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
   return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'random' ? 'random' : 'due', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
 };
-
 const zonedParts = (value: number, timeZone: string) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
 const utcForZonedDateTime = (parts: Record<string, number>, timeZone: string) => {
   let candidate = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
@@ -81,14 +82,14 @@ export const nextReviewDayBoundary = (value = Date.now(), preferences: Scheduler
   const next = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + 1));
   return utcForZonedDateTime({ year: next.getUTCFullYear(), month: next.getUTCMonth() + 1, day: next.getUTCDate(), hour: parts.hour, minute: parts.minute }, preferences.reviewTimeZone || detectedTimeZone());
 };
-const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
+export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
+export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
 const intervalsFor = (oldInterval: number, preferences = DEFAULT_SCHEDULER_PREFERENCES): Record<ReviewGrade, number> => ({
   again: preferences.relearningMinutes / 1440,
   hard: Math.max(1, oldInterval * 1.5),
   good: Math.max(3, oldInterval * 2),
   easy: Math.max(7, oldInterval * 2.5),
 });
-
 export const reviewGradeForScore = (score: number): ReviewGrade =>
   score < 2000 ? 'again' : score < 3000 ? 'hard' : score < 4500 ? 'good' : 'easy';
 
@@ -102,7 +103,14 @@ export const reviewGradeForPerformance = (score: number, timeSpentSeconds: numbe
   if (score < easyAt || timeSpentSeconds > maximumAnswerSeconds / 2) return 'good';
   return 'easy';
 };
-
+export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, preferences: SchedulerPreferences): ReviewRecord {
+  const at = attempt.reviewedAt || attempt.createdAt;
+  if (attempt.source !== 'review' || (review.lastReviewedAt || 0) > at) return review;
+  const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness);
+  const intervalDays = attempt.intervalDays ?? Math.min(preferences.maximumIntervalDays, intervalsFor(review.intervalDays, preferences)[grade]);
+  if (review.lastReviewedAt === at) return attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
+  return { ...review, dueAt: attempt.nextDueAt ?? at + intervalDays * 864e5, intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
+}
 export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced') =>
   guessedCountryCode !== countryCode || score < passingScoreFor(strictness);
 
@@ -110,7 +118,6 @@ export const reviewGradeForCorrection = (score: number, countryCode: string, gue
   isCountryMistake(score, countryCode, guessedCountryCode, strictness) ? 'again' : 'hard';
 
 let database: Promise<IDBDatabase> | undefined;
-
 const request = <T>(value: IDBRequest<T>) =>
   new Promise<T>((resolve, reject) => {
     value.onsuccess = () => resolve(value.result);
@@ -267,9 +274,21 @@ async function migrateLocalStorageV1(): Promise<void> {
   await complete(tx);
 }
 
+async function reconcileSavedReviews() {
+  const [attempts, reviews, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), get<SettingRecord>('settings', 'schedulerPreferences')]);
+  const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
+  const latest = new Map<string, Attempt>();
+  attempts.filter((item) => item.source === 'review').forEach((item) => { if (!latest.get(item.panoId) || latest.get(item.panoId)!.createdAt < item.createdAt) latest.set(item.panoId, item); });
+  const repaired = reviews.map((review) => reconcileReviewAttempt(review, latest.get(review.panoId) || {} as Attempt, preferences));
+  if (!repaired.some((review, index) => review !== reviews[index])) return;
+  const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); repaired.forEach((review) => tx.objectStore('reviews').put(review));
+  await complete(tx); notifyChange();
+}
+
 export async function initTrainerDb(): Promise<void> {
   await openDatabase();
   await migrateLocalStorageV1();
+  await reconcileSavedReviews();
 }
 
 export const trainerDb = {
@@ -281,7 +300,7 @@ export const trainerDb = {
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),
   collections: () => all<Collection>('collections'),
   sessions: () => all<TrainingSession>('sessions'),
-  clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
+  clues: async () => resolveClueImages((await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt)),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   setSetting: (key: string, value: unknown) => put('settings', { key, value }),
@@ -328,6 +347,7 @@ export const trainerDb = {
   },
 
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {
+    await reconcileSavedReviews();
     const [attempts, reviews, bookmarks, storedPreferences] = await Promise.all([
       all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
     ]);

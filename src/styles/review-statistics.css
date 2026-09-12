@@ -37,6 +37,7 @@
 .review-next-action button { min-width: 150px; padding: 11px 18px; color: #fff; background: var(--blue); border: 0; border-radius: 4px; font-weight: 800; cursor: pointer; }
 .study-result-map { height: 170px; margin-bottom: 10px; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
 .study-result-map .result-map-canvas { min-height: 170px; }
+.location-card-drag-handle { cursor: grab; touch-action: none; }.location-card-drag-handle.dragging { cursor: grabbing; }
 .study-review-save { padding: 9px 0 10px; border-top: 1px solid var(--rule); }
 .study-review-save button { width: 100%; padding: 8px; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 3px; font-weight: 800; cursor: pointer; }
 .statistics-panel { display: grid; width: 100%; min-width: 0; gap: 18px; }

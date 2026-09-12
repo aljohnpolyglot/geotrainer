@@ -19,7 +19,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
   const markers = useRef<google.maps.Marker[]>([]);
   const preview = useRef<google.maps.InfoWindow>();
   const [selected, setSelected] = useState<TrainerLocation>();
-  const [overlay, setOverlay] = useState<"exposure" | "accuracy" | "score" | "weakness" | "due">("exposure");
+  const [overlay, setOverlay] = useState<"exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery">("exposure");
 
   useEffect(() => {
     if (!element.current || typeof google === "undefined") return;
@@ -32,7 +32,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
       const cell = zoom < 4 ? 20 : zoom < 6 ? 5 : 0;
       const groups = new Map<string, TrainerLocation[]>();
       locations.forEach((location) => {
-        const key = cell ? `${Math.round(location.lat / cell)},${Math.round(location.lng / cell)}` : location.id;
+        const key = overlay === "mastery" && zoom < 4 ? `country:${location.countryCode}` : cell ? `${Math.round(location.lat / cell)},${Math.round(location.lng / cell)}` : location.id;
         groups.set(key, [...(groups.get(key) || []), location]);
       });
       groups.forEach((group) => {
@@ -43,20 +43,22 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
         const accuracy = eligible.length ? eligible.filter((item) => item.guessedCountryCode === item.countryCode).length / eligible.length : null;
         const averageScore = locationAttempts.length ? locationAttempts.reduce((sum, item) => sum + item.score, 0) / locationAttempts.length : null;
         const due = reviews.some((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now());
-        const color = overlay === "due" ? (due ? "#ff6b5f" : "#586777") : overlay === "score" ? (averageScore === null ? "#586777" : averageScore >= 4000 ? "#68d5b0" : averageScore >= 2500 ? "#ffb000" : "#ff6b5f") : overlay === "accuracy" || overlay === "weakness" ? (accuracy === null ? "#586777" : accuracy >= .7 ? (overlay === "accuracy" ? "#68d5b0" : "#3d718d") : accuracy >= .4 ? "#ffb000" : (overlay === "accuracy" ? "#ff6b5f" : "#ef4c43")) : "#72b7d9";
+        const groupReviews = reviews.filter((item) => panoIds.has(item.panoId));
+        const mastery = groupReviews.length ? groupReviews.reduce((sum, item) => sum + Math.min(1, Math.log2(item.intervalDays + 1) / 10) * Math.min(1, item.reviewCount / 20) * (1 - Math.min(.65, item.lapseCount / Math.max(1, item.reviewCount))), 0) / groupReviews.length : 0;
+        const color = overlay === "mastery" ? (groupReviews.length ? `hsl(${220 - mastery * 172} 82% ${38 + mastery * 24}%)` : "#586777") : overlay === "due" ? (due ? "#ff6b5f" : "#586777") : overlay === "score" ? (averageScore === null ? "#586777" : averageScore >= 4000 ? "#68d5b0" : averageScore >= 2500 ? "#ffb000" : "#ff6b5f") : overlay === "accuracy" || overlay === "weakness" ? (accuracy === null ? "#586777" : accuracy >= .7 ? (overlay === "accuracy" ? "#68d5b0" : "#3d718d") : accuracy >= .4 ? "#ffb000" : (overlay === "accuracy" ? "#ff6b5f" : "#ef4c43")) : "#72b7d9";
         const position = { lat: group.reduce((sum, item) => sum + item.lat, 0) / group.length, lng: group.reduce((sum, item) => sum + item.lng, 0) / group.length };
         const marker = new google.maps.Marker({
           map: map.current,
           position,
           label: group.length > 1 ? String(group.length) : undefined,
           title: [...new Set(group.map((item) => countryName(item.countryCode)))].slice(0, 5).join(", "),
-          icon: group.length > 1 ? undefined : { path: google.maps.SymbolPath.CIRCLE, scale: 6, fillColor: color, fillOpacity: 1, strokeColor: "#081018", strokeWeight: 2 },
+          icon: { path: google.maps.SymbolPath.CIRCLE, scale: Math.min(18, 6 + Math.sqrt(group.length) * 2), fillColor: color, fillOpacity: .92, strokeColor: "#081018", strokeWeight: 2 },
         });
         marker.addListener("mouseover", () => {
           const countries = [...new Set(group.map((item) => countryName(item.countryCode)))];
           const content = document.createElement("div");
           content.className = "map-cluster-preview";
-          const metric = overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString()} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
+          const metric = overlay === "mastery" ? `${t("Mastery")}: ${groupReviews.length ? Math.round(mastery * 100) + "%" : "—"}` : overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString()} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
           const text = document.createElement("span"); text.textContent = `${group.length} ${group.length === 1 ? t("panorama") : t("panoramas")} · ${metric} · ${countries.slice(0, 4).join(", ")}${countries.length > 4 ? ` +${countries.length - 4}` : ""}`;
           if (location.imageDataUrl) { const image = document.createElement("img"); image.src = location.imageDataUrl; image.alt = ""; content.append(image); }
           content.append(text);
@@ -87,7 +89,8 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
   const selectedReview = selected ? reviews.find((item) => item.panoId === selected.id) : undefined;
   return (
     <div className="coverage-map-wrap">
-      <label className="coverage-map-overlay">{t("mapLayer")}<select value={overlay} onChange={(event) => setOverlay(event.target.value as typeof overlay)}><option value="exposure">{t("exposure")}</option><option value="accuracy">{t("accuracy")}</option><option value="score">{t("averageScoreMap")}</option><option value="weakness">{t("weakness")}</option><option value="due">{t("reviewsDueMap")}</option></select></label>
+      <label className="coverage-map-overlay">{t("mapLayer")}<select value={overlay} onChange={(event) => setOverlay(event.target.value as typeof overlay)}><option value="exposure">{t("exposure")}</option><option value="mastery">{t("Mastery")}</option><option value="accuracy">{t("accuracy")}</option><option value="score">{t("averageScoreMap")}</option><option value="weakness">{t("weakness")}</option><option value="due">{t("reviewsDueMap")}</option></select></label>
+      {overlay === "mastery" && <div className="coverage-mastery-legend" aria-label={`${t("Mastery")} 0–100%`}><span>0%</span><i /><span>100%</span></div>}
       <div ref={element} className="coverage-map" aria-label={t("mapAria")} />
       {selected && <aside className="map-inspector">
         <button className="icon-button inspector-close" onClick={() => setSelected(undefined)} aria-label={t("closeLocation")}><X size={16} /></button>

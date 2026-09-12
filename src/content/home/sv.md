@@ -38,7 +38,7 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 ## Repetition och schemaläggning
 
-Svaret döljs tills du gissar. Avstånd och poäng beräknar nästa intervall automatiskt; anpassad extraträning ändrar inte förfallodatum.
+Svaret döljs tills du gissar. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 ## AI-coach och ledtrådar
 
@@ -90,3 +90,17 @@ Kombinera vägmarkeringar, körsida, skriftsystem, stolpar, terräng, arkitektur
 - [GeoHints](https://geohints.com/) — visuell katalog över kantstolpar, linjer, registreringsskyltar, vägmärken, stolpar, kameror och andra ledtrådar.
 - [GeoMetas](https://geometas.com/) — kostnadsfria metaguider efter land, region och kategori, med dynamiska quiz.
 - [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-lärkartor, dokumentation och resurser för att skapa kartor.
+
+## Lär, Meta och Anteckningsbok
+
+Lär har tre vägar. **Anpassad** behåller samlingar och miljöer. **Meta** öppnar guidade lektioner vid sparad panorama och riktning. **Utforska karta** visar Street View-täckning. I Meta och kartan öppnar Avslöja det vanliga platskortet, där Spara för repetition schemalägger senare kartträning. Kartan använder Tillbaka till världskartan i stället för Nästa. Anpassat lärande och Spel kan inkludera bidragsgivares panoraman eller begränsa nya sökningar till officiella Google-bilder.
+
+Glödlampan uppe till höger öppnar och stänger förklaringen. Förstarådet kan stängas en gång eller döljas permanent utan att lektioner tas bort. Ett Meta visas i **Mina ledtrådar** först när platsen uttryckligen sparas för repetition. Under repetition visas bara referensbilden före svaret; hela texten visas efteråt.
+
+**Anteckningsboken** sparar valfritt antal personliga noteringar per panorama. Kategori och text är valfria; en tom post kan också spara platsen för repetition. Den tar även emot bilder som analyserats med Coach. Personliga, AI- och Meta-poster öppnas i detalj med Street View och en överlagrad bild när sådan finns. **Tillgängliga anteckningar** visar en räknare och hela den rullningsbara historiken; nya Coach-analyser hamnar där direkt och öppnas inte som aktivt Coach-resultat efter omladdning. Mina ledtrådar filtrerar **Personliga**, **AI-assisterade** och **Meta-lektioner**; avslöjande text förblir dold före svaret.
+
+Ett svagt repetitionsresultat flyttas automatiskt till slutet av den aktuella sessionen tills du klarar det. Varje försök sparas separat.
+
+Meta-studier innehåller 359 lokalt lagrade lektioner, normaliserade från den parade OpenGuessr-insamlingen och ytterligare GeoMetas-exempel med användbara Street View-koordinater. Meta-förklaringar följer gränssnittsspråket på alla åtta språk som stöds. När du använder AI Coach eller sparar en post i Anteckningsboken skapas eller återanvänds repetitionskortet automatiskt; annars finns Spara för repetition kvar på det avslöjade platskortet. **Tillgängliga anteckningar** innehåller endast personlig och AI-assisterad historik med fullständig analys, exakt tid och den inskickade skärmbilden när den finns; Meta ligger kvar under sin egen glödlampa. Slutlig personlig och AI-text behåller språket den skapades på. Repetition av ett redan förfallet kort flyttar schemat framåt även från anpassad träning och sparas efter omladdning.
+
+En oavslutad Studie- eller Spelsession sparas. När du återvänder kan du välja **Återuppta**, **Starta nytt** eller **Tillbaka**. Täckningen har ett kontinuerligt värmelager för **Behärskning**: många lyckade repetitioner och långa intervall gör länder och platser gradvis ljusare, medan missar sänker intensiteten. Bildberoende Meta-ledtrådar visar en varning eftersom Street View-uppdateringar kan göra dem inaktuella.

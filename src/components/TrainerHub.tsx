@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { COUNTRIES } from "../data/countries";
 import { reviewDayStart, trainerDb } from "../data/trainerDb";
-import type { Attempt, ClueRecord, Collection, GameRecord, ReviewFilters, ReviewRecord, ReviewSessionKind, SchedulerPreferences, StudyVisit, TrainerLocation } from "../types";
+import { savedMetaLessonIds } from "../data/metaLessons";
+import type { Attempt, ClueRecord, Collection, GameRecord, LearnedMeta, NotebookNote, ReviewFilters, ReviewRecord, ReviewSessionKind, SchedulerPreferences, StudyVisit, TrainerLocation } from "../types";
 import { StatisticsPanel } from "./StatisticsPanel";
 import { CoveragePanel } from "./TrainerHubCoveragePanel";
 import { HistoryPanel } from "./TrainerHubHistory";
@@ -27,6 +28,8 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   const [scheduler, setScheduler] = useState<SchedulerPreferences>();
   const [sessions, setSessions] = useState<Array<{ activeTimeSeconds: number; startedAt: number }>>([]);
   const [clues, setClues] = useState<ClueRecord[]>([]);
+  const [learnedMetas, setLearnedMetas] = useState<LearnedMeta[]>([]);
+  const [notebookNotes, setNotebookNotes] = useState<NotebookNote[]>([]);
   const [clueCountry, setClueCountry] = useState("");
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<ReviewFilters>({ due: true });
@@ -66,8 +69,11 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   }, []);
   const load = async () => {
     setLoading(true);
-    const [nextLocations, nextAttempts, nextGames, nextVisits, nextReviews, nextSessions, nextClues, nextScheduler] = await Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.games(), trainerDb.studyVisits(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.clues(), trainerDb.schedulerPreferences()]);
-    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setSessions(nextSessions); setClues(nextClues); setScheduler(nextScheduler); setLoading(false);
+    const [nextLocations, nextAttempts, nextGames, nextVisits, nextReviews, nextSessions, nextClues, nextScheduler, nextMetas, nextNotes, savedOnlyMigrated] = await Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.games(), trainerDb.studyVisits(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.clues(), trainerDb.schedulerPreferences(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated')]);
+    const savedMetaIds = savedMetaLessonIds(nextAttempts);
+    const visibleMetas = savedOnlyMigrated ? nextMetas || [] : (nextMetas || []).filter((meta) => savedMetaIds.has(meta.id));
+    if (!savedOnlyMigrated) void Promise.all([trainerDb.setSetting('meta.learned', visibleMetas), trainerDb.setSetting('meta.savedOnlyMigrated', true)]);
+    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setSessions(nextSessions); setClues(nextClues); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setLoading(false);
   };
   useEffect(() => { void load(); }, [refreshKey]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);
@@ -111,7 +117,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
       {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={attempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {tab === "statistics" && <StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} />} historyPanel={historyPanel} />}
       {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} reviewCount={reviews.length} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
-      {tab === "clues" && <TrainerHubClues clues={clues} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onTrainCountries={onTrainCountries} />}
+      {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onTrainCountries={onTrainCountries} />}
       {tab === "coverage" && <CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} />}
       {tab === "history" && historyPanel}
     </div>}

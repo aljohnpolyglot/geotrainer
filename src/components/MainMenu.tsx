@@ -41,9 +41,9 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
         <div className="menu-orbit" aria-hidden="true"><i /><i /><i /></div>
         <div className="menu-intro">
           <h1>{t('Build a world')}<br />{t('you can recognize.')}</h1>
-          <p>{t('Study unfamiliar roads, test your recall, then return to the places that fooled you.')}</p>
+          <p>{t('Learn unfamiliar roads, test your recall, then return to the places that fooled you.')}</p>
         </div>
-        <button className="menu-primary" onClick={onStudy}><span><BookOpen size={18} /><strong>{t('Continue Study')}</strong><small>{t('Open a fresh panorama')}</small></span><ArrowRight size={20} /></button>
+        <button className="menu-primary" onClick={onStudy}><span><BookOpen size={18} /><strong>{t('Continue learning')}</strong><small>{t('Open a fresh panorama')}</small></span><ArrowRight size={20} /></button>
       </div>
 
       <div className="departure-board">

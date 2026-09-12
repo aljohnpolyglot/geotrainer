@@ -1,7 +1,39 @@
 # Changelog
 
+## 2026-09-12
+
+- Renamed the visible Study destination to Learn and added Custom, Meta, and world-map Street View entry paths while preserving existing Study data compatibility.
+- Added 359 normalized Meta lessons from paired OpenGuessr and usable GeoMetas records, with a persistent top-right lightbulb, recorded panorama headings, eight-language explanations, and explicit Review saving.
+- Added a panorama-scoped Notebook beside AI Coach for multiple independent personal hints and optional pasted, uploaded, or captured clue analysis; category and text may be empty, saves reuse Review, and the image workspace opens immediately without a redundant Known Clues row.
+- Added spoiler-safe Meta and saved-clue toggles during Review: visual hints are available before guessing, while answer-bearing text appears only after submission.
+- Added Personal, AI-assisted, and Meta-lesson filters to My Clues; personal Notebook text and explicitly saved Meta lessons now appear in the library.
+- Moved low-scoring Review cards to the end of the active session until passed, keeping every retry as a separate attempt.
+- Repaired malformed escaped accents in Coach output, added accented-Latin and Cyrillic regression coverage across all eight supported languages, and updated the localized guide for Learn, Meta, Notebook, hints, and relearning.
+- Added an optional contributor-panorama filter to Custom Learn and Play generation while leaving older preferences and saved games compatible.
+- Improved pasted-clue teaching prompts to identify the selected plant or road object as specifically as the image supports, explain its geographic range, and state when fine details are unreadable.
+- Made clue analysis explain the meaning of visible sign symbols, letters, numbers, colors, and restrictions before discussing country likelihood.
+- Made readable brand clues explain the company or organization, its origin or main market, cross-border availability, and why that changes clue reliability.
+- Randomized Gemini key selection and retry every available key before Coach reports quota or service failure.
+- Hosted and optimized all 359 Meta reference images locally, showing lesson text after the image is ready and retaining a translated failure state.
+- Simplified Meta and Explore Map to the existing Reveal → location card → Save for Review flow; Explore Map returns through a dedicated Back to world map action.
+- Made personal and Meta library rows open detailed Street View views with compact saved/reference-image overlays; Meta lessons enter My Clues only after explicit Review saving.
+- Added a counted, scrollable Available notes history per panorama in Learn and Review; Coach analyses append immediately and no longer reopen as active results after reload.
+- Made Notebook, Meta, and saved-clue panels draggable with the same viewport bounds as AI Coach.
+- Kept the AI Coach launcher visible while its panel is open or has been dragged.
+- Fixed dark-theme contrast in the Learn chooser, Meta advice, and Notebook editor, added a pointer from the first-use advice to the Meta lightbulb, and moved Notebook image capture above personal notes.
+- Compressed explicitly uploaded and captured clue images, privately hosted them per account, and reused the exact hosted preview across Available notes and My Clues without embedding duplicate image bytes in cloud backups.
+- Fixed due Review cards opened through custom practice so completing them advances and persists their schedule; future cards remain unchanged.
+- Added startup reconciliation from saved Review attempts so an already-completed card cannot remain falsely due after reload.
+- Added a continuous country/location mastery heat layer whose brightest colors require long intervals, many successful repetitions, and few lapses.
+- Refined multi-clue dialogs with contained previews, clearer source and timestamp hierarchy, readable candidates, and aligned actions.
+- Prevented AI Coach from treating GeoGuessr, GeoTrainer, browser, map-control, attribution, or screenshot-tool interface elements as geographic evidence.
+- Moved the Google Maps action into the revealed location-card header, replaced Hide's eye with a minimize affordance, made the card draggable, and added fullscreen to its embedded map.
+- Added Resume or Start new prompts for paused Learn and Play sessions, with Back preserving the previous screen.
+- Saved and hosted plain Notebook screenshots even without AI analysis, linking each preview directly to its personal note.
+
 ## 2026-09-11
 
+- Fixed AI Coach output that could repeat a country as a specific location estimate or append unsolicited quiz-card blocks to a normal analysis.
 - Clue details now use one unambiguous close action and open in a compact, centered overlay instead of exposing a redundant country-list modal. The library’s country filter shows clue counts, sorts countries by count, and has a dedicated clear button.
 - Pasted-clue analysis now prioritizes an obvious foreground subject while still considering surrounding context, and avoids guessing the object type when the crop is unreadable.
 - After a location is revealed, AI Coach now switches from guessing to an honest explanation, clears stale candidate rankings, and states when the imagery was insufficient; strong location estimates appear only before reveal and without metadata. Explain can consult bounded GeoMetas facts for the revealed country but may mention only features visible in the image. Added Learnable Meta to the learning resources.

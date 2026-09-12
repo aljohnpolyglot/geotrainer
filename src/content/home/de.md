@@ -182,7 +182,7 @@ Zusätzliche Übung kann nach schwachen Ländern, letzten Fehlern, ungesehenen O
 
 ### Planungsregel
 
-Benutzerdefinierte Übung verlängert, erneuert oder verschiebt niemals Wiederholungsintervalle. Der normale Fälligkeitsplan bleibt maßgeblich.
+Benutzerdefinierte Übung lässt zukünftige Karten unverändert. Wird eine bereits fällige Karte abgeschlossen, rückt ihr Zeitplan weiter und bleibt nach dem Neuladen nicht fällig.
 
 ### Fehlerkorrektur
 
@@ -374,7 +374,7 @@ Nein. Die Planung folgt dem geografischen Ergebnis.
 
 ### Verschiebt zusätzliche Übung eine fällige Karte?
 
-Nein. Benutzerdefinierte Übung verändert den Zeitplan nicht.
+Nein. Zukünftige Karten bleiben unverändert; eine bereits fällige Karte wird nach dem Abschluss normal weitergeplant.
 
 ### Warum erscheint dasselbe Land erneut?
 
@@ -417,3 +417,17 @@ Lerne, warum ein Hinweis regional variiert, wo er unzuverlässig wird und womit 
 - [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-Lernkarten sowie Dokumentation und Ressourcen zur Kartenerstellung.
 
 Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechne mit veralteten Bildern, regionalen Ausnahmen und Änderungen in Street View.
+
+## Lernen, Meta und Notizbuch
+
+Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Benutzerdefiniertes Lernen und Spiel können Panoramen von Mitwirkenden einschließen oder neue Suchen auf offizielle Google-Bilder beschränken.
+
+Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist vor der Antwort nur das Referenzbild sichtbar; der vollständige Text folgt danach.
+
+Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständig scrollbaren Verlauf; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen**; verräterischer Text bleibt vor der Antwort verborgen.
+
+Ein schwaches Wiederholungsergebnis kehrt automatisch ans Ende der aktuellen Sitzung zurück, bis es bestanden wird. Jeder Versuch bleibt ein eigener Eintrag.
+
+Meta-Lernen enthält 359 lokal gehostete Lektionen, normalisiert aus der gekoppelten OpenGuessr-Aufzeichnung und zusätzlichen GeoMetas-Beispielen mit nutzbaren Street-View-Koordinaten. Meta-Erklärungen folgen der Oberflächensprache in allen acht unterstützten Sprachen. Die Nutzung von KI-Coach oder das Speichern eines Notizbuch-Eintrags erstellt oder verwendet automatisch die Wiederholungskarte; andernfalls bleibt Für Wiederholung speichern auf der aufgedeckten Ortskarte sichtbar. **Verfügbare Notizen** enthält nur persönliche und KI-unterstützte Verläufe mit vollständiger Analyse, genauer Uhrzeit und dem eingereichten Bild, falls vorhanden; Meta bleibt unter der eigenen Glühbirne. Fertige persönliche und KI-Texte behalten ihre Erstellungssprache. Das Wiederholen einer bereits fälligen Karte verschiebt ihren Plan auch aus einer benutzerdefinierten Übung heraus und bleibt nach dem Neuladen gespeichert.
+
+Eine unfertige Lern- oder Spielsitzung bleibt erhalten. Beim nächsten Öffnen stehen **Fortsetzen**, **Neu starten** und **Zurück** zur Wahl. Die Kartenabdeckung enthält eine kontinuierliche **Beherrschung**-Heatmap; viele erfolgreiche Wiederholungen und lange Intervalle hellen Länder und einzelne Orte langsam auf, während Fehler die Intensität senken. Bildabhängige Meta-Hinweise tragen eine Warnung, weil Street-View-Aktualisierungen sie veralten lassen können.

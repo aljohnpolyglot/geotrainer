@@ -9,24 +9,20 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
 import { CoachLocationEstimate } from './CoachLocationEstimate';
+import { compressClueImage } from '../services/clueImages';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
-type ClueDraft = { panoId: string; imageDataUrl: string; analysis?: CoachAnalysis; saved: boolean };
+type ClueDraft = { panoId: string; imageDataUrl: string; clueId?: string; analysis?: CoachAnalysis; saved: boolean };
 
 async function prepareImage(file: File) {
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10_000_000) throw new Error('Paste a JPEG, PNG, or WebP image under 10 MB.');
   const source = URL.createObjectURL(file);
   try {
-    const image = new Image(); image.src = source;
-    await image.decode();
-    const scale = Math.min(1, 1280 / image.width);
-    const canvas = document.createElement('canvas'); canvas.width = Math.round(image.width * scale); canvas.height = Math.round(image.height * scale);
-    canvas.getContext('2d')!.drawImage(image, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', .86);
+    return await compressClueImage(source);
   } finally { URL.revokeObjectURL(source); }
 }
 
-export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze, spoilerFree }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<void> | void; onAnalyze?: () => void; spoilerFree?: boolean }) {
+export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, spoilerFree, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; spoilerFree?: boolean; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [image, setImage] = useState('');
@@ -39,9 +35,9 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     let active = true;
-    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false);
+    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false); onSaved?.(undefined);
     void trainerDb.setting<ClueDraft>('workspace.clueDraft').then((draft) => {
-      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.saved && draft.analysis) onAnalyze?.(); }
+      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
     });
     return () => { active = false; };
   }, [panoId]);
@@ -58,7 +54,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
 
   const choose = async (file?: File) => {
     if (!file || disabled || busy) return;
-    try { const prepared = await prepareImage(file); setImage(prepared); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
+    try { const prepared = await prepareImage(file); setImage(prepared); onImageChange?.(prepared); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
     catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
   const analyze = async () => {
@@ -74,8 +70,9 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
       const completedAt = value.generatedAt || Date.now();
       const completedModel = value.model || 'Gemini';
       setAnalysis(value.analysis); onAnalyze?.();
-      await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
-      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, analysis: value.analysis, saved: true } satisfies ClueDraft);
+      const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
+      if (clueId) onSaved?.(clueId);
+      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: value.analysis, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -86,10 +83,10 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
     const value = await response.json() as { imageDataUrl?: string; error?: string };
     if (!response.ok || !value.imageDataUrl) throw new Error(value.error || t('captureFailed'));
     if (!isCurrent()) return;
-    setImage(value.imageDataUrl); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: value.imageDataUrl, saved: false } satisfies ClueDraft);
+    setImage(value.imageDataUrl); onImageChange?.(value.imageDataUrl); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: value.imageDataUrl, saved: false } satisfies ClueDraft);
   });
-  return <details className="clue-capture">
-<summary><Clipboard size={14} /> {t('knownClues')}</summary>
+  return <details className={`clue-capture${expanded ? ' expanded' : ''}`} open={expanded || undefined}>
+    <summary className={expanded ? 'clue-capture-summary-hidden' : undefined}><Clipboard size={14} /> {t('knownClues')}</summary>
     <div className="clue-drop" tabIndex={0} onPaste={(event) => void choose(event.clipboardData.files[0])}>
       {image ? <img src={image} alt={t('clueToAnalyze')} /> : <p>{t('clueDropHint')}</p>}
     </div>
@@ -99,7 +96,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onAnalyze,
 <button disabled={disabled || busy || !image} onClick={() => void analyze()}>{t('Analyze clue')}</button>
     </div>
     {status && <p className="coach-status" role="status">{status}</p>}
-    {analysis && <div className="clue-analysis">
+    {analysis && (!saved || !collapseSavedAnalysis) && <div className="clue-analysis">
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
       {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}

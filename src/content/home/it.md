@@ -38,7 +38,7 @@ Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 
 
 ## Ripasso e programmazione
 
-La soluzione resta nascosta fino alla stima. Distanza e punteggio calcolano automaticamente l’intervallo successivo; la pratica personalizzata non cambia le scadenze.
+La soluzione resta nascosta fino alla stima. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
 ## Coach IA e indizi
 
@@ -77,7 +77,7 @@ L’account è facoltativo e l’allenamento locale funziona senza accesso. Se c
 1. Serve un account? — No, solo per sincronizzare.
 2. Studio cambia il punteggio? — No.
 3. Posso valutare manualmente? — No, decide il risultato geografico.
-4. La pratica extra rinvia le schede? — No.
+4. La pratica extra rinvia le schede? — No; quelle future non cambiano e quelle già in scadenza avanzano una volta completate.
 5. Copertura mostra ogni luogo? — No, solo quelli visitati.
 
 ## Risorse di apprendimento
@@ -90,3 +90,17 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 - [GeoHints](https://geohints.com/) — catalogo visivo di delineatori, linee, targhe, segnali, pali, fotocamere e altri indizi.
 - [GeoMetas](https://geometas.com/) — lezioni gratuite sui meta per paese, regione e categoria, con quiz dinamici.
 - [Learnable Meta](https://learnablemeta.com/) — mappe didattiche per GeoGuessr, documentazione e risorse per creare mappe.
+
+## Impara, Meta e Taccuino
+
+Impara offre tre percorsi. **Personalizzato** mantiene raccolte e ambienti. **Meta** apre lezioni guidate nel panorama e nell’orientamento registrati. **Esplora mappa** mostra la copertura Street View. In Meta e nella mappa, Rivela apre la normale scheda del luogo, dove Salva per il ripasso programma la futura prova di localizzazione. La mappa usa Torna alla mappa mondiale al posto di Avanti. Impara personalizzato e Gioco possono includere panorami dei collaboratori o limitare le nuove ricerche alle immagini ufficiali Google.
+
+La lampadina in alto a destra apre o chiude la spiegazione. Il consiglio iniziale può essere chiuso una volta o nascosto per sempre senza rimuovere lezioni. Un Meta appare in **I miei indizi** solo dopo averne salvato esplicitamente il luogo per il ripasso. Nel ripasso, prima della risposta compare solo l’immagine; il testo completo appare dopo.
+
+Il **Taccuino** salva un numero qualsiasi di note personali per panorama. Categoria e testo sono facoltativi; anche una voce vuota può salvare il luogo per il ripasso. Accetta inoltre immagini analizzate con Coach. Le voci personali, IA e Meta aprono una vista dettagliata con Street View e un’immagine sovrapposta quando disponibile. **Note disponibili** mostra un contatore e l’intera cronologia scorrevole; le nuove analisi del Coach entrano subito lì e non si riaprono come risultato attivo dopo il ricaricamento. I miei indizi filtra **Personali**, **Con assistenza IA** e **Lezioni Meta**; il testo rivelatore resta nascosto prima della risposta.
+
+Un risultato basso torna automaticamente in fondo alla sessione di ripasso finché non viene superato. Ogni tentativo rimane separato.
+
+Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla cattura abbinata di OpenGuessr e da ulteriori esempi GeoMetas con coordinate Street View utilizzabili. Le spiegazioni Meta seguono la lingua dell’interfaccia nelle otto lingue supportate. Usare Coach IA o salvare una voce del Taccuino crea o riutilizza automaticamente la scheda di Ripasso; altrimenti la scheda del luogo rivelato mantiene Salva per il ripasso. **Note disponibili** contiene solo la cronologia personale e assistita dall’IA, con analisi completa, ora esatta e schermata inviata quando presente; Meta resta sotto la propria lampadina. Il testo personale e IA finalizzato conserva la lingua di creazione. Ripassare una scheda già in scadenza ne avanza la pianificazione anche dalla pratica personalizzata e persiste dopo il ricaricamento.
+
+Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi scegliere **Riprendi**, **Inizia da capo** o **Indietro**. La copertura include una mappa di calore continua della **Padronanza**: molti ripassi riusciti e intervalli lunghi illuminano gradualmente paesi e luoghi, mentre gli errori riducono l’intensità. Gli indizi Meta dipendenti dalle immagini mostrano un avviso perché gli aggiornamenti di Street View possono renderli obsoleti.

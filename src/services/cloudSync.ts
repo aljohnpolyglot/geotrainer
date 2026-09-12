@@ -4,12 +4,15 @@ import {
   importBackup,
   initTrainerDb,
   onTrainerDbChange,
+  trainerDb,
   STORE_NAMES,
   validateBackup,
   type StoreName,
   type TrainerBackup,
 } from '../data/trainerDb';
 import { supabase } from './supabase';
+import { uploadClueImage } from './clueImages';
+import type { ClueRecord } from '../types';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
 
@@ -79,6 +82,8 @@ const update = (next: Partial<CloudSyncState>) => {
 export const shouldSyncAuthEvent = (event: AuthChangeEvent, previousUserId?: string, nextUserId?: string) =>
   event === 'SIGNED_OUT' ? !!previousUserId : event === 'SIGNED_IN' && !!nextUserId && nextUserId !== previousUserId;
 
+export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((clue) => clue.imagePath ? { ...clue, imageDataUrl: '' } : clue);
+
 async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
   if (uploadPromise) {
@@ -87,7 +92,13 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
   }
   if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
   uploadPromise = (async () => {
-    const backup = await createBackup(false);
+    let backup = await createBackup(false);
+    for (const clue of backup.data.clues as ClueRecord[]) {
+      const hosted = await uploadClueImage(userId, clue);
+      if (hosted !== clue) await trainerDb.saveClue(hosted);
+    }
+    backup = await createBackup(false);
+    backup.data.clues = withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]);
     const syncedAt = new Date().toISOString();
     const { error } = await supabase.from('user_backups').upsert({
       user_id: userId,

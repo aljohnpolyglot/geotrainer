@@ -4,11 +4,12 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type Point = { lat: number; lng: number };
 
-export function ResultMap({ actual, guess, previousGuess, className = '' }: {
+export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false }: {
   actual: Point;
   guess: Point | null;
   previousGuess?: Point | null;
   className?: string;
+  fullscreenControl?: boolean;
 }) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -17,7 +18,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '' }: {
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
     const map = new google.maps.Map(element.current, {
-      mapTypeControl: false, streetViewControl: false, fullscreenControl: false, zoomControl: true,
+      mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
       styles: [{ featureType: 'poi', stylers: [{ visibility: 'off' }] }, { featureType: 'transit', stylers: [{ visibility: 'off' }] }],
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
@@ -47,7 +48,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '' }: {
       lines.forEach((line) => line.setMap(null));
       google.maps.event.clearInstanceListeners(map);
     };
-  }, [actual.lat, actual.lng, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

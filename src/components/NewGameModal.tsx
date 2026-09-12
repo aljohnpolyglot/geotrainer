@@ -58,6 +58,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [environment, setEnvironment] = useState<Environment>('mixed');
   const [urbanLevel, setUrbanLevel] = useState<UrbanLevel>(3);
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
+  const [allowContributors, setAllowContributors] = useState(true);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -68,7 +69,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setTimeLimitSeconds(value.timeLimitSeconds);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setAllowContributors(value.allowContributors !== false); setTimeLimitSeconds(value.timeLimitSeconds);
     });
     return () => { active = false; };
   }, [isOpen, defaultShowCompass, collections]);
@@ -105,6 +106,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       environment,
       urbanLevel,
       samplingMode,
+      allowContributors,
       timeLimitSeconds,
     };
     void trainerDb.setSetting('gamePreferences', settings);
@@ -301,7 +303,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           </div>
 
           {/* 4. Timer Option */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <button
               type="button"
               role="switch"
@@ -319,6 +321,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               className={`game-compass-setting ${aiCoachEnabled ? 'enabled' : ''}`}
             >
               <span className="inline-flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" />{t('AI Coach')}</span><strong>{aiCoachEnabled ? t('Enabled') : t('Disabled')}</strong>
+            </button>
+            <button type="button" role="switch" aria-checked={allowContributors} onClick={() => setAllowContributors((value) => !value)} className={`game-compass-setting ${allowContributors ? 'enabled' : ''}`}>
+              <span>{t('Contributor panoramas')}</span><strong>{t(allowContributors ? 'Included' : 'Official only')}</strong>
             </button>
           </div>
 

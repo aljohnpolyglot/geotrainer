@@ -210,7 +210,7 @@ Custom practice is extra training built from filters such as weak countries, rec
 
 ### Scheduling rule
 
-Custom practice never advances, renews, or postpones spaced-review intervals. It is safe for warmups, focused drills, and extra preparation because the due schedule remains authoritative.
+Custom practice leaves future cards unchanged. If a card is already due, completing it advances the schedule so it does not remain due after reload.
 
 ### Mistake correction
 
@@ -430,7 +430,7 @@ No. GeoTrainer schedules from the geographic result so the grade remains consist
 
 ### Does custom practice postpone a due card?
 
-No. Extra practice does not change the spaced-review schedule.
+No. Future cards stay unchanged; completing an already-due card advances its schedule normally.
 
 ### Why did the same country appear twice?
 
@@ -477,3 +477,17 @@ Learn why a clue varies by region, where it stops being reliable, and what it is
 - [Learnable Meta](https://learnablemeta.com/) — GeoGuessr learning maps plus documentation and map-making resources.
 
 External guides are community references. Check several clues together and allow for outdated imagery, regional exceptions, and Street View changes.
+
+## Learn, Meta, and Notebook
+
+Learn has three paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Custom Learn and Play can include contributor panoramas or restrict new generation to official Google imagery.
+
+In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Hint shows only the reference image before the guess; the full explanation appears afterward.
+
+The top-right **Notebook** stores any number of personal notes for the current panorama. Choose an optional clue category, add optional text, or save with both empty simply to remember the place. You can also paste or upload a reference image and analyze it with Coach. Personal, AI-assisted, and Meta entries open in detail views with Street View and an overlaid saved/reference image when available. The numbered **Available notes** button opens the full scrollable history for that panorama; new Coach analyses enter it immediately and do not reopen as the active Coach result after reload. Explicitly saved notes and images create or reuse the same Review source. My Clues can filter **Personal**, **AI-assisted**, and **Meta lessons**. Before a Review guess, personal text and answer-bearing analysis remain hidden.
+
+A low Review result automatically returns that location to the end of the current session. It continues returning until you pass it; each try remains a separate attempt.
+
+Meta Study contains 359 locally hosted lessons normalized from the paired OpenGuessr capture and additional GeoMetas examples with usable Street View coordinates. Meta explanations follow the interface language in English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Using AI Coach or explicitly saving a Notebook entry automatically creates or reuses the location’s Review card; otherwise the revealed location card keeps its Save for Review action. **Available notes** contains only Personal and AI-assisted history, including full analysis details, exact timestamps, and the submitted screenshot when one exists; Meta remains under its own lightbulb. Finalized Personal and AI-assisted text stays in its creation language. Reviewing an already-due card advances its schedule even when opened through custom practice, and the completed state persists after reload.
+
+Leaving an unfinished Learn or Play session preserves it. The next entry offers **Resume**, **Start new**, or **Back**. Coverage includes a continuous **Mastery** heat layer: repeated successful reviews and long intervals gradually brighten countries and individual locations, while lapses reduce intensity. Meta lessons based on camera generation, Google vehicles, coverage, rifts, trekkers, or other imagery artifacts show a warning because later Street View updates can make them outdated.

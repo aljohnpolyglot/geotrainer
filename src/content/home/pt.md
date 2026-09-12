@@ -38,7 +38,7 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 ## Revisão e agendamento
 
-A resposta fica oculta até o palpite. Distância e pontuação calculam o próximo intervalo automaticamente; a prática personalizada não altera datas agendadas.
+A resposta fica oculta até o palpite. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ## Coach de IA e pistas
 
@@ -77,7 +77,7 @@ A conta é opcional e o treino local funciona sem login. Quando conectada, a sin
 1. Preciso de conta? — Não, somente para sincronizar.
 2. Estudo muda a pontuação? — Não.
 3. Posso avaliar manualmente? — Não; o resultado geográfico decide.
-4. Prática extra adia cartões? — Não.
+4. Prática extra adia cartões? — Não; cartões futuros não mudam e os já vencidos avançam quando concluídos.
 5. Cobertura inclui todos os lugares? — Não, apenas os visitados.
 
 ## Recursos de aprendizagem
@@ -90,3 +90,17 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 - [GeoHints](https://geohints.com/) — catálogo visual de balizadores, linhas, placas, sinais, postes, câmeras e outras pistas.
 - [GeoMetas](https://geometas.com/) — lições gratuitas de metas por país, região e categoria, com quizzes dinâmicos.
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizagem do GeoGuessr, documentação e recursos para criar mapas.
+
+## Aprender, Meta e Caderno
+
+Aprender tem três caminhos. **Personalizado** mantém coleções e ambientes. **Meta** abre lições guiadas no panorama e direção registrados. **Explorar mapa** mostra a cobertura do Street View. Em Meta e no mapa, Revelar abre o cartão normal, onde Salvar para revisão agenda a prática de localização. O mapa usa Voltar ao mapa-múndi no lugar de Próximo. Aprender personalizado e Jogo podem incluir panoramas de colaboradores ou limitar a nova geração a imagens oficiais do Google.
+
+A lâmpada no canto superior direito alterna a explicação. O aviso inicial pode ser fechado uma vez ou ocultado definitivamente sem remover lições. Um Meta só entra em **Minhas pistas** quando sua localização é salva explicitamente para revisão. Na revisão, antes da resposta aparece apenas a imagem; o texto completo vem depois.
+
+O **Caderno** guarda quantas notas pessoais quiser por panorama. Categoria e texto são opcionais; uma entrada vazia também pode salvar o local para revisão. Também aceita imagens analisadas pelo Coach. Entradas pessoais, de IA e Meta abrem uma vista detalhada com Street View e uma imagem sobreposta quando disponível. **Notas disponíveis** mostra um contador e todo o histórico rolável; novas análises do Coach entram ali imediatamente e não reabrem como resultado ativo após recarregar. Minhas pistas filtra **Pessoal**, **Com ajuda de IA** e **Lições Meta**; texto revelador fica oculto antes da resposta.
+
+Um resultado baixo volta automaticamente ao fim da sessão de revisão atual até você acertar. Cada tentativa permanece registrada separadamente.
+
+O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captura pareada do OpenGuessr e de exemplos adicionais do GeoMetas com coordenadas utilizáveis do Street View. As explicações Meta seguem o idioma da interface nos oito idiomas suportados. Usar o Coach de IA ou salvar uma entrada do Caderno cria ou reutiliza automaticamente o cartão de Revisão; caso contrário, o cartão de localização revelado mantém Salvar para revisão. **Notas disponíveis** contém apenas o histórico Pessoal e assistido por IA, com análise completa, horário exato e a captura enviada quando existir; Meta permanece na própria lâmpada. Texto pessoal e de IA finalizado mantém o idioma de criação. Revisar um cartão já pendente avança seu agendamento mesmo pela prática personalizada e persiste após recarregar.
+
+Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Retomar**, **Começar de novo** ou **Voltar**. A cobertura inclui um mapa de calor contínuo de **Domínio**: muitas revisões bem-sucedidas e intervalos longos iluminam gradualmente países e locais, enquanto erros reduzem a intensidade. Pistas Meta dependentes da imagem mostram um aviso porque atualizações do Street View podem torná-las desatualizadas.

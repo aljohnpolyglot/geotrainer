@@ -8,6 +8,16 @@ import { announceLanguagePreferences } from '../services/useLanguagePreferences'
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 type SettingsTab = 'language' | 'review' | 'display';
+const NOTE_LANGUAGE_COPY: Record<SupportedLanguage, string> = {
+  en: 'Saved Personal and AI-assisted notes keep the language in which they were created; changing languages does not translate them.',
+  es: 'Las notas personales y asistidas por IA conservan el idioma en que se crearon; cambiar el idioma no las traduce.',
+  pt: 'As notas pessoais e assistidas por IA mantêm o idioma em que foram criadas; mudar o idioma não as traduz.',
+  fr: 'Les notes personnelles et assistées par IA conservent leur langue de création ; changer de langue ne les traduit pas.',
+  de: 'Gespeicherte persönliche und KI-gestützte Notizen behalten ihre ursprüngliche Sprache; ein Sprachwechsel übersetzt sie nicht.',
+  it: 'Le note personali e assistite dall’IA mantengono la lingua in cui sono state create; cambiare lingua non le traduce.',
+  ru: 'Сохранённые личные заметки и заметки с помощью ИИ остаются на языке создания; смена языка их не переводит.',
+  sv: 'Sparade personliga och AI-assisterade anteckningar behåller språket de skapades på; ett språkbyte översätter dem inte.',
+};
 
 export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void }) {
   const [languages, setLanguages] = useState<LanguagePreferences>(DEFAULT_LANGUAGE_PREFERENCES);
@@ -53,6 +63,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
             {LANGUAGE_OPTIONS.map((option) => <option key={option.code} value={option.code}>{option.nativeLabel} · {option.label}</option>)}
           </select></span>
         </label>)}
+        <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
       </fieldset>}
       {tab === 'display' && <fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
         <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>

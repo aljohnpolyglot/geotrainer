@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { createQuietSyncScheduler, mergeBackups, shouldSyncAuthEvent } from './cloudSync';
+import { createQuietSyncScheduler, mergeBackups, shouldSyncAuthEvent, withoutEmbeddedHostedImages } from './cloudSync';
 
 const backup = (id: string, score: number): TrainerBackup => ({
   format: 'street-view-trainer',
@@ -41,6 +41,11 @@ test('token refresh does not trigger a visible full sync', () => {
   assert.equal(shouldSyncAuthEvent('SIGNED_IN', 'user-1', 'user-1'), false);
   assert.equal(shouldSyncAuthEvent('SIGNED_IN', undefined, 'user-1'), true);
   assert.equal(shouldSyncAuthEvent('SIGNED_OUT', 'user-1'), true);
+});
+
+test('cloud backup keeps hosted paths without duplicating image bytes', () => {
+  const clues = [{ id: 'hosted', imageDataUrl: 'data:image/jpeg;base64,AQ==', imagePath: 'user/hosted.jpg' }, { id: 'local', imageDataUrl: 'data:image/jpeg;base64,Ag==' }];
+  assert.deepEqual(withoutEmbeddedHostedImages(clues as never), [{ ...clues[0], imageDataUrl: '' }, clues[1]]);
 });
 
 test('quiet sync coalesces a burst of local saves into one upload', async () => {

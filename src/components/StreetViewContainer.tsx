@@ -251,7 +251,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       panorama.setPano(targetPano);
 
       const initialPov = {
-        heading: savedView?.heading ?? Math.floor(Math.random() * 360),
+        heading: savedView?.heading ?? currentLocation.heading ?? Math.floor(Math.random() * 360),
         pitch: savedView?.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;

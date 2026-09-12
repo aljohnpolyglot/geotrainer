@@ -15,20 +15,31 @@ const geminiResponse = (text: string, status = 200) => new Response(status === 2
 });
 
 test('Coach decodes escaped Unicode before rendering localized evidence', () => {
-  assert.equal(decodeCoachText('La strada \\u00e8 stretta.'), 'La strada è stretta.');
+  const cases = [
+    ['Good road quality.', 'Good road quality.'],
+    ['Carretera de Espa\\u00f1a.', 'Carretera de España.'],
+    ['Estrada de boa qualidade.', 'Estrada de boa qualidade.'],
+    ['Route de bonne qualit\\u00e9.', 'Route de bonne qualité.'],
+    ['Eine enge Stra\\u00dfe.', 'Eine enge Straße.'],
+    ['Strada di buona qualit00e0 e prosperit00e0.', 'Strada di buona qualità e prosperità.'],
+    ['\\u0414\\u043e\\u0440\\u043e\\u0433\\u0430 \\u0443\\u0437\\u043a\\u0430\\u044f.', 'Дорога узкая.'],
+    ['En smal v\\u00e4g.', 'En smal väg.'],
+  ];
+  cases.forEach(([input, expected]) => assert.equal(decodeCoachText(input), expected));
+  assert.equal(decodeCoachText('Reference 00e0 remains unchanged.'), 'Reference 00e0 remains unchanged.');
 });
 
-test('Gemini carousel cools down a 429 key and fails over without exposing it', async () => {
-  const carousel = new GeminiKeyCarousel(['first-secret', 'second-secret']);
+test('Gemini carousel exhausts shuffled keys after quota failures without exposing them', async () => {
+  const carousel = new GeminiKeyCarousel(['first-secret', 'second-secret', 'third-secret', 'fourth-secret']);
   const used: string[] = [];
   const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => {
     used.push((init?.headers as Record<string, string>)['x-goog-api-key']);
-    return used.length === 1 ? geminiResponse('', 429) : geminiResponse(JSON.stringify(validAnalysis));
+    return used.length < 4 ? geminiResponse('', 429) : geminiResponse(JSON.stringify(validAnalysis));
   }) as typeof fetch;
   const result = await callGeminiCoach(carousel, { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
   assert.equal(result.analysis.region, 'Central Europe');
-  assert.equal(used.length, 2);
-  assert.notEqual(used[0], used[1]);
+  assert.equal(used.length, 4);
+  assert.equal(new Set(used).size, 4);
 });
 
 test('Coach accepts only server-side Gemini key names', () => {
@@ -83,13 +94,21 @@ test('clue analysis ranks countries while safe Review clues cannot reveal one', 
 test('pasted clue prompts prioritize an obvious foreground subject without discarding context', async () => {
   const prompts: string[] = [];
   const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => {
-    prompts.push(JSON.parse(String(init?.body)).contents[0].parts[0].text);
+    const body = JSON.parse(String(init?.body));
+    prompts.push(`${body.systemInstruction.parts[0].text} ${body.contents[0].parts[0].text}`);
     return geminiResponse(JSON.stringify(validAnalysis));
   }) as typeof fetch;
   await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'clue', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
   await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
   assert.match(prompts[0], /foreground object.*intended subject|intended subject.*foreground object/);
+  assert.match(prompts[0], /Ignore all app and browser interface elements/);
   assert.match(prompts[0], /surrounding scene.*supporting or contradictory context/);
+  assert.match(prompts[0], /plant family or species/);
+  assert.match(prompts[0], /colors, shape, reflector, stripe, border, and mounting pattern/);
+  assert.match(prompts[0], /explain the visible symbol, letter, number, color, and restriction or instruction/);
+  assert.match(prompts[0], /readable brand or organization.*where it originates or primarily operates.*cross borders/);
+  assert.match(prompts[0], /where that specific variant is commonly found/);
+  assert.match(prompts[0], /resolution is insufficient.*never invent specificity/);
   assert.doesNotMatch(prompts[1], /user-selected clue crop/);
 });
 
@@ -101,6 +120,18 @@ test('specific location estimates require strong visual evidence and no answer m
   const explained = normalizeCoachAnalysis(input, 'explain', 'Liberia');
   assert.deepEqual(explained.candidates, []);
   assert.equal(explained.region, '');
+});
+
+test('ordinary analysis drops country-only location estimates and unsolicited cards', () => {
+  const analysis = normalizeCoachAnalysis({
+    ...validAnalysis,
+    locationEstimate: { level: 'region', label: 'Ungheria', confidence: 'high', basis: ['Readable Hungarian text', 'Distinctive accent marks'] },
+    coreCard: { front: ['What language is visible?'], backExplanation: 'Hungarian.' },
+    extraCards: [{ category: 'Architecture', front: ['Describe the building.'], back: 'Two floors.', clueStrength: 2 }],
+  }, 'analyze');
+  assert.equal(analysis.locationEstimate, undefined);
+  assert.equal(analysis.coreCard, undefined);
+  assert.deepEqual(analysis.extraCards, []);
 });
 
 test('candidate confidence is deduplicated, ranked, and never exceeds a total of one', () => {

@@ -7,10 +7,11 @@ import React, { useState, useEffect } from "react";
 import { LocationResult } from "../types";
 import { COUNTRIES } from "../data/countries";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
-import { MapPin, ExternalLink, EyeOff, Compass, Building } from "lucide-react";
+import { MapPin, ExternalLink, Minimize2, Compass, Building } from "lucide-react";
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
+import { useDraggablePanel } from "../hooks/useDraggablePanel";
 
 interface LocationCardProps {
   location: LocationResult;
@@ -27,6 +28,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState<boolean>(true);
   const [flagError, setFlagError] = useState<boolean>(false);
+  const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   const resolvedCountryCode = geocodeData?.countryCode || location.countryCode;
   const country = COUNTRIES[resolvedCountryCode];
@@ -78,9 +80,9 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
   const primaryArea = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
   return (
-    <div id="revealed-location-card" className="absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text">
+    <div ref={panelRef} style={dragStyle} id="revealed-location-card" className="absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text">
       {/* Header: Country + Flag CDN + Close */}
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div {...dragHandleProps} className={`location-card-drag-handle flex items-start justify-between gap-3 mb-3${dragging ? ' dragging' : ''}`}>
         <div className="flex items-center space-x-2.5">
           {/* Flag CDN badge */}
           {!flagError && flag1x ? (
@@ -96,9 +98,10 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
           </div>
         </div>
 
-        <button onClick={onHide} title={t('Hide location spoilers (R)')} className="p-1 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0">
-          <EyeOff className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <a href={mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}><ExternalLink className="w-4 h-4" /></a>
+          <button onClick={onHide} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minimize2 className="w-4 h-4" /></button>
+        </div>
       </div>
 
       {/* Exact Location & Address Details */}
@@ -139,7 +142,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
         </div>
       </div>
 
-      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" />
+      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl />
 
       {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">
@@ -149,11 +152,6 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
         </div>
       )}
 
-      <div className="flex items-center justify-end">
-        <a href={mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}>
-          <ExternalLink className="w-4 h-4" />
-        </a>
-      </div>
     </div>
   );
 };
