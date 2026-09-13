@@ -8,6 +8,7 @@
 - Persist one current-view screenshot when the user explicitly saves a location or submits a Play answer; treat older records without screenshots as valid.
 - Compress explicitly uploaded or captured Notebook and AI Coach clue images, sync them to private per-user Supabase Storage, and render that exact hosted image in Available notes and My Clues. Preserve local-only fallback for signed-out or offline saves.
 - My Clues rows and details must show the hosted preview, note type, note text, and exact creation time when present; never substitute a general panorama screenshot for a submitted clue image.
+- Keep My Clues source and timestamp metadata beneath the note body rather than inline with its country, category, or text.
 
 ## Commands
 
@@ -46,6 +47,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
+- Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card, never invents a score, and must remain recognized as saved after reload.
 - Environment is a generator/filter dimension, not a duplicate collection system.

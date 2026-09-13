@@ -78,7 +78,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, onDelete, 
 <p>{clue.analysis.description || clue.analysis.strongClues[0] || t('savedVisualClue')}</p>
 <small>{t(clue.origin === 'personal' ? 'Personal' : 'AI-assisted')} · {new Date(clue.createdAt).toLocaleString(ui)}</small>
 </div>
-<div>
+<div className="clue-row-actions">
 <button className="icon-button" onClick={(event) => { event.stopPropagation(); setGallery({ country: clue.countryCode, clueId: clue.id }); }} aria-label={t('Details')}>
 <Eye size={16} />
 </button>
@@ -105,7 +105,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, onDelete, 
 <CountryFlag code={learned.countryCode} />{countryName(learned.countryCode)}</h3>
 <p>{lesson.text}</p>{lesson.note && <small>{lesson.note}</small>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}<small>{t('Meta lessons')} · {new Date(learned.learnedAt).toLocaleString(ui)}</small>
 </div>
-<div>
+<div className="clue-row-actions">
 <Lightbulb size={16} />
 </div>
 </article>)}{!totalFiltered && <p className="empty">{t('No clues match these filters.')}</p>}</div>

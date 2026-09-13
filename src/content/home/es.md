@@ -63,6 +63,8 @@ Los países, ciudades y entornos orientan la generación y no representan una co
 
 ## Progreso y estadísticas
 
+Los lugares guardados en Estudio son fuentes sin calificar: cuentan como actividad de Estudio y tarjetas nuevas, no como intentos «Sin respuesta» ni puntuaciones cero. Recargar reanuda la visita actual sin crear otra fila.
+
 Consulta lugares, intentos, tiempo activo, cola pendiente, rendimiento e historial. Pistas conocidas suma entradas personales, de IA y Meta sin duplicar la imagen de una nota. Las sesiones sin visitas ni intentos se ocultan. Las rondas con IA se incluyen por defecto y pueden excluirse. El resumen distingue promedio anterior y de hoy; el calendario colorea la actividad. Lugares del mismo país a menos de 50 metros comparten tarjeta.
 
 ## Sincronización en la nube

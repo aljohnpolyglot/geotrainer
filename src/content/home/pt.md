@@ -63,6 +63,8 @@ Países, cidades e ambientes orientam a geração, sem prometer cobertura comple
 
 ## Progresso e estatísticas
 
+Locais salvos no Estudo são fontes sem nota: contam como atividade de Estudo e cartões novos, não como tentativas «Sem palpite» ou pontuações zero. Recarregar retoma a visita atual sem criar outra linha.
+
 Veja lugares, tentativas, tempo ativo, fila, desempenho e histórico. Pistas conhecidas soma entradas pessoais, de IA e Meta sem duplicar a imagem de uma nota. Sessões sem visitas nem tentativas ficam ocultas. Rodadas com IA entram por padrão e podem ser excluídas. O resumo separa média anterior e de hoje; o calendário colore a atividade. Locais do mesmo país a até 50 metros compartilham um cartão.
 
 ## Sincronização na nuvem

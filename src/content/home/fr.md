@@ -63,6 +63,8 @@ Pays, villes et environnements orientent la génération sans garantir une couve
 
 ## Progression et statistiques
 
+Les lieux enregistrés en Étude sont des sources non notées : ils comptent comme activité d’Étude et nouvelles cartes, jamais comme essais « Sans réponse » ou scores nuls. Un rechargement reprend la visite en cours sans ajouter de ligne.
+
 Consultez lieux, tentatives, temps actif, file, performances et historique. Indices connus totalise les entrées personnelles, IA et Méta sans compter deux fois l’image d’une note. Les sessions sans visite ni tentative sont masquées. Les parties assistées par IA sont incluses par défaut et peuvent être exclues. Le résumé sépare moyenne précédente et du jour. Deux lieux du même pays à moins de 50 mètres partagent une carte.
 
 ## Synchronisation cloud

@@ -63,6 +63,8 @@ Paesi, città e ambienti guidano la generazione senza garantire copertura comple
 
 ## Progressi e statistiche
 
+I luoghi salvati in Studio sono fonti non valutate: contano come attività di Studio e nuove schede, non come tentativi «Nessuna risposta» o punteggi zero. Il ricaricamento riprende la visita corrente senza aggiungere un’altra riga.
+
 Consulta luoghi, tentativi, tempo attivo, coda, prestazioni e cronologia. Indizi conosciuti somma voci personali, IA e Meta senza contare due volte l’immagine di una nota. Le sessioni senza visite né tentativi sono nascoste. Le partite assistite dall’IA sono incluse per impostazione predefinita e possono essere escluse. Il riepilogo separa media precedente e odierna. Luoghi nello stesso paese entro 50 metri condividono una scheda.
 
 ## Sincronizzazione cloud

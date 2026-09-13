@@ -32,7 +32,7 @@ test('filters exclude Study, Review, and AI-assisted Play by default and respect
   const study = attempt('EE', undefined, { source: 'study' });
   const assisted = attempt('EE', 'EE', { aiAssisted: true });
   assert.deepEqual(performanceAttempts([normal, review, study, assisted]).map((item) => item.id), [normal.id]);
-  assert.equal(performanceAttempts([normal, review], true).length, 2);
+  assert.equal(performanceAttempts([normal, review, study], true).length, 2);
   const noon = new Date(2026, 8, 10, 12).getTime();
   const bounds = rangeBounds('today', noon);
   assert.equal(filterByRange([new Date(2026, 8, 10, 0).getTime(), new Date(2026, 8, 9, 23, 59).getTime()], (value) => value, bounds).length, 1);

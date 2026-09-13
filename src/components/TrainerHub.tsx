@@ -4,6 +4,7 @@ import { COUNTRIES } from "../data/countries";
 import { isReviewDue, nextScheduledReviewAt, trainerDb } from "../data/trainerDb";
 import { savedMetaLessonIds } from "../data/metaLessons";
 import { meaningfulSessions } from "../analytics/advanced";
+import { performanceAttempts } from "../analytics/statistics";
 import type { Attempt, ClueRecord, Collection, GameRecord, LearnedMeta, NotebookNote, ReviewFilters, ReviewRecord, ReviewSessionKind, SchedulerPreferences, StudyVisit, TrainerLocation } from "../types";
 import { StatisticsPanel } from "./StatisticsPanel";
 import { CoveragePanel } from "./TrainerHubCoveragePanel";
@@ -85,34 +86,35 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   const dueCount = scheduler ? reviews.filter((review) => isReviewDue(review, Date.now(), scheduler)).length : 0;
   const nextDueAt = scheduler ? nextScheduledReviewAt(reviews, Date.now(), scheduler) : undefined;
   const startReview = (attempt: Attempt) => onReview(attempt, [attempt, ...queue.filter((item) => item.id !== attempt.id)], reviewSource, reviewKind);
+  const gradedAttempts = useMemo(() => performanceAttempts(attempts, true, true), [attempts]);
   const today = dayStart();
   const todayVisits = visits.filter((item) => item.openedAt >= today);
-  const todayAttempts = attempts.filter((item) => item.createdAt >= today);
+  const todayAttempts = gradedAttempts.filter((item) => item.createdAt >= today);
   const reviewedPanos = new Set(reviews.map((item) => item.panoId));
-  const correct = attempts.filter((item) => item.guessedCountryCode && item.guessedCountryCode === item.countryCode);
+  const correct = gradedAttempts.filter((item) => item.guessedCountryCode && item.guessedCountryCode === item.countryCode);
   const countryCodesSeen = new Set(locations.map((item) => item.countryCode));
   const allActive = sessions.reduce((sum, item) => sum + item.activeTimeSeconds, 0);
   const todayActive = sessions.filter((item) => item.startedAt >= today).reduce((sum, item) => sum + item.activeTimeSeconds, 0);
   const countries = useMemo(() => Object.keys(COUNTRIES).map((code) => {
     const seenLocations = locations.filter((item) => item.countryCode === code);
-    const played = attempts.filter((item) => item.countryCode === code);
+    const played = gradedAttempts.filter((item) => item.countryCode === code);
     const right = played.filter((item) => item.guessedCountryCode === code).length;
     return { code, name: countryName(code), seen: seenLocations.length, played: played.length, reviewed: new Set(played.filter((item) => reviewedPanos.has(item.panoId)).map((item) => item.panoId)).size, correct: right, wrong: played.length - right, accuracy: played.length ? right / played.length : 0, average: played.length ? played.reduce((sum, item) => sum + item.score, 0) / played.length : 0, best: Math.max(0, ...played.map((item) => item.score)), lastSeen: Math.max(0, ...seenLocations.map((item) => item.lastSeenAt)), clues: clues.filter((clue) => clue.countryCode === code).length };
-  }), [locations, attempts, reviews, clues]);
+  }), [locations, gradedAttempts, reviews, clues]);
   const weakCountries = countries.filter((item) => item.played).sort((a, b) => a.average - b.average).slice(0, 5);
   const unseen = countries.filter((item) => !item.seen);
   const confusions = useMemo(() => {
     const counts = new Map<string, number>();
-    attempts.forEach((item) => { if (item.guessedCountryCode && item.guessedCountryCode !== item.countryCode) { const key = `${item.countryCode}:${item.guessedCountryCode}`; counts.set(key, (counts.get(key) || 0) + 1); } });
+    gradedAttempts.forEach((item) => { if (item.guessedCountryCode && item.guessedCountryCode !== item.countryCode) { const key = `${item.countryCode}:${item.guessedCountryCode}`; counts.set(key, (counts.get(key) || 0) + 1); } });
     return [...counts].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([key, count]) => ({ codes: key.split(":"), count }));
-  }, [attempts]);
-  const filteredAttempts = attempts.filter((item) => (!countryFilter || item.countryCode === countryFilter) && (!collectionFilter || item.collectionId === collectionFilter) && (sourceFilter === "all" || item.source === sourceFilter) && (!dateFilter || item.createdAt >= new Date(`${dateFilter}T00:00:00`).getTime()) && (!minScore || item.score >= Number(minScore)) && (!maxDistance || (item.distanceKm !== null && item.distanceKm <= Number(maxDistance))) && (correctness === "all" || (correctness === "correct" ? item.guessedCountryCode === item.countryCode : !!item.guessedCountryCode && item.guessedCountryCode !== item.countryCode)));
+  }, [gradedAttempts]);
+  const filteredAttempts = gradedAttempts.filter((item) => (!countryFilter || item.countryCode === countryFilter) && (!collectionFilter || item.collectionId === collectionFilter) && (sourceFilter === "all" || item.source === sourceFilter) && (!dateFilter || item.createdAt >= new Date(`${dateFilter}T00:00:00`).getTime()) && (!minScore || item.score >= Number(minScore)) && (!maxDistance || (item.distanceKm !== null && item.distanceKm <= Number(maxDistance))) && (correctness === "all" || (correctness === "correct" ? item.guessedCountryCode === item.countryCode : !!item.guessedCountryCode && item.guessedCountryCode !== item.countryCode)));
 
   const historyPanel = <HistoryPanel historyKind={historyKind} setHistoryKind={(next) => persistView({ historyKind: next })} setCountryFilter={setCountryFilter} countryFilter={countryFilter} collectionFilter={collectionFilter} setCollectionFilter={setCollectionFilter} dateFilter={dateFilter} setDateFilter={setDateFilter} minScore={minScore} setMinScore={setMinScore} maxDistance={maxDistance} setMaxDistance={setMaxDistance} correctness={correctness} setCorrectness={setCorrectness} sourceFilter={sourceFilter} setSourceFilter={setSourceFilter} collections={collections} countries={countries} games={games} filteredAttempts={filteredAttempts} visits={visits} reviews={reviews} locations={locations} onOpen={onOpen} startReview={startReview} onSelectGame={onSelectGame} />;
   return <section className="trainer-hub">
   <header className="hub-header"><div><h1>{tab === "statistics" ? t("tabStatistics") : tab === "clues" ? t("Clues") : t("tabReview")}</h1><p>{tab === "statistics" ? t("tagline") : tab === "clues" ? t("Your saved visual clues, organized for study.") : t("dueDescription")}</p></div></header>
     {loading ? <div className="hub-loading"><RefreshCw className="spin" /> {t("loading")}</div> : <div className="hub-content">
-      {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={attempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
+      {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={gradedAttempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {tab === "statistics" && <StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} />} historyPanel={historyPanel} />}
       {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
       {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onTrainCountries={onTrainCountries} />}

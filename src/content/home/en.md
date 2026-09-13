@@ -298,6 +298,8 @@ Display preferences include Light or Dark palette, compass visibility, compass s
 
 ## Progress and statistics
 
+Learn saves are ungraded sources, so they appear as Study activity and new Review cards—not as “No guess” attempts or zero scores. Reloading a paused Study workspace resumes its current visit rather than adding another Study row.
+
 ### Progress
 
 Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and active study time. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. Session lists and active time omit reload records that contain no Study visit, Play attempt, or Review attempt. It is a workload and habit view, not a single mastery score.

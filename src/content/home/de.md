@@ -260,6 +260,8 @@ Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern 
 
 ## Fortschritt und Statistik
 
+Gespeicherte Lernorte sind unbewertete Quellen: Sie erscheinen als Lernaktivität und neue Wiederholungskarten, nicht als „Kein Tipp“-Versuche oder Nullpunkte. Beim Neuladen wird der aktuelle Lernbesuch fortgesetzt, statt eine weitere Zeile anzulegen.
+
 ### Fortschritt
 
 Fortschritt fasst heutige und gesamte Orte, Versuche, aktive Zeit und fällige Wiederholungen zusammen. Bekannte Hinweise auf der Startseite entspricht Meine Hinweise: persönliche, KI-unterstützte und ausdrücklich gespeicherte Meta-Einträge zählen, ein Notizbuchbild nicht doppelt. Sitzungen ohne Lernbesuch, Spiel- oder Wiederholungsversuch werden ausgeblendet. Es ist eine Arbeits- und Gewohnheitsansicht, keine einzelne Meisterschaftsnote.

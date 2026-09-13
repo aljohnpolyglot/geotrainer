@@ -63,6 +63,8 @@ Länder, städer och miljöer styr genereringen utan att lova fullständig täck
 
 ## Framsteg och statistik
 
+Sparade Studieplatser är obedömda källor: de räknas som Studieaktivitet och nya kort, inte som ”Ingen gissning”-försök eller nollpoäng. En omladdning återupptar det aktuella besöket utan att lägga till en ny rad.
+
 Se platser, försök, aktiv tid, kö, resultat och historik. Kända ledtrådar summerar personliga, AI- och Meta-poster utan att räkna en anteckningsbild två gånger. Sessioner utan besök eller försök döljs. AI-assisterade spel ingår som standard men kan uteslutas. Sammanfattningen skiljer tidigare och dagens snitt. Platser i samma land inom 50 meter delar ett kort.
 
 ## Molnsynkronisering
