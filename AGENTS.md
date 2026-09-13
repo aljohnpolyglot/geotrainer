@@ -37,7 +37,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card and never invents a score.
 - Environment is a generator/filter dimension, not a duplicate collection system.
-- The contributor-panorama toggle filters only newly generated Custom Learn and Play locations; it does not alter Meta, Explore Map, saved locations, History, or Review.
+- The Official / Mixed / Contributor imagery selector filters only newly generated Custom Learn and Play locations and defaults to Official; it does not alter Meta, Explore Map, saved locations, History, or Review.
 - Country and city datasets are local data files, not UI-component constants.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.

@@ -27,6 +27,7 @@ import {
   CompassStyle,
   StreetViewState,
   LearnSource,
+  PanoramaSource,
 } from './types';
 import {
   BUILT_IN_COLLECTIONS,
@@ -114,7 +115,7 @@ export default function App() {
   const [studyEnvironment, setStudyEnvironment] = useState<Environment>(() => (localStorage.getItem(ENVIRONMENT_STORAGE_KEY) as Environment) || 'mixed');
   const [studyUrbanLevel, setStudyUrbanLevel] = useState<UrbanLevel>(() => Number(localStorage.getItem(URBAN_LEVEL_STORAGE_KEY) || 3) as UrbanLevel);
   const [studySampling, setStudySampling] = useState<SamplingMode>(() => (localStorage.getItem(SAMPLING_STORAGE_KEY) as SamplingMode) || 'natural');
-  const [studyAllowContributors, setStudyAllowContributors] = useState(true);
+  const [studyPanoramaSource, setStudyPanoramaSource] = useState<PanoramaSource>('official');
 
   // Play Mode State
   const [pastGames, setPastGames] = useState<GameRecord[]>([]);
@@ -157,14 +158,14 @@ export default function App() {
   const studyEnvironmentRef = useRef(studyEnvironment);
   const studyUrbanLevelRef = useRef(studyUrbanLevel);
   const studySamplingRef = useRef(studySampling);
-  const studyAllowContributorsRef = useRef(studyAllowContributors);
+  const studyPanoramaSourceRef = useRef(studyPanoramaSource);
   const workspaceRestoreAttemptedRef = useRef(false);
   const restoredPlayPanoRef = useRef<string | null>(null);
   const restoredStudyPanoRef = useRef<string | null>(null);
   studyEnvironmentRef.current = studyEnvironment;
   studyUrbanLevelRef.current = studyUrbanLevel;
   studySamplingRef.current = studySampling;
-  studyAllowContributorsRef.current = studyAllowContributors;
+  studyPanoramaSourceRef.current = studyPanoramaSource;
   currentLocationRef.current = currentLocation;
 
   const allCollections = [...BUILT_IN_COLLECTIONS, ...customCollections, ...(temporaryCollection ? [temporaryCollection] : [])];
@@ -201,7 +202,7 @@ export default function App() {
   const study = useStudyMode({
     appMode, showHome, dbReady, currentLocation, setCurrentLocation, isLoading, setIsLoading, setErrorMessage,
     selectedCollectionId, setSelectedCollectionId, customCollections, setCustomCollections, bookmarks, setBookmarks,
-    setTrainerRefreshKey, activeCollectionRef, studyEnvironment, setStudyEnvironment, studyUrbanLevel, setStudyUrbanLevel, studySampling, setStudySampling, studyAllowContributors, setStudyAllowContributors, studyEnvironmentRef, studyUrbanLevelRef, studySamplingRef, studyAllowContributorsRef, currentLocationRef,
+    setTrainerRefreshKey, activeCollectionRef, studyEnvironment, setStudyEnvironment, studyUrbanLevel, setStudyUrbanLevel, studySampling, setStudySampling, studyPanoramaSource, setStudyPanoramaSource, studyEnvironmentRef, studyUrbanLevelRef, studySamplingRef, studyPanoramaSourceRef, currentLocationRef,
     generationPendingRef, abortControllerRef, latestGenerationRequestRef, latestPanoramaSyncRef, recentStudyPanosRef,
     isMapsReadyRef, hasAutoFetchedRef, mapsReady, setMapsReady, currentVisitRef, activeStartedAtRef, sessionRef,
     setIsRevealed, setCoachNote, setEditingCollection, setIsModalOpen, temporaryCollection, setTemporaryCollection,
@@ -257,10 +258,11 @@ export default function App() {
     }
     void initTrainerDb()
       .then(async () => {
-        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedContributors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, pausedStudy, pausedPlay] = await Promise.all([
+        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPanoramaSource, savedContributors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, pausedStudy, pausedPlay] = await Promise.all([
           trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'), trainerDb.schedulerPreferences(),
           trainerDb.setting<boolean>('preference.compass'),
           trainerDb.setting<Environment>('preference.environment'), trainerDb.setting<UrbanLevel>('preference.urbanLevel'), trainerDb.setting<SamplingMode>('preference.sampling'),
+          trainerDb.setting<PanoramaSource>('preference.panoramaSource'),
           trainerDb.setting<boolean>('preference.allowContributors'),
           trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<ActiveWorkspace>('workspace.paused.study'), trainerDb.setting<ActiveWorkspace>('workspace.paused.play'),
         ]);
@@ -273,7 +275,8 @@ export default function App() {
         if (savedEnvironment === 'mixed' || savedEnvironment === 'urban' || savedEnvironment === 'suburban' || savedEnvironment === 'rural') setStudyEnvironment(savedEnvironment);
         if (savedUrbanLevel === 1 || savedUrbanLevel === 2 || savedUrbanLevel === 3) setStudyUrbanLevel(savedUrbanLevel);
         if (savedSampling === 'natural' || savedSampling === 'balanced') setStudySampling(savedSampling);
-        if (typeof savedContributors === 'boolean') setStudyAllowContributors(savedContributors);
+        if (savedPanoramaSource === 'mixed' || savedPanoramaSource === 'official' || savedPanoramaSource === 'contributor') setStudyPanoramaSource(savedPanoramaSource);
+        else if (savedContributors === true) setStudyPanoramaSource('mixed');
         if (savedCompassStyle === 'bar' || savedCompassStyle === 'dial') setCompassStyle(savedCompassStyle);
         setDarkMode(savedDarkMode === true);
         if (savedStreetView?.panoId && Number.isFinite(savedStreetView.heading)) setRestoredStreetView(savedStreetView);
@@ -455,7 +458,7 @@ export default function App() {
         reviewHistory={reviewHistory} reviewStats={reviewStats} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource} reviewComplete={reviewComplete}
         activeRoundResult={activeRoundResult} gameSettings={gameSettings} currentRoundIndex={currentRoundIndex}
-        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, allowContributors: studyAllowContributors, showCompass: compassPreference }}
+        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, panoramaSource: studyPanoramaSource, showCompass: compassPreference }}
         isHistoryModalOpen={isHistoryModalOpen} isModalOpen={isModalOpen} editingCollection={editingCollection}
         pastGames={pastGames}
         allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference}

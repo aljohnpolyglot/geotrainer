@@ -93,7 +93,7 @@ Combina marcas viales, lado de conducción, alfabetos, postes, relieve, arquitec
 
 ## Aprender, Meta y Cuaderno
 
-Aprender ofrece tres rutas. **Personalizado** conserva colecciones y entornos. **Meta** abre lecciones guiadas en el panorama y rumbo guardados. **Explorar mapa** muestra la cobertura de Street View. En Meta y el mapa, Revelar abre la tarjeta normal, donde Guardar para repasar programa la práctica de ubicación. El mapa usa Volver al mapa mundial en lugar de Siguiente. Aprender personalizado y Juego pueden incluir panoramas de colaboradores o limitar la generación nueva a imágenes oficiales de Google.
+Aprender ofrece tres rutas. **Personalizado** conserva colecciones y entornos. **Meta** abre lecciones guiadas en el panorama y rumbo guardados. **Explorar mapa** muestra la cobertura de Street View. En Meta y el mapa, Revelar abre la tarjeta normal, donde Guardar para repasar programa la práctica de ubicación. El mapa usa Volver al mapa mundial en lugar de Siguiente. Aprender personalizado y Juego usan imágenes oficiales de Google de forma predeterminada; el selector permite mezclar panoramas oficiales y de colaboradores o solicitar solo panoramas de colaboradores.
 
 La bombilla superior derecha abre o cierra la explicación. El aviso inicial puede cerrarse una vez u ocultarse para siempre sin eliminar lecciones. Un Meta entra en **Mis pistas** solo al guardar explícitamente su ubicación para repasar. Durante el repaso, antes de responder solo se muestra la imagen; el texto completo aparece después.
 

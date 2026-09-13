@@ -16,7 +16,7 @@ class StreetViewService {
   getPanorama(_request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
     const result = results.shift()!;
-    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright }, result.status || 'OK'), result.delay || 0);
+    setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright ?? '© Google' }, result.status || 'OK'), result.delay || 0);
   }
 }
 
@@ -105,6 +105,17 @@ test('official-only generation rejects contributor panoramas', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
   const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, { ...rural, allowContributors: false });
   assert.equal(found.panoId, 'official');
+});
+
+test('contributor-only generation rejects official panoramas', async () => {
+  currentResults = [
+    { lat: 7.5, lng: 7, pano: 'official', countryCode: 'IT', copyright: '© 2026 Google' },
+    { lat: 7.6, lng: 7, pano: 'contributor', countryCode: 'IT', copyright: '© Ada Example' },
+  ];
+  results = [...currentResults];
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, { ...rural, panoramaSource: 'contributor' });
+  assert.equal(found.panoId, 'contributor');
 });
 
 test('an aborted lookup cannot return a stale panorama', async () => {

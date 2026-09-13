@@ -93,7 +93,7 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 
 ## Aprender, Meta e Caderno
 
-Aprender tem três caminhos. **Personalizado** mantém coleções e ambientes. **Meta** abre lições guiadas no panorama e direção registrados. **Explorar mapa** mostra a cobertura do Street View. Em Meta e no mapa, Revelar abre o cartão normal, onde Salvar para revisão agenda a prática de localização. O mapa usa Voltar ao mapa-múndi no lugar de Próximo. Aprender personalizado e Jogo podem incluir panoramas de colaboradores ou limitar a nova geração a imagens oficiais do Google.
+Aprender tem três caminhos. **Personalizado** mantém coleções e ambientes. **Meta** abre lições guiadas no panorama e direção registrados. **Explorar mapa** mostra a cobertura do Street View. Em Meta e no mapa, Revelar abre o cartão normal, onde Salvar para revisão agenda a prática de localização. O mapa usa Voltar ao mapa-múndi no lugar de Próximo. Aprender personalizado e Jogo usam imagens oficiais do Google por padrão; o seletor permite misturar panoramas oficiais e de colaboradores ou solicitar somente panoramas de colaboradores.
 
 A lâmpada no canto superior direito alterna a explicação. O aviso inicial pode ser fechado uma vez ou ocultado definitivamente sem remover lições. Um Meta só entra em **Minhas pistas** quando sua localização é salva explicitamente para revisão. Na revisão, antes da resposta aparece apenas a imagem; o texto completo vem depois.
 

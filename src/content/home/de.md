@@ -420,7 +420,7 @@ Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechn
 
 ## Lernen, Meta und Notizbuch
 
-Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Benutzerdefiniertes Lernen und Spiel können Panoramen von Mitwirkenden einschließen oder neue Suchen auf offizielle Google-Bilder beschränken.
+Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google-Bilder; die Auswahl kann offizielle und beigesteuerte Panoramen mischen oder nur beigesteuerte Panoramen anfordern.
 
 Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist vor der Antwort nur das Referenzbild sichtbar; der vollständige Text folgt danach.
 

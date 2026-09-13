@@ -100,7 +100,8 @@ export interface SchedulerPreferences {
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
-export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; allowContributors?: boolean; }
+export type PanoramaSource = 'mixed' | 'official' | 'contributor';
+export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; }
 
 export interface GameSettings {
   roundCount: number;
@@ -115,6 +116,7 @@ export interface GameSettings {
   environment?: Environment;
   urbanLevel?: UrbanLevel;
   samplingMode?: SamplingMode;
+  panoramaSource?: PanoramaSource; // Optional for backwards-compatible saved games
   allowContributors?: boolean; // Optional for backwards-compatible saved games
   timeLimitSeconds: number; // 0 = unlimited, or 30, 60, 90, 120, 180
 }

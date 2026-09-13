@@ -18,6 +18,8 @@ import type {
 } from '../types';
 import { COUNTRIES } from './countries';
 import { resolveClueImages } from '../services/clueImages';
+import { detectedTimeZone, nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
+export { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [
@@ -27,12 +29,12 @@ export const STORE_NAMES = [
 export type StoreName = (typeof STORE_NAMES)[number];
 const changeListeners = new Set<() => void>();
 const notifyChange = () => changeListeners.forEach((listener) => listener());
-const detectedTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 20, maximumReviewsPerDay: 200, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'due', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
   const countryCodes = Array.isArray(source.countryCodes) ? [...new Set(source.countryCodes.filter((code): code is string => typeof code === 'string' && code in COUNTRIES))] : [];
+  const panoramaSource = source.panoramaSource === 'mixed' || source.panoramaSource === 'contributor' ? source.panoramaSource : source.allowContributors === true ? 'mixed' : 'official';
   return {
     roundCount: Number.isInteger(rounds) && rounds >= 1 && rounds <= 100 ? rounds : 5,
     collectionId: typeof source.collectionId === 'string' ? source.collectionId : 'world',
@@ -46,7 +48,8 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     environment: source.environment === 'urban' || source.environment === 'suburban' || source.environment === 'rural' ? source.environment : 'mixed',
     urbanLevel: source.urbanLevel === 1 || source.urbanLevel === 2 ? source.urbanLevel : 3,
     samplingMode: source.samplingMode === 'balanced' ? 'balanced' : 'natural',
-    allowContributors: source.allowContributors !== false,
+    panoramaSource,
+    allowContributors: panoramaSource !== 'official',
     timeLimitSeconds: [0, 30, 60, 90, 120].includes(Number(source.timeLimitSeconds)) ? Number(source.timeLimitSeconds) : 0,
   };
 };
@@ -57,30 +60,6 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
   let timeZone = typeof source.reviewTimeZone === 'string' ? source.reviewTimeZone.trim() : '';
   try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
   return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'random' ? 'random' : 'due', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
-};
-const zonedParts = (value: number, timeZone: string) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
-const utcForZonedDateTime = (parts: Record<string, number>, timeZone: string) => {
-  let candidate = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const local = zonedParts(candidate, timeZone);
-    candidate += Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute) - Date.UTC(local.year, local.month - 1, local.day, local.hour, local.minute);
-  }
-  return candidate;
-};
-export const reviewDayStart = (value = Date.now(), preferences: SchedulerPreferences = DEFAULT_SCHEDULER_PREFERENCES) => {
-  const timeZone = preferences.reviewTimeZone || detectedTimeZone();
-  const reset = preferences.reviewDayResetMinutes ?? 0;
-  const current = zonedParts(value, timeZone);
-  const beforeReset = current.hour * 60 + current.minute < reset;
-  const base = Date.UTC(current.year, current.month - 1, current.day - (beforeReset ? 1 : 0));
-  const date = new Date(base);
-  return utcForZonedDateTime({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: Math.floor(reset / 60), minute: reset % 60 }, timeZone);
-};
-export const nextReviewDayBoundary = (value = Date.now(), preferences: SchedulerPreferences = DEFAULT_SCHEDULER_PREFERENCES) => {
-  const start = reviewDayStart(value, preferences);
-  const parts = zonedParts(start, preferences.reviewTimeZone || detectedTimeZone());
-  const next = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + 1));
-  return utcForZonedDateTime({ year: next.getUTCFullYear(), month: next.getUTCMonth() + 1, day: next.getUTCDate(), hour: parts.hour, minute: parts.minute }, preferences.reviewTimeZone || detectedTimeZone());
 };
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
@@ -109,7 +88,7 @@ export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, p
   const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness);
   const intervalDays = attempt.intervalDays ?? Math.min(preferences.maximumIntervalDays, intervalsFor(review.intervalDays, preferences)[grade]);
   if (review.lastReviewedAt === at) return attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
-  return { ...review, dueAt: attempt.nextDueAt ?? at + intervalDays * 864e5, intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
+  return { ...review, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
 }
 export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced') =>
   guessedCountryCode !== countryCode || score < passingScoreFor(strictness);
@@ -392,7 +371,7 @@ export const trainerDb = {
     const next: ReviewRecord = {
       id: panoId,
       panoId,
-      dueAt: now + intervalDays * 864e5,
+      dueAt: nextReviewAt(now, intervalDays, preferences),
       intervalDays,
       gradingHistory: [...(previous?.gradingHistory || []), { grade, at: now }],
       lapseCount: (previous?.lapseCount || 0) + (grade === 'again' ? 1 : 0),
@@ -410,7 +389,7 @@ export const trainerDb = {
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     const intervalDays: Record<ReviewGrade, number> = { again: preferences.firstReviewDays, hard: preferences.firstReviewDays, good: 7, easy: preferences.easyFirstIntervalDays };
     const days = Math.min(preferences.maximumIntervalDays, intervalDays[grade]);
-    const created: ReviewRecord = { id: panoId, panoId, dueAt: now + days * 864e5, intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    const created: ReviewRecord = { id: panoId, panoId, dueAt: nextReviewAt(now, days, preferences), intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
     await put('reviews', created);
     return created;
   },
@@ -425,7 +404,7 @@ export const trainerDb = {
     }
     const now = Date.now();
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
-    const created: ReviewRecord = { id: panoId, panoId, dueAt: dueNow ? now : now + preferences.firstReviewDays * 864e5, intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    const created: ReviewRecord = { id: panoId, panoId, dueAt: dueNow ? now : nextReviewAt(now, preferences.firstReviewDays, preferences), intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
     await put('reviews', created);
     return created;
   },

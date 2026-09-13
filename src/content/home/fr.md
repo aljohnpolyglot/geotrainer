@@ -93,7 +93,7 @@ Croisez marquages routiers, sens de circulation, écritures, poteaux, relief, ar
 
 ## Apprendre, Méta et Carnet
 
-Apprendre propose trois parcours. **Personnalisé** conserve collections et environnements. **Méta** ouvre des leçons guidées au panorama et à l’orientation enregistrés. **Explorer la carte** affiche la couverture Street View. Dans Méta et la carte, Révéler ouvre la fiche normale, où Enregistrer pour révision programme le futur exercice de localisation. La carte remplace Suivant par Retour à la carte du monde. Apprendre personnalisé et Jeu peuvent inclure les panoramas de contributeurs ou limiter les nouvelles recherches aux images officielles Google.
+Apprendre propose trois parcours. **Personnalisé** conserve collections et environnements. **Méta** ouvre des leçons guidées au panorama et à l’orientation enregistrés. **Explorer la carte** affiche la couverture Street View. Dans Méta et la carte, Révéler ouvre la fiche normale, où Enregistrer pour révision programme le futur exercice de localisation. La carte remplace Suivant par Retour à la carte du monde. Apprendre personnalisé et Jeu utilisent les images officielles Google par défaut ; le sélecteur permet de mélanger panoramas officiels et contributeurs ou de demander uniquement les panoramas de contributeurs.
 
 L’ampoule en haut à droite affiche ou masque l’explication. Le conseil initial peut être fermé une fois ou définitivement sans retirer les leçons. Une Méta rejoint **Mes indices** uniquement après l’enregistrement explicite de son lieu pour révision. En révision, seule l’image apparaît avant la réponse ; le texte complet vient ensuite.
 

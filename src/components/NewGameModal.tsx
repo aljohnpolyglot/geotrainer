@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Collection, Environment, GameSettings, SamplingMode, UrbanLevel } from '../types';
+import { Collection, Environment, GameSettings, PanoramaSource, SamplingMode, UrbanLevel } from '../types';
 import { TRAINING_PRESETS } from '../data/collections';
 import { normalizeGamePreferences, trainerDb } from '../data/trainerDb';
 import {
@@ -58,7 +58,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [environment, setEnvironment] = useState<Environment>('mixed');
   const [urbanLevel, setUrbanLevel] = useState<UrbanLevel>(3);
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
-  const [allowContributors, setAllowContributors] = useState(true);
+  const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
 
   useEffect(() => {
     if (!isOpen) return;
@@ -69,7 +69,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setAllowContributors(value.allowContributors !== false); setTimeLimitSeconds(value.timeLimitSeconds);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setTimeLimitSeconds(value.timeLimitSeconds);
     });
     return () => { active = false; };
   }, [isOpen, defaultShowCompass, collections]);
@@ -106,7 +106,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       environment,
       urbanLevel,
       samplingMode,
-      allowContributors,
+      panoramaSource,
+      allowContributors: panoramaSource !== 'official',
       timeLimitSeconds,
     };
     void trainerDb.setSetting('gamePreferences', settings);
@@ -303,7 +304,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           </div>
 
           {/* 4. Timer Option */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <button
               type="button"
               role="switch"
@@ -322,10 +323,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             >
               <span className="inline-flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" />{t('AI Coach')}</span><strong>{aiCoachEnabled ? t('Enabled') : t('Disabled')}</strong>
             </button>
-            <button type="button" role="switch" aria-checked={allowContributors} onClick={() => setAllowContributors((value) => !value)} className={`game-compass-setting ${allowContributors ? 'enabled' : ''}`}>
-              <span>{t('Contributor panoramas')}</span><strong>{t(allowContributors ? 'Included' : 'Official only')}</strong>
-            </button>
           </div>
+          <label className="panorama-source-setting">{t('Street View imagery')}<select value={panoramaSource} onChange={(event) => setPanoramaSource(event.target.value as PanoramaSource)}><option value="official">{t('Official only')}</option><option value="mixed">{t('Official + contributor')}</option><option value="contributor">{t('Contributor only')}</option></select></label>
 
           {/* 5. Timer Option */}
           <div className="space-y-1.5">

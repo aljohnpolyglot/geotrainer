@@ -93,7 +93,7 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 
 ## Impara, Meta e Taccuino
 
-Impara offre tre percorsi. **Personalizzato** mantiene raccolte e ambienti. **Meta** apre lezioni guidate nel panorama e nell’orientamento registrati. **Esplora mappa** mostra la copertura Street View. In Meta e nella mappa, Rivela apre la normale scheda del luogo, dove Salva per il ripasso programma la futura prova di localizzazione. La mappa usa Torna alla mappa mondiale al posto di Avanti. Impara personalizzato e Gioco possono includere panorami dei collaboratori o limitare le nuove ricerche alle immagini ufficiali Google.
+Impara offre tre percorsi. **Personalizzato** mantiene raccolte e ambienti. **Meta** apre lezioni guidate nel panorama e nell’orientamento registrati. **Esplora mappa** mostra la copertura Street View. In Meta e nella mappa, Rivela apre la normale scheda del luogo, dove Salva per il ripasso programma la futura prova di localizzazione. La mappa usa Torna alla mappa mondiale al posto di Avanti. Impara personalizzato e Gioco usano per impostazione predefinita immagini ufficiali Google; il selettore può mescolare panorami ufficiali e dei collaboratori oppure richiedere solo quelli dei collaboratori.
 
 La lampadina in alto a destra apre o chiude la spiegazione. Il consiglio iniziale può essere chiuso una volta o nascosto per sempre senza rimuovere lezioni. Un Meta appare in **I miei indizi** solo dopo averne salvato esplicitamente il luogo per il ripasso. Nel ripasso, prima della risposta compare solo l’immagine; il testo completo appare dopo.
 

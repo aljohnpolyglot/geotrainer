@@ -22,6 +22,7 @@ const CITIES = cityData as Record<string, CitySeed[]>;
 const classesForLevel = (level: UrbanLevel) => level === 1 ? ['major'] : level === 2 ? ['major', 'regional'] : ['major', 'regional', 'local'];
 const mixedWeights = { urban: 35, suburban: 20, rural: 45 } as const;
 export const isOfficialGooglePanorama = (data: Pick<google.maps.StreetViewPanoramaData, 'copyright'>) => /\bGoogle\b/i.test(data.copyright || '');
+export const acceptsPanoramaSource = (official: boolean, source: EnvironmentSettings['panoramaSource'], allowContributors?: boolean) => { const mode = source || (allowContributors === true ? 'mixed' : 'official'); return mode === 'mixed' || (mode === 'official' ? official : !official); };
 
 export function chooseMixedEnvironment(recent: string[], random = Math.random): Exclude<EnvironmentSettings['environment'], 'mixed'> {
   const blocked = recent.length >= 2 && recent.at(-1) === recent.at(-2) ? recent.at(-1) : '';
@@ -197,7 +198,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
         if (data && data.location && data.location.latLng && data.location.pano) {
-          if (options.allowContributors === false && !isOfficialGooglePanorama(data)) continue;
+          if (!acceptsPanoramaSource(isOfficialGooglePanorama(data), options.panoramaSource, options.allowContributors)) continue;
           if (context.requireNavigation && !data.links?.length) continue;
           const lat = data.location.latLng.lat();
           const lng = data.location.latLng.lng();
