@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULT_SCHEDULER_PREFERENCES, isCountryMistake, nextReviewAt, reconcileReviewAttempt, reviewDayStart, reviewGradeForPerformance, shouldScheduleReview } from './trainerDb';
+import { DEFAULT_SCHEDULER_PREFERENCES, isCountryMistake, nextReviewAt, nextScheduledReviewAt, reconcileReviewAttempt, reviewDayStart, reviewGradeForPerformance, shouldScheduleReview } from './trainerDb';
 
 test('automatic grading scales from country-first beginner to 4800-point pro', () => {
   assert.equal(reviewGradeForPerformance(1600, 20, true, 60, 'beginner'), 'hard');
@@ -25,6 +25,12 @@ test('interday due dates become available at the configured boundary', () => {
   const preferences = { ...DEFAULT_SCHEDULER_PREFERENCES, reviewTimeZone: 'UTC', reviewDayResetMinutes: 0 };
   assert.equal(new Date(reviewDayStart(Date.parse('2026-09-12T10:41:00.000Z'), preferences)).toISOString(), '2026-09-12T00:00:00.000Z');
   assert.equal(new Date(nextReviewAt(Date.parse('2026-09-12T10:41:00.000Z'), 1, preferences)).toISOString(), '2026-09-13T00:00:00.000Z');
+});
+
+test('next review uses the earliest persisted due time', () => {
+  const now = Date.parse('2026-09-13T01:30:00.000Z');
+  const reviews = [{ dueAt: Date.parse('2026-09-13T01:35:00.000Z'), intervalDays: 0 }, { dueAt: Date.parse('2026-09-14T00:00:00.000Z'), intervalDays: 1 }];
+  assert.equal(nextScheduledReviewAt(reviews, now, DEFAULT_SCHEDULER_PREFERENCES), reviews[0].dueAt);
 });
 
 test('practicing a card that is already due advances its persisted schedule', () => {

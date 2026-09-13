@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { COUNTRIES } from "../data/countries";
-import { reviewDayStart, trainerDb } from "../data/trainerDb";
+import { nextScheduledReviewAt, trainerDb } from "../data/trainerDb";
 import { savedMetaLessonIds } from "../data/metaLessons";
 import type { Attempt, ClueRecord, Collection, GameRecord, LearnedMeta, NotebookNote, ReviewFilters, ReviewRecord, ReviewSessionKind, SchedulerPreferences, StudyVisit, TrainerLocation } from "../types";
 import { StatisticsPanel } from "./StatisticsPanel";
@@ -81,11 +81,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   const reviewCriterion = filters.wrongCountry ? "Wrong Country" : filters.bookmarked ? "Bookmarked" : filters.due ? "Due Today" : filters.recent ? "Recently Missed" : filters.minScore !== undefined || filters.maxScore !== undefined ? `Score ${filters.minScore ?? 0}–${filters.maxScore ?? 5000}` : "Review Queue";
   const reviewSource = [filters.environment && `${filters.environment[0].toUpperCase()}${filters.environment.slice(1)}`, reviewCriterion].filter(Boolean).join(" · ");
   const reviewKind: ReviewSessionKind = filters.due ? "due" : "practice";
-  const nextDueAt = scheduler ? reviews.reduce<number | undefined>((next, item) => {
-    const candidate = item.intervalDays < 1 ? item.dueAt : reviewDayStart(item.dueAt, scheduler);
-    const today = reviewDayStart(Date.now(), scheduler);
-    return candidate > today && (next === undefined || candidate < next) ? candidate : next;
-  }, undefined) : undefined;
+  const nextDueAt = scheduler ? nextScheduledReviewAt(reviews, Date.now(), scheduler) : undefined;
   const startReview = (attempt: Attempt) => onReview(attempt, [attempt, ...queue.filter((item) => item.id !== attempt.id)], reviewSource, reviewKind);
   const today = dayStart();
   const todayVisits = visits.filter((item) => item.openedAt >= today);

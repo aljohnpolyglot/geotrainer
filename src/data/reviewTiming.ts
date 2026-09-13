@@ -1,4 +1,4 @@
-import type { SchedulerPreferences } from '../types';
+import type { ReviewRecord, SchedulerPreferences } from '../types';
 
 export const detectedTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 const zonedParts = (value: number, timeZone: string) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
@@ -27,3 +27,8 @@ export const nextReviewAt = (value: number, intervalDays: number, preferences: S
   const target = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + Math.ceil(intervalDays)));
   return utcForZonedDateTime({ year: target.getUTCFullYear(), month: target.getUTCMonth() + 1, day: target.getUTCDate(), hour: parts.hour, minute: parts.minute }, timeZone);
 };
+export const effectiveReviewDueAt = (review: Pick<ReviewRecord, 'dueAt' | 'intervalDays'>, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt : reviewDayStart(review.dueAt, preferences);
+export const nextScheduledReviewAt = (reviews: Array<Pick<ReviewRecord, 'dueAt' | 'intervalDays'>>, now: number, preferences: SchedulerPreferences) => reviews.reduce<number | undefined>((next, review) => {
+  const candidate = effectiveReviewDueAt(review, preferences);
+  return candidate > now && (next === undefined || candidate < next) ? candidate : next;
+}, undefined);

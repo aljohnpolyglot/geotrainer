@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { ArrowRight, BookOpen, BookOpenText, ChevronRight, Cloud, Gamepad2, MapPinned, Target } from 'lucide-react';
-import { reviewDayStart, trainerDb } from '../data/trainerDb';
+import { effectiveReviewDueAt, nextScheduledReviewAt, trainerDb } from '../data/trainerDb';
 import { cloudSync } from '../services/cloudSync';
 import { CloudAccountDialog } from './CloudAccountDialog';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -25,8 +25,8 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       .then(([locations, attempts, reviews, sessions, scheduler]) => setStatus({
         locations: locations.length,
         attempts: attempts.length,
-        due: reviews.filter((review) => review.intervalDays < 1 ? review.dueAt <= Date.now() : reviewDayStart(review.dueAt, scheduler) <= reviewDayStart(Date.now(), scheduler)).length,
-        nextDue: reviews.reduce<number | null>((next, review) => { const today = reviewDayStart(Date.now(), scheduler); const candidate = review.intervalDays < 1 ? review.dueAt : reviewDayStart(review.dueAt, scheduler); return candidate > today && (next === null || candidate < next) ? candidate : next; }, null),
+        due: reviews.filter((review) => effectiveReviewDueAt(review, scheduler) <= Date.now()).length,
+        nextDue: nextScheduledReviewAt(reviews, Date.now(), scheduler) ?? null,
         scheduled: reviews.length > 0,
         timeZone: scheduler.reviewTimeZone,
         minutes: Math.round(sessions.reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
@@ -49,7 +49,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       <div className="departure-board">
         <div className="board-heading"><span>{t('Choose a mode')}</span></div>
         <button onClick={onPlay}><span className="route-code">PLY</span><span><strong>{t('Start a game')}</strong><small>{t('1–100 scored rounds · Standard / No Move / NMPZ')}</small></span><Gamepad2 size={19} /></button>
-        <button onClick={onReview}><span className="route-code">REV</span><span><strong>{t('Review weak places')}</strong><small>{status.due ? `${status.due} ${t('reviewsDueToday')}` : status.nextDue ? `${t('dailyReviewsComplete')} · ${t('tryAgainAt')}: ${new Date(status.nextDue).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short', ...(status.timeZone ? { timeZone: status.timeZone } : {}) })}` : status.scheduled ? t('dailyReviewsComplete') : t('noReviewsScheduled')}</small></span><Target size={19} /></button>
+        <button onClick={onReview}><span className="route-code">REV</span><span><strong>{t('Review weak places')}</strong><small>{status.due ? `${status.due} ${t('reviewsDueToday')}` : status.nextDue ? `${t('dailyReviewsComplete')} · ${t('tryAgainAt')}: ${new Date(status.nextDue).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(status.timeZone ? { timeZone: status.timeZone } : {}) })}` : status.scheduled ? t('dailyReviewsComplete') : t('noReviewsScheduled')}</small></span><Target size={19} /></button>
         <button onClick={() => window.open(`${import.meta.env.BASE_URL}docs/`, '_blank', 'noopener,noreferrer')}><span className="route-code">DOC</span><span><strong>{t('Guide')}</strong><small>{t('Learn how GeoTrainer builds durable recall')}</small></span><BookOpenText size={19} /></button>
         <div className="menu-status">
           <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-import { DEFAULT_SCHEDULER_PREFERENCES, nextReviewAt, normalizeSchedulerPreferences, trainerDb } from '../data/trainerDb';
+import { DEFAULT_SCHEDULER_PREFERENCES, effectiveReviewDueAt, nextScheduledReviewAt, normalizeSchedulerPreferences, trainerDb } from '../data/trainerDb';
 import { DEFAULT_LANGUAGE_PREFERENCES, LANGUAGE_OPTIONS, normalizeLanguagePreferences, translate } from '../services/language';
-import type { CompassStyle, LanguagePreferences, SchedulerPreferences, SupportedLanguage } from '../types';
+import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferences, SupportedLanguage } from '../types';
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
+const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 const relativeDuration = (milliseconds: number, locale: string) => { const minutes = Math.max(0, Math.round(milliseconds / 60000)); const hours = Math.floor(minutes / 60); const remainder = minutes % 60; const format = (value: number, unit: 'hour' | 'minute') => new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short' }).format(value); return [hours && format(hours, 'hour'), remainder && format(remainder, 'minute')].filter(Boolean).join(' '); };
 type SettingsTab = 'language' | 'review' | 'display';
@@ -23,6 +24,7 @@ const NOTE_LANGUAGE_COPY: Record<SupportedLanguage, string> = {
 export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void }) {
   const [languages, setLanguages] = useState<LanguagePreferences>(DEFAULT_LANGUAGE_PREFERENCES);
   const [scheduler, setScheduler] = useState<SchedulerPreferences>(DEFAULT_SCHEDULER_PREFERENCES);
+  const [reviews, setReviews] = useState<ReviewRecord[]>([]);
   const [loadedGameLanguage, setLoadedGameLanguage] = useState<SupportedLanguage>('en');
   const [compassStyle, setCompassStyle] = useState<CompassStyle>('bar');
   const [darkMode, setDarkMode] = useState(false);
@@ -30,12 +32,13 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.reviews()]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedReviews]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
       setCompassStyle(savedCompassStyle === 'dial' ? 'dial' : 'bar');
       setDarkMode(savedDarkMode === true);
+      setReviews(savedReviews);
       if (savedTab === 'language' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
   }, [open]);
@@ -53,7 +56,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
     else onClose();
   };
   if (!open) return null;
-  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextReviewAt(previewNow, previewScheduler.firstReviewDays, previewScheduler); const previewDate = new Date(previewAt).toLocaleString(languages.ui, { dateStyle: 'medium', timeStyle: 'short', timeZone: previewScheduler.reviewTimeZone });
+  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])];
 
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="language-settings preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
@@ -84,9 +87,9 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label>{translate(languages.ui, 'maximumAnswer')}<input type="number" min="10" max="600" value={scheduler.maximumAnswerSeconds} onChange={(event) => number('maximumAnswerSeconds', event.target.value)} /></label>
         <label>{translate(languages.ui, 'dueOrder')}<select value={scheduler.reviewOrder} onChange={(event) => setScheduler((current) => ({ ...current, reviewOrder: event.target.value as SchedulerPreferences['reviewOrder'] }))}><option value="due">{translate(languages.ui, 'oldestDue')}</option><option value="random">{translate(languages.ui, 'random')}</option></select></label>
         <label>{translate(languages.ui, 'reviewResetTime')}<input type="time" value={timeValue(scheduler.reviewDayResetMinutes)} onChange={(event) => resetTime(event.target.value)} /></label>
-        <label>{translate(languages.ui, 'reviewTimeZone')}<input list="review-time-zones" value={scheduler.reviewTimeZone || ''} disabled={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZone: event.target.value, reviewTimeZoneAuto: false }))} /><datalist id="review-time-zones">{COMMON_TIME_ZONES.map((zone) => <option key={zone} value={zone} />)}</datalist></label>
+        <label>{translate(languages.ui, 'reviewTimeZone')}<select value={previewScheduler.reviewTimeZone} disabled={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZone: event.target.value, reviewTimeZoneAuto: false }))}>{timeZones.map((zone) => <option key={zone} value={zone}>{zone}</option>)}</select></label>
         <label className="settings-checkbox"><input type="checkbox" checked={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZoneAuto: event.target.checked }))} />{translate(languages.ui, 'autoDetectTimeZone')}</label>
-        <p>{translate(languages.ui, 'reviewResetDescription')}</p><p className="review-time-preview"><strong>{translate(languages.ui, 'nextFirstReview')}</strong> {previewDate} · {relativeDuration(previewAt - previewNow, languages.ui)}</p>
+        <p>{translate(languages.ui, 'reviewResetDescription')}</p><p className="review-time-preview"><strong>{translate(languages.ui, 'nextReviewAt')}:</strong> {hasDueReviews ? translate(languages.ui, 'Due now') : previewAt ? `${new Date(previewAt).toLocaleString(languages.ui, { dateStyle: 'medium', timeStyle: 'short', timeZone: previewScheduler.reviewTimeZone })} · ${relativeDuration(previewAt - previewNow, languages.ui)}` : translate(languages.ui, 'noReviewsScheduled')}</p>
       </fieldset></>}
       <footer><button type="button" className="button secondary" onClick={onClose}>{translate(languages.ui, 'close')}</button><button type="button" className="button primary" onClick={() => void save()}>{translate(languages.ui, 'save')}</button></footer>
     </section>

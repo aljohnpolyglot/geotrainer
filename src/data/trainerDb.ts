@@ -19,7 +19,7 @@ import type {
 import { COUNTRIES } from './countries';
 import { resolveClueImages } from '../services/clueImages';
 import { detectedTimeZone, nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
-export { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
+export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [

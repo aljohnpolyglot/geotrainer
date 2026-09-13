@@ -174,7 +174,7 @@ Erste Wiederholung bestimmt die anfängliche Verzögerung. Erneutes Lernen legt 
 
 ### Antwortzeit, Reihenfolge und Tageswechsel
 
-Maximale Antwortsekunden unterscheiden flüssiges Erinnern von langem Suchen. Älteste fällige priorisiert lange wartende Karten; Zufällig mischt die Auswahl. Rücksetzzeit und Zeitzone definieren den Beginn eines neuen Wiederholungstags.
+Maximale Antwortsekunden unterscheiden flüssiges Erinnern von langem Suchen. Älteste fällige priorisiert lange wartende Karten; Zufällig mischt die Auswahl. Rücksetzzeit und die per Auswahlfeld oder automatisch erkannte Zeitzone definieren den Beginn eines neuen Wiederholungstags. Die Einstellungen zeigen die tatsächlich nächste geplante Wiederholung mit Ortszeit und verbleibender Dauer.
 
 ## Benutzerdefinierte Übung
 

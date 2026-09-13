@@ -5,10 +5,12 @@ import type { ReviewPanelProps } from "./trainerHubTypes";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
 import { CollectionOptions } from "./CollectionOptions";
+import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
 export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
-  const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
+  const { ui } = useLanguagePreferences();
+  const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
   const scorePreset = filters.minScore !== undefined || (filters.maxScore !== undefined && ![4000, 3000, 2000, 1000].includes(filters.maxScore)) ? 'custom' : filters.maxScore === undefined ? 'any' : String(filters.maxScore);
   return <>
     <section className="daily-review-block" aria-labelledby="daily-review-title">

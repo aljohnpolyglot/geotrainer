@@ -202,7 +202,7 @@ Maximum answer seconds helps distinguish fluent recall from a correct answer rea
 
 ### Due order and day boundary
 
-Oldest due prioritizes the longest-waiting cards. Random mixes the due queue. The review reset time and timezone define when a new study day begins, which prevents midnight sessions from splitting unexpectedly. Preferences previews the next first-review boundary as both a local date and the remaining hours and minutes.
+Oldest due prioritizes the longest-waiting cards. Random mixes the due queue. The review reset time and timezone define when a new study day begins, which prevents midnight sessions from splitting unexpectedly. Choose the timezone from the dropdown or use automatic detection. Preferences shows the actual next scheduled review as both a local date and the remaining hours and minutes.
 
 ## Custom practice
 

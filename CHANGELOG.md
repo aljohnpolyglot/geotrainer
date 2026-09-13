@@ -5,6 +5,8 @@
 - Kept localized Reveal and Next controls visible throughout mobile Learn, grouped Coach and learning aids into one modal-safe toolbar, and made Statistics tables reliably swipeable with a readable sticky first column.
 - Replaced the contributor toggle in Custom Learn and Play with an Official / Mixed / Contributor imagery selector that defaults to official panoramas while preserving older saved preferences and games.
 - Scheduled day-based reviews at the configured local reset boundary instead of 24 hours after the prior action, and added an exact local-time plus hours/minutes preview to Review preferences.
+- Made Review and Preferences show the same earliest persisted due time in the UI language, and replaced free-text timezone entry with a timezone dropdown.
+- Kept result-map legend labels readable in both light and dark themes.
 
 ## 2026-09-12
 
