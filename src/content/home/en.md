@@ -342,7 +342,7 @@ Open the account entry on the homepage and use Google or email. Signing in ident
 
 ### What sync does
 
-Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to a screen checks for newer cloud progress. Signed-out localhost and deployed-site data remain separate.
+Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to a screen checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 

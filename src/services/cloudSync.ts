@@ -13,7 +13,7 @@ import {
 import { supabase } from './supabase';
 import { uploadClueImage } from './clueImages';
 import type { ClueRecord } from '../types';
-import { reloadPage } from './devDiagnostics';
+import { announceCloudImport } from './cloudSyncEvent';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
 
@@ -147,7 +147,7 @@ async function syncSession(session: Session | null): Promise<void> {
       }
     }
     await upload(session.user.id, true);
-    if (importedCloud) reloadPage('cloud-import');
+    if (importedCloud) announceCloudImport();
   } catch (error) {
     applyingCloud = false;
     update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync failed.' });

@@ -41,6 +41,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
 - Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
 - Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
+- Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card, never invents a score, and must remain recognized as saved after reload.

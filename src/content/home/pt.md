@@ -63,7 +63,7 @@ Veja lugares, tentativas, tempo ativo, fila, desempenho e histórico. Pistas con
 
 ## Sincronização na nuvem
 
-A conta é opcional e o treino local funciona sem login. Quando conectada, a sincronização inclui progresso e preferências de Revisão, idioma, interface, áudio e jogo; vencem a configuração mais recente e a Revisão avaliada por último. A nuvem é verificada ao voltar a cada tela. Sem login, localhost e o site publicado ficam separados.
+A conta é opcional e o treino local funciona sem login. Quando conectada, a sincronização inclui progresso e preferências de Revisão, idioma, interface, áudio e jogo; vencem a configuração mais recente e a Revisão avaliada por último. A nuvem é verificada ao voltar a cada tela e atualiza o app aberto sem recarregar nem substituir o espaço de trabalho ativo. Sem login, localhost e o site publicado ficam separados.
 
 ## Solução de problemas
 

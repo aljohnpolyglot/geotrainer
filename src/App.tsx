@@ -38,6 +38,7 @@ import {
 } from './data/collections';
 import { COUNTRIES } from './data/countries';
 import { hasStudyReviewSource } from './data/reviewIdentity';
+import { CLOUD_IMPORT_EVENT } from './services/cloudSyncEvent';
 import {
   getBookmarks,
   saveBookmark,
@@ -316,6 +317,7 @@ export default function App() {
       });
   }, []);
   useEffect(() => { document.documentElement.classList.toggle('dark', darkMode); }, [darkMode]);
+  useEffect(() => { const refresh = () => setTrainerRefreshKey((key) => key + 1); window.addEventListener(CLOUD_IMPORT_EVENT, refresh); return () => window.removeEventListener(CLOUD_IMPORT_EVENT, refresh); }, []);
 
   useEffect(() => {
     if (!summaryGameRecord) return;

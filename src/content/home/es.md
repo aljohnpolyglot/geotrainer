@@ -63,7 +63,7 @@ Consulta lugares, intentos, tiempo activo, cola pendiente, rendimiento e histori
 
 ## Sincronización en la nube
 
-La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al conectarte, se sincronizan el progreso y los ajustes de Repaso, idioma, interfaz, audio y juego; prevalecen el ajuste más reciente y el Repaso calificado más tarde. La nube se vuelve a comprobar al enfocar cada pantalla. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
+La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al conectarte, se sincronizan el progreso y los ajustes de Repaso, idioma, interfaz, audio y juego; prevalecen el ajuste más reciente y el Repaso calificado más tarde. La nube se vuelve a comprobar al enfocar cada pantalla y actualiza la aplicación abierta sin recargar ni sustituir el espacio de trabajo activo. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
 
 ## Solución de problemas
 

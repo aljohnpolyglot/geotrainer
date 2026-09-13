@@ -63,7 +63,7 @@ Se platser, försök, aktiv tid, kö, resultat och historik. Kända ledtrådar s
 
 ## Molnsynkronisering
 
-Konto är valfritt och lokal träning fungerar utan inloggning. När du är inloggad synkroniseras framsteg samt inställningar för Repetition, språk, gränssnitt, ljud och spel; den senaste inställningen och den senast bedömda Repetitionen vinner. Molnet kontrolleras när varje skärm får fokus. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
+Konto är valfritt och lokal träning fungerar utan inloggning. När du är inloggad synkroniseras framsteg samt inställningar för Repetition, språk, gränssnitt, ljud och spel; den senaste inställningen och den senast bedömda Repetitionen vinner. Molnet kontrolleras när varje skärm får fokus och uppdaterar den öppna appen utan omladdning eller byte av den aktiva arbetsytan. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
 
 ## Felsökning
 

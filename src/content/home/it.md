@@ -63,7 +63,7 @@ Consulta luoghi, tentativi, tempo attivo, coda, prestazioni e cronologia. Indizi
 
 ## Sincronizzazione cloud
 
-L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la sincronizzazione include progressi e preferenze di Ripasso, lingua, interfaccia, audio e gioco; prevalgono l’impostazione più recente e il Ripasso valutato per ultimo. Il cloud viene ricontrollato quando ogni schermata torna attiva. Senza accesso, localhost e il sito pubblicato restano separati.
+L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la sincronizzazione include progressi e preferenze di Ripasso, lingua, interfaccia, audio e gioco; prevalgono l’impostazione più recente e il Ripasso valutato per ultimo. Il cloud viene ricontrollato quando ogni schermata torna attiva e aggiorna l’app aperta senza ricaricare né sostituire lo spazio di lavoro attivo. Senza accesso, localhost e il sito pubblicato restano separati.
 
 ## Risoluzione dei problemi
 

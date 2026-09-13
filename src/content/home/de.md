@@ -298,7 +298,7 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Synchronisierte Daten
 
-Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim erneuten Fokussieren wird neuer Cloud-Fortschritt geprüft. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim erneuten Fokussieren wird neuer Cloud-Fortschritt ohne Neuladen oder Ersetzen des aktiven Arbeitsstands übernommen. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
 
 ### Offline arbeiten und abmelden
 

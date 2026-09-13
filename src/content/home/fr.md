@@ -63,7 +63,7 @@ Consultez lieux, tentatives, temps actif, file, performances et historique. Indi
 
 ## Synchronisation cloud
 
-Le compte est facultatif et l’entraînement local fonctionne sans connexion. Une fois connecté, la synchronisation inclut la progression et les réglages de Révision, langue, interface, audio et jeu ; le réglage le plus récent et la Révision notée en dernier l’emportent. Le cloud est vérifié lorsque chaque écran reprend le focus. Sans connexion, localhost et le site publié restent séparés.
+Le compte est facultatif et l’entraînement local fonctionne sans connexion. Une fois connecté, la synchronisation inclut la progression et les réglages de Révision, langue, interface, audio et jeu ; le réglage le plus récent et la Révision notée en dernier l’emportent. Le cloud est vérifié lorsque chaque écran reprend le focus et met à jour l’application ouverte sans rechargement ni remplacement de l’espace de travail actif. Sans connexion, localhost et le site publié restent séparés.
 
 ## Dépannage
 
