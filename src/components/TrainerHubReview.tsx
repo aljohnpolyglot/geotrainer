@@ -7,14 +7,15 @@ import { CountryFlag } from "./CountryFlag";
 import { CollectionOptions } from "./CollectionOptions";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
-export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
+export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
   const { ui } = useLanguagePreferences();
   const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
+  const heldByDailyLimits = filters.due && reviewCollection === 'all' && !filters.environment ? Math.max(0, dueCount - queue.length) : 0;
   const scorePreset = filters.minScore !== undefined || (filters.maxScore !== undefined && ![4000, 3000, 2000, 1000].includes(filters.maxScore)) ? 'custom' : filters.maxScore === undefined ? 'any' : String(filters.maxScore);
   return <>
     <section className="daily-review-block" aria-labelledby="daily-review-title">
-      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? t("dueDescription") : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p></div>
+      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("dueDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p></div>
       <button className="button primary daily-review-action" disabled={!queue[0]} onClick={() => queue[0] && startReview(queue[0])}><Target size={20} /> {t("reviewAction")}</button>
     </section>
     <div className="filter-bar">
@@ -30,7 +31,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
       </div>
     </div>
     <div className="queue-head"><div><h2>{queue.length} {t("locationsReady")}</h2><p>{filters.due ? t("dueDescription") : t("customDescription")}</p></div>{queue[0] && <button className="button primary" onClick={() => startReview(queue[0])}><Target size={16} /> {t("reviewAction")}</button>}</div>
-    <div className="attempt-list">{queue.slice(0, 30).map((item) => <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code"><CountryFlag code={item.countryCode} /></span><span><strong>{countryName(item.countryCode)}</strong><small>{date(item.createdAt)} · {item.source === "play" ? t("play") : t("review")}</small></span><span>{item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{item.score.toLocaleString()}</strong><ArrowUpRight size={15} /></button>)}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t("dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
+    <div className="attempt-list">{queue.slice(0, 30).map((item) => { const isNewCard = item.source === "study"; return <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code"><CountryFlag code={item.countryCode} /></span><span><strong>{countryName(item.countryCode)}</strong><small>{date(item.createdAt)} · {isNewCard ? t("study") : item.source === "play" ? t("play") : t("review")}</small></span><span>{isNewCard ? t("New card") : item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{isNewCard ? "—" : item.score.toLocaleString()}</strong><ArrowUpRight size={15} /></button>; })}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t("dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
     <section className="smart-collections"><h2>{t("smartCollections")}</h2><p className="smart-collection-note">{t("smartCollectionDescription")}</p><div className="preset-list">
       <button onClick={() => onTrainCountries(weakCountries.map((item) => item.code), t("weakCountriesAction"))}>{t("weakCountriesAction")}</button>
       <button onClick={() => onTrainCountries([...new Set<string>(confusions.flatMap((item) => item.codes))], t("mostConfused"))}>{t("mostConfused")}</button>

@@ -7,6 +7,8 @@
 - Scheduled day-based reviews at the configured local reset boundary instead of 24 hours after the prior action, and added an exact local-time plus hours/minutes preview to Review preferences.
 - Made Review and Preferences show the same earliest persisted due time in the UI language, and replaced free-text timezone entry with a timezone dropdown.
 - Kept result-map legend labels and fullscreen controls readable in both light and dark themes.
+- Labeled ungraded Learn review sources as new cards, excluded them from wrong-country filters, and explained when daily limits hold back due cards.
+- Kept mobile learning tools in a vertical side rail below map controls and anchored Reveal / Next to the visible viewport in normal and fullscreen layouts.
 
 ## 2026-09-12
 

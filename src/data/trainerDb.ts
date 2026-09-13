@@ -340,7 +340,7 @@ export const trainerDb = {
       .filter((attempt) => !filters.environment || (attempt.environmentRequested ?? attempt.environment ?? 'mixed') === filters.environment)
       .filter((attempt) => filters.minScore === undefined || attempt.score >= filters.minScore)
       .filter((attempt) => filters.maxScore === undefined || attempt.score < filters.maxScore)
-      .filter((attempt) => !filters.wrongCountry || attempt.guessedLat === null || (!!attempt.guessedCountryCode && attempt.guessedCountryCode !== attempt.countryCode))
+      .filter((attempt) => !filters.wrongCountry || (!!attempt.guessedCountryCode && attempt.guessedCountryCode !== attempt.countryCode))
       .filter((attempt) => !filters.recent || (attempt.createdAt >= recentCutoff && attempt.score < 4000))
       .filter((attempt) => !filters.neverReviewed || !reviewByPano.has(attempt.panoId))
       .filter((attempt) => !filters.bookmarked || bookmarked.has(attempt.panoId))

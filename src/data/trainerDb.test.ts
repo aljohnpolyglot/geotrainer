@@ -60,6 +60,7 @@ test('migration is idempotent and backup/import protects history', async () => {
 
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'study-card:pano-study', panoId: 'pano-study', source: 'study', score: 0, guessedLat: null, guessedLng: null, guessedCountryCode: undefined });
   await trainerDb.queueForReview('pano-study');
+  assert.equal((await trainerDb.reviewQueue({ wrongCountry: true })).some((item) => item.panoId === 'pano-study'), false);
   assert.equal((await trainerDb.reviewQueue({ due: true })).some((item) => item.panoId === 'pano-study'), false);
   assert.ok((await trainerDb.reviews()).find((item) => item.panoId === 'pano-study')!.dueAt > Date.now());
   await trainerDb.queueForReview('pano-study', true);

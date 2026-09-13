@@ -1,4 +1,4 @@
-.panorama-tools { position: fixed; z-index: 40; top: 66px; right: 12px; display: flex; flex-direction: row-reverse; gap: 5px; padding: 4px; background: var(--storm); border: 1px solid rgba(138,215,232,.28); border-radius: 6px; box-shadow: 0 8px 22px rgba(0,18,29,.24); }
+.panorama-tools { position: fixed; z-index: 40; top: 66px; right: 60px; display: flex; flex-direction: row-reverse; gap: 5px; padding: 4px; background: var(--storm); border: 1px solid rgba(138,215,232,.28); border-radius: 6px; box-shadow: 0 8px 22px rgba(0,18,29,.24); }
 .ai-coach { position: fixed; top: 70px; right: 12px; z-index: 45; }
 .learning-aids > button { position: relative; }.learning-aids > button > b { position: absolute; top: -6px; right: -6px; min-width: 16px; height: 16px; padding: 0 4px; color: #001019; background: var(--lime); border-radius: 999px; font: 800 9px/16px ui-monospace,monospace; }.available-notes-list { max-height: calc(100dvh - 150px); overflow-y: auto; scrollbar-width: thin; }.available-notes-list article { display: grid; gap: 8px; padding: 12px 13px; border-bottom: 1px solid var(--rule); }.available-notes-list article > img { width: 100%; max-height: 240px; object-fit: contain; background: var(--paper-2); border-radius: 4px; }.available-notes-list strong { color: var(--blue); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }.available-notes-list p,.available-notes-list section,.available-notes-list ul { margin: 0; }.available-notes-list p,.available-notes-list li { font-size: 12px; line-height: 1.5; }.available-notes-list ul { padding-left: 18px; }.available-notes-list small { color: var(--muted); }.available-note-analysis { display: grid; gap: 9px; }.available-note-analysis section { display: grid; gap: 4px; }
 .coach-launch { display: grid; width: 30px; height: 30px; place-items: center; padding: 0; color: #b9cbd0; background: rgba(5,28,42,.78); border: 1px solid rgba(138,215,232,.25); border-radius: 4px; box-shadow: none; cursor: pointer; }
@@ -99,7 +99,8 @@
 .review-complete-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 
 @media (max-width: 700px) {
-  .panorama-tools { top: 68px; right: 50%; transform: translateX(50%); }
+  .panorama-tools { top: 116px; right: 12px; flex-direction: column; transform: none; }
+  .panorama-tools .learning-aids { flex-direction: column; }
   .ai-coach { top: 124px; max-width: calc(100vw - 24px); }
   .coach-launch-fixed { top: 72px; right: 93px; }
   .ai-coach aside { max-height: calc(100dvh - 136px); }

@@ -57,7 +57,7 @@ Ein Ort ist möglichst an seine Panorama-ID gebunden. Jeder abgegebene Tipp in S
 
 ### Wiederholungskarten
 
-Spiel-Fehler können automatisch eine Karte anlegen. Lernen erstellt mit Für Wiederholung speichern eine unbewertete Quellkarte. Wiederholungsantworten ergänzen neue Versuche und ändern nur den Zeitplan der Karte.
+Spiel-Fehler können automatisch eine Karte anlegen. Lernen erstellt mit Für Wiederholung speichern eine unbewertete Quellkarte; sie erscheint als neue Karte, nicht als Versuch ohne Tipp oder mit falschem Land. Wiederholungsantworten ergänzen neue Versuche und ändern nur den Zeitplan der Karte.
 
 ### Kartenstatus
 
@@ -152,7 +152,7 @@ Land, Entfernung, Punktzahl, Antwortzeit und Strengegrad ergeben intern die näc
 
 ### Warteschlange abschließen
 
-GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Tageslimits können weitere Karten zurückhalten.
+GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Wenn die Statistik mehr fällige Karten als die Wiederholungsansicht zeigt, nennt die Zusammenfassung die durch Tageslimits zurückgehaltene Anzahl.
 
 ## Planung und Einstellungen
 
@@ -420,7 +420,7 @@ Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechn
 
 ## Lernen, Meta und Notizbuch
 
-Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google-Bilder; die Auswahl kann offizielle und beigesteuerte Panoramen mischen oder nur beigesteuerte Panoramen anfordern.
+Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Aufdecken und Weiter bleiben auch im Vollbild am unteren Rand des sichtbaren Bereichs; mobile Lernwerkzeuge stehen seitlich unter den Kartensteuerungen. Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google-Bilder; die Auswahl kann offizielle und beigesteuerte Panoramen mischen oder nur beigesteuerte Panoramen anfordern.
 
 Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist vor der Antwort nur das Referenzbild sichtbar; der vollständige Text folgt danach.
 

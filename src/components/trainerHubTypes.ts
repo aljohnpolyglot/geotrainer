@@ -45,6 +45,7 @@ export interface ReviewPanelProps {
   customMax: string;
   setCustomMax: (value: string) => void;
   queue: Attempt[];
+  dueCount?: number;
   nextDueAt?: number;
   reviewCount?: number;
   reviewTimeZone?: string;

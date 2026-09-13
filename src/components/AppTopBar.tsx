@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   AppMode,
   GameSettings,
@@ -85,7 +86,13 @@ export function AppTopBar({
   const t = (key: string) => translate(ui, key);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
-  return (
+  const studyActions = !showHome && appMode === 'study' && <div className="study-viewport-actions" role="group" aria-label={t('Learn')}>
+    <button id="reveal-location-btn" onClick={onReveal} disabled={!currentLocation || isLoading} title={isRevealed ? t('Hide exact location (R)') : t('Reveal exact location (R)')} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${isRevealed ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30' : 'bg-stone-950 text-stone-300 border-stone-800 hover:border-stone-700 hover:text-stone-100'} disabled:opacity-50 disabled:cursor-not-allowed`}>
+      {isRevealed && currentLocation ? <><img src={getFlagCdnUrl(currentLocation.countryCode, 40)} srcSet={`${getFlagCdnUrl(currentLocation.countryCode, 40)} 1x, ${getFlagCdnUrl(currentLocation.countryCode, 80)} 2x`} alt="" width="18" height="13" className="w-4.5 h-3 rounded-xs object-cover border border-stone-600/60 flex-shrink-0" referrerPolicy="no-referrer" /><span className="study-reveal-label font-semibold text-white">{COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode}</span><EyeOff className="w-3.5 h-3.5 text-amber-400 ml-0.5" /></> : <><Eye className="w-3.5 h-3.5 text-stone-400" /><span>{t('Reveal')}</span></>}
+    </button>
+    {learnSource !== 'map' && <button id="random-next-btn" onClick={onNextLocation} disabled={isLoading || studyReviewSaving} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md ${isLoading || studyReviewSaving ? 'bg-stone-700 text-stone-400 cursor-not-allowed' : 'bg-stone-100 hover:bg-white text-stone-950 active:scale-[0.98]'}`}>{isLoading || studyReviewSaving ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" /><span>{studyReviewSaving ? t('Saving...') : t('Finding...')}</span></> : <><Shuffle className="w-3.5 h-3.5 text-stone-900" /><span>{t(learnSource === 'meta' ? 'Next Meta' : 'Next')}</span><span className="hidden sm:inline-block text-[10px] text-stone-700 bg-stone-200 px-1.5 py-0.5 rounded font-mono">{t('Space')}</span></>}</button>}
+  </div>;
+  return <>
     <header id="app-topbar" className={`${mobileMenuOpen ? 'mobile-nav-open ' : ''}${isRevealed ? 'location-revealed ' : ''}mode-${appMode} h-14 px-3 sm:px-5 bg-stone-900 border-b border-stone-800 flex items-center justify-between z-30 flex-shrink-0 gap-2`}>
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
@@ -109,13 +116,6 @@ export function AppTopBar({
         </div>}
 
       <div className="header-actions flex items-center space-x-1.5 sm:space-x-2">
-        {!showHome && appMode === 'study' && <>
-          <button id="reveal-location-btn" onClick={onReveal} disabled={!currentLocation || isLoading} title={isRevealed ? t('Hide exact location (R)') : t('Reveal exact location (R)')} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${isRevealed ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30' : 'bg-stone-950 text-stone-300 border-stone-800 hover:border-stone-700 hover:text-stone-100'} disabled:opacity-50 disabled:cursor-not-allowed`}>
-            {isRevealed && currentLocation ? <><img src={getFlagCdnUrl(currentLocation.countryCode, 40)} srcSet={`${getFlagCdnUrl(currentLocation.countryCode, 40)} 1x, ${getFlagCdnUrl(currentLocation.countryCode, 80)} 2x`} alt="" width="18" height="13" className="w-4.5 h-3 rounded-xs object-cover border border-stone-600/60 flex-shrink-0" referrerPolicy="no-referrer" /><span className="study-reveal-label font-semibold text-white">{COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode}</span><EyeOff className="w-3.5 h-3.5 text-amber-400 ml-0.5" /></> : <><Eye className="w-3.5 h-3.5 text-stone-400" /><span>{t('Reveal')}</span></>}
-          </button>
-          {learnSource !== 'map' && <button id="random-next-btn" onClick={onNextLocation} disabled={isLoading || studyReviewSaving} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md ${isLoading || studyReviewSaving ? 'bg-stone-700 text-stone-400 cursor-not-allowed' : 'bg-stone-100 hover:bg-white text-stone-950 active:scale-[0.98]'}`}>{isLoading || studyReviewSaving ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" /><span>{studyReviewSaving ? t('Saving...') : t('Finding...')}</span></> : <><Shuffle className="w-3.5 h-3.5 text-stone-900" /><span>{t(learnSource === 'meta' ? 'Next Meta' : 'Next')}</span><span className="hidden sm:inline-block text-[10px] text-stone-700 bg-stone-200 px-1.5 py-0.5 rounded font-mono">{t('Space')}</span></>}</button>}
-        </>}
-
         {!showHome && appMode === 'play' && <>{isGameActive ? <><>{timeRemaining !== null && <div className={`flex items-center space-x-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border ${timeRemaining <= 10 ? 'bg-rose-950/80 border-rose-600 text-rose-400 animate-pulse' : 'bg-stone-950 border-stone-800 text-amber-300'}`}><Clock className="w-3.5 h-3.5" /><span>{formatTime(timeRemaining)}</span></div>}</><button onClick={onAbandonGame} title={t('Abandon game')} className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-stone-950 text-stone-400 hover:text-rose-400 border border-stone-800 hover:border-rose-900 rounded-lg text-xs font-medium transition-colors cursor-pointer"><XCircle className="w-3.5 h-3.5" /><span className="hidden sm:inline">{t('Abandon')}</span></button></> : <><button onClick={onOpenHistory} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-stone-950 text-stone-300 border border-stone-800 hover:border-stone-700 rounded-lg text-xs font-medium transition-colors cursor-pointer"><History className="w-3.5 h-3.5 text-amber-400" /><span className="hidden sm:inline">{t('Past Games')}</span><span className="text-[10px] font-mono bg-stone-800 text-stone-300 px-1.5 py-0.2 rounded-full">{pastGamesCount}</span></button><button onClick={onOpenNewGame} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-[#171000] font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md cursor-pointer active:scale-98"><Play className="w-3.5 h-3.5 fill-stone-950 text-stone-950" /><span>{t('New Game')}</span></button></>}</>}
         {!showHome && appMode === 'review' && reviewAttempt && <><span className="review-live-context">{reviewStatsLength + 1} / {Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</span><span className="review-source">{t('Source')}: {reviewSource}</span><button className="icon-button" onClick={onExitReview} aria-label={t('Exit review')}><XCircle size={16} /></button></>}
         <button onClick={onOpenPreferences} title={t('Preferences')} aria-label={t('Preferences')} className="utility-action p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"><Settings2 className="w-4 h-4" /><span>{t('Preferences')}</span></button>
@@ -124,5 +124,6 @@ export function AppTopBar({
         </div>
       </div>
     </header>
-  );
+    {studyActions && createPortal(studyActions, document.body)}
+  </>;
 }

@@ -35,6 +35,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review attempts are new records; never mutate the original Play attempt.
 - Before a guess, Review must not receive or render answer metadata.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
+- Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card and never invents a score.
 - Environment is a generator/filter dimension, not a duplicate collection system.

@@ -65,7 +65,7 @@ Every submitted Play or Review guess is a new attempt. The original attempt is n
 
 ### Review cards
 
-A review card schedules a reusable location. Play mistakes can create cards automatically. Study can create one ungraded source card with Save for Review. Review answers add new attempts and update only the card’s schedule.
+A review card schedules a reusable location. Play mistakes can create cards automatically. Study can create one ungraded source card with Save for Review; it appears as a new card, not a no-guess or wrong-country attempt. Review answers add new attempts and update only the card’s schedule.
 
 ### Card states
 
@@ -172,7 +172,7 @@ GeoTrainer derives an internal grade from the current result. Country correctnes
 
 ### Completing a queue
 
-Review continues through the active queue until no selected cards remain. Same-day relearning cards may return after their configured delay. Daily limits can leave additional due cards for a later session.
+Review continues through the active queue until no selected cards remain. Same-day relearning cards may return after their configured delay. When Statistics contains more due cards than Review makes ready, the Review summary shows how many daily limits are holding back.
 
 ## Scheduling
 
@@ -480,7 +480,7 @@ External guides are community references. Check several clues together and allow
 
 ## Learn, Meta, and Notebook
 
-Learn has three paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Custom Learn and Play default to official Google imagery; the imagery selector can instead mix official and contributor panoramas or request contributor-only coverage.
+Learn has three paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Reveal and Next stay at the bottom of the visible viewport, including fullscreen, while mobile learning tools form a side rail below the map controls. Custom Learn and Play default to official Google imagery; the imagery selector can instead mix official and contributor panoramas or request contributor-only coverage.
 
 In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Hint shows only the reference image before the guess; the full explanation appears afterward.
 
