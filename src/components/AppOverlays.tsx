@@ -10,7 +10,7 @@ import { GameSummaryModal } from './GameSummaryModal';
 import { NewGameModal } from './NewGameModal';
 import { GameHistoryModal } from './GameHistoryModal';
 import { CustomCollectionModal } from './CustomCollectionModal';
-import { XCircle } from 'lucide-react';
+import { Compass, XCircle } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { ReviewCompleteOverlay } from './ReviewCompleteOverlay';
@@ -28,7 +28,7 @@ interface AppOverlaysProps {
   summaryGameRecord: GameRecord | null; isNewGameModalOpen: boolean; isHistoryModalOpen: boolean; isStudySetupOpen: boolean; studySetup: StudySetup;
   isModalOpen: boolean; editingCollection: any;
   pastGames: GameRecord[]; allCollections: any[]; coveragePreview: TrainerLocation | null;
-  compassPreference: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
+  compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
   reviewGrading: boolean; roundIsMistake: boolean;
   learnSource: LearnSource; activeMetaLesson?: MetaLesson; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
   onSaveCoach: (note: any) => void; onSaveClue: (clue: any) => void; onClueAnalyzed: () => void;
@@ -41,6 +41,7 @@ interface AppOverlaysProps {
   onSaveCollection: (collection: any) => void; onDeleteCollection: (id: string) => void; onCloseCollection: () => void;
   onOpenMapLocation: (location: Omit<LocationResult, 'countryCode'>) => void; onCloseMapPicker: () => void; onDismissMetaAdvice: (forever: boolean) => void;
   onNoteSaved: () => Promise<void> | void;
+  onToggleCompass: () => void;
 }
 
 export function AppOverlays(props: AppOverlaysProps) {
@@ -49,12 +50,13 @@ export function AppOverlays(props: AppOverlaysProps) {
   const { appMode, showHome, currentLocation, isRevealed, reviewResult, reviewAttempt, reviewAttemptRecord, reviewHistory,
     reviewStats, reviewInitialTotal, reviewQueueLength, reviewSource, reviewComplete, activeRoundResult, gameSettings,
     currentRoundIndex, gameRounds, summaryGameRecord, isNewGameModalOpen, isHistoryModalOpen, isStudySetupOpen, studySetup, isModalOpen,
-    editingCollection, pastGames, allCollections, coveragePreview, compassPreference,
+    editingCollection, pastGames, allCollections, coveragePreview, compassPreference, activeCompass,
     preferencesOpen, trainerRefreshKey, reviewGrading, roundIsMistake, learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
   const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   return <>
     {!showHome && currentLocation && <div className={`panorama-tools${appMode === 'review' && reviewResult ? ' review-result-tools' : ''}`} aria-label={t('Learning aids')}>
+    {appMode !== 'play' && <button className={`map-training-toggle${activeCompass ? ' enabled' : ''}`} type="button" role="switch" aria-checked={activeCompass} onClick={props.onToggleCompass} title={`${t('compass')} ${activeCompass ? t('on') : t('off')}`}><Compass size={17} /></button>}
     {(appMode !== 'play' || gameSettings?.aiCoachEnabled !== false) && <AiCoach panoId={currentLocation.panoId} appMode={appMode} revealed={appMode === 'study' ? isRevealed : !!reviewResult} context={(appMode === 'study' ? isRevealed : reviewResult) ? { actualCountry: COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode, guessedCountry: reviewAttemptRecord?.guessedCountryCode ? COUNTRIES[reviewAttemptRecord.guessedCountryCode]?.name || reviewAttemptRecord.guessedCountryCode : undefined, score: reviewResult?.score, distanceKm: reviewResult?.distanceKm, previousAttempts: appMode === 'review' ? reviewHistory.slice(0, 5).map((item) => ({ guessedCountry: item.guessedCountryCode, score: item.score })) : undefined } : undefined} onSave={props.onSaveCoach} onSaveClue={(clue) => props.onSaveClue({ ...clue, origin: 'coach' })} onClueAnalyzed={props.onClueAnalyzed} />}
     <LearningAids lesson={appMode === 'study' && learnSource === 'meta' ? studyMeta : reviewMeta}
       panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} reviewActive={appMode === 'review'} answerVisible={appMode === 'study' || !!reviewResult} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} refreshKey={trainerRefreshKey} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />

@@ -45,7 +45,7 @@
 .statistics-title { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--rule); padding-bottom: 12px; }
 .statistics-title h2, .statistics-panel h3 { margin: 0; color: var(--carbon); }
 .statistics-title p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
-.statistics-title nav { display: flex; min-width: 0; max-width: 100%; flex-wrap: nowrap; gap: 4px; overflow-x: auto; }
+.statistics-title nav { display: flex; min-width: 0; max-width: 100%; flex-wrap: nowrap; gap: 4px; overflow-x: auto; overscroll-behavior-inline: contain; touch-action: pan-x; -webkit-overflow-scrolling: touch; }
 .statistics-title nav button { flex: 0 0 auto; padding: 7px 9px; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 3px; text-transform: capitalize; white-space: nowrap; cursor: pointer; }
 .statistics-title nav button.active { color: #fff; background: var(--storm); border-color: var(--storm); }
 .stats-summary { padding: 16px 18px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; }

@@ -48,7 +48,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   }, [open]);
 
   const language = (key: keyof LanguagePreferences, value: SupportedLanguage) => setLanguages((current) => ({ ...current, [key]: value }));
-  const number = (key: keyof SchedulerPreferences, value: string) => setScheduler((current) => ({ ...current, [key]: Number(value) }));
+  const number = (key: keyof SchedulerPreferences, value: string) => setScheduler((current) => ({ ...current, [key]: value === '' ? NaN : Number(value) }));
   const resetTime = (value: string) => { const [hours, minutes] = value.split(':').map(Number); setScheduler((current) => ({ ...current, reviewDayResetMinutes: (hours || 0) * 60 + (minutes || 0) })); };
   const save = async () => {
     const nextLanguages = normalizeLanguagePreferences(languages);
@@ -85,8 +85,8 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label>{translate(languages.ui, 'Music volume')} · {Math.round(audio.musicVolume * 100)}%<input type="range" min="0" max="1" step="0.05" disabled={!audio.musicEnabled} value={audio.musicVolume} onChange={(event) => setAudio({ ...audio, musicVolume: Number(event.target.value) })} /></label>
       </fieldset></>}
       {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
-        <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
-        <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
+        <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={Number.isNaN(scheduler.newCardsPerDay) ? '' : scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
+        <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={Number.isNaN(scheduler.maximumReviewsPerDay) ? '' : scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
       </fieldset>
       <fieldset className="scheduling-settings"><legend>{translate(languages.ui, 'scheduling')}</legend>
         <label>{translate(languages.ui, 'strictness')}<select value={scheduler.strictness} onChange={(event) => setScheduler((current) => ({ ...current, strictness: event.target.value as SchedulerPreferences['strictness'] }))}><option value="beginner">{translate(languages.ui, 'beginner')}</option><option value="balanced">{translate(languages.ui, 'balanced')}</option><option value="pro">{translate(languages.ui, 'pro')}</option></select></label>

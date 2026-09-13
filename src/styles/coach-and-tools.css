@@ -73,7 +73,7 @@
 .compass-toggle.enabled { color: #fff; border-color: var(--lime); }
 .compass-toggle.enabled strong { color: var(--lime); }
 .compass-toggle:disabled { opacity: .78; }
-.map-training-toggles { position: absolute; z-index: 24; top: 12px; right: 58px; display: flex; gap: 5px; }.map-training-toggles button { position: relative; display: grid; width: 30px; height: 30px; place-items: center; color: #b9cbd0; background: rgba(5,28,42,.78); border: 1px solid rgba(138,215,232,.25); border-radius: 4px; cursor: pointer; }.map-training-toggles button:hover { color: #fff; background: rgba(5,28,42,.94); }.map-training-toggles button.enabled { color: var(--lime); border-color: rgba(201,240,91,.6); }.map-training-toggles button:focus-visible { outline: 3px solid #8ad7e8; outline-offset: 2px; }
+.map-training-toggle { display: grid; width: 30px; height: 30px; flex: 0 0 auto; place-items: center; padding: 0; color: #b9cbd0; background: rgba(5,28,42,.78); border: 1px solid rgba(138,215,232,.25); border-radius: 4px; cursor: pointer; }.map-training-toggle:hover { color: #fff; background: rgba(5,28,42,.94); }.map-training-toggle.enabled { color: var(--lime); border-color: rgba(201,240,91,.6); }.map-training-toggle:focus-visible { outline: 3px solid #8ad7e8; outline-offset: 2px; }
 .game-compass-setting {
   width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 13px;
   color: #aebfc5; background: #071722; border: 1px solid #314752; border-radius: 8px; cursor: pointer;
@@ -107,7 +107,7 @@
   .ai-coach { top: 124px; max-width: calc(100vw - 24px); }
   .coach-launch-fixed { top: 72px; right: 93px; }
   .ai-coach aside { max-height: calc(100dvh - 136px); }
-  .panorama-tools :is(.coach-launch,.learning-aids > button) { width: 40px; height: 40px; }
+  .panorama-tools :is(.coach-launch,.learning-aids > button,.map-training-toggle) { width: 44px; height: 44px; }
   .learning-aids { top: 72px; right: 129px; }.learning-aid-panel { top: 116px; max-height: calc(100dvh - 128px); }.meta-advice { top: 116px; right: 12px; }
   .round-timer { top: 116px; }
   #new-game-dialog { max-height: 94vh !important; }

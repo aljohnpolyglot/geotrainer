@@ -444,7 +444,6 @@ export default function App() {
         onNextLocation={appMode === 'play' && isGameActive && gameSettings ? () => void fetchLocationForRound(gameSettings) : handleNextLearn}
         onMapsLoaded={handleMapsLoaded}
         onPanoramaChanged={(location) => void handleStudyPanoramaChanged(location)}
-        onToggleCompass={toggleCompass}
         onStudy={() => requestMode('study')}
         onPlay={() => requestMode('play')}
         onReview={() => { setShowHome(false); setTrainerStartTab('review'); setAppMode('review'); }}
@@ -468,10 +467,11 @@ export default function App() {
         gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, panoramaSource: studyPanoramaSource, showCompass: compassPreference }}
         isHistoryModalOpen={isHistoryModalOpen} isModalOpen={isModalOpen} editingCollection={editingCollection}
         pastGames={pastGames}
-        allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference}
+        allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference} activeCompass={activeCompass}
         preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady}
         roundIsMistake={!!summaryGameRecord?.rounds.some((round) => isCountryMistake(round.score, round.location.countryCode, round.guessedCountryCode, schedulerStrictness))}
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
+        onToggleCompass={toggleCompass}
         onClueAnalyzed={() => { if (appMode === 'play') playAiAssistedRef.current = true; }}
         onNextReview={() => void handleReviewNext()} onCloseCoverage={() => setCoveragePreview(null)}
         onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}

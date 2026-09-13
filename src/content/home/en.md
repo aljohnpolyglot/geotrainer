@@ -294,7 +294,7 @@ Start with Balanced defaults. Change one group at a time and observe the queue f
 
 ### Display
 
-Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
+Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
 
 ## Progress and statistics
 
@@ -306,7 +306,7 @@ Progress summarizes today and all-time activity, due reviews, countries encounte
 
 ### Performance
 
-Statistics can compare Study, Play, and Review activity over selected periods. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
+Statistics can compare Study, Play, and Review activity over selected periods. On mobile, swipe the section tabs and wide tables horizontally; the page stays in Statistics while those rows scroll. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
 
 ### AI-assisted rounds
 

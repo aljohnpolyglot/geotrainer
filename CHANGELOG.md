@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-14
+
+- Let daily new-card and review limits be cleared and replaced without forcing a leading zero.
+- Moved the Learn and Review compass switch into the shared panorama learning toolbar, with mobile-sized touch targets.
+- Kept mobile Statistics section tabs and wide tables horizontally swipeable without handing the gesture to browser navigation.
+
 ## 2026-09-13
 
 - Removed ungraded Learn source cards from scored attempt history and performance totals, resumed the existing Study visit after reload, and moved Personal source/timestamp metadata beneath My Clues note text.
