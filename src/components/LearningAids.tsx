@@ -9,14 +9,17 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { ClueCapture } from './ClueCapture';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
 import { CoachLocationEstimate } from './CoachLocationEstimate';
+import { nearbyReviewPoint } from '../data/reviewIdentity';
 
 export type MetaAid = { id: string; imageUrl: string; text?: string; note?: string; temporallySensitive?: boolean };
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
 type NoteDraft = { panoId: string; text: string; category: string };
 
-export function LearningAids({ lesson, panoId, countryCode, reviewActive, answerVisible, adviceOpen, refreshKey, onAdviceClose, onSaveClue, onNoteSaved }: {
+export function LearningAids({ lesson, panoId, lat, lng, countryCode, reviewActive, answerVisible, adviceOpen, refreshKey, onAdviceClose, onSaveClue, onNoteSaved }: {
   lesson?: MetaAid;
   panoId: string;
+  lat: number;
+  lng: number;
   countryCode: string;
   reviewActive: boolean;
   answerVisible: boolean;
@@ -43,13 +46,18 @@ export function LearningAids({ lesson, panoId, countryCode, reviewActive, answer
 
   useEffect(() => { setOpen(null); setClueIndex(0); setNoteClueId(undefined); setNoteImage(''); }, [panoId]);
   useEffect(() => { void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues()]).then(([personal = [], coach = [], attempts, visits, savedClues]) => {
-    const coachByRun = new Map(coach.filter((item) => item.panoId === panoId).map((item) => [`${item.generatedAt}:${item.mode}:${item.model}`, item]));
-    [...visits, ...attempts].filter((item) => item.panoId === panoId && item.coachAnalysis && item.coachGeneratedAt && item.coachMode).forEach((item) => { const model = item.coachModel || 'Gemini'; const key = `${item.coachGeneratedAt}:${item.coachMode}:${model}`; if (!coachByRun.has(key)) coachByRun.set(key, { id: `coach-legacy:${key}`, panoId, countryCode: item.countryCode, mode: item.coachMode!, model, generatedAt: item.coachGeneratedAt!, analysis: item.coachAnalysis! }); });
-    setClues(savedClues.filter((clue) => clue.panoId === panoId));
-    const personalImage = (note: NotebookNote) => (note.clueId ? savedClues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || savedClues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
-    const linkedClues = new Set(personal.flatMap((item) => item.clueId ? [item.clueId] : []));
-    setNotes([...personal.filter((item) => item.panoId === panoId).map((item) => { const linked = item.clueId ? savedClues.find((clue) => clue.id === item.clueId) : undefined; return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: personalImage(item), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', analysis: item.analysis, at: item.generatedAt })), ...savedClues.filter((item) => item.panoId === panoId && !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))].sort((a, b) => b.at - a.at));
-  }); }, [panoId, refreshKey, ui]);
+    const current = { panoId, lat, lng, countryCode }; const relatedPanos = new Set([panoId]);
+    visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
+    attempts.forEach((item) => { if (nearbyReviewPoint(current, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode })) relatedPanos.add(item.panoId); });
+    const nearbyClues = savedClues.filter((item) => relatedPanos.has(item.panoId) || (typeof item.lat === 'number' && typeof item.lng === 'number' && nearbyReviewPoint(current, { panoId: item.panoId, lat: item.lat, lng: item.lng, countryCode: item.countryCode })));
+    nearbyClues.forEach((item) => relatedPanos.add(item.panoId)); setClues(nearbyClues);
+    const coachByRun = new Map(coach.filter((item) => relatedPanos.has(item.panoId)).map((item) => [`${item.generatedAt}:${item.mode}:${item.model}`, item]));
+    [...visits, ...attempts].filter((item) => relatedPanos.has(item.panoId) && item.coachAnalysis && item.coachGeneratedAt && item.coachMode).forEach((item) => { const model = item.coachModel || 'Gemini'; const key = `${item.coachGeneratedAt}:${item.coachMode}:${model}`; if (!coachByRun.has(key)) coachByRun.set(key, { id: `coach-legacy:${key}`, panoId: item.panoId, countryCode: item.countryCode, mode: item.coachMode!, model, generatedAt: item.coachGeneratedAt!, analysis: item.coachAnalysis! }); });
+    const relevantPersonal = personal.filter((item) => relatedPanos.has(item.panoId) || !!item.clueId && nearbyClues.some((clue) => clue.id === item.clueId));
+    const personalImage = (note: NotebookNote) => (note.clueId ? nearbyClues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || nearbyClues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
+    const linkedClues = new Set(relevantPersonal.flatMap((item) => item.clueId ? [item.clueId] : []));
+    setNotes([...relevantPersonal.map((item) => { const linked = item.clueId ? nearbyClues.find((clue) => clue.id === item.clueId) : undefined; return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: personalImage(item), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', analysis: item.analysis, at: item.generatedAt })), ...nearbyClues.filter((item) => !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))].sort((a, b) => b.at - a.at));
+  }); }, [panoId, lat, lng, countryCode, refreshKey, ui]);
   useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
   const fullContent = !reviewActive || answerVisible;
   useEffect(() => {
@@ -58,7 +66,7 @@ export function LearningAids({ lesson, panoId, countryCode, reviewActive, answer
   }, [panoId]);
   const clue = clues[clueIndex];
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
-  const analysisDetails = (analysis: CoachAnalysis) => <div className="available-note-analysis"><CoachLocationEstimate estimate={analysis.locationEstimate} />{!!analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode} · {Math.round(candidate.confidence * 100)}%</li>)}</ul></section>}{list(t('strongClues'), analysis.strongClues)}{list(t('weakGeneric'), analysis.weakClues)}{list(t('contradictionsGaps'), analysis.contradictions || [])}{list(t('confusableWith'), analysis.confusions)}{list(t('inspectNext'), analysis.nextThingsToInspect)}{analysis.coreCard && <section><strong>{t('coreCard')}</strong><ul>{analysis.coreCard.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{analysis.coreCard.backExplanation}</p></section>}{analysis.extraCards.map((card) => <section key={card.category}><strong>{card.category}</strong><ul>{card.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{card.back}</p></section>)}</div>;
+  const analysisDetails = (analysis: CoachAnalysis) => <div className="available-note-analysis"><CoachLocationEstimate estimate={analysis.locationEstimate} />{!!analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode} · {Math.round(candidate.confidence * 100)}%{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ul></section>}{list(t('strongClues'), analysis.strongClues)}{list(t('weakGeneric'), analysis.weakClues)}{list(t('contradictionsGaps'), analysis.contradictions || [])}{list(t('confusableWith'), analysis.confusions)}{list(t('inspectNext'), analysis.nextThingsToInspect)}{analysis.coreCard && <section><strong>{t('coreCard')}</strong><ul>{analysis.coreCard.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{analysis.coreCard.backExplanation}</p></section>}{analysis.extraCards.map((card) => <section key={card.category}><strong>{card.category}</strong><ul>{card.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{card.back}</p></section>)}</div>;
   const saveNotebookNote = async () => {
     const updatedAt = Date.now(); let clueId = noteClueId;
     if (noteImage && !clueId) clueId = await onSaveClue({ imageDataUrl: noteImage, model: 'Notebook', generatedAt: updatedAt, analysis: { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] }, origin: 'personal' }) || undefined;

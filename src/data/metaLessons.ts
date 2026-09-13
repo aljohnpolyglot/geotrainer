@@ -15,6 +15,7 @@ export const metaLessonById = (id?: string) => id ? META_LESSONS.find((lesson) =
 export const localizeMetaLesson = (lesson: MetaLesson, language: SupportedLanguage): MetaLesson => ({ ...lesson, text: (rawTranslations as Record<string, Partial<Record<SupportedLanguage, string>>>)[lesson.id]?.[language] || lesson.text });
 
 export const savedMetaLessonIds = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => new Set(attempts.flatMap((attempt) => attempt.source === 'study' && attempt.metaLessonId ? [attempt.metaLessonId] : []));
+export const hasRemainingMetaLessons = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => savedMetaLessonIds(attempts).size < META_LESSONS.length;
 
 export const metaReviewAid = (id: string | undefined, answerVisible: boolean, language: SupportedLanguage = 'en') => {
   const lesson = metaLessonById(id);
@@ -23,7 +24,8 @@ export const metaReviewAid = (id: string | undefined, answerVisible: boolean, la
   return answerVisible ? { id: localized.id, imageUrl: localized.imageUrl, text: localized.text, note: localized.note, temporallySensitive: localized.temporallySensitive } : { id: localized.id, imageUrl: localized.imageUrl, temporallySensitive: localized.temporallySensitive };
 };
 
-export const nextMetaLesson = (currentId?: string, random = Math.random): MetaLesson | undefined => {
-  const choices = currentId && META_LESSONS.length > 1 ? META_LESSONS.filter((lesson) => lesson.id !== currentId) : META_LESSONS;
+export const nextMetaLesson = (currentId?: string, random = Math.random, completed = new Set<string>()): MetaLesson | undefined => {
+  const remaining = META_LESSONS.filter((lesson) => !completed.has(lesson.id));
+  const choices = currentId && remaining.length > 1 ? remaining.filter((lesson) => lesson.id !== currentId) : remaining;
   return choices[Math.floor(random() * choices.length)];
 };

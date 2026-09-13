@@ -42,6 +42,8 @@ Svaret döljs tills du gissar. Anpassad extraträning lämnar framtida kort ofö
 
 ## AI-coach och ledtrådar
 
+Coach väntar före analysen på det sparade AI-språket, avvisar tydligt flerspråkiga resultat och förklarar de synliga skälen för varje nytt kandidatland.
+
 Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. En uppskattning av region, stad eller exakt plats visas bara när flera starka synliga ledtrådar stöder den. Efter visat facit blir **Analysera** **Förklara**: coachen använder bara referenser för rätt land och säger öppet när bilden inte räckte för att identifiera det. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar; filtret visar antal per land, sorterar flest först och × rensar det.
 
 ### Ta skärmbild, klistra in och analysera
@@ -101,6 +103,8 @@ Glödlampan uppe till höger öppnar och stänger förklaringen. Förstarådet k
 
 Ett svagt repetitionsresultat flyttas automatiskt till slutet av den aktuella sessionen tills du klarar det. Varje försök sparas separat.
 
-Meta-studier innehåller 359 lokalt lagrade lektioner, normaliserade från den parade OpenGuessr-insamlingen och ytterligare GeoMetas-exempel med användbara Street View-koordinater. Meta-förklaringar följer gränssnittsspråket på alla åtta språk som stöds. När du använder AI Coach eller sparar en post i Anteckningsboken skapas eller återanvänds repetitionskortet automatiskt; annars finns Spara för repetition kvar på det avslöjade platskortet. **Tillgängliga anteckningar** innehåller endast personlig och AI-assisterad historik med fullständig analys, exakt tid och den inskickade skärmbilden när den finns; Meta ligger kvar under sin egen glödlampa. Slutlig personlig och AI-text behåller språket den skapades på. Repetition av ett redan förfallet kort flyttar schemat framåt även från anpassad träning och sparas efter omladdning.
+Meta-studier innehåller 359 lokalt lagrade lektioner, normaliserade från den parade OpenGuessr-insamlingen och ytterligare GeoMetas-exempel med användbara Street View-koordinater. Meta-förklaringar följer gränssnittsspråket på alla åtta språk som stöds. När du använder AI Coach eller sparar en post i Anteckningsboken skapas eller återanvänds repetitionskortet automatiskt; annars finns Spara för repetition kvar på det avslöjade platskortet. **Tillgängliga anteckningar** innehåller personlig och AI-assisterad historik för panoramat och Street View-noder i samma land inom 50 meter, med fullständig analys, exakt tid och den inskickade skärmbilden när den finns; Meta ligger kvar under sin egen glödlampa. Coach väntar på den sparade språkinställningen och begär alla naturliga textvärden på det valda AI-språket. Slutlig personlig och AI-text behåller språket den skapades på. Repetition av ett redan förfallet kort flyttar schemat framåt även från anpassad träning och sparas efter omladdning.
+
+Meta väljer bara oavslutade lektioner. När alla 359 är klara gråas alternativet i Lär dig ut och kan inte längre väljas.
 
 En oavslutad Studie- eller Spelsession sparas. När du återvänder kan du välja **Återuppta**, **Starta nytt** eller **Tillbaka**. Täckningen har ett kontinuerligt värmelager för **Behärskning**: många lyckade repetitioner och långa intervall gör länder och platser gradvis ljusare, medan missar sänker intensiteten. Ett panorama som öppnas från Täckning har AI Coach, Anteckningsbok, länkad Meta och Tillgängliga anteckningar; en sparning skapar eller återanvänder dess repetitionskort. Bildberoende Meta-ledtrådar visar en varning eftersom Street View-uppdateringar kan göra dem inaktuella.

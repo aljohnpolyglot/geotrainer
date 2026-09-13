@@ -22,6 +22,8 @@ Run type-check, tests, and build before handing off user-visible changes.
 ## Security
 
 - Gemini and Google API secrets stay server-side or in ignored environment files.
+- Load persisted language preferences before rendering or enabling Coach analysis, and require every natural-language Coach response value to use the selected AI language without translating JSON keys or ISO codes.
+- Reject and retry substantially mixed-language Coach output before displaying it; each ranked country must include a short visible-evidence rationale, while older saved results without one remain valid.
 - Shuffle the starting Gemini key and exhaust all available non-cooling keys on retryable Coach failures before surfacing an error.
 - Never place secrets in `src`, browser storage, IndexedDB, logs, reports, or committed examples.
 - The browser may call only the local coach endpoint; it must never call Gemini with a private key.
@@ -36,6 +38,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Before a guess, Review must not receive or render answer metadata.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
 - Treat same-country locations within 50 metres as one Review card across Play, Study, Notebook, and Coach sources.
+- Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
 - Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.
 - Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
 - Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
@@ -63,6 +66,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Preserve paused Learn and Play workspaces separately. When a saved workspace exists, entering that mode must offer Resume and Start new, with Back returning to the prior screen.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
+- Meta Learn selects only unfinished lessons and becomes visibly disabled in Learn setup after all lessons are completed.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.
 - Render every collection selector with the shared World, Continents, Trainer drills, regions, and custom-collections hierarchy.
 

@@ -2,6 +2,10 @@
 
 ## 2026-09-13
 
+- Loaded local language preferences before first render and made Coach wait for them, then strengthened local and hosted Gemini prompts to keep every natural-language response value in the selected AI language without changing the JSON schema.
+- Rejected substantially mixed-language Coach responses before display and added a visible-evidence explanation beneath every newly ranked candidate country.
+- Disabled and greyed out Meta in Learn setup after every lesson is completed, while selecting only unfinished lessons until then.
+- Grouped Available notes and its badge across same-country Street View nodes within 50 metres so moving a few steps no longer hides nearby Coach or Notebook history.
 - Applied imported cloud progress to open screens without forcing a page reload or resetting the active view.
 - Restored each Study panorama's saved-for-Review state from persisted attempts so its save action stays hidden after reload.
 - Synced every persisted setting category and resolved Review conflicts by the latest grading time; added safe development diagnostics for Vite reloads and corrected the revealed-location minimize contrast.

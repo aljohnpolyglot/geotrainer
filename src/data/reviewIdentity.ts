@@ -11,7 +11,7 @@ const pointsByPano = (locations: TrainerLocation[], attempts: Attempt[]) => {
   return points;
 };
 
-const nearby = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM;
+export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM;
 
 export const hasStudyReviewSource = (attempts: Attempt[], panoId: string) => attempts.some((attempt) => attempt.source === 'study' && attempt.panoId === panoId);
 
@@ -33,7 +33,7 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
 export function coalesceNearbyReviews(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[]) {
   const points = pointsByPano(locations, attempts); const aliases = new Map<string, string>(); const result: ReviewRecord[] = [];
   [...reviews].sort((a, b) => b.reviewCount - a.reviewCount || (b.lastReviewedAt || 0) - (a.lastReviewedAt || 0)).forEach((review) => {
-    const point = points.get(review.panoId); const index = point ? result.findIndex((item) => { const candidate = points.get(item.panoId); return !!candidate && nearby(point, candidate); }) : -1;
+    const point = points.get(review.panoId); const index = point ? result.findIndex((item) => { const candidate = points.get(item.panoId); return !!candidate && nearbyReviewPoint(point, candidate); }) : -1;
     if (index < 0) result.push(review);
     else { aliases.set(review.panoId, result[index].panoId); result[index] = merge(result[index], review); }
   });
@@ -42,5 +42,5 @@ export function coalesceNearbyReviews(reviews: ReviewRecord[], locations: Traine
 
 export function nearbyReview(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[], target: ReviewPoint) {
   const points = pointsByPano(locations, attempts);
-  return reviews.find((review) => review.panoId === target.panoId) || reviews.find((review) => { const point = points.get(review.panoId); return !!point && nearby(target, point); });
+  return reviews.find((review) => review.panoId === target.panoId) || reviews.find((review) => { const point = points.get(review.panoId); return !!point && nearbyReviewPoint(target, point); });
 }

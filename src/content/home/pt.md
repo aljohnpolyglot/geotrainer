@@ -42,6 +42,8 @@ A resposta fica oculta até o palpite. A prática personalizada não altera cart
 
 ## Coach de IA e pistas
 
+O Coach aguarda o idioma de IA salvo antes da análise, rejeita resultados claramente multilíngues e explica as pistas visíveis por trás de cada novo país candidato.
+
 Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. Só mostra uma estimativa de região, cidade ou local exato quando várias pistas visuais fortes a sustentam. Após revelar a resposta, **Analisar** vira **Explicar**: usa apenas referências do país correto e admite quando a imagem não bastava para identificá-lo. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps; o filtro mostra o total por país, ordena do maior para o menor e × o limpa.
 
 ### Capturar, colar e analisar uma pista
@@ -101,6 +103,8 @@ O **Caderno** guarda quantas notas pessoais quiser por panorama. Categoria e tex
 
 Um resultado baixo volta automaticamente ao fim da sessão de revisão atual até você acertar. Cada tentativa permanece registrada separadamente.
 
-O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captura pareada do OpenGuessr e de exemplos adicionais do GeoMetas com coordenadas utilizáveis do Street View. As explicações Meta seguem o idioma da interface nos oito idiomas suportados. Usar o Coach de IA ou salvar uma entrada do Caderno cria ou reutiliza automaticamente o cartão de Revisão; caso contrário, o cartão de localização revelado mantém Salvar para revisão. **Notas disponíveis** contém apenas o histórico Pessoal e assistido por IA, com análise completa, horário exato e a captura enviada quando existir; Meta permanece na própria lâmpada. Texto pessoal e de IA finalizado mantém o idioma de criação. Revisar um cartão já pendente avança seu agendamento mesmo pela prática personalizada e persiste após recarregar.
+O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captura pareada do OpenGuessr e de exemplos adicionais do GeoMetas com coordenadas utilizáveis do Street View. As explicações Meta seguem o idioma da interface nos oito idiomas suportados. Usar o Coach de IA ou salvar uma entrada do Caderno cria ou reutiliza automaticamente o cartão de Revisão; caso contrário, o cartão de localização revelado mantém Salvar para revisão. **Notas disponíveis** contém o histórico Pessoal e assistido por IA do panorama e de nós do Street View no mesmo país a até 50 metros, com análise completa, horário exato e a captura enviada quando existir; Meta permanece na própria lâmpada. O Coach aguarda a preferência de idioma salva e solicita todos os valores em linguagem natural no idioma de IA escolhido. Texto pessoal e de IA finalizado mantém o idioma de criação. Revisar um cartão já pendente avança seu agendamento mesmo pela prática personalizada e persiste após recarregar.
+
+Meta seleciona apenas lições não concluídas. Depois que as 359 forem concluídas, a opção em Aprender fica desativada e não pode mais ser escolhida.
 
 Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Retomar**, **Começar de novo** ou **Voltar**. A cobertura inclui um mapa de calor contínuo de **Domínio**: muitas revisões bem-sucedidas e intervalos longos iluminam gradualmente países e locais, enquanto erros reduzem a intensidade. Um panorama aberto da Cobertura oferece Coach de IA, Caderno, Meta vinculada e Notas disponíveis; salvar cria ou reutiliza seu cartão de Revisão. Pistas Meta dependentes da imagem mostram um aviso porque atualizações do Street View podem torná-las desatualizadas.

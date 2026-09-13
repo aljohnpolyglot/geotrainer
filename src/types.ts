@@ -248,7 +248,7 @@ export interface CoachAnalysis {
   region: string;
   locationEstimate?: { level: 'region' | 'city' | 'exact'; label: string; confidence: 'medium' | 'high'; basis: string[] };
   description?: string;
-  candidates: Array<{ countryCode: string; confidence: number }>;
+  candidates: Array<{ countryCode: string; confidence: number; rationale?: string }>;
   strongClues: string[];
   weakClues: string[];
   contradictions?: string[];

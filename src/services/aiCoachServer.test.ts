@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { callGeminiCoach, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
+import { callGeminiCoach, coachLanguageMatches, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
@@ -137,10 +137,17 @@ test('ordinary analysis drops country-only location estimates and unsolicited ca
 test('candidate confidence is deduplicated, ranked, and never exceeds a total of one', () => {
   const analysis = normalizeCoachAnalysis({
     ...validAnalysis,
-    candidates: [{ countryCode: 'de', confidence: .7 }, { countryCode: 'HU', confidence: .9 }, { countryCode: 'hu', confidence: .4 }],
+    candidates: [{ countryCode: 'de', confidence: .7, rationale: 'German bollards' }, { countryCode: 'HU', confidence: .9, rationale: 'Hungarian poles' }, { countryCode: 'hu', confidence: .4, rationale: 'Weaker duplicate' }],
   }, 'analyze');
   assert.deepEqual(analysis.candidates.map(({ countryCode }) => countryCode), ['HU', 'DE']);
+  assert.equal(analysis.candidates[0].rationale, 'Hungarian poles');
   assert.ok(Math.abs(analysis.candidates.reduce((sum, candidate) => sum + candidate.confidence, 0) - 1) < Number.EPSILON);
+});
+
+test('Coach rejects substantial English leakage for a non-English response', () => {
+  const mixed = normalizeCoachAnalysis({ ...validAnalysis, strongClues: ['The road sign and the green bin are common in this country', 'Look at the buildings and check the nearby vehicles'], weakClues: ['The overall lighting suggests daytime'] }, 'analyze');
+  assert.equal(coachLanguageMatches(mixed, 'it'), false);
+  assert.equal(coachLanguageMatches(normalizeCoachAnalysis({ ...validAnalysis, region: 'Europa centrale', strongClues: ['I pali in cemento e la segnaletica sono indizi visibili'], weakClues: ['La vegetazione è generica'] }, 'analyze'), 'it'), true);
 });
 
 test('candidate normalization drops codes outside the supported country catalog', () => {

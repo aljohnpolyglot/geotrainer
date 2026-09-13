@@ -4,7 +4,7 @@ import type { CoachAnalysis } from '../types';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { COUNTRIES } from '../data/countries';
 import { trainerDb } from '../data/trainerDb';
-import { normalizeLanguagePreferences, translate } from '../services/language';
+import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
@@ -23,7 +23,7 @@ async function prepareImage(file: File) {
 }
 
 export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, spoilerFree, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; spoilerFree?: boolean; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
-  const { ui } = useLanguagePreferences();
+  const { ui, ai, game, ready: languageReady } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [image, setImage] = useState('');
   const [analysis, setAnalysis] = useState<CoachAnalysis>();
@@ -58,12 +58,11 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
   const analyze = async () => {
-    if (!image || disabled || busy) return;
+    if (!languageReady || !image || disabled || busy) return;
     const sourceImage = image;
     setStatus(t('analyzingClue')); setSaved(false);
     await run(async (signal, isCurrent) => {
-      const preferences = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
-      const response = await postCoach({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: preferences.ai, gameLanguage: preferences.game }, signal);
+      const response = await postCoach({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: ai, gameLanguage: game }, signal);
       const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
       if (!response.ok || !value.analysis) throw new Error(value.error || t('coachNoClue'));
       if (!isCurrent()) return;
@@ -93,13 +92,13 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     <div className="clue-actions">
       <label><Upload size={14} /> {t('upload')}<input disabled={disabled || busy} type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void choose(event.target.files?.[0])} /></label>
       <button disabled={disabled || busy} onClick={() => void capture()}><Camera size={14} /> {t('capture')}</button>
-<button disabled={disabled || busy || !image} onClick={() => void analyze()}>{t('Analyze clue')}</button>
+<button disabled={!languageReady || disabled || busy || !image} onClick={() => void analyze()}>{t('Analyze clue')}</button>
     </div>
     {status && <p className="coach-status" role="status">{status}</p>}
     {analysis && (!saved || !collapseSavedAnalysis) && <div className="clue-analysis">
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
-      {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></li>)}</ol>}
+      {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
       {analysis.description && <p>{analysis.description}</p>}
       {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
       {!!analysis.weakClues.length && <><strong>{t('limitations')}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}

@@ -42,6 +42,8 @@ La soluzione resta nascosta fino alla stima. La pratica personalizzata lascia in
 
 ## Coach IA e indizi
 
+Coach attende la lingua IA salvata prima dell’analisi, rifiuta i risultati chiaramente multilingue e spiega gli indizi visibili dietro ogni nuovo paese candidato.
+
 Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps; il filtro mostra il totale per paese, ordina dal maggiore al minore e × lo cancella.
 
 ### Catturare, incollare e analizzare un indizio
@@ -101,6 +103,8 @@ Il **Taccuino** salva un numero qualsiasi di note personali per panorama. Catego
 
 Un risultato basso torna automaticamente in fondo alla sessione di ripasso finché non viene superato. Ogni tentativo rimane separato.
 
-Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla cattura abbinata di OpenGuessr e da ulteriori esempi GeoMetas con coordinate Street View utilizzabili. Le spiegazioni Meta seguono la lingua dell’interfaccia nelle otto lingue supportate. Usare Coach IA o salvare una voce del Taccuino crea o riutilizza automaticamente la scheda di Ripasso; altrimenti la scheda del luogo rivelato mantiene Salva per il ripasso. **Note disponibili** contiene solo la cronologia personale e assistita dall’IA, con analisi completa, ora esatta e schermata inviata quando presente; Meta resta sotto la propria lampadina. Il testo personale e IA finalizzato conserva la lingua di creazione. Ripassare una scheda già in scadenza ne avanza la pianificazione anche dalla pratica personalizzata e persiste dopo il ricaricamento.
+Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla cattura abbinata di OpenGuessr e da ulteriori esempi GeoMetas con coordinate Street View utilizzabili. Le spiegazioni Meta seguono la lingua dell’interfaccia nelle otto lingue supportate. Usare Coach IA o salvare una voce del Taccuino crea o riutilizza automaticamente la scheda di Ripasso; altrimenti la scheda del luogo rivelato mantiene Salva per il ripasso. **Note disponibili** contiene la cronologia personale e assistita dall’IA del panorama e dei nodi Street View dello stesso paese entro 50 metri, con analisi completa, ora esatta e schermata inviata quando presente; Meta resta sotto la propria lampadina. Coach attende la preferenza linguistica salvata e richiede ogni valore in linguaggio naturale nella lingua IA selezionata. Il testo personale e IA finalizzato conserva la lingua di creazione. Ripassare una scheda già in scadenza ne avanza la pianificazione anche dalla pratica personalizzata e persiste dopo il ricaricamento.
+
+Meta seleziona solo le lezioni non completate. Dopo aver completato tutte le 359 lezioni, l’opzione in Impara viene disattivata e non è più selezionabile.
 
 Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi scegliere **Riprendi**, **Inizia da capo** o **Indietro**. La copertura include una mappa di calore continua della **Padronanza**: molti ripassi riusciti e intervalli lunghi illuminano gradualmente paesi e luoghi, mentre gli errori riducono l’intensità. Un panorama aperto da Copertura offre Coach IA, Taccuino, Meta collegata e Note disponibili; il salvataggio crea o riutilizza la sua scheda di Ripasso. Gli indizi Meta dipendenti dalle immagini mostrano un avviso perché gli aggiornamenti di Street View possono renderli obsoleti.

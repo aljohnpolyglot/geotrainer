@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { AppMode, LearnSource, LocationResult, MetaLesson } from '../types';
-import { metaLessonById, nextMetaLesson } from '../data/metaLessons';
+import { metaLessonById, nextMetaLesson, savedMetaLessonIds } from '../data/metaLessons';
 import { trainerDb } from '../data/trainerDb';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
@@ -39,17 +39,17 @@ export function useLearnSources(ctx: LearnSourceContext) {
     } finally { setIsLoading(false); }
   }, [prepare, setCurrentLocation, setErrorMessage, setIsLoading]);
 
-  const startMeta = useCallback(() => {
-    const lesson = nextMetaLesson();
+  const startMeta = useCallback(async () => {
+    const lesson = nextMetaLesson(undefined, Math.random, savedMetaLessonIds(await trainerDb.attempts()));
     if (!lesson) return setErrorMessage('No Meta lessons are available.');
     void trainerDb.setting<boolean>('preference.metaAdviceDismissed').then((dismissed) => setMetaAdviceOpen(dismissed !== true));
-    void openMetaLesson(lesson);
+    await openMetaLesson(lesson);
   }, [openMetaLesson, setErrorMessage]);
 
-  const nextMeta = useCallback(() => {
-    const lesson = nextMetaLesson(activeMetaLesson?.id);
-    if (lesson) void openMetaLesson(lesson);
-  }, [activeMetaLesson?.id, openMetaLesson]);
+  const nextMeta = useCallback(async () => {
+    const lesson = nextMetaLesson(activeMetaLesson?.id, Math.random, savedMetaLessonIds(await trainerDb.attempts()));
+    if (lesson) await openMetaLesson(lesson); else { setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true); }
+  }, [activeMetaLesson?.id, openMetaLesson, setCurrentLocation, setStudySetupOpen]);
 
   const startMap = useCallback(() => {
     prepare('map'); setActiveMetaLesson(undefined); setMapPickerOpen(true);

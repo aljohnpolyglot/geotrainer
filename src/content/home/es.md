@@ -42,6 +42,8 @@ Repaso oculta la respuesta hasta tu conjetura. La práctica personalizada no cam
 
 ## Entrenador de IA y pistas
 
+Coach espera el idioma de IA guardado antes del análisis, rechaza resultados claramente multilingües y explica las pistas visibles detrás de cada nuevo país candidato.
+
 Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Solo muestra una estimación de región, ciudad o lugar exacto cuando varias pistas visuales sólidas la respaldan. Tras revelar la respuesta, **Analizar** se convierte en **Explicar**: usa solo referencias del país correcto y admite si la imagen no bastaba para identificarlo. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps; el filtro muestra el total por país, se ordena de mayor a menor y × lo borra.
 
 ### Capturar, pegar y analizar una pista
@@ -101,6 +103,8 @@ El **Cuaderno** guarda cualquier cantidad de notas personales por panorama. La c
 
 Un resultado bajo vuelve automáticamente al final de la sesión de repaso actual hasta que lo superes. Cada intento se guarda por separado.
 
-El estudio Meta incluye 359 lecciones alojadas localmente, normalizadas de la captura emparejada de OpenGuessr y de ejemplos adicionales de GeoMetas con coordenadas de Street View utilizables. Las explicaciones Meta siguen el idioma de la interfaz en los ocho idiomas compatibles. Usar el entrenador de IA o guardar una entrada del Cuaderno crea o reutiliza automáticamente la tarjeta de Repaso; si no, la tarjeta de ubicación revelada conserva Guardar para repasar. **Notas disponibles** contiene solo el historial personal y asistido por IA, con análisis completo, hora exacta y la captura enviada cuando existe; Meta permanece en su bombilla. El texto personal y de IA finalizado conserva el idioma en que se creó. Repasar una tarjeta ya pendiente avanza su programación incluso desde la práctica personalizada y persiste tras recargar.
+El estudio Meta incluye 359 lecciones alojadas localmente, normalizadas de la captura emparejada de OpenGuessr y de ejemplos adicionales de GeoMetas con coordenadas de Street View utilizables. Las explicaciones Meta siguen el idioma de la interfaz en los ocho idiomas compatibles. Usar el entrenador de IA o guardar una entrada del Cuaderno crea o reutiliza automáticamente la tarjeta de Repaso; si no, la tarjeta de ubicación revelada conserva Guardar para repasar. **Notas disponibles** contiene el historial personal y asistido por IA del panorama y de nodos del mismo país situados a menos de 50 metros, con análisis completo, hora exacta y la captura enviada cuando existe; Meta permanece en su bombilla. Coach espera la preferencia de idioma guardada y solicita todos los valores de texto natural en el idioma de IA elegido. El texto personal y de IA finalizado conserva el idioma en que se creó. Repasar una tarjeta ya pendiente avanza su programación incluso desde la práctica personalizada y persiste tras recargar.
+
+Meta elige solo lecciones sin completar. Al terminar las 359, su opción de Aprender queda atenuada y ya no puede seleccionarse.
 
 Una sesión de Estudio o Juego sin terminar se conserva. Al volver puedes elegir **Reanudar**, **Empezar de nuevo** o **Atrás**. La cobertura incluye un mapa de calor continuo de **Dominio**: muchos repasos correctos e intervalos largos iluminan poco a poco países y lugares, mientras que los fallos reducen la intensidad. Al abrir un panorama de Cobertura están disponibles Coach de IA, Cuaderno, Meta vinculada y Notas disponibles; guardar crea o reutiliza su tarjeta de Repaso. Las pistas Meta dependientes de imágenes muestran una advertencia porque las actualizaciones de Street View pueden volverlas obsoletas.
