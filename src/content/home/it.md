@@ -42,6 +42,8 @@ La soluzione resta nascosta fino alla stima. La pratica personalizzata lascia in
 
 ## Coach IA e indizi
 
+Gioco usa la stessa barra di apprendimento di Studio: Taccuino, conteggio delle note disponibili nelle vicinanze e Coach IA quando è attivato nella configurazione della partita.
+
 Coach attende la lingua IA salvata prima dell’analisi, rifiuta i risultati chiaramente multilingue e spiega gli indizi visibili dietro ogni nuovo paese candidato.
 
 Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps; il filtro mostra il totale per paese, ordina dal maggiore al minore e × lo cancella.

@@ -55,6 +55,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
+- Keep Play's panorama learning toolbar aligned with Study and expose the same Notebook and Available notes count; its existing AI Coach preference may still hide Coach only.
 - Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
 - Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
 - Supply country-specific external reference facts only during post-reveal Coach explanations, and mention a fact only when its feature is visibly present in the submitted imagery.

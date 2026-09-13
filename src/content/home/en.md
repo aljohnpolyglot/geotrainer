@@ -220,6 +220,8 @@ After a game, correction practice can repeat weak rounds until they are answered
 
 AI Coach looks for visible geographic evidence in the current panorama. Guest users can use it without creating an account.
 
+Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup.
+
 Coach waits for the saved AI language before analysis, rejects substantially mixed-language results, and explains the visible evidence behind every new candidate country.
 
 ### Analyze

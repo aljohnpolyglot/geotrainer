@@ -192,6 +192,8 @@ Nach einem Spiel kann eine Korrektursitzung schwache Runden wiederholen, bis sie
 
 Der KI-Coach untersucht sichtbare geografische Hinweise. Er funktioniert auch für Gäste ohne Konto.
 
+Spiel verwendet dieselbe Lernleiste wie Lernen: Notizbuch, die Anzahl naher verfügbarer Notizen und – falls in der Spieleinrichtung aktiviert – KI-Coach.
+
 Coach wartet vor der Analyse auf die gespeicherte KI-Sprache, verwirft deutlich gemischtsprachige Ergebnisse und erklärt die sichtbaren Gründe für jedes neue Kandidatenland.
 
 ### Analysieren

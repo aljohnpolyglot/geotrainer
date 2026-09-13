@@ -42,6 +42,8 @@ A resposta fica oculta até o palpite. A prática personalizada não altera cart
 
 ## Coach de IA e pistas
 
+Jogo usa a mesma barra de aprendizagem de Estudo: Caderno, contagem de notas disponíveis próximas e Coach de IA quando ativado na configuração da partida.
+
 O Coach aguarda o idioma de IA salvo antes da análise, rejeita resultados claramente multilíngues e explica as pistas visíveis por trás de cada novo país candidato.
 
 Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. Só mostra uma estimativa de região, cidade ou local exato quando várias pistas visuais fortes a sustentam. Após revelar a resposta, **Analisar** vira **Explicar**: usa apenas referências do país correto e admite quando a imagem não bastava para identificá-lo. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps; o filtro mostra o total por país, ordena do maior para o menor e × o limpa.

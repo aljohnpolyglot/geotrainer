@@ -42,6 +42,8 @@ Repaso oculta la respuesta hasta tu conjetura. La práctica personalizada no cam
 
 ## Entrenador de IA y pistas
 
+Juego usa la misma barra de aprendizaje que Estudio: Cuaderno, el contador de notas cercanas disponibles y el entrenador de IA cuando está activado en la configuración de la partida.
+
 Coach espera el idioma de IA guardado antes del análisis, rechaza resultados claramente multilingües y explica las pistas visibles detrás de cada nuevo país candidato.
 
 Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Solo muestra una estimación de región, ciudad o lugar exacto cuando varias pistas visuales sólidas la respaldan. Tras revelar la respuesta, **Analizar** se convierte en **Explicar**: usa solo referencias del país correcto y admite si la imagen no bastaba para identificarlo. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps; el filtro muestra el total por país, se ordena de mayor a menor y × lo borra.

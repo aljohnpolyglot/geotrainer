@@ -42,6 +42,8 @@ La réponse reste cachée jusqu’à votre estimation. La pratique personnalisé
 
 ## Coach IA et indices
 
+Jeu utilise la même barre d’apprentissage qu’Étude : Carnet, compteur des notes disponibles à proximité et Coach IA lorsqu’il est activé dans la configuration de la partie.
+
 Coach attend la langue IA enregistrée avant l’analyse, rejette les résultats nettement multilingues et explique les indices visibles derrière chaque nouveau pays candidat.
 
 Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Une estimation de région, ville ou lieu exact n’apparaît que si plusieurs indices visuels forts la soutiennent. Après la révélation, **Analyser** devient **Expliquer** : le Coach utilise uniquement les références du bon pays et reconnaît si l’image ne suffisait pas à l’identifier. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps ; le filtre affiche le total par pays, les classe du plus fourni au moins fourni et × l’efface.
