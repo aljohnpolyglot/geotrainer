@@ -67,6 +67,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Preserve paused Learn and Play workspaces separately. When a saved workspace exists, entering that mode must offer Resume and Start new, with Back returning to the prior screen.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
+- Refresh Available notes and its badge immediately after every Notebook save in every mode; do not depend on Study-only scheduling side effects.
 - Meta Learn selects only unfinished lessons and becomes visibly disabled in Learn setup after all lessons are completed.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.
 - Render every collection selector with the shared World, Continents, Trainer drills, regions, and custom-collections hierarchy.

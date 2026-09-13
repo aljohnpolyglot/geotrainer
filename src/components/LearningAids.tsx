@@ -33,6 +33,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, reviewActi
   const [open, setOpen] = useState<'meta' | 'clues' | 'notebook' | 'available' | null>(null);
   const [clues, setClues] = useState<ClueRecord[]>([]);
   const [notes, setNotes] = useState<Array<{ id: string; source: string; text: string; category?: string; imageUrl?: string; analysis?: CoachAnalysis; at: number }>>([]);
+  const [notesRefreshKey, setNotesRefreshKey] = useState(0);
   const [clueIndex, setClueIndex] = useState(0);
   const [note, setNote] = useState('');
   const [category, setCategory] = useState('');
@@ -57,7 +58,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, reviewActi
     const personalImage = (note: NotebookNote) => (note.clueId ? nearbyClues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || nearbyClues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
     const linkedClues = new Set(relevantPersonal.flatMap((item) => item.clueId ? [item.clueId] : []));
     setNotes([...relevantPersonal.map((item) => { const linked = item.clueId ? nearbyClues.find((clue) => clue.id === item.clueId) : undefined; return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: personalImage(item), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', analysis: item.analysis, at: item.generatedAt })), ...nearbyClues.filter((item) => !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))].sort((a, b) => b.at - a.at));
-  }); }, [panoId, lat, lng, countryCode, refreshKey, ui]);
+  }); }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
   useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
   const fullContent = !reviewActive || answerVisible;
   useEffect(() => {
@@ -72,7 +73,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, reviewActi
     if (noteImage && !clueId) clueId = await onSaveClue({ imageDataUrl: noteImage, model: 'Notebook', generatedAt: updatedAt, analysis: { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] }, origin: 'personal' }) || undefined;
     const saved = await trainerDb.setting<NotebookNote[]>('notebook.notes') || [];
     await trainerDb.setSetting('notebook.notes', [{ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt }, ...saved]);
-    setNote(''); setCategory(''); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); void trainerDb.setSetting('workspace.noteDraft', null); window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();
+    setNote(''); setCategory(''); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1); void trainerDb.setSetting('workspace.noteDraft', null); window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();
   };
 
   return <>

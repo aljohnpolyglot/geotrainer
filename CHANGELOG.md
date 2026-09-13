@@ -3,6 +3,7 @@
 ## 2026-09-13
 
 - Added Study's shared Notebook and Available notes toolbar to Play, including the nearby saved-note badge, and aligned AI Coach with the same tool group.
+- Refreshed Available notes and its badge immediately after a Notebook save in Play, Review, Study, and Coverage so newly written comments appear without reloading.
 - Loaded local language preferences before first render and made Coach wait for them, then strengthened local and hosted Gemini prompts to keep every natural-language response value in the selected AI language without changing the JSON schema.
 - Rejected substantially mixed-language Coach responses before display and added a visible-evidence explanation beneath every newly ranked candidate country.
 - Kept localhost Coach requests on the matching local backend so frontend work no longer silently uses stale hosted Coach behavior; deployed the same response contract to the hosted function.
