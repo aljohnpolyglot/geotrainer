@@ -19,6 +19,7 @@ import type {
 import { COUNTRIES } from './countries';
 import { resolveClueImages } from '../services/clueImages';
 import { detectedTimeZone, nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
+import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
@@ -29,7 +30,7 @@ export const STORE_NAMES = [
 export type StoreName = (typeof STORE_NAMES)[number];
 const changeListeners = new Set<() => void>();
 const notifyChange = () => changeListeners.forEach((listener) => listener());
-export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 20, maximumReviewsPerDay: 200, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'due', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
+export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'due', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
@@ -254,13 +255,14 @@ async function migrateLocalStorageV1(): Promise<void> {
 }
 
 async function reconcileSavedReviews() {
-  const [attempts, reviews, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), get<SettingRecord>('settings', 'schedulerPreferences')]);
+  const [attempts, reviews, locations, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), get<SettingRecord>('settings', 'schedulerPreferences')]);
   const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
   const latest = new Map<string, Attempt>();
   attempts.filter((item) => item.source === 'review').forEach((item) => { if (!latest.get(item.panoId) || latest.get(item.panoId)!.createdAt < item.createdAt) latest.set(item.panoId, item); });
   const repaired = reviews.map((review) => reconcileReviewAttempt(review, latest.get(review.panoId) || {} as Attempt, preferences));
-  if (!repaired.some((review, index) => review !== reviews[index])) return;
-  const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); repaired.forEach((review) => tx.objectStore('reviews').put(review));
+  const merged = coalesceNearbyReviews(repaired, locations, attempts).reviews;
+  if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index])) return;
+  const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
   await complete(tx); notifyChange();
 }
 
@@ -275,14 +277,21 @@ export const trainerDb = {
   attempts: () => all<Attempt>('attempts'),
   games: async () => (await all<GameRecord>('games')).sort((a, b) => b.createdAt - a.createdAt),
   studyVisits: () => all<StudyVisit>('studyVisits'),
-  reviews: () => all<ReviewRecord>('reviews'),
+  reviews: async () => {
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    return coalesceNearbyReviews(reviews, locations, attempts).reviews;
+  },
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),
   collections: () => all<Collection>('collections'),
   sessions: () => all<TrainingSession>('sessions'),
   clues: async () => resolveClueImages((await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt)),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
-  setSetting: (key: string, value: unknown) => put('settings', { key, value }),
+  setSetting: async (key: string, value: unknown) => {
+    const previous = await get<SettingRecord>('settings', key);
+    if (previous && JSON.stringify(previous.value) === JSON.stringify(value)) return;
+    await put('settings', { key, value, updatedAt: Date.now() });
+  },
   saveGame: (game: GameRecord) => put('games', game),
   deleteGame: (id: string) => remove('games', id),
   clearGames: async () => {
@@ -327,11 +336,14 @@ export const trainerDb = {
 
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {
     await reconcileSavedReviews();
-    const [attempts, reviews, bookmarks, storedPreferences] = await Promise.all([
-      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
+    const [attempts, storedReviews, locations, bookmarks, storedPreferences] = await Promise.all([
+      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
     ]);
+    const { reviews, aliases } = coalesceNearbyReviews(storedReviews, locations, attempts);
     const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
     const reviewByPano = new Map(reviews.map((item) => [item.panoId, item]));
+    aliases.forEach((canonical, alias) => reviewByPano.set(alias, reviewByPano.get(canonical)!));
+    attempts.forEach((attempt) => { if (!reviewByPano.has(attempt.panoId)) { const match = nearbyReview(reviews, locations, attempts, { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode }); if (match) reviewByPano.set(attempt.panoId, match); } });
     const bookmarked = new Set(bookmarks.map((item) => item.panoId));
     const now = Date.now();
     const recentCutoff = now - 30 * 864e5;
@@ -348,7 +360,7 @@ export const trainerDb = {
       .sort((a, b) => filters.due
         ? (reviewByPano.get(a.panoId)?.dueAt || 0) - (reviewByPano.get(b.panoId)?.dueAt || 0)
         : a.score - b.score || b.createdAt - a.createdAt)
-      .filter((attempt, index, values) => values.findIndex((other) => other.panoId === attempt.panoId) === index);
+      .filter((attempt, index, values) => values.findIndex((other) => (reviewByPano.get(other.panoId)?.panoId || other.panoId) === (reviewByPano.get(attempt.panoId)?.panoId || attempt.panoId)) === index);
     if (!filters.due) return queue;
     if (preferences.reviewOrder === 'random') queue.sort(() => Math.random() - .5);
     const today = reviewDayStart(now, preferences); const nowForLimits = now;
@@ -363,14 +375,16 @@ export const trainerDb = {
   },
 
   async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number): Promise<ReviewRecord> {
-    const previous = await get<ReviewRecord>('reviews', panoId);
+    const [storedReviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
+    const previous = target ? nearbyReview(coalesceNearbyReviews(storedReviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : await get<ReviewRecord>('reviews', panoId);
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     const oldInterval = previous?.intervalDays || 0;
     const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(oldInterval, preferences)[grade]);
     const now = Date.now();
     const next: ReviewRecord = {
-      id: panoId,
-      panoId,
+      id: previous?.panoId || panoId,
+      panoId: previous?.panoId || panoId,
       dueAt: nextReviewAt(now, intervalDays, preferences),
       intervalDays,
       gradingHistory: [...(previous?.gradingHistory || []), { grade, at: now }],
@@ -382,8 +396,9 @@ export const trainerDb = {
     return next;
   },
 
-  async scheduleFirstPlay(panoId: string, grade: ReviewGrade): Promise<ReviewRecord> {
-    const existing = await get<ReviewRecord>('reviews', panoId);
+  async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord> {
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) return existing;
     const now = Date.now();
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
@@ -394,8 +409,9 @@ export const trainerDb = {
     return created;
   },
 
-  async queueForReview(panoId: string, dueNow = false): Promise<ReviewRecord> {
-    const existing = await get<ReviewRecord>('reviews', panoId);
+  async queueForReview(panoId: string, dueNow = false, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord> {
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) {
       if (!dueNow || existing.dueAt <= Date.now()) return existing;
       const queued = { ...existing, dueAt: Date.now() };
@@ -410,7 +426,10 @@ export const trainerDb = {
   },
 
   async reviewIntervals(panoId: string): Promise<Record<ReviewGrade, number>> {
-    const oldInterval = (await get<ReviewRecord>('reviews', panoId))?.intervalDays || 0;
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
+    const review = target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : undefined;
+    const oldInterval = review?.intervalDays || 0;
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     return intervalsFor(oldInterval, preferences);
   },
@@ -469,6 +488,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
   }
   await complete(tx);
   notifyChange();
+  await reconcileSavedReviews();
 }
 
 export async function clearTrainerDbForTesting(): Promise<void> {

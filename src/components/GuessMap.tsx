@@ -9,6 +9,7 @@ import { formatTime } from '../services/gameLogic';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
+import { playUiSound } from '../services/audio';
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
@@ -71,6 +72,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       if (!e.latLng) return;
       const coords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
       setCurrentGuess(coords);
+      playUiSound('pin');
 
       if (!markerRef.current) {
         markerRef.current = new google.maps.Marker({
@@ -90,6 +92,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
 
         markerRef.current.addListener('dragend', (dragEvent: google.maps.MapMouseEvent) => {
           if (dragEvent.latLng) {
+            playUiSound('pin');
             setCurrentGuess({
               lat: dragEvent.latLng.lat(),
               lng: dragEvent.latLng.lng(),

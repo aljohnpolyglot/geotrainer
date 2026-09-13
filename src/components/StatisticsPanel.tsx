@@ -112,10 +112,10 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, sessions
   const [environment, setEnvironment] = useState("");
   const [movement, setMovement] = useState("");
   const [collection, setCollection] = useState("");
-  const [includeAiAssisted, setIncludeAiAssisted] = useState(false);
+  const [includeAiAssisted, setIncludeAiAssisted] = useState(true);
   useEffect(() => {
     let active = true;
-    void trainerDb.setting<{ includeAiAssisted?: boolean }>('workspace.statistics').then((saved) => { if (active) setIncludeAiAssisted(saved?.includeAiAssisted === true); });
+    void trainerDb.setting<{ includeAiAssisted?: boolean }>('workspace.statistics').then((saved) => { if (active) setIncludeAiAssisted(saved?.includeAiAssisted !== false); });
     return () => { active = false; };
   }, []);
   const aiAssistedCount = useMemo(() => attempts.filter((item) => item.source === 'play' && item.aiAssisted === true).length, [attempts]);

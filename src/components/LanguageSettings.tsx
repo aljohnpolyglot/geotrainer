@@ -4,6 +4,8 @@ import { DEFAULT_SCHEDULER_PREFERENCES, effectiveReviewDueAt, nextScheduledRevie
 import { DEFAULT_LANGUAGE_PREFERENCES, LANGUAGE_OPTIONS, normalizeLanguagePreferences, translate } from '../services/language';
 import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferences, SupportedLanguage } from '../types';
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
+import { DEFAULT_AUDIO_PREFERENCES, normalizeAudioPreferences, setAudioPreferences, type AudioPreferences } from '../services/audio';
+import { reloadPage } from '../services/devDiagnostics';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
@@ -28,16 +30,18 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const [loadedGameLanguage, setLoadedGameLanguage] = useState<SupportedLanguage>('en');
   const [compassStyle, setCompassStyle] = useState<CompassStyle>('bar');
   const [darkMode, setDarkMode] = useState(false);
+  const [audio, setAudio] = useState<AudioPreferences>(DEFAULT_AUDIO_PREFERENCES);
   const [tab, setTab] = useState<SettingsTab>('language');
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.reviews()]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedReviews]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<AudioPreferences>('preference.audio'), trainerDb.reviews()]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedAudio, savedReviews]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
       setCompassStyle(savedCompassStyle === 'dial' ? 'dial' : 'bar');
       setDarkMode(savedDarkMode === true);
+      setAudio(normalizeAudioPreferences(savedAudio));
       setReviews(savedReviews);
       if (savedTab === 'language' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
@@ -49,10 +53,11 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const save = async () => {
     const nextLanguages = normalizeLanguagePreferences(languages);
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
-    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode)]);
+    const nextAudio = normalizeAudioPreferences(audio); setAudioPreferences(nextAudio);
+    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio)]);
     announceLanguagePreferences(nextLanguages);
     onChange?.(nextLanguages, compassStyle, darkMode);
-    if (nextLanguages.game !== loadedGameLanguage) window.location.reload();
+    if (nextLanguages.game !== loadedGameLanguage) reloadPage('game-language-change');
     else onClose();
   };
   if (!open) return null;
@@ -70,10 +75,15 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         </label>)}
         <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
       </fieldset>}
-      {tab === 'display' && <fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
+      {tab === 'display' && <><fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
         <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>
         <label>{translate(languages.ui, 'Compass style')}<select value={compassStyle} onChange={(event) => setCompassStyle(event.target.value as CompassStyle)}><option value="bar">{translate(languages.ui, 'Heading bar')}</option><option value="dial">{translate(languages.ui, 'Compass dial')}</option></select></label>
-      </fieldset>}
+      </fieldset><fieldset className="audio-settings"><legend>{translate(languages.ui, 'Audio')}</legend>
+        <label className="settings-checkbox"><input type="checkbox" checked={audio.sfxEnabled} onChange={(event) => setAudio({ ...audio, sfxEnabled: event.target.checked })} />{translate(languages.ui, 'Sound effects')}</label>
+        <label>{translate(languages.ui, 'SFX volume')} · {Math.round(audio.sfxVolume * 100)}%<input type="range" min="0" max="1" step="0.05" disabled={!audio.sfxEnabled} value={audio.sfxVolume} onChange={(event) => setAudio({ ...audio, sfxVolume: Number(event.target.value) })} /></label>
+        <label className="settings-checkbox"><input type="checkbox" checked={audio.musicEnabled} onChange={(event) => setAudio({ ...audio, musicEnabled: event.target.checked })} />{translate(languages.ui, 'Ambient music')}</label>
+        <label>{translate(languages.ui, 'Music volume')} · {Math.round(audio.musicVolume * 100)}%<input type="range" min="0" max="1" step="0.05" disabled={!audio.musicEnabled} value={audio.musicVolume} onChange={(event) => setAudio({ ...audio, musicVolume: Number(event.target.value) })} /></label>
+      </fieldset></>}
       {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
         <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
         <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>

@@ -24,7 +24,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const country = COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
 
   return (
-    <div className="review-result-backdrop" role="dialog" aria-modal="true" aria-labelledby="review-result-title">
+    <div className="review-result-backdrop" role="dialog" aria-labelledby="review-result-title">
       <section className="review-result-panel">
         <header className="review-result-header">
           <div>

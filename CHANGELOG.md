@@ -2,6 +2,16 @@
 
 ## 2026-09-13
 
+- Synced every persisted setting category and resolved Review conflicts by the latest grading time; added safe development diagnostics for Vite reloads and corrected the revealed-location minimize contrast.
+- Prevented React development remounts from configuring the Google Maps loader twice and emitting a misleading reset warning.
+- Paginated the filtered My Clues library at 20 entries per page with localized navigation and safe last-page clamping.
+- Added the full Study learning toolset to Coverage panoramas, with AI Coach, Notebook, linked Meta, and Available notes safely scoped to the opened location and connected to Review.
+- Added a fourth homepage Known clues total for Personal, AI-assisted, and Meta entries, and removed activity-only ghost records from session totals and lists.
+- Added opt-in click and map-pin sounds plus CC0 ambient music with separately saved volumes.
+- Clarified Review summaries as previous versus today averages and improved/same/worse results, fixed dark activity-calendar colors, and distinguished a reached daily limit from a completed queue.
+- Raised fresh-profile limits to 50 new cards and 500 daily reviews, included AI-assisted Play in Statistics by default, and coalesced same-country Review cards within 50 metres.
+- Synced paused workspaces and other settings by newest update across signed-in screens, with a refresh when a screen regains focus.
+- Made Notebook writable throughout Review with spoiler-safe image analysis, and kept all learning aids accessible on the result until the learner continues.
 - Kept localized Reveal and Next controls visible throughout mobile Learn, grouped Coach and learning aids into one modal-safe toolbar, and made Statistics tables reliably swipeable with a readable sticky first column.
 - Replaced the contributor toggle in Custom Learn and Play with an Official / Mixed / Contributor imagery selector that defaults to official panoramas while preserving older saved preferences and games.
 - Scheduled day-based reviews at the configured local reset boundary instead of 24 hours after the prior action, and added an exact local-time plus hours/minutes preview to Review preferences.

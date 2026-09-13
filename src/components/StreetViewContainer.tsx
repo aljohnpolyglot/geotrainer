@@ -30,7 +30,7 @@ interface StreetViewContainerProps {
   onViewChanged?: (view: StreetViewState) => void;
 }
 
-const mapsLoaderState = globalThis as typeof globalThis & { __geotrainerMapsLoaderConfigured?: boolean };
+const mapsLoaderState = globalThis as typeof globalThis & { __geotrainerMapsLoad?: Promise<unknown[]> };
 
 export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   currentLocation,
@@ -124,13 +124,13 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     }
 
     let isMounted = true;
-    const load = async () => {
-      if (!mapsLoaderState.__geotrainerMapsLoaderConfigured) {
+    const load = () => {
+      mapsLoaderState.__geotrainerMapsLoad ??= (async () => {
         const languages = normalizeLanguagePreferences(await trainerDb.setting('languagePreferences'));
         setOptions({ key: apiKey, v: 'weekly', language: languages.game });
-        mapsLoaderState.__geotrainerMapsLoaderConfigured = true;
-      }
-      return Promise.all([importLibrary('maps'), importLibrary('streetView')]);
+        return Promise.all([importLibrary('maps'), importLibrary('streetView')]);
+      })();
+      return mapsLoaderState.__geotrainerMapsLoad;
     };
     try {
       void load()

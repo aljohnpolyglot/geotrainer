@@ -72,15 +72,20 @@ export function collectionStatistics(attempts: Attempt[], reviews: ReviewRecord[
   return breakdown(performanceAttempts(attempts, false, includeAssisted), (item) => item.collectionId).map((item) => ({ ...item, name: names.get(item.key) || item.key, reviewed: attempts.filter((attempt) => attempt.source === 'review' && attempt.collectionId === item.key).length, due: reviews.filter((review) => review.dueAt <= Date.now() && attempts.some((attempt) => attempt.collectionId === item.key && attempt.panoId === review.panoId)).length }));
 }
 
-export function sessionStatistics(sessions: TrainingSession[], attempts: Attempt[], visits: StudyVisit[], includeAssisted = false) {
+export function meaningfulSessions(sessions: TrainingSession[], attempts: Attempt[], visits: StudyVisit[]) {
   const ordered = sessions.filter((item) => item.activeTimeSeconds >= 5).sort((a, b) => a.startedAt - b.startedAt);
+  return ordered.filter((session, index) => { const to = session.endedAt || ordered[index + 1]?.startedAt || Date.now(); return attempts.some((item) => item.createdAt >= session.startedAt && item.createdAt <= to) || visits.some((item) => item.openedAt >= session.startedAt && item.openedAt <= to); });
+}
+
+export function sessionStatistics(sessions: TrainingSession[], attempts: Attempt[], visits: StudyVisit[], includeAssisted = false) {
+  const ordered = meaningfulSessions(sessions, attempts, visits);
   const rows = ordered.map((session, index) => {
     const to = session.endedAt || ordered[index + 1]?.startedAt || Date.now();
     const within = (stamp: number) => stamp >= session.startedAt && stamp <= to;
     const play = performanceAttempts(attempts, false, includeAssisted).filter((item) => within(item.createdAt));
     const review = attempts.filter((item) => item.source === 'review' && within(item.createdAt));
     const study = visits.filter((item) => within(item.openedAt));
-    return { ...session, endedAt: to, play: play.length, reviews: review.length, study: study.length, countries: new Set([...play, ...review].map((item) => item.countryCode)).size, accuracy: recognition(play).country, averageScore: metrics(play).averageScore };
+    return { ...session, endedAt: to, play: play.length, reviews: review.length, study: study.length, countries: new Set([...play, ...review, ...study].map((item) => item.countryCode)).size, accuracy: recognition(play).country, averageScore: metrics(play).averageScore };
   });
   const eligible = rows.filter((item) => item.accuracy.eligible >= 10 && (item.accuracy.rate || 0) >= .7);
   return { rows: rows.reverse(), bestAccuracy: [...rows].sort((a, b) => (b.accuracy.rate || 0) - (a.accuracy.rate || 0))[0], fastestAccurate: [...eligible].sort((a, b) => a.activeTimeSeconds - b.activeTimeSeconds)[0], mostReviews: [...rows].sort((a, b) => b.reviews - a.reviews)[0] };

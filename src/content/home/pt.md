@@ -55,15 +55,15 @@ Quando o recorte tem um objeto principal claro em primeiro plano, o Coach o anal
 
 ## Coleções e preferências
 
-Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa.
+Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 
 ## Progresso e estatísticas
 
-Veja lugares, tentativas, tempo ativo, fila, desempenho e histórico. Cobertura mostra apenas panoramas realmente encontrados. Digite as primeiras letras nos menus de países e categorias para saltar até uma opção.
+Veja lugares, tentativas, tempo ativo, fila, desempenho e histórico. Pistas conhecidas soma entradas pessoais, de IA e Meta sem duplicar a imagem de uma nota. Sessões sem visitas nem tentativas ficam ocultas. Rodadas com IA entram por padrão e podem ser excluídas. O resumo separa média anterior e de hoje; o calendário colore a atividade. Locais do mesmo país a até 50 metros compartilham um cartão.
 
 ## Sincronização na nuvem
 
-A conta é opcional e o treino local funciona sem login. Quando conectada, a sincronização combina silenciosamente o progresso compatível entre dispositivos.
+A conta é opcional e o treino local funciona sem login. Quando conectada, a sincronização inclui progresso e preferências de Revisão, idioma, interface, áudio e jogo; vencem a configuração mais recente e a Revisão avaliada por último. A nuvem é verificada ao voltar a cada tela. Sem login, localhost e o site publicado ficam separados.
 
 ## Solução de problemas
 
@@ -95,12 +95,12 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 
 Aprender tem três caminhos. **Personalizado** mantém coleções e ambientes. **Meta** abre lições guiadas no panorama e direção registrados. **Explorar mapa** mostra a cobertura do Street View. Em Meta e no mapa, Revelar abre o cartão normal, onde Salvar para revisão agenda a prática de localização. O mapa usa Voltar ao mapa-múndi no lugar de Próximo. Aprender personalizado e Jogo usam imagens oficiais do Google por padrão; o seletor permite misturar panoramas oficiais e de colaboradores ou solicitar somente panoramas de colaboradores.
 
-A lâmpada no canto superior direito alterna a explicação. O aviso inicial pode ser fechado uma vez ou ocultado definitivamente sem remover lições. Um Meta só entra em **Minhas pistas** quando sua localização é salva explicitamente para revisão. Na revisão, antes da resposta aparece apenas a imagem; o texto completo vem depois.
+A lâmpada no canto superior direito alterna a explicação. O aviso inicial pode ser fechado uma vez ou ocultado definitivamente sem remover lições. Um Meta só entra em **Minhas pistas** quando sua localização é salva explicitamente para revisão. Na revisão, antes da resposta aparece apenas a imagem; o texto completo vem depois, e as ferramentas de aprendizagem continuam disponíveis até você escolher Próxima revisão.
 
-O **Caderno** guarda quantas notas pessoais quiser por panorama. Categoria e texto são opcionais; uma entrada vazia também pode salvar o local para revisão. Também aceita imagens analisadas pelo Coach. Entradas pessoais, de IA e Meta abrem uma vista detalhada com Street View e uma imagem sobreposta quando disponível. **Notas disponíveis** mostra um contador e todo o histórico rolável; novas análises do Coach entram ali imediatamente e não reabrem como resultado ativo após recarregar. Minhas pistas filtra **Pessoal**, **Com ajuda de IA** e **Lições Meta**; texto revelador fica oculto antes da resposta.
+O **Caderno** guarda quantas notas pessoais quiser por panorama. Categoria e texto são opcionais; uma entrada vazia também pode salvar o local para revisão. Também aceita imagens analisadas pelo Coach. Você pode escrever e salvar uma nova nota durante a revisão; a análise da imagem não revela a resposta antes do palpite. Entradas pessoais, de IA e Meta abrem uma vista detalhada com Street View e uma imagem sobreposta quando disponível. **Notas disponíveis** mostra um contador e todo o histórico rolável; novas análises do Coach entram ali imediatamente e não reabrem como resultado ativo após recarregar. Minhas pistas filtra **Pessoal**, **Com ajuda de IA** e **Lições Meta** e pagina 20 resultados correspondentes por vez; texto revelador fica oculto antes da resposta.
 
 Um resultado baixo volta automaticamente ao fim da sessão de revisão atual até você acertar. Cada tentativa permanece registrada separadamente.
 
 O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captura pareada do OpenGuessr e de exemplos adicionais do GeoMetas com coordenadas utilizáveis do Street View. As explicações Meta seguem o idioma da interface nos oito idiomas suportados. Usar o Coach de IA ou salvar uma entrada do Caderno cria ou reutiliza automaticamente o cartão de Revisão; caso contrário, o cartão de localização revelado mantém Salvar para revisão. **Notas disponíveis** contém apenas o histórico Pessoal e assistido por IA, com análise completa, horário exato e a captura enviada quando existir; Meta permanece na própria lâmpada. Texto pessoal e de IA finalizado mantém o idioma de criação. Revisar um cartão já pendente avança seu agendamento mesmo pela prática personalizada e persiste após recarregar.
 
-Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Retomar**, **Começar de novo** ou **Voltar**. A cobertura inclui um mapa de calor contínuo de **Domínio**: muitas revisões bem-sucedidas e intervalos longos iluminam gradualmente países e locais, enquanto erros reduzem a intensidade. Pistas Meta dependentes da imagem mostram um aviso porque atualizações do Street View podem torná-las desatualizadas.
+Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Retomar**, **Começar de novo** ou **Voltar**. A cobertura inclui um mapa de calor contínuo de **Domínio**: muitas revisões bem-sucedidas e intervalos longos iluminam gradualmente países e locais, enquanto erros reduzem a intensidade. Um panorama aberto da Cobertura oferece Coach de IA, Caderno, Meta vinculada e Notas disponíveis; salvar cria ou reutiliza seu cartão de Revisão. Pistas Meta dependentes da imagem mostram um aviso porque atualizações do Street View podem torná-las desatualizadas.

@@ -35,12 +35,20 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review attempts are new records; never mutate the original Play attempt.
 - Before a guess, Review must not receive or render answer metadata.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
+- Treat same-country locations within 50 metres as one Review card across Play, Study, Notebook, and Coach sources.
+- Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.
+- Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
+- Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
+- Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
+- Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card and never invents a score.
 - Environment is a generator/filter dimension, not a duplicate collection system.
 - The Official / Mixed / Contributor imagery selector filters only newly generated Custom Learn and Play locations and defaults to Official; it does not alter Meta, Explore Map, saved locations, History, or Review.
 - Country and city datasets are local data files, not UI-component constants.
+- Configure the Google Maps JavaScript loader through one shared promise so development remounts cannot call `setOptions` twice.
+- Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
 - Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
@@ -71,8 +79,10 @@ Run type-check, tests, and build before handing off user-visible changes.
 - For localized or AI-generated text changes, QA accented Latin and Cyrillic output in every supported locale; reject visible escape fragments or mojibake such as `00e0`, `\\u00e0`, or replacement characters.
 - For panels and modals, browser-check scroll containment at desktop and mobile sizes. Keep scrollbars thin and unobtrusive, never hide scrolling, and keep primary actions reachable without nested page scroll traps.
 - Keep AI Coach, Notebook, Meta, and saved-clue learning panels draggable by their headers and bounded inside the viewport.
+- Keep AI Coach, Notebook, linked Meta, saved clues, and Available notes accessible from Coverage location details and scoped to the opened panorama.
 - Keep the AI Coach launcher visible while its draggable panel is open.
 - Keep the revealed location card draggable by its header, use a minimize affordance for hiding it, and expose the embedded result map's fullscreen control.
+- Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
 - Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.
 - For deployment handoffs, generate `.gz` copies of `dist` text assets with Node's built-in zlib after the build; add no compression dependency.

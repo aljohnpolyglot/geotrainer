@@ -16,7 +16,7 @@
 .dark :is(.stats-ai-control, .review-fallback) { color: #f7d88c; background: #302718; border-color: #705c2c; }
 .dark .stats-ai-count, .dark .stats-ai-count strong { color: #f7d88c; }
 .dark :is(.sample, .sample.low) { color: #d6eadf; background: #244336; }
-.dark :is(.activity-heatmap i, .anki-outcome i, .anki-calendar i, .anki-calendar-label .level-0) { background: #284453; }
+.dark :is(.activity-heatmap .level-0, .anki-outcome i, .anki-calendar .level-0, .anki-calendar-label .level-0) { background: #284453; }
 .dark :is(button.attempt-row:hover, tbody tr:hover) { background: #173747; }
 .dark :is(.coverage-map-wrap, .review-result-map) { background: #102b3b; }
 .dark :is(.button.secondary, .grade-actions button) { color: var(--carbon); background: #102b3b; border-color: var(--rule); }

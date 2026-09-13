@@ -160,11 +160,11 @@ Review presents scheduled locations when they are due. It is a real recall test,
 
 ### Before the guess
 
-The panorama appears without answer metadata. Review does not receive or render the original answer, previous guessed country, score, or other spoilers before you submit.
+The panorama appears without answer metadata. Review does not receive or render the original answer, previous guessed country, score, or other spoilers before you submit. You can write and save a new Notebook note while deciding; previously saved answer-bearing text remains hidden until submission.
 
 ### After the guess
 
-The result compares your current pinpoint with the actual location and may show previous attempts for context. The new answer is stored as its own Review attempt.
+The result compares your current pinpoint with the actual location and may show previous attempts for context. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 ### Automatic grading
 
@@ -172,7 +172,7 @@ GeoTrainer derives an internal grade from the current result. Country correctnes
 
 ### Completing a queue
 
-Review continues through the active queue until no selected cards remain. Same-day relearning cards may return after their configured delay. When Statistics contains more due cards than Review makes ready, the Review summary shows how many daily limits are holding back.
+Review continues through the active queue until no selected cards remain. Same-day relearning cards may return after their configured delay. If due cards are being held back, Review says the daily limit was reached instead of claiming all reviews are complete.
 
 ## Scheduling
 
@@ -186,7 +186,7 @@ Strictness affects future grading; it does not rewrite old attempts.
 
 ### Daily limits
 
-New cards per day limits how many unseen review cards enter the queue. Maximum reviews per day limits the total due workload. Lower the new-card limit if the daily queue is growing faster than you can finish it.
+New cards per day limits how many unseen review cards enter the queue. Maximum reviews per day limits the total due workload. Fresh profiles default to 50 new cards and 500 total reviews per day; saved choices remain unchanged. Locations within 50 metres in the same country share one Review card, including cards created by Save for Review, Notebook, Coach, or Play.
 
 ### First review and relearning
 
@@ -290,13 +290,13 @@ Start with Balanced defaults. Change one group at a time and observe the queue f
 
 ### Display
 
-Display preferences include Light or Dark palette, compass visibility, and compass style. Display choices do not affect scoring or scheduling.
+Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
 
 ## Progress and statistics
 
 ### Progress
 
-Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and active study time. It is a workload and habit view, not a single mastery score.
+Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and active study time. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. Session lists and active time omit reload records that contain no Study visit, Play attempt, or Review attempt. It is a workload and habit view, not a single mastery score.
 
 ### Performance
 
@@ -304,7 +304,7 @@ Statistics can compare Study, Play, and Review activity over selected periods. C
 
 ### AI-assisted rounds
 
-Play attempts made with AI assistance are excluded from performance statistics by default. Enable the AI-assisted filter when you intentionally want to include them.
+Play attempts made with AI assistance are included in performance statistics by default. Clear the visible AI-assisted checkbox when you want an unassisted-only view. Review summaries compare the previous average with today’s average and classify results as improved, unchanged, or worse; the 12-week activity calendar colors days by completed-review intensity.
 
 ### Reading noisy data
 
@@ -316,7 +316,7 @@ One poor session does not prove regression. Look for repeated country confusions
 
 Coverage shows panoramas you actually encountered in Study, Play, or Review. It never plots country or city seed points as if you had visited them.
 
-Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View.
+Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View. An opened Coverage panorama includes AI Coach, Notebook, linked Meta, and Available notes; saving there creates or reuses its Review card.
 
 Map layers can emphasize exposure, accuracy, average score, weakness, or due reviews. Clusters summarize nearby encountered locations.
 
@@ -342,7 +342,7 @@ Open the account entry on the homepage and use Google or email. Signing in ident
 
 ### What sync does
 
-Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, and saved clues available across devices. When records conflict, the current device’s version wins while unique records from both sides are preserved.
+Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to a screen checks for newer cloud progress. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 
@@ -484,7 +484,7 @@ Learn has three paths. **Custom** keeps the familiar collection and environment 
 
 In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Hint shows only the reference image before the guess; the full explanation appears afterward.
 
-The top-right **Notebook** stores any number of personal notes for the current panorama. Choose an optional clue category, add optional text, or save with both empty simply to remember the place. You can also paste or upload a reference image and analyze it with Coach. Personal, AI-assisted, and Meta entries open in detail views with Street View and an overlaid saved/reference image when available. The numbered **Available notes** button opens the full scrollable history for that panorama; new Coach analyses enter it immediately and do not reopen as the active Coach result after reload. Explicitly saved notes and images create or reuse the same Review source. My Clues can filter **Personal**, **AI-assisted**, and **Meta lessons**. Before a Review guess, personal text and answer-bearing analysis remain hidden.
+The top-right **Notebook** stores any number of personal notes for the current panorama. Choose an optional clue category, add optional text, or save with both empty simply to remember the place. You can also paste or upload a reference image and analyze it with Coach. Personal, AI-assisted, and Meta entries open in detail views with Street View and an overlaid saved/reference image when available. The numbered **Available notes** button opens the full scrollable history for that panorama; new Coach analyses enter it immediately and do not reopen as the active Coach result after reload. Explicitly saved notes and images create or reuse the same Review source. My Clues can filter **Personal**, **AI-assisted**, and **Meta lessons**, then paginates matching entries 20 at a time. Before a Review guess, personal text and answer-bearing analysis remain hidden.
 
 A low Review result automatically returns that location to the end of the current session. It continues returning until you pass it; each try remains a separate attempt.
 

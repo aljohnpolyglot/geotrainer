@@ -13,6 +13,7 @@ import {
 import { supabase } from './supabase';
 import { uploadClueImage } from './clueImages';
 import type { ClueRecord } from '../types';
+import { reloadPage } from './devDiagnostics';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
 
@@ -36,6 +37,7 @@ const keys: Record<StoreName, string> = {
   sessions: 'id',
   clues: 'id',
 };
+const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
 
 export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): TrainerBackup {
   const data = Object.fromEntries(STORE_NAMES.map((name) => {
@@ -43,7 +45,8 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
     // ponytail: current-device records win same-key conflicts; add per-record timestamps if concurrent editing becomes common.
     const records = new Map<string, unknown>();
     for (const item of [...(cloud.data[name] || []), ...(local.data[name] || [])]) {
-      records.set(String((item as Record<string, unknown>)[key]), item);
+      const record = item as Record<string, unknown>; const recordKey = String(record[key]); const previous = records.get(recordKey) as Record<string, unknown> | undefined;
+      if (!previous || revision(name, record) === undefined || revision(name, record)! >= revision(name, previous)!) records.set(recordKey, item);
     }
     return [name, [...records.values()]];
   })) as TrainerBackup['data'];
@@ -144,7 +147,7 @@ async function syncSession(session: Session | null): Promise<void> {
       }
     }
     await upload(session.user.id, true);
-    if (importedCloud) window.location.reload();
+    if (importedCloud) reloadPage('cloud-import');
   } catch (error) {
     applyingCloud = false;
     update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync failed.' });
@@ -175,6 +178,9 @@ export const cloudSync = {
         if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session), 0);
       });
       window.addEventListener('online', () => void upload().catch(() => {}));
+      const refresh = createQuietSyncScheduler(() => void supabase.auth.getSession().then(({ data }) => data.session && syncSession(data.session)).catch(() => {}), 250);
+      window.addEventListener('focus', refresh);
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(); });
     } catch (error) {
       update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync could not start.' });
     }

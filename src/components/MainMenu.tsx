@@ -5,6 +5,10 @@ import { cloudSync } from '../services/cloudSync';
 import { CloudAccountDialog } from './CloudAccountDialog';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
+import { savedMetaLessonIds } from '../data/metaLessons';
+import { savedClueCount } from './trainerHubUtils';
+import type { LearnedMeta, NotebookNote } from '../types';
+import { meaningfulSessions } from '../analytics/advanced';
 
 interface MainMenuProps {
   refreshKey: number;
@@ -14,22 +18,23 @@ interface MainMenuProps {
 }
 
 export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProps) {
-  const [status, setStatus] = useState({ locations: 0, attempts: 0, due: 0, nextDue: null as number | null, scheduled: false, timeZone: undefined as string | undefined, minutes: 0 });
+  const [status, setStatus] = useState({ locations: 0, attempts: 0, clues: 0, due: 0, nextDue: null as number | null, scheduled: false, timeZone: undefined as string | undefined, minutes: 0 });
   const sync = useSyncExternalStore(cloudSync.subscribe, cloudSync.getSnapshot);
   const [accountOpen, setAccountOpen] = useState(false);
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
 
   useEffect(() => {
-    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.schedulerPreferences()])
-      .then(([locations, attempts, reviews, sessions, scheduler]) => setStatus({
+    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.studyVisits(), trainerDb.schedulerPreferences(), trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated')])
+      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], savedOnlyMigrated]) => setStatus({
         locations: locations.length,
         attempts: attempts.length,
+        clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id))),
         due: reviews.filter((review) => effectiveReviewDueAt(review, scheduler) <= Date.now()).length,
         nextDue: nextScheduledReviewAt(reviews, Date.now(), scheduler) ?? null,
         scheduled: reviews.length > 0,
         timeZone: scheduler.reviewTimeZone,
-        minutes: Math.round(sessions.reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
+        minutes: Math.round(meaningfulSessions(sessions, attempts, visits).reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
       }))
       .catch(() => {});
   }, [refreshKey]);
@@ -55,6 +60,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
           <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>
           <span><strong>{status.attempts.toLocaleString()}</strong> {t('attempts retained')}</span>
           <span><strong>{status.minutes.toLocaleString()}</strong> {t('active minutes')}</span>
+          <span><strong>{status.clues.toLocaleString()}</strong> {t('knownClues')}</span>
         </div>
         <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>
           <span className="account-entry-icon"><Cloud size={19} /></span>

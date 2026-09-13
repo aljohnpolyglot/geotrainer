@@ -3,6 +3,7 @@ import { RefreshCw } from "lucide-react";
 import { COUNTRIES } from "../data/countries";
 import { isReviewDue, nextScheduledReviewAt, trainerDb } from "../data/trainerDb";
 import { savedMetaLessonIds } from "../data/metaLessons";
+import { meaningfulSessions } from "../analytics/advanced";
 import type { Attempt, ClueRecord, Collection, GameRecord, LearnedMeta, NotebookNote, ReviewFilters, ReviewRecord, ReviewSessionKind, SchedulerPreferences, StudyVisit, TrainerLocation } from "../types";
 import { StatisticsPanel } from "./StatisticsPanel";
 import { CoveragePanel } from "./TrainerHubCoveragePanel";
@@ -73,7 +74,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     const savedMetaIds = savedMetaLessonIds(nextAttempts);
     const visibleMetas = savedOnlyMigrated ? nextMetas || [] : (nextMetas || []).filter((meta) => savedMetaIds.has(meta.id));
     if (!savedOnlyMigrated) void Promise.all([trainerDb.setSetting('meta.learned', visibleMetas), trainerDb.setSetting('meta.savedOnlyMigrated', true)]);
-    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setSessions(nextSessions); setClues(nextClues); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setLoading(false);
+    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setSessions(meaningfulSessions(nextSessions, nextAttempts, nextVisits)); setClues(nextClues); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setLoading(false);
   };
   useEffect(() => { void load(); }, [refreshKey]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);

@@ -58,7 +58,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.reviewQueue({ wrongCountry: true })).length, 1);
   assert.equal((await trainerDb.reviewQueue({ due: true })).some((item) => item.panoId === 'pano-new'), false);
 
-  await trainerDb.saveAttempt({ ...baseAttempt, id: 'study-card:pano-study', panoId: 'pano-study', source: 'study', score: 0, guessedLat: null, guessedLng: null, guessedCountryCode: undefined });
+  await trainerDb.saveAttempt({ ...baseAttempt, id: 'study-card:pano-study', panoId: 'pano-study', actualLat: 40, actualLng: 10, source: 'study', score: 0, guessedLat: null, guessedLng: null, guessedCountryCode: undefined });
   await trainerDb.queueForReview('pano-study');
   assert.equal((await trainerDb.reviewQueue({ wrongCountry: true })).some((item) => item.panoId === 'pano-study'), false);
   assert.equal((await trainerDb.reviewQueue({ due: true })).some((item) => item.panoId === 'pano-study'), false);
@@ -150,7 +150,7 @@ test('due queue enforces same-day limits and persists review session kind', asyn
   await clearTrainerDbForTesting();
   const preferences = await trainerDb.schedulerPreferences();
   const saveAttempt = (panoId: string) => trainerDb.saveAttempt({
-    id: `daily:${panoId}`, gameId: 'daily', roundNumber: 1, panoId, actualLat: 1, actualLng: 1,
+    id: `daily:${panoId}`, gameId: 'daily', roundNumber: 1, panoId, actualLat: panoId.endsWith('a') ? 1 : 2, actualLng: 1,
     countryCode: 'DE', guessedLat: 2, guessedLng: 2, guessedCountryCode: 'FR', distanceKm: 100,
     score: 1000, timeSpentSeconds: 10, collectionId: 'world', canMove: true, canPan: true, canZoom: true,
     createdAt: Date.now(), source: 'play',

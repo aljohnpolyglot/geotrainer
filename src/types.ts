@@ -321,6 +321,7 @@ export interface TrainingSession {
 export interface SettingRecord {
   key: string;
   value: unknown;
+  updatedAt?: number;
 }
 
 export interface ReviewFilters {

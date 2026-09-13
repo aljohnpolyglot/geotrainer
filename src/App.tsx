@@ -58,6 +58,7 @@ import { usePlayMode } from './hooks/usePlayMode';
 import { useStudyMode } from './hooks/useStudyMode';
 import { useLearnSources } from './hooks/useLearnSources';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
+import { installAudio, setAudioPreferences } from './services/audio';
 
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
@@ -168,6 +169,8 @@ export default function App() {
   studyPanoramaSourceRef.current = studyPanoramaSource;
   currentLocationRef.current = currentLocation;
 
+  useEffect(() => installAudio(), []);
+
   const allCollections = [...BUILT_IN_COLLECTIONS, ...customCollections, ...(temporaryCollection ? [temporaryCollection] : [])];
   const activeCollection = allCollections.find((collection) => collection.id === selectedCollectionId) || BUILT_IN_COLLECTIONS[0];
   const activeCollectionRef = useRef(activeCollection);
@@ -258,13 +261,13 @@ export default function App() {
     }
     void initTrainerDb()
       .then(async () => {
-        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPanoramaSource, savedContributors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, pausedStudy, pausedPlay] = await Promise.all([
+        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPanoramaSource, savedContributors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay] = await Promise.all([
           trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'), trainerDb.schedulerPreferences(),
           trainerDb.setting<boolean>('preference.compass'),
           trainerDb.setting<Environment>('preference.environment'), trainerDb.setting<UrbanLevel>('preference.urbanLevel'), trainerDb.setting<SamplingMode>('preference.sampling'),
           trainerDb.setting<PanoramaSource>('preference.panoramaSource'),
           trainerDb.setting<boolean>('preference.allowContributors'),
-          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<ActiveWorkspace>('workspace.paused.study'), trainerDb.setting<ActiveWorkspace>('workspace.paused.play'),
+          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting('preference.audio'), trainerDb.setting<ActiveWorkspace>('workspace.paused.study'), trainerDb.setting<ActiveWorkspace>('workspace.paused.play'),
         ]);
         setPausedWorkspaces({ ...(pausedStudy?.mode === 'study' ? { study: pausedStudy } : {}), ...(pausedPlay?.mode === 'play' ? { play: pausedPlay } : {}) });
         setCustomCollections(dbCollections);
@@ -279,6 +282,7 @@ export default function App() {
         else if (savedContributors === true) setStudyPanoramaSource('mixed');
         if (savedCompassStyle === 'bar' || savedCompassStyle === 'dial') setCompassStyle(savedCompassStyle);
         setDarkMode(savedDarkMode === true);
+        setAudioPreferences(savedAudio);
         if (savedStreetView?.panoId && Number.isFinite(savedStreetView.heading)) setRestoredStreetView(savedStreetView);
         await Promise.all([
           savedCompass === undefined && localStorage.getItem(COMPASS_STORAGE_KEY) !== null && trainerDb.setSetting('preference.compass', compassPreference),

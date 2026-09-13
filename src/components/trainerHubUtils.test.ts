@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { sortCoverageCountries } from './trainerHubUtils';
+import { pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -10,4 +10,14 @@ test('coverage columns sort in both directions without mutating source rows', ()
   assert.deepEqual(sortCoverageCountries(source, 'name', 1).map((item) => item.name), ['Andorra', 'Brazil']);
   assert.deepEqual(sortCoverageCountries(source, 'seen', -1).map((item) => item.seen), [2, 1]);
   assert.equal(source[0].name, 'Brazil');
+});
+
+test('saved clue total counts personal, AI, and Meta entries without double-counting a note image', () => {
+  const clues = [{ id: 'note-image' }, { id: 'coach' }]; const notes = [{ clueId: 'note-image' }]; const metas = [{ id: 'meta' }];
+  assert.equal(savedClueCount(clues as never, notes as never, metas as never), 3);
+});
+
+test('clue pagination uses twenty rows and clamps an emptied last page', () => {
+  assert.deepEqual(pageBounds(97, 5), { current: 5, pages: 5, start: 80, end: 100 });
+  assert.deepEqual(pageBounds(39, 5), { current: 2, pages: 2, start: 20, end: 40 });
 });

@@ -171,7 +171,8 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
 }
 #revealed-location-card [class*="text-amber"], #revealed-location-card svg.text-stone-400 { color: var(--blue) !important; }
 #revealed-location-card button, #revealed-location-card a { border-radius: 3px !important; }
-#revealed-location-card button[class*="bg-stone-800"] { background: #dce5e7 !important; color: var(--carbon) !important; border-color: var(--rule) !important; }
+#revealed-location-card button[class*="bg-stone-800"] { background: var(--storm) !important; color: #fff !important; border-color: #49626d !important; }
+#revealed-location-card button[class*="bg-stone-800"]:hover { background: var(--blue) !important; border-color: var(--blue) !important; }
 #revealed-location-card button[class*="bg-amber"] { background: var(--blue) !important; color: #fff !important; border-color: var(--blue) !important; }
 #guess-map-widget > div:first-child,
 #guess-map-widget > div:last-child { color: var(--carbon) !important; background: var(--paper) !important; border-color: var(--rule) !important; }

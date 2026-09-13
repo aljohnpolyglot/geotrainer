@@ -36,6 +36,28 @@ test('cloud merge includes saved clue images and persisted preferences', () => {
   assert.deepEqual(merged.data.settings, [{ key: 'schedulerPreferences', value: { strictness: 'pro' } }]);
 });
 
+test('cloud merge keeps the newest setting across screens', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.settings.push({ key: 'workspace.active', value: { mode: 'study', location: 'Russia' }, updatedAt: 20 });
+  local.data.settings.push({ key: 'workspace.active', value: { mode: 'study', location: 'Sweden' }, updatedAt: 10 });
+  assert.deepEqual(mergeBackups(cloud, local).data.settings, [cloud.data.settings[0]]);
+});
+
+test('cloud merge includes review, language, UI, audio, game, and workspace settings', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  for (const key of ['schedulerPreferences', 'languagePreferences', 'preference.darkMode', 'preference.audio', 'gamePreferences', 'workspace.paused.study']) {
+    cloud.data.settings.push({ key, value: `cloud-${key}`, updatedAt: 20 }); local.data.settings.push({ key, value: `local-${key}`, updatedAt: 10 });
+  }
+  assert.deepEqual((mergeBackups(cloud, local).data.settings as Array<{ value: string }>).map(({ value }) => value), ['cloud-schedulerPreferences', 'cloud-languagePreferences', 'cloud-preference.darkMode', 'cloud-preference.audio', 'cloud-gamePreferences', 'cloud-workspace.paused.study']);
+});
+
+test('cloud merge keeps the most recently graded review across devices', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 30, lastReviewedAt: 20, gradingHistory: [{ grade: 'good', at: 20 }] });
+  local.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 15, lastReviewedAt: 10, gradingHistory: [{ grade: 'hard', at: 10 }] });
+  assert.deepEqual(mergeBackups(cloud, local).data.reviews, [cloud.data.reviews[0]]);
+});
+
 test('token refresh does not trigger a visible full sync', () => {
   assert.equal(shouldSyncAuthEvent('TOKEN_REFRESHED', 'user-1', 'user-1'), false);
   assert.equal(shouldSyncAuthEvent('SIGNED_IN', 'user-1', 'user-1'), false);

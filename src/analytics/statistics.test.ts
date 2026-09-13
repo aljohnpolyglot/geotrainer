@@ -90,7 +90,7 @@ test('session statistics ignore empty reload and HMR records', () => {
   const rows = sessionStatistics([
     { id: 'empty-a', startedAt: 1, endedAt: 2, activeTimeSeconds: 0 },
     { id: 'real', startedAt: 3, endedAt: 13, activeTimeSeconds: 10 },
-    { id: 'empty-b', startedAt: 14, endedAt: 15, activeTimeSeconds: 0 },
-  ], [], []).rows;
+    { id: 'empty-b', startedAt: 14, endedAt: 80, activeTimeSeconds: 60 },
+  ], [], [{ openedAt: 5, countryCode: 'DE' }] as never).rows;
   assert.deepEqual(rows.map((item) => item.id), ['real']);
 });

@@ -55,15 +55,15 @@ Se il ritaglio mostra un soggetto principale evidente in primo piano, il Coach a
 
 ## Raccolte e preferenze
 
-Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa.
+Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 
 ## Progressi e statistiche
 
-Consulta luoghi, tentativi, tempo attivo, coda, prestazioni e cronologia. Copertura mostra solo panorami realmente incontrati. Digita le prime lettere nei menu di paesi e categorie per raggiungere un’opzione.
+Consulta luoghi, tentativi, tempo attivo, coda, prestazioni e cronologia. Indizi conosciuti somma voci personali, IA e Meta senza contare due volte l’immagine di una nota. Le sessioni senza visite né tentativi sono nascoste. Le partite assistite dall’IA sono incluse per impostazione predefinita e possono essere escluse. Il riepilogo separa media precedente e odierna. Luoghi nello stesso paese entro 50 metri condividono una scheda.
 
 ## Sincronizzazione cloud
 
-L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, il cloud unisce discretamente i progressi compatibili tra dispositivi.
+L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la sincronizzazione include progressi e preferenze di Ripasso, lingua, interfaccia, audio e gioco; prevalgono l’impostazione più recente e il Ripasso valutato per ultimo. Il cloud viene ricontrollato quando ogni schermata torna attiva. Senza accesso, localhost e il sito pubblicato restano separati.
 
 ## Risoluzione dei problemi
 
@@ -95,12 +95,12 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 
 Impara offre tre percorsi. **Personalizzato** mantiene raccolte e ambienti. **Meta** apre lezioni guidate nel panorama e nell’orientamento registrati. **Esplora mappa** mostra la copertura Street View. In Meta e nella mappa, Rivela apre la normale scheda del luogo, dove Salva per il ripasso programma la futura prova di localizzazione. La mappa usa Torna alla mappa mondiale al posto di Avanti. Impara personalizzato e Gioco usano per impostazione predefinita immagini ufficiali Google; il selettore può mescolare panorami ufficiali e dei collaboratori oppure richiedere solo quelli dei collaboratori.
 
-La lampadina in alto a destra apre o chiude la spiegazione. Il consiglio iniziale può essere chiuso una volta o nascosto per sempre senza rimuovere lezioni. Un Meta appare in **I miei indizi** solo dopo averne salvato esplicitamente il luogo per il ripasso. Nel ripasso, prima della risposta compare solo l’immagine; il testo completo appare dopo.
+La lampadina in alto a destra apre o chiude la spiegazione. Il consiglio iniziale può essere chiuso una volta o nascosto per sempre senza rimuovere lezioni. Un Meta appare in **I miei indizi** solo dopo averne salvato esplicitamente il luogo per il ripasso. Nel ripasso, prima della risposta compare solo l’immagine; il testo completo appare dopo e gli strumenti di apprendimento restano disponibili fino a quando scegli il ripasso successivo.
 
-Il **Taccuino** salva un numero qualsiasi di note personali per panorama. Categoria e testo sono facoltativi; anche una voce vuota può salvare il luogo per il ripasso. Accetta inoltre immagini analizzate con Coach. Le voci personali, IA e Meta aprono una vista dettagliata con Street View e un’immagine sovrapposta quando disponibile. **Note disponibili** mostra un contatore e l’intera cronologia scorrevole; le nuove analisi del Coach entrano subito lì e non si riaprono come risultato attivo dopo il ricaricamento. I miei indizi filtra **Personali**, **Con assistenza IA** e **Lezioni Meta**; il testo rivelatore resta nascosto prima della risposta.
+Il **Taccuino** salva un numero qualsiasi di note personali per panorama. Categoria e testo sono facoltativi; anche una voce vuota può salvare il luogo per il ripasso. Accetta inoltre immagini analizzate con Coach. Durante il ripasso puoi scrivere e salvare una nuova nota; l’analisi dell’immagine non rivela la risposta prima del tentativo. Le voci personali, IA e Meta aprono una vista dettagliata con Street View e un’immagine sovrapposta quando disponibile. **Note disponibili** mostra un contatore e l’intera cronologia scorrevole; le nuove analisi del Coach entrano subito lì e non si riaprono come risultato attivo dopo il ricaricamento. I miei indizi filtra **Personali**, **Con assistenza IA** e **Lezioni Meta** e impagina 20 risultati corrispondenti alla volta; il testo rivelatore resta nascosto prima della risposta.
 
 Un risultato basso torna automaticamente in fondo alla sessione di ripasso finché non viene superato. Ogni tentativo rimane separato.
 
 Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla cattura abbinata di OpenGuessr e da ulteriori esempi GeoMetas con coordinate Street View utilizzabili. Le spiegazioni Meta seguono la lingua dell’interfaccia nelle otto lingue supportate. Usare Coach IA o salvare una voce del Taccuino crea o riutilizza automaticamente la scheda di Ripasso; altrimenti la scheda del luogo rivelato mantiene Salva per il ripasso. **Note disponibili** contiene solo la cronologia personale e assistita dall’IA, con analisi completa, ora esatta e schermata inviata quando presente; Meta resta sotto la propria lampadina. Il testo personale e IA finalizzato conserva la lingua di creazione. Ripassare una scheda già in scadenza ne avanza la pianificazione anche dalla pratica personalizzata e persiste dopo il ricaricamento.
 
-Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi scegliere **Riprendi**, **Inizia da capo** o **Indietro**. La copertura include una mappa di calore continua della **Padronanza**: molti ripassi riusciti e intervalli lunghi illuminano gradualmente paesi e luoghi, mentre gli errori riducono l’intensità. Gli indizi Meta dipendenti dalle immagini mostrano un avviso perché gli aggiornamenti di Street View possono renderli obsoleti.
+Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi scegliere **Riprendi**, **Inizia da capo** o **Indietro**. La copertura include una mappa di calore continua della **Padronanza**: molti ripassi riusciti e intervalli lunghi illuminano gradualmente paesi e luoghi, mentre gli errori riducono l’intensità. Un panorama aperto da Copertura offre Coach IA, Taccuino, Meta collegata e Note disponibili; il salvataggio crea o riutilizza la sua scheda di Ripasso. Gli indizi Meta dipendenti dalle immagini mostrano un avviso perché gli aggiornamenti di Street View possono renderli obsoleti.

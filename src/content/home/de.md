@@ -144,7 +144,7 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 ### Nach der Antwort
 
-Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert.
+Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
 ### Automatische Bewertung
 
@@ -152,7 +152,7 @@ Land, Entfernung, Punktzahl, Antwortzeit und Strengegrad ergeben intern die näc
 
 ### Warteschlange abschließen
 
-GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Wenn die Statistik mehr fällige Karten als die Wiederholungsansicht zeigt, nennt die Zusammenfassung die durch Tageslimits zurückgehaltene Anzahl.
+GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Werden fällige Karten zurückgehalten, meldet die Ansicht das erreichte Tageslimit, statt alle Wiederholungen als abgeschlossen zu bezeichnen.
 
 ## Planung und Einstellungen
 
@@ -166,7 +166,7 @@ Eine Änderung wirkt auf künftige Bewertungen und schreibt alte Versuche nicht 
 
 ### Tageslimits
 
-Neue Karten pro Tag begrenzt erstmals fällige Orte. Maximale Wiederholungen pro Tag begrenzt die gesamte Tageslast. Senke neue Karten, wenn die Warteschlange schneller wächst, als du sie erledigen kannst.
+Neue Karten pro Tag begrenzt erstmals fällige Orte. Maximale Wiederholungen pro Tag begrenzt die gesamte Tageslast. Neue Profile starten mit 50 neuen Karten und 500 Wiederholungen pro Tag; gespeicherte Werte bleiben erhalten. Orte im selben Land innerhalb von 50 Metern teilen eine Karte – auch bei Speichern, Notizbuch, Coach und Spiel.
 
 ### Intervalle
 
@@ -248,7 +248,7 @@ Oberflächensprache, geografische Spielbezeichnungen und KI-Antwortsprache sind 
 
 ### Darstellung
 
-Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern nur die Anzeige. Sie beeinflussen weder Punkte noch Planung.
+Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern nur die Anzeige. Optionale Klangeffekte und Ambient-Musik starten ausgeschaltet, speichern getrennte Lautstärken und beginnen erst nach einer Interaktion. Sie beeinflussen weder Punkte noch Planung.
 
 ### Einstellungen ändern
 
@@ -258,7 +258,7 @@ Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern 
 
 ### Fortschritt
 
-Fortschritt fasst heutige und gesamte Orte, Versuche, aktive Zeit und fällige Wiederholungen zusammen. Es ist eine Arbeits- und Gewohnheitsansicht, keine einzelne Meisterschaftsnote.
+Fortschritt fasst heutige und gesamte Orte, Versuche, aktive Zeit und fällige Wiederholungen zusammen. Bekannte Hinweise auf der Startseite entspricht Meine Hinweise: persönliche, KI-unterstützte und ausdrücklich gespeicherte Meta-Einträge zählen, ein Notizbuchbild nicht doppelt. Sitzungen ohne Lernbesuch, Spiel- oder Wiederholungsversuch werden ausgeblendet. Es ist eine Arbeits- und Gewohnheitsansicht, keine einzelne Meisterschaftsnote.
 
 ### Leistung
 
@@ -266,7 +266,7 @@ Statistik vergleicht Lernen, Spielen und Wiederholen über verschiedene Zeiträu
 
 ### KI-unterstützte Runden
 
-Spielversuche mit KI-Unterstützung sind standardmäßig aus Leistungswerten ausgeschlossen. Aktiviere den entsprechenden Filter nur, wenn du sie bewusst einbeziehen möchtest.
+Spielversuche mit KI-Unterstützung sind standardmäßig einbezogen. Entferne das Häkchen für eine rein nicht unterstützte Ansicht. Wiederholungszusammenfassungen vergleichen den früheren mit dem heutigen Durchschnitt und nennen verbessert, gleich oder schlechter; der 12-Wochen-Kalender färbt Tage nach Aktivität.
 
 ### Daten sinnvoll lesen
 
@@ -278,7 +278,7 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 
 Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche oder fällige Wiederholungen hervorheben.
 
-Gespeicherte Lernorte und abgegebene Spieltipps behalten die aktuelle Ansicht als Vorschau. In Länder-, Kategorie- und Sammlungsmenüs kannst du die Anfangsbuchstaben tippen, um direkt zu einer Option zu springen.
+Gespeicherte Lernorte und abgegebene Spieltipps behalten die aktuelle Ansicht als Vorschau. Ein geöffnetes Abdeckungspanorama bietet KI-Coach, Notizbuch, verknüpfte Meta und verfügbare Notizen; Speichern erstellt oder verwendet seine Wiederholungskarte. In Länder-, Kategorie- und Sammlungsmenüs kannst du die Anfangsbuchstaben tippen, um direkt zu einer Option zu springen.
 
 ### Ländertabelle
 
@@ -298,7 +298,7 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Synchronisierte Daten
 
-Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen und Hinweise werden geräteübergreifend zusammengeführt. Eindeutige Datensätze bleiben erhalten; bei einem direkten Konflikt gewinnt das aktuelle Gerät.
+Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim erneuten Fokussieren wird neuer Cloud-Fortschritt geprüft. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
 
 ### Offline arbeiten und abmelden
 
@@ -424,7 +424,7 @@ Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen
 
 Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist vor der Antwort nur das Referenzbild sichtbar; der vollständige Text folgt danach.
 
-Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständig scrollbaren Verlauf; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen**; verräterischer Text bleibt vor der Antwort verborgen.
+Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Während der Wiederholung kannst du eine neue Notiz schreiben und speichern; ihre Bildanalyse verrät vor dem Tipp keine Antwort. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständig scrollbaren Verlauf; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen** und zeigt passende Einträge seitenweise zu je 20; verräterischer Text bleibt vor der Antwort verborgen.
 
 Ein schwaches Wiederholungsergebnis kehrt automatisch ans Ende der aktuellen Sitzung zurück, bis es bestanden wird. Jeder Versuch bleibt ein eigener Eintrag.
 

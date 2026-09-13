@@ -72,12 +72,22 @@ function aiCoachPlugin(googleKey: string): Plugin {
     },
   };
 }
+
+function restartDiagnosticsPlugin(): Plugin {
+  return {
+    name: 'geotrainer-restart-diagnostics',
+    configureServer(server) {
+      console.info('[GeoTrainer dev]', new Date().toISOString(), 'vite-server:start', { pid: process.pid });
+      server.httpServer?.once('close', () => console.warn('[GeoTrainer dev]', new Date().toISOString(), 'vite-server:close', { pid: process.pid }));
+    },
+  };
+}
 // LINT.ThenChange(//depot/google3/java/com/google/alkali/boq/makersuite/applet_dev_service/templates/initializers/react_theme/vite.config.ts:aistudio_media_plugin)
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), tailwindcss(), aistudioMediaPlugin(), aiCoachPlugin(env.GOOGLE_MAPS_API_KEY || env.VITE_GOOGLE_MAPS_API_KEY || '')],
+    plugins: [react(), tailwindcss(), aistudioMediaPlugin(), aiCoachPlugin(env.GOOGLE_MAPS_API_KEY || env.VITE_GOOGLE_MAPS_API_KEY || ''), restartDiagnosticsPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
