@@ -37,6 +37,7 @@ import {
   deleteCustomCollection,
 } from './data/collections';
 import { COUNTRIES } from './data/countries';
+import { hasStudyReviewSource } from './data/reviewIdentity';
 import {
   getBookmarks,
   saveBookmark,
@@ -218,7 +219,7 @@ export default function App() {
   const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
-  useEffect(() => { setStudyReviewSaved(false); }, [currentLocation?.panoId]);
+  useEffect(() => { const panoId = currentLocation?.panoId; let active = true; if (!dbReady || !panoId) { setStudyReviewSaved(false); return; } void trainerDb.attempts().then((attempts) => { if (active) setStudyReviewSaved(hasStudyReviewSource(attempts, panoId)); }); return () => { active = false; }; }, [currentLocation?.panoId, dbReady, trainerRefreshKey]);
   const handleNextLearn = useCallback(() => { if (learnSource === 'meta') nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen]);
   const requestMode = (mode: 'study' | 'play') => {
     if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation : isGameActive)) return;

@@ -13,6 +13,8 @@ const pointsByPano = (locations: TrainerLocation[], attempts: Attempt[]) => {
 
 const nearby = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM;
 
+export const hasStudyReviewSource = (attempts: Attempt[], panoId: string) => attempts.some((attempt) => attempt.source === 'study' && attempt.panoId === panoId);
+
 const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
   const gradingHistory = [...kept.gradingHistory, ...duplicate.gradingHistory]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)

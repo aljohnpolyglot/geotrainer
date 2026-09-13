@@ -109,7 +109,7 @@ Reveal shows the exact location information for the current Study panorama. Unti
 
 ### Save for Review
 
-Save for Review creates one reusable source card for the panorama. It never invents a guess, distance, score, or grade. Repeated clicks do not create duplicate source cards. Saving a visual clue creates this source card automatically, so a second action is unnecessary.
+Save for Review creates one reusable source card for the panorama. It never invents a guess, distance, score, or grade. Repeated clicks do not create duplicate source cards, and the saved state is restored after a reload. Saving a visual clue creates this source card automatically, so a second action is unnecessary.
 
 ### Environment and sampling
 

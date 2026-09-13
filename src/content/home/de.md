@@ -99,7 +99,7 @@ Aufdecken zeigt genaue Ortsdaten. Vorher bleiben Antwortinformationen verborgen.
 
 ### Für Wiederholung speichern
 
-Die Aktion erzeugt genau eine wiederverwendbare Quellkarte. Sie erfindet keinen Tipp, keine Entfernung, keine Punktzahl und keine Note.
+Die Aktion erzeugt genau eine wiederverwendbare Quellkarte. Sie erfindet keinen Tipp, keine Entfernung, keine Punktzahl und keine Note. Nach einem Neuladen bleibt der Ort als gespeichert erkannt und die Aktion erscheint nicht erneut.
 
 ### Umgebung und Auswahl
 

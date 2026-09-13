@@ -43,7 +43,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
-- Study may offer one ungraded “Save for Review” action; it creates one reusable source card and never invents a score.
+- Study may offer one ungraded “Save for Review” action; it creates one reusable source card, never invents a score, and must remain recognized as saved after reload.
 - Environment is a generator/filter dimension, not a duplicate collection system.
 - The Official / Mixed / Contributor imagery selector filters only newly generated Custom Learn and Play locations and defaults to Official; it does not alter Meta, Explore Map, saved locations, History, or Review.
 - Country and city datasets are local data files, not UI-component constants.

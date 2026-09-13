@@ -2,6 +2,7 @@
 
 ## 2026-09-13
 
+- Restored each Study panorama's saved-for-Review state from persisted attempts so its save action stays hidden after reload.
 - Synced every persisted setting category and resolved Review conflicts by the latest grading time; added safe development diagnostics for Vite reloads and corrected the revealed-location minimize contrast.
 - Prevented React development remounts from configuring the Google Maps loader twice and emitting a misleading reset warning.
 - Paginated the filtered My Clues library at 20 entries per page with localized navigation and safe last-page clamping.

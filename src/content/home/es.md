@@ -30,7 +30,7 @@ Un mal intento vuelve antes y una respuesta sólida espera más. La distancia y 
 
 ## Modo Estudio
 
-Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación.
+Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación. El estado guardado se recupera al recargar, por lo que la acción no vuelve a aparecer.
 
 ## Modo Juego
 
