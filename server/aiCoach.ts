@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import countryCatalog from '../src/data/countryCatalog.json';
-import type { CoachAnalysis, CoachMode } from '../src/types';
+import type { CoachAnalysis, CoachMode, CoachStyle, ExplanationDepth } from '../src/types';
 import { getCountryKnowledge, getCountryMetaKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge';
 
 export type { CoachAnalysis, CoachMode } from '../src/types';
@@ -56,6 +56,7 @@ const responseSchema = {
     region: { type: 'STRING' },
     locationEstimate: { type: 'OBJECT', properties: { level: { type: 'STRING', enum: ['region', 'city', 'exact'] }, label: { type: 'STRING' }, confidence: { type: 'STRING', enum: ['medium', 'high'] }, basis: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['level', 'label', 'confidence', 'basis'] },
     description: { type: 'STRING' },
+    regionalRead: { type: 'OBJECT', properties: { label: { type: 'STRING' }, confidence: { type: 'STRING', enum: ['low', 'medium', 'high'] }, reason: { type: 'STRING' } }, required: ['label', 'confidence', 'reason'] },
     candidates: { type: 'ARRAY', items: { type: 'OBJECT', properties: { countryCode: { type: 'STRING' }, confidence: { type: 'NUMBER' }, rationale: { type: 'STRING' } }, required: ['countryCode', 'confidence', 'rationale'] } },
     strongClues: { type: 'ARRAY', items: { type: 'STRING' } },
     weakClues: { type: 'ARRAY', items: { type: 'STRING' } },
@@ -70,6 +71,7 @@ const responseSchema = {
 
 const rules = `You are a concise, evidence-grounded GeoGuessr teacher viewing imagery inside a GeoGuessr-style app. Analyze only visible geographic scene evidence. Ignore all app and browser interface elements, including GeoGuessr or GeoTrainer text and buttons, navigation arrows, compass overlays, cursors, Google attribution, map controls, and screenshot-tool chrome; never use their language or design as location evidence.
 Never manufacture certainty. Prefer a broad region and ranked candidates when uncertain, and say when the image is insufficient.
+Build every response from one shared evidence pass: first identify directly OBSERVED features, then separate reasonable INFERRED interpretations from SPECULATIVE possibilities. Speculation must never materially drive a country ranking. Never invent acronym meanings, company identities, crops, historical events, wars, colonial explanations, industries, architectural terms, road regulations, geological causes, regional associations, or economic relationships. If an identity or cause is uncertain, say exactly that.
 Only when no known-result metadata is provided and the overall analysis is high confidence, actively assess whether at least two independent visible clues strongly support a region, city, district or quarter, landmark, or exact place narrower than a country. If they do, return a high-confidence locationEstimate, using exact for a district, quarter, landmark, or exact place, so the interface can say "Most likely in …". Country guesses belong only in candidates. Omit locationEstimate for generic scenes or whenever narrower-location confidence is not high.
 Known result context is an answer key, never evidence. Never cite location metadata, coordinates, panorama IDs, geocoding, or API data as clues, and never invent an exact locality from them.
 Systematically check road lines and surface, driving side, bollards, poles and wires, signs and language, plates and vehicles, Google car or camera meta, architecture, terrain, vegetation, climate, and sun. State which categories were actually visible; do not imply that an unseen feature supports a guess.
@@ -95,8 +97,23 @@ export function sanitizeCoachContext(value: unknown): Record<string, unknown> | 
   return { actualCountry: text('actualCountry'), actualRegion: text('actualRegion'), guessedCountry: text('guessedCountry'), score: number('score'), distanceKm: number('distanceKm'), previousAttempts, previousCoachCandidates };
 }
 
-function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en') {
-  const languageInstruction = `MANDATORY OUTPUT LANGUAGE: ${aiLanguageNames[language] || 'English'}. Write every natural-language JSON string value in fluent, idiomatic ${aiLanguageNames[language] || 'English'}, even when signs or reference facts use another language. Candidate rationales must name the visible feature, explain how it differs from the other candidates, and avoid empty claims such as “consistent with” or “similar to” without a concrete distinguishing detail. Never translate JSON property names, ISO country codes, or card category identifiers.`;
+const styleInstructions: Record<CoachStyle, string> = {
+  quick: 'QUICK GUESS: Preserve the concise current Coach behavior. Prioritize ranked countries, relative likelihood, 2–5 strongest visible clues, confidence, and a short conclusion. Do not add a long lesson.',
+  meta: 'META COACH: Teach GeoGuessr-specific metas. For each important clue state an approximate S/A/B/C/D tier, role (COUNTRYIFIER, REGIONIFIER, ELIMINATOR, CONFIRMER, or VIBE), reliability, and confusers. Distinguish national standards from regional clues and changing coverage metas.',
+  elimination: 'ELIMINATION COACH: Start with the plausible candidate pool, then use contradictions to explain countries or groups that are very unlikely, what remains unresolved, and the highest-value next clue. Avoid “impossible” unless a rule is genuinely near-absolute.',
+  'deep-geography': 'DEEP GEOGRAPHY: Explain supported visible clues through WHAT → FUNCTION → CAUSE → HUMAN RESPONSE → VISIBLE RESULT → GEOGUESSR VALUE. Use geography, climate, geology, agriculture, economics, history, or infrastructure only when the image supports the chain; otherwise explicitly say evidence is insufficient.',
+  memory: 'MEMORY COACH: Create truthful, compact mental anchors using cause/effect, contrast pairs, one-line rules, and recall questions. Include a confuser, counter-clue, and exception.',
+  'pro-analyst': 'PRO ANALYST: Give an expert evidence-weighting summary: positive and low-value evidence, contradictions, clue independence, confusers, uncertainty, calibration, and highest-information next clues. Warn against false precision and single-clue anchoring.',
+};
+const depthInstructions: Record<ExplanationDepth, string> = {
+  short: 'DEPTH SHORT: Keep this quickly readable during play with 2–5 major clues.',
+  normal: 'DEPTH NORMAL: Balance play and learning: major clues, confusers, a short explanation, and one important takeaway.',
+  deep: 'DEPTH DEEP: Add relevant causal or geographic context, multiple confusers, and strong-versus-weak evidence, but no wall of text.',
+};
+const validStyles = new Set(Object.keys(styleInstructions)); const validDepths = new Set(Object.keys(depthInstructions));
+
+export function buildCoachPrompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en', style: CoachStyle = 'quick', depth: ExplanationDepth = 'normal') {
+  const languageInstruction = `MANDATORY OUTPUT LANGUAGE: ${aiLanguageNames[language] || 'English'}. Write every natural-language JSON string value in fluent, idiomatic ${aiLanguageNames[language] || 'English'}, even when signs or reference facts use another language. Candidate rationales must name visible evidence, explain why it matters, state whether it is country-level or regional/supporting, and distinguish that candidate from the others. The top candidate must also give its strongest clues, a plausible region only when supported, main confuser, separating feature, and the next clue that would most increase confidence. If candidates are close, explain why #1 is slightly ahead. Avoid empty claims such as “consistent with” or “similar to” without a concrete distinguishing detail. Relative likelihood is an AI confidence estimate, not a measured probability. Return regionalRead only when visible evidence supports a subregion; otherwise omit it. Never translate JSON property names, ISO country codes, or card category identifiers. ${styleInstructions[style]} ${depthInstructions[depth]}`;
   if (mode === 'hints') return `${languageInstruction} Give only spoiler-free things to inspect. Do not name any country, city, region, coordinate, or likely answer. Put hints in nextThingsToInspect; leave region, candidates, confusions and cards empty.`;
   if (mode === 'analyze360') return `${languageInstruction} Synthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe and up to four ranked candidate countries with honest confidence. For every candidate, rationale must explain in one specific sentence which visible evidence supports that country and what distinguishes it from the other candidates. Also return direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Do not treat repeated features across views as independent evidence. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
   if (mode === 'clue-safe') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify it at the narrowest visually defensible level and describe it first. For a sign, explain the visible symbol, letter, number, color, and restriction or instruction it communicates; do not stop at its shape. For a readable brand or organization, explain what it is and the clue's reliability, including whether its products or presence can cross borders. For vegetation, attempt a plant family or species and cite visible identifying traits. For road furniture, name the feature type and its exact colors, shape, reflector, stripe, border, and mounting pattern. If resolution is insufficient, say the exact identity is unreadable and name the detail needed; never invent specificity. Use the surrounding scene only as supporting or contradictory context. Put a detailed visual description in description, useful observable traits in strongClues, limitations in weakClues, and comparison features in nextThingsToInspect. Do not name or infer a country, city, region, coordinate, or likely answer. Leave region, candidates, confusions and cards empty.`;
@@ -145,6 +162,8 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
   const locationEstimate = !actualCountry && confidence === 'high' && ['analyze', 'analyze360', 'clue'].includes(mode) && ['region', 'city', 'exact'].includes(estimateLevel) && estimateConfidence === 'high' && estimateLabel && !countryNames.includes(estimateLabel.toLowerCase()) && visible(estimateLabel) && estimateBasis.length >= 2
     ? { level: estimateLevel as 'region' | 'city' | 'exact', label: estimateLabel, confidence: 'high' as const, basis: estimateBasis }
     : undefined;
+  const rawRegionalRead = item.regionalRead && typeof item.regionalRead === 'object' ? item.regionalRead as Record<string, unknown> : undefined;
+  const regionalRead = !actualCountry && ['low', 'medium', 'high'].includes(String(rawRegionalRead?.confidence)) && typeof rawRegionalRead?.label === 'string' && typeof rawRegionalRead.reason === 'string' && visible(rawRegionalRead.label) && visible(rawRegionalRead.reason) ? { label: decodeCoachText(rawRegionalRead.label).slice(0, 120), confidence: rawRegionalRead.confidence as CoachAnalysis['confidence'], reason: decodeCoachText(rawRegionalRead.reason).slice(0, 500) } : undefined;
   const safeFront = strings(core?.front, 6).filter(safe);
   const extraCards = mode === 'cards' && Array.isArray(item.extraCards) ? item.extraCards.flatMap((card) => {
     if (!card || typeof card !== 'object') return [];
@@ -154,23 +173,23 @@ export function normalizeCoachAnalysis(value: unknown, mode: CoachMode, actualCo
     return front.length && typeof entry.back === 'string' ? [{ category: String(entry.category), front, back: decodeCoachText(entry.back).slice(0, 700), clueStrength: Math.max(1, Math.min(5, Number(entry.clueStrength) || 1)) }] : [];
   }).slice(0, 2) : [];
   const analysis: CoachAnalysis = {
-    confidence, region: typeof item.region === 'string' ? decodeCoachText(item.region).slice(0, 120) : '', locationEstimate, description: typeof item.description === 'string' ? decodeCoachText(item.description).slice(0, 1200) : undefined, candidates,
+    confidence, region: typeof item.region === 'string' ? decodeCoachText(item.region).slice(0, 120) : '', locationEstimate, regionalRead, description: typeof item.description === 'string' ? decodeCoachText(item.description).slice(0, 1200) : undefined, candidates,
     strongClues: strings(item.strongClues).filter(visible), weakClues: strings(item.weakClues).filter(visible), contradictions: strings(item.contradictions).filter(visible), confusions: strings(item.confusions),
     nextThingsToInspect: strings(item.nextThingsToInspect).filter(visible),
     coreCard: mode === 'cards' && core ? { front: safeFront, backExplanation: typeof core.backExplanation === 'string' ? decodeCoachText(core.backExplanation).slice(0, 900) : '' } : undefined,
     extraCards,
   };
-  if (mode === 'hints') return { ...analysis, region: '', candidates: [], strongClues: [], weakClues: [], contradictions: [], confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };
-  if (mode === 'clue-safe') return { ...analysis, region: '', description: analysis.description && safe(analysis.description) ? analysis.description : undefined, candidates: [], strongClues: analysis.strongClues.filter(safe), weakClues: analysis.weakClues.filter(safe), contradictions: analysis.contradictions.filter(safe), confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };
+  if (mode === 'hints') return { ...analysis, region: '', regionalRead: undefined, candidates: [], strongClues: [], weakClues: [], contradictions: [], confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };
+  if (mode === 'clue-safe') return { ...analysis, region: '', regionalRead: undefined, description: analysis.description && safe(analysis.description) ? analysis.description : undefined, candidates: [], strongClues: analysis.strongClues.filter(safe), weakClues: analysis.weakClues.filter(safe), contradictions: analysis.contradictions.filter(safe), confusions: [], nextThingsToInspect: analysis.nextThingsToInspect.filter(safe), coreCard: undefined, extraCards: [] };
   if (mode === 'clue') return { ...analysis, coreCard: undefined, extraCards: [] };
-  if (mode === 'explain') return { ...analysis, region: '', locationEstimate: undefined, candidates: [] };
+  if (mode === 'explain') return { ...analysis, region: '', locationEstimate: undefined, regionalRead: undefined, candidates: [] };
   return analysis;
 }
 
 const englishLeakWords = new Set(['the', 'and', 'this', 'that', 'with', 'from', 'which', 'where', 'other', 'look', 'likely', 'common', 'road', 'sign', 'country', 'overall', 'suggests', 'found', 'appears', 'nearby', 'buildings', 'vehicles', 'lighting', 'daytime', 'background', 'check', 'style', 'used', 'green', 'yellow']);
 export function coachLanguageMatches(analysis: CoachAnalysis, language = 'en') {
   if (language === 'en') return true;
-  const text = [analysis.region, analysis.description, ...analysis.candidates.flatMap((item) => item.rationale || []), ...analysis.strongClues, ...analysis.weakClues, ...(analysis.contradictions || []), ...analysis.confusions, ...analysis.nextThingsToInspect].filter(Boolean).join(' ').toLowerCase();
+  const text = [analysis.region, analysis.description, analysis.regionalRead?.label, analysis.regionalRead?.reason, ...analysis.candidates.flatMap((item) => item.rationale || []), ...analysis.strongClues, ...analysis.weakClues, ...(analysis.contradictions || []), ...analysis.confusions, ...analysis.nextThingsToInspect].filter(Boolean).join(' ').toLowerCase();
   const words = text.match(/[a-zÀ-ž]+/gu) || [];
   const english = words.filter((word) => englishLeakWords.has(word)).length;
   return english < 8 || english / Math.max(words.length, 1) < .12;
@@ -188,7 +207,7 @@ const vagueRationale = [
 ];
 export const coachRationalesAreSpecific = (analysis: CoachAnalysis) => analysis.candidates.every((candidate) => !!candidate.rationale && !vagueRationale.some((pattern) => pattern.test(candidate.rationale!)));
 
-export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string }, fetcher: typeof fetch = fetch) {
+export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string; style?: CoachStyle; depth?: ExplanationDepth }, fetcher: typeof fetch = fetch) {
   if (!carousel.size) throw new Error('No Gemini keys are configured.');
   const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
   const deadline = Date.now() + 30_000;
@@ -209,8 +228,8 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
           headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
-            contents: [{ role: 'user', parts: [{ text: prompt(request.mode, context, knowledge, metaKnowledge, request.language) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
-            generationConfig: { temperature: 0.25, maxOutputTokens: 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
+            contents: [{ role: 'user', parts: [{ text: buildCoachPrompt(request.mode, context, knowledge, metaKnowledge, request.language, request.style, request.depth) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
+            generationConfig: { temperature: 0.25, maxOutputTokens: request.depth === 'deep' ? 1600 : request.depth === 'short' ? 700 : 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
           }),
         });
         if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
@@ -292,7 +311,8 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
       const frames = supplied ? [{ mimeType: suppliedMime, imageData: suppliedData }] : mode === 'analyze360' ? await fetchStreetViewFrames(value.view, googleKey) : [await fetchStreetViewFrame(value.view, googleKey)];
       if (!['hints', 'analyze', 'analyze360', 'explain', 'cards', 'clue', 'clue-safe'].includes(mode) || frames.some((frame) => !['image/jpeg', 'image/png', 'image/webp'].includes(frame.mimeType) || !/^[A-Za-z0-9+/=]+$/.test(frame.imageData))) throw new Error('Invalid Coach request.');
       const language = typeof value.language === 'string' && Object.prototype.hasOwnProperty.call(aiLanguageNames, value.language) ? value.language : 'en';
-      const result = await callGeminiCoach(carousel, { mode, ...frames[0], frames, language, context: sanitizeCoachContext(value.context) });
+      const style = validStyles.has(String(value.style)) ? value.style as CoachStyle : 'quick'; const depth = validDepths.has(String(value.depth)) ? value.depth as ExplanationDepth : 'normal';
+      const result = await callGeminiCoach(carousel, { mode, ...frames[0], frames, language, style, depth, context: sanitizeCoachContext(value.context) });
       res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(result));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Coach unavailable.';

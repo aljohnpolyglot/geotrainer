@@ -6,12 +6,14 @@ import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferen
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
 import { DEFAULT_AUDIO_PREFERENCES, normalizeAudioPreferences, setAudioPreferences, type AudioPreferences } from '../services/audio';
 import { reloadPage } from '../services/devDiagnostics';
+import { COACH_STYLES, COACH_STYLE_NAMES, DEFAULT_COACH_PREFERENCES, EXPLANATION_DEPTHS, coachGuide, normalizeCoachPreferences } from '../services/coachPreferences';
+import type { CoachPreferences } from '../types';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 const relativeDuration = (milliseconds: number, locale: string) => { const minutes = Math.max(0, Math.round(milliseconds / 60000)); const hours = Math.floor(minutes / 60); const remainder = minutes % 60; const format = (value: number, unit: 'hour' | 'minute') => new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short' }).format(value); return [hours && format(hours, 'hour'), remainder && format(remainder, 'minute')].filter(Boolean).join(' '); };
-type SettingsTab = 'language' | 'review' | 'display';
+type SettingsTab = 'language' | 'coach' | 'review' | 'display';
 const NOTE_LANGUAGE_COPY: Record<SupportedLanguage, string> = {
   en: 'Saved Personal and AI-assisted notes keep the language in which they were created; changing languages does not translate them.',
   es: 'Las notas personales y asistidas por IA conservan el idioma en que se crearon; cambiar el idioma no las traduce.',
@@ -32,10 +34,11 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const [darkMode, setDarkMode] = useState(false);
   const [audio, setAudio] = useState<AudioPreferences>(DEFAULT_AUDIO_PREFERENCES);
   const [tab, setTab] = useState<SettingsTab>('language');
+  const [coach, setCoach] = useState<CoachPreferences>(DEFAULT_COACH_PREFERENCES);
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<AudioPreferences>('preference.audio'), trainerDb.reviews()]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedAudio, savedReviews]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<AudioPreferences>('preference.audio'), trainerDb.reviews(), trainerDb.setting<CoachPreferences>('coachPreferences')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedAudio, savedReviews, savedCoach]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
@@ -43,7 +46,8 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       setDarkMode(savedDarkMode === true);
       setAudio(normalizeAudioPreferences(savedAudio));
       setReviews(savedReviews);
-      if (savedTab === 'language' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
+      setCoach(normalizeCoachPreferences(savedCoach));
+      if (savedTab === 'language' || savedTab === 'coach' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
   }, [open]);
 
@@ -54,19 +58,20 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
     const nextLanguages = normalizeLanguagePreferences(languages);
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
     const nextAudio = normalizeAudioPreferences(audio); setAudioPreferences(nextAudio);
-    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio)]);
+    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio), trainerDb.setSetting('coachPreferences', normalizeCoachPreferences(coach))]);
+    window.dispatchEvent(new CustomEvent('geotrainer:coach-preferences'));
     announceLanguagePreferences(nextLanguages);
     onChange?.(nextLanguages, compassStyle, darkMode);
     if (nextLanguages.game !== loadedGameLanguage) reloadPage('game-language-change');
     else onClose();
   };
   if (!open) return null;
-  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])];
+  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])]; const guide = coachGuide(languages.ui);
 
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="language-settings preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
       <header><h2 id="preferences-title">{translate(languages.ui, 'preferences')}</h2><button type="button" onClick={onClose} aria-label={translate(languages.ui, 'close')}><X size={17} /></button></header>
-      <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'review', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{translate(languages.ui, item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
+      <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'coach', 'review', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{translate(languages.ui, item === 'coach' ? 'AI Coach' : item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
       {tab === 'language' && <fieldset><legend>{translate(languages.ui, 'settings')}</legend><p>{translate(languages.ui, 'description')}</p>
         {(['ui', 'game', 'ai'] as const).map((key) => <label key={key}>{translate(languages.ui, key)}
           <span className="language-choice"><img src={`https://flagcdn.com/w40/${LANGUAGE_OPTIONS.find((option) => option.code === languages[key])!.flagCode}.png`} alt="" width="24" height="18" referrerPolicy="no-referrer" /><select value={languages[key]} onChange={(event) => language(key, event.target.value as SupportedLanguage)}>
@@ -74,6 +79,12 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
           </select></span>
         </label>)}
         <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
+      </fieldset>}
+      {tab === 'coach' && <fieldset className="coach-settings"><legend>{translate(languages.ui, 'AI Coach')}</legend><p>{guide.intro}</p>
+        <label>{translate(languages.ui, 'AI Coach Style')}<select value={coach.style} onChange={(event) => setCoach({ ...coach, style: event.target.value as CoachPreferences['style'], askEveryTime: false })}>{COACH_STYLES.map((style) => <option key={style} value={style}>{COACH_STYLE_NAMES[style]} — {guide.styles[style].purpose}</option>)}</select></label>
+        <label>{translate(languages.ui, 'Explanation Depth')}<select value={coach.depth} onChange={(event) => setCoach({ ...coach, depth: event.target.value as CoachPreferences['depth'] })}>{EXPLANATION_DEPTHS.map((depth) => <option key={depth} value={depth}>{translate(languages.ui, depth[0].toUpperCase() + depth.slice(1))}</option>)}</select></label><p>{guide.depth}</p>
+        <label className="settings-checkbox"><input type="checkbox" checked={coach.askEveryTime} onChange={(event) => setCoach({ ...coach, askEveryTime: event.target.checked })} />{translate(languages.ui, 'Always ask before analysis')}</label>
+        <h3>{translate(languages.ui, 'What do these styles mean?')}</h3><div className="coach-style-guide">{COACH_STYLES.map((style) => { const copy = guide.styles[style]; return <details key={style} open={style === coach.style}><summary>{COACH_STYLE_NAMES[style]}</summary><dl><dt>{guide.labels.purpose}</dt><dd>{copy.purpose}</dd><dt>{guide.labels.strengths}</dt><dd>{copy.strengths}</dd><dt>{guide.labels.weaknesses}</dt><dd>{copy.weaknesses}</dd><dt>{guide.labels.best}</dt><dd>{copy.best}</dd><dt>{guide.labels.example}</dt><dd>{copy.example}</dd></dl></details>; })}</div>
       </fieldset>}
       {tab === 'display' && <><fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
         <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>

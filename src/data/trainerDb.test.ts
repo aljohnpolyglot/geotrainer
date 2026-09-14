@@ -194,3 +194,10 @@ test('saved game preferences are normalized before reuse', async () => {
   assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);
   assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);
 });
+
+test('fresh review settings randomize with a deterministic Fisher-Yates shuffle', async () => {
+  const { normalizeSchedulerPreferences, shuffleInPlace } = await import('./trainerDb');
+  assert.equal(normalizeSchedulerPreferences(undefined).reviewOrder, 'random');
+  assert.deepEqual(shuffleInPlace([1, 2, 3, 4], () => 0), [2, 3, 4, 1]);
+  assert.equal(normalizeSchedulerPreferences({ reviewOrder: 'due' }).reviewOrder, 'due');
+});

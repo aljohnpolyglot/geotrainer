@@ -9,6 +9,8 @@ import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
 import { CoachLocationEstimate } from './CoachLocationEstimate';
 import { compressClueImage } from '../services/clueImages';
+import { useCoachPreferences } from '../services/useCoachPreferences';
+import { COACH_STYLE_NAMES } from '../services/coachPreferences';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 type ClueDraft = { panoId: string; imageDataUrl: string; clueId?: string; analysis?: CoachAnalysis; saved: boolean };
@@ -23,18 +25,20 @@ async function prepareImage(file: File) {
 
 export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
   const { ui, ai, game, ready: languageReady } = useLanguagePreferences();
+  const coachPreferences = useCoachPreferences();
   const t = (key: string) => translate(ui, key);
   const [image, setImage] = useState('');
   const [analysis, setAnalysis] = useState<CoachAnalysis>();
   const [status, setStatus] = useState('');
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [choosingStyle, setChoosingStyle] = useState(false);
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     let active = true;
-    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); onBusyChange?.(false); onSaved?.(undefined);
+    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); setChoosingStyle(false); onBusyChange?.(false); onSaved?.(undefined);
     void trainerDb.setting<ClueDraft>('workspace.clueDraft').then((draft) => {
       if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
     });
@@ -53,15 +57,15 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
 
   const choose = async (file?: File) => {
     if (!file || disabled || busy) return;
-    try { const prepared = await prepareImage(file); setImage(prepared); onImageChange?.(prepared); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
+    try { const prepared = await prepareImage(file); setImage(prepared); onImageChange?.(prepared); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setChoosingStyle(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
     catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
-  const analyze = async () => {
+  const analyze = async (style = coachPreferences.style) => {
     if (!languageReady || !image || disabled || busy) return;
     const sourceImage = image;
     setStatus(t('analyzingClue')); setSaved(false);
     await run(async (signal, isCurrent) => {
-      const response = await postCoach({ mode: 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: ai, gameLanguage: game }, signal);
+      setChoosingStyle(false); const response = await postCoach({ mode: 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: ai, gameLanguage: game, ...coachPreferences, style }, signal);
       const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
       if (!response.ok || !value.analysis) throw new Error(value.error || t('coachNoClue'));
       if (!isCurrent()) return;
@@ -91,13 +95,14 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     <div className="clue-actions">
       <label><Upload size={14} /> {t('upload')}<input disabled={disabled || busy} type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void choose(event.target.files?.[0])} /></label>
       <button disabled={disabled || busy} onClick={() => void capture()}><Camera size={14} /> {t('capture')}</button>
-<button disabled={!languageReady || disabled || busy || !image} onClick={() => void analyze()}>{t('Analyze clue')}</button>
+<button disabled={!languageReady || disabled || busy || !image} onClick={() => coachPreferences.askEveryTime ? setChoosingStyle(true) : void analyze()}>{t('Analyze clue')}</button>
     </div>
+    {choosingStyle && <div className="coach-style-picker" role="dialog" aria-label={t('Choose a Coach style')}><strong>{t('Choose a Coach style')}</strong>{Object.entries(COACH_STYLE_NAMES).map(([style, name]) => <button type="button" key={style} onClick={() => void analyze(style as typeof coachPreferences.style)}>{name}</button>)}<button type="button" onClick={() => setChoosingStyle(false)}>{t('cancel')}</button></div>}
     {status && <p className="coach-status" role="status">{status}</p>}
     {analysis && (!saved || !collapseSavedAnalysis) && <div className="clue-analysis">
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
-      {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
+      {!!analysis.candidates.length && <><small className="coach-confidence-label">{t('Relative likelihood')}</small><ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol></>}
       {analysis.description && <p>{analysis.description}</p>}
       {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
       {!!analysis.weakClues.length && <><strong>{t('limitations')}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}

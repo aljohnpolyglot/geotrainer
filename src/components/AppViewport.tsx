@@ -49,7 +49,7 @@ export function AppViewport({
       return null;
     });
   }, [appMode, currentLocation, isLoading, isRevealed, showHome]);
-  return <main className="flex-1 w-full h-[calc(100vh-3.5rem)] relative overflow-hidden bg-black">
+  return <main className="flex-1 w-full h-[calc(100dvh-3.5rem)] relative overflow-hidden bg-black">
     <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} canMove={canMove} canPan={canPan} canZoom={canZoom} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && appMode === 'study' ? onPanoramaChanged : undefined} />
     {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
     {!showHome && appMode === 'review' && !reviewAttempt && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}

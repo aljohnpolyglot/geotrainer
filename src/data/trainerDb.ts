@@ -28,9 +28,9 @@ export const STORE_NAMES = [
   'bookmarks', 'collections', 'settings', 'sessions', 'clues',
 ] as const;
 export type StoreName = (typeof STORE_NAMES)[number];
-const changeListeners = new Set<() => void>();
-const notifyChange = () => changeListeners.forEach((listener) => listener());
-export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'due', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
+const changeListeners = new Set<() => void>(); const notifyChange = () => changeListeners.forEach((listener) => listener());
+export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'random', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
+export function shuffleInPlace<T>(items: T[], random = Math.random) { for (let index = items.length - 1; index > 0; index--) { const swap = Math.floor(random() * (index + 1)); [items[index], items[swap]] = [items[swap], items[index]]; } return items; }
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
@@ -60,7 +60,7 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
   const auto = source.reviewTimeZoneAuto !== false;
   let timeZone = typeof source.reviewTimeZone === 'string' ? source.reviewTimeZone.trim() : '';
   try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
-  return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'random' ? 'random' : 'due', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
+  return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'due' ? 'due' : 'random', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
 };
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
@@ -363,7 +363,7 @@ export const trainerDb = {
         : a.score - b.score || b.createdAt - a.createdAt)
       .filter((attempt, index, values) => values.findIndex((other) => (reviewByPano.get(other.panoId)?.panoId || other.panoId) === (reviewByPano.get(attempt.panoId)?.panoId || attempt.panoId)) === index);
     if (!filters.due) return queue;
-    if (preferences.reviewOrder === 'random') queue.sort(() => Math.random() - .5);
+    if (preferences.reviewOrder === 'random') shuffleInPlace(queue);
     const today = reviewDayStart(now, preferences); const nowForLimits = now;
     const reviewsToday = reviews.reduce((total, review) => total + (review.gradingHistory?.filter(({ at }) => at >= today && at <= nowForLimits).length || (review.lastReviewedAt && review.lastReviewedAt >= today && review.lastReviewedAt <= nowForLimits ? 1 : 0)), 0);
     const newCardsToday = reviews.filter((review) => {

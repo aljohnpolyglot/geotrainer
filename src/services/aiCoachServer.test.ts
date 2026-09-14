@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
@@ -227,4 +227,15 @@ test('Coach bounds user context before inserting it into a prompt', () => {
   assert.equal((context?.previousAttempts as unknown[]).length, 5);
   assert.deepEqual(context?.previousCoachCandidates, ['GH', 'NG', 'CI', 'CM']);
   assert.equal('ignored' in context!, false);
+});
+
+test('the same image gets genuinely different coaching instructions while sharing evidence rules', () => {
+  const quick = buildCoachPrompt('analyze', undefined, [], [], 'en', 'quick', 'normal');
+  const meta = buildCoachPrompt('analyze', undefined, [], [], 'en', 'meta', 'deep');
+  const geography = buildCoachPrompt('analyze', undefined, [], [], 'en', 'deep-geography', 'short');
+  assert.match(quick, /QUICK GUESS.*ranked countries.*short conclusion/i);
+  assert.match(meta, /META COACH.*S\/A\/B\/C\/D.*REGIONIFIER/i);
+  assert.match(geography, /DEEP GEOGRAPHY.*FUNCTION.*CAUSE.*HUMAN RESPONSE/i);
+  for (const prompt of [quick, meta, geography]) assert.match(prompt, /top candidate.*main confuser.*next clue/i);
+  assert.doesNotMatch(`${quick}${meta}${geography}`, /ADAPTIVE/i);
 });

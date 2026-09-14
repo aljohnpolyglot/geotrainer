@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-15
+
+- Added six independent AI Coach styles—Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach, and Pro Analyst—plus separate Short, Normal, and Deep explanation depth.
+- Added a localized in-app style guide, a default per-analysis style picker, and a persisted preferred-style option without Adaptive or automatic switching.
+- Strengthened Coach prompts against fabricated identities and causal stories, required candidate-specific evidence and confuser comparisons, and labeled likelihoods as AI estimates.
+- Randomized fresh-profile daily Review queues while preserving an existing oldest-due preference.
+- Restored the shared Play/Review pinpointer inside the visible mobile viewport and contained Statistics tables, charts, and heatmap legends on narrow screens; future-due values now open with a normal tap.
+
 ## 2026-09-14
 
 - Kept opened Google maps warm across panel minimization, round changes, Explore Map reopen, and Statistics or Coverage tab switches, while leaving tile caching to the browser instead of persisting imagery.

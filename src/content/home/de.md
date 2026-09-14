@@ -455,3 +455,7 @@ Meta-Lernen enthält 359 lokal gehostete Lektionen, normalisiert aus der gekoppe
 Meta-Lernen wählt nur noch nicht abgeschlossene Lektionen. Nach allen 359 Lektionen ist die Option im Lernmenü ausgegraut und nicht mehr auswählbar.
 
 Eine unfertige Lern- oder Spielsitzung bleibt erhalten. Beim nächsten Öffnen stehen **Fortsetzen**, **Neu starten** und **Zurück** zur Wahl. Die Kartenabdeckung enthält eine kontinuierliche **Beherrschung**-Heatmap; viele erfolgreiche Wiederholungen und lange Intervalle hellen Länder und einzelne Orte langsam auf, während Fehler die Intensität senken. Bildabhängige Meta-Hinweise tragen eine Warnung, weil Street-View-Aktualisierungen sie veralten lassen können.
+
+## KI-Coach-Stile und Erklärungstiefe
+
+Unter **Einstellungen → KI-Coach** stehen ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach und Pro Analyst sowie unabhängig Kurz, Normal oder Tief zur Wahl. Neue Profile fragen vor jeder Analyse nach dem Stil; ein bevorzugter Stil überspringt diese Auswahl. Adaptive und automatischer Stilwechsel existieren nicht. Quick Guess bleibt knapp; Meta lehrt Stärke, Rolle, Zuverlässigkeit und Verwechslungen; Elimination grenzt Kandidaten ein; Deep Geography erklärt nur belegte Ursachen; Memory schafft wahrheitsgemäße Merksätze; Pro Analyst gewichtet Belege, Widersprüche und Informationsgewinn. Alle verwenden dieselben sichtbaren Beobachtungen, kennzeichnen Prozentwerte als KI-Schätzungen und erfinden keine Abkürzungen, Firmen, Pflanzen, Geschichte, Geologie oder Regeln.

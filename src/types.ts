@@ -76,6 +76,9 @@ export type LearnSource = 'custom' | 'meta' | 'map';
 export type ReviewSessionKind = 'practice' | 'due' | 'correction';
 export type SupportedLanguage = 'en' | 'es' | 'pt' | 'fr' | 'de' | 'it' | 'ru' | 'sv';
 export type CompassStyle = 'bar' | 'dial';
+export type CoachStyle = 'quick' | 'meta' | 'elimination' | 'deep-geography' | 'memory' | 'pro-analyst';
+export type ExplanationDepth = 'short' | 'normal' | 'deep';
+export interface CoachPreferences { style: CoachStyle; depth: ExplanationDepth; askEveryTime: boolean; }
 export type StreetViewState = { locationPanoId: string; panoId: string; heading: number; pitch: number; zoom: number };
 export interface LanguagePreferences {
   ui: SupportedLanguage;
@@ -248,6 +251,7 @@ export interface CoachAnalysis {
   region: string;
   locationEstimate?: { level: 'region' | 'city' | 'exact'; label: string; confidence: 'medium' | 'high'; basis: string[] };
   description?: string;
+  regionalRead?: { label: string; confidence: 'low' | 'medium' | 'high'; reason: string };
   candidates: Array<{ countryCode: string; confidence: number; rationale?: string }>;
   strongClues: string[];
   weakClues: string[];

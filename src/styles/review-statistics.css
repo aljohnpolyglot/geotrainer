@@ -41,7 +41,7 @@
 .location-card-drag-handle { cursor: grab; touch-action: none; }.location-card-drag-handle.dragging { cursor: grabbing; }
 .study-review-save { padding: 9px 0 10px; border-top: 1px solid var(--rule); }
 .study-review-save button { width: 100%; padding: 8px; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 3px; font-weight: 800; cursor: pointer; }
-.statistics-panel { display: grid; width: 100%; min-width: 0; gap: 18px; }
+.statistics-panel { display: grid; width: 100%; min-width: 0; gap: 18px; }.statistics-panel > *, .anki-statistics > *, .stats-card { min-width: 0; max-width: 100%; }
 .statistics-title { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--rule); padding-bottom: 12px; }
 .statistics-title h2, .statistics-panel h3 { margin: 0; color: var(--carbon); }
 .statistics-title p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }

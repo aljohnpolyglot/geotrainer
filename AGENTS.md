@@ -59,6 +59,8 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.
+- Keep exactly six user-selected AI Coach styles: Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach, and Pro Analyst. Explanation depth is independent; never add Adaptive or automatic style switching. Fresh profiles ask for a style per analysis, while selecting a preferred style in Settings skips that picker.
+- Build every Coach style from the same visible-observation pass, keep speculative identities and causal stories out of country evidence, and describe likelihood percentages as AI estimates rather than measured probabilities.
 - Keep Play's panorama learning toolbar aligned with Study and expose the same Notebook and Available notes count; its existing AI Coach preference may still hide Coach only.
 - Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
 - Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
@@ -93,6 +95,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep AI Coach, Notebook, linked Meta, saved clues, and Available notes accessible from Coverage location details and scoped to the opened panorama.
 - Keep the AI Coach launcher visible while its draggable panel is open.
 - Keep the revealed location card draggable by its header, use a minimize affordance for hiding it, and expose the embedded result map's fullscreen control.
+- Keep the same mobile pinpointer available in Play and Review, and anchor panorama controls to the dynamic visible viewport so browser chrome cannot cover them.
 - Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
 - Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.
