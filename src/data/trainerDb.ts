@@ -93,6 +93,7 @@ export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, p
 }
 export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced') =>
   guessedCountryCode !== countryCode || score < passingScoreFor(strictness);
+export const gameMistakes = (attempts: Attempt[], gameId: string, strictness: SchedulerPreferences['strictness']) => attempts.filter((attempt) => attempt.gameId === gameId && isCountryMistake(attempt.score, attempt.countryCode, attempt.guessedCountryCode, strictness)).sort((a, b) => a.roundNumber - b.roundNumber);
 
 export const reviewGradeForCorrection = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced'): ReviewGrade =>
   isCountryMistake(score, countryCode, guessedCountryCode, strictness) ? 'again' : 'hard';

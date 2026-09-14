@@ -2,6 +2,7 @@
 
 ## 2026-09-14
 
+- Hid Play's Practice mistakes action when the selected game has no eligible persisted attempts.
 - Let daily new-card and review limits be cleared and replaced without forcing a leading zero.
 - Moved the Learn and Review compass switch into the shared panorama learning toolbar, with mobile-sized touch targets.
 - Kept mobile Statistics section tabs and wide tables horizontally swipeable without handing the gesture to browser navigation.

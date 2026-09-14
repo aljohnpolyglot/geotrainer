@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULT_SCHEDULER_PREFERENCES, isCountryMistake, nextReviewAt, nextScheduledReviewAt, reconcileReviewAttempt, reviewDayStart, reviewGradeForPerformance, shouldScheduleReview } from './trainerDb';
+import type { Attempt } from '../types';
+import { DEFAULT_SCHEDULER_PREFERENCES, gameMistakes, isCountryMistake, nextReviewAt, nextScheduledReviewAt, reconcileReviewAttempt, reviewDayStart, reviewGradeForPerformance, shouldScheduleReview } from './trainerDb';
 
 test('automatic grading scales from country-first beginner to 4800-point pro', () => {
   assert.equal(reviewGradeForPerformance(1600, 20, true, 60, 'beginner'), 'hard');
@@ -11,6 +12,11 @@ test('automatic grading scales from country-first beginner to 4800-point pro', (
   assert.equal(reviewGradeForPerformance(5000, 20, false, 60, 'beginner'), 'again');
   assert.equal(isCountryMistake(4799, 'IT', 'IT', 'pro'), true);
   assert.equal(isCountryMistake(4800, 'IT', 'IT', 'pro'), false);
+});
+
+test('game mistake practice includes only eligible persisted attempts in round order', () => {
+  const attempt = (gameId: string, roundNumber: number, score: number) => ({ gameId, roundNumber, score, countryCode: 'IT', guessedCountryCode: 'IT' }) as Attempt;
+  assert.deepEqual(gameMistakes([attempt('other', 1, 0), attempt('game', 2, 1000), attempt('game', 1, 5000)], 'game', 'balanced').map((item) => item.roundNumber), [2]);
 });
 
 test('daily review boundary follows configured timezone and reset time', () => {

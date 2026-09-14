@@ -186,7 +186,7 @@ Benutzerdefinierte Übung lässt zukünftige Karten unverändert. Wird eine bere
 
 ### Fehlerkorrektur
 
-Nach einem Spiel kann eine Korrektursitzung schwache Runden wiederholen, bis sie gelöst werden. Diese Versuche bleiben neue Datensätze; das ursprüngliche Spiel bleibt unverändert.
+Nach einem Spiel kann eine Korrektursitzung schwache Runden wiederholen, bis sie gelöst werden. Fehler üben erscheint nur, wenn für das gespeicherte Spiel noch geeignete Versuchsdaten vorhanden sind. Diese Versuche bleiben neue Datensätze; das ursprüngliche Spiel bleibt unverändert.
 
 ## KI-Coach
 

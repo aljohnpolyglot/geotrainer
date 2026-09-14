@@ -29,7 +29,7 @@ interface AppOverlaysProps {
   isModalOpen: boolean; editingCollection: any;
   pastGames: GameRecord[]; allCollections: any[]; coveragePreview: TrainerLocation | null;
   compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
-  reviewGrading: boolean; roundIsMistake: boolean;
+  reviewGrading: boolean;
   learnSource: LearnSource; activeMetaLesson?: MetaLesson; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
   onSaveCoach: (note: any) => void; onSaveClue: (clue: any) => void; onClueAnalyzed: () => void;
   onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void;
@@ -51,7 +51,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     reviewStats, reviewInitialTotal, reviewQueueLength, reviewSource, reviewComplete, activeRoundResult, gameSettings,
     currentRoundIndex, gameRounds, summaryGameRecord, isNewGameModalOpen, isHistoryModalOpen, isStudySetupOpen, studySetup, isModalOpen,
     editingCollection, pastGames, allCollections, coveragePreview, compassPreference, activeCompass,
-    preferencesOpen, trainerRefreshKey, reviewGrading, roundIsMistake, learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
+    preferencesOpen, trainerRefreshKey, reviewGrading, learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
   const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   return <>
@@ -67,7 +67,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}
     {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} />}
-    {summaryGameRecord && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={roundIsMistake ? props.onPracticeMistakes : undefined} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onGoToLocation={props.onGoToLocation} />}
+    {summaryGameRecord && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={props.onPracticeMistakes} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onGoToLocation={props.onGoToLocation} />}
     <NewGameModal isOpen={isNewGameModalOpen} onClose={props.onCloseNewGame} collections={allCollections} onStartGame={props.onStartGame} onOpenHistory={props.onOpenHistory} pastGamesCount={pastGames.length} defaultShowCompass={compassPreference} />
     <StudySetupModal open={isStudySetupOpen} onClose={props.onCloseStudySetup} collections={allCollections} initial={studySetup} onStart={props.onStartStudy} />
     <GameHistoryModal isOpen={isHistoryModalOpen} onClose={props.onCloseHistory} games={pastGames} onSelectGame={props.onSelectGame} onDeleteGame={props.onDeleteGame} onClearAll={props.onClearGames} />

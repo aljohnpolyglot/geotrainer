@@ -50,7 +50,7 @@ import {
   deleteGameRecord,
   clearGameHistory,
 } from './data/games';
-import { initTrainerDb, isCountryMistake, trainerDb } from './data/trainerDb';
+import { gameMistakes, initTrainerDb, trainerDb } from './data/trainerDb';
 import type { HubTab } from './components/TrainerHub';
 import { AppTopBar } from './components/AppTopBar';
 import { AppViewport } from './components/AppViewport';
@@ -107,6 +107,7 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [schedulerStrictness, setSchedulerStrictness] = useState<SchedulerPreferences['strictness']>('balanced');
+  const [summaryMistakes, setSummaryMistakes] = useState<Attempt[]>([]);
 
   // Exact location reveal & bookmarks state (Study mode)
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
@@ -327,6 +328,7 @@ export default function App() {
     setPausedWorkspaces((saved) => ({ ...saved, play: undefined }));
     void trainerDb.setSetting('workspace.paused.play', null);
   }, [summaryGameRecord]);
+  useEffect(() => { let active = true; setSummaryMistakes([]); if (summaryGameRecord) void trainerDb.attempts().then((attempts) => { if (active) setSummaryMistakes(gameMistakes(attempts, summaryGameRecord.id, schedulerStrictness)); }); return () => { active = false; }; }, [schedulerStrictness, summaryGameRecord, trainerRefreshKey]);
 
   useEffect(() => {
     if (!dbReady || !workspaceRestoreAttemptedRef.current) return;
@@ -472,7 +474,6 @@ export default function App() {
         pastGames={pastGames}
         allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference} activeCompass={activeCompass}
         preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady}
-        roundIsMistake={!!summaryGameRecord?.rounds.some((round) => isCountryMistake(round.score, round.location.countryCode, round.guessedCountryCode, schedulerStrictness))}
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
         onToggleCompass={toggleCompass}
         onClueAnalyzed={() => { if (appMode === 'play') playAiAssistedRef.current = true; }}
@@ -480,7 +481,7 @@ export default function App() {
         onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}
         onNextRound={handleNextRound}
-        onPracticeMistakes={summaryGameRecord ? () => { void trainerDb.attempts().then((attempts) => { const mistakes = attempts.filter((attempt) => attempt.gameId === summaryGameRecord.id && isCountryMistake(attempt.score, attempt.countryCode, attempt.guessedCountryCode, schedulerStrictness)).sort((a, b) => a.roundNumber - b.roundNumber); if (!mistakes.length) return; setSummaryGameRecord(null); return handleStartReview(mistakes[0], mistakes, 'Game mistakes', 'correction'); }); } : undefined}
+        onPracticeMistakes={summaryMistakes.length ? () => { setSummaryGameRecord(null); void handleStartReview(summaryMistakes[0], summaryMistakes, 'Game mistakes', 'correction'); } : undefined}
         onPlayAgain={() => { if (summaryGameRecord) { setSummaryGameRecord(null); handleStartGame(summaryGameRecord.settings); } }}
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
         onCloseSummary={() => setSummaryGameRecord(null)}

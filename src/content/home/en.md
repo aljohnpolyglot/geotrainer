@@ -214,7 +214,7 @@ Custom practice leaves future cards unchanged. If a card is already due, complet
 
 ### Mistake correction
 
-After a game, correction practice can repeat weak rounds until they are answered successfully. These correction attempts remain separate evidence and do not alter the original Play records.
+After a game, correction practice can repeat weak rounds until they are answered successfully. Practice mistakes appears only when that saved game still has eligible attempt records. These correction attempts remain separate evidence and do not alter the original Play records.
 
 ## AI Coach
 
