@@ -2,6 +2,7 @@
 
 ## 2026-09-14
 
+- Fixed a startup crash caused by checking Play mistake-practice eligibility before a game summary was loaded.
 - Prompted AI Coach to show a “Most likely in” region, city, quarter, landmark, or exact-place estimate after its country ranking only when the overall and narrower-location confidence are high and multiple visible clues support it.
 - Made Practice mistakes enter Review correctly while retaining each Play mistake as its original new card and recording correction answers separately.
 - Renamed Play's unrestricted environment choice from Mixed to Any environment so it is clear how to remove a City, Suburban, or Rural filter.
