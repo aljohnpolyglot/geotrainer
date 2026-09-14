@@ -2,6 +2,7 @@
 
 ## 2026-09-14
 
+- Removed the nested scrollbar from Available notes so the panel uses one continuous scroll area.
 - Added a second SVG country heatmap beneath Coverage, synchronized to the selected map layer with a saved user-selectable warm, blue, green, or purple palette.
 - Paginated Review improvement history at 20 newest-first rows per page.
 - Fixed a startup crash caused by checking Play mistake-practice eligibility before a game summary was loaded.
