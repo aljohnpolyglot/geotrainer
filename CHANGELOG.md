@@ -2,6 +2,9 @@
 
 ## 2026-09-14
 
+- Kept opened Google maps warm across panel minimization, round changes, Explore Map reopen, and Statistics or Coverage tab switches, while leaving tile caching to the browser instead of persisting imagery.
+- Saved every completed text-only Coach analysis into Available notes and My Clues, serialized concurrent history writes to prevent lost entries, and kept the homepage clue total aligned.
+- Localized Coach candidate country names to the selected AI language and retried vague country rationales that claim a generic fit without naming a distinguishing visible feature.
 - Kept every learning tool fully accessible throughout Review, including Meta explanations, saved note text, and Coach country candidates and probabilities before guessing, without supplying the current card's persisted answer metadata.
 - Paginated Sessions, Review improvement history, and every filtered History tab at 10 entries per page, with complete localization for the improvement-history heading.
 - Removed the nested scrollbar from Available notes so the panel uses one continuous scroll area.

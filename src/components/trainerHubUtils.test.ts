@@ -14,7 +14,7 @@ test('coverage columns sort in both directions without mutating source rows', ()
 
 test('saved clue total counts personal, AI, and Meta entries without double-counting a note image', () => {
   const clues = [{ id: 'note-image' }, { id: 'coach' }]; const notes = [{ clueId: 'note-image' }]; const metas = [{ id: 'meta' }];
-  assert.equal(savedClueCount(clues as never, notes as never, metas as never), 3);
+  assert.equal(savedClueCount(clues as never, notes as never, metas as never, [{ id: 'coach-note' }] as never), 4);
 });
 
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {

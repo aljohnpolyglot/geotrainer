@@ -4,16 +4,19 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type Point = { lat: number; lng: number };
 
-export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false }: {
+export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false, active = true }: {
   actual: Point;
   guess: Point | null;
   previousGuess?: Point | null;
   className?: string;
   fullscreenControl?: boolean;
+  active?: boolean;
 }) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
 
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
@@ -22,7 +25,19 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       styles: [{ featureType: 'poi', stylers: [{ visibility: 'off' }] }, { featureType: 'transit', stylers: [{ visibility: 'off' }] }],
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
+    mapRef.current = map;
+    return () => {
+      google.maps.event.clearInstanceListeners(map);
+      if (mapRef.current === map) mapRef.current = null;
+      boundsRef.current = null;
+    };
+  }, [fullscreenControl]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
     const bounds = new google.maps.LatLngBounds();
+    boundsRef.current = bounds;
     const markers: google.maps.Marker[] = [];
     const lines: google.maps.Polyline[] = [];
     const addMarker = (position: Point, title: string, color: string, scale = 7) => {
@@ -46,9 +61,18 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
     return () => {
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
-      google.maps.event.clearInstanceListeners(map);
+      if (boundsRef.current === bounds) boundsRef.current = null;
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng, ui]);
+
+  useEffect(() => {
+    if (!active || !mapRef.current || !boundsRef.current) return;
+    const frame = requestAnimationFrame(() => {
+      google.maps.event.trigger(mapRef.current!, 'resize');
+      mapRef.current?.fitBounds(boundsRef.current!, { top: 48, right: 48, bottom: 48, left: 48 });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [active]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

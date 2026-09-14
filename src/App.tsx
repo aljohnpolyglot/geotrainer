@@ -2,7 +2,6 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Collection,
@@ -38,6 +37,7 @@ import {
 } from './data/collections';
 import { COUNTRIES } from './data/countries';
 import { hasStudyReviewSource } from './data/reviewIdentity';
+import { saveCoachHistoryNote } from './services/coachHistory';
 import { CLOUD_IMPORT_EVENT } from './services/cloudSyncEvent';
 import {
   getBookmarks,
@@ -387,14 +387,14 @@ export default function App() {
   const canPan = appMode === 'review' && reviewAttempt ? reviewAttempt.canPan : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canPan : true;
   const canZoom = appMode === 'review' && reviewAttempt ? reviewAttempt.canZoom : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canZoom : true;
 
-  const handleSaveCoach = useCallback((note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => {
+  const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => {
     setCoachNote(note);
     const location = currentLocationRef.current;
-    if (location) void trainerDb.setting<CoachHistoryNote[]>('coach.notes').then((saved = []) => trainerDb.setSetting('coach.notes', [{ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }, ...saved])).then(() => setTrainerRefreshKey((key) => key + 1));
+    if (location) { await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }); setTrainerRefreshKey((key) => key + 1); }
     if (appMode === 'study' && currentVisitRef.current && currentVisitRef.current.panoId === currentLocationRef.current?.panoId) {
       Object.assign(currentVisitRef.current, { coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis });
-      void trainerDb.saveVisit({ ...currentVisitRef.current });
-      void handleSaveStudyForReview(false);
+      await trainerDb.saveVisit({ ...currentVisitRef.current });
+      await handleSaveStudyForReview(false);
     } else if (appMode === 'review') {
       setReviewAttemptRecord((attempt) => attempt ? { ...attempt, coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis } : attempt);
     }

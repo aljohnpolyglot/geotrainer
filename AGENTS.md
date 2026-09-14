@@ -24,7 +24,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 
 - Gemini and Google API secrets stay server-side or in ignored environment files.
 - Load persisted language preferences before rendering or enabling Coach analysis, and require every natural-language Coach response value to use the selected AI language without translating JSON keys or ISO codes.
-- Reject and retry substantially mixed-language Coach output before displaying it; each ranked country must include a short visible-evidence rationale, while older saved results without one remain valid.
+- Reject and retry substantially mixed-language Coach output before displaying it; render candidate country names in the selected AI language and require each ranked country to explain a concrete visible feature that distinguishes it rather than merely claiming the scene is consistent, similar, common, or typical.
 - Shuffle the starting Gemini key and exhaust all available non-cooling keys on retryable Coach failures before surfacing an error.
 - Never place secrets in `src`, browser storage, IndexedDB, logs, reports, or committed examples.
 - The browser may call only the local coach endpoint; it must never call Gemini with a private key.
@@ -47,7 +47,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Show Review improvement, Sessions, and every History tab 10 entries per page; reset History to page one when its tab or filters change.
 - Count foreground time across Study, active Play, and active Review work, including panorama movement and learning-aid use; persist it when switching surfaces or returning home. Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
-- Coalesce local cloud-sync bursts, skip unchanged whole-backup writes, and throttle repeated focus-triggered cloud pulls.
+- Coalesce local cloud-sync bursts, skip unchanged whole-backup writes, throttle repeated focus-triggered cloud pulls, and serialize read-modify-write updates such as Coach history so reliability fixes do not recreate Supabase I/O amplification.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
@@ -55,7 +55,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Environment is a generator/filter dimension, not a duplicate collection system.
 - The Official / Mixed / Contributor imagery selector filters only newly generated Custom Learn and Play locations and defaults to Official; it does not alter Meta, Explore Map, saved locations, History, or Review.
 - Country and city datasets are local data files, not UI-component constants.
-- Configure the Google Maps JavaScript loader through one shared promise so development remounts cannot call `setOptions` twice.
+- Configure the Google Maps JavaScript loader through one shared promise so development remounts cannot call `setOptions` twice. Keep already-opened map surfaces mounted while their tab or panel is hidden, and resize the retained instance when it becomes visible again; rely on Google's browser cache rather than persisting map imagery locally.
 - Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.
 - Keep AI Coach as one continuous Analyze flow per location: preserve observations while the user moves or reveals the answer, hide capture implementation choices, and present learning notes as evidence plus explanation rather than card-front/card-back terminology.

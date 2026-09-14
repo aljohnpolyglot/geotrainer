@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import type { AppMode, CoachAnalysis, CoachMode } from '../types';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
-import { COUNTRIES } from '../data/countries';
 import { ClueCapture } from './ClueCapture';
 import { trainerDb } from '../data/trainerDb';
-import { translate } from '../services/language';
+import { countryDisplayName, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
 import { postCoach } from '../services/coachClient';
@@ -21,7 +20,7 @@ type CoachContext = {
   previousAttempts?: Array<{ guessedCountry?: string; score: number }>;
 };
 
-export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue, onClueAnalyzed }: { panoId: string; appMode: AppMode; revealed: boolean; context?: CoachContext; onSave?: (value: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => void; onSaveClue: (value: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis }) => Promise<void> | void; onClueAnalyzed?: () => void }) {
+export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue, onClueAnalyzed }: { panoId: string; appMode: AppMode; revealed: boolean; context?: CoachContext; onSave?: (value: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => Promise<void> | void; onSaveClue: (value: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis }) => Promise<string | void> | string | void; onClueAnalyzed?: () => void }) {
   const { ui, ai, game, ready: languageReady } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [open, setOpen] = useState(false);
@@ -72,9 +71,10 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       const completedAt = value.generatedAt || Date.now();
       const completedModel = value.model || 'Gemini';
       const merged = result && mode !== 'explain' ? { ...value.analysis, strongClues: [...new Set([...result.strongClues, ...value.analysis.strongClues])], weakClues: [...new Set([...result.weakClues, ...value.analysis.weakClues])], contradictions: [...new Set([...(result.contradictions || []), ...(value.analysis.contradictions || [])])], confusions: [...new Set([...result.confusions, ...value.analysis.confusions])], nextThingsToInspect: [...new Set([...result.nextThingsToInspect, ...value.analysis.nextThingsToInspect])] } : value.analysis;
-      setResult(merged); setSaved(true);
-      onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: merged });
+      setResult(merged);
       if (appMode === 'play') onClueAnalyzed?.();
+      await onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: merged });
+      setSaved(true);
     } catch (caught) {
       if (currentRequest === requestId.current && caught instanceof Error && caught.name !== 'AbortError') setError(caught.message);
     } finally {
@@ -94,7 +94,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       {result && <div className="coach-result">
         <h4>{t('geographicClueAnalysis')}</h4>
         {!revealed && result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
-        {!revealed && result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
+        {!revealed && result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
         {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
         {list(t('strongClues'), result.strongClues)}
         {list(t('weakGeneric'), result.weakClues)}

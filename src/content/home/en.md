@@ -224,7 +224,7 @@ Before reveal, a high-confidence analysis can add a “Most likely in” region,
 
 Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup.
 
-Coach waits for the saved AI language before analysis, rejects substantially mixed-language results, and explains the visible evidence behind every new candidate country.
+Coach waits for the saved AI language before analysis, localizes candidate country names, rejects substantially mixed-language results, and retries vague country reasoning that merely says the scene is “consistent with,” “similar to,” “common in,” or “typical of” a country without a concrete distinguishing feature.
 
 ### Analyze
 
@@ -249,7 +249,7 @@ Treat Coach output as a hypothesis. Prefer multiple independent clues, notice co
 
 ## Saved clues
 
-Useful Coach analysis can be saved with its clue image and notes. Saved clues help build a personal reference for countries and clue families. Open Clues from the main navigation to search the library, filter by country, inspect confidence summaries, open full clue details, or start country practice. Country options show clue totals and are ordered from most clues to least; × clears the filter. Back from a detail returns directly to the library.
+Every completed Coach analysis is saved after its write finishes and appears in Available notes and My Clues, including text-only Analyze and Explain results without a screenshot. Rapid Coach completions are serialized so one cannot overwrite another. Saved clues help build a personal reference for countries and clue families. Open Clues from the main navigation to search the library, filter by country, inspect confidence summaries, open full clue details, or start country practice. Country options show clue totals and are ordered from most clues to least; × clears the filter. Back from a detail returns directly to the library.
 
 ### Good clue notes
 
@@ -329,6 +329,8 @@ Coverage shows panoramas you actually encountered in Study, Play, or Review. It 
 Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View. An opened Coverage panorama includes AI Coach, Notebook, linked Meta, and Available notes; saving there creates or reuses its Review card.
 
 Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A detailed SVG country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data. On Exposure, hover a country for its exact encounter count. The neutral map color means not encountered, no scored attempts, or no Review history according to the selected layer; it does not describe Google Maps availability.
+
+Once opened, embedded result, Explore, Coverage, and Statistics maps remain warm while their panel or tab is hidden, so reopening does not initialize the same map again. Map tiles use the browser and Google Maps cache; GeoTrainer does not persist map or Street View imagery locally.
 
 ### Geography table
 

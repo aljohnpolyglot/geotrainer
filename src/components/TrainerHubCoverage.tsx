@@ -87,6 +87,15 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
     };
   }, [locations, attempts, reviews, overlay, t]);
 
+  useEffect(() => {
+    if (!element.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width && entry.contentRect.height && map.current) google.maps.event.trigger(map.current, "resize");
+    });
+    observer.observe(element.current);
+    return () => observer.disconnect();
+  }, []);
+
   const selectedAttempts = selected ? attempts.filter((item) => item.panoId === selected.id) : [];
   const selectedReview = selected ? reviews.find((item) => item.panoId === selected.id) : undefined;
   return <>

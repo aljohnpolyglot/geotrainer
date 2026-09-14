@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Camera, Clipboard, Upload } from 'lucide-react';
 import type { CoachAnalysis } from '../types';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
-import { COUNTRIES } from '../data/countries';
 import { trainerDb } from '../data/trainerDb';
-import { translate } from '../services/language';
+import { countryDisplayName, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { postCoach } from '../services/coachClient';
 import { CountryFlag } from './CountryFlag';
@@ -98,7 +97,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     {analysis && (!saved || !collapseSavedAnalysis) && <div className="clue-analysis">
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
-      {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
+      {!!analysis.candidates.length && <ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
       {analysis.description && <p>{analysis.description}</p>}
       {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
       {!!analysis.weakClues.length && <><strong>{t('limitations')}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}

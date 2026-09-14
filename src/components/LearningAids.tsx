@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Files, Images, Lightbulb, NotebookPen, X } from 'lucide-react';
 import type { ClueRecord, CoachAnalysis, CoachHistoryNote, NotebookNote } from '../types';
 import { trainerDb } from '../data/trainerDb';
-import { COUNTRIES } from '../data/countries';
 import { CountryFlag } from './CountryFlag';
-import { translate } from '../services/language';
+import { countryDisplayName, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { ClueCapture } from './ClueCapture';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
@@ -27,7 +26,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   onSaveClue: (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach' }) => Promise<string | void> | string | void;
   onNoteSaved: () => Promise<void> | void;
 }) {
-  const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
+  const { ui, ai } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
   const [open, setOpen] = useState<'meta' | 'clues' | 'notebook' | 'available' | null>(null);
   const [clues, setClues] = useState<ClueRecord[]>([]);
   const [notes, setNotes] = useState<Array<{ id: string; source: string; text: string; category?: string; imageUrl?: string; analysis?: CoachAnalysis; at: number }>>([]);
@@ -64,7 +63,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   }, [panoId]);
   const clue = clues[clueIndex];
   const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
-  const analysisDetails = (analysis: CoachAnalysis) => <div className="available-note-analysis"><CoachLocationEstimate estimate={analysis.locationEstimate} />{!!analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode} · {Math.round(candidate.confidence * 100)}%{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ul></section>}{list(t('strongClues'), analysis.strongClues)}{list(t('weakGeneric'), analysis.weakClues)}{list(t('contradictionsGaps'), analysis.contradictions || [])}{list(t('confusableWith'), analysis.confusions)}{list(t('inspectNext'), analysis.nextThingsToInspect)}{analysis.coreCard && <section><strong>{t('coreCard')}</strong><ul>{analysis.coreCard.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{analysis.coreCard.backExplanation}</p></section>}{analysis.extraCards.map((card) => <section key={card.category}><strong>{card.category}</strong><ul>{card.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{card.back}</p></section>)}</div>;
+  const analysisDetails = (analysis: CoachAnalysis) => <div className="available-note-analysis"><CoachLocationEstimate estimate={analysis.locationEstimate} />{!!analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)} · {Math.round(candidate.confidence * 100)}%{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ul></section>}{list(t('strongClues'), analysis.strongClues)}{list(t('weakGeneric'), analysis.weakClues)}{list(t('contradictionsGaps'), analysis.contradictions || [])}{list(t('confusableWith'), analysis.confusions)}{list(t('inspectNext'), analysis.nextThingsToInspect)}{analysis.coreCard && <section><strong>{t('coreCard')}</strong><ul>{analysis.coreCard.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{analysis.coreCard.backExplanation}</p></section>}{analysis.extraCards.map((card) => <section key={card.category}><strong>{card.category}</strong><ul>{card.front.map((value) => <li key={value}>{value}</li>)}</ul><p>{card.back}</p></section>)}</div>;
   const saveNotebookNote = async () => {
     const updatedAt = Date.now(); let clueId = noteClueId;
     if (noteImage && !clueId) clueId = await onSaveClue({ imageDataUrl: noteImage, model: 'Notebook', generatedAt: updatedAt, analysis: { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] }, origin: 'personal' }) || undefined;
@@ -89,7 +88,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     {open === 'clues' && clue && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Show Clues')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Images size={17} />{t('Show Clues')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
       <img src={clue.imageDataUrl} alt={t('savedVisualClue')} />
-      <div className="learning-aid-copy">{clue.analysis.description && <p>{clue.analysis.description}</p>}{list(t('strongClues'), clue.analysis.strongClues)}{!!clue.analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{clue.analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</li>)}</ul></section>}</div>
+      <div className="learning-aid-copy">{clue.analysis.description && <p>{clue.analysis.description}</p>}{list(t('strongClues'), clue.analysis.strongClues)}{!!clue.analysis.candidates.length && <section><strong>{t('candidates')}</strong><ul>{clue.analysis.candidates.map((candidate) => <li key={candidate.countryCode}><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)} · {Math.round(candidate.confidence * 100)}%{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ul></section>}</div>
       {clues.length > 1 && <footer><button disabled={clueIndex === 0} onClick={() => setClueIndex((value) => value - 1)}>{t('Previous')}</button><span>{clueIndex + 1} / {clues.length}</span><button disabled={clueIndex === clues.length - 1} onClick={() => setClueIndex((value) => value + 1)}>{t('Next')}</button></footer>}
     </aside>}
     {open === 'available' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel available-notes-panel" aria-label={t('Available notes')}>

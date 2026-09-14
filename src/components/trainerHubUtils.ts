@@ -2,14 +2,14 @@ import { useCallback } from "react";
 import { COUNTRIES } from "../data/countries";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { translate } from "../services/language";
-import type { Attempt, ClueRecord, LearnedMeta, NotebookNote, ReviewRecord, TrainerLocation } from "../types";
+import type { Attempt, ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, ReviewRecord, TrainerLocation } from "../types";
 import type { CountryStats } from "./trainerHubTypes";
 
 export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
 export const countryName = (code: string) => COUNTRIES[code]?.name || code;
-export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[]) => {
+export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
   const linked = new Set(notes.flatMap((note) => note.clueId ? [note.clueId] : []));
-  return clues.filter((clue) => !linked.has(clue.id)).length + notes.length + metas.length;
+  return clues.filter((clue) => !linked.has(clue.id)).length + notes.length + metas.length + coachNotes.length;
 };
 export const pageBounds = (total: number, page: number, size = 20) => { const pages = Math.max(1, Math.ceil(total / size)); const current = Math.min(Math.max(1, page), pages); return { current, pages, start: (current - 1) * size, end: current * size }; };
 export type CoverageOverlay = "exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery";

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Eye, Lightbulb, MapPin, NotebookPen, Search, Trash2, X } from 'lucide-react';
-import type { ClueRecord, LearnedMeta, NotebookNote, TrainerLocation } from '../types';
+import { Eye, Lightbulb, MapPin, NotebookPen, Search, Sparkles, Trash2, X } from 'lucide-react';
+import type { ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { CountryFlag } from './CountryFlag';
 import { ClueGallery } from './ClueGallery';
@@ -11,20 +11,22 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
 type ClueView = 'library' | 'countries' | 'insights';
 
-export function TrainerHubClues({ clues, learnedMetas, notebookNotes, onDelete, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onTrainCountries: (codes: string[], name: string) => void }) {
+export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, onDelete, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onTrainCountries: (codes: string[], name: string) => void }) {
   const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null);
   const metaRows = useMemo(() => learnedMetas.map((learned) => { const lesson = metaLessonById(learned.id); return { learned, lesson: lesson && localizeMetaLesson(lesson, ui) }; }).filter((row) => !!row.lesson).sort((a, b) => b.learned.learnedAt - a.learned.learnedAt), [learnedMetas, ui]);
   const filtered = useMemo(() => { const linked = new Set(notebookNotes.flatMap((note) => note.clueId ? [note.clueId] : [])); return clues.filter((clue) => !linked.has(clue.id) && (source === 'all' || source === 'personal' ? clue.origin === 'personal' || source === 'all' : source === 'coach' ? clue.origin !== 'personal' : false) && (!country || clue.countryCode === country) && (!query || `${countryName(clue.countryCode)} ${clue.analysis.description} ${clue.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt); }, [clues, country, notebookNotes, query, source]);
   const filteredMetas = useMemo(() => (source === 'all' || source === 'meta' ? metaRows : []).filter(({ learned, lesson }) => (!country || learned.countryCode === country) && (!query || `${countryName(learned.countryCode)} ${lesson?.text} ${lesson?.note || ''}`.toLowerCase().includes(query.toLowerCase()))), [country, metaRows, query, source]);
   const filteredNotes = useMemo(() => (source === 'all' || source === 'personal' ? notebookNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.category || ''} ${note.text}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.updatedAt - a.updatedAt), [country, notebookNotes, query, source]);
+  const filteredCoach = useMemo(() => (source === 'all' || source === 'coach' ? coachNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.analysis.description || ''} ${note.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.generatedAt - a.generatedAt), [coachNotes, country, query, source]);
   useEffect(() => setPage(1), [country, query, source]);
-  const totalFiltered = filtered.length + filteredNotes.length + filteredMetas.length; const paging = pageBounds(totalFiltered, page); const noteOffset = filtered.length; const metaOffset = noteOffset + filteredNotes.length;
-  const pageClues = filtered.slice(paging.start, paging.end); const pageNotes = filteredNotes.slice(Math.max(0, paging.start - noteOffset), Math.max(0, paging.end - noteOffset)); const pageMetas = filteredMetas.slice(Math.max(0, paging.start - metaOffset), Math.max(0, paging.end - metaOffset));
-  const groups = useMemo(() => [...new Set([...clues.map((clue) => clue.countryCode), ...learnedMetas.map((meta) => meta.countryCode), ...notebookNotes.map((note) => note.countryCode)])].map((code) => { const rows = clues.filter((clue) => clue.countryCode === code); const metas = learnedMetas.filter((meta) => meta.countryCode === code); const notes = notebookNotes.filter((note) => note.countryCode === code); return { code, count: rows.length + metas.length + notes.length, latest: Math.max(0, ...rows.map((row) => row.createdAt), ...metas.map((row) => row.learnedAt), ...notes.map((row) => row.updatedAt)), confidence: rows.length ? rows.reduce((sum, row) => sum + (row.analysis.candidates[0]?.confidence || 0), 0) / rows.length : 0 }; }).sort((a, b) => b.count - a.count || countryName(a.code).localeCompare(countryName(b.code))), [clues, learnedMetas, notebookNotes]);
-  const analyzed = clues.filter((clue) => clue.analysis.candidates.length).length; const averageConfidence = analyzed ? clues.reduce((sum, clue) => sum + (clue.analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
+  const totalFiltered = filtered.length + filteredCoach.length + filteredNotes.length + filteredMetas.length; const paging = pageBounds(totalFiltered, page); const coachOffset = filtered.length; const noteOffset = coachOffset + filteredCoach.length; const metaOffset = noteOffset + filteredNotes.length;
+  const pageClues = filtered.slice(paging.start, paging.end); const pageCoach = filteredCoach.slice(Math.max(0, paging.start - coachOffset), Math.max(0, paging.end - coachOffset)); const pageNotes = filteredNotes.slice(Math.max(0, paging.start - noteOffset), Math.max(0, paging.end - noteOffset)); const pageMetas = filteredMetas.slice(Math.max(0, paging.start - metaOffset), Math.max(0, paging.end - metaOffset));
+  const groups = useMemo(() => [...new Set([...clues.map((clue) => clue.countryCode), ...learnedMetas.map((meta) => meta.countryCode), ...notebookNotes.map((note) => note.countryCode), ...coachNotes.map((note) => note.countryCode)])].map((code) => { const rows = clues.filter((clue) => clue.countryCode === code); const metas = learnedMetas.filter((meta) => meta.countryCode === code); const notes = notebookNotes.filter((note) => note.countryCode === code); const coaches = coachNotes.filter((note) => note.countryCode === code); const analyzed = [...rows.map((row) => row.analysis), ...coaches.map((row) => row.analysis)].filter((analysis) => analysis.candidates.length); return { code, count: rows.length + metas.length + notes.length + coaches.length, latest: Math.max(0, ...rows.map((row) => row.createdAt), ...metas.map((row) => row.learnedAt), ...notes.map((row) => row.updatedAt), ...coaches.map((row) => row.generatedAt)), confidence: analyzed.length ? analyzed.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed.length : 0 }; }).sort((a, b) => b.count - a.count || countryName(a.code).localeCompare(countryName(b.code))), [clues, coachNotes, learnedMetas, notebookNotes]);
+  const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
   const noteImage = (note: NotebookNote) => (note.clueId ? clues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || clues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
   const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note) });
+  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: t('AI-assisted'), text: note.analysis.description || note.analysis.strongClues.join(' · '), at: note.generatedAt, panoId: note.panoId });
   const openMeta = (learned: LearnedMeta, lesson: NonNullable<ReturnType<typeof metaLessonById>>) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId });
   return <section className="clues-panel">
     <div className="statistics-title">
@@ -37,7 +39,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, onDelete, 
     <div className="metric-strip">
 <div>
 <span>{t('Saved clues')}</span>
-<strong>{savedClueCount(clues, notebookNotes, learnedMetas)}</strong>
+<strong>{savedClueCount(clues, notebookNotes, learnedMetas, coachNotes)}</strong>
 </div>
 <div>
 <span>{t('Countries covered')}</span>
@@ -89,6 +91,9 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, onDelete, 
 <Trash2 size={16} />
 </button>
 </div>
+</article>)}{pageCoach.map((note) => <article key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
+<div className="clue-note-icon"><Sparkles size={24} /></div>
+<div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
 </article>)}{pageNotes.map((note, index) => <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>
 {noteImage(note) ? <img src={noteImage(note)} alt="" /> : <div className="clue-note-icon"><NotebookPen size={24} /></div>}
 <div>

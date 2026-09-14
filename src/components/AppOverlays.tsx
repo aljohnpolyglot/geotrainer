@@ -31,7 +31,7 @@ interface AppOverlaysProps {
   compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
   reviewGrading: boolean;
   learnSource: LearnSource; activeMetaLesson?: MetaLesson; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
-  onSaveCoach: (note: any) => void; onSaveClue: (clue: any) => void; onClueAnalyzed: () => void;
+  onSaveCoach: (note: any) => Promise<void> | void; onSaveClue: (clue: any) => Promise<string | void> | string | void; onClueAnalyzed: () => void;
   onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void;
   onCloseReviewComplete: () => void; onPracticeMistakes?: () => void; onPlayAgain: () => void;
   onNextRound: () => void;

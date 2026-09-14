@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { callGeminiCoach, coachLanguageMatches, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
+import { callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
   confidence: 'medium', region: 'Central Europe',
-  candidates: [{ countryCode: 'HU', confidence: .4 }],
+  candidates: [{ countryCode: 'HU', confidence: .4, rationale: 'Concrete utility poles use a narrow profile that differs from the neighboring candidates.' }],
   strongClues: ['Concrete utility poles'], weakClues: ['Generic vegetation'],
   confusions: ['Serbia'], nextThingsToInspect: ['Check road edge lines'], extraCards: [],
 };
@@ -155,6 +155,13 @@ test('Coach rejects substantial English leakage for a non-English response', () 
 test('candidate normalization drops codes outside the supported country catalog', () => {
   const analysis = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'HU', confidence: .8 }, { countryCode: 'ZZ', confidence: .99 }] }, 'analyze');
   assert.deepEqual(analysis.candidates.map(({ countryCode }) => countryCode), ['HU']);
+});
+
+test('Coach rejects candidate rationales that claim fit without explaining a distinguishing feature', () => {
+  const vague = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'NL', confidence: .7, rationale: 'La segnaletica è coerente con gli standard olandesi.' }] }, 'analyze');
+  const specific = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'NL', confidence: .7, rationale: 'I semafori hanno pannelli di contrasto bianchi e una disposizione sospesa diversa dai candidati vicini.' }] }, 'analyze');
+  assert.equal(coachRationalesAreSpecific(vague), false);
+  assert.equal(coachRationalesAreSpecific(specific), true);
 });
 
 test('automatic Coach capture requests the exact pano and current orientation without storing imagery', async () => {

@@ -15,6 +15,7 @@ import { useDraggablePanel } from "../hooks/useDraggablePanel";
 
 interface LocationCardProps {
   location: LocationResult;
+  hidden?: boolean;
   onHide: () => void;
   onMetadata?: (details: { panoId: string; country?: string; countryCode?: string; exactAddress?: string; locality?: string; adminArea?: string }) => void;
   onSaveForReview?: () => void;
@@ -22,7 +23,7 @@ interface LocationCardProps {
   reviewSaved?: boolean;
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
@@ -80,7 +81,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
   const primaryArea = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
   return (
-    <div ref={panelRef} style={dragStyle} id="revealed-location-card" className="absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text">
+    <div ref={panelRef} style={dragStyle} hidden={hidden} id="revealed-location-card" className="absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text">
       {/* Header: Country + Flag CDN + Close */}
       <div {...dragHandleProps} className={`location-card-drag-handle flex items-start justify-between gap-3 mb-3${dragging ? ' dragging' : ''}`}>
         <div className="flex items-center space-x-2.5">
@@ -142,7 +143,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, onHide, on
         </div>
       </div>
 
-      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl />
+      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl active={!hidden} />
 
       {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">

@@ -11,6 +11,7 @@ import { LearningAids, type MetaAid } from './LearningAids';
 import { trainerDb } from '../data/trainerDb';
 import { metaReviewAid } from '../data/metaLessons';
 import { captureStreetViewImage } from '../services/streetViewSnapshot';
+import { saveCoachHistoryNote } from '../services/coachHistory';
 
 export function CoverageStudyModal({ location, onClose }: { location: TrainerLocation; onClose: () => void }) {
   const { ui } = useLanguagePreferences();
@@ -43,8 +44,8 @@ export function CoverageStudyModal({ location, onClose }: { location: TrainerLoc
     await trainerDb.saveClue({ id, panoId: location.panoId, countryCode: location.countryCode, lat: location.lat, lng: location.lng, createdAt: clue.generatedAt, ...clue });
     await ensureReviewSource(); setRefreshKey((key) => key + 1); return id;
   };
-  const saveCoach = (note: Omit<CoachHistoryNote, 'id' | 'panoId' | 'countryCode'>) => {
-    void trainerDb.setting<CoachHistoryNote[]>('coach.notes').then((saved = []) => trainerDb.setSetting('coach.notes', [{ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }, ...saved])).then(ensureReviewSource).then(() => setRefreshKey((key) => key + 1));
+  const saveCoach = async (note: Omit<CoachHistoryNote, 'id' | 'panoId' | 'countryCode'>) => {
+    await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }); await ensureReviewSource(); setRefreshKey((key) => key + 1);
   };
   const noteSaved = async () => { await ensureReviewSource(); setRefreshKey((key) => key + 1); };
 
@@ -57,7 +58,7 @@ export function CoverageStudyModal({ location, onClose }: { location: TrainerLoc
       <div className="coverage-study-view">
         <StreetViewContainer currentLocation={location} isLoading={false} onNextLocation={() => {}} canMove canPan canZoom showCompass />
         <div className="panorama-tools coverage-study-tools" aria-label={t('Learning aids')}>
-          <AiCoach panoId={location.panoId} appMode="study" revealed context={{ actualCountry: COUNTRIES[location.countryCode]?.name || location.countryCode }} onSave={saveCoach} onSaveClue={(clue) => { void saveClue({ ...clue, origin: 'coach' }); }} />
+          <AiCoach panoId={location.panoId} appMode="study" revealed context={{ actualCountry: COUNTRIES[location.countryCode]?.name || location.countryCode }} onSave={saveCoach} onSaveClue={(clue) => saveClue({ ...clue, origin: 'coach' })} />
           <LearningAids lesson={lesson} panoId={location.panoId} lat={location.lat} lng={location.lng} countryCode={location.countryCode} adviceOpen={false} refreshKey={refreshKey} onAdviceClose={() => {}} onSaveClue={saveClue} onNoteSaved={noteSaved} />
         </div>
       </div>

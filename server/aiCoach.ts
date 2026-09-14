@@ -96,7 +96,7 @@ export function sanitizeCoachContext(value: unknown): Record<string, unknown> | 
 }
 
 function prompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en') {
-  const languageInstruction = `MANDATORY OUTPUT LANGUAGE: ${aiLanguageNames[language] || 'English'}. Write every natural-language JSON string value only in that language, even when signs or reference facts use another language. Never translate JSON property names, ISO country codes, or card category identifiers.`;
+  const languageInstruction = `MANDATORY OUTPUT LANGUAGE: ${aiLanguageNames[language] || 'English'}. Write every natural-language JSON string value in fluent, idiomatic ${aiLanguageNames[language] || 'English'}, even when signs or reference facts use another language. Candidate rationales must name the visible feature, explain how it differs from the other candidates, and avoid empty claims such as “consistent with” or “similar to” without a concrete distinguishing detail. Never translate JSON property names, ISO country codes, or card category identifiers.`;
   if (mode === 'hints') return `${languageInstruction} Give only spoiler-free things to inspect. Do not name any country, city, region, coordinate, or likely answer. Put hints in nextThingsToInspect; leave region, candidates, confusions and cards empty.`;
   if (mode === 'analyze360') return `${languageInstruction} Synthesize evidence across four views taken 90 degrees apart from the same panorama. Give a short region/vibe and up to four ranked candidate countries with honest confidence. For every candidate, rationale must explain in one specific sentence which visible evidence supports that country and what distinguishes it from the other candidates. Also return direct observations in strongClues, generic or uncertain evidence in weakClues, contradictions in contradictions, and what to inspect next. Do not treat repeated features across views as independent evidence. Add locationEstimate only when multiple independent visible clues meet its strict evidence threshold. Leave cards empty.`;
   if (mode === 'clue-safe') return `${languageInstruction} Treat this as a user-selected clue crop. If one foreground object is clearly the intended subject, identify it at the narrowest visually defensible level and describe it first. For a sign, explain the visible symbol, letter, number, color, and restriction or instruction it communicates; do not stop at its shape. For a readable brand or organization, explain what it is and the clue's reliability, including whether its products or presence can cross borders. For vegetation, attempt a plant family or species and cite visible identifying traits. For road furniture, name the feature type and its exact colors, shape, reflector, stripe, border, and mounting pattern. If resolution is insufficient, say the exact identity is unreadable and name the detail needed; never invent specificity. Use the surrounding scene only as supporting or contradictory context. Put a detailed visual description in description, useful observable traits in strongClues, limitations in weakClues, and comparison features in nextThingsToInspect. Do not name or infer a country, city, region, coordinate, or likely answer. Leave region, candidates, confusions and cards empty.`;
@@ -176,6 +176,18 @@ export function coachLanguageMatches(analysis: CoachAnalysis, language = 'en') {
   return english < 8 || english / Math.max(words.length, 1) < .12;
 }
 
+const vagueRationale = [
+  /consistent with|similar to|common in|typical of/iu,
+  /coerente con|simile (?:a|agli?|alle?)|comune in|tipic[oa]/iu,
+  /coherente con|similar a|común en|típic[oa]/iu,
+  /coerente com|semelhante a|comum em|típic[oa]/iu,
+  /cohérent avec|similaire à|courant en|typique de/iu,
+  /entspricht|ähnlich(?:e|er|es)?|typisch für/iu,
+  /характерн\w* для|похож\w* на|типичн\w* для/iu,
+  /stämmer överens med|liknar|typisk(?:t)? för/iu,
+];
+export const coachRationalesAreSpecific = (analysis: CoachAnalysis) => analysis.candidates.every((candidate) => !!candidate.rationale && !vagueRationale.some((pattern) => pattern.test(candidate.rationale!)));
+
 export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string }, fetcher: typeof fetch = fetch) {
   if (!carousel.size) throw new Error('No Gemini keys are configured.');
   const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
@@ -209,6 +221,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
         if (!text) { lastError = new Error('Gemini returned an empty response.'); continue; }
         const analysis = normalizeCoachAnalysis(JSON.parse(text), request.mode, String(context?.actualCountry || ''));
         if (!coachLanguageMatches(analysis, request.language)) { lastError = new Error('Gemini returned mixed-language output.'); continue; }
+        if (['analyze', 'analyze360', 'clue'].includes(request.mode) && !coachRationalesAreSpecific(analysis)) { lastError = new Error('Gemini returned vague candidate reasoning.'); continue; }
         return { analysis, model, generatedAt: Date.now() };
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') { lastError = new Error('Gemini request timed out.'); break; }

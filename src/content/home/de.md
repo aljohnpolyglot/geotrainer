@@ -196,7 +196,7 @@ Vor dem Aufdecken kann eine Analyse mit hoher Sicherheit nach der Länderranglis
 
 Spiel verwendet dieselbe Lernleiste wie Lernen: Notizbuch, die Anzahl naher verfügbarer Notizen und – falls in der Spieleinrichtung aktiviert – KI-Coach.
 
-Coach wartet vor der Analyse auf die gespeicherte KI-Sprache, verwirft deutlich gemischtsprachige Ergebnisse und erklärt die sichtbaren Gründe für jedes neue Kandidatenland.
+Coach wartet vor der Analyse auf die gespeicherte KI-Sprache, lokalisiert die Namen der Kandidatenländer, verwirft deutlich gemischtsprachige Ergebnisse und wiederholt vage Begründungen, die ohne unterscheidbares sichtbares Merkmal nur behaupten, eine Szene sei für ein Land stimmig, ähnlich, häufig oder typisch.
 
 ### Analysieren
 
@@ -287,6 +287,8 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 ### Abdeckungskarte
 
 Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine detaillierte SVG-Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl. Die neutrale Farbe bedeutet je nach Ebene „noch nicht begegnet“, „keine gewerteten Versuche“ oder „kein Wiederholungsverlauf“—nicht fehlende Google-Maps-Abdeckung.
+
+Einmal geöffnete Ergebnis-, Erkundungs-, Abdeckungs- und Statistikkarten bleiben beim Ausblenden ihres Fensters oder Reiters geladen und öffnen dadurch ohne erneute Karteninitialisierung. Kartenkacheln verwenden den Browser- und Google-Maps-Cache; GeoTrainer speichert Karten- oder Street-View-Bilder nicht lokal.
 
 Gespeicherte Lernorte und abgegebene Spieltipps behalten die aktuelle Ansicht als Vorschau. Ein geöffnetes Abdeckungspanorama bietet KI-Coach, Notizbuch, verknüpfte Meta und verfügbare Notizen; Speichern erstellt oder verwendet seine Wiederholungskarte. In Länder-, Kategorie- und Sammlungsmenüs kannst du die Anfangsbuchstaben tippen, um direkt zu einer Option zu springen.
 
@@ -443,6 +445,8 @@ Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen
 Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung bleibt Meta vor und nach dem Tipp vollständig zugänglich.
 
 Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständigen Verlauf des Panoramas und gleichländiger Street-View-Knoten im Umkreis von 50 Metern in einem einzigen durchgehenden Scrollbereich; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen** und zeigt passende Einträge seitenweise zu je 20. Während der Wiederholung bleiben Notiztext, Analysen, Kandidaten und Wahrscheinlichkeiten vor und nach dem Tipp sichtbar.
+
+Jede abgeschlossene Coach-Analyse wird erst nach erfolgreichem Schreiben in Verfügbare Notizen und Meine Hinweise übernommen, auch reine Textanalysen ohne Bild. Gleichzeitig abgeschlossene Analysen werden nacheinander gespeichert, damit kein Eintrag einen anderen überschreibt.
 
 Ein schwaches Wiederholungsergebnis kehrt automatisch ans Ende der aktuellen Sitzung zurück, bis es bestanden wird. Jeder Versuch bleibt ein eigener Eintrag.
 

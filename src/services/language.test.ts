@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { normalizeLanguagePreferences, LANGUAGE_OPTIONS, translate } from './language';
+import { countryDisplayName, normalizeLanguagePreferences, LANGUAGE_OPTIONS, translate } from './language';
 
 test('language preferences keep only supported community languages and migrate missing fields', () => {
   assert.equal(LANGUAGE_OPTIONS.some((option) => (option.code as string) === 'id'), false);
@@ -11,4 +11,10 @@ test('language preferences keep only supported community languages and migrate m
   for (const { code } of LANGUAGE_OPTIONS) for (const key of preferenceKeys) assert.notEqual(translate(code, key), key);
   const visibleKeys = ['History', 'Relearning', 'Young', 'Mastery', 'Continue saved session?', 'Resume', 'Start new', 'mature locations', 'until next rank', 'Coverage by continent', 'Study scenes', '1–100 scored rounds · Standard / No Move / NMPZ', 'Major Cities', 'Any environment', 'bestLocationEstimate'];
   for (const { code } of LANGUAGE_OPTIONS.filter(({ code }) => code !== 'en')) for (const key of visibleKeys) assert.notEqual(translate(code, key), key);
+});
+
+test('country names follow the selected language', () => {
+  assert.equal(countryDisplayName('NL', 'it'), 'Paesi Bassi');
+  assert.equal(countryDisplayName('DE', 'ru'), 'Германия');
+  assert.equal(countryDisplayName('', 'sv'), '');
 });

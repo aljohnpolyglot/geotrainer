@@ -106,7 +106,9 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, sessions
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [section, setSection] = useState<StatisticsSection>(initialSection);
+  const [visitedLocations, setVisitedLocations] = useState(initialSection === "locations");
   useEffect(() => setSection(initialSection), [initialSection]);
+  useEffect(() => { if (section === "locations") setVisitedLocations(true); }, [section]);
   const [range, setRange] = useState<RangeKey>("30d");
   const [custom, setCustom] = useState({ from: "", to: "" });
   const [environment, setEnvironment] = useState("");
@@ -275,7 +277,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, sessions
       {section === "confusions" && <ConfusionStatistics attempts={ranged} onTrainCountries={onTrainCountries} />}
       {section === "coverage" && <CoverageStatistics locations={locations} visits={visits} attempts={attempts} includeAssisted={includeAiAssisted} />}
       {section === "sessions" && <SessionStatistics sessions={sessions} attempts={attempts} visits={visits} includeAssisted={includeAiAssisted} />}
-      {section === "locations" && locationsPanel}
+      {visitedLocations && <div hidden={section !== "locations"}>{locationsPanel}</div>}
       {section === "history" && historyPanel}
       {!ranged.length && !["coverage", "sessions", "locations", "history"].includes(section) && <p className="empty">{t(includeAiAssisted ? 'No eligible Play attempts match these filters.' : 'No eligible non-assisted Play attempts match these filters.')}</p>}
     </div>
