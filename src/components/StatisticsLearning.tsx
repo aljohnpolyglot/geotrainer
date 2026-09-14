@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import type { Attempt, ReviewRecord, StudyVisit, TrainerLocation, TrainingSession } from '../types';
 import { coverageByContinent, exposurePerformance, regionConfusions, retentionAndLapses, sessionStatistics } from '../analytics/advanced';
@@ -5,6 +6,7 @@ import { confusions, reviewAnalytics } from '../analytics/statistics';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CountryFlag } from './CountryFlag';
+import { pageBounds } from './trainerHubUtils';
 
 const name = (code: string) => COUNTRIES[code]?.name || code;
 const pct = (value: number | null) => value === null ? '—' : `${Math.round(value * 100)}%`;
@@ -13,7 +15,9 @@ const duration = (seconds: number) => seconds < 3600 ? `${Math.round(seconds / 6
 
 export function ReviewStatistics({ attempts, reviews }: { attempts: Attempt[]; reviews: ReviewRecord[] }) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
+  const [page, setPage] = useState(1);
   const data = reviewAnalytics(attempts, reviews);
+  const improvements = data.improvements.slice().reverse(); const paging = pageBounds(improvements.length, page);
   const learning = retentionAndLapses(attempts);
   const today = new Date().setHours(0, 0, 0, 0);
   const week = today - 6 * 86400000;
@@ -22,7 +26,7 @@ export function ReviewStatistics({ attempts, reviews }: { attempts: Attempt[]; r
     <div className="metric-strip"><div><span>{t('Today')}</span><strong>{reviewAttempts.filter((item) => item.createdAt >= today).length}</strong></div><div><span>{t('7 days')}</span><strong>{reviewAttempts.filter((item) => item.createdAt >= week).length}</strong></div><div><span>{t('All time')}</span><strong>{data.completed}</strong></div><div><span>{t('Due')}</span><strong>{data.due}</strong></div><div><span>{t('Locations')}</span><strong>{data.locations}</strong></div><div><span>{t('Avg improvement')}</span><strong>{num(data.averageImprovement)}</strong><small>n={data.eligible}</small></div></div>
     <div className="stats-callouts"><span>{t('Improved')} <b>{data.improved}</b></span><span>{t('Country corrected')} <b>{data.corrected}</b></span>{Object.entries(data.gradeCounts).map(([grade, count]) => <span key={grade}>{t(grade)} <b>{count}</b></span>)}</div>
     <section><h3>{t('Retention')}</h3><div className="stats-callouts">{learning.retention.map((item) => <span key={item.days}>{item.days}d <b>{item.eligible >= 5 ? pct(item.rate) : t('Low sample')}</b><small> n={item.eligible}</small></span>)}</div></section>
-    <section><h3>{t('Review improvement history')}</h3><div className="table-scroll"><table><thead><tr><th>{t('Date')}</th><th>{t('Country')}</th><th>{t('Before')}</th><th>{t('Review')}</th><th>{t('Score Δ')}</th><th>{t('Distance gain')}</th><th>{t('Time Δ')}</th></tr></thead><tbody>{data.improvements.slice().reverse().map((item) => <tr key={item.attempt.id}><td>{new Date(item.attempt.createdAt).toLocaleDateString()}</td><th><CountryFlag code={item.attempt.countryCode} />{name(item.attempt.countryCode)}</th><td>{item.original.score}</td><td>{item.attempt.score}</td><td>{item.score > 0 ? '+' : ''}{item.score}</td><td>{item.distance === null ? '—' : `${item.distance > 0 ? '+' : ''}${Math.round(item.distance)} km`}</td><td>{item.attempt.timeSpentSeconds - item.original.timeSpentSeconds}s</td></tr>)}</tbody></table></div></section>
+    <section><h3>{t('Review improvement history')}</h3><div className="table-scroll"><table><thead><tr><th>{t('Date')}</th><th>{t('Country')}</th><th>{t('Before')}</th><th>{t('Review')}</th><th>{t('Score Δ')}</th><th>{t('Distance gain')}</th><th>{t('Time Δ')}</th></tr></thead><tbody>{improvements.slice(paging.start, paging.end).map((item) => <tr key={item.attempt.id}><td>{new Date(item.attempt.createdAt).toLocaleDateString()}</td><th><CountryFlag code={item.attempt.countryCode} />{name(item.attempt.countryCode)}</th><td>{item.original.score}</td><td>{item.attempt.score}</td><td>{item.score > 0 ? '+' : ''}{item.score}</td><td>{item.distance === null ? '—' : `${item.distance > 0 ? '+' : ''}${Math.round(item.distance)} km`}</td><td>{item.attempt.timeSpentSeconds - item.original.timeSpentSeconds}s</td></tr>)}</tbody></table></div>{paging.pages > 1 && <nav className="clue-pagination" aria-label={t('Review improvement history')}><button type="button" disabled={paging.current === 1} onClick={() => setPage(paging.current - 1)}>{t('Previous')}</button><span aria-live="polite">{paging.current} / {paging.pages}</span><button type="button" disabled={paging.current === paging.pages} onClick={() => setPage(paging.current + 1)}>{t('Next')}</button></nav>}</section>
     <div className="stats-ladders"><section className="stats-card"><h3>{t('Lapsed countries')}</h3>{learning.lapseCountries.slice(0, 12).map((item) => <div className="data-row" key={item.key}><span><CountryFlag code={item.key} />{name(item.key)}</span><b>{item.count}</b></div>)}{!learning.lapseCountries.length && <p className="empty">{t('No learned-to-wrong review transitions yet.')}</p>}</section><section className="stats-card"><h3>{t('Lapsed locations')}</h3>{learning.lapseLocations.slice(0, 12).map((item) => <div className="data-row" key={item.key}><span>{item.key.slice(0, 14)}…</span><b>{item.count}</b></div>)}{!learning.lapseLocations.length && <p className="empty">{t('No location lapses yet.')}</p>}</section></div>
   </>;
 }

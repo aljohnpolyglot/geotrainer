@@ -2,6 +2,8 @@
 
 ## 2026-09-14
 
+- Added a second SVG country heatmap beneath Coverage, synchronized to the selected map layer with a saved user-selectable warm, blue, green, or purple palette.
+- Paginated Review improvement history at 20 newest-first rows per page.
 - Fixed a startup crash caused by checking Play mistake-practice eligibility before a game summary was loaded.
 - Prompted AI Coach to show a “Most likely in” region, city, quarter, landmark, or exact-place estimate after its country ranking only when the overall and narrower-location confidence are high and multiple visible clues support it.
 - Made Practice mistakes enter Review correctly while retaining each Play mistake as its original new card and recording correction answers separately.

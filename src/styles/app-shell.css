@@ -207,6 +207,19 @@ button.attempt-row:hover { background: var(--panel); }
 .coverage-legend .wrong::before { background: var(--coral); }
 .coverage-legend .reviewed::before { background: var(--sky); }
 .coverage-map { width: 100%; height: 100%; }
+.coverage-choropleth { --choropleth-empty: color-mix(in srgb, var(--muted) 24%, var(--paper)); margin-top: 24px; }
+.coverage-choropleth > header { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+.coverage-choropleth > header h3 { margin: 0; }
+.coverage-choropleth > header label { display: grid; gap: 4px; color: var(--muted); font-size: 11px; }
+.coverage-choropleth > header select { min-width: 132px; padding: 7px 9px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; }
+.coverage-choropleth-map { padding: clamp(8px, 2vw, 22px); overflow: hidden; background: color-mix(in srgb, var(--sky) 12%, var(--paper)); border: 1px solid var(--line); }
+.coverage-choropleth-svg { display: block; width: 100%; height: auto; }
+.coverage-choropleth-svg path { stroke: var(--paper); stroke-width: .55; vector-effect: non-scaling-stroke; transition: fill .18s ease; }
+.coverage-choropleth-legend { display: flex; align-items: center; gap: 7px; margin-top: 8px; color: var(--muted); font: 700 10px/1 ui-monospace,monospace; }
+.coverage-choropleth-legend i { width: min(220px, 38vw); height: 9px; border-radius: 2px; }
+.coverage-choropleth-legend em { width: 10px; height: 10px; margin-left: 8px; background: var(--choropleth-empty, var(--muted)); border: 1px solid var(--line); }
+.coverage-map-credit { display: inline-block; margin-top: 7px; color: var(--muted); font-size: 10px; }
+@media (max-width: 560px) { .coverage-choropleth > header { align-items: stretch; flex-direction: column; } .coverage-choropleth > header select { width: 100%; } }
 .coverage-map .gm-style-iw-c { max-width: min(300px, calc(100vw - 48px)) !important; padding: 0 !important; border-radius: 6px !important; box-shadow: 0 8px 24px rgba(3, 20, 30, .22) !important; }
 .coverage-map .gm-style-iw-d { overflow: hidden !important; }
 .coverage-map .gm-style-iw-chr { display: none; }

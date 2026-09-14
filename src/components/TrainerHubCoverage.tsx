@@ -3,6 +3,8 @@ import { X } from "lucide-react";
 import type { Attempt, ReviewRecord, TrainerLocation } from "../types";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
+import { CoverageChoropleth } from "./CoverageChoropleth";
+import type { CoverageOverlay } from "./trainerHubUtils";
 
 interface CoverageMapProps {
   locations: TrainerLocation[];
@@ -19,7 +21,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
   const markers = useRef<google.maps.Marker[]>([]);
   const preview = useRef<google.maps.InfoWindow>();
   const [selected, setSelected] = useState<TrainerLocation>();
-  const [overlay, setOverlay] = useState<"exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery">("exposure");
+  const [overlay, setOverlay] = useState<CoverageOverlay>("exposure");
 
   useEffect(() => {
     if (!element.current || typeof google === "undefined") return;
@@ -87,7 +89,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
 
   const selectedAttempts = selected ? attempts.filter((item) => item.panoId === selected.id) : [];
   const selectedReview = selected ? reviews.find((item) => item.panoId === selected.id) : undefined;
-  return (
+  return <>
     <div className="coverage-map-wrap">
       <label className="coverage-map-overlay">{t("mapLayer")}<select value={overlay} onChange={(event) => setOverlay(event.target.value as typeof overlay)}><option value="exposure">{t("exposure")}</option><option value="mastery">{t("Mastery")}</option><option value="accuracy">{t("accuracy")}</option><option value="score">{t("averageScoreMap")}</option><option value="weakness">{t("weakness")}</option><option value="due">{t("reviewsDueMap")}</option></select></label>
       {overlay === "mastery" && <div className="coverage-mastery-legend" aria-label={`${t("Mastery")} 0–100%`}><span>0%</span><i /><span>100%</span></div>}
@@ -103,5 +105,6 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
         <div className="button-row"><button className="button secondary" onClick={() => onOpen(selected)}>{t("openLocation")}</button>{selectedAttempts[0] && <button className="button primary" onClick={() => onReview(selectedAttempts[0])}>{t("reviewAction")}</button>}</div>
       </aside>}
     </div>
-  );
+    <CoverageChoropleth locations={locations} attempts={attempts} reviews={reviews} overlay={overlay} />
+  </>;
 }

@@ -272,6 +272,8 @@ Fortschritt fasst heutige und gesamte Orte, Versuche, fällige Wiederholungen un
 
 Statistik vergleicht Lernen, Spielen und Wiederholen über verschiedene Zeiträume. Ländergenauigkeit, Durchschnittspunktzahl, schwache Länder und Verwechslungen sind über längere Zeit aussagekräftiger als an einem einzelnen Tag.
 
+Der Verbesserungsverlauf zeigt zuerst die neuesten 20 Einträge. Mit Zurück und Weiter unter der Tabelle erreichst du ältere Ergebnisse.
+
 ### KI-unterstützte Runden
 
 Spielversuche mit KI-Unterstützung sind standardmäßig einbezogen. Entferne das Häkchen für eine rein nicht unterstützte Ansicht. Wiederholungszusammenfassungen vergleichen den früheren mit dem heutigen Durchschnitt und nennen verbessert, gleich oder schlechter; der 12-Wochen-Kalender färbt Tage nach Aktivität.
@@ -284,7 +286,7 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 
 ### Abdeckungskarte
 
-Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche oder fällige Wiederholungen hervorheben.
+Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine zweite Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen.
 
 Gespeicherte Lernorte und abgegebene Spieltipps behalten die aktuelle Ansicht als Vorschau. Ein geöffnetes Abdeckungspanorama bietet KI-Coach, Notizbuch, verknüpfte Meta und verfügbare Notizen; Speichern erstellt oder verwendet seine Wiederholungskarte. In Länder-, Kategorie- und Sammlungsmenüs kannst du die Anfangsbuchstaben tippen, um direkt zu einer Option zu springen.
 

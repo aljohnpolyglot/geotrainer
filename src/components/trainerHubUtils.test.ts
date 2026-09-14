@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
+import { coverageCountryValues, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -20,4 +20,12 @@ test('saved clue total counts personal, AI, and Meta entries without double-coun
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {
   assert.deepEqual(pageBounds(97, 5), { current: 5, pages: 5, start: 80, end: 100 });
   assert.deepEqual(pageBounds(39, 5), { current: 2, pages: 2, start: 20, end: 40 });
+});
+
+test('country heat values normalize counts and preserve score and weakness scales', () => {
+  const locations = [{ id: 'it-1', countryCode: 'IT', encounterCount: 4 }, { id: 'se-1', countryCode: 'SE', encounterCount: 2 }];
+  const attempts = [{ panoId: 'it-1', countryCode: 'IT', guessedCountryCode: 'FR', score: 1000 }, { panoId: 'se-1', countryCode: 'SE', guessedCountryCode: 'SE', score: 4000 }];
+  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure'), { IT: 1, SE: .5 });
+  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'weakness'), { IT: 1, SE: 0 });
+  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'score'), { IT: .2, SE: .8 });
 });

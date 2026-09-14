@@ -310,6 +310,8 @@ Progress summarizes today and all-time activity, due reviews, countries encounte
 
 Statistics can compare Study, Play, and Review activity over selected periods. On mobile, swipe the section tabs and wide tables horizontally; the page stays in Statistics while those rows scroll. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
 
+Review improvement history shows the newest 20 entries first. Use Previous and Next beneath the table to move through older results.
+
 ### AI-assisted rounds
 
 Play attempts made with AI assistance are included in performance statistics by default. Clear the visible AI-assisted checkbox when you want an unassisted-only view. Review summaries compare the previous average with today’s average and classify results as improved, unchanged, or worse; the 12-week activity calendar colors days by completed-review intensity.
@@ -326,7 +328,7 @@ Coverage shows panoramas you actually encountered in Study, Play, or Review. It 
 
 Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View. An opened Coverage panorama includes AI Coach, Notebook, linked Meta, and Available notes; saving there creates or reuses its Review card.
 
-Map layers can emphasize exposure, accuracy, average score, weakness, or due reviews. Clusters summarize nearby encountered locations.
+Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A second country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data.
 
 ### Geography table
 
