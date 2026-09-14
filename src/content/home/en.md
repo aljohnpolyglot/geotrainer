@@ -126,7 +126,7 @@ Play measures unaided recall in scored rounds. It supports short drills and long
 - Round count — choose 1 to 100 rounds.
 - Collection — choose the country pool.
 - Country mix — use the full collection, choose one target country, or add several commonly confused countries as a focused pool. Remove a flag pill to take a country back out.
-- Environment — choose Mixed, Urban, Suburban, or Rural.
+- Environment — choose Any environment to remove the filter, or limit generation to Urban, Suburban, or Rural scenes.
 - Sampling — use Natural or Balanced selection.
 - Timer — set a round limit or leave time unlimited.
 - Compass — show or hide the selected compass style.
@@ -214,11 +214,13 @@ Custom practice leaves future cards unchanged. If a card is already due, complet
 
 ### Mistake correction
 
-After a game, correction practice can repeat weak rounds until they are answered successfully. Practice mistakes appears only when that saved game still has eligible attempt records. These correction attempts remain separate evidence and do not alter the original Play records.
+After a game, Practice mistakes opens Review and repeats weak rounds until they are answered successfully. It appears only when that saved game still has eligible attempt records. Each weak Play location remains a new review card, while correction attempts are saved separately and never alter the original Play records.
 
 ## AI Coach
 
 AI Coach looks for visible geographic evidence in the current panorama. Guest users can use it without creating an account.
+
+Before reveal, a high-confidence analysis can add a “Most likely in” region, city, quarter, landmark, or exact-place estimate after the country ranking, but only when multiple strong visible clues support that narrower location. Generic scenes keep the estimate hidden.
 
 Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup.
 

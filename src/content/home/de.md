@@ -112,7 +112,7 @@ Diese Werte steuern die Suche, garantieren aber wegen begrenzter Street-View-Abd
 ### Spieleinstellungen
 
 - 1 bis 100 Runden.
-- Länder-Sammlung und Umgebung.
+- Länder-Sammlung und Umgebung; Beliebige Umgebung entfernt den Filter, alternativ kann die Suche auf Stadt, Vorstadt oder Land begrenzt werden.
 - Optionaler Ländermix für ein Zielland oder häufig verwechselte Länder.
 - Natürliche oder ausgewogene Auswahl.
 - Optionales Zeitlimit und Kompass.
@@ -186,11 +186,13 @@ Benutzerdefinierte Übung lässt zukünftige Karten unverändert. Wird eine bere
 
 ### Fehlerkorrektur
 
-Nach einem Spiel kann eine Korrektursitzung schwache Runden wiederholen, bis sie gelöst werden. Fehler üben erscheint nur, wenn für das gespeicherte Spiel noch geeignete Versuchsdaten vorhanden sind. Diese Versuche bleiben neue Datensätze; das ursprüngliche Spiel bleibt unverändert.
+Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache Runden, bis sie gelöst werden. Die Aktion erscheint nur, wenn für das gespeicherte Spiel noch geeignete Versuchsdaten vorhanden sind. Jeder schwache Spielort bleibt eine neue Wiederholungskarte; Korrekturversuche werden separat gespeichert und verändern die ursprünglichen Spieldaten nie.
 
 ## KI-Coach
 
 Der KI-Coach untersucht sichtbare geografische Hinweise. Er funktioniert auch für Gäste ohne Konto.
+
+Vor dem Aufdecken kann eine Analyse mit hoher Sicherheit nach der Länderrangliste eine Region, Stadt, ein Viertel, eine Sehenswürdigkeit oder einen genauen Ort unter „Am wahrscheinlichsten in“ nennen, aber nur wenn mehrere starke sichtbare Hinweise diesen genaueren Ort stützen. Bei allgemeinen Szenen bleibt diese Schätzung verborgen.
 
 Spiel verwendet dieselbe Lernleiste wie Lernen: Notizbuch, die Anzahl naher verfügbarer Notizen und – falls in der Spieleinrichtung aktiviert – KI-Coach.
 

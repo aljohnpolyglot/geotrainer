@@ -36,6 +36,7 @@ export function useReviewMode(ctx: any) {
 
   const handleStartReview = useCallback(async (attempt: Attempt, queue: Attempt[] = [attempt], source = 'History', kind: ReviewSessionKind = 'practice') => {
     const compass = attempt.showCompass ?? compassPreference;
+    ctx.setShowHome(false); ctx.setAppMode('review');
     setReviewQueue(queue); setReviewOriginalQueue(queue); setReviewInitialTotal(queue.length); setReviewStats([]); setReviewComplete(false); setReviewSource(source); setReviewKind(kind);
     ctx.setReviewCompass(compass);
     await trainerDb.setSetting('review.active', { attemptIds: queue.map((item) => item.id), source, kind, initialTotal: queue.length, compass });

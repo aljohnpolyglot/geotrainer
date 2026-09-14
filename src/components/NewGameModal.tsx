@@ -173,7 +173,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           <div className="environment-game-settings">
             <label>{t('Environment')}
               <select value={environment} onChange={(event) => setEnvironment(event.target.value as Environment)}>
-                <option value="mixed">{t('Mixed')}</option><option value="urban">{t('Urban')}</option><option value="suburban">{t('Suburban')}</option><option value="rural">{t('Rural')}</option>
+                <option value="mixed">{t('Any environment')}</option><option value="urban">{t('Urban')}</option><option value="suburban">{t('Suburban')}</option><option value="rural">{t('Rural')}</option>
               </select>
             </label>
             {(environment === 'urban' || environment === 'suburban') && <label>{t('Urban Level')}

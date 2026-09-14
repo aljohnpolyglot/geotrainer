@@ -2,6 +2,9 @@
 
 ## 2026-09-14
 
+- Prompted AI Coach to show a “Most likely in” region, city, quarter, landmark, or exact-place estimate after its country ranking only when the overall and narrower-location confidence are high and multiple visible clues support it.
+- Made Practice mistakes enter Review correctly while retaining each Play mistake as its original new card and recording correction answers separately.
+- Renamed Play's unrestricted environment choice from Mixed to Any environment so it is clear how to remove a City, Suburban, or Rural filter.
 - Hid Play's Practice mistakes action when the selected game has no eligible persisted attempts.
 - Let daily new-card and review limits be cleared and replaced without forcing a leading zero.
 - Moved the Learn and Review compass switch into the shared panorama learning toolbar, with mobile-sized touch targets.

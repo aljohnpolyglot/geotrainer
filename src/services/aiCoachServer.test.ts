@@ -110,13 +110,15 @@ test('pasted clue prompts prioritize an obvious foreground subject without disca
   assert.match(prompts[0], /where that specific variant is commonly found/);
   assert.match(prompts[0], /resolution is insufficient.*never invent specificity/);
   assert.doesNotMatch(prompts[1], /user-selected clue crop/);
+  assert.match(prompts[1], /overall analysis is high confidence.*district or quarter.*Most likely in/);
 });
 
 test('specific location estimates require strong visual evidence and no answer metadata', () => {
-  const input = { ...validAnalysis, locationEstimate: { level: 'city', label: 'Central Monrovia', confidence: 'high', basis: ['Readable Sekou Toure Avenue sign', 'Distinctive coastal street grid'] } };
+  const input = { ...validAnalysis, confidence: 'high', candidates: [{ countryCode: 'LR', confidence: .8 }], locationEstimate: { level: 'city', label: 'Central Monrovia', confidence: 'high', basis: ['Readable Sekou Toure Avenue sign', 'Distinctive coastal street grid'] } };
   assert.equal(normalizeCoachAnalysis(input, 'analyze').locationEstimate?.label, 'Central Monrovia');
   assert.equal(normalizeCoachAnalysis(input, 'analyze', 'Liberia').locationEstimate, undefined);
   assert.equal(normalizeCoachAnalysis({ ...input, locationEstimate: { ...input.locationEstimate, basis: ['Tropical vegetation'] } }, 'analyze').locationEstimate, undefined);
+  assert.equal(normalizeCoachAnalysis({ ...input, confidence: 'medium' }, 'analyze').locationEstimate, undefined);
   const explained = normalizeCoachAnalysis(input, 'explain', 'Liberia');
   assert.deepEqual(explained.candidates, []);
   assert.equal(explained.region, '');

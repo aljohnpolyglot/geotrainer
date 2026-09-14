@@ -94,8 +94,8 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       {result && <div className="coach-result">
         <h4>{t('geographicClueAnalysis')}</h4>
         {!revealed && result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
-        {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
         {!revealed && result.candidates.length > 0 && <ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{COUNTRIES[candidate.countryCode]?.name || candidate.countryCode}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol>}
+        {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
         {list(t('strongClues'), result.strongClues)}
         {list(t('weakGeneric'), result.weakClues)}
         {list(t('contradictionsGaps'), result.contradictions || [])}

@@ -107,7 +107,7 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [schedulerStrictness, setSchedulerStrictness] = useState<SchedulerPreferences['strictness']>('balanced');
-  const [summaryMistakes, setSummaryMistakes] = useState<Attempt[]>([]);
+  const [summaryMistakes, setSummaryMistakes] = useState<{ gameId: string; attempts: Attempt[] } | null>(null);
 
   // Exact location reveal & bookmarks state (Study mode)
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
@@ -194,7 +194,7 @@ export default function App() {
   const review = useReviewMode({
     dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
     setErrorMessage, compassPreference, setTrainerRefreshKey, roundStartTimeRef, setIsSubmittingGuess,
-    isSubmittingGuess, coachNote, reviewCompass, setReviewCompass, setCoachNote,
+    isSubmittingGuess, coachNote, reviewCompass, setReviewCompass, setCoachNote, setAppMode, setShowHome,
   });
   const { reviewResult, setReviewResult, reviewAttemptRecord, setReviewAttemptRecord, reviewQueue,
     reviewOriginalQueue, reviewSource, reviewKind, reviewHistory, reviewIntervals, reviewElapsed, reviewInitialTotal,
@@ -328,7 +328,7 @@ export default function App() {
     setPausedWorkspaces((saved) => ({ ...saved, play: undefined }));
     void trainerDb.setSetting('workspace.paused.play', null);
   }, [summaryGameRecord]);
-  useEffect(() => { let active = true; setSummaryMistakes([]); if (summaryGameRecord) void trainerDb.attempts().then((attempts) => { if (active) setSummaryMistakes(gameMistakes(attempts, summaryGameRecord.id, schedulerStrictness)); }); return () => { active = false; }; }, [schedulerStrictness, summaryGameRecord, trainerRefreshKey]);
+  useEffect(() => { let active = true; setSummaryMistakes(null); if (summaryGameRecord) void trainerDb.attempts().then((attempts) => { if (active) setSummaryMistakes({ gameId: summaryGameRecord.id, attempts: gameMistakes(attempts, summaryGameRecord.id, schedulerStrictness) }); }); return () => { active = false; }; }, [schedulerStrictness, summaryGameRecord, trainerRefreshKey]);
 
   useEffect(() => {
     if (!dbReady || !workspaceRestoreAttemptedRef.current) return;
@@ -481,7 +481,7 @@ export default function App() {
         onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}
         onNextRound={handleNextRound}
-        onPracticeMistakes={summaryMistakes.length ? () => { setSummaryGameRecord(null); void handleStartReview(summaryMistakes[0], summaryMistakes, 'Game mistakes', 'correction'); } : undefined}
+        onPracticeMistakes={summaryMistakes?.gameId === summaryGameRecord?.id && summaryMistakes.attempts.length ? () => { setSummaryGameRecord(null); void handleStartReview(summaryMistakes.attempts[0], summaryMistakes.attempts, 'Game mistakes', 'correction'); } : undefined}
         onPlayAgain={() => { if (summaryGameRecord) { setSummaryGameRecord(null); handleStartGame(summaryGameRecord.settings); } }}
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
         onCloseSummary={() => setSummaryGameRecord(null)}
