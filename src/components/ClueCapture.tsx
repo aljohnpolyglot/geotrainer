@@ -22,7 +22,7 @@ async function prepareImage(file: File) {
   } finally { URL.revokeObjectURL(source); }
 }
 
-export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, spoilerFree, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; spoilerFree?: boolean; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
+export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
   const { ui, ai, game, ready: languageReady } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [image, setImage] = useState('');
@@ -62,7 +62,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     const sourceImage = image;
     setStatus(t('analyzingClue')); setSaved(false);
     await run(async (signal, isCurrent) => {
-      const response = await postCoach({ mode: spoilerFree ? 'clue-safe' : 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: ai, gameLanguage: game }, signal);
+      const response = await postCoach({ mode: 'clue', mimeType: 'image/jpeg', imageData: sourceImage.split(',')[1], language: ai, gameLanguage: game }, signal);
       const value = await response.json() as { analysis?: CoachAnalysis; model?: string; generatedAt?: number; error?: string };
       if (!response.ok || !value.analysis) throw new Error(value.error || t('coachNoClue'));
       if (!isCurrent()) return;

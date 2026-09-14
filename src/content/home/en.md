@@ -160,7 +160,7 @@ Review presents scheduled locations when they are due. It is a real recall test,
 
 ### Before the guess
 
-The panorama appears without answer metadata. Review does not receive or render the original answer, previous guessed country, score, or other spoilers before you submit. You can write and save a new Notebook note while deciding; previously saved answer-bearing text remains hidden until submission.
+The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. All learning tools remain available, and anything you deliberately open—including saved note text, Meta explanations, Coach candidates, and probabilities—is shown in full.
 
 ### After the guess
 
@@ -235,13 +235,13 @@ Analyze samples the panorama around you and evaluates the visible evidence toget
 1. Frame the visual clue, then press **PrtScn** or **Windows + Shift + S** to copy a screenshot.
 2. Open **AI Coach → Known clues**, select the clue box, and press **Ctrl + V** (or **Command + V** on macOS).
 3. Check the preview, then choose **Analyze clue**.
-4. GeoTrainer analyzes the pasted image and automatically saves the image, evidence, and learning note in **Clues**. In Review before a guess, the analysis stays spoiler-safe.
+4. GeoTrainer analyzes the pasted image and automatically saves the image, evidence, and learning note in **Clues**. The full analysis remains accessible during Review.
 
 When the crop has one obvious foreground subject, Coach analyzes that object first and uses the surroundings as supporting or contradictory context. Unreadable details remain explicitly uncertain.
 
 ### Before and after reveal
 
-Before a guess, Coach responses are spoiler-safe and do not receive answer metadata. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
+Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
 
 ### Reliability
 
@@ -310,7 +310,7 @@ Progress summarizes today and all-time activity, due reviews, countries encounte
 
 Statistics can compare Study, Play, and Review activity over selected periods. On mobile, swipe the section tabs and wide tables horizontally; the page stays in Statistics while those rows scroll. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
 
-Review improvement history shows the newest 20 entries first. Use Previous and Next beneath the table to move through older results.
+Review improvement history shows the newest 10 entries first. Sessions and each History tab also show 10 entries per page. Use Previous and Next beneath each list to move through older results; changing a History tab or filter returns to page one.
 
 ### AI-assisted rounds
 
@@ -328,7 +328,7 @@ Coverage shows panoramas you actually encountered in Study, Play, or Review. It 
 
 Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View. An opened Coverage panorama includes AI Coach, Notebook, linked Meta, and Available notes; saving there creates or reuses its Review card.
 
-Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A second country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data.
+Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A detailed SVG country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data. On Exposure, hover a country for its exact encounter count. The neutral map color means not encountered, no scored attempts, or no Review history according to the selected layer; it does not describe Google Maps availability.
 
 ### Geography table
 
@@ -336,7 +336,7 @@ The country table compares seen, played, reviewed, correct, wrong, average, best
 
 ### History
 
-History filters original visits, Play attempts, Review attempts, and saved games. Opening an item returns to its preserved context when the panorama remains available.
+History filters original visits, Play attempts, Review attempts, and saved games. Each tab shows 10 entries per page and returns to the first page when its filters change. Opening an item returns to its preserved context when the panorama remains available.
 
 ### Missing panoramas
 
@@ -352,7 +352,7 @@ Open the account entry on the homepage and use Google or email. Signing in ident
 
 ### What sync does
 
-Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to a screen checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Signed-out localhost and deployed-site data remain separate.
+Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to the app periodically checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 
@@ -500,9 +500,9 @@ External guides are community references. Check several clues together and allow
 
 Learn has three paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Reveal and Next stay at the bottom of the visible viewport, including fullscreen, while mobile learning tools form a side rail below the map controls. Custom Learn and Play default to official Google imagery; the imagery selector can instead mix official and contributor panoramas or request contributor-only coverage.
 
-In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Hint shows only the reference image before the guess; the full explanation appears afterward.
+In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Meta remains fully accessible before and after the guess.
 
-The top-right **Notebook** stores any number of personal notes for the current panorama. Choose an optional clue category, add optional text, or save with both empty simply to remember the place. You can also paste or upload a reference image and analyze it with Coach. Personal, AI-assisted, and Meta entries open in detail views with Street View and an overlaid saved/reference image when available. The numbered **Available notes** button opens the full history for that panorama and same-country Street View nodes within 50 metres in one continuous scroll area; new Coach analyses enter it immediately and do not reopen as the active Coach result after reload. Explicitly saved notes and images create or reuse the same Review source. My Clues can filter **Personal**, **AI-assisted**, and **Meta lessons**, then paginates matching entries 20 at a time. Before a Review guess, personal text and answer-bearing analysis remain hidden.
+The top-right **Notebook** stores any number of personal notes for the current panorama. Choose an optional clue category, add optional text, or save with both empty simply to remember the place. You can also paste or upload a reference image and analyze it with Coach. Personal, AI-assisted, and Meta entries open in detail views with Street View and an overlaid saved/reference image when available. The numbered **Available notes** button opens the full history for that panorama and same-country Street View nodes within 50 metres in one continuous scroll area; new Coach analyses enter it immediately and do not reopen as the active Coach result after reload. Explicitly saved notes and images create or reuse the same Review source. My Clues can filter **Personal**, **AI-assisted**, and **Meta lessons**, then paginates matching entries 20 at a time. During Review, saved note text, analyses, candidates, and probabilities remain visible before and after the guess.
 
 A low Review result automatically returns that location to the end of the current session. It continues returning until you pass it; each try remains a separate attempt.
 

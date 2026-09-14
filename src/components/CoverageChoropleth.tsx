@@ -14,13 +14,15 @@ const PALETTES = {
 type MapPalette = keyof typeof PALETTES;
 
 const escapeXml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-const colorMap = (values: Record<string, number | null>, colors: readonly string[], label: string) => worldMap
-  .replace('<svg ', `<svg class="coverage-choropleth-svg" role="img" aria-label="${escapeXml(label)}" `)
-  .replace('<title>Simple World Map</title>', `<title>${escapeXml(label)}</title>`)
-  .replace(/<path id="([^"]+)"([^>]*)\/>/g, (_match, id: string, rest: string) => {
-    const value = values[id.toUpperCase()];
+const colorMap = (values: Record<string, number | null>, colors: readonly string[], label: string, emptyLabel: string, encounters: Record<string, number>, encounterLabel: string) => worldMap
+  .replace(/<\?xml[^>]*>\s*/, '')
+  .replace(/<svg\b/, `<svg class="coverage-choropleth-svg" role="img" aria-label="${escapeXml(label)}"`)
+  .replace(/(<svg\b[^>]*>)/, `$1<title>${escapeXml(label)}</title>`)
+  .replace(/<path\b([^>]*\bid="([A-Z]{2})"[^>]*)\/>/g, (_match, attributes: string, id: string) => {
+    const value = values[id];
     const fill = value === null || value === undefined ? 'var(--choropleth-empty)' : colors[Math.min(3, Math.floor(value * 4))];
-    return `<path id="${id}"${rest} fill="${fill}"><title>${escapeXml(countryName(id.toUpperCase()))}</title></path>`;
+    const detail = value === null || value === undefined ? emptyLabel : encounters[id] === undefined ? '' : `${encounters[id]} ${encounterLabel}`;
+    return `<path${attributes.replace(/\sstyle="[^"]*"/, '')} style="fill:${fill}"><title>${escapeXml(countryName(id) + (detail ? ` · ${detail}` : ''))}</title></path>`;
   });
 
 export function CoverageChoropleth({ locations, attempts, reviews, overlay }: { locations: TrainerLocation[]; attempts: Attempt[]; reviews: ReviewRecord[]; overlay: CoverageOverlay }) {
@@ -33,13 +35,15 @@ export function CoverageChoropleth({ locations, attempts, reviews, overlay }: { 
     return () => { active = false; window.removeEventListener(CLOUD_IMPORT_EVENT, load); };
   }, []);
   const values = useMemo(() => coverageCountryValues(locations, attempts, reviews, overlay), [locations, attempts, reviews, overlay]);
+  const encounters = useMemo(() => locations.reduce<Record<string, number>>((counts, item) => ({ ...counts, [item.countryCode]: (counts[item.countryCode] || 0) + item.encounterCount }), {}), [locations]);
   const colors = PALETTES[palette];
   const label = `${t('Country heatmap')} · ${t(overlay === 'score' ? 'averageScoreMap' : overlay === 'due' ? 'reviewsDueMap' : overlay === 'mastery' ? 'Mastery' : overlay)}`;
-  const svg = useMemo(() => colorMap(values, colors, label), [values, colors, label]);
+  const emptyLabel = t(overlay === 'exposure' ? 'Not encountered' : overlay === 'due' || overlay === 'mastery' ? 'No review history' : 'No scored attempts');
+  const svg = useMemo(() => colorMap(values, colors, label, emptyLabel, overlay === 'exposure' ? encounters : {}, t('encounters')), [values, colors, label, emptyLabel, encounters, overlay, t]);
   return <section className="coverage-choropleth">
     <header><h3>{t('Country heatmap')}</h3><label>{t('Map palette')}<select value={palette} onChange={(event) => { const value = event.target.value as MapPalette; setPalette(value); void trainerDb.setSetting('coverage.mapPalette', value); }}><option value="warm">{t('Warm')}</option><option value="blue">{t('Blue')}</option><option value="green">{t('Green')}</option><option value="purple">{t('Purple')}</option></select></label></header>
     <div className="coverage-choropleth-map" dangerouslySetInnerHTML={{ __html: svg }} />
-    <div className="coverage-choropleth-legend" aria-label={`${t('Low')} – ${t('High')}`}><span>{t('Low')}</span><i style={{ background: `linear-gradient(90deg, ${colors.join(', ')})` }} /><span>{t('High')}</span><em /><span>{t('No data')}</span></div>
-    <a className="coverage-map-credit" href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noreferrer">Al MacDonald / Fritz Lekschas · CC BY-SA 3.0</a>
+    <div className="coverage-choropleth-legend" aria-label={`${t('Low')} – ${t('High')}`}><span>{t('Low')}</span><i style={{ background: `linear-gradient(90deg, ${colors.join(', ')})` }} /><span>{t('High')}</span><em /><span>{emptyLabel}</span></div>
+    <a className="coverage-map-credit" href="https://simplemaps.com/resources/svg-world" target="_blank" rel="noreferrer">SimpleMaps · MIT</a>
   </section>;
 }

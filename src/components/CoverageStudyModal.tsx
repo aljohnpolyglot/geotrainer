@@ -58,7 +58,7 @@ export function CoverageStudyModal({ location, onClose }: { location: TrainerLoc
         <StreetViewContainer currentLocation={location} isLoading={false} onNextLocation={() => {}} canMove canPan canZoom showCompass />
         <div className="panorama-tools coverage-study-tools" aria-label={t('Learning aids')}>
           <AiCoach panoId={location.panoId} appMode="study" revealed context={{ actualCountry: COUNTRIES[location.countryCode]?.name || location.countryCode }} onSave={saveCoach} onSaveClue={(clue) => { void saveClue({ ...clue, origin: 'coach' }); }} />
-          <LearningAids lesson={lesson} panoId={location.panoId} lat={location.lat} lng={location.lng} countryCode={location.countryCode} reviewActive={false} answerVisible adviceOpen={false} refreshKey={refreshKey} onAdviceClose={() => {}} onSaveClue={saveClue} onNoteSaved={noteSaved} />
+          <LearningAids lesson={lesson} panoId={location.panoId} lat={location.lat} lng={location.lng} countryCode={location.countryCode} adviceOpen={false} refreshKey={refreshKey} onAdviceClose={() => {}} onSaveClue={saveClue} onNoteSaved={noteSaved} />
         </div>
       </div>
     </section>

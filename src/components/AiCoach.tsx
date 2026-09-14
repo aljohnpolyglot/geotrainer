@@ -89,7 +89,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
 <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><img src={`${import.meta.env.BASE_URL}assets/ai-coach-mark.png`} alt="" /> {t('AI Coach')}</span><button onClick={() => { requestId.current += 1; controller.current?.abort(); setLoading(null); setCoachOpen(false); }} aria-label={t('close')}><X size={16} /></button></header>
       <p className="coach-note">{appMode === 'play' ? t('aiAssistedNote') : t('transientImagesNote')}</p>
       <div className="coach-modes"><button disabled={!languageReady || !!loading || clueBusy} onClick={() => void run(revealed ? 'explain' : 'analyze360')}>{loading ? t(loading === 'explain' ? 'explaining' : 'analyzing') : t(revealed ? 'explain' : 'analyze')}</button>{loading && <button onClick={() => controller.current?.abort()}>{t('cancel')}</button>}</div>
-      <ClueCapture panoId={panoId} disabled={!languageReady || !!loading} onBusyChange={setClueBusy} onSave={onSaveClue} onAnalyze={onClueAnalyzed} spoilerFree={appMode === 'review' && !revealed} />
+      <ClueCapture panoId={panoId} disabled={!languageReady || !!loading} onBusyChange={setClueBusy} onSave={onSaveClue} onAnalyze={onClueAnalyzed} />
       {error && <p className="coach-error" role="alert">{error}</p>}
       {result && <div className="coach-result">
         <h4>{t('geographicClueAnalysis')}</h4>

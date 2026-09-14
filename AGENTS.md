@@ -36,7 +36,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Avoid military, tactical, command-center, and field-operations jargon in user-facing copy. Use direct learning and gameplay language.
 - New persisted fields must remain optional or have migration-safe defaults.
 - Review attempts are new records; never mutate the original Play attempt.
-- Before a guess, Review must not receive or render answer metadata.
+- Before a guess, Review must not receive the current card's persisted answer metadata, but every learner-opened tool may render its full saved or newly generated content, including Meta explanations, note text, country candidates, and probabilities.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
 - Treat same-country locations within 50 metres as one Review card across Play, Study, Notebook, and Coach sources.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
@@ -44,8 +44,10 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
 - Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
 - Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
+- Show Review improvement, Sessions, and every History tab 10 entries per page; reset History to page one when its tab or filters change.
 - Count foreground time across Study, active Play, and active Review work, including panorama movement and learning-aid use; persist it when switching surfaces or returning home. Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
+- Coalesce local cloud-sync bursts, skip unchanged whole-backup writes, and throttle repeated focus-triggered cloud pulls.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.

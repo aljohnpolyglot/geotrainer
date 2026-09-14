@@ -68,6 +68,9 @@ let uploadPromise: Promise<void> | undefined;
 let uploadPending = false;
 let applyingCloud = false;
 let started = false;
+let syncedUserId: string | undefined;
+let syncedBackup = '';
+let lastPullAt = 0;
 
 export function createQuietSyncScheduler(task: () => void, delayMs = 1200) {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -86,6 +89,8 @@ export const shouldSyncAuthEvent = (event: AuthChangeEvent, previousUserId?: str
   event === 'SIGNED_OUT' ? !!previousUserId : event === 'SIGNED_IN' && !!nextUserId && nextUserId !== previousUserId;
 
 export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((clue) => clue.imagePath ? { ...clue, imageDataUrl: '' } : clue);
+export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
+export const shouldPullCloud = (now: number, previous: number, interval = 60_000) => !previous || now - previous >= interval;
 
 async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
@@ -96,12 +101,18 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
   uploadPromise = (async () => {
     let backup = await createBackup(false);
+    let hostedImage = false;
     for (const clue of backup.data.clues as ClueRecord[]) {
       const hosted = await uploadClueImage(userId, clue);
-      if (hosted !== clue) await trainerDb.saveClue(hosted);
+      if (hosted !== clue) { await trainerDb.saveClue(hosted); hostedImage = true; }
     }
-    backup = await createBackup(false);
+    if (hostedImage) backup = await createBackup(false);
     backup.data.clues = withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]);
+    const signature = backupSignature(backup);
+    if (syncedUserId === userId && syncedBackup === signature) {
+      if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
+      return;
+    }
     const syncedAt = new Date().toISOString();
     const { error } = await supabase.from('user_backups').upsert({
       user_id: userId,
@@ -109,6 +120,8 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
       updated_at: syncedAt,
     });
     if (error) throw error;
+    syncedUserId = userId;
+    syncedBackup = signature;
     update({ phase: 'synced', message: 'Progress backed up.', lastSyncedAt: syncedAt });
   })();
   try {
@@ -125,6 +138,7 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
 async function syncSession(session: Session | null): Promise<void> {
   activeUserId = session?.user.id;
   if (!session) {
+    syncedUserId = undefined; syncedBackup = ''; lastPullAt = 0;
     update({ email: undefined, phase: 'signed-out', message: 'Sign in to back up progress.', lastSyncedAt: undefined });
     return;
   }
@@ -136,8 +150,11 @@ async function syncSession(session: Session | null): Promise<void> {
     const local = await createBackup(false);
     const { data, error } = await supabase!.from('user_backups').select('backup').eq('user_id', session.user.id).maybeSingle();
     if (error) throw error;
+    syncedUserId = session.user.id;
+    syncedBackup = '';
     if (data?.backup) {
       validateBackup(data.backup);
+      syncedBackup = backupSignature(data.backup);
       const merged = mergeBackups(data.backup, local);
       if (JSON.stringify(merged.data) !== JSON.stringify(local.data)) {
         applyingCloud = true;
@@ -147,6 +164,7 @@ async function syncSession(session: Session | null): Promise<void> {
       }
     }
     await upload(session.user.id, true);
+    lastPullAt = Date.now();
     if (importedCloud) announceCloudImport();
   } catch (error) {
     applyingCloud = false;
@@ -168,7 +186,7 @@ export const cloudSync = {
       const scheduleUpload = createQuietSyncScheduler(() => {
         if (!activeUserId || applyingCloud) return;
         void upload().catch((error) => update({ phase: 'error', message: error.message }));
-      });
+      }, 5000);
       onTrainerDbChange(scheduleUpload);
       const { data } = await supabase.auth.getSession();
       await syncSession(data.session);
@@ -178,7 +196,10 @@ export const cloudSync = {
         if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session), 0);
       });
       window.addEventListener('online', () => void upload().catch(() => {}));
-      const refresh = createQuietSyncScheduler(() => void supabase.auth.getSession().then(({ data }) => data.session && syncSession(data.session)).catch(() => {}), 250);
+      const refresh = createQuietSyncScheduler(() => {
+        if (!shouldPullCloud(Date.now(), lastPullAt)) return;
+        void supabase.auth.getSession().then(({ data }) => data.session && syncSession(data.session)).catch(() => {});
+      }, 250);
       window.addEventListener('focus', refresh);
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(); });
     } catch (error) {

@@ -272,7 +272,7 @@ Fortschritt fasst heutige und gesamte Orte, Versuche, fällige Wiederholungen un
 
 Statistik vergleicht Lernen, Spielen und Wiederholen über verschiedene Zeiträume. Ländergenauigkeit, Durchschnittspunktzahl, schwache Länder und Verwechslungen sind über längere Zeit aussagekräftiger als an einem einzelnen Tag.
 
-Der Verbesserungsverlauf zeigt zuerst die neuesten 20 Einträge. Mit Zurück und Weiter unter der Tabelle erreichst du ältere Ergebnisse.
+Der Verbesserungsverlauf zeigt zuerst die neuesten 10 Einträge. Sitzungen und alle Verlauf-Tabs zeigen ebenfalls 10 Einträge pro Seite. Mit Zurück und Weiter unter jeder Liste erreichst du ältere Ergebnisse; ein anderer Tab oder Filter springt auf Seite eins zurück.
 
 ### KI-unterstützte Runden
 
@@ -286,7 +286,7 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 
 ### Abdeckungskarte
 
-Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine zweite Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen.
+Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine detaillierte SVG-Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl. Die neutrale Farbe bedeutet je nach Ebene „noch nicht begegnet“, „keine gewerteten Versuche“ oder „kein Wiederholungsverlauf“—nicht fehlende Google-Maps-Abdeckung.
 
 Gespeicherte Lernorte und abgegebene Spieltipps behalten die aktuelle Ansicht als Vorschau. Ein geöffnetes Abdeckungspanorama bietet KI-Coach, Notizbuch, verknüpfte Meta und verfügbare Notizen; Speichern erstellt oder verwendet seine Wiederholungskarte. In Länder-, Kategorie- und Sammlungsmenüs kannst du die Anfangsbuchstaben tippen, um direkt zu einer Option zu springen.
 
@@ -296,7 +296,7 @@ Sortiere Gesehen, Gespielt, Wiederholt, Richtig, Falsch, Durchschnitt, Bestes, Z
 
 ### Verlauf
 
-Der Verlauf filtert Besuche, Spielversuche, Wiederholungsversuche und gespeicherte Spiele. Wenn Google das Original entfernt hat, kann ein markierter Koordinaten-Ersatz in der Nähe geöffnet werden.
+Der Verlauf filtert Besuche, Spielversuche, Wiederholungsversuche und gespeicherte Spiele. Jeder Tab zeigt 10 Einträge pro Seite und springt nach Filteränderungen auf die erste Seite zurück. Wenn Google das Original entfernt hat, kann ein markierter Koordinaten-Ersatz in der Nähe geöffnet werden.
 
 ## Cloud-Synchronisierung
 
@@ -308,7 +308,7 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Synchronisierte Daten
 
-Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim erneuten Fokussieren wird neuer Cloud-Fortschritt ohne Neuladen oder Ersetzen des aktiven Arbeitsstands übernommen. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim Zurückkehren prüft die App regelmäßig auf neuen Cloud-Fortschritt und übernimmt ihn ohne Neuladen oder Ersetzen des aktiven Arbeitsstands. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
 
 ### Offline arbeiten und abmelden
 
@@ -440,9 +440,9 @@ Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechn
 
 Lernen bietet drei Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen. **Meta** öffnet geführte Lektionen am gespeicherten Panorama und Blickwinkel. **Karte erkunden** zeigt die Street-View-Abdeckung. In Meta und der Karte öffnet Aufdecken die normale Ortskarte; dort plant Für Wiederholung speichern die spätere Ortungsübung. Die Karte verwendet Zurück zur Weltkarte statt Weiter. Aufdecken und Weiter bleiben auch im Vollbild am unteren Rand des sichtbaren Bereichs; mobile Lernwerkzeuge stehen seitlich unter den Kartensteuerungen. Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google-Bilder; die Auswahl kann offizielle und beigesteuerte Panoramen mischen oder nur beigesteuerte Panoramen anfordern.
 
-Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist vor der Antwort nur das Referenzbild sichtbar; der vollständige Text folgt danach.
+Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung bleibt Meta vor und nach dem Tipp vollständig zugänglich.
 
-Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Während der Wiederholung kannst du eine neue Notiz schreiben und speichern; ihre Bildanalyse verrät vor dem Tipp keine Antwort. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständigen Verlauf des Panoramas und gleichländiger Street-View-Knoten im Umkreis von 50 Metern in einem einzigen durchgehenden Scrollbereich; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen** und zeigt passende Einträge seitenweise zu je 20; verräterischer Text bleibt vor der Antwort verborgen.
+Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständigen Verlauf des Panoramas und gleichländiger Street-View-Knoten im Umkreis von 50 Metern in einem einzigen durchgehenden Scrollbereich; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen** und zeigt passende Einträge seitenweise zu je 20. Während der Wiederholung bleiben Notiztext, Analysen, Kandidaten und Wahrscheinlichkeiten vor und nach dem Tipp sichtbar.
 
 Ein schwaches Wiederholungsergebnis kehrt automatisch ans Ende der aktuellen Sitzung zurück, bis es bestanden wird. Jeder Versuch bleibt ein eigener Eintrag.
 

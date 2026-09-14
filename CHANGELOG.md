@@ -2,9 +2,11 @@
 
 ## 2026-09-14
 
+- Kept every learning tool fully accessible throughout Review, including Meta explanations, saved note text, and Coach country candidates and probabilities before guessing, without supplying the current card's persisted answer metadata.
+- Paginated Sessions, Review improvement history, and every filtered History tab at 10 entries per page, with complete localization for the improvement-history heading.
 - Removed the nested scrollbar from Available notes so the panel uses one continuous scroll area.
-- Added a second SVG country heatmap beneath Coverage, synchronized to the selected map layer with a saved user-selectable warm, blue, green, or purple palette.
-- Paginated Review improvement history at 20 newest-first rows per page.
+- Added a detailed Robinson-projection SVG country heatmap beneath Coverage, synchronized to the selected map layer with a saved user-selectable warm, blue, green, or purple palette, exact Exposure counts on hover, and layer-specific empty-state labels.
+- Reduced Supabase disk I/O by combining rapid local changes, skipping unchanged full-backup writes, avoiding duplicate local backup reads when clue images are already hosted, and throttling repeated focus pulls.
 - Fixed a startup crash caused by checking Play mistake-practice eligibility before a game summary was loaded.
 - Prompted AI Coach to show a “Most likely in” region, city, quarter, landmark, or exact-place estimate after its country ranking only when the overall and narrower-location confidence are high and multiple visible clues support it.
 - Made Practice mistakes enter Review correctly while retaining each Play mistake as its original new card and recording correction answers separately.

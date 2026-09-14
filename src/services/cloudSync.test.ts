@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { createQuietSyncScheduler, mergeBackups, shouldSyncAuthEvent, withoutEmbeddedHostedImages } from './cloudSync';
+import { backupSignature, createQuietSyncScheduler, mergeBackups, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -77,6 +77,14 @@ test('quiet sync coalesces a burst of local saves into one upload', async () => 
   schedule(); schedule(); schedule();
   await new Promise((resolve) => setTimeout(resolve, 25));
   assert.equal(uploads, 1);
+});
+
+test('cloud sync skips unchanged backup writes and throttles repeated focus pulls', () => {
+  const original = backup('same', 10); const reexported = backup('same', 10);
+  reexported.exportedAt = 'later';
+  assert.equal(backupSignature(original), backupSignature(reexported));
+  assert.equal(shouldPullCloud(59_999, 1), false);
+  assert.equal(shouldPullCloud(60_001, 1), true);
 });
 
 test('cloud imports notify the live app without a page reload', () => {
