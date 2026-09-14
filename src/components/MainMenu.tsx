@@ -25,8 +25,9 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
   const t = (key: string) => translate(ui, key);
 
   useEffect(() => {
+    let active = true;
     void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.studyVisits(), trainerDb.schedulerPreferences(), trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated')])
-      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], savedOnlyMigrated]) => setStatus({
+      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], savedOnlyMigrated]) => { if (!active) return; setStatus({
         locations: locations.length,
         attempts: attempts.length,
         clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id))),
@@ -35,9 +36,10 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
         scheduled: reviews.length > 0,
         timeZone: scheduler.reviewTimeZone,
         minutes: Math.round(meaningfulSessions(sessions, attempts, visits).reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
-      }))
+      }); })
       .catch(() => {});
-  }, [refreshKey]);
+    return () => { active = false; };
+  }, [refreshKey, sync.lastSyncedAt, sync.phase]);
 
   return (
     <section className="main-menu">

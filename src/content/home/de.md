@@ -264,7 +264,7 @@ Gespeicherte Lernorte sind unbewertete Quellen: Sie erscheinen als Lernaktivitä
 
 ### Fortschritt
 
-Fortschritt fasst heutige und gesamte Orte, Versuche, aktive Zeit und fällige Wiederholungen zusammen. Bekannte Hinweise auf der Startseite entspricht Meine Hinweise: persönliche, KI-unterstützte und ausdrücklich gespeicherte Meta-Einträge zählen, ein Notizbuchbild nicht doppelt. Sitzungen ohne Lernbesuch, Spiel- oder Wiederholungsversuch werden ausgeblendet. Es ist eine Arbeits- und Gewohnheitsansicht, keine einzelne Meisterschaftsnote.
+Fortschritt fasst heutige und gesamte Orte, Versuche, fällige Wiederholungen und aktive Vordergrundzeit in Lernen, laufendem Spiel und laufender Wiederholung zusammen—einschließlich Bewegung im Panorama und Nutzung der Lernhilfen. Die aktive Zeit wird beim Bereichswechsel oder bei der Rückkehr zur Startseite gespeichert; Sitzungen ohne Lernbesuch, Spiel- oder Wiederholungsversuch werden ausgeblendet. Halte auf einem Touchscreen einen Balken unter **Künftig fällig** gedrückt, um Datum und Anzahl zu sehen. Bekannte Hinweise auf der Startseite entspricht Meine Hinweise: persönliche, KI-unterstützte und ausdrücklich gespeicherte Meta-Einträge zählen, ein Notizbuchbild nicht doppelt. Es ist eine Arbeits- und Gewohnheitsansicht, keine einzelne Meisterschaftsnote.
 
 ### Leistung
 
@@ -340,6 +340,10 @@ Bedienelemente sind per Tastatur erreichbar, Fokus bleibt sichtbar, reduzierte B
 
 Gehe zum nächsten Ort. In Wiederholung oder Verlauf kann ein markierter Ersatz anhand der Koordinaten angeboten werden.
 
+### Street-View-Bedienelemente vor einem schwarzen Bild
+
+Wenn Kompass, Pfeile oder Google-Schriftzug erscheinen, die Panoramaaufnahme aber vollständig schwarz bleibt, teste Street View in Google Maps im selben Browser. Ist sie dort ebenfalls schwarz, öffne GeoTrainer in einem privaten Fenster ohne Erweiterungen, schalte die Grafikbeschleunigung des Browsers um und starte ihn neu. Aktualisiere bei Bedarf Browser und Grafiktreiber. Funktioniert Google Maps, aber GeoTrainer bleibt schwarz, lade GeoTrainer einmal neu und nenne bei der Problemmeldung Browser, Gerät und aktivierte Erweiterungen.
+
 ### Ortssuche dauert lange
 
 Sehr kleine Sammlungen, strenge Umgebungsfilter und Beweglichkeitsprüfung reduzieren gültige Kandidaten. Wähle eine breitere Sammlung oder Gemischt.
@@ -363,6 +367,10 @@ Prüfe das verbundene Konto, warte auf Synchronisierung und lade einmal neu. Ein
 ### Google-Anmeldung schlägt fehl
 
 Kehre zurück und versuche es erneut. Fehler zu Anbieter oder Weiterleitungsadresse müssen in der bereitgestellten Anmeldung korrigiert werden; nutze solange E-Mail, wenn verfügbar.
+
+## Vorschläge und Fehlermeldungen
+
+Sende Vorschläge oder Fehlermeldungen per E-Mail an [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Gib bei Fehlern möglichst Browser, Gerät, den letzten Arbeitsschritt und einen Screenshot an.
 
 ## Häufige Fragen
 

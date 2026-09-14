@@ -65,7 +65,7 @@ Los países, ciudades y entornos orientan la generación y no representan una co
 
 Los lugares guardados en Estudio son fuentes sin calificar: cuentan como actividad de Estudio y tarjetas nuevas, no como intentos «Sin respuesta» ni puntuaciones cero. Recargar reanuda la visita actual sin crear otra fila.
 
-Consulta lugares, intentos, tiempo activo, cola pendiente, rendimiento e historial. Pistas conocidas suma entradas personales, de IA y Meta sin duplicar la imagen de una nota. Las sesiones sin visitas ni intentos se ocultan. Las rondas con IA se incluyen por defecto y pueden excluirse. El resumen distingue promedio anterior y de hoy; el calendario colorea la actividad. Lugares del mismo país a menos de 50 metros comparten tarjeta.
+Consulta lugares, intentos, cola pendiente, rendimiento, historial y tiempo activo en primer plano durante Estudio, Juego activo y Repaso activo, incluido moverte por panoramas y usar ayudas de aprendizaje. El tiempo se guarda al cambiar de sección o volver a Inicio; las sesiones sin visitas ni intentos se ocultan. En una pantalla táctil, mantén pulsada una barra de **Próximos pendientes** para ver la fecha y la cantidad. Pistas conocidas suma entradas personales, de IA y Meta sin duplicar la imagen de una nota. Las rondas con IA se incluyen por defecto y pueden excluirse. El resumen distingue promedio anterior y de hoy; el calendario colorea la actividad. Lugares del mismo país a menos de 50 metros comparten tarjeta.
 
 ## Sincronización en la nube
 
@@ -74,9 +74,14 @@ La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al 
 ## Solución de problemas
 
 1. Panorama vacío — pasa al siguiente; la cobertura de Street View puede cambiar.
-2. Repaso vacío — juega o guarda un lugar de Estudio y espera a que venza.
-3. IA no disponible — continúa entrenando y prueba más tarde.
-4. Progreso antiguo — verifica la cuenta y espera a que termine la sincronización.
+2. Controles sobre una pantalla negra — prueba Street View en Google Maps en el mismo navegador. Si también aparece negro, abre GeoTrainer en una ventana privada sin extensiones, cambia la aceleración gráfica del navegador y reinícialo. Actualiza el navegador y el controlador gráfico si hace falta. Si solo falla GeoTrainer, recárgalo una vez e indica el navegador, el dispositivo y las extensiones activas al informar del problema.
+3. Repaso vacío — juega o guarda un lugar de Estudio y espera a que venza.
+4. IA no disponible — continúa entrenando y prueba más tarde.
+5. Progreso antiguo — verifica la cuenta y espera a que termine la sincronización.
+
+## Sugerencias e informes de errores
+
+Envía sugerencias o informes de errores a [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Para un error, incluye el navegador, el dispositivo, lo que estabas haciendo y una captura de pantalla cuando sea posible.
 
 ## Preguntas frecuentes
 

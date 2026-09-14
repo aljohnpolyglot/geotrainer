@@ -59,6 +59,7 @@ import { useReviewMode } from './hooks/useReviewMode';
 import { usePlayMode } from './hooks/usePlayMode';
 import { useStudyMode } from './hooks/useStudyMode';
 import { useLearnSources } from './hooks/useLearnSources';
+import { useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioPreferences } from './services/audio';
 
@@ -209,7 +210,7 @@ export default function App() {
     selectedCollectionId, setSelectedCollectionId, customCollections, setCustomCollections, bookmarks, setBookmarks,
     setTrainerRefreshKey, activeCollectionRef, studyEnvironment, setStudyEnvironment, studyUrbanLevel, setStudyUrbanLevel, studySampling, setStudySampling, studyPanoramaSource, setStudyPanoramaSource, studyEnvironmentRef, studyUrbanLevelRef, studySamplingRef, studyPanoramaSourceRef, currentLocationRef,
     generationPendingRef, abortControllerRef, latestGenerationRequestRef, latestPanoramaSyncRef, recentStudyPanosRef,
-    isMapsReadyRef, hasAutoFetchedRef, mapsReady, setMapsReady, currentVisitRef, activeStartedAtRef, sessionRef,
+    isMapsReadyRef, hasAutoFetchedRef, mapsReady, setMapsReady, currentVisitRef, activeStartedAtRef,
     setIsRevealed, setCoachNote, setEditingCollection, setIsModalOpen, temporaryCollection, setTemporaryCollection,
     compassPreference, setCompassPreference, reviewAttempt, reviewCompass, setReviewCompass, reviewQueue, reviewSource, reviewKind,
     reviewInitialTotal, setStudyReviewSaving, studyReviewSaving, setStudyReviewSaved,
@@ -220,6 +221,8 @@ export default function App() {
   const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
+  const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
+  useActiveSession(dbReady && !showHome && (appMode === 'study' ? !!currentLocation && !isLoading : appMode === 'play' ? isGameActive : appMode === 'review' ? !!reviewAttempt : false), sessionRef, refreshTrainer);
   useEffect(() => { const panoId = currentLocation?.panoId; let active = true; if (!dbReady || !panoId) { setStudyReviewSaved(false); return; } void trainerDb.attempts().then((attempts) => { if (active) setStudyReviewSaved(hasStudyReviewSource(attempts, panoId)); }); return () => { active = false; }; }, [currentLocation?.panoId, dbReady, trainerRefreshKey]);
   const handleNextLearn = useCallback(() => { if (learnSource === 'meta') nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen]);
   const requestMode = (mode: 'study' | 'play') => {

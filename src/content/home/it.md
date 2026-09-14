@@ -65,7 +65,7 @@ Paesi, città e ambienti guidano la generazione senza garantire copertura comple
 
 I luoghi salvati in Studio sono fonti non valutate: contano come attività di Studio e nuove schede, non come tentativi «Nessuna risposta» o punteggi zero. Il ricaricamento riprende la visita corrente senza aggiungere un’altra riga.
 
-Consulta luoghi, tentativi, tempo attivo, coda, prestazioni e cronologia. Indizi conosciuti somma voci personali, IA e Meta senza contare due volte l’immagine di una nota. Le sessioni senza visite né tentativi sono nascoste. Le partite assistite dall’IA sono incluse per impostazione predefinita e possono essere escluse. Il riepilogo separa media precedente e odierna. Luoghi nello stesso paese entro 50 metri condividono una scheda.
+Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in primo piano durante Studio, Gioco attivo e Ripasso attivo, inclusi gli spostamenti nei panorami e l’uso degli aiuti didattici. Il tempo viene salvato cambiando sezione o tornando alla pagina iniziale; le sessioni senza visite né tentativi sono nascoste. Su uno schermo tattile, tieni premuta una barra di **Prossime scadenze** per vedere data e quantità. Indizi conosciuti somma voci personali, IA e Meta senza contare due volte l’immagine di una nota. Le partite assistite dall’IA sono incluse per impostazione predefinita e possono essere escluse. Il riepilogo separa media precedente e odierna. Luoghi nello stesso paese entro 50 metri condividono una scheda.
 
 ## Sincronizzazione cloud
 
@@ -74,9 +74,14 @@ L’account è facoltativo e l’allenamento locale funziona senza accesso. Se c
 ## Risoluzione dei problemi
 
 1. Panorama vuoto — passa oltre; la copertura Street View può cambiare.
-2. Ripasso vuoto — gioca o salva un luogo da Studio e attendi la scadenza.
-3. IA non disponibile — continua e riprova più tardi.
-4. Progressi vecchi — verifica l’account e attendi la sincronizzazione.
+2. Controlli su uno schermo nero — prova Street View in Google Maps nello stesso browser. Se anche lì l’immagine è nera, apri GeoTrainer in una finestra privata senza estensioni, cambia l’impostazione dell’accelerazione grafica del browser e riavvialo. Aggiorna il browser e il driver grafico se necessario. Se il problema riguarda solo GeoTrainer, ricaricalo una volta e indica browser, dispositivo ed estensioni attive nella segnalazione.
+3. Ripasso vuoto — gioca o salva un luogo da Studio e attendi la scadenza.
+4. IA non disponibile — continua e riprova più tardi.
+5. Progressi vecchi — verifica l’account e attendi la sincronizzazione.
+
+## Suggerimenti e segnalazioni di bug
+
+Invia suggerimenti o segnalazioni di bug a [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Per un bug, indica browser, dispositivo, cosa stavi facendo e allega una schermata quando possibile.
 
 ## Domande frequenti
 

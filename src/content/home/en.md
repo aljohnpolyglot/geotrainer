@@ -302,7 +302,7 @@ Learn saves are ungraded sources, so they appear as Study activity and new Revie
 
 ### Progress
 
-Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and active study time. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. Session lists and active time omit reload records that contain no Study visit, Play attempt, or Review attempt. It is a workload and habit view, not a single mastery score.
+Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and foreground training time across Study, active Play, and active Review—including time spent moving through panoramas and using learning aids. Active time is saved when you switch sections or return Home; sessions with no Study visit, Play attempt, or Review attempt remain excluded. On a touch screen, press and hold a **Future due** bar to see its date and number of reviews. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. It is a workload and habit view, not a single mastery score.
 
 ### Performance
 
@@ -392,6 +392,10 @@ GeoTrainer supports keyboard-accessible controls, visible focus, reduced motion,
 
 Street View coverage can change. Move to the next location. In Review or History, a coordinate fallback may be offered when the original panorama no longer opens.
 
+### Street View controls appear over a black screen
+
+If the compass, arrows, or Google label appear but the panorama stays completely black, test Street View in Google Maps in the same browser. If it is black there too, open GeoTrainer in a private window with extensions disabled, toggle the browser's graphics acceleration setting, and relaunch it. Update the browser and graphics driver if needed. If Google Maps works but GeoTrainer stays black, reload GeoTrainer once and include your browser, device, and enabled extensions when reporting the problem.
+
 ### Location search takes a long time
 
 Narrow collections, strict environment filters, and movable-game connectivity checks reduce the number of valid candidates. Broaden the collection or environment and try again.
@@ -419,6 +423,10 @@ Return to GeoTrainer and try again. A provider-disabled or redirect-mismatch err
 ### Layout or scrolling is stuck
 
 Close the open panel with its close control or Escape, then reopen it. On a phone, keep the browser in portrait or landscape according to which gives the panorama and map enough space.
+
+## Suggestions and bug reports
+
+Email [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com) with suggestions or bug reports. For bugs, include your browser, device, what you were doing, and a screenshot when possible.
 
 ## Frequently asked questions
 

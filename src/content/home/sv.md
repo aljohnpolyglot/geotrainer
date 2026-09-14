@@ -65,7 +65,7 @@ Länder, städer och miljöer styr genereringen utan att lova fullständig täck
 
 Sparade Studieplatser är obedömda källor: de räknas som Studieaktivitet och nya kort, inte som ”Ingen gissning”-försök eller nollpoäng. En omladdning återupptar det aktuella besöket utan att lägga till en ny rad.
 
-Se platser, försök, aktiv tid, kö, resultat och historik. Kända ledtrådar summerar personliga, AI- och Meta-poster utan att räkna en anteckningsbild två gånger. Sessioner utan besök eller försök döljs. AI-assisterade spel ingår som standard men kan uteslutas. Sammanfattningen skiljer tidigare och dagens snitt. Platser i samma land inom 50 meter delar ett kort.
+Se platser, försök, kö, resultat, historik och aktiv tid i förgrunden under Studera, aktivt Spel och aktiv Repetition, inklusive tid när du rör dig i panoramat eller använder lärhjälpmedel. Tiden sparas när du byter avsnitt eller återgår till startsidan; sessioner utan besök eller försök döljs. Håll ned en stapel under **Kommande förfallna** på en pekskärm för att se datum och antal. Kända ledtrådar summerar personliga, AI- och Meta-poster utan att räkna en anteckningsbild två gånger. AI-assisterade spel ingår som standard men kan uteslutas. Sammanfattningen skiljer tidigare och dagens snitt. Platser i samma land inom 50 meter delar ett kort.
 
 ## Molnsynkronisering
 
@@ -74,9 +74,14 @@ Konto är valfritt och lokal träning fungerar utan inloggning. När du är inlo
 ## Felsökning
 
 1. Tomt panorama — gå vidare; Street View-täckning kan ändras.
-2. Tom repetitionskö — spela eller spara en studieplats och vänta tills den förfaller.
-3. AI saknas — fortsätt träna och försök senare.
-4. Gamla framsteg — kontrollera kontot och låt synkroniseringen bli klar.
+2. Kontroller ovanpå en svart skärm — testa Street View i Google Maps i samma webbläsare. Om bilden är svart även där öppnar du GeoTrainer i ett privat fönster utan tillägg, ändrar webbläsarens inställning för grafikacceleration och startar om den. Uppdatera webbläsaren och grafikdrivrutinen vid behov. Om bara GeoTrainer påverkas laddar du om sidan en gång och anger webbläsare, enhet och aktiva tillägg när du rapporterar problemet.
+3. Tom repetitionskö — spela eller spara en studieplats och vänta tills den förfaller.
+4. AI saknas — fortsätt träna och försök senare.
+5. Gamla framsteg — kontrollera kontot och låt synkroniseringen bli klar.
+
+## Förslag och felrapporter
+
+Skicka förslag eller felrapporter till [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Vid fel bör du ange webbläsare, enhet, vad du gjorde och bifoga en skärmbild när det är möjligt.
 
 ## Vanliga frågor
 

@@ -65,7 +65,7 @@ Pays, villes et environnements orientent la génération sans garantir une couve
 
 Les lieux enregistrés en Étude sont des sources non notées : ils comptent comme activité d’Étude et nouvelles cartes, jamais comme essais « Sans réponse » ou scores nuls. Un rechargement reprend la visite en cours sans ajouter de ligne.
 
-Consultez lieux, tentatives, temps actif, file, performances et historique. Indices connus totalise les entrées personnelles, IA et Méta sans compter deux fois l’image d’une note. Les sessions sans visite ni tentative sont masquées. Les parties assistées par IA sont incluses par défaut et peuvent être exclues. Le résumé sépare moyenne précédente et du jour. Deux lieux du même pays à moins de 50 mètres partagent une carte.
+Consultez lieux, tentatives, file, performances, historique et temps actif au premier plan pendant l’Étude, le Jeu actif et la Révision active, y compris les déplacements dans les panoramas et l’utilisation des aides. Le temps est enregistré lors d’un changement de section ou du retour à l’accueil ; les sessions sans visite ni tentative sont masquées. Sur écran tactile, maintenez une barre **Échéances à venir** pour afficher sa date et son nombre. Indices connus totalise les entrées personnelles, IA et Méta sans compter deux fois l’image d’une note. Les parties assistées par IA sont incluses par défaut et peuvent être exclues. Le résumé sépare moyenne précédente et du jour. Deux lieux du même pays à moins de 50 mètres partagent une carte.
 
 ## Synchronisation cloud
 
@@ -74,9 +74,14 @@ Le compte est facultatif et l’entraînement local fonctionne sans connexion. U
 ## Dépannage
 
 1. Panorama vide — passez au suivant ; la couverture Street View peut changer.
-2. Révision vide — jouez ou enregistrez un lieu d’Étude, puis attendez son échéance.
-3. IA indisponible — continuez normalement et réessayez plus tard.
-4. Progression ancienne — vérifiez le compte et attendez la fin de la synchronisation.
+2. Commandes sur un écran noir — testez Street View dans Google Maps avec le même navigateur. Si l’image y est également noire, ouvrez GeoTrainer dans une fenêtre privée sans extensions, changez le réglage d’accélération graphique du navigateur, puis relancez-le. Mettez à jour le navigateur et le pilote graphique si nécessaire. Si seul GeoTrainer échoue, rechargez-le une fois et indiquez le navigateur, l’appareil et les extensions actives dans votre signalement.
+3. Révision vide — jouez ou enregistrez un lieu d’Étude, puis attendez son échéance.
+4. IA indisponible — continuez normalement et réessayez plus tard.
+5. Progression ancienne — vérifiez le compte et attendez la fin de la synchronisation.
+
+## Suggestions et signalements de bugs
+
+Envoyez vos suggestions ou signalements de bugs à [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Pour un bug, précisez le navigateur, l’appareil, l’action en cours et joignez une capture d’écran si possible.
 
 ## Questions fréquentes
 

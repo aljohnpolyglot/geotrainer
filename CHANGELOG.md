@@ -5,6 +5,10 @@
 - Let daily new-card and review limits be cleared and replaced without forcing a leading zero.
 - Moved the Learn and Review compass switch into the shared panorama learning toolbar, with mobile-sized touch targets.
 - Kept mobile Statistics section tabs and wide tables horizontally swipeable without handing the gesture to browser navigation.
+- Added localized troubleshooting for black Street View imagery, including browser, extension, graphics-acceleration, and driver checks.
+- Added a localized contact section for suggestions and bug reports.
+- Counted foreground Play and Review activity in active minutes, refreshed persisted homepage totals after navigation, and prevented stale reads from replacing newer totals.
+- Added touch-and-hold values to the Future due review chart on mobile.
 
 ## 2026-09-13
 

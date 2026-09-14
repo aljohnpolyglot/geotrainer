@@ -65,7 +65,7 @@ Países, cidades e ambientes orientam a geração, sem prometer cobertura comple
 
 Locais salvos no Estudo são fontes sem nota: contam como atividade de Estudo e cartões novos, não como tentativas «Sem palpite» ou pontuações zero. Recarregar retoma a visita atual sem criar outra linha.
 
-Veja lugares, tentativas, tempo ativo, fila, desempenho e histórico. Pistas conhecidas soma entradas pessoais, de IA e Meta sem duplicar a imagem de uma nota. Sessões sem visitas nem tentativas ficam ocultas. Rodadas com IA entram por padrão e podem ser excluídas. O resumo separa média anterior e de hoje; o calendário colore a atividade. Locais do mesmo país a até 50 metros compartilham um cartão.
+Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primeiro plano durante Estudo, Jogo ativo e Revisão ativa, incluindo movimento pelos panoramas e uso de recursos de aprendizagem. O tempo é salvo ao trocar de seção ou voltar ao Início; sessões sem visitas nem tentativas ficam ocultas. Em uma tela sensível ao toque, mantenha pressionada uma barra de **Próximos pendentes** para ver a data e a quantidade. Pistas conhecidas soma entradas pessoais, de IA e Meta sem duplicar a imagem de uma nota. Rodadas com IA entram por padrão e podem ser excluídas. O resumo separa média anterior e de hoje; o calendário colore a atividade. Locais do mesmo país a até 50 metros compartilham um cartão.
 
 ## Sincronização na nuvem
 
@@ -74,9 +74,14 @@ A conta é opcional e o treino local funciona sem login. Quando conectada, a sin
 ## Solução de problemas
 
 1. Panorama vazio — avance; a cobertura do Street View pode mudar.
-2. Revisão vazia — jogue ou salve um local do Estudo e espere vencer.
-3. IA indisponível — continue treinando e tente mais tarde.
-4. Progresso antigo — confira a conta e aguarde a sincronização.
+2. Controles sobre uma tela preta — teste o Street View no Google Maps com o mesmo navegador. Se a imagem também ficar preta, abra o GeoTrainer em uma janela privada sem extensões, altere a aceleração gráfica do navegador e reinicie-o. Atualize o navegador e o driver gráfico se necessário. Se apenas o GeoTrainer falhar, recarregue-o uma vez e informe o navegador, o dispositivo e as extensões ativas ao relatar o problema.
+3. Revisão vazia — jogue ou salve um local do Estudo e espere vencer.
+4. IA indisponível — continue treinando e tente mais tarde.
+5. Progresso antigo — confira a conta e aguarde a sincronização.
+
+## Sugestões e relatos de erros
+
+Envie sugestões ou relatos de erros para [mogatas.princealjohn.05082003@gmail.com](mailto:mogatas.princealjohn.05082003@gmail.com). Ao relatar um erro, inclua o navegador, o dispositivo, o que estava fazendo e uma captura de tela quando possível.
 
 ## Perguntas frequentes
 
