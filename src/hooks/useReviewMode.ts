@@ -5,6 +5,13 @@ import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
 
+type ReviewStat = { previous: number; current: number; grade: ReviewGrade };
+type SavedReviewSession = { attemptIds: string[]; source: string; kind?: ReviewSessionKind; initialTotal: number; compass?: boolean; stats?: ReviewStat[] };
+export const restoredReviewProgress = (saved: Pick<SavedReviewSession, 'initialTotal' | 'stats'>, remaining: number) => {
+  const stats = Array.isArray(saved.stats) ? saved.stats : [];
+  return { stats, initialTotal: Math.max(saved.initialTotal || 0, stats.length + remaining) };
+};
+
 export function useReviewMode(ctx: any) {
   const { dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
     setErrorMessage, compassPreference, setTrainerRefreshKey, roundStartTimeRef, setIsSubmittingGuess,
@@ -19,7 +26,7 @@ export function useReviewMode(ctx: any) {
   const [reviewIntervals, setReviewIntervals] = useState<Record<ReviewGrade, number>>({ again: 5 / 1440, hard: 1, good: 3, easy: 7 });
   const [reviewElapsed, setReviewElapsed] = useState(0);
   const [reviewInitialTotal, setReviewInitialTotal] = useState(1);
-  const [reviewStats, setReviewStats] = useState<Array<{ previous: number; current: number; grade: ReviewGrade }>>([]);
+  const [reviewStats, setReviewStats] = useState<ReviewStat[]>([]);
   const [reviewComplete, setReviewComplete] = useState(false);
   const reviewGradingRef = useRef(false);
   const reviewRestoreAttemptedRef = useRef(false);
@@ -39,7 +46,7 @@ export function useReviewMode(ctx: any) {
     ctx.setShowHome(false); ctx.setAppMode('review');
     setReviewQueue(queue); setReviewOriginalQueue(queue); setReviewInitialTotal(queue.length); setReviewStats([]); setReviewComplete(false); setReviewSource(source); setReviewKind(kind);
     ctx.setReviewCompass(compass);
-    await trainerDb.setSetting('review.active', { attemptIds: queue.map((item) => item.id), source, kind, initialTotal: queue.length, compass });
+    await trainerDb.setSetting('review.active', { attemptIds: queue.map((item) => item.id), source, kind, initialTotal: queue.length, compass, stats: [] } satisfies SavedReviewSession);
     await openReviewAttempt(attempt);
   }, [compassPreference, ctx, openReviewAttempt]);
 
@@ -47,12 +54,13 @@ export function useReviewMode(ctx: any) {
     if (!dbReady || !mapsReady || reviewRestoreAttemptedRef.current || reviewAttempt) return;
     reviewRestoreAttemptedRef.current = true;
     void (async () => {
-      const saved = await trainerDb.setting<{ attemptIds: string[]; source: string; kind?: ReviewSessionKind; initialTotal: number; compass?: boolean } | null>('review.active');
+      const saved = await trainerDb.setting<SavedReviewSession | null>('review.active');
       if (!saved?.attemptIds.length) return;
       const attempts = await trainerDb.attempts(); const byId = new Map(attempts.map((item) => [item.id, item]));
       const queue = saved.attemptIds.map((id) => byId.get(id)).filter((item): item is Attempt => !!item); if (!queue.length) return;
       const kind = saved.kind ?? (saved.source === 'Game mistakes' ? 'correction' : saved.source.includes('Due Today') ? 'due' : 'practice');
-      setReviewQueue(queue); setReviewOriginalQueue(queue); setReviewInitialTotal(saved.initialTotal); setReviewSource(saved.source); setReviewKind(kind); ctx.setReviewCompass(saved.compass ?? queue[0].showCompass ?? compassPreference); setReviewStats([]); await openReviewAttempt(queue[0]);
+      const progress = restoredReviewProgress(saved, queue.length);
+      setReviewQueue(queue); setReviewOriginalQueue(queue); setReviewInitialTotal(progress.initialTotal); setReviewSource(saved.source); setReviewKind(kind); ctx.setReviewCompass(saved.compass ?? queue[0].showCompass ?? compassPreference); setReviewStats(progress.stats); await openReviewAttempt(queue[0]);
     })();
   }, [compassPreference, dbReady, mapsReady, openReviewAttempt, reviewAttempt, ctx]);
 
@@ -82,7 +90,7 @@ export function useReviewMode(ctx: any) {
       await trainerDb.saveAttempt({ ...reviewAttemptRecord, grade, reviewedAt: Date.now(), previousDueAt: previous?.dueAt, nextDueAt: schedule?.dueAt, intervalDays: schedule?.intervalDays });
       const stats = [...reviewStats, { previous: reviewAttempt.score, current: reviewResult.score, grade }]; setReviewStats(stats);
       const remaining = reviewQueue.slice(1); if (grade === 'again') remaining.push(reviewAttempt); setReviewQueue(remaining); setTrainerRefreshKey((key: number) => key + 1);
-      if (!remaining.length) { setReviewAttempt(null); setReviewResult(null); setCurrentLocation(null); setReviewComplete(true); await trainerDb.setSetting('review.active', null); } else { await trainerDb.setSetting('review.active', { attemptIds: remaining.map((item) => item.id), source: reviewSource, kind: reviewKind, initialTotal: reviewInitialTotal, compass: ctx.reviewCompass }); await openReviewAttempt(remaining[0]); }
+      if (!remaining.length) { setReviewAttempt(null); setReviewResult(null); setCurrentLocation(null); setReviewComplete(true); await trainerDb.setSetting('review.active', null); } else { await trainerDb.setSetting('review.active', { attemptIds: remaining.map((item) => item.id), source: reviewSource, kind: reviewKind, initialTotal: reviewInitialTotal, compass: ctx.reviewCompass, stats } satisfies SavedReviewSession); await openReviewAttempt(remaining[0]); }
     } finally { reviewGradingRef.current = false; }
   }, [ctx.reviewCompass, currentLocation, openReviewAttempt, reviewAttempt, reviewAttemptRecord, reviewInitialTotal, reviewKind, reviewQueue, reviewResult, reviewSource, reviewStats, setCurrentLocation, setReviewAttempt, setTrainerRefreshKey]);
 

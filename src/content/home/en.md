@@ -160,7 +160,7 @@ Review presents scheduled locations when they are due. It is a real recall test,
 
 ### Before the guess
 
-The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. All learning tools remain available, and anything you deliberately open—including saved note text, Meta explanations, Coach candidates, and probabilities—is shown in full.
+The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. All learning tools remain available, and anything you deliberately open—including saved note text, Meta explanations, Coach candidates, and probabilities—is shown in full. The Review header shows your current card, remaining cards, and when session progress is saved; reloading restores the completed-card count instead of restarting the display at card one.
 
 ### After the guess
 
@@ -304,7 +304,7 @@ Learn saves are ungraded sources, so they appear as Study activity and new Revie
 
 ### Progress
 
-Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and foreground training time across Study, active Play, and active Review—including time spent moving through panoramas and using learning aids. Active time is saved when you switch sections or return Home; sessions with no Study visit, Play attempt, or Review attempt remain excluded. On a touch screen, press and hold a **Future due** bar to see its date and number of reviews. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. It is a workload and habit view, not a single mastery score.
+Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and foreground training time across Study, active Play, and active Review—including time spent moving through panoramas and using learning aids. Active time is saved when you switch sections or return Home; sessions with no Study visit, Play attempt, or Review attempt remain excluded. On a touch screen, tap a **Future due** bar to see its date and number of reviews. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. It is a workload and habit view, not a single mastery score.
 
 ### Performance
 

@@ -2,6 +2,7 @@
 
 ## 2026-09-15
 
+- Preserved the completed-card count when a Review session resumes after reload and clarified the live header with “of”, remaining-card, and saved-progress labels on every viewport.
 - Added six independent AI Coach styles—Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach, and Pro Analyst—plus separate Short, Normal, and Deep explanation depth.
 - Added a localized in-app style guide, a default per-analysis style picker, and a persisted preferred-style option without Adaptive or automatic switching.
 - Strengthened Coach prompts against fabricated identities and causal stories, required candidate-specific evidence and confuser comparisons, and labeled likelihoods as AI estimates.
