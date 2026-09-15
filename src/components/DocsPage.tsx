@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, MapPinned, Search } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { parseHomeMarkdown, parseInlineMarkdown } from '../services/homeMarkdown';
+import { arrangeGuideSections, parseHomeMarkdown, parseInlineMarkdown } from '../services/homeMarkdown';
 import type { GuideBlock } from '../services/homeMarkdown';
 import { translate } from '../services/language';
 import type { SupportedLanguage } from '../types';
@@ -21,12 +21,14 @@ const placements: Record<SupportedLanguage, Array<[string, string]>> = {
   en: [['Learn, Meta, and Notebook', 'Study mode']], de: [['Lernen, Meta und Notizbuch', 'Lernmodus'], ['KI-Coach-Stile und Erklärungstiefe', 'KI-Coach']],
   es: [['Aprender, Meta y Cuaderno', 'Modo Estudio'], ['Estilos y profundidad del Coach de IA', 'Entrenador de IA y pistas']], pt: [['Aprender, Meta e Caderno', 'Modo Estudo'], ['Estilos e profundidade do Coach de IA', 'Coach de IA e pistas']],
   fr: [['Apprendre, Méta et Carnet', 'Mode Étude'], ['Styles et profondeur du Coach IA', 'Coach IA et indices']], it: [['Impara, Meta e Taccuino', 'Modalità Studio'], ['Stili e profondità del Coach IA', 'Coach IA e indizi']],
-  ru: [['Обучение, мета и блокнот', 'Режим изучения'], ['Стили и глубина ИИ-тренера', 'ИИ-тренер и подсказки']], sv: [['Lär, Meta och Anteckningsbok', 'Studieläge'], ['AI-coachstilar och förklaringsdjup', 'AI-coach och ledtrådar']],
+  ru: [['Обучение, мета и блокнот', 'Режим изучения'], ['Стили и глубина ИИ-тренера', 'ИИ-тренер и подсказки']], sv: [['Lär, Meta och Anteckningsbok', 'Lär'], ['AI-coachstilar och förklaringsdjup', 'AI-coach och ledtrådar']],
 };
-const arrangeSections = <T extends { title: string }>(sections: T[], language: SupportedLanguage) => placements[language].reduce((ordered, [title, after]) => {
-  const from = ordered.findIndex((section) => section.title === title); if (from < 0) return ordered;
-  const [section] = ordered.splice(from, 1); const target = ordered.findIndex((item) => item.title === after); ordered.splice(target < 0 ? ordered.length : target + 1, 0, section); return ordered;
-}, [...sections]);
+const endings: Record<SupportedLanguage, string[]> = {
+  en: ['Learning resources', 'Frequently asked questions', 'Suggestions and bug reports'], de: ['Lernressourcen', 'Häufige Fragen', 'Vorschläge und Fehlermeldungen'],
+  es: ['Recursos de aprendizaje', 'Preguntas frecuentes', 'Sugerencias e informes de errores'], pt: ['Recursos de aprendizagem', 'Perguntas frequentes', 'Sugestões e relatos de erros'],
+  fr: ['Ressources d’apprentissage', 'Questions fréquentes', 'Suggestions et signalements de bugs'], it: ['Risorse di apprendimento', 'Domande frequenti', 'Suggerimenti e segnalazioni di bug'],
+  ru: ['Учебные материалы', 'Частые вопросы', 'Предложения и сообщения об ошибках'], sv: ['Lärresurser', 'Vanliga frågor', 'Förslag och felrapporter'],
+};
 const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.strong ? <strong key={index}>{part.text}</strong> : part.text)}</>;
 const Blocks = ({ blocks }: { blocks: GuideBlock[] }) => <>{blocks.map((block, index) => block.type === 'paragraph'
   ? <p key={index}><InlineText text={block.text} /></p>
@@ -43,20 +45,20 @@ export function DocsPage() {
   const t = (key: string) => translate(ui, key);
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(ui);
-  const orderedSections = arrangeSections(guide.sections, ui);
+  const orderedSections = arrangeGuideSections(guide.sections, placements[ui], endings[ui]);
   const visibleSections = normalizedQuery ? orderedSections.filter((section) => [section.title, ...section.subsections.map((item) => item.title)].some((value) => value.toLocaleLowerCase(ui).includes(normalizedQuery))) : orderedSections;
   useEffect(() => { document.documentElement.lang = ui; }, [ui]);
   return <main className="docs-page">
     <aside>
       <a className="docs-home" href={import.meta.env.BASE_URL}><MapPinned size={20} /><strong>GeoTrainer</strong></a>
       <label className="docs-search"><Search size={15} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('Search guide')} aria-label={t('Search guide')} /></label>
-      <nav aria-label={t('Guide contents')}>{visibleSections.map((section) => <div className="docs-nav-group" key={section.id}><a href={`#${section.id}`}><b>{guide.sections.indexOf(section) + 1}.</b>{section.title}</a>{section.subsections.map((subsection) => <a className="docs-nav-sub" href={`#${subsection.id}`} key={subsection.id}>{subsection.title}</a>)}</div>)}</nav>
+      <nav aria-label={t('Guide contents')}>{visibleSections.map((section) => <div className="docs-nav-group" key={section.id}><a href={`#${section.id}`}><b>{orderedSections.indexOf(section) + 1}.</b>{section.title}</a>{section.subsections.map((subsection) => <a className="docs-nav-sub" href={`#${subsection.id}`} key={subsection.id}>{subsection.title}</a>)}</div>)}</nav>
       {!visibleSections.length && <p className="docs-no-results">{t('No matching chapters')}</p>}
     </aside>
     <article>
       <a className="docs-back" href={import.meta.env.BASE_URL}><ArrowLeft size={17} />GeoTrainer</a>
       <header><h1>{guide.title}</h1><Blocks blocks={guide.introduction} /></header>
-      {guide.sections.map((section) => <section id={section.id} key={section.id}><h2>{section.title}</h2><Blocks blocks={section.blocks} />{section.subsections.map((subsection) => <div className="docs-subsection" id={subsection.id} key={subsection.id}><h3>{subsection.title}</h3><Blocks blocks={subsection.blocks} /></div>)}</section>)}
+      {orderedSections.map((section) => <section id={section.id} key={section.id}><h2>{section.title}</h2><Blocks blocks={section.blocks} />{section.subsections.map((subsection) => <div className="docs-subsection" id={subsection.id} key={subsection.id}><h3>{subsection.title}</h3><Blocks blocks={subsection.blocks} /></div>)}</section>)}
     </article>
   </main>;
 }

@@ -1,6 +1,6 @@
-# Lär dig en plats. Minns den. Behåll den.
+# Se en plats. Förstå den. Känn igen den nästa gång.
 
-GeoTrainer gör Street View-träning till varaktigt geografiskt minne. Upptäck platser, testa dig utan ledtrådar och återvänd till svaga områden när repetitionen gör mest nytta.
+GeoTrainer förvandlar dina Street View-möten och misstag till geografisk kunskap som sitter kvar. Utforska nya platser, gissa utan ledtrådar och repetera automatiskt det du har svårt för — precis när det är mest värdefullt att se det igen.
 
 ## Snabbstart
 
@@ -12,7 +12,7 @@ En plats kan kännas bekant; att ange var den ligger visar vad du faktiskt kan h
 
 ## Använd eller glöm
 
-Geografiska ledtrådar bleknar när de bara ses en gång. GeoTrainer sparar varje försök och tar tillbaka svåra platser utan att allt repeteras lika ofta.
+Att känna igen är inte samma sak som att minnas. Ett portugisiskt landskap kan kännas bekant när du ser facit, men den verkliga frågan är om du kan identifiera Portugal utan hjälp en vecka senare. GeoTrainer testar aktiv återkallning och tar tillbaka platser som börjar blekna.
 
 ## Utspridd repetition
 
@@ -26,9 +26,9 @@ En svag gissning återkommer tidigare, ett säkert svar senare. Avstånd och po�
 
 ## Så kompletterar GeoTrainer GeoGuessr
 
-[GeoGuessr](https://www.geoguessr.com/) är utmärkt för utforskning, varierade kartor, soloutmaningar, flerspelarlägen och tävling. GeoTrainer fokuserar på tiden mellan spelen: möten och misstag blir en långsiktig plan med obetygsatta studier, försökshistorik, automatisk repetition, landsmixar för vanliga förväxlingar och sparade ledtrådar. Använd GeoGuessr för att utforska och tävla; använd GeoTrainer för att förstå misstag, träna förväxlingar och befästa kunskapen. Det är ett komplement, inte en ersättning.
+**GeoGuessr för spelet. GeoTrainer för minnet.** [GeoGuessr](https://www.geoguessr.com/) låter dig utforska, tävla och möta nya platser. GeoTrainer tar hand om det som händer mellan spelen: varje plats, misstag och sparad ledtråd kan bli del av en långsiktig träningsplan. Spela fler platser i GeoGuessr; förstå varför du missade dem och se dem igen tills kunskapen sitter i GeoTrainer.
 
-## Studieläge
+## Lär
 
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
 
@@ -56,6 +56,16 @@ Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som
 4. GeoTrainer sparar automatiskt bilden, beläggen och läranteckningen under **Ledtrådar**. Före en gissning i Repetition avslöjar analysen inte svaret.
 
 När beskärningen har ett tydligt huvudobjekt i förgrunden analyserar coachen det först och använder omgivningen som stödjande eller motsägande sammanhang. Oläsliga detaljer förblir uttryckligen osäkra.
+
+### Använd ett externt AI-svar i Anteckningsboken
+
+1. Ta eller kopiera en bild av ledtråden.
+2. Öppna Gemini eller en annan extern Google AI-tjänst och bifoga eller klistra in bilden.
+3. Börja med: **”Du är en GeoGuessr-coach.”** Be den förklara synliga bevis, viktigaste förväxlingsländer och vilken ledtråd som skulle skilja dem åt.
+4. Kopiera svaret och klistra in det i textfältet i **Anteckningsboken**.
+5. Spara anteckningen för Repetition.
+
+Anteckningsboken bevarar inklistrade rubriker, fetstil och punktlistor. Externa svar verifieras inte automatiskt, så håll oläsliga detaljer osäkra och kontrollera varje påstående mot det som faktiskt syns.
 
 ## Samlingar och inställningar
 

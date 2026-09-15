@@ -57,6 +57,16 @@ Analisar reúne automaticamente várias direções e usa a vista atual como alte
 
 Quando o recorte tem um objeto principal claro em primeiro plano, o Coach o analisa primeiro e usa o entorno como contexto de apoio ou contradição. Detalhes ilegíveis permanecem explicitamente incertos.
 
+### Usar uma resposta de IA externa no Caderno
+
+1. Capture ou copie a imagem da pista.
+2. Abra o Gemini ou outra interface externa de IA do Google e anexe ou cole a imagem.
+3. Comece com: **“Você é um coach de GeoGuessr.”** Peça as evidências visíveis, os principais países que podem ser confundidos e a pista que os separaria.
+4. Copie a resposta e cole no campo de texto do **Caderno**.
+5. Salve a nota para Revisão.
+
+O Caderno preserva títulos, negrito e listas com marcadores ao colar. Respostas externas não são verificadas automaticamente; mantenha detalhes ilegíveis como incertos e confira cada afirmação com o que realmente aparece.
+
 ## Coleções e preferências
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.

@@ -57,6 +57,16 @@ Analyser rassemble automatiquement plusieurs directions et revient à la vue act
 
 Si le recadrage montre un sujet principal évident au premier plan, le Coach l’analyse d’abord et utilise l’environnement comme contexte favorable ou contradictoire. Les détails illisibles restent explicitement incertains.
 
+### Utiliser une réponse d’IA externe dans le Carnet
+
+1. Capturez ou copiez l’image de l’indice.
+2. Ouvrez Gemini ou une autre interface externe d’IA Google, puis joignez ou collez l’image.
+3. Commencez par : **« Tu es un coach GeoGuessr. »** Demandez les preuves visibles, les principaux pays similaires et l’indice qui permettrait de les départager.
+4. Copiez la réponse et collez-la dans le champ de texte du **Carnet**.
+5. Enregistrez la note pour Révision.
+
+Le Carnet conserve les titres, le gras et les listes à puces collés. Les réponses externes ne sont pas vérifiées automatiquement : laissez les détails illisibles incertains et confrontez chaque affirmation à ce qui est réellement visible.
+
 ## Collections et préférences
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.

@@ -57,6 +57,16 @@ Analizar reúne automáticamente varias direcciones y vuelve a la vista actual s
 
 Si el recorte tiene un objeto principal claro en primer plano, el entrenador lo analiza primero y usa el entorno como contexto de apoyo o contradicción. Los detalles ilegibles se mantienen explícitamente inciertos.
 
+### Usar una respuesta de IA externa en el Cuaderno
+
+1. Captura o copia la imagen de la pista.
+2. Abre Gemini u otra interfaz externa de IA de Google y adjunta o pega la imagen.
+3. Empieza con: **«Eres un entrenador de GeoGuessr.»** Pide que explique las pruebas visibles, los principales países que pueden confundirse y la pista que los distinguiría.
+4. Copia la respuesta y pégala en el campo de texto del **Cuaderno**.
+5. Guarda la nota para Repaso.
+
+El Cuaderno conserva títulos, negrita y listas con viñetas al pegar. Las respuestas externas no se verifican automáticamente: mantén incierto lo ilegible y contrasta cada afirmación con lo realmente visible.
+
 ## Colecciones y preferencias
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.

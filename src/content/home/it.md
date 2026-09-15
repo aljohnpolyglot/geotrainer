@@ -57,6 +57,16 @@ Analizza raccoglie automaticamente più direzioni e usa la vista corrente come a
 
 Se il ritaglio mostra un soggetto principale evidente in primo piano, il Coach analizza prima quello e usa l’ambiente come contesto di supporto o contraddizione. I dettagli illeggibili restano esplicitamente incerti.
 
+### Usare una risposta IA esterna nel Taccuino
+
+1. Cattura o copia l’immagine dell’indizio.
+2. Apri Gemini o un’altra interfaccia IA esterna di Google e allega o incolla l’immagine.
+3. Inizia con: **«Sei un coach di GeoGuessr.»** Chiedi di spiegare le prove visibili, i principali paesi confondibili e l’indizio che li distinguerebbe.
+4. Copia la risposta e incollala nel campo di testo del **Taccuino**.
+5. Salva la nota per il Ripasso.
+
+Il Taccuino conserva titoli, grassetto ed elenchi puntati incollati. Le risposte esterne non vengono verificate automaticamente: mantieni incerti i dettagli illeggibili e confronta ogni affermazione con ciò che è davvero visibile.
+
 ## Raccolte e preferenze
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.

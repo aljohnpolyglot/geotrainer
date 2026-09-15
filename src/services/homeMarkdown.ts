@@ -4,6 +4,14 @@ export type GuideSubsection = { id: string; title: string; blocks: GuideBlock[] 
 export type GuideSection = { id: string; title: string; blocks: GuideBlock[]; subsections: GuideSubsection[] };
 export type HomeGuide = { title: string; introduction: GuideBlock[]; sections: GuideSection[] };
 
+export function arrangeGuideSections<T extends { title: string }>(sections: T[], placements: Array<[string, string]>, endings: string[]): T[] {
+  const ordered = placements.reduce((items, [title, after]) => {
+    const from = items.findIndex((item) => item.title === title); if (from < 0) return items;
+    const [section] = items.splice(from, 1); const target = items.findIndex((item) => item.title === after); items.splice(target < 0 ? items.length : target + 1, 0, section); return items;
+  }, [...sections]);
+  return [...ordered.filter((item) => !endings.includes(item.title)), ...endings.flatMap((title) => ordered.filter((item) => item.title === title))];
+}
+
 const id = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export function parseInlineMarkdown(value: string): InlinePart[] {

@@ -239,6 +239,16 @@ Analyze samples the panorama around you and evaluates the visible evidence toget
 
 When the crop has one obvious foreground subject, Coach analyzes that object first and uses the surroundings as supporting or contradictory context. Unreadable details remain explicitly uncertain.
 
+### Use an external AI answer in Notebook
+
+1. Capture or copy the clue image.
+2. Open Gemini or another external Google AI surface and attach or paste the image.
+3. Start with: **“You are a GeoGuessr coach.”** Ask it to explain the visible evidence, main confusers, and the clue that would distinguish them.
+4. Copy the answer, open **Notebook**, and paste it into the note field.
+5. Save the note for Review.
+
+Notebook preserves pasted headings, bold emphasis, and bullet lists. External answers are not automatically verified, so keep unreadable details uncertain and check every claim against what is actually visible.
+
 ### Before and after reveal
 
 Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.

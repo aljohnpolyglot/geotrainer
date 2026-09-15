@@ -85,6 +85,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep this guide current autonomously when a change creates a durable contributor rule, data invariant, supported locale, or required QA step. Do not record temporary task status or implementation trivia here.
 - Keep user-facing documentation thorough and current whenever behavior changes, including new modes and learning aids such as Notebook, Meta, and Review hints. Update the relevant concepts, workflows, settings, limitations, edge cases, troubleshooting, and FAQ material rather than adding only a release-note summary.
 - Insert documentation into the existing topical workflow and navigation order; never append a new feature section at the end merely because it is new.
+- Keep learning/external resources, Frequently asked questions, and Contact/feedback as the final three Game Guide sections, in that order.
 - Keep detailed feature explanations in the standalone Game Guide. Settings may show concise descriptions and a clearly labeled Guide link, but must not duplicate long-form documentation inline.
 - Record every user-visible change in `CHANGELOG.md` under the local date of the work session (`YYYY-MM-DD`), not only under an undated Unreleased heading.
 - Supported UI/game/AI locales are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Do not add Tagalog, Bisaya, or Indonesian unless explicitly requested later.

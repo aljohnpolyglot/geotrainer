@@ -213,6 +213,16 @@ Die Analyse prüft automatisch mehrere Blickrichtungen und nutzt die aktuelle An
 
 Hat der Ausschnitt ein klares Vordergrundmotiv, untersucht der Coach dieses zuerst und nutzt die Umgebung als stützenden oder widersprechenden Kontext. Unlesbare Details bleiben ausdrücklich unsicher.
 
+### Eine externe KI-Antwort im Notizbuch verwenden
+
+1. Erfasse oder kopiere das Hinweisbild.
+2. Öffne Gemini oder eine andere externe Google-KI-Oberfläche und füge das Bild ein.
+3. Beginne mit: **„Du bist ein GeoGuessr-Coach.“** Bitte um sichtbare Belege, Hauptverwechslungen und den Hinweis, der sie unterscheiden würde.
+4. Kopiere die Antwort und füge sie in das Textfeld des **Notizbuchs** ein.
+5. Speichere die Notiz für die Wiederholung.
+
+Das Notizbuch bewahrt eingefügte Überschriften, Fettdruck und Aufzählungen. Externe Antworten werden nicht automatisch geprüft; halte Unlesbares unsicher und gleiche jede Aussage mit dem tatsächlich Sichtbaren ab.
+
 ### Schutz vor Lösungen
 
 Vor einem Tipp erhält der Coach keine Antwortmetadaten. Eine Regions-, Stadt- oder genaue Ortsschätzung erscheint nur bei mehreren starken sichtbaren Hinweisen. Nach Aufdecken oder Abgabe wird **Analysieren** zu **Erklären**; der Coach nutzt nur Hinweise zum richtigen Land und sagt offen, wenn das Bild allein nicht ausreichte.
