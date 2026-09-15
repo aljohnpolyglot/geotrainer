@@ -120,5 +120,14 @@ Una sesión de Estudio o Juego sin terminar se conserva. Al volver puedes elegir
 
 ## Estilos y profundidad del Coach de IA
 
-En **Ajustes → Coach de IA** puedes elegir ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach o Pro Analyst, además de una profundidad Corta, Normal o Profunda independiente. Los perfiles nuevos preguntan el estilo antes de cada análisis; elegir uno preferido desactiva esa pregunta. No existe modo Adaptive ni cambio automático. Quick Guess prioriza una respuesta breve; Meta clasifica fuerza, función, fiabilidad y confusores; Elimination descarta candidatos con lenguaje calibrado; Deep Geography explica solo causas respaldadas; Memory crea anclas y preguntas veraces; Pro Analyst pondera pruebas, contradicciones e información adicional. Todos parten de las mismas observaciones visibles, tratan los porcentajes como estimaciones de IA y no inventan siglas, empresas, cultivos, historia, geología o normas.
+En **Ajustes → Coach de IA** puedes elegir **Preguntar siempre antes del análisis** o un estilo preferido. La profundidad Corta, Normal o Profunda es independiente y cambia el detalle, no el método. No existe modo Adaptive ni cambio automático.
+
+- **⚡ Quick Guess:** países probables, probabilidad relativa, pistas visibles principales y confianza. Es rápido durante la partida, pero enseña menos.
+- **🎯 Meta Coach:** clasifica metas como postes, bolardos, líneas, placas, señales, coche de Google y cobertura por nivel S–D, función, fiabilidad y confusores. Es ideal para No Move, aunque algunas metas cambian.
+- **🚫 Elimination Coach:** muestra el grupo de candidatos, lo que juega en contra, lo que sigue plausible y la mejor pista separadora. Reduce el anclaje y evita llamar «imposible» a una regla con excepciones.
+- **🌍 Deep Geography:** sigue qué es → función → causa → respuesta humana → resultado visible → valor en GeoGuessr. Construye intuición causal, pero declara cuándo una imagen no respalda una explicación histórica, económica o geológica.
+- **🧠 Memory Coach:** crea anclas veraces, cadenas de causa y efecto, pares de contraste, contraindicios y preguntas de recuerdo. Favorece la retención sin convertir simplificaciones en absolutos.
+- **🏆 Pro Analyst:** pondera pruebas positivas y negativas, contradicciones, independencia, pistas débiles, incertidumbre e información adicional. Es preciso para casos cerrados, pero los porcentajes son estimaciones de IA.
+
+Todos parten de las mismas observaciones visibles y separan lo observado de la inferencia y la especulación. Cada candidato debe explicar la característica concreta, su alcance nacional o regional, el principal confusor, qué los separa y qué pista aumentaría más la confianza. No se inventan siglas, organizaciones, cultivos, historia, geología, industrias ni normas.
 Durante un Repaso activo, la cabecera indica la tarjeta actual, las tarjetas restantes y que el progreso está guardado. Al recargar, se conserva el número de tarjetas ya completadas.

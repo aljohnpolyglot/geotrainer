@@ -387,7 +387,7 @@ export default function App() {
   const canPan = appMode === 'review' && reviewAttempt ? reviewAttempt.canPan : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canPan : true;
   const canZoom = appMode === 'review' && reviewAttempt ? reviewAttempt.canZoom : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canZoom : true;
 
-  const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis }) => {
+  const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis; clueId?: string }) => {
     setCoachNote(note);
     const location = currentLocationRef.current;
     if (location) { await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }); setTrainerRefreshKey((key) => key + 1); }

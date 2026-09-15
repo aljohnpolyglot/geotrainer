@@ -120,5 +120,14 @@ Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi sceglie
 
 ## Stili e profondità del Coach IA
 
-In **Impostazioni → Coach IA** scegli ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach o Pro Analyst e, separatamente, profondità Breve, Normale o Profonda. I nuovi profili chiedono lo stile prima di ogni analisi; impostarne uno preferito elimina quel passaggio. Non esistono Adaptive o cambi automatici. Quick Guess è conciso; Meta insegna forza, ruolo, affidabilità e confusori; Elimination riduce i candidati; Deep Geography spiega solo cause supportate; Memory crea ancore veritiere; Pro Analyst pesa prove, contraddizioni e guadagno informativo. Tutti partono dalle stesse osservazioni visibili, trattano le percentuali come stime IA e non inventano sigle, aziende, colture, storia, geologia o regole.
+In **Impostazioni → Coach IA** scegli **Chiedi sempre prima dell’analisi** o uno stile preferito. La profondità Breve, Normale o Profonda è indipendente e cambia il dettaglio, non il metodo. Non esistono Adaptive o cambi automatici.
+
+- **⚡ Quick Guess:** paesi probabili, probabilità relativa, indizi visibili più forti e confidenza. Rapido durante il gioco, ma meno didattico.
+- **🎯 Meta Coach:** valuta pali, delineatori, linee, targhe, segnali, auto Google e copertura per livello S–D, ruolo, affidabilità e confusori. Ideale per No Move, anche se alcune meta cambiano.
+- **🚫 Elimination Coach:** mostra candidati, prove contrarie, opzioni plausibili e il miglior indizio discriminante. Riduce l’ancoraggio ed evita “impossibile” quando esistono eccezioni.
+- **🌍 Deep Geography:** segue cosa → funzione → causa → risposta umana → risultato visibile → valore GeoGuessr. Costruisce intuizione causale, ma segnala quando l’immagine non sostiene storia, economia o geologia.
+- **🧠 Memory Coach:** crea ancore vere, catene causa-effetto, contrasti, controindizi e domande di richiamo. Migliora la memoria senza trasformare semplificazioni in assoluti.
+- **🏆 Pro Analyst:** pesa prove positive e negative, contraddizioni, indipendenza, indizi deboli, incertezza e guadagno informativo. Utile nei casi ravvicinati; le percentuali restano stime IA.
+
+Tutti partono dalle stesse osservazioni e separano osservato, inferito e speculativo. Ogni candidato spiega la caratteristica concreta, il valore nazionale o regionale, il confusore principale, cosa li separa e l’indizio che aumenterebbe di più la confidenza. Sigle, organizzazioni, colture, storia, geologia, industrie e regole non vengono inventate.
 Durante un Ripasso attivo, l’intestazione mostra la scheda corrente, quelle rimanenti e che i progressi sono salvati. Dopo il ricaricamento resta corretto il numero delle schede già completate.

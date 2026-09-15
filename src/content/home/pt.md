@@ -120,5 +120,14 @@ Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Re
 
 ## Estilos e profundidade do Coach de IA
 
-Em **Configurações → Coach de IA**, escolha ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach ou Pro Analyst e, separadamente, profundidade Curta, Normal ou Profunda. Perfis novos perguntam o estilo antes de cada análise; definir um preferido remove essa etapa. Não há Adaptive nem troca automática. Quick Guess é conciso; Meta ensina força, função, confiabilidade e confusores; Elimination reduz candidatos; Deep Geography explica apenas causas sustentadas; Memory cria âncoras verdadeiras; Pro Analyst pondera evidências, contradições e ganho de informação. Todos usam as mesmas observações visíveis, tratam percentuais como estimativas de IA e não inventam siglas, empresas, cultivos, história, geologia ou regras.
+Em **Configurações → Coach de IA**, escolha **Sempre perguntar antes da análise** ou um estilo preferido. A profundidade Curta, Normal ou Profunda é independente e muda o detalhe, não o método. Não há Adaptive nem troca automática.
+
+- **⚡ Quick Guess:** países prováveis, probabilidade relativa, pistas visíveis principais e confiança. É rápido durante o jogo, mas ensina menos.
+- **🎯 Meta Coach:** classifica postes, balizadores, linhas, placas, sinais, carro do Google e cobertura por nível S–D, função, confiabilidade e confusores. É ideal para No Move, embora algumas metas mudem.
+- **🚫 Elimination Coach:** mostra candidatos, evidências contrárias, opções ainda plausíveis e a melhor pista para separá-las. Reduz ancoragem e evita “impossível” quando há exceções.
+- **🌍 Deep Geography:** segue o que é → função → causa → resposta humana → resultado visível → valor no GeoGuessr. Constrói intuição causal, mas declara quando a imagem não sustenta história, economia ou geologia.
+- **🧠 Memory Coach:** cria âncoras verdadeiras, causa e efeito, contrastes, contrapistas e perguntas de memória. Ajuda a retenção sem transformar simplificações em absolutos.
+- **🏆 Pro Analyst:** pondera evidências positivas e negativas, contradições, independência, pistas fracas, incerteza e ganho de informação. É ótimo em casos próximos, mas percentuais são estimativas de IA.
+
+Todos usam as mesmas observações e separam observado, inferido e especulativo. Cada candidato explica a característica concreta, se é nacional ou regional, o principal confusor, o que os separa e qual pista aumentaria mais a confiança. Siglas, organizações, cultivos, história, geologia, indústrias e regras não são inventados.
 Durante uma Revisão ativa, o cabeçalho mostra o cartão atual, os cartões restantes e que o progresso foi salvo. Recarregar preserva a contagem de cartões já concluídos.

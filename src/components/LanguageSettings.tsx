@@ -6,7 +6,7 @@ import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferen
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
 import { DEFAULT_AUDIO_PREFERENCES, normalizeAudioPreferences, setAudioPreferences, type AudioPreferences } from '../services/audio';
 import { reloadPage } from '../services/devDiagnostics';
-import { COACH_STYLES, COACH_STYLE_NAMES, DEFAULT_COACH_PREFERENCES, EXPLANATION_DEPTHS, coachGuide, normalizeCoachPreferences } from '../services/coachPreferences';
+import { COACH_STYLES, DEFAULT_COACH_PREFERENCES, EXPLANATION_DEPTHS, coachGuide, coachStyleLabel, normalizeCoachPreferences } from '../services/coachPreferences';
 import type { CoachPreferences } from '../types';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
@@ -81,10 +81,9 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
       </fieldset>}
       {tab === 'coach' && <fieldset className="coach-settings"><legend>{translate(languages.ui, 'AI Coach')}</legend><p>{guide.intro}</p>
-        <label>{translate(languages.ui, 'AI Coach Style')}<select value={coach.style} onChange={(event) => setCoach({ ...coach, style: event.target.value as CoachPreferences['style'], askEveryTime: false })}>{COACH_STYLES.map((style) => <option key={style} value={style}>{COACH_STYLE_NAMES[style]} — {guide.styles[style].purpose}</option>)}</select></label>
+        <label>{translate(languages.ui, 'AI Coach Style')}<select value={coach.askEveryTime ? 'ask' : coach.style} onChange={(event) => { const value = event.target.value; setCoach(value === 'ask' ? { ...coach, askEveryTime: true } : { ...coach, style: value as CoachPreferences['style'], askEveryTime: false }); }}><option value="ask">{translate(languages.ui, 'Always ask before analysis')}</option>{COACH_STYLES.map((style) => <option key={style} value={style}>{coachStyleLabel(style)}</option>)}</select></label><p className="coach-setting-summary">{coach.askEveryTime ? translate(languages.ui, 'Choose a Coach style for every analysis.') : guide.styles[coach.style].purpose}</p>
         <label>{translate(languages.ui, 'Explanation Depth')}<select value={coach.depth} onChange={(event) => setCoach({ ...coach, depth: event.target.value as CoachPreferences['depth'] })}>{EXPLANATION_DEPTHS.map((depth) => <option key={depth} value={depth}>{translate(languages.ui, depth[0].toUpperCase() + depth.slice(1))}</option>)}</select></label><p>{guide.depth}</p>
-        <label className="settings-checkbox"><input type="checkbox" checked={coach.askEveryTime} onChange={(event) => setCoach({ ...coach, askEveryTime: event.target.checked })} />{translate(languages.ui, 'Always ask before analysis')}</label>
-        <h3>{translate(languages.ui, 'What do these styles mean?')}</h3><div className="coach-style-guide">{COACH_STYLES.map((style) => { const copy = guide.styles[style]; return <details key={style} open={style === coach.style}><summary>{COACH_STYLE_NAMES[style]}</summary><dl><dt>{guide.labels.purpose}</dt><dd>{copy.purpose}</dd><dt>{guide.labels.strengths}</dt><dd>{copy.strengths}</dd><dt>{guide.labels.weaknesses}</dt><dd>{copy.weaknesses}</dd><dt>{guide.labels.best}</dt><dd>{copy.best}</dd><dt>{guide.labels.example}</dt><dd>{copy.example}</dd></dl></details>; })}</div>
+        <a className="button secondary coach-guide-link" href={`${import.meta.env.BASE_URL}docs/`} target="_blank" rel="noreferrer">{translate(languages.ui, 'Open Coach styles guide')}</a>
       </fieldset>}
       {tab === 'display' && <><fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
         <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>

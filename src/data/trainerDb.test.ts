@@ -56,6 +56,12 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.reviewQueue({ maxScore: 2000 })).length, 1);
   assert.equal((await trainerDb.reviewQueue({ minScore: 2000, maxScore: 4000 })).length, 1);
   assert.equal((await trainerDb.reviewQueue({ wrongCountry: true })).length, 1);
+  assert.equal((await trainerDb.reviewQueue({ recentDays: 1 })).length, 1);
+  assert.equal((await trainerDb.reviewQueue({ recentDays: 1, wrongCountry: true, maxScore: 2000 })).length, 1);
+  await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-low-correct', panoId: 'pano-low-correct', actualLat: 51, actualLng: 9, score: 3000, guessedCountryCode: 'DE' });
+  const anyMistake = await trainerDb.reviewQueue({ wrongCountry: true, minScore: 2000, maxScore: 4000 });
+  assert.equal(anyMistake.some((item) => item.panoId === 'pano-new'), true);
+  assert.equal(anyMistake.some((item) => item.panoId === 'pano-low-correct'), true);
   assert.equal((await trainerDb.reviewQueue({ due: true })).some((item) => item.panoId === 'pano-new'), false);
 
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'study-card:pano-study', panoId: 'pano-study', actualLat: 40, actualLng: 10, source: 'study', score: 0, guessedLat: null, guessedLng: null, guessedCountryCode: undefined });

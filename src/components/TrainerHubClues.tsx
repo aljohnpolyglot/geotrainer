@@ -8,13 +8,14 @@ import { countryName, pageBounds, savedClueCount, useHubTranslate } from './trai
 import { localizeMetaLesson, metaLessonById } from '../data/metaLessons';
 import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { coachStyleLabel } from '../services/coachPreferences';
 
 type ClueView = 'library' | 'countries' | 'insights';
 
 export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, onDelete, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onTrainCountries: (codes: string[], name: string) => void }) {
   const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null);
   const metaRows = useMemo(() => learnedMetas.map((learned) => { const lesson = metaLessonById(learned.id); return { learned, lesson: lesson && localizeMetaLesson(lesson, ui) }; }).filter((row) => !!row.lesson).sort((a, b) => b.learned.learnedAt - a.learned.learnedAt), [learnedMetas, ui]);
-  const filtered = useMemo(() => { const linked = new Set(notebookNotes.flatMap((note) => note.clueId ? [note.clueId] : [])); return clues.filter((clue) => !linked.has(clue.id) && (source === 'all' || source === 'personal' ? clue.origin === 'personal' || source === 'all' : source === 'coach' ? clue.origin !== 'personal' : false) && (!country || clue.countryCode === country) && (!query || `${countryName(clue.countryCode)} ${clue.analysis.description} ${clue.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt); }, [clues, country, notebookNotes, query, source]);
+  const filtered = useMemo(() => { const linked = new Set([...notebookNotes.flatMap((note) => note.clueId ? [note.clueId] : []), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]); return clues.filter((clue) => !linked.has(clue.id) && (source === 'all' || source === 'personal' ? clue.origin === 'personal' || source === 'all' : source === 'coach' ? clue.origin !== 'personal' : false) && (!country || clue.countryCode === country) && (!query || `${countryName(clue.countryCode)} ${clue.analysis.description} ${clue.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt); }, [clues, coachNotes, country, notebookNotes, query, source]);
   const filteredMetas = useMemo(() => (source === 'all' || source === 'meta' ? metaRows : []).filter(({ learned, lesson }) => (!country || learned.countryCode === country) && (!query || `${countryName(learned.countryCode)} ${lesson?.text} ${lesson?.note || ''}`.toLowerCase().includes(query.toLowerCase()))), [country, metaRows, query, source]);
   const filteredNotes = useMemo(() => (source === 'all' || source === 'personal' ? notebookNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.category || ''} ${note.text}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.updatedAt - a.updatedAt), [country, notebookNotes, query, source]);
   const filteredCoach = useMemo(() => (source === 'all' || source === 'coach' ? coachNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.analysis.description || ''} ${note.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.generatedAt - a.generatedAt), [coachNotes, country, query, source]);
@@ -26,7 +27,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
   const noteImage = (note: NotebookNote) => (note.clueId ? clues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || clues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
   const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note) });
-  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: t('AI-assisted'), text: note.analysis.description || note.analysis.strongClues.join(' · '), at: note.generatedAt, panoId: note.panoId });
+  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || note.analysis.strongClues.join(' · '), at: note.generatedAt, panoId: note.panoId, imageUrl: note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined });
   const openMeta = (learned: LearnedMeta, lesson: NonNullable<ReturnType<typeof metaLessonById>>) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId });
   return <section className="clues-panel">
     <div className="statistics-title">
@@ -78,7 +79,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <h3>
 <CountryFlag code={clue.countryCode} />{countryName(clue.countryCode)}</h3>
 <p>{clue.analysis.description || clue.analysis.strongClues[0] || t('savedVisualClue')}</p>
-<small>{t(clue.origin === 'personal' ? 'Personal' : 'AI-assisted')} · {new Date(clue.createdAt).toLocaleString(ui)}</small>
+<small>{t(clue.origin === 'personal' ? 'Personal' : 'AI-assisted')}{clue.analysis.style ? ` · ${coachStyleLabel(clue.analysis.style)}` : ''} · {new Date(clue.createdAt).toLocaleString(ui)}</small>
 </div>
 <div className="clue-row-actions">
 <button className="icon-button" onClick={(event) => { event.stopPropagation(); setGallery({ country: clue.countryCode, clueId: clue.id }); }} aria-label={t('Details')}>
@@ -93,7 +94,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 </div>
 </article>)}{pageCoach.map((note) => <article key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
 <div className="clue-note-icon"><Sparkles size={24} /></div>
-<div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
+<div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')}{note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
 </article>)}{pageNotes.map((note, index) => <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>
 {noteImage(note) ? <img src={noteImage(note)} alt="" /> : <div className="clue-note-icon"><NotebookPen size={24} /></div>}
 <div>

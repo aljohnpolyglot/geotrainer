@@ -136,6 +136,15 @@ test('ordinary analysis drops country-only location estimates and unsolicited ca
   assert.deepEqual(analysis.extraCards, []);
 });
 
+test('regional confidence never exceeds the overall geographic confidence', () => {
+  const analysis = normalizeCoachAnalysis({
+    ...validAnalysis,
+    confidence: 'low',
+    regionalRead: { label: 'Iberian Peninsula', confidence: 'high', reason: 'Coastal scrub and road form provide a soft regional lean.' },
+  }, 'analyze');
+  assert.equal(analysis.regionalRead?.confidence, 'low');
+});
+
 test('candidate confidence is deduplicated, ranked, and never exceeds a total of one', () => {
   const analysis = normalizeCoachAnalysis({
     ...validAnalysis,
@@ -233,9 +242,11 @@ test('the same image gets genuinely different coaching instructions while sharin
   const quick = buildCoachPrompt('analyze', undefined, [], [], 'en', 'quick', 'normal');
   const meta = buildCoachPrompt('analyze', undefined, [], [], 'en', 'meta', 'deep');
   const geography = buildCoachPrompt('analyze', undefined, [], [], 'en', 'deep-geography', 'short');
-  assert.match(quick, /QUICK GUESS.*ranked countries.*short conclusion/i);
+  assert.match(quick, /QUICK GUESS.*short conclusion.*ranked countries/i);
   assert.match(meta, /META COACH.*S\/A\/B\/C\/D.*REGIONIFIER/i);
   assert.match(geography, /DEEP GEOGRAPHY.*FUNCTION.*CAUSE.*HUMAN RESPONSE/i);
-  for (const prompt of [quick, meta, geography]) assert.match(prompt, /top candidate.*main confuser.*next clue/i);
+  for (const prompt of [quick, meta, geography]) assert.match(prompt, /major candidate.*main confuser.*highest-information decider/i);
+  for (const prompt of [quick, meta, geography]) assert.match(prompt, /positive evidence.*negative or missing evidence.*main confuser.*highest-information decider/i);
+  assert.match(geography, /WHAT.*FUNCTION.*CAUSE.*HUMAN RESPONSE.*VISIBLE RESULT.*GEOGUESSR VALUE/i);
   assert.doesNotMatch(`${quick}${meta}${geography}`, /ADAPTIVE/i);
 });

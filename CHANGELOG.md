@@ -2,6 +2,10 @@
 
 ## 2026-09-15
 
+- Made every completed Coach analysis retain its exact current-view preview in Available notes and My Clues, while keeping additional 360° views transient and de-duplicating linked entries.
+- Reworked Coach output around explicit candidate comparisons, missing evidence, generic-clue detection, confusers, causal geography, and highest-information next clues; narrower regional confidence can no longer exceed the overall result.
+- Polished the six-style picker with a distinct emoji and purpose for every Coach, moved the full style guide to the standalone Game Guide, and placed “Always ask” inside the persisted style dropdown.
+- Added independent Review filters for wrong country, score range, and attempts from the last 7, 30, 90, or custom number of days; wrong-country and score criteria combine as alternatives.
 - Preserved the completed-card count when a Review session resumes after reload and clarified the live header with “of”, remaining-card, and saved-progress labels on every viewport.
 - Added six independent AI Coach styles—Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach, and Pro Analyst—plus separate Short, Normal, and Deep explanation depth.
 - Added a localized in-app style guide, a default per-analysis style picker, and a persisted preferred-style option without Adaptive or automatic switching.

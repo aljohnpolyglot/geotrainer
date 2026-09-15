@@ -1,5 +1,5 @@
-export type GuideBlock = { type: 'paragraph' | 'ordered' | 'unordered'; text?: string; items?: string[] };
-export type InlinePart = { text: string; href?: string };
+export type GuideBlock = { type: 'paragraph' | 'quote' | 'ordered' | 'unordered' | 'table'; text?: string; items?: string[]; headers?: string[]; rows?: string[][] };
+export type InlinePart = { text: string; href?: string; strong?: boolean };
 export type GuideSubsection = { id: string; title: string; blocks: GuideBlock[] };
 export type GuideSection = { id: string; title: string; blocks: GuideBlock[]; subsections: GuideSubsection[] };
 export type HomeGuide = { title: string; introduction: GuideBlock[]; sections: GuideSection[] };
@@ -7,9 +7,9 @@ export type HomeGuide = { title: string; introduction: GuideBlock[]; sections: G
 const id = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export function parseInlineMarkdown(value: string): InlinePart[] {
-  return value.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\))/g).filter(Boolean).map((part) => {
+  return value.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|\*\*[^*]+\*\*)/g).filter(Boolean).map((part) => {
     const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
-    return link ? { text: link[1], href: link[2] } : { text: part };
+    return link ? { text: link[1], href: link[2] } : part.startsWith('**') && part.endsWith('**') ? { text: part.slice(2, -2), strong: true } : { text: part };
   });
 }
 
@@ -19,17 +19,21 @@ export function parseHomeMarkdown(markdown: string): HomeGuide {
   let subsection: GuideSubsection | undefined;
   let paragraph: string[] = [];
   let list: { type: 'ordered' | 'unordered'; items: string[] } | undefined;
+  let table: { headers: string[]; rows: string[][] } | undefined;
   const blocks = () => subsection?.blocks || section?.blocks || guide.introduction;
   const flush = () => {
     if (paragraph.length) blocks().push({ type: 'paragraph', text: paragraph.join(' ') });
     if (list) blocks().push({ type: list.type, items: list.items });
+    if (table) blocks().push({ type: 'table', headers: table.headers, rows: table.rows });
     paragraph = [];
     list = undefined;
+    table = undefined;
   };
 
   for (const raw of `${markdown}\n`.split('\n')) {
     const line = raw.trim();
     if (!line) { flush(); continue; }
+    if (line === '---') { flush(); continue; }
     if (line.startsWith('# ')) { flush(); guide.title = line.slice(2).trim(); continue; }
     if (line.startsWith('## ')) {
       flush();
@@ -54,6 +58,15 @@ export function parseHomeMarkdown(markdown: string): HomeGuide {
       list.items.push(item[2]);
       continue;
     }
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (paragraph.length || list) flush();
+      const cells = line.slice(1, -1).split('|').map((cell) => cell.trim());
+      if (!table) table = { headers: cells, rows: [] };
+      else if (!cells.every((cell) => /^:?-{3,}:?$/.test(cell))) table.rows.push(cells);
+      continue;
+    }
+    if (line.startsWith('> ')) { if (paragraph.length || list || table) flush(); blocks().push({ type: 'quote', text: line.slice(2) }); continue; }
+    if (table) flush();
     paragraph.push(line);
   }
   if (!guide.title) throw new Error('Home guide needs a level-one heading.');

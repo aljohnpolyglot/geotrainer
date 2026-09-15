@@ -2,6 +2,9 @@
 .review-source { color: #9dafb8; }
 .custom-score-range { display: inline-flex; align-items: center; gap: 5px; }
 .custom-score-range input { width: 68px; min-height: 34px; padding: 0 6px; color: var(--carbon); background: #fff; border: 1px solid #8fa3aa; border-radius: 3px; }
+.custom-days { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.custom-days input { width: 76px; min-height: 34px; padding: 0 8px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; }
+.filter-match-note { flex-basis: 100%; margin: 0; color: var(--muted); font-size: .78rem; }
 .review-location-button { min-height: 34px; padding: 0 10px; color: var(--blue); background: #fff; border: 1px solid #8fa3aa; border-radius: 3px; font-size: 11px; font-weight: 750; cursor: pointer; white-space: nowrap; }
 .review-location-button:hover { color: #fff; background: var(--blue); border-color: var(--blue); }
 

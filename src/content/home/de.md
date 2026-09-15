@@ -458,5 +458,14 @@ Eine unfertige Lern- oder Spielsitzung bleibt erhalten. Beim nächsten Öffnen s
 
 ## KI-Coach-Stile und Erklärungstiefe
 
-Unter **Einstellungen → KI-Coach** stehen ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach und Pro Analyst sowie unabhängig Kurz, Normal oder Tief zur Wahl. Neue Profile fragen vor jeder Analyse nach dem Stil; ein bevorzugter Stil überspringt diese Auswahl. Adaptive und automatischer Stilwechsel existieren nicht. Quick Guess bleibt knapp; Meta lehrt Stärke, Rolle, Zuverlässigkeit und Verwechslungen; Elimination grenzt Kandidaten ein; Deep Geography erklärt nur belegte Ursachen; Memory schafft wahrheitsgemäße Merksätze; Pro Analyst gewichtet Belege, Widersprüche und Informationsgewinn. Alle verwenden dieselben sichtbaren Beobachtungen, kennzeichnen Prozentwerte als KI-Schätzungen und erfinden keine Abkürzungen, Firmen, Pflanzen, Geschichte, Geologie oder Regeln.
+Unter **Einstellungen → KI-Coach** wählst du **Vor jeder Analyse fragen** oder einen bevorzugten Stil. Kurz, Normal oder Tief ist unabhängig und ändert die Detailmenge, nicht die Methode. Adaptive und automatische Stilwechsel gibt es nicht.
+
+- **⚡ Quick Guess:** wahrscheinliche Länder, relative Einschätzung, stärkste sichtbare Hinweise und Sicherheit. Schnell im Spiel, aber mit weniger Lerneffekt.
+- **🎯 Meta Coach:** bewertet Masten, Leitpfosten, Linien, Kennzeichen, Schilder, Google-Auto und Abdeckung nach Stufe S–D, Rolle, Zuverlässigkeit und Verwechslungen. Ideal für No Move; manche Metas ändern sich.
+- **🚫 Elimination Coach:** zeigt Kandidatenfeld, Gegenbeweise, plausible Länder und den besten Trennhinweis. Verhindert frühe Festlegung und sagt bei Ausnahmen nicht vorschnell „unmöglich“.
+- **🌍 Deep Geography:** folgt Was → Funktion → Ursache → menschliche Reaktion → sichtbares Ergebnis → GeoGuessr-Wert. Baut kausales Verständnis auf, kennzeichnet aber unbelegte historische, wirtschaftliche oder geologische Erklärungen.
+- **🧠 Memory Coach:** erstellt wahrheitsgemäße Merksätze, Ursache-Wirkungs-Ketten, Kontrastpaare, Gegenhinweise und Abruffragen. Fördert Erinnerung, ohne Vereinfachungen zu absoluten Regeln zu machen.
+- **🏆 Pro Analyst:** gewichtet positive und negative Belege, Widersprüche, Unabhängigkeit, schwache Hinweise, Unsicherheit und Informationsgewinn. Gut für knappe Fälle; Prozentwerte bleiben KI-Schätzungen.
+
+Alle Stile beginnen mit denselben sichtbaren Beobachtungen und trennen Beobachtung, Schlussfolgerung und Spekulation. Jeder Kandidat erklärt das konkrete Merkmal, nationale oder regionale Reichweite, Hauptverwechslung, Trennhinweis und den nächsten Hinweis mit größtem Sicherheitsgewinn. Abkürzungen, Organisationen, Pflanzen, Geschichte, Geologie, Branchen und Regeln werden nicht erfunden.
 Während einer aktiven Wiederholung zeigt die Kopfzeile die aktuelle Karte, die verbleibenden Karten und den gespeicherten Fortschritt. Nach dem Neuladen bleibt die Zahl der bereits abgeschlossenen Karten erhalten.

@@ -1,10 +1,6 @@
 import type {
-  Attempt,
-  BookmarkLocation,
-  ClueRecord,
-  Collection,
-  GameRecord,
-  GameSettings,
+  Attempt, BookmarkLocation, ClueRecord, Collection,
+  GameRecord, GameSettings,
   LocationResult,
   ReviewFilters,
   ReviewGrade,
@@ -347,14 +343,17 @@ export const trainerDb = {
     attempts.forEach((attempt) => { if (!reviewByPano.has(attempt.panoId)) { const match = nearbyReview(reviews, locations, attempts, { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode }); if (match) reviewByPano.set(attempt.panoId, match); } });
     const bookmarked = new Set(bookmarks.map((item) => item.panoId));
     const now = Date.now();
-    const recentCutoff = now - 30 * 864e5;
+    const recentCutoff = now - (filters.recentDays || 30) * 864e5;
+    const hasScoreFilter = filters.minScore !== undefined || filters.maxScore !== undefined;
     const queue = attempts
       .filter((attempt) => !filters.countryCodes?.length || filters.countryCodes.includes(attempt.countryCode))
       .filter((attempt) => !filters.environment || (attempt.environmentRequested ?? attempt.environment ?? 'mixed') === filters.environment)
-      .filter((attempt) => filters.minScore === undefined || attempt.score >= filters.minScore)
-      .filter((attempt) => filters.maxScore === undefined || attempt.score < filters.maxScore)
-      .filter((attempt) => !filters.wrongCountry || (!!attempt.guessedCountryCode && attempt.guessedCountryCode !== attempt.countryCode))
-      .filter((attempt) => !filters.recent || (attempt.createdAt >= recentCutoff && attempt.score < 4000))
+      .filter((attempt) => {
+        const scoreMatches = hasScoreFilter && attempt.source !== 'study' && (filters.minScore === undefined || attempt.score >= filters.minScore) && (filters.maxScore === undefined || attempt.score < filters.maxScore);
+        const countryMatches = !!filters.wrongCountry && !!attempt.guessedCountryCode && attempt.guessedCountryCode !== attempt.countryCode;
+        return (!hasScoreFilter && !filters.wrongCountry) || scoreMatches || countryMatches;
+      })
+      .filter((attempt) => (!filters.recent || (attempt.source !== 'study' && attempt.createdAt >= recentCutoff && attempt.score < 4000)) && (!filters.recentDays || attempt.createdAt >= recentCutoff))
       .filter((attempt) => !filters.neverReviewed || !reviewByPano.has(attempt.panoId))
       .filter((attempt) => !filters.bookmarked || bookmarked.has(attempt.panoId))
       .filter((attempt) => !filters.due || (!!reviewByPano.get(attempt.panoId) && isReviewDue(reviewByPano.get(attempt.panoId)!, now, preferences)))

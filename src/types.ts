@@ -247,6 +247,8 @@ export interface MetaLesson {
 
 export type CoachMode = 'hints' | 'analyze' | 'analyze360' | 'explain' | 'cards' | 'clue' | 'clue-safe';
 export interface CoachAnalysis {
+  style?: CoachStyle;
+  depth?: ExplanationDepth;
   confidence: 'low' | 'medium' | 'high';
   region: string;
   locationEstimate?: { level: 'region' | 'city' | 'exact'; label: string; confidence: 'medium' | 'high'; basis: string[] };
@@ -300,6 +302,7 @@ export interface CoachHistoryNote {
   model: string;
   generatedAt: number;
   analysis: CoachAnalysis;
+  clueId?: string;
 }
 
 export type ReviewGrade = 'again' | 'hard' | 'good' | 'easy';
@@ -334,6 +337,7 @@ export interface ReviewFilters {
   maxScore?: number;
   wrongCountry?: boolean;
   recent?: boolean;
+  recentDays?: number;
   neverReviewed?: boolean;
   bookmarked?: boolean;
   due?: boolean;

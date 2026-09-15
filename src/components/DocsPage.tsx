@@ -12,14 +12,19 @@ import de from '../content/home/de.md?raw';
 import it from '../content/home/it.md?raw';
 import ru from '../content/home/ru.md?raw';
 import sv from '../content/home/sv.md?raw';
+import coachStyles from '../content/coach/AI_COACH_STYLES_GUIDE.md?raw';
 
-const guides = { en, es, pt, fr, de, it, ru, sv };
-const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.text)}</>;
+const detailedCoachGuide = coachStyles.split('\n').map((line) => line.startsWith('### ') ? `**${line.slice(4)}**` : line.startsWith('## ') ? `### ${line.slice(3)}` : line.startsWith('# ') ? `## ${line.slice(2)}` : line).join('\n');
+const guides = { en: `${en}\n\n${detailedCoachGuide}`, es, pt, fr, de, it, ru, sv };
+const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.strong ? <strong key={index}>{part.text}</strong> : part.text)}</>;
 const Blocks = ({ blocks }: { blocks: GuideBlock[] }) => <>{blocks.map((block, index) => block.type === 'paragraph'
   ? <p key={index}><InlineText text={block.text} /></p>
+  : block.type === 'quote' ? <blockquote key={index}><InlineText text={block.text} /></blockquote>
   : block.type === 'ordered'
     ? <ol key={index}>{block.items?.map((item) => <li key={item}><InlineText text={item} /></li>)}</ol>
-    : <ul key={index}>{block.items?.map((item) => <li key={item}><InlineText text={item} /></li>)}</ul>)}</>;
+    : block.type === 'unordered'
+      ? <ul key={index}>{block.items?.map((item) => <li key={item}><InlineText text={item} /></li>)}</ul>
+      : <div className="docs-table" key={index}><table><thead><tr>{block.headers?.map((cell) => <th key={cell}><InlineText text={cell} /></th>)}</tr></thead><tbody>{block.rows?.map((row, rowIndex) => <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={cellIndex}><InlineText text={cell} /></td>)}</tr>)}</tbody></table></div>)}</>;
 
 export function DocsPage() {
   const { ui } = useLanguagePreferences();

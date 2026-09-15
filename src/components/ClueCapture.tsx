@@ -10,7 +10,8 @@ import { CountryFlag } from './CountryFlag';
 import { CoachLocationEstimate } from './CoachLocationEstimate';
 import { compressClueImage } from '../services/clueImages';
 import { useCoachPreferences } from '../services/useCoachPreferences';
-import { COACH_STYLE_NAMES } from '../services/coachPreferences';
+import { CoachStylePicker } from './CoachStylePicker';
+import { COACH_OUTPUT_LABELS, coachStyleLabel } from '../services/coachPreferences';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 type ClueDraft = { panoId: string; imageDataUrl: string; clueId?: string; analysis?: CoachAnalysis; saved: boolean };
@@ -71,10 +72,10 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
       if (!isCurrent()) return;
       const completedAt = value.generatedAt || Date.now();
       const completedModel = value.model || 'Gemini';
-      setAnalysis(value.analysis); onAnalyze?.();
-      const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: value.analysis });
+      const styled = { ...value.analysis, style, depth: coachPreferences.depth }; setAnalysis(styled); onAnalyze?.();
+      const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: styled });
       if (clueId) onSaved?.(clueId);
-      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: value.analysis, saved: true } satisfies ClueDraft);
+      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -97,18 +98,20 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
       <button disabled={disabled || busy} onClick={() => void capture()}><Camera size={14} /> {t('capture')}</button>
 <button disabled={!languageReady || disabled || busy || !image} onClick={() => coachPreferences.askEveryTime ? setChoosingStyle(true) : void analyze()}>{t('Analyze clue')}</button>
     </div>
-    {choosingStyle && <div className="coach-style-picker" role="dialog" aria-label={t('Choose a Coach style')}><strong>{t('Choose a Coach style')}</strong>{Object.entries(COACH_STYLE_NAMES).map(([style, name]) => <button type="button" key={style} onClick={() => void analyze(style as typeof coachPreferences.style)}>{name}</button>)}<button type="button" onClick={() => setChoosingStyle(false)}>{t('cancel')}</button></div>}
+    {choosingStyle && <CoachStylePicker selected={coachPreferences.style} onSelect={(style) => void analyze(style)} onClose={() => setChoosingStyle(false)} />}
     {status && <p className="coach-status" role="status">{status}</p>}
-    {analysis && (!saved || !collapseSavedAnalysis) && <div className="clue-analysis">
+    {analysis && (!saved || !collapseSavedAnalysis) && <div className={`clue-analysis coach-output-${analysis.style || coachPreferences.style}`}>
+      {analysis.style && <p className="coach-history-profile"><strong>{coachStyleLabel(analysis.style)}</strong>{analysis.depth && <span>{t(analysis.depth[0].toUpperCase() + analysis.depth.slice(1))}</span>}</p>}
+      {analysis.description && <section className="coach-style-lead"><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].lead)}</strong><p>{analysis.description}</p></section>}
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
-      {!!analysis.candidates.length && <><small className="coach-confidence-label">{t('Relative likelihood')}</small><ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol></>}
-      {analysis.description && <p>{analysis.description}</p>}
-      {!!analysis.strongClues.length && <><strong>{t('usefulTraits')}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.weakClues.length && <><strong>{t('limitations')}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.contradictions?.length && <><strong>{t('contradictionsGaps')}</strong><ul>{analysis.contradictions.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.confusions.length && <><strong>{t('confusableWith')}</strong><ul>{analysis.confusions.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.nextThingsToInspect.length && <><strong>{t('inspectNext')}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.candidates.length && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol></>}
+      <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p>{analysis.regionalRead ? `${analysis.regionalRead.label} — ${t(analysis.regionalRead.confidence)} ${t('confidence')}. ${analysis.regionalRead.reason}` : t('Insufficient evidence.')}</p></section>
+      {!!analysis.strongClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].strong)}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.weakClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].weak)}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.contradictions?.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].contradictions)}</strong><ul>{analysis.contradictions.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.confusions.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].confusions)}</strong><ul>{analysis.confusions.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.nextThingsToInspect.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].next)}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}>{item}</li>)}</ul></>}
       {saved && <p className="coach-autosaved" role="status">{t('savedAutomatically')}</p>}
     </div>}
   </details>;

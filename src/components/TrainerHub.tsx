@@ -86,7 +86,8 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   useEffect(() => { void load(); }, [refreshKey]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);
   useEffect(() => { void trainerDb.reviewQueue(effectiveFilters).then(setQueue); }, [effectiveFilters, refreshKey]);
-  const reviewCriterion = filters.wrongCountry ? "Wrong Country" : filters.bookmarked ? "Bookmarked" : filters.due ? "Due Today" : filters.recent ? "Recently Missed" : filters.minScore !== undefined || filters.maxScore !== undefined ? `Score ${filters.minScore ?? 0}–${filters.maxScore ?? 5000}` : "Review Queue";
+  const mistakeCriterion = [filters.wrongCountry && "Wrong Country", filters.minScore !== undefined || filters.maxScore !== undefined ? `Score ${filters.minScore ?? 0}–${filters.maxScore ?? 5000}` : ''].filter(Boolean).join(" or ");
+  const reviewCriterion = [filters.due && "Due Today", mistakeCriterion, filters.recent && "Recently Missed", filters.recentDays && `Last ${filters.recentDays} days`, filters.bookmarked && "Bookmarked"].filter(Boolean).join(" · ") || "Review Queue";
   const reviewSource = [filters.environment && `${filters.environment[0].toUpperCase()}${filters.environment.slice(1)}`, reviewCriterion].filter(Boolean).join(" · ");
   const reviewKind: ReviewSessionKind = filters.due ? "due" : "practice";
   const dueCount = scheduler ? reviews.filter((review) => isReviewDue(review, Date.now(), scheduler)).length : 0;

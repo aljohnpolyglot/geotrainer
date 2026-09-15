@@ -69,6 +69,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - AI Coach knows imagery is shown inside a GeoGuessr-style app and must ignore all app/browser chrome, controls, navigation arrows, attribution, cursors, and interface language as geographic evidence.
 - When a submitted clue centers on a sign, AI Coach must explain what its visible symbol, letter, number, color, or restriction means before discussing geographic likelihood.
 - When a readable brand or organization is central to a clue, explain what it is, its geographic origin or main operation, cross-border availability, and resulting evidence strength.
+- Make every meaningful Coach clue comparative: explain what is visible, why it matters, what it supports and argues against, whether it is national or regional, its confusers, and what would confirm or overturn it. Major candidate rationales must include positive and missing evidence, why they rank above or below nearby candidates, and a high-information decider; correlated generic scenery must not be double-counted.
 - Persist clue-image and unsaved Notebook drafts across reloads, scoped to the current panorama. Completed Coach analyses belong in Available notes rather than the active Coach panel.
 - Preserve paused Learn and Play workspaces separately. When a saved workspace exists, entering that mode must offer Resume and Start new, with Back returning to the prior screen.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
@@ -83,6 +84,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 
 - Keep this guide current autonomously when a change creates a durable contributor rule, data invariant, supported locale, or required QA step. Do not record temporary task status or implementation trivia here.
 - Keep user-facing documentation thorough and current whenever behavior changes, including new modes and learning aids such as Notebook, Meta, and Review hints. Update the relevant concepts, workflows, settings, limitations, edge cases, troubleshooting, and FAQ material rather than adding only a release-note summary.
+- Keep detailed feature explanations in the standalone Game Guide. Settings may show concise descriptions and a clearly labeled Guide link, but must not duplicate long-form documentation inline.
 - Record every user-visible change in `CHANGELOG.md` under the local date of the work session (`YYYY-MM-DD`), not only under an undated Unreleased heading.
 - Supported UI/game/AI locales are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Do not add Tagalog, Bisaya, or Indonesian unless explicitly requested later.
 - Use TypeScript and existing project patterns; add no dependency when the platform or current stack is sufficient.

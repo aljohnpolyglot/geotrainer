@@ -14,8 +14,18 @@ export const normalizeCoachPreferences = (value: unknown): CoachPreferences => {
 };
 
 export const COACH_STYLE_NAMES: Record<CoachStyle, string> = {
-  quick: '⚡ Quick Guess', meta: 'Meta Coach', elimination: 'Elimination Coach',
+  quick: 'Quick Guess', meta: 'Meta Coach', elimination: 'Elimination Coach',
   'deep-geography': 'Deep Geography', memory: 'Memory Coach', 'pro-analyst': 'Pro Analyst',
+};
+export const COACH_STYLE_ICONS: Record<CoachStyle, string> = { quick: '⚡', meta: '🎯', elimination: '🚫', 'deep-geography': '🌍', memory: '🧠', 'pro-analyst': '🏆' };
+export const coachStyleLabel = (style: CoachStyle) => `${COACH_STYLE_ICONS[style]} ${COACH_STYLE_NAMES[style]}`;
+export const COACH_OUTPUT_LABELS: Record<CoachStyle, { lead: string; strong: string; weak: string; contradictions: string; confusions: string; next: string }> = {
+  quick: { lead: 'Quick conclusion', strong: 'strongClues', weak: 'weakGeneric', contradictions: 'contradictionsGaps', confusions: 'confusableWith', next: 'inspectNext' },
+  meta: { lead: 'Meta verdict', strong: 'Clue strength and roles', weak: 'limitations', contradictions: 'contradictionsGaps', confusions: 'confusableWith', next: 'Highest-value meta' },
+  elimination: { lead: 'Candidate pool', strong: 'Evidence keeping candidates', weak: 'limitations', contradictions: 'Evidence against', confusions: 'Still plausible', next: 'Best separator' },
+  'deep-geography': { lead: 'Causal chain', strong: 'Visible causes and results', weak: 'Causal limits', contradictions: 'contradictionsGaps', confusions: 'confusableWith', next: 'What would verify this' },
+  memory: { lead: 'Memory anchor', strong: 'Cause and effect', weak: 'limitations', contradictions: 'contradictionsGaps', confusions: 'Contrast pair', next: 'Recall prompts' },
+  'pro-analyst': { lead: 'Analyst summary', strong: 'Positive evidence', weak: 'Low-value evidence', contradictions: 'contradictionsGaps', confusions: 'Main ambiguity', next: 'Information gain' },
 };
 
 type StyleGuide = { purpose: string; strengths: string; weaknesses: string; best: string; example: string };

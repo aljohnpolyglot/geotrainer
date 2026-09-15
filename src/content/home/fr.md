@@ -120,5 +120,14 @@ Une session Étude ou Jeu inachevée est conservée. À votre retour, choisissez
 
 ## Styles et profondeur du Coach IA
 
-Dans **Paramètres → Coach IA**, choisissez ⚡ Quick Guess, Meta Coach, Elimination Coach, Deep Geography, Memory Coach ou Pro Analyst, puis une profondeur Courte, Normale ou Approfondie indépendante. Un nouveau profil demande le style avant chaque analyse ; définir un style préféré supprime cette étape. Il n’existe ni mode Adaptive ni changement automatique. Quick Guess reste concis ; Meta enseigne force, rôle, fiabilité et confusions ; Elimination réduit les candidats ; Deep Geography n’explique que les causes étayées ; Memory crée des repères véridiques ; Pro Analyst pondère preuves, contradictions et gain d’information. Tous partent des mêmes observations visibles, présentent les pourcentages comme des estimations IA et n’inventent ni sigles, entreprises, cultures, histoire, géologie ou règles.
+Dans **Paramètres → Coach IA**, choisissez **Toujours demander avant l’analyse** ou un style préféré. La profondeur Courte, Normale ou Approfondie reste indépendante et change le détail, pas la méthode. Aucun mode Adaptive ni changement automatique.
+
+- **⚡ Quick Guess :** pays probables, vraisemblance relative, principaux indices visibles et confiance. Rapide en partie, mais moins pédagogique.
+- **🎯 Meta Coach :** classe poteaux, balises, lignes, plaques, panneaux, voiture Google et couverture par niveau S–D, rôle, fiabilité et confusions. Idéal en No Move, malgré des métas évolutives.
+- **🚫 Elimination Coach :** présente les candidats, les indices défavorables, les options plausibles et le meilleur indice de séparation. Limite l’ancrage et évite « impossible » lorsque des exceptions existent.
+- **🌍 Deep Geography :** suit quoi → fonction → cause → réponse humaine → résultat visible → valeur GeoGuessr. Développe l’intuition causale, mais signale quand l’image ne justifie pas une histoire, une économie ou une géologie.
+- **🧠 Memory Coach :** crée des repères véridiques, chaînes causales, contrastes, contre-indices et questions de rappel. Favorise la mémorisation sans transformer les simplifications en absolus.
+- **🏆 Pro Analyst :** pondère indices positifs et négatifs, contradictions, indépendance, indices faibles, incertitude et gain d’information. Adapté aux cas serrés, mais les pourcentages restent des estimations IA.
+
+Tous partent des mêmes observations et séparent observation, inférence et spéculation. Chaque candidat explique le détail concret, sa portée nationale ou régionale, la confusion principale, ce qui les distingue et l’indice qui augmenterait le plus la confiance. Aucun sigle, organisme, culture, fait historique, cause géologique, industrie ou règle n’est inventé.
 Pendant une Révision active, l’en-tête indique la carte actuelle, les cartes restantes et que la progression est enregistrée. Un rechargement conserve le nombre de cartes déjà terminées.

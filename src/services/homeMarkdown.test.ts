@@ -13,3 +13,12 @@ test('inline Markdown keeps external references clickable without accepting unsa
     { text: 'Use ' }, { text: 'Plonk It', href: 'https://www.plonkit.net/' }, { text: ' and [bad](javascript:alert(1)).' },
   ]);
 });
+
+test('inline Markdown renders bold learner guidance without enabling raw HTML', () => {
+  assert.deepEqual(parseInlineMarkdown('Use **visible evidence**.'), [{ text: 'Use ' }, { text: 'visible evidence', strong: true }, { text: '.' }]);
+});
+
+test('home Markdown preserves comparison tables', () => {
+  const guide = parseHomeMarkdown('# Guide\n\n## Coaches\n\n| Coach | Best for |\n|---|---|\n| Quick | Play |');
+  assert.deepEqual(guide.sections[0].blocks[0], { type: 'table', headers: ['Coach', 'Best for'], rows: [['Quick', 'Play']] });
+});
