@@ -2,6 +2,7 @@
 
 ## 2026-09-15
 
+- Clarified Coverage exposure by showing unique panoramas and total encounters together in country-map tooltips, and labeled the matching Statistics column as Panoramas.
 - Preserved headings, bold emphasis, and bullet lists when rich text is pasted into Notebook, and documented the external Gemini-to-Notebook workflow in the localized Game Guide.
 - Standardized the Game Guide ending so External resources, Frequently asked questions, and Contact remain the final three sections.
 - Made the Home primary action respond to due reviews and paused Study or Play work, and refocused its message on learning from mistakes.

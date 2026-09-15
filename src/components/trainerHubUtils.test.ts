@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryValues, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
+import { coverageCountryCounts, coverageCountryValues, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -29,4 +29,9 @@ test('country heat values normalize counts and preserve score and weakness scale
   assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure'), { IT: 1, SE: .5 });
   assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'weakness'), { IT: 1, SE: 0 });
   assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'score'), { IT: .2, SE: .8 });
+});
+
+test('coverage distinguishes unique panoramas from repeated encounters', () => {
+  const locations = [{ countryCode: 'IE', encounterCount: 50 }, { countryCode: 'IE', encounterCount: 33 }, { countryCode: 'HU', encounterCount: 2 }];
+  assert.deepEqual(coverageCountryCounts(locations as never), { IE: { panoramas: 2, encounters: 83 }, HU: { panoramas: 1, encounters: 2 } });
 });

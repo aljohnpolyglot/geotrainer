@@ -3,7 +3,7 @@ import worldMap from '../assets/simple-world-map.svg?raw';
 import { trainerDb } from '../data/trainerDb';
 import { CLOUD_IMPORT_EVENT } from '../services/cloudSyncEvent';
 import type { Attempt, ReviewRecord, TrainerLocation } from '../types';
-import { countryName, coverageCountryValues, useHubTranslate, type CoverageOverlay } from './trainerHubUtils';
+import { countryName, coverageCountryCounts, coverageCountryValues, useHubTranslate, type CoverageOverlay } from './trainerHubUtils';
 
 const PALETTES = {
   warm: ['#fee8c8', '#fdbb84', '#e34a33', '#b30000'],
@@ -14,14 +14,14 @@ const PALETTES = {
 type MapPalette = keyof typeof PALETTES;
 
 const escapeXml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-const colorMap = (values: Record<string, number | null>, colors: readonly string[], label: string, emptyLabel: string, encounters: Record<string, number>, encounterLabel: string) => worldMap
+const colorMap = (values: Record<string, number | null>, colors: readonly string[], label: string, emptyLabel: string, details: Record<string, string>) => worldMap
   .replace(/<\?xml[^>]*>\s*/, '')
   .replace(/<svg\b/, `<svg class="coverage-choropleth-svg" role="img" aria-label="${escapeXml(label)}"`)
   .replace(/(<svg\b[^>]*>)/, `$1<title>${escapeXml(label)}</title>`)
   .replace(/<path\b([^>]*\bid="([A-Z]{2})"[^>]*)\/>/g, (_match, attributes: string, id: string) => {
     const value = values[id];
     const fill = value === null || value === undefined ? 'var(--choropleth-empty)' : colors[Math.min(3, Math.floor(value * 4))];
-    const detail = value === null || value === undefined ? emptyLabel : encounters[id] === undefined ? '' : `${encounters[id]} ${encounterLabel}`;
+    const detail = value === null || value === undefined ? emptyLabel : details[id] || '';
     return `<path${attributes.replace(/\sstyle="[^"]*"/, '')} style="fill:${fill}"><title>${escapeXml(countryName(id) + (detail ? ` · ${detail}` : ''))}</title></path>`;
   });
 
@@ -35,11 +35,12 @@ export function CoverageChoropleth({ locations, attempts, reviews, overlay }: { 
     return () => { active = false; window.removeEventListener(CLOUD_IMPORT_EVENT, load); };
   }, []);
   const values = useMemo(() => coverageCountryValues(locations, attempts, reviews, overlay), [locations, attempts, reviews, overlay]);
-  const encounters = useMemo(() => locations.reduce<Record<string, number>>((counts, item) => ({ ...counts, [item.countryCode]: (counts[item.countryCode] || 0) + item.encounterCount }), {}), [locations]);
+  const counts = useMemo(() => coverageCountryCounts(locations), [locations]);
   const colors = PALETTES[palette];
   const label = `${t('Country heatmap')} · ${t(overlay === 'score' ? 'averageScoreMap' : overlay === 'due' ? 'reviewsDueMap' : overlay === 'mastery' ? 'Mastery' : overlay)}`;
   const emptyLabel = t(overlay === 'exposure' ? 'Not encountered' : overlay === 'due' || overlay === 'mastery' ? 'No review history' : 'No scored attempts');
-  const svg = useMemo(() => colorMap(values, colors, label, emptyLabel, overlay === 'exposure' ? encounters : {}, t('encounters')), [values, colors, label, emptyLabel, encounters, overlay, t]);
+  const details = useMemo(() => overlay === 'exposure' ? Object.fromEntries(Object.keys(counts).map((code) => [code, `${counts[code].panoramas} ${t('panoramas')} · ${counts[code].encounters} ${t('encounters')}`])) : {}, [counts, overlay, t]);
+  const svg = useMemo(() => colorMap(values, colors, label, emptyLabel, details), [values, colors, label, emptyLabel, details]);
   return <section className="coverage-choropleth">
     <header><h3>{t('Country heatmap')}</h3><label>{t('Map palette')}<select value={palette} onChange={(event) => { const value = event.target.value as MapPalette; setPalette(value); void trainerDb.setSetting('coverage.mapPalette', value); }}><option value="warm">{t('Warm')}</option><option value="blue">{t('Blue')}</option><option value="green">{t('Green')}</option><option value="purple">{t('Purple')}</option></select></label></header>
     <div className="coverage-choropleth-map" dangerouslySetInnerHTML={{ __html: svg }} />

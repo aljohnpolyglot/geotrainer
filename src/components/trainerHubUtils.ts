@@ -13,6 +13,14 @@ export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas
 };
 export const pageBounds = (total: number, page: number, size = 20) => { const pages = Math.max(1, Math.ceil(total / size)); const current = Math.min(Math.max(1, page), pages); return { current, pages, start: (current - 1) * size, end: current * size }; };
 export type CoverageOverlay = "exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery";
+
+export function coverageCountryCounts(locations: TrainerLocation[]): Record<string, { panoramas: number; encounters: number }> {
+  return locations.reduce<Record<string, { panoramas: number; encounters: number }>>((counts, item) => {
+    const current = counts[item.countryCode] || { panoramas: 0, encounters: 0 };
+    counts[item.countryCode] = { panoramas: current.panoramas + 1, encounters: current.encounters + item.encounterCount };
+    return counts;
+  }, {});
+}
 export const coverageCountryValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, now = Date.now()) => {
   const panos = new Map(locations.map((item) => [item.id, item.countryCode]));
   const grouped = new Map<string, { locations: TrainerLocation[]; attempts: Attempt[]; reviews: ReviewRecord[] }>();
