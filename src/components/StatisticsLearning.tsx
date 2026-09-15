@@ -6,7 +6,7 @@ import { confusions, reviewAnalytics } from '../analytics/statistics';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CountryFlag } from './CountryFlag';
-import { pageBounds } from './trainerHubUtils';
+import { pageBounds, timestampRange } from './trainerHubUtils';
 
 const name = (code: string) => COUNTRIES[code]?.name || code;
 const pct = (value: number | null) => value === null ? '—' : `${Math.round(value * 100)}%`;
@@ -54,7 +54,7 @@ export function SessionStatistics({ sessions, attempts, visits, includeAssisted 
   const data = sessionStatistics(sessions, attempts, visits, includeAssisted);
   const paging = pageBounds(data.rows.length, page, 10);
   return <><div className="metric-strip"><div><span>{t('Sessions')}</span><strong>{data.rows.length}</strong></div><div><span>{t('Total active')}</span><strong>{duration(data.rows.reduce((sum, item) => sum + item.activeTimeSeconds, 0))}</strong></div><div><span>{t('Longest')}</span><strong>{duration(Math.max(0, ...data.rows.map((item) => item.activeTimeSeconds)))}</strong></div><div><span>{t('Best eligible')}</span><strong>{data.bestAccuracy?.accuracy.eligible >= 10 ? pct(data.bestAccuracy.accuracy.rate) : '—'}</strong></div><div><span>{t('Most reviews')}</span><strong>{data.mostReviews?.reviews || 0}</strong></div><div><span>{t('Fastest ≥70%')}</span><strong>{data.fastestAccurate ? duration(data.fastestAccurate.activeTimeSeconds) : '—'}</strong></div></div>
-    <div className="attempt-list">{data.rows.slice(paging.start, paging.end).map((item) => <div className="attempt-row session-row" key={item.id}><span><strong>{new Date(item.startedAt).toLocaleDateString()}</strong><small>{duration(item.activeTimeSeconds)} · {item.countries} {t('countries')}</small></span><span>{item.study} {t('Study')} · {item.play} {t('Play')} · {item.reviews} {t('Review')}</span><strong>{pct(item.accuracy.rate)} <small>n={item.accuracy.eligible}</small></strong><span>{t('Avg score')} {num(item.averageScore)}</span></div>)}</div>
+    <div className="attempt-list">{data.rows.slice(paging.start, paging.end).map((item) => <div className="attempt-row session-row" key={item.id}><span><strong>{timestampRange(item.startedAt, item.endedAt, ui)}</strong><small>{duration(item.activeTimeSeconds)} · {item.countries} {t('countries')}</small></span><span>{item.study} {t('Study')} · {item.play} {t('Play')} · {item.reviews} {t('Review')}</span><strong>{pct(item.accuracy.rate)} <small>n={item.accuracy.eligible}</small></strong><span>{t('Avg score')} {num(item.averageScore)}</span></div>)}</div>
     {paging.pages > 1 && <nav className="clue-pagination" aria-label={t('Sessions')}><button type="button" disabled={paging.current === 1} onClick={() => setPage(paging.current - 1)}>{t('Previous')}</button><span aria-live="polite">{paging.current} / {paging.pages}</span><button type="button" disabled={paging.current === paging.pages} onClick={() => setPage(paging.current + 1)}>{t('Next')}</button></nav>}
   </>;
 }

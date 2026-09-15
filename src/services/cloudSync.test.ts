@@ -53,6 +53,17 @@ test('cloud merge unions Notebook and Coach histories instead of deleting one de
   assert.deepEqual(settings.find(({ key }) => key === 'coach.notes')?.value.map(({ id }) => id), ['local-coach', 'cloud-coach']);
 });
 
+test('upload-side merge keeps Personal clues and Notebook notes from both origins', () => {
+  const deployed = backup('deployed', 10); const localhost = backup('localhost', 20);
+  deployed.data.clues.push({ id: 'wall-image', panoId: 'wall', createdAt: 10 });
+  deployed.data.settings.push({ key: 'notebook.notes', value: [{ id: 'wall-note', panoId: 'wall', text: 'stone wall', updatedAt: 10 }], updatedAt: 10 });
+  localhost.data.clues.push({ id: 'roof-image', panoId: 'roof', createdAt: 20 });
+  localhost.data.settings.push({ key: 'notebook.notes', value: [{ id: 'roof-note', panoId: 'roof', text: 'slate roof', updatedAt: 20 }], updatedAt: 20 });
+  const merged = mergeBackups(deployed, localhost);
+  assert.deepEqual((merged.data.clues as Array<{ id: string }>).map(({ id }) => id), ['wall-image', 'roof-image']);
+  assert.deepEqual((merged.data.settings[0] as { value: Array<{ id: string }> }).value.map(({ id }) => id), ['roof-note', 'wall-note']);
+});
+
 test('cloud merge includes review, language, UI, audio, game, and workspace settings', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   for (const key of ['schedulerPreferences', 'languagePreferences', 'preference.darkMode', 'preference.audio', 'gamePreferences', 'workspace.paused.study']) {

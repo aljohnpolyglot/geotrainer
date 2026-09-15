@@ -48,6 +48,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Count foreground time across Study, active Play, and active Review work, including panorama movement and learning-aid use; persist it when switching surfaces or returning home. Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
 - Coalesce local cloud-sync bursts, skip unchanged whole-backup writes, throttle repeated focus-triggered cloud pulls, and serialize read-modify-write updates such as Coach history so reliability fixes do not recreate Supabase I/O amplification.
+- Merge the latest remote backup before every whole-backup upload so localhost and deployed origins using the same account converge without replacing each other's unique records.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.

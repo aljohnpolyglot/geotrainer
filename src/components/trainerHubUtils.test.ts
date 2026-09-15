@@ -18,9 +18,9 @@ test('saved clue total counts personal, AI, and Meta entries without double-coun
   assert.equal(savedClueCount(clues as never, notes as never, metas as never, [{ id: 'coach-note', clueId: 'coach' }] as never), 3);
 });
 
-test('orphaned personal clue images reconnect to Notebook text by exact panorama and save time', () => {
-  const clues = [{ id: 'image-a', panoId: 'pano-a', origin: 'personal', createdAt: 10 }, { id: 'image-b', panoId: 'pano-a', origin: 'personal', createdAt: 20 }];
-  const notes = [{ panoId: 'pano-a', countryCode: 'FR', text: 'shark teeth', updatedAt: 20 }];
+test('orphaned personal clue images reconnect to nearby Notebook saves on the same panorama', () => {
+  const clues = [{ id: 'image-a', panoId: 'pano-a', origin: 'personal', createdAt: 1_000 }, { id: 'image-b', panoId: 'pano-a', origin: 'personal', createdAt: 180_000 }];
+  const notes = [{ panoId: 'pano-a', countryCode: 'FR', text: 'shark teeth', updatedAt: 170_000 }];
   assert.equal(notebookClueLinks(clues as never, notes).get(notes[0] as never), 'image-b');
   assert.equal(savedClueCount(clues as never, notes, [], []), 2);
 });

@@ -6,13 +6,16 @@ import type { Attempt, ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, 
 import type { CountryStats } from "./trainerHubTypes";
 
 export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
+export const timestamp = (value: number, locale: string) => new Date(value).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'medium' });
+export const timestampRange = (start: number, end: number, locale: string) => `${timestamp(start, locale)} – ${timestamp(end, locale)}`;
 export const countryName = (code: string) => COUNTRIES[code]?.name || code;
 export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) => {
   const used = new Set<string>(); const links = new Map<NotebookNote, string>();
   notes.forEach((note) => {
-    const match = note.clueId && clues.some((clue) => clue.id === note.clueId) ? note.clueId : clues.find((clue) => !used.has(clue.id) && clue.origin === 'personal' && clue.panoId === note.panoId && clue.createdAt === note.updatedAt)?.id;
-    if (match) { used.add(match); links.set(note, match); }
+    if (note.clueId && clues.some((clue) => clue.id === note.clueId)) { used.add(note.clueId); links.set(note, note.clueId); }
   });
+  const candidates = notes.flatMap((note) => links.has(note) ? [] : clues.filter((clue) => !used.has(clue.id) && clue.origin === 'personal' && clue.panoId === note.panoId && Math.abs(clue.createdAt - note.updatedAt) <= 300_000).map((clue) => ({ note, clue, distance: Math.abs(clue.createdAt - note.updatedAt) }))).sort((a, b) => a.distance - b.distance);
+  candidates.forEach(({ note, clue }) => { if (!links.has(note) && !used.has(clue.id)) { used.add(clue.id); links.set(note, clue.id); } });
   return links;
 };
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {

@@ -99,7 +99,7 @@ export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((c
 export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
 export const shouldPullCloud = (now: number, previous: number, interval = 60_000) => !previous || now - previous >= interval;
 
-async function upload(userId = activeUserId, announce = false): Promise<void> {
+async function upload(userId = activeUserId, announce = false, knownRemote?: unknown): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
   if (uploadPromise) {
     uploadPending = true;
@@ -108,16 +108,34 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
   if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
   uploadPromise = (async () => {
     let backup = await createBackup(false);
+    let importedCloud = false;
     let hostedImage = false;
     for (const clue of backup.data.clues as ClueRecord[]) {
       const hosted = await uploadClueImage(userId, clue);
       if (hosted !== clue) { await trainerDb.saveClue(hosted); hostedImage = true; }
     }
     if (hostedImage) backup = await createBackup(false);
+    let remote = knownRemote;
+    if (remote === undefined) {
+      const { data, error } = await supabase.from('user_backups').select('backup').eq('user_id', userId).maybeSingle();
+      if (error) throw error;
+      remote = data?.backup;
+    }
+    if (remote) {
+      validateBackup(remote);
+      const merged = mergeBackups(remote as TrainerBackup, backup);
+      if (JSON.stringify(merged.data) !== JSON.stringify(backup.data)) {
+        applyingCloud = true;
+        try { await importBackup(merged, 'replace'); } finally { applyingCloud = false; }
+        backup = merged;
+        importedCloud = true;
+      }
+    }
     backup.data.clues = withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]);
     const signature = backupSignature(backup);
     if (syncedUserId === userId && syncedBackup === signature) {
       if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
+      if (importedCloud) announceCloudImport();
       return;
     }
     const syncedAt = new Date().toISOString();
@@ -130,6 +148,7 @@ async function upload(userId = activeUserId, announce = false): Promise<void> {
     syncedUserId = userId;
     syncedBackup = signature;
     update({ phase: 'synced', message: 'Progress backed up.', lastSyncedAt: syncedAt });
+    if (importedCloud) announceCloudImport();
   })();
   try {
     await uploadPromise;
@@ -170,7 +189,7 @@ async function syncSession(session: Session | null): Promise<void> {
         importedCloud = true;
       }
     }
-    await upload(session.user.id, true);
+    await upload(session.user.id, true, data?.backup);
     lastPullAt = Date.now();
     if (importedCloud) announceCloudImport();
   } catch (error) {
