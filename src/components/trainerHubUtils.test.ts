@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryCounts, coverageCountryValues, elapsed, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, visibleNotebookNotes } from './trainerHubUtils';
+import { coverageCountryCounts, coverageCountryValues, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, visibleNotebookNotes } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -49,6 +49,12 @@ test('an explicit missing image stays broken instead of stealing another same-pa
   assert.equal(links.has(broken as never), false);
   assert.equal(links.get(independent as never), clue.id);
   assert.deepEqual(visibleNotebookNotes([broken] as never, links), [broken]);
+});
+
+test('photo integrity detects absent records, unresolved paths, and failed signed images only', () => {
+  const notes = [{ id: 'absent', clueId: 'missing' }, { id: 'unsigned', clueId: 'path' }, { id: 'failed', clueId: 'url' }, { id: 'text' }];
+  const clues = [{ id: 'path', imagePath: 'u/path.jpg', imageDataUrl: '' }, { id: 'url', imagePath: 'u/url.jpg', imageDataUrl: 'https://signed' }];
+  assert.deepEqual(missingNotebookPhotoNotes(clues as never, notes as never, new Set(['url'])).map((note) => note.id), ['absent', 'unsigned', 'failed']);
 });
 
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {

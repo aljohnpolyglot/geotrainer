@@ -5,6 +5,9 @@
 - Prevented background cloud imports from clearing Notebook clue images saved during synchronization.
 - Rendered pasted Notebook Markdown formatting in My Clues and removed stray standalone list markers.
 - Kept broken photo-linked notes visible with a localized recovery warning instead of silently pairing them with another panorama image.
+- Added automatic missing-photo detection for absent records, unresolved signed URLs, and failed image loads, plus a visible My Clues recovery count.
+- Added safe exact-image repair from panorama-scoped drafts and private per-user Storage before sync; panorama screenshots are never substituted.
+- Added development-only saved-content count invariants with privacy-safe host/session/device diagnostics, and regression coverage for first, later, and all-black same-panorama clues.
 
 ## 2026-09-15
 

@@ -28,6 +28,14 @@ export const visibleNotebookNotes = (notes: NotebookNote[], links: Map<NotebookN
   const linkedIds = new Set(links.values());
   return notes.filter((note) => !!String(note.text || '').trim() || !!note.category || links.has(note) || !!note.clueId && !linkedIds.has(note.clueId));
 };
+export const missingNotebookPhotoNotes = (clues: ClueRecord[], notes: NotebookNote[], failedImages = new Set<string>()) => {
+  const byId = new Map(clues.map((clue) => [clue.id, clue]));
+  return notes.filter((note) => {
+    if (!note.clueId) return false;
+    const clue = byId.get(note.clueId);
+    return !clue || !clue.imageDataUrl || failedImages.has(clue.id);
+  });
+};
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
   const noteLinks = notebookClueLinks(clues, notes); const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
   return clues.filter((clue) => !linked.has(clue.id)).length + visibleNotebookNotes(notes, noteLinks).length + metas.length + coachNotes.length;

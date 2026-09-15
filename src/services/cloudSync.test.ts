@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, savedContentCounts, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
+import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, savedContentCounts, savedContentDecreased, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -42,6 +42,8 @@ test('saved-content invariant counts every clue and independent Notebook save', 
   value.data.clues.push({ id: 'black-image', imageDataUrl: 'data:image/png;base64,AAAA' }, { id: 'second-image' });
   value.data.settings.push({ key: 'notebook.notes', value: [{ id: 'first' }, { id: 'second' }, { id: 'third' }] });
   assert.deepEqual(savedContentCounts(value), { clues: 2, notes: 3 });
+  assert.equal(savedContentDecreased({ clues: 2, notes: 3 }, { clues: 1, notes: 3 }), true);
+  assert.equal(savedContentDecreased({ clues: 2, notes: 3 }, { clues: 2, notes: 4 }), false);
 });
 
 test('cloud merge keeps the newest setting across screens', () => {

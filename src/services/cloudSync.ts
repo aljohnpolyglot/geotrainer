@@ -11,8 +11,8 @@ import {
   type TrainerBackup,
 } from '../data/trainerDb';
 import { supabase } from './supabase';
-import { uploadClueImage } from './clueImages';
-import type { ClueRecord } from '../types';
+import { resolveStoredClueImages, uploadClueImage } from './clueImages';
+import type { ClueRecord, CoachAnalysis, NotebookNote } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
@@ -109,11 +109,43 @@ export const savedContentCounts = (backup: TrainerBackup) => ({
   clues: backup.data.clues.length,
   notes: ((backup.data.settings as Array<{ key?: string; value?: unknown }>).find((item) => item.key === 'notebook.notes')?.value as unknown[] | undefined)?.length || 0,
 });
+export const savedContentDecreased = (previous: ReturnType<typeof savedContentCounts>, current: ReturnType<typeof savedContentCounts>) => current.clues < previous.clues || current.notes < previous.notes;
+const diagnosticId = () => typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
+const syncSessionId = diagnosticId();
+const syncDeviceId = (() => {
+  try {
+    if (typeof localStorage === 'undefined') return diagnosticId();
+    const key = 'geotrainer.diagnosticDeviceId'; const existing = localStorage.getItem(key);
+    if (existing) return existing;
+    const created = diagnosticId(); localStorage.setItem(key, created); return created;
+  } catch { return diagnosticId(); }
+})();
+const logUnexpectedDecrease = (previous: ReturnType<typeof savedContentCounts>, current: ReturnType<typeof savedContentCounts>, operation: string) => {
+  if (savedContentDecreased(previous, current)) console.error('[GeoTrainer] Unexpected saved-content decrease', { previous, current, operation, host: typeof location === 'undefined' ? 'unknown' : location.host, sessionId: syncSessionId, deviceId: syncDeviceId });
+};
 const reportUnexpectedDecrease = async (before: TrainerBackup, operation: string) => {
   if (!import.meta.env.DEV) return;
   const previous = savedContentCounts(before); const current = savedContentCounts(await createBackup(false));
-  if (current.clues < previous.clues || current.notes < previous.notes) console.error('[GeoTrainer] Unexpected saved-content decrease', { previous, current, operation });
+  logUnexpectedDecrease(previous, current, operation);
 };
+
+const emptyAnalysis = (): CoachAnalysis => ({ confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] });
+async function repairMissingNotebookClues(userId: string) {
+  const [notes, clues] = await Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.clues()]);
+  const existing = new Set(clues.map((clue) => clue.id));
+  const missing = (notes || []).filter((note): note is NotebookNote & { clueId: string } => !!note.clueId && !existing.has(note.clueId));
+  if (!missing.length) return 0;
+  const stored = await resolveStoredClueImages(userId, missing.map((note) => note.clueId));
+  let repaired = 0;
+  for (const note of missing) {
+    const draft = await trainerDb.setting<{ clueId?: string; imageDataUrl?: string; analysis?: CoachAnalysis }>(`workspace.clueDraft:${encodeURIComponent(note.panoId)}`);
+    const image = draft?.clueId === note.clueId && draft.imageDataUrl?.startsWith('data:image/') ? { imageDataUrl: draft.imageDataUrl } : stored.get(note.clueId);
+    if (!image) continue;
+    await trainerDb.saveClue({ id: note.clueId, panoId: note.panoId, countryCode: note.countryCode, createdAt: note.updatedAt, model: 'recovered', origin: 'personal', analysis: draft?.analysis || emptyAnalysis(), ...image });
+    repaired += 1;
+  }
+  return repaired;
+}
 
 async function upload(userId = activeUserId, announce = false, knownRemote?: unknown): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
@@ -123,6 +155,7 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
   }
   if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
   uploadPromise = (async () => {
+    await repairMissingNotebookClues(userId);
     let backup = await createBackup(false);
     let importedCloud = false;
     let hostedImage = false;
@@ -201,9 +234,7 @@ async function syncSession(session: Session | null): Promise<void> {
       const merged = mergeBackups(data.backup, local);
       if (JSON.stringify(merged.data) !== JSON.stringify(local.data)) {
         applyingCloud = true;
-        await importBackup(merged, 'merge');
-        await reportUnexpectedDecrease(local, 'session cloud merge');
-        applyingCloud = false;
+        try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(local, 'session cloud merge'); } finally { applyingCloud = false; }
         importedCloud = true;
       }
     }
@@ -231,7 +262,12 @@ export const cloudSync = {
         if (!activeUserId || applyingCloud) return;
         void upload().catch((error) => update({ phase: 'error', message: error.message }));
       }, 5000);
-      onTrainerDbChange(scheduleUpload);
+      let previousCounts = savedContentCounts(await createBackup(false)); let audit = Promise.resolve();
+      onTrainerDbChange((change) => {
+        scheduleUpload();
+        if (!import.meta.env.DEV) return;
+        audit = audit.then(async () => { const current = savedContentCounts(await createBackup(false)); if (!change.allowsSavedContentDecrease) logUnexpectedDecrease(previousCounts, current, change.operation); previousCounts = current; });
+      });
       const { data } = await supabase.auth.getSession();
       await syncSession(data.session);
       supabase.auth.onAuthStateChange((event, session) => {

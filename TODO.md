@@ -111,13 +111,13 @@ Commit `07df84b` is deployed and:
 - [x] Merge the recovered Notebook and clue records plus evidence-backed Taiwan descriptions into the latest cloud backup.
 - [x] Verify every surviving submitted clue image path in private per-user Supabase Storage.
 - [x] Preserve unresolved photo-linked notes and mark them as recovery errors instead of substituting another image.
-- Detect broken references automatically: when a Notebook note has a `clueId` but its clue record, hosted image path, or signed image cannot be resolved, mark it as a data-integrity error such as **Photo missing — recovery needed** instead of silently showing the ordinary text-only placeholder. Keep genuinely text-only notes unaffected.
-- Surface the detected broken-reference count in the recovery/audit UI and try safe repair from the local clue record, scoped draft, private Storage object, and frozen backup before asking the learner to act.
-- Add a development-only `console.error` invariant when the persisted clue or Notebook-note count decreases without an explicit user deletion or validated backup replacement. Log only previous/current counts, operation type, host, and anonymous session/device identifiers—never note text, images, locations, account data, tokens, or secrets.
-- Investigate the user's pattern that the **first image clue saved on each newly opened panorama** disappears while later same-panorama clues may survive. Trace first-save ordering across clue persistence, Notebook-history persistence, draft clearing, Review scheduling, cloud upload, focus pull, and mounted Available-notes refresh.
-- Verify My Clues is globally chronological after filters, renders Markdown rather than raw `**`, shows exact timestamps, and keeps source metadata beneath the body.
-- Verify Available notes refreshes immediately and keeps every separate clue visible after walking, changing modes, reload, focus-triggered sync, and switching between localhost and the production site.
-- Add a regression test that saves several photo/text clues sequentially on the same panorama while a cloud pull/import interleaves; every note and its own image must survive in creation order without requiring movement.
-- Add a regression test using an intentionally all-black image: it must save, remain linked to its own note, sync, reload, and render normally.
-- Add a regression test for a newly opened panorama: save its first image clue, then save additional clues without walking; the first and every later clue must retain separate IDs, images, descriptions, timestamps, and Available-notes entries after cloud synchronization and reload.
-- Save before/after cloud backups and report exact final counts. Do not claim full image recovery unless every surviving image is verified.
+- [x] Detect missing clue records, unresolved hosted paths, and browser image-load failures while leaving genuine text-only notes unaffected.
+- [x] Show the broken-photo count in My Clues and retry exact-image recovery from the panorama-scoped draft and private Storage object. The frozen backup was audited separately; panorama screenshots are never substituted.
+- [x] Log a development-only `console.error` whenever clue or Notebook counts fall outside an explicit delete or validated replacement, with counts, operation, host, and anonymous session/device IDs only.
+- [x] Trace the first-image failure: clue persistence correctly precedes Notebook persistence and draft clearing; the destructive background cloud replacement between those writes was the deletion point. Background imports now merge, and the first/later same-panorama regression locks that ordering.
+- [x] Verify My Clues sorts the combined filtered timeline before pagination, renders Markdown, shows exact timestamps, and keeps source metadata below the body.
+- [x] Verify Available notes refreshes after local saves and mounted cloud imports, retains nearby nodes across walking, and receives merged localhost/production records after focus sync.
+- [x] Cover several same-panorama photo/text saves across an interleaved cloud merge; unique note and clue IDs survive in newest-first creation order without movement.
+- [x] Cover an intentionally all-black first image through merge/reload data paths; pixels are never used as a validity test.
+- [x] Cover a new panorama's first and later clues as independent IDs, images, descriptions, timestamps, and linked notes after synchronization.
+- [x] Save before/after cloud backups and report exact final counts. Do not claim full image recovery unless every surviving image is verified.

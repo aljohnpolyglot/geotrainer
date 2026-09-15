@@ -24,7 +24,8 @@ export const STORE_NAMES = [
   'bookmarks', 'collections', 'settings', 'sessions', 'clues',
 ] as const;
 export type StoreName = (typeof STORE_NAMES)[number];
-const changeListeners = new Set<() => void>(); const notifyChange = () => changeListeners.forEach((listener) => listener());
+export type TrainerDbChange = { operation: string; allowsSavedContentDecrease?: boolean };
+const changeListeners = new Set<(change: TrainerDbChange) => void>(); const notifyChange = (change: TrainerDbChange) => changeListeners.forEach((listener) => listener(change));
 export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'random', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
 export function shuffleInPlace<T>(items: T[], random = Math.random) { for (let index = items.length - 1; index > 0; index--) { const swap = Math.floor(random() * (index + 1)); [items[index], items[swap]] = [items[swap], items[index]]; } return items; }
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
@@ -158,7 +159,7 @@ async function put<T>(storeName: StoreName, value: T): Promise<void> {
   const tx = db.transaction(storeName, 'readwrite');
   tx.objectStore(storeName).put(value);
   await complete(tx);
-  notifyChange();
+  notifyChange({ operation: `put:${storeName}` });
 }
 
 async function remove(storeName: StoreName, key: IDBValidKey): Promise<void> {
@@ -166,10 +167,10 @@ async function remove(storeName: StoreName, key: IDBValidKey): Promise<void> {
   const tx = db.transaction(storeName, 'readwrite');
   tx.objectStore(storeName).delete(key);
   await complete(tx);
-  notifyChange();
+  notifyChange({ operation: `delete:${storeName}`, allowsSavedContentDecrease: true });
 }
 
-export function onTrainerDbChange(listener: () => void): () => void {
+export function onTrainerDbChange(listener: (change: TrainerDbChange) => void): () => void {
   changeListeners.add(listener);
   return () => changeListeners.delete(listener);
 }
@@ -260,7 +261,7 @@ async function reconcileSavedReviews() {
   const merged = coalesceNearbyReviews(repaired, locations, attempts).reviews;
   if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index])) return;
   const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
-  await complete(tx); notifyChange();
+  await complete(tx); notifyChange({ operation: 'reconcile:reviews' });
 }
 
 export async function initTrainerDb(): Promise<void> {
@@ -296,7 +297,7 @@ export const trainerDb = {
     const tx = db.transaction('games', 'readwrite');
     tx.objectStore('games').clear();
     await complete(tx);
-    notifyChange();
+    notifyChange({ operation: 'clear:games' });
   },
   saveAttempt: (attempt: Attempt) => put('attempts', attempt),
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
@@ -487,7 +488,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
     for (const item of value.data[name] || []) tx.objectStore(name).put(item);
   }
   await complete(tx);
-  notifyChange();
+  notifyChange({ operation: `backup:${mode}`, allowsSavedContentDecrease: mode === 'replace' });
   await reconcileSavedReviews();
 }
 

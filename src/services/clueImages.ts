@@ -41,3 +41,16 @@ export async function resolveClueImages(clues: ClueRecord[]): Promise<ClueRecord
   const urls = new Map(data.map((item) => [item.path, item.signedUrl]));
   return clues.map((clue) => clue.imagePath && !clue.imageDataUrl ? { ...clue, imageDataUrl: urls.get(clue.imagePath) || '' } : clue);
 }
+
+export async function resolveStoredClueImages(userId: string, clueIds: string[]) {
+  if (!supabase || !clueIds.length) return new Map<string, { imagePath: string; imageDataUrl: string }>();
+  const { data: objects, error: listError } = await supabase.storage.from(CLUE_IMAGE_BUCKET).list(userId, { limit: 1000 });
+  if (listError) return new Map<string, { imagePath: string; imageDataUrl: string }>();
+  const names = new Set(objects.map((item) => item.name));
+  const existingIds = clueIds.filter((id) => names.has(`${id}.jpg`));
+  const paths = existingIds.map((id) => clueImagePath(userId, id));
+  if (!paths.length) return new Map<string, { imagePath: string; imageDataUrl: string }>();
+  const { data, error } = await supabase.storage.from(CLUE_IMAGE_BUCKET).createSignedUrls(paths, 3600);
+  if (error) return new Map<string, { imagePath: string; imageDataUrl: string }>();
+  return new Map(data.flatMap((item, index) => item.signedUrl ? [[existingIds[index], { imagePath: paths[index], imageDataUrl: item.signedUrl }] as const] : []));
+}
