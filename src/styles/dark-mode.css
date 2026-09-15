@@ -22,6 +22,7 @@
 .dark :is(.button.secondary, .grade-actions button) { color: var(--carbon); background: #102b3b; border-color: var(--rule); }
 .dark :is(.button.secondary:hover, .grade-actions button:hover, .icon-button:hover) { background: #1a3b4c; }
 .dark .coach-error { color: #ffc2ba; background: #421f20; border-color: #8d4949; }
+.dark .clue-integrity-error { color: #ffc2ba !important; background: #421f20; border-color: #8d4949; }
 
 .dark :is(#new-game-dialog, #bookmarks-dialog, #custom-collection-dialog, #game-history-dialog) :is(input, select),
 .dark #new-game-dialog button[class*="bg-stone-950"],

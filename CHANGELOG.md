@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-16
+
+- Prevented background cloud imports from clearing Notebook clue images saved during synchronization.
+- Rendered pasted Notebook Markdown formatting in My Clues and removed stray standalone list markers.
+- Kept broken photo-linked notes visible with a localized recovery warning instead of silently pairing them with another panorama image.
+
 ## 2026-09-15
 
 - Kept Available notes, saved clue images, and unsaved Notebook work visible throughout one continuous Street View walk, while reconnecting legacy image-only saves to their nearby richer Personal descriptions.

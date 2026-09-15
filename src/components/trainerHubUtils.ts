@@ -20,11 +20,14 @@ export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) =>
     const richer = !String(note.text || '').trim() && !note.category ? notes.find((other) => other !== note && (!!String(other.text || '').trim() || !!other.category) && (other.panoId === note.panoId || other.countryCode === note.countryCode) && Math.abs(other.updatedAt - note.updatedAt) <= 300_000) : undefined;
     used.add(note.clueId); links.set(richer || note, note.clueId);
   });
-  const candidates = notes.flatMap((note) => links.has(note) ? [] : clues.filter((clue) => !used.has(clue.id) && clue.origin === 'personal' && (clue.panoId === note.panoId || clue.countryCode === note.countryCode) && Math.abs(clue.createdAt - note.updatedAt) <= 300_000).map((clue) => ({ note, clue, exactPano: clue.panoId === note.panoId, distance: Math.abs(clue.createdAt - note.updatedAt) }))).sort((a, b) => Number(b.exactPano) - Number(a.exactPano) || a.distance - b.distance);
+  const candidates = notes.flatMap((note) => links.has(note) || note.clueId ? [] : clues.filter((clue) => !used.has(clue.id) && clue.origin === 'personal' && (clue.panoId === note.panoId || clue.countryCode === note.countryCode) && Math.abs(clue.createdAt - note.updatedAt) <= 300_000).map((clue) => ({ note, clue, exactPano: clue.panoId === note.panoId, distance: Math.abs(clue.createdAt - note.updatedAt) }))).sort((a, b) => Number(b.exactPano) - Number(a.exactPano) || a.distance - b.distance);
   candidates.forEach(({ note, clue }) => { if (!links.has(note) && !used.has(clue.id)) { used.add(clue.id); links.set(note, clue.id); } });
   return links;
 };
-export const visibleNotebookNotes = (notes: NotebookNote[], links: Map<NotebookNote, string>) => notes.filter((note) => !!String(note.text || '').trim() || !!note.category || links.has(note));
+export const visibleNotebookNotes = (notes: NotebookNote[], links: Map<NotebookNote, string>) => {
+  const linkedIds = new Set(links.values());
+  return notes.filter((note) => !!String(note.text || '').trim() || !!note.category || links.has(note) || !!note.clueId && !linkedIds.has(note.clueId));
+};
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
   const noteLinks = notebookClueLinks(clues, notes); const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
   return clues.filter((clue) => !linked.has(clue.id)).length + visibleNotebookNotes(notes, noteLinks).length + metas.length + coachNotes.length;

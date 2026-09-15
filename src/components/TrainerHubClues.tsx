@@ -9,6 +9,7 @@ import { localizeMetaLesson, metaLessonById } from '../data/metaLessons';
 import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { coachStyleLabel } from '../services/coachPreferences';
+import { CoachRichText } from './CoachRichText';
 
 type ClueView = 'library' | 'countries' | 'insights';
 
@@ -28,7 +29,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
   const noteImage = (note: NotebookNote) => clues.find((clue) => clue.id === noteLinks.get(note))?.imageDataUrl;
-  const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note) });
+  const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note), missingImage: !!note.clueId && !noteLinks.has(note) });
   const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined });
   const openMeta = (learned: LearnedMeta, lesson: NonNullable<ReturnType<typeof metaLessonById>>) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId });
   return <section className="clues-panel">
@@ -80,7 +81,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <div>
 <h3>
 <CountryFlag code={clue.countryCode} />{countryName(clue.countryCode)}</h3>
-<p>{clue.analysis.description || clue.analysis.strongClues[0] || t('savedVisualClue')}</p>
+<p><CoachRichText text={clue.analysis.description || clue.analysis.strongClues[0] || t('savedVisualClue')} /></p>
 <small>{t(clue.origin === 'personal' ? 'Personal' : 'AI-assisted')}{clue.analysis.style ? ` · ${coachStyleLabel(clue.analysis.style)}` : ''} · {new Date(clue.createdAt).toLocaleString(ui)}</small>
 </div>
 <div className="clue-row-actions">
@@ -96,14 +97,15 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 </div>
 </article>; })() : row.kind === 'coach' ? (() => { const note = row.value; return <article className={`coach-output-${note.analysis.style || 'quick'}`} key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
 <div className="clue-note-icon"><Sparkles size={24} /></div>
-<div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')}{note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
+<div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p><CoachRichText text={note.analysis.description || note.analysis.strongClues[0] || t('Learning note')} /></p><small>{t('AI-assisted')}{note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
 </article>; })() : row.kind === 'note' ? (() => { const note = row.value; return <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>
 {noteImage(note) ? <img src={noteImage(note)} alt="" /> : <div className="clue-note-icon"><NotebookPen size={24} /></div>}
 <div>
 <h3>
 <CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3>
 {note.category && <small>{t(note.category)}</small>}
-{note.text && <p>{note.text}</p>}
+{!!note.clueId && !noteLinks.has(note) && <p className="clue-integrity-error">{t('Saved photo is missing. Keep this note; recovery may still restore it.')}</p>}
+{note.text && <p><CoachRichText text={note.text} /></p>}
 <small>{t('Personal')} · {new Date(note.updatedAt).toLocaleString(ui)}</small>
 </div>
 </article>; })() : (() => { const { learned, lesson } = row.value; return lesson && <article key={`meta:${lesson.id}`} role="button" tabIndex={0} onClick={() => openMeta(learned, lesson)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openMeta(learned, lesson); } }}>

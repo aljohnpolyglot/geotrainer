@@ -8,7 +8,7 @@ function Inline({ text }: { text: string }) {
 }
 
 export function CoachRichText({ text, className = '' }: { text: string; className?: string }) {
-  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !/^[-•]\s*$/.test(line));
   return <span className={`coach-rich-text ${className}`.trim()}>{lines.map((line, index) => {
     const heading = line.match(/^(#{1,3})\s+(.+)$/);
     const label = line.match(/^([^:]{2,32}):\s*(.+)$/);

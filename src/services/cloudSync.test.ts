@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
+import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, savedContentCounts, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -37,6 +37,13 @@ test('cloud merge includes saved clue images and persisted preferences', () => {
   assert.deepEqual(merged.data.settings, [{ key: 'schedulerPreferences', value: { strictness: 'pro' } }]);
 });
 
+test('saved-content invariant counts every clue and independent Notebook save', () => {
+  const value = backup('local', 20);
+  value.data.clues.push({ id: 'black-image', imageDataUrl: 'data:image/png;base64,AAAA' }, { id: 'second-image' });
+  value.data.settings.push({ key: 'notebook.notes', value: [{ id: 'first' }, { id: 'second' }, { id: 'third' }] });
+  assert.deepEqual(savedContentCounts(value), { clues: 2, notes: 3 });
+});
+
 test('cloud merge keeps the newest setting across screens', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   cloud.data.settings.push({ key: 'workspace.active', value: { mode: 'study', location: 'Russia' }, updatedAt: 20 });
@@ -62,6 +69,17 @@ test('upload-side merge keeps Personal clues and Notebook notes from both origin
   const merged = mergeBackups(deployed, localhost);
   assert.deepEqual((merged.data.clues as Array<{ id: string }>).map(({ id }) => id), ['wall-image', 'roof-image']);
   assert.deepEqual((merged.data.settings[0] as { value: Array<{ id: string }> }).value.map(({ id }) => id), ['roof-note', 'wall-note']);
+});
+
+test('cloud merge preserves the first and later photo notes saved on one panorama', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.clues.push({ id: 'first-image', panoId: 'one-pano', createdAt: 10, imageDataUrl: 'data:image/png;base64,AAAA' });
+  cloud.data.settings.push({ key: 'notebook.notes', value: [{ id: 'first-note', panoId: 'one-pano', clueId: 'first-image', updatedAt: 10 }], updatedAt: 10 });
+  local.data.clues.push({ id: 'second-image', panoId: 'one-pano', createdAt: 20 }, { id: 'third-image', panoId: 'one-pano', createdAt: 30 });
+  local.data.settings.push({ key: 'notebook.notes', value: [{ id: 'second-note', panoId: 'one-pano', clueId: 'second-image', updatedAt: 20 }, { id: 'third-note', panoId: 'one-pano', clueId: 'third-image', updatedAt: 30 }], updatedAt: 30 });
+  const merged = mergeBackups(cloud, local);
+  assert.deepEqual((merged.data.clues as Array<{ id: string }>).map(({ id }) => id), ['first-image', 'second-image', 'third-image']);
+  assert.deepEqual(((merged.data.settings as Array<{ key: string; value: Array<{ id: string }> }>).find(({ key }) => key === 'notebook.notes')?.value || []).map(({ id }) => id), ['third-note', 'second-note', 'first-note']);
 });
 
 test('cloud merge includes review, language, UI, audio, game, and workspace settings', () => {

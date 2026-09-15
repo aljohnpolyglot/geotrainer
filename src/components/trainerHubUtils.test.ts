@@ -41,6 +41,16 @@ test('a richer nearby note inherits an image from an empty legacy save', () => {
   assert.deepEqual(visibleNotebookNotes([empty, rich], links), [rich]);
 });
 
+test('an explicit missing image stays broken instead of stealing another same-panorama image', () => {
+  const clue = { id: 'surviving-image', panoId: 'same-pano', countryCode: 'TW', origin: 'personal', createdAt: 100_000 };
+  const broken = { id: 'broken', panoId: 'same-pano', countryCode: 'TW', text: 'pedestrian sign', clueId: 'missing-image', updatedAt: 100_000 };
+  const independent = { id: 'independent', panoId: 'same-pano', countryCode: 'TW', text: 'bamboo stakes', updatedAt: 101_000 };
+  const links = notebookClueLinks([clue] as never, [broken, independent] as never);
+  assert.equal(links.has(broken as never), false);
+  assert.equal(links.get(independent as never), clue.id);
+  assert.deepEqual(visibleNotebookNotes([broken] as never, links), [broken]);
+});
+
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {
   assert.deepEqual(pageBounds(97, 5), { current: 5, pages: 5, start: 80, end: 100 });
   assert.deepEqual(pageBounds(39, 5), { current: 2, pages: 2, start: 20, end: 40 });

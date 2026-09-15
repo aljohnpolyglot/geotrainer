@@ -456,6 +456,8 @@ Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinwe
 
 Das **Notizbuch** speichert beliebig viele persönliche Notizen pro Panorama. Kategorie und Text sind optional; auch ein leerer Eintrag kann den Ort zur Wiederholung speichern. Referenzbilder lassen sich außerdem einfügen oder hochladen und mit Coach analysieren. Persönliche, KI-unterstützte und Meta-Einträge öffnen eine Detailansicht mit Street View und, falls vorhanden, einem eingeblendeten Bild. **Verfügbare Notizen** zeigt mit Zähler den vollständigen Verlauf des Panoramas und gleichländiger Street-View-Knoten im Umkreis von 50 Metern in einem einzigen durchgehenden Scrollbereich; neue Coach-Analysen erscheinen dort sofort und werden nach dem Neuladen nicht wieder als aktives Coach-Ergebnis geöffnet. Meine Hinweise filtert **Persönlich**, **KI-unterstützt** und **Meta-Lektionen** und zeigt passende Einträge seitenweise zu je 20. Während der Wiederholung bleiben Notiztext, Analysen, Kandidaten und Wahrscheinlichkeiten vor und nach dem Tipp sichtbar.
 
+Jeder Speichervorgang im Notizbuch bleibt ein eigener Eintrag, auch im selben Panorama. Kann ein eingereichtes Foto nicht geladen werden, bleibt die Notiz sichtbar und wird zur Wiederherstellung markiert.
+
 Jede abgeschlossene Coach-Analyse wird erst nach erfolgreichem Schreiben in Verfügbare Notizen und Meine Hinweise übernommen, auch reine Textanalysen ohne Bild. Gleichzeitig abgeschlossene Analysen werden nacheinander gespeichert, damit kein Eintrag einen anderen überschreibt.
 
 Ein schwaches Wiederholungsergebnis kehrt automatisch ans Ende der aktuellen Sitzung zurück, bis es bestanden wird. Jeder Versuch bleibt ein eigener Eintrag.

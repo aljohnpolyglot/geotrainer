@@ -105,6 +105,15 @@ export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((c
 export const withoutEmbeddedLocationImages = (locations: Record<string, unknown>[]) => locations.map(({ imageDataUrl: _image, ...location }) => location);
 export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
 export const shouldPullCloud = (now: number, previous: number, interval = 60_000) => !previous || now - previous >= interval;
+export const savedContentCounts = (backup: TrainerBackup) => ({
+  clues: backup.data.clues.length,
+  notes: ((backup.data.settings as Array<{ key?: string; value?: unknown }>).find((item) => item.key === 'notebook.notes')?.value as unknown[] | undefined)?.length || 0,
+});
+const reportUnexpectedDecrease = async (before: TrainerBackup, operation: string) => {
+  if (!import.meta.env.DEV) return;
+  const previous = savedContentCounts(before); const current = savedContentCounts(await createBackup(false));
+  if (current.clues < previous.clues || current.notes < previous.notes) console.error('[GeoTrainer] Unexpected saved-content decrease', { previous, current, operation });
+};
 
 async function upload(userId = activeUserId, announce = false, knownRemote?: unknown): Promise<void> {
   if (!supabase || !userId || applyingCloud) return;
@@ -133,7 +142,7 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
       const merged = mergeBackups(remote as TrainerBackup, backup);
       if (JSON.stringify(merged.data) !== JSON.stringify(backup.data)) {
         applyingCloud = true;
-        try { await importBackup(merged, 'replace'); } finally { applyingCloud = false; }
+        try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(backup, 'upload cloud merge'); } finally { applyingCloud = false; }
         backup = merged;
         importedCloud = true;
       }
@@ -192,7 +201,8 @@ async function syncSession(session: Session | null): Promise<void> {
       const merged = mergeBackups(data.backup, local);
       if (JSON.stringify(merged.data) !== JSON.stringify(local.data)) {
         applyingCloud = true;
-        await importBackup(merged, 'replace');
+        await importBackup(merged, 'merge');
+        await reportUnexpectedDecrease(local, 'session cloud merge');
         applyingCloud = false;
         importedCloud = true;
       }

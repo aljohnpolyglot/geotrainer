@@ -130,6 +130,9 @@ test('migration is idempotent and backup/import protects history', async () => {
   await importBackup(backup, 'merge');
   assert.equal((await trainerDb.locations()).length, expected.locations);
   assert.equal((await trainerDb.attempts()).length, expected.attempts);
+  await trainerDb.saveClue({ ...(await trainerDb.clues())[0], id: 'saved-during-cloud-import' });
+  await importBackup(backup, 'merge');
+  assert.equal((await trainerDb.clues()).some((clue) => clue.id === 'saved-during-cloud-import'), true);
 
   const beforeMalformed = (await trainerDb.attempts()).length;
   await assert.rejects(() => importBackup({ format: 'wrong' }, 'replace'));
