@@ -7,8 +7,16 @@ import type { CountryStats } from "./trainerHubTypes";
 
 export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
 export const countryName = (code: string) => COUNTRIES[code]?.name || code;
+export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) => {
+  const used = new Set<string>(); const links = new Map<NotebookNote, string>();
+  notes.forEach((note) => {
+    const match = note.clueId && clues.some((clue) => clue.id === note.clueId) ? note.clueId : clues.find((clue) => !used.has(clue.id) && clue.origin === 'personal' && clue.panoId === note.panoId && clue.createdAt === note.updatedAt)?.id;
+    if (match) { used.add(match); links.set(note, match); }
+  });
+  return links;
+};
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
-  const linked = new Set([...notes.flatMap((note) => note.clueId ? [note.clueId] : []), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
+  const linked = new Set([...notebookClueLinks(clues, notes).values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
   return clues.filter((clue) => !linked.has(clue.id)).length + notes.length + metas.length + coachNotes.length;
 };
 export const pageBounds = (total: number, page: number, size = 20) => { const pages = Math.max(1, Math.ceil(total / size)); const current = Math.min(Math.max(1, page), pages); return { current, pages, start: (current - 1) * size, end: current * size }; };

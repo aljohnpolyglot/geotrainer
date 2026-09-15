@@ -3,6 +3,7 @@
 ## 2026-09-15
 
 - Scoped unsaved Notebook text and clue-image drafts to each panorama so switching Learn or Play locations cannot replace them, and kept the location-clue control visible with a count and clear empty state.
+- Reconnected orphaned Personal Notebook images to their surviving descriptions when their panorama and original save timestamp match, without rewriting existing records.
 - Clarified Coverage exposure by showing unique panoramas and total encounters together in country-map tooltips, and labeled the matching Statistics column as Panoramas.
 - Preserved headings, bold emphasis, and bullet lists when rich text is pasted into Notebook, and documented the external Gemini-to-Notebook workflow in the localized Game Guide.
 - Standardized the Game Guide ending so External resources, Frequently asked questions, and Contact remain the final three sections.

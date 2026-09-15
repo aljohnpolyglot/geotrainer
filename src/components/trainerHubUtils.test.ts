@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryCounts, coverageCountryValues, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
+import { coverageCountryCounts, coverageCountryValues, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -16,6 +16,13 @@ test('saved clue total counts personal, AI, and Meta entries without double-coun
   const clues = [{ id: 'note-image' }, { id: 'coach' }]; const notes = [{ clueId: 'note-image' }]; const metas = [{ id: 'meta' }];
   assert.equal(savedClueCount(clues as never, notes as never, metas as never, [{ id: 'coach-note' }] as never), 4);
   assert.equal(savedClueCount(clues as never, notes as never, metas as never, [{ id: 'coach-note', clueId: 'coach' }] as never), 3);
+});
+
+test('orphaned personal clue images reconnect to Notebook text by exact panorama and save time', () => {
+  const clues = [{ id: 'image-a', panoId: 'pano-a', origin: 'personal', createdAt: 10 }, { id: 'image-b', panoId: 'pano-a', origin: 'personal', createdAt: 20 }];
+  const notes = [{ panoId: 'pano-a', countryCode: 'FR', text: 'shark teeth', updatedAt: 20 }];
+  assert.equal(notebookClueLinks(clues as never, notes).get(notes[0] as never), 'image-b');
+  assert.equal(savedClueCount(clues as never, notes, [], []), 2);
 });
 
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {
