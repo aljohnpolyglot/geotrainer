@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { CheckCircle2, LoaderCircle, X } from 'lucide-react';
 import { DEFAULT_SCHEDULER_PREFERENCES, effectiveReviewDueAt, nextScheduledReviewAt, normalizeSchedulerPreferences, trainerDb } from '../data/trainerDb';
 import { DEFAULT_LANGUAGE_PREFERENCES, LANGUAGE_OPTIONS, normalizeLanguagePreferences, translate } from '../services/language';
 import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferences, SupportedLanguage } from '../types';
@@ -35,6 +35,13 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const [audio, setAudio] = useState<AudioPreferences>(DEFAULT_AUDIO_PREFERENCES);
   const [tab, setTab] = useState<SettingsTab>('language');
   const [coach, setCoach] = useState<CoachPreferences>(DEFAULT_COACH_PREFERENCES);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+
+  useEffect(() => {
+    if (saveState !== 'saved') return;
+    const timer = window.setTimeout(() => setSaveState('idle'), 2200);
+    return () => window.clearTimeout(timer);
+  }, [saveState]);
 
   useEffect(() => {
     if (!open) return;
@@ -55,17 +62,22 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const number = (key: keyof SchedulerPreferences, value: string) => setScheduler((current) => ({ ...current, [key]: value === '' ? NaN : Number(value) }));
   const resetTime = (value: string) => { const [hours, minutes] = value.split(':').map(Number); setScheduler((current) => ({ ...current, reviewDayResetMinutes: (hours || 0) * 60 + (minutes || 0) })); };
   const save = async () => {
+    if (saveState === 'saving') return;
+    setSaveState('saving');
     const nextLanguages = normalizeLanguagePreferences(languages);
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
     const nextAudio = normalizeAudioPreferences(audio); setAudioPreferences(nextAudio);
-    await Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio), trainerDb.setSetting('coachPreferences', normalizeCoachPreferences(coach))]);
-    window.dispatchEvent(new CustomEvent('geotrainer:coach-preferences'));
-    announceLanguagePreferences(nextLanguages);
-    onChange?.(nextLanguages, compassStyle, darkMode);
-    if (nextLanguages.game !== loadedGameLanguage) reloadPage('game-language-change');
-    else onClose();
+    try {
+      await Promise.all([Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio), trainerDb.setSetting('coachPreferences', normalizeCoachPreferences(coach))]), new Promise((resolve) => window.setTimeout(resolve, 450))]);
+      window.dispatchEvent(new CustomEvent('geotrainer:coach-preferences'));
+      announceLanguagePreferences(nextLanguages);
+      onChange?.(nextLanguages, compassStyle, darkMode);
+      setSaveState('saved');
+      if (nextLanguages.game !== loadedGameLanguage) reloadPage('game-language-change');
+      else onClose();
+    } catch { setSaveState('error'); }
   };
-  if (!open) return null;
+  if (!open) return saveState === 'saved' ? <div className="settings-saved-toast" role="status" aria-live="polite"><CheckCircle2 size={19} />{translate(languages.ui, 'Settings saved')}</div> : null;
   const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])]; const guide = coachGuide(languages.ui);
 
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
@@ -110,7 +122,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label className="settings-checkbox"><input type="checkbox" checked={scheduler.reviewTimeZoneAuto !== false} onChange={(event) => setScheduler((current) => ({ ...current, reviewTimeZoneAuto: event.target.checked }))} />{translate(languages.ui, 'autoDetectTimeZone')}</label>
         <p>{translate(languages.ui, 'reviewResetDescription')}</p><p className="review-time-preview"><strong>{translate(languages.ui, 'nextReviewAt')}:</strong> {hasDueReviews ? translate(languages.ui, 'Due now') : previewAt ? `${new Date(previewAt).toLocaleString(languages.ui, { dateStyle: 'medium', timeStyle: 'short', timeZone: previewScheduler.reviewTimeZone })} · ${relativeDuration(previewAt - previewNow, languages.ui)}` : translate(languages.ui, 'noReviewsScheduled')}</p>
       </fieldset></>}
-      <footer><button type="button" className="button secondary" onClick={onClose}>{translate(languages.ui, 'close')}</button><button type="button" className="button primary" onClick={() => void save()}>{translate(languages.ui, 'save')}</button></footer>
+      <footer>{saveState === 'error' && <p className="settings-save-error" role="alert">{translate(languages.ui, 'Could not save settings. Try again.')}</p>}<button type="button" className="button secondary" disabled={saveState === 'saving'} onClick={onClose}>{translate(languages.ui, 'close')}</button><button type="button" className="button primary" disabled={saveState === 'saving'} onClick={() => void save()}>{saveState === 'saving' && <LoaderCircle className="button-spinner" size={16} />}{translate(languages.ui, saveState === 'saving' ? 'Saving...' : 'save')}</button></footer>
     </section>
   </div>;
 }

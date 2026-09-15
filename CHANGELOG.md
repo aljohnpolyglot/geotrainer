@@ -2,6 +2,7 @@
 
 ## 2026-09-16
 
+- Added an explicit Settings saving state, blocked duplicate submissions, preserved errors in the open modal, and confirmed successful saves after the modal closes.
 - Prevented background cloud imports from clearing Notebook clue images saved during synchronization.
 - Rendered pasted Notebook Markdown formatting in My Clues and removed stray standalone list markers.
 - Kept broken photo-linked notes visible with a localized recovery warning instead of silently pairing them with another panorama image.
