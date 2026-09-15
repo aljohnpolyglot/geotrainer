@@ -86,22 +86,31 @@ Recover three separate notes from the user's supplied Gemini history and screens
 
 Only the third description currently survives in IndexedDB. The screenshot shows the pedestrian note at `2026-09-15 18:59:27` and the curb/bamboo note at `2026-09-15 18:58:48`. Keep all three as independent records and attach only their own matching submitted/cropped image.
 
-### Prevention fix already drafted but not verified
+### Prevention fix deployed and verified
 
-There are uncommitted changes that:
+Commit `07df84b` is deployed and:
 
-- change background cloud imports from destructive `replace` to non-clearing `merge`, preventing a save completed during synchronization from being erased;
-- render Notebook, Personal clue, and Coach Markdown through `CoachRichText` in My Clues;
-- remove dangling standalone `-` paste markers;
-- add focused regression checks and changelog entries.
+- changes background cloud imports from destructive `replace` to non-clearing `merge`, preventing a save completed during synchronization from being erased;
+- renders Notebook, Personal clue, and Coach Markdown through `CoachRichText` in My Clues;
+- removes dangling standalone `-` paste markers;
+- keeps broken photo-linked notes visible with a localized recovery warning instead of attaching another clue image;
+- adds focused regression checks for same-panorama first/later images and all-black image data.
 
-Review the diff, then run `npm run lint`, `npm test`, and `npm run build`. Browser-check My Clues and Available notes in desktop/mobile and light/dark modes, run the Impeccable detector on changed UI files, then commit, push, wait for GitHub Pages deployment, and verify the deployed bundle.
+`npm run lint`, all 114 tests, the production build, the Impeccable detector, GitHub Pages deployment, and the served production bundle passed. Automated browser screenshots remain pending because no browser connection was available in the verification session.
+
+### Recovery status — 2026-09-16
+
+- A newer frozen snapshot recovered 85 Notebook records and 298 clue records. After removing one duplicate recovered draft and adding the two missing Taiwan descriptions from the supplied evidence, the recovery package contains 86 notes.
+- The package was merged with the latest remote backup. The verified cloud result contains **89 Notebook notes and 298 clue records**.
+- All **298/298** surviving clue image paths were verified in private Storage; no hosted object is missing.
+- **11** Notebook notes still reference submitted images absent from every frozen IndexedDB snapshot and private Storage. Their text remains intact and the deployed UI marks them for recovery. Do not claim those 11 images were recovered.
+- The final backup and verification report are frozen in `C:\Users\user-MSI\Downloads\GeoTrainer-Recovery-2026-09-15`.
 
 ### Recovery completion
 
-- Merge all 79 recovered Notebook records, all 294 decoded image records, and any additional exact records reconstructed from the supplied history into the latest cloud backup.
-- Re-upload every recovered submitted clue image to private per-user Supabase Storage and store its deterministic `imagePath`.
-- Verify that every Notebook `clueId` resolves to its own image record or is explicitly retained as a valid text-only legacy note.
+- [x] Merge the recovered Notebook and clue records plus evidence-backed Taiwan descriptions into the latest cloud backup.
+- [x] Verify every surviving submitted clue image path in private per-user Supabase Storage.
+- [x] Preserve unresolved photo-linked notes and mark them as recovery errors instead of substituting another image.
 - Detect broken references automatically: when a Notebook note has a `clueId` but its clue record, hosted image path, or signed image cannot be resolved, mark it as a data-integrity error such as **Photo missing — recovery needed** instead of silently showing the ordinary text-only placeholder. Keep genuinely text-only notes unaffected.
 - Surface the detected broken-reference count in the recovery/audit UI and try safe repair from the local clue record, scoped draft, private Storage object, and frozen backup before asking the learner to act.
 - Add a development-only `console.error` invariant when the persisted clue or Notebook-note count decreases without an explicit user deletion or validated backup replacement. Log only previous/current counts, operation type, host, and anonymous session/device identifiers—never note text, images, locations, account data, tokens, or secrets.
