@@ -40,6 +40,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [noteSaved, setNoteSaved] = useState(false);
   const [noteClueId, setNoteClueId] = useState<string>();
   const [noteImage, setNoteImage] = useState('');
+  const [noteFormKey, setNoteFormKey] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
@@ -72,7 +73,9 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     if (noteImage && !clueId) clueId = await onSaveClue({ imageDataUrl: noteImage, model: 'Notebook', generatedAt: updatedAt, analysis: { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] }, origin: 'personal' }) || undefined;
     const saved = await trainerDb.setting<NotebookNote[]>('notebook.notes') || [];
     await trainerDb.setSetting('notebook.notes', [{ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt }, ...saved]);
-    setNote(''); setCategory(''); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1); void trainerDb.setSetting('workspace.noteDraft', null); window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();
+    setNote(''); setCategory(''); setCategoryOpen(false); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1);
+    await Promise.all([trainerDb.setSetting('workspace.noteDraft', null), trainerDb.setSetting('workspace.clueDraft', null)]); setNoteFormKey((value) => value + 1);
+    window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();
   };
 
   return <>
@@ -100,7 +103,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     </aside>}
     {open === 'notebook' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel notebook-panel" aria-label={t('Notebook')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><NotebookPen size={17} />{t('Notebook')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
-      <><ClueCapture panoId={panoId} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal' })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis />
+      <><div key={noteFormKey}><ClueCapture panoId={panoId} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal' })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis /></div>
         <label>{t('Clue category (optional)')}<div className="note-category-picker" onKeyDown={(event) => { if (event.key === 'Escape') setCategoryOpen(false); }}><button type="button" aria-expanded={categoryOpen} onClick={() => setCategoryOpen((value) => !value)}>{category ? t(category) : t('Choose a category')}<span aria-hidden="true">⌄</span></button>{categoryOpen && <div role="listbox" aria-label={t('Clue category (optional)')}><button type="button" role="option" aria-selected={!category} onClick={() => { setCategory(''); setCategoryOpen(false); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text: note, category: '' } satisfies NoteDraft); }}>{t('Any category')}</button>{[...NOTE_CATEGORIES].sort((a, b) => t(a).localeCompare(t(b), ui)).map((item) => <button type="button" role="option" aria-selected={category === item} key={item} onClick={() => { setCategory(item); setCategoryOpen(false); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text: note, category: item } satisfies NoteDraft); }}>{t(item)}</button>)}</div>}</div></label>
         <label>{t('Personal hint or note')}<textarea value={note} maxLength={5000} placeholder={t('Write what you noticed, such as “bollards have a black cap.”')} onChange={(event) => { const text = event.target.value; setNote(text); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text, category } satisfies NoteDraft); }} /></label>
         <button className="notebook-save" disabled={noteSaved} onClick={() => void saveNotebookNote()}>{t(noteSaved ? 'Saved' : 'Save note for Review')}</button></>

@@ -184,6 +184,11 @@ test('Coach returns a grounded response instead of a service outage when detail 
   assert.equal(calls, 2);
 });
 
+test('Coach reports a Google-disabled leaked key without echoing provider details', async () => {
+  const response = new Response(JSON.stringify({ error: { status: 'PERMISSION_DENIED', message: 'Your API key was reported as leaked. Please use another API key.' } }), { status: 403, headers: { 'content-type': 'application/json' } });
+  await assert.rejects(() => callGeminiCoach(new GeminiKeyCarousel(['secret']), { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj' }, (async () => response.clone()) as typeof fetch), /disabled by Google/);
+});
+
 test('automatic Coach capture requests the exact pano and current orientation without storing imagery', async () => {
   let requested = '';
   const fetcher = (async (url: string | URL | Request) => {

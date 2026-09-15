@@ -241,7 +241,12 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
         });
         if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
         if (response.status === 404) { lastError = new Error(`${model} is unavailable.`); break; }
-        if (!response.ok) { lastError = new Error(response.status >= 500 ? 'Gemini service error.' : 'Gemini request was rejected.'); continue; }
+        if (!response.ok) {
+          const failure = await response.clone().json().catch(() => undefined) as { error?: { status?: string; message?: string; details?: Array<{ reason?: string }> } } | undefined;
+          const leaked = /reported as leaked/i.test(failure?.error?.message || '');
+          const reason = failure?.error?.details?.find((detail) => detail.reason)?.reason || failure?.error?.status;
+          lastError = new Error(response.status >= 500 ? 'Gemini service error.' : leaked ? 'Gemini API key was disabled by Google. Update the server key and try again.' : `Gemini request was rejected (${response.status}${reason ? `: ${reason}` : ''}).`); continue;
+        }
         const raw = await response.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
         const text = raw.candidates?.[0]?.content?.parts?.find((part) => part.text)?.text;
         if (!text) { lastError = new Error('Gemini returned an empty response.'); continue; }

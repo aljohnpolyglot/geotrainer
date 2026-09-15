@@ -2,6 +2,7 @@
 
 ## 2026-09-15
 
+- Reset the Notebook photo, analyzed clue, category, and note text together after a successful save, including their reload-persistent drafts.
 - Made every completed Coach analysis retain its exact current-view preview in Available notes and My Clues, while keeping additional 360° views transient and de-duplicating linked entries.
 - Reworked Coach output around explicit candidate comparisons, missing evidence, generic-clue detection, confusers, causal geography, and highest-information next clues; narrower regional confidence can no longer exceed the overall result.
 - Polished the six-style picker with a distinct emoji and purpose for every Coach, organized the full style guide inside the standalone Game Guide, and placed “Always ask” inside the persisted style dropdown without a duplicate Settings guide button.
