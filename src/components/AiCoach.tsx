@@ -38,18 +38,14 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
   const [activeStyle, setActiveStyle] = useState(coachPreferences.style);
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
-  const initialPano = useRef(panoId);
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     void trainerDb.setting<{ coachOpen?: boolean }>('workspace.panels').then((saved) => {
-      if (panoId === initialPano.current && typeof saved?.coachOpen === 'boolean') setOpen(saved.coachOpen);
+      if (typeof saved?.coachOpen === 'boolean') setOpen(saved.coachOpen);
     });
-  }, [panoId]);
-  useEffect(() => {
-    requestId.current += 1; controller.current?.abort(); controller.current = null; setError(''); setLoading(null); setResult(null); setSaved(false); setPendingMode(null); setActiveStyle(coachPreferences.style);
-  }, [panoId]);
+  }, []);
 
   const setCoachOpen = (value: boolean) => {
     setOpen(value);

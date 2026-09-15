@@ -109,7 +109,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.locations()).filter((item) => item.id === 'pano-new').length, 1);
   assert.equal((await trainerDb.studyVisits()).filter((item) => item.panoId === 'pano-new').length, 2);
 
-  await trainerDb.saveClue({ id: 'clue-1', panoId: 'pano-new', countryCode: 'DE', lat: 52.5, lng: 13.4, createdAt: 500, imageDataUrl: 'data:image/jpeg;base64,AQID', model: 'test', analysis: { confidence: 'low', region: '', candidates: [], strongClues: ['Black reflector'], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] } });
+  await trainerDb.saveClue({ id: 'clue-1', panoId: 'pano-new', countryCode: 'DE', lat: 52.5, lng: 13.4, createdAt: 500, imageDataUrl: 'data:image/jpeg;base64,AQID', model: 'test', analysis: { confidence: 'low', region: '', candidates: [{ countryCode: 'AT', confidence: .6 }], strongClues: ['Black reflector'], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] } });
   assert.equal((await trainerDb.clues())[0].countryCode, 'DE');
   assert.deepEqual([(await trainerDb.clues())[0].lat, (await trainerDb.clues())[0].lng], [52.5, 13.4]);
   await trainerDb.setSetting('notebook.notes', [{ id: 'note-1', panoId: 'pano-new', countryCode: 'DE', text: '', clueId: 'clue-1', updatedAt: 500 }]);

@@ -2,6 +2,11 @@
 
 ## 2026-09-15
 
+- Kept active AI Coach and submitted-clue analysis running while the learner walks between nearby panoramas, and saved each completed result against the location where its request began regardless of which country the Coach ranked first.
+- Prevented Coach reasoning recipes from appearing as generated learner text across all six styles, while keeping Deep Geography's supported causal explanation natural and detailed.
+- Required every Coach style to return a learner-facing summary instead of leaving its lead section blank.
+- Required generated Study locations to provide Street View navigation links, matching movable Play rounds and avoiding isolated no-walk starts.
+- Localized the shared Coach Candidates heading in every supported UI language.
 - Reset the Notebook photo, analyzed clue, category, and note text together after a successful save, including their reload-persistent drafts.
 - Made every completed Coach analysis retain its exact current-view preview in Available notes and My Clues, while keeping additional 360° views transient and de-duplicating linked entries.
 - Reworked Coach output around explicit candidate comparisons, missing evidence, generic-clue detection, confusers, causal geography, and highest-information next clues; narrower regional confidence can no longer exceed the overall result.

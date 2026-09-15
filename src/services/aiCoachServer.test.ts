@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCoachPrompt, callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 
 const validAnalysis = {
@@ -27,6 +27,11 @@ test('Coach decodes escaped Unicode before rendering localized evidence', () => 
   ];
   cases.forEach(([input, expected]) => assert.equal(decodeCoachText(input), expected));
   assert.equal(decodeCoachText('Reference 00e0 remains unchanged.'), 'Reference 00e0 remains unchanged.');
+});
+
+test('Coach removes translated internal recipe chains from learner-facing descriptions', () => {
+  const text = 'COSA → FUNZIONE → CAUSA → RISPOSTA UMANA → RISULTATO VISIBILE → VALORE GEOGUESSR. TERRENO → AGRICOLTURA → CLIMA → RISULTATO. La strada e i campi offrono solo prove regionali.';
+  assert.equal(stripCoachInstructionScaffolds(text), 'La strada e i campi offrono solo prove regionali.');
 });
 
 test('Gemini carousel exhausts shuffled keys after quota failures without exposing them', async () => {
@@ -264,11 +269,11 @@ test('the same image gets genuinely different coaching instructions while sharin
   assert.match(quick, /QUICK GUESS.*short conclusion.*ranked countries/i);
   assert.match(meta, /META COACH.*S\/A\/B\/C\/D.*REGIONIFIER/i);
   assert.match(elimination, /ELIMINATION COACH.*candidate pool.*best separator/i);
-  assert.match(geography, /DEEP GEOGRAPHY.*FUNCTION.*CAUSE.*HUMAN RESPONSE/i);
+  assert.match(geography, /DEEP GEOGRAPHY.*causal story.*learner-facing prose/i);
   assert.match(memory, /MEMORY COACH.*memory anchor.*recall questions/i);
   assert.match(analyst, /PRO ANALYST.*positive evidence.*(?:highest-information|information gain)/i);
   for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /major candidate.*main confuser.*highest-information decider/i);
   for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /positive evidence.*negative or missing evidence.*main confuser.*highest-information decider/i);
-  assert.match(geography, /WHAT.*FUNCTION.*CAUSE.*HUMAN RESPONSE.*VISIBLE RESULT.*GEOGUESSR VALUE/i);
+  for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /Never echo prompt instructions.*style recipes.*learner-facing content/i);
   assert.doesNotMatch(`${quick}${meta}${elimination}${geography}${memory}${analyst}`, /ADAPTIVE/i);
 });

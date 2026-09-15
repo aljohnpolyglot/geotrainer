@@ -25,7 +25,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   adviceOpen: boolean;
   refreshKey: number;
   onAdviceClose: (forever: boolean) => void;
-  onSaveClue: (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach' }) => Promise<string | void> | string | void;
+  onSaveClue: (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach'; location?: { panoId: string; lat: number; lng: number; countryCode: string } }) => Promise<string | void> | string | void;
   onNoteSaved: () => Promise<void> | void;
 }) {
   const { ui, ai } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
@@ -103,7 +103,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     </aside>}
     {open === 'notebook' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel notebook-panel" aria-label={t('Notebook')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><NotebookPen size={17} />{t('Notebook')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
-      <><div key={noteFormKey}><ClueCapture panoId={panoId} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal' })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis /></div>
+      <><div key={noteFormKey}><ClueCapture panoId={panoId} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal', location: { panoId, lat, lng, countryCode } })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis /></div>
         <label>{t('Clue category (optional)')}<div className="note-category-picker" onKeyDown={(event) => { if (event.key === 'Escape') setCategoryOpen(false); }}><button type="button" aria-expanded={categoryOpen} onClick={() => setCategoryOpen((value) => !value)}>{category ? t(category) : t('Choose a category')}<span aria-hidden="true">⌄</span></button>{categoryOpen && <div role="listbox" aria-label={t('Clue category (optional)')}><button type="button" role="option" aria-selected={!category} onClick={() => { setCategory(''); setCategoryOpen(false); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text: note, category: '' } satisfies NoteDraft); }}>{t('Any category')}</button>{[...NOTE_CATEGORIES].sort((a, b) => t(a).localeCompare(t(b), ui)).map((item) => <button type="button" role="option" aria-selected={category === item} key={item} onClick={() => { setCategory(item); setCategoryOpen(false); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text: note, category: item } satisfies NoteDraft); }}>{t(item)}</button>)}</div>}</div></label>
         <label>{t('Personal hint or note')}<textarea value={note} maxLength={5000} placeholder={t('Write what you noticed, such as “bollards have a black cap.”')} onChange={(event) => { const text = event.target.value; setNote(text); setNoteSaved(false); void trainerDb.setSetting('workspace.noteDraft', { panoId, text, category } satisfies NoteDraft); }} /></label>
         <button className="notebook-save" disabled={noteSaved} onClick={() => void saveNotebookNote()}>{t(noteSaved ? 'Saved' : 'Save note for Review')}</button></>

@@ -37,15 +37,15 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
   const [choosingStyle, setChoosingStyle] = useState(false);
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
+  const initialPano = useRef(panoId);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     let active = true;
-    requestId.current += 1; controller.current?.abort(); controller.current = null; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setBusy(false); setChoosingStyle(false); onBusyChange?.(false); onSaved?.(undefined);
     void trainerDb.setting<ClueDraft>('workspace.clueDraft').then((draft) => {
-      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
+      if (active && draft?.panoId === initialPano.current) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
     });
     return () => { active = false; };
-  }, [panoId]);
+  }, []);
 
   const run = async (task: (signal: AbortSignal, isCurrent: () => boolean) => Promise<void>) => {
     controller.current?.abort();

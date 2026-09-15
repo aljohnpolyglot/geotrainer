@@ -387,10 +387,10 @@ export default function App() {
   const canPan = appMode === 'review' && reviewAttempt ? reviewAttempt.canPan : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canPan : true;
   const canZoom = appMode === 'review' && reviewAttempt ? reviewAttempt.canZoom : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canZoom : true;
 
-  const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis; clueId?: string }) => {
-    setCoachNote(note);
-    const location = currentLocationRef.current;
-    if (location) { await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }); setTrainerRefreshKey((key) => key + 1); }
+  const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis; clueId?: string; location?: LocationResult }) => {
+    const { location: sourceLocation, ...savedNote } = note; setCoachNote(savedNote);
+    const location = sourceLocation || currentLocationRef.current;
+    if (location) { await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...savedNote }); setTrainerRefreshKey((key) => key + 1); }
     if (appMode === 'study' && currentVisitRef.current && currentVisitRef.current.panoId === currentLocationRef.current?.panoId) {
       Object.assign(currentVisitRef.current, { coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis });
       await trainerDb.saveVisit({ ...currentVisitRef.current });
@@ -400,11 +400,11 @@ export default function App() {
     }
   }, [appMode, handleSaveStudyForReview]);
 
-  const handleSaveClue = useCallback(async (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach' }) => {
-    const location = currentLocationRef.current;
+  const handleSaveClue = useCallback(async (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach'; location?: LocationResult }) => {
+    const { location: sourceLocation, ...savedClue } = clue; const location = sourceLocation || currentLocationRef.current;
     if (!location) return;
     const id = `clue-${crypto.randomUUID()}`;
-    await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: clue.generatedAt, ...clue });
+    await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: savedClue.generatedAt, ...savedClue });
     if (appMode === 'play') playAiAssistedRef.current = true;
     if (appMode === 'study') await handleSaveStudyForReview(false);
     setTrainerRefreshKey((key) => key + 1);
