@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryCounts, coverageCountryValues, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries } from './trainerHubUtils';
+import { coverageCountryCounts, coverageCountryValues, elapsed, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, visibleNotebookNotes } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -23,6 +23,22 @@ test('orphaned personal clue images reconnect to nearby Notebook saves on the sa
   const notes = [{ panoId: 'pano-a', countryCode: 'FR', text: 'shark teeth', updatedAt: 170_000 }];
   assert.equal(notebookClueLinks(clues as never, notes).get(notes[0] as never), 'image-b');
   assert.equal(savedClueCount(clues as never, notes, [], []), 2);
+});
+
+test('walking reconnects a nearby same-country Notebook image and rounds active time', () => {
+  const clue = { id: 'walked-image', panoId: 'pano-b', countryCode: 'MN', origin: 'personal', createdAt: 100_000 };
+  const note = { panoId: 'pano-a', countryCode: 'MN', updatedAt: 110_000 };
+  assert.equal(notebookClueLinks([clue] as never, [note] as never).get(note as never), clue.id);
+  assert.equal(elapsed(82.56000000000002), '1m 23s');
+});
+
+test('a richer nearby note inherits an image from an empty legacy save', () => {
+  const clue = { id: 'image', panoId: 'walk-b', countryCode: 'IL', origin: 'personal', createdAt: 100_000 };
+  const empty = { id: 'empty', panoId: 'walk-b', countryCode: 'IL', text: '', clueId: 'image', updatedAt: 100_000 };
+  const rich = { id: 'rich', panoId: 'walk-a', countryCode: 'IL', text: 'Tel Aviv skyline', updatedAt: 140_000 };
+  const links = notebookClueLinks([clue] as never, [empty, rich]);
+  assert.equal(links.get(rich), 'image');
+  assert.deepEqual(visibleNotebookNotes([empty, rich], links), [rich]);
 });
 
 test('clue pagination uses twenty rows and clamps an emptied last page', () => {

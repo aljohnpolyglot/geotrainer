@@ -8,19 +8,26 @@ import type { CountryStats } from "./trainerHubTypes";
 export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
 export const timestamp = (value: number, locale: string) => new Date(value).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'medium' });
 export const timestampRange = (start: number, end: number, locale: string) => `${timestamp(start, locale)} – ${timestamp(end, locale)}`;
+export const elapsed = (seconds: number) => {
+  const total = Math.max(0, Math.round(seconds)); const minutes = Math.floor(total / 60); const remainder = total % 60;
+  return minutes ? `${minutes}m ${remainder}s` : `${remainder}s`;
+};
 export const countryName = (code: string) => COUNTRIES[code]?.name || code;
 export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) => {
   const used = new Set<string>(); const links = new Map<NotebookNote, string>();
   notes.forEach((note) => {
-    if (note.clueId && clues.some((clue) => clue.id === note.clueId)) { used.add(note.clueId); links.set(note, note.clueId); }
+    if (!note.clueId || !clues.some((clue) => clue.id === note.clueId)) return;
+    const richer = !String(note.text || '').trim() && !note.category ? notes.find((other) => other !== note && (!!String(other.text || '').trim() || !!other.category) && (other.panoId === note.panoId || other.countryCode === note.countryCode) && Math.abs(other.updatedAt - note.updatedAt) <= 300_000) : undefined;
+    used.add(note.clueId); links.set(richer || note, note.clueId);
   });
-  const candidates = notes.flatMap((note) => links.has(note) ? [] : clues.filter((clue) => !used.has(clue.id) && clue.origin === 'personal' && clue.panoId === note.panoId && Math.abs(clue.createdAt - note.updatedAt) <= 300_000).map((clue) => ({ note, clue, distance: Math.abs(clue.createdAt - note.updatedAt) }))).sort((a, b) => a.distance - b.distance);
+  const candidates = notes.flatMap((note) => links.has(note) ? [] : clues.filter((clue) => !used.has(clue.id) && clue.origin === 'personal' && (clue.panoId === note.panoId || clue.countryCode === note.countryCode) && Math.abs(clue.createdAt - note.updatedAt) <= 300_000).map((clue) => ({ note, clue, exactPano: clue.panoId === note.panoId, distance: Math.abs(clue.createdAt - note.updatedAt) }))).sort((a, b) => Number(b.exactPano) - Number(a.exactPano) || a.distance - b.distance);
   candidates.forEach(({ note, clue }) => { if (!links.has(note) && !used.has(clue.id)) { used.add(clue.id); links.set(note, clue.id); } });
   return links;
 };
+export const visibleNotebookNotes = (notes: NotebookNote[], links: Map<NotebookNote, string>) => notes.filter((note) => !!String(note.text || '').trim() || !!note.category || links.has(note));
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
-  const linked = new Set([...notebookClueLinks(clues, notes).values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
-  return clues.filter((clue) => !linked.has(clue.id)).length + notes.length + metas.length + coachNotes.length;
+  const noteLinks = notebookClueLinks(clues, notes); const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
+  return clues.filter((clue) => !linked.has(clue.id)).length + visibleNotebookNotes(notes, noteLinks).length + metas.length + coachNotes.length;
 };
 export const pageBounds = (total: number, page: number, size = 20) => { const pages = Math.max(1, Math.ceil(total / size)); const current = Math.min(Math.max(1, page), pages); return { current, pages, start: (current - 1) * size, end: current * size }; };
 export type CoverageOverlay = "exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery";

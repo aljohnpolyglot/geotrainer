@@ -2,6 +2,12 @@
 
 ## 2026-09-15
 
+- Kept Available notes, saved clue images, and unsaved Notebook work visible throughout one continuous Street View walk, while reconnecting legacy image-only saves to their nearby richer Personal descriptions.
+- Retried transient Supabase backup failures and removed duplicate location-preview bytes from cloud payloads while retaining local previews and private hosted Notebook/Coach images.
+- Added Study-history audit rows showing new cards versus re-encounters, nearby surviving Personal clues, rounded active durations, and a direct panorama link even when the location index is missing.
+- Reconnected detached Notebook images after walking when a same-country capture and note were saved within five minutes.
+- Replaced raw panorama IDs in forgotten-place statistics with resolved country names or a localized unknown label and a direct Street View link.
+- Sorted the complete My Clues library chronologically across Personal images, Notebook descriptions, Coach notes, and Meta lessons before pagination.
 - Added exact localized timestamps to every History row and start–end timestamps to every Statistics session so activity can be matched against saved notes and clues.
 - Merged the latest remote backup before every coalesced cloud upload so localhost and production sessions on the same account cannot replace each other's unique progress.
 - Scoped unsaved Notebook text and clue-image drafts to each panorama so switching Learn or Play locations cannot replace them, and kept the location-clue control visible with a count and clear empty state.

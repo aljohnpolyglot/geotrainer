@@ -4,7 +4,7 @@ import type { ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, TrainerLo
 import { COUNTRIES } from '../data/countries';
 import { CountryFlag } from './CountryFlag';
 import { ClueGallery } from './ClueGallery';
-import { countryName, notebookClueLinks, pageBounds, savedClueCount, useHubTranslate } from './trainerHubUtils';
+import { countryName, notebookClueLinks, pageBounds, savedClueCount, useHubTranslate, visibleNotebookNotes } from './trainerHubUtils';
 import { localizeMetaLesson, metaLessonById } from '../data/metaLessons';
 import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -15,14 +15,15 @@ type ClueView = 'library' | 'countries' | 'insights';
 export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, onDelete, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onTrainCountries: (codes: string[], name: string) => void }) {
   const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null);
   const noteLinks = useMemo(() => notebookClueLinks(clues, notebookNotes), [clues, notebookNotes]);
+  const displayNotes = useMemo(() => visibleNotebookNotes(notebookNotes, noteLinks), [notebookNotes, noteLinks]);
   const metaRows = useMemo(() => learnedMetas.map((learned) => { const lesson = metaLessonById(learned.id); return { learned, lesson: lesson && localizeMetaLesson(lesson, ui) }; }).filter((row) => !!row.lesson).sort((a, b) => b.learned.learnedAt - a.learned.learnedAt), [learnedMetas, ui]);
   const filtered = useMemo(() => { const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]); return clues.filter((clue) => !linked.has(clue.id) && (source === 'all' || source === 'personal' ? clue.origin === 'personal' || source === 'all' : source === 'coach' ? clue.origin !== 'personal' : false) && (!country || clue.countryCode === country) && (!query || `${countryName(clue.countryCode)} ${clue.analysis.description} ${clue.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt); }, [clues, coachNotes, country, noteLinks, query, source]);
   const filteredMetas = useMemo(() => (source === 'all' || source === 'meta' ? metaRows : []).filter(({ learned, lesson }) => (!country || learned.countryCode === country) && (!query || `${countryName(learned.countryCode)} ${lesson?.text} ${lesson?.note || ''}`.toLowerCase().includes(query.toLowerCase()))), [country, metaRows, query, source]);
-  const filteredNotes = useMemo(() => (source === 'all' || source === 'personal' ? notebookNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.category || ''} ${note.text}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.updatedAt - a.updatedAt), [country, notebookNotes, query, source]);
+  const filteredNotes = useMemo(() => (source === 'all' || source === 'personal' ? displayNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.category || ''} ${note.text}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.updatedAt - a.updatedAt), [country, displayNotes, query, source]);
   const filteredCoach = useMemo(() => (source === 'all' || source === 'coach' ? coachNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.analysis.description || ''} ${note.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.generatedAt - a.generatedAt), [coachNotes, country, query, source]);
   useEffect(() => setPage(1), [country, query, source]);
-  const totalFiltered = filtered.length + filteredCoach.length + filteredNotes.length + filteredMetas.length; const paging = pageBounds(totalFiltered, page); const coachOffset = filtered.length; const noteOffset = coachOffset + filteredCoach.length; const metaOffset = noteOffset + filteredNotes.length;
-  const pageClues = filtered.slice(paging.start, paging.end); const pageCoach = filteredCoach.slice(Math.max(0, paging.start - coachOffset), Math.max(0, paging.end - coachOffset)); const pageNotes = filteredNotes.slice(Math.max(0, paging.start - noteOffset), Math.max(0, paging.end - noteOffset)); const pageMetas = filteredMetas.slice(Math.max(0, paging.start - metaOffset), Math.max(0, paging.end - metaOffset));
+  const timeline = useMemo(() => [...filtered.map((value) => ({ kind: 'clue' as const, value, at: value.createdAt })), ...filteredCoach.map((value) => ({ kind: 'coach' as const, value, at: value.generatedAt })), ...filteredNotes.map((value) => ({ kind: 'note' as const, value, at: value.updatedAt })), ...filteredMetas.map((value) => ({ kind: 'meta' as const, value, at: value.learned.learnedAt }))].sort((a, b) => b.at - a.at), [filtered, filteredCoach, filteredMetas, filteredNotes]);
+  const totalFiltered = timeline.length; const paging = pageBounds(totalFiltered, page); const pageRows = timeline.slice(paging.start, paging.end);
   const groups = useMemo(() => [...new Set([...clues.map((clue) => clue.countryCode), ...learnedMetas.map((meta) => meta.countryCode), ...notebookNotes.map((note) => note.countryCode), ...coachNotes.map((note) => note.countryCode)])].map((code) => { const rows = clues.filter((clue) => clue.countryCode === code); const metas = learnedMetas.filter((meta) => meta.countryCode === code); const notes = notebookNotes.filter((note) => note.countryCode === code); const coaches = coachNotes.filter((note) => note.countryCode === code); const analyzed = [...rows.map((row) => row.analysis), ...coaches.map((row) => row.analysis)].filter((analysis) => analysis.candidates.length); return { code, count: rows.length + metas.length + notes.length + coaches.length, latest: Math.max(0, ...rows.map((row) => row.createdAt), ...metas.map((row) => row.learnedAt), ...notes.map((row) => row.updatedAt), ...coaches.map((row) => row.generatedAt)), confidence: analyzed.length ? analyzed.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed.length : 0 }; }).sort((a, b) => b.count - a.count || countryName(a.code).localeCompare(countryName(b.code))), [clues, coachNotes, learnedMetas, notebookNotes]);
   const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
@@ -74,7 +75,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <X size={16} />
 </button>}</div>
 </div>
-<div className="clue-library">{pageClues.map((clue) => <article className={`coach-output-${clue.analysis.style || 'quick'}`} key={clue.id} role="button" tabIndex={0} onClick={() => setGallery({ country: clue.countryCode, clueId: clue.id })} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setGallery({ country: clue.countryCode, clueId: clue.id }); } }}>
+<div className="clue-library">{pageRows.map((row, index) => row.kind === 'clue' ? (() => { const clue = row.value; return <article className={`coach-output-${clue.analysis.style || 'quick'}`} key={clue.id} role="button" tabIndex={0} onClick={() => setGallery({ country: clue.countryCode, clueId: clue.id })} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setGallery({ country: clue.countryCode, clueId: clue.id }); } }}>
 <img src={clue.imageDataUrl} alt={t('savedVisualClue')} />
 <div>
 <h3>
@@ -93,10 +94,10 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <Trash2 size={16} />
 </button>
 </div>
-</article>)}{pageCoach.map((note) => <article className={`coach-output-${note.analysis.style || 'quick'}`} key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
+</article>; })() : row.kind === 'coach' ? (() => { const note = row.value; return <article className={`coach-output-${note.analysis.style || 'quick'}`} key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
 <div className="clue-note-icon"><Sparkles size={24} /></div>
 <div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')}{note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
-</article>)}{pageNotes.map((note, index) => <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>
+</article>; })() : row.kind === 'note' ? (() => { const note = row.value; return <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>
 {noteImage(note) ? <img src={noteImage(note)} alt="" /> : <div className="clue-note-icon"><NotebookPen size={24} /></div>}
 <div>
 <h3>
@@ -105,7 +106,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 {note.text && <p>{note.text}</p>}
 <small>{t('Personal')} · {new Date(note.updatedAt).toLocaleString(ui)}</small>
 </div>
-</article>)}{pageMetas.map(({ learned, lesson }) => lesson && <article key={`meta:${lesson.id}`} role="button" tabIndex={0} onClick={() => openMeta(learned, lesson)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openMeta(learned, lesson); } }}>
+</article>; })() : (() => { const { learned, lesson } = row.value; return lesson && <article key={`meta:${lesson.id}`} role="button" tabIndex={0} onClick={() => openMeta(learned, lesson)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openMeta(learned, lesson); } }}>
 <img src={lesson.imageUrl} alt={t('Meta reference clue')} />
 <div>
 <h3>
@@ -115,7 +116,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <div className="clue-row-actions">
 <Lightbulb size={16} />
 </div>
-</article>)}{!totalFiltered && <p className="empty">{t('No clues match these filters.')}</p>}</div>
+</article>; })())}{!totalFiltered && <p className="empty">{t('No clues match these filters.')}</p>}</div>
 {paging.pages > 1 && <nav className="clue-pagination" aria-label={t('Library')}><button disabled={paging.current === 1} onClick={() => setPage(paging.current - 1)}>{t('Previous')}</button><span aria-live="polite">{paging.current} / {paging.pages}</span><button disabled={paging.current === paging.pages} onClick={() => setPage(paging.current + 1)}>{t('Next')}</button></nav>}
 </>}
     {view === 'countries' && <div className="table-scroll">

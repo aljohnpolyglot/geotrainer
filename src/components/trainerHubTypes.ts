@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Attempt, ClueRecord, Collection, GameRecord, ReviewFilters, ReviewRecord, ReviewSessionKind, StudyVisit, TrainerLocation } from "../types";
+import type { Attempt, ClueRecord, Collection, GameRecord, NotebookNote, ReviewFilters, ReviewRecord, ReviewSessionKind, StudyVisit, TrainerLocation } from "../types";
 
 export type HubTab = "progress" | "statistics" | "review" | "clues" | "coverage" | "history";
 export type HistoryKind = "games" | "attempts" | "study" | "reviews";
@@ -94,6 +94,8 @@ export interface HistoryPanelProps {
   games: GameRecord[];
   filteredAttempts: Attempt[];
   visits: StudyVisit[];
+  clues: ClueRecord[];
+  notebookNotes: NotebookNote[];
   reviews: ReviewRecord[];
   locations: TrainerLocation[];
   onOpen: (location: TrainerLocation) => void;

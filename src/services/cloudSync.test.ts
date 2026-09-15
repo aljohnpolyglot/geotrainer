@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { backupSignature, createQuietSyncScheduler, mergeBackups, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages } from './cloudSync';
+import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -91,12 +91,22 @@ test('cloud backup keeps hosted paths without duplicating image bytes', () => {
   assert.deepEqual(withoutEmbeddedHostedImages(clues as never), [{ ...clues[0], imageDataUrl: '' }, clues[1]]);
 });
 
+test('cloud backup keeps location metadata without duplicating panorama screenshots', () => {
+  assert.deepEqual(withoutEmbeddedLocationImages([{ id: 'pano', imageDataUrl: 'data:image/jpeg;base64,AQ==', countryCode: 'IE' }]), [{ id: 'pano', countryCode: 'IE' }]);
+});
+
 test('quiet sync coalesces a burst of local saves into one upload', async () => {
   let uploads = 0;
   const schedule = createQuietSyncScheduler(() => { uploads += 1; }, 10);
   schedule(); schedule(); schedule();
   await new Promise((resolve) => setTimeout(resolve, 25));
   assert.equal(uploads, 1);
+});
+
+test('cloud requests retry transient failures before surfacing them', async () => {
+  let calls = 0;
+  const result = await retryCloud(async () => ({ error: ++calls < 2 ? new Error('temporary') : null, data: 'ok' }), 2);
+  assert.equal(calls, 2); assert.equal(result.data, 'ok');
 });
 
 test('cloud sync skips unchanged backup writes and throttles repeated focus pulls', () => {
