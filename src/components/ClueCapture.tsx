@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Camera, Clipboard, Upload } from 'lucide-react';
 import type { CoachAnalysis } from '../types';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
-import { trainerDb } from '../data/trainerDb';
 import { countryDisplayName, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { postCoach } from '../services/coachClient';
@@ -13,6 +12,7 @@ import { useCoachPreferences } from '../services/useCoachPreferences';
 import { CoachStylePicker } from './CoachStylePicker';
 import { COACH_OUTPUT_LABELS, coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
+import { readWorkspaceDraft, writeWorkspaceDraft } from '../services/workspaceDrafts';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 type ClueDraft = { panoId: string; imageDataUrl: string; clueId?: string; analysis?: CoachAnalysis; saved: boolean };
@@ -41,7 +41,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     let active = true;
-    void trainerDb.setting<ClueDraft>('workspace.clueDraft').then((draft) => {
+    void readWorkspaceDraft<ClueDraft>('clue', initialPano.current).then((draft) => {
       if (active && draft?.panoId === initialPano.current) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
     });
     return () => { active = false; };
@@ -59,7 +59,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
 
   const choose = async (file?: File) => {
     if (!file || disabled || busy) return;
-    try { const prepared = await prepareImage(file); setImage(prepared); onImageChange?.(prepared); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setChoosingStyle(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
+    try { const prepared = await prepareImage(file); setImage(prepared); onImageChange?.(prepared); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setChoosingStyle(false); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: prepared, saved: false } satisfies ClueDraft); }
     catch (error) { setStatus(error instanceof Error ? error.message : t('imageReadFailed')); }
   };
   const analyze = async (style = coachPreferences.style) => {
@@ -76,7 +76,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
       const styled = { ...value.analysis, style, depth: coachPreferences.depth }; setAnalysis(styled); onAnalyze?.();
       const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: styled });
       if (clueId) onSaved?.(clueId);
-      setSaved(true); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
+      setSaved(true); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -87,7 +87,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     const value = await response.json() as { imageDataUrl?: string; error?: string };
     if (!response.ok || !value.imageDataUrl) throw new Error(value.error || t('captureFailed'));
     if (!isCurrent()) return;
-    setImage(value.imageDataUrl); onImageChange?.(value.imageDataUrl); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setStatus(''); void trainerDb.setSetting('workspace.clueDraft', { panoId, imageDataUrl: value.imageDataUrl, saved: false } satisfies ClueDraft);
+    setImage(value.imageDataUrl); onImageChange?.(value.imageDataUrl); onSaved?.(undefined); setAnalysis(undefined); setSaved(false); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: value.imageDataUrl, saved: false } satisfies ClueDraft);
   });
   return <details className={`clue-capture${expanded ? ' expanded' : ''}`} open={expanded || undefined}>
     <summary className={expanded ? 'clue-capture-summary-hidden' : undefined}><Clipboard size={14} /> {t('knownClues')}</summary>

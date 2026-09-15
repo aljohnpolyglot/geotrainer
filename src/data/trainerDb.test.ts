@@ -138,16 +138,20 @@ test('migration is idempotent and backup/import protects history', async () => {
 
 test('workspace settings preserve Coach history and scoped drafts', async () => {
   const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  const { readWorkspaceDraft, writeWorkspaceDraft } = await import('../services/workspaceDrafts');
   await initTrainerDb();
   await clearTrainerDbForTesting();
   const analysis = { confidence: 'low', region: '', candidates: [], strongClues: ['red soil'], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] };
   const coach = { panoId: 'pano-workspace', mode: 'analyze', model: 'test', generatedAt: 10, analysis };
   const clue = { panoId: 'pano-workspace', imageDataUrl: 'data:image/jpeg;base64,AQID', analysis, saved: true };
 
-  await Promise.all([trainerDb.setSetting('coach.notes', [coach]), trainerDb.setSetting('workspace.clueDraft', clue), trainerDb.setSetting('workspace.noteDraft', { panoId: 'pano-a', text: 'bollard', category: 'Bollards' })]);
+  const otherClue = { ...clue, panoId: 'pano-other', imageDataUrl: 'data:image/jpeg;base64,BAUG' };
+  await Promise.all([trainerDb.setSetting('coach.notes', [coach]), writeWorkspaceDraft('clue', clue), writeWorkspaceDraft('clue', otherClue), writeWorkspaceDraft('note', { panoId: 'pano-a', text: 'bollard', category: 'Bollards' })]);
 
   assert.deepEqual(await trainerDb.setting('coach.notes'), [coach]);
-  assert.deepEqual(await trainerDb.setting('workspace.clueDraft'), clue);
+  assert.deepEqual(await readWorkspaceDraft('clue', 'pano-workspace'), clue);
+  assert.deepEqual(await readWorkspaceDraft('clue', 'pano-other'), otherClue);
+  assert.equal((await readWorkspaceDraft<{ panoId: string; text: string }>('note', 'pano-a'))?.text, 'bollard');
 });
 
 test('due queue enforces same-day limits and persists review session kind', async () => {
