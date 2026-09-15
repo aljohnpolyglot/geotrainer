@@ -44,6 +44,15 @@ test('cloud merge keeps the newest setting across screens', () => {
   assert.deepEqual(mergeBackups(cloud, local).data.settings, [cloud.data.settings[0]]);
 });
 
+test('cloud merge unions Notebook and Coach histories instead of deleting one device records', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.settings.push({ key: 'notebook.notes', value: [{ id: 'cloud-note', updatedAt: 10 }], updatedAt: 10 }, { key: 'coach.notes', value: [{ id: 'cloud-coach', generatedAt: 10 }], updatedAt: 10 });
+  local.data.settings.push({ key: 'notebook.notes', value: [{ id: 'local-note', updatedAt: 20 }], updatedAt: 20 }, { key: 'coach.notes', value: [{ id: 'local-coach', generatedAt: 20 }], updatedAt: 20 });
+  const settings = mergeBackups(cloud, local).data.settings as Array<{ key: string; value: Array<{ id: string }> }>;
+  assert.deepEqual(settings.find(({ key }) => key === 'notebook.notes')?.value.map(({ id }) => id), ['local-note', 'cloud-note']);
+  assert.deepEqual(settings.find(({ key }) => key === 'coach.notes')?.value.map(({ id }) => id), ['local-coach', 'cloud-coach']);
+});
+
 test('cloud merge includes review, language, UI, audio, game, and workspace settings', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   for (const key of ['schedulerPreferences', 'languagePreferences', 'preference.darkMode', 'preference.audio', 'gamePreferences', 'workspace.paused.study']) {

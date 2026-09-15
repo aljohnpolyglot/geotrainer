@@ -38,6 +38,12 @@ const keys: Record<StoreName, string> = {
   clues: 'id',
 };
 const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
+const noteSettings = new Set(['notebook.notes', 'coach.notes']);
+const mergeNotes = (left: unknown, right: unknown) => {
+  const notes = new Map<string, Record<string, unknown>>();
+  for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) notes.set(String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`), item);
+  return [...notes.values()].sort((a, b) => Number(b.updatedAt || b.generatedAt || 0) - Number(a.updatedAt || a.generatedAt || 0));
+};
 
 export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): TrainerBackup {
   const data = Object.fromEntries(STORE_NAMES.map((name) => {
@@ -46,7 +52,8 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
     const records = new Map<string, unknown>();
     for (const item of [...(cloud.data[name] || []), ...(local.data[name] || [])]) {
       const record = item as Record<string, unknown>; const recordKey = String(record[key]); const previous = records.get(recordKey) as Record<string, unknown> | undefined;
-      if (!previous || revision(name, record) === undefined || revision(name, record)! >= revision(name, previous)!) records.set(recordKey, item);
+      if (previous && name === 'settings' && noteSettings.has(recordKey)) records.set(recordKey, { ...(revision(name, record)! >= revision(name, previous)! ? record : previous), value: mergeNotes(previous.value, record.value), updatedAt: Math.max(revision(name, record)!, revision(name, previous)!) });
+      else if (!previous || revision(name, record) === undefined || revision(name, record)! >= revision(name, previous)!) records.set(recordKey, item);
     }
     return [name, [...records.values()]];
   })) as TrainerBackup['data'];

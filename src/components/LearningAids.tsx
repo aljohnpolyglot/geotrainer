@@ -11,6 +11,7 @@ import { CoachLocationEstimate } from './CoachLocationEstimate';
 import { nearbyReviewPoint } from '../data/reviewIdentity';
 import { coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
+import { saveNotebookHistoryNote } from '../services/coachHistory';
 
 export type MetaAid = { id: string; imageUrl: string; text?: string; note?: string; temporallySensitive?: boolean };
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
@@ -46,7 +47,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
   useEffect(() => { setOpen(null); setClueIndex(0); setNoteClueId(undefined); setNoteImage(''); }, [panoId]);
-  useEffect(() => { void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues(), trainerDb.locations()]).then(([personal = [], coach = [], attempts, visits, savedClues, locations]) => {
+  useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues(), trainerDb.locations()]).then(([personal = [], coach = [], attempts, visits, savedClues, locations]) => { if (!active) return;
     const current = { panoId, lat, lng, countryCode }; const relatedPanos = new Set([panoId]);
     locations.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
     visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
@@ -59,7 +60,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     const personalImage = (note: NotebookNote) => (note.clueId ? nearbyClues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || nearbyClues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
     const linkedClues = new Set([...relevantPersonal.flatMap((item) => item.clueId ? [item.clueId] : []), ...[...coachByRun.values()].flatMap((item) => item.clueId ? [item.clueId] : [])]);
     setNotes([...relevantPersonal.map((item) => { const linked = item.clueId ? nearbyClues.find((clue) => clue.id === item.clueId) : undefined; return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: personalImage(item), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', imageUrl: item.clueId ? nearbyClues.find((clue) => clue.id === item.clueId)?.imageDataUrl : undefined, analysis: item.analysis, at: item.generatedAt })), ...nearbyClues.filter((item) => !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))].sort((a, b) => b.at - a.at));
-  }); }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
+  }); return () => { active = false; }; }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
   useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
   useEffect(() => {
     setNote(''); setCategory(''); setCategoryOpen(false); setNoteSaved(false);
@@ -71,8 +72,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const saveNotebookNote = async () => {
     const updatedAt = Date.now(); let clueId = noteClueId;
     if (noteImage && !clueId) clueId = await onSaveClue({ imageDataUrl: noteImage, model: 'Notebook', generatedAt: updatedAt, analysis: { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] }, origin: 'personal' }) || undefined;
-    const saved = await trainerDb.setting<NotebookNote[]>('notebook.notes') || [];
-    await trainerDb.setSetting('notebook.notes', [{ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt }, ...saved]);
+    await saveNotebookHistoryNote({ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt });
     setNote(''); setCategory(''); setCategoryOpen(false); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1);
     await Promise.all([trainerDb.setSetting('workspace.noteDraft', null), trainerDb.setSetting('workspace.clueDraft', null)]); setNoteFormKey((value) => value + 1);
     window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();

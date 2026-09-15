@@ -2,6 +2,7 @@
 
 ## 2026-09-15
 
+- Serialized rapid Notebook saves, merged Notebook and Coach histories by record across devices, and ignored stale nearby-panorama reads so saved notes cannot be silently replaced or temporarily disappear.
 - Kept active AI Coach and submitted-clue analysis running while the learner walks between nearby panoramas, and saved each completed result against the location where its request began regardless of which country the Coach ranked first.
 - Prevented Coach reasoning recipes from appearing as generated learner text across all six styles, while keeping Deep Geography's supported causal explanation natural and detailed.
 - Required every Coach style to return a learner-facing summary instead of leaving its lead section blank.
