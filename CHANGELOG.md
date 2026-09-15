@@ -6,7 +6,7 @@
 - Standardized the Game Guide ending so External resources, Frequently asked questions, and Contact remain the final three sections.
 - Made the Home primary action respond to due reviews and paused Study or Play work, and refocused its message on learning from mistakes.
 - Clarified the Swedish Guide's core promise, active-recall explanation, and GeoGuessr comparison around the Study–Play–Review learning loop.
-- Simplified Swedish primary navigation terminology to Lär, Spela, Repetera, Ledtrådar, and Framsteg.
+- Simplified primary navigation terminology across all eight locales to Learn, Play, Review, Clues, and Progress equivalents without changing noun labels elsewhere.
 - Serialized rapid Notebook saves, merged Notebook and Coach histories by record across devices, and ignored stale nearby-panorama reads so saved notes cannot be silently replaced or temporarily disappear.
 - Kept active AI Coach and submitted-clue analysis running while the learner walks between nearby panoramas, and saved each completed result against the location where its request began regardless of which country the Coach ranked first.
 - Prevented Coach reasoning recipes from appearing as generated learner text across all six styles, while keeping Deep Geography's supported causal explanation natural and detailed.
