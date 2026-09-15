@@ -12,6 +12,7 @@ import { compressClueImage } from '../services/clueImages';
 import { useCoachPreferences } from '../services/useCoachPreferences';
 import { CoachStylePicker } from './CoachStylePicker';
 import { COACH_OUTPUT_LABELS, coachStyleLabel } from '../services/coachPreferences';
+import { CoachRichText } from './CoachRichText';
 
 type SavedClue = { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis };
 type ClueDraft = { panoId: string; imageDataUrl: string; clueId?: string; analysis?: CoachAnalysis; saved: boolean };
@@ -102,16 +103,16 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     {status && <p className="coach-status" role="status">{status}</p>}
     {analysis && (!saved || !collapseSavedAnalysis) && <div className={`clue-analysis coach-output-${analysis.style || coachPreferences.style}`}>
       {analysis.style && <p className="coach-history-profile"><strong>{coachStyleLabel(analysis.style)}</strong>{analysis.depth && <span>{t(analysis.depth[0].toUpperCase() + analysis.depth.slice(1))}</span>}</p>}
-      {analysis.description && <section className="coach-style-lead"><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].lead)}</strong><p>{analysis.description}</p></section>}
+      {analysis.description && <section className="coach-style-lead"><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].lead)}</strong><p><CoachRichText text={analysis.description} /></p></section>}
       {analysis.region && <h3>{analysis.region}<small>{analysis.confidence} {t('confidence')}</small></h3>}
       <CoachLocationEstimate estimate={analysis.locationEstimate} />
-      {!!analysis.candidates.length && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol></>}
-      <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p>{analysis.regionalRead ? `${analysis.regionalRead.label} — ${t(analysis.regionalRead.confidence)} ${t('confidence')}. ${analysis.regionalRead.reason}` : t('Insufficient evidence.')}</p></section>
-      {!!analysis.strongClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].strong)}</strong><ul>{analysis.strongClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.weakClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].weak)}</strong><ul>{analysis.weakClues.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.contradictions?.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].contradictions)}</strong><ul>{analysis.contradictions.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.confusions.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].confusions)}</strong><ul>{analysis.confusions.map((item) => <li key={item}>{item}</li>)}</ul></>}
-      {!!analysis.nextThingsToInspect.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].next)}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}>{item}</li>)}</ul></>}
+      {!!analysis.candidates.length && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{analysis.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small><CoachRichText text={candidate.rationale} /></small>}</li>)}</ol></>}
+      <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p><CoachRichText text={analysis.regionalRead ? `${analysis.regionalRead.label} — ${t(analysis.regionalRead.confidence)} ${t('confidence')}. ${analysis.regionalRead.reason}` : t('Insufficient evidence.')} /></p></section>
+      {!!analysis.strongClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].strong)}</strong><ul>{analysis.strongClues.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
+      {!!analysis.weakClues.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].weak)}</strong><ul>{analysis.weakClues.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
+      {!!analysis.contradictions?.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].contradictions)}</strong><ul>{analysis.contradictions.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
+      {!!analysis.confusions.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].confusions)}</strong><ul>{analysis.confusions.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
+      {!!analysis.nextThingsToInspect.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].next)}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
       {saved && <p className="coach-autosaved" role="status">{t('savedAutomatically')}</p>}
     </div>}
   </details>;

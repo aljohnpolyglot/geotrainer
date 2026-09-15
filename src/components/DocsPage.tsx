@@ -4,6 +4,7 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { parseHomeMarkdown, parseInlineMarkdown } from '../services/homeMarkdown';
 import type { GuideBlock } from '../services/homeMarkdown';
 import { translate } from '../services/language';
+import type { SupportedLanguage } from '../types';
 import en from '../content/home/en.md?raw';
 import es from '../content/home/es.md?raw';
 import pt from '../content/home/pt.md?raw';
@@ -14,8 +15,18 @@ import ru from '../content/home/ru.md?raw';
 import sv from '../content/home/sv.md?raw';
 import coachStyles from '../content/coach/AI_COACH_STYLES_GUIDE.md?raw';
 
-const detailedCoachGuide = coachStyles.split('\n').map((line) => line.startsWith('### ') ? `**${line.slice(4)}**` : line.startsWith('## ') ? `### ${line.slice(3)}` : line.startsWith('# ') ? `## ${line.slice(2)}` : line).join('\n');
-const guides = { en: `${en}\n\n${detailedCoachGuide}`, es, pt, fr, de, it, ru, sv };
+const detailedCoachGuide = coachStyles.split('\n').map((line) => line.startsWith('### ') ? `**${line.slice(4)}**` : line.startsWith('## ') ? `### ${line.slice(3)}` : line.startsWith('# ') ? `### ${line.slice(2)}` : line).join('\n');
+const guides = { en: en.replace('\n## Saved clues', `\n${detailedCoachGuide}\n\n## Saved clues`), es, pt, fr, de, it, ru, sv };
+const placements: Record<SupportedLanguage, Array<[string, string]>> = {
+  en: [['Learn, Meta, and Notebook', 'Study mode']], de: [['Lernen, Meta und Notizbuch', 'Lernmodus'], ['KI-Coach-Stile und Erklärungstiefe', 'KI-Coach']],
+  es: [['Aprender, Meta y Cuaderno', 'Modo Estudio'], ['Estilos y profundidad del Coach de IA', 'Entrenador de IA y pistas']], pt: [['Aprender, Meta e Caderno', 'Modo Estudo'], ['Estilos e profundidade do Coach de IA', 'Coach de IA e pistas']],
+  fr: [['Apprendre, Méta et Carnet', 'Mode Étude'], ['Styles et profondeur du Coach IA', 'Coach IA et indices']], it: [['Impara, Meta e Taccuino', 'Modalità Studio'], ['Stili e profondità del Coach IA', 'Coach IA e indizi']],
+  ru: [['Обучение, мета и блокнот', 'Режим изучения'], ['Стили и глубина ИИ-тренера', 'ИИ-тренер и подсказки']], sv: [['Lär, Meta och Anteckningsbok', 'Studieläge'], ['AI-coachstilar och förklaringsdjup', 'AI-coach och ledtrådar']],
+};
+const arrangeSections = <T extends { title: string }>(sections: T[], language: SupportedLanguage) => placements[language].reduce((ordered, [title, after]) => {
+  const from = ordered.findIndex((section) => section.title === title); if (from < 0) return ordered;
+  const [section] = ordered.splice(from, 1); const target = ordered.findIndex((item) => item.title === after); ordered.splice(target < 0 ? ordered.length : target + 1, 0, section); return ordered;
+}, [...sections]);
 const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.strong ? <strong key={index}>{part.text}</strong> : part.text)}</>;
 const Blocks = ({ blocks }: { blocks: GuideBlock[] }) => <>{blocks.map((block, index) => block.type === 'paragraph'
   ? <p key={index}><InlineText text={block.text} /></p>
@@ -32,7 +43,8 @@ export function DocsPage() {
   const t = (key: string) => translate(ui, key);
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(ui);
-  const visibleSections = normalizedQuery ? guide.sections.filter((section) => [section.title, ...section.subsections.map((item) => item.title)].some((value) => value.toLocaleLowerCase(ui).includes(normalizedQuery))) : guide.sections;
+  const orderedSections = arrangeSections(guide.sections, ui);
+  const visibleSections = normalizedQuery ? orderedSections.filter((section) => [section.title, ...section.subsections.map((item) => item.title)].some((value) => value.toLocaleLowerCase(ui).includes(normalizedQuery))) : orderedSections;
   useEffect(() => { document.documentElement.lang = ui; }, [ui]);
   return <main className="docs-page">
     <aside>

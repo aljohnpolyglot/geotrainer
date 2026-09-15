@@ -27,7 +27,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const streetViewUrl = (clue: ClueRecord) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(clue.panoId)}`;
   const noteImage = (note: NotebookNote) => (note.clueId ? clues.find((clue) => clue.id === note.clueId) : undefined)?.imageDataUrl || clues.filter((clue) => clue.panoId === note.panoId).sort((a, b) => Math.abs(a.createdAt - note.updatedAt) - Math.abs(b.createdAt - note.updatedAt))[0]?.imageDataUrl;
   const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note) });
-  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || note.analysis.strongClues.join(' · '), at: note.generatedAt, panoId: note.panoId, imageUrl: note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined });
+  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined });
   const openMeta = (learned: LearnedMeta, lesson: NonNullable<ReturnType<typeof metaLessonById>>) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId });
   return <section className="clues-panel">
     <div className="statistics-title">
@@ -73,7 +73,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <X size={16} />
 </button>}</div>
 </div>
-<div className="clue-library">{pageClues.map((clue) => <article key={clue.id} role="button" tabIndex={0} onClick={() => setGallery({ country: clue.countryCode, clueId: clue.id })} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setGallery({ country: clue.countryCode, clueId: clue.id }); } }}>
+<div className="clue-library">{pageClues.map((clue) => <article className={`coach-output-${clue.analysis.style || 'quick'}`} key={clue.id} role="button" tabIndex={0} onClick={() => setGallery({ country: clue.countryCode, clueId: clue.id })} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setGallery({ country: clue.countryCode, clueId: clue.id }); } }}>
 <img src={clue.imageDataUrl} alt={t('savedVisualClue')} />
 <div>
 <h3>
@@ -92,7 +92,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <Trash2 size={16} />
 </button>
 </div>
-</article>)}{pageCoach.map((note) => <article key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
+</article>)}{pageCoach.map((note) => <article className={`coach-output-${note.analysis.style || 'quick'}`} key={note.id} role="button" tabIndex={0} onClick={() => openCoach(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openCoach(note); } }}>
 <div className="clue-note-icon"><Sparkles size={24} /></div>
 <div><h3><CountryFlag code={note.countryCode} />{countryName(note.countryCode)}</h3><p>{note.analysis.description || note.analysis.strongClues[0] || t('Learning note')}</p><small>{t('AI-assisted')}{note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''} · {new Date(note.generatedAt).toLocaleString(ui)}</small></div>
 </article>)}{pageNotes.map((note, index) => <article key={note.id || `note:${note.panoId}:${index}`} role="button" tabIndex={0} onClick={() => openNote(note)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openNote(note); } }}>

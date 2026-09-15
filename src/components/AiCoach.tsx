@@ -13,6 +13,7 @@ import { CoachLocationEstimate } from './CoachLocationEstimate';
 import { useCoachPreferences } from '../services/useCoachPreferences';
 import { COACH_OUTPUT_LABELS, coachStyleLabel } from '../services/coachPreferences';
 import { CoachStylePicker } from './CoachStylePicker';
+import { CoachRichText } from './CoachRichText';
 
 type CoachContext = {
   actualCountry?: string;
@@ -91,7 +92,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
     }
   };
 
-  const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}>{value}</li>)}</ul></section> : null;
+  const list = (title: string, values: string[]) => values.length ? <section><strong>{title}</strong><ul>{values.map((value) => <li key={value}><CoachRichText text={value} /></li>)}</ul></section> : null;
   const outputLabels = COACH_OUTPUT_LABELS[result?.style || activeStyle];
 
   return <><button className="coach-launch coach-launch-fixed" aria-pressed={open} onClick={() => setCoachOpen(!open)} aria-label={t('AI Coach')} title={t('AI Coach')}><img src={`${import.meta.env.BASE_URL}assets/ai-coach-mark.png`} alt="" /></button>
@@ -104,18 +105,18 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       {error && <p className="coach-error" role="alert">{error}</p>}
       {result && <div className={`coach-result coach-output-${result.style || activeStyle}`}>
         <h4>{coachStyleLabel(result.style || activeStyle)}</h4>
-        {result.description && <section className="coach-style-lead"><strong>{t(outputLabels.lead)}</strong><p className="coach-description">{result.description}</p></section>}
+        {result.description && <section className="coach-style-lead"><strong>{t(outputLabels.lead)}</strong><p className="coach-description"><CoachRichText text={result.description} /></p></section>}
         {!revealed && result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
-        {!revealed && result.candidates.length > 0 && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small>{candidate.rationale}</small>}</li>)}</ol></>}
+        {!revealed && result.candidates.length > 0 && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small><CoachRichText text={candidate.rationale} /></small>}</li>)}</ol></>}
         {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
-        {!revealed && <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p>{result.regionalRead ? `${result.regionalRead.label} — ${t(result.regionalRead.confidence)} ${t('confidence')}. ${result.regionalRead.reason}` : t('Insufficient evidence.')}</p></section>}
+        {!revealed && <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p><CoachRichText text={result.regionalRead ? `${result.regionalRead.label} — ${t(result.regionalRead.confidence)} ${t('confidence')}. ${result.regionalRead.reason}` : t('Insufficient evidence.')} /></p></section>}
         {list(t(outputLabels.strong), result.strongClues)}
         {list(t(outputLabels.weak), result.weakClues)}
         {list(t(outputLabels.contradictions), result.contradictions || [])}
         {list(t(outputLabels.confusions), result.confusions)}
         {list(t(outputLabels.next), result.nextThingsToInspect)}
-        {result.coreCard && <section className="coach-card"><strong>{t('Learning note')}</strong><ul>{result.coreCard.front.map((line) => <li key={line}>{line}</li>)}</ul><p>{result.coreCard.backExplanation}</p></section>}
-        {result.extraCards.map((card) => <section className="coach-card" key={card.category}><strong>{card.category}</strong><ul>{card.front.map((line) => <li key={line}>{line}</li>)}</ul><p>{card.back}</p></section>)}
+        {result.coreCard && <section className="coach-card"><strong>{t('Learning note')}</strong><ul>{result.coreCard.front.map((line) => <li key={line}><CoachRichText text={line} /></li>)}</ul><p><CoachRichText text={result.coreCard.backExplanation} /></p></section>}
+        {result.extraCards.map((card) => <section className="coach-card" key={card.category}><strong>{card.category}</strong><ul>{card.front.map((line) => <li key={line}><CoachRichText text={line} /></li>)}</ul><p><CoachRichText text={card.back} /></p></section>)}
         {saved && <p className="coach-autosaved" role="status">{appMode === 'study' ? t('savedAutomatically') : t('savedAutomatically')}</p>}
       </div>}
     </aside></div>}

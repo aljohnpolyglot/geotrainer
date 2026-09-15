@@ -83,7 +83,7 @@ function languageMatches(analysis: ReturnType<typeof normalize>, language: strin
   return english < 8 || english / Math.max(words.length, 1) < .12;
 }
 const vagueRationale = [/consistent with|similar to|common in|typical of/iu, /coerente con|simile (?:a|agli?|alle?)|comune in|tipic[oa]/iu, /coherente con|similar a|común en|típic[oa]/iu, /coerente com|semelhante a|comum em|típic[oa]/iu, /cohérent avec|similaire à|courant en|typique de/iu, /entspricht|ähnlich(?:e|er|es)?|typisch für/iu, /характерн\w* для|похож\w* на|типичн\w* для/iu, /stämmer överens med|liknar|typisk(?:t)? för/iu];
-const rationalesAreSpecific = (analysis: ReturnType<typeof normalize>) => analysis.candidates.every((candidate) => !!candidate.rationale && !vagueRationale.some((pattern) => pattern.test(candidate.rationale!)));
+const rationalesAreSpecific = (analysis: ReturnType<typeof normalize>) => analysis.candidates.every((candidate) => !!candidate.rationale && (candidate.rationale.length >= 180 || !vagueRationale.some((pattern) => pattern.test(candidate.rationale!))));
 function base64(buffer: ArrayBuffer) { const bytes = new Uint8Array(buffer); let binary = ''; for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000)); return btoa(binary); }
 async function streetView(view: unknown, headingOffset = 0): Promise<Frame> {
   const key = Deno.env.get('GOOGLE_MAPS_API_KEY') || ''; if (!key) throw new Error('Street View server key is not configured.'); if (!view || typeof view !== 'object') throw new Error('Current Street View orientation is unavailable.'); const item = view as Record<string, unknown>; const pano = String(item.panoId || ''); const heading = Number(item.heading); const pitch = Number(item.pitch); const zoom = Number(item.zoom); if (!pano || ![heading, pitch, zoom].every(Number.isFinite)) throw new Error('Current Street View orientation is invalid.');
@@ -91,18 +91,19 @@ async function streetView(view: unknown, headingOffset = 0): Promise<Frame> {
 }
 async function gemini(mode: Mode, frames: Frame[], known: Record<string, unknown> | undefined, language: string, style: Style, depth: Depth) {
   if (!keyStates.length) throw new Error('Gemini keys are not configured.');
-  const models = (Deno.env.get('GEMINI_COACH_MODELS') || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(','); let last = new Error('Gemini Coach is unavailable.');
+  const models = (Deno.env.get('GEMINI_COACH_MODELS') || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(','); let last = new Error('Gemini Coach is unavailable.'); let groundedFallback: { analysis: ReturnType<typeof normalize>; model: string; generatedAt: number } | undefined;
   for (const model of models) for (let attempt = 0; attempt < keyStates.length; attempt++) {
     const state = keyStates[keyCursor++ % keyStates.length]; if (state.cooldownUntil > Date.now()) continue;
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model.trim())}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(mode === 'analyze360' ? 35_000 : 25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ systemInstruction: { parts: [{ text: groundedRules }] }, contents: [{ role: 'user', parts: [{ text: instruction(mode, language, known, style, depth) }, ...frames.map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }], generationConfig: { temperature: .25, maxOutputTokens: depth === 'deep' ? 1600 : depth === 'short' ? 700 : 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: schema } }) });
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model.trim())}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(mode === 'analyze360' ? 35_000 : 25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ systemInstruction: { parts: [{ text: groundedRules }] }, contents: [{ role: 'user', parts: [{ text: instruction(mode, language, known, style, depth) }, ...frames.map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }], generationConfig: { temperature: .25, maxOutputTokens: depth === 'deep' ? 3400 : depth === 'short' ? 1600 : 2400, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: schema } }) });
       if (response.status === 429) { state.cooldownUntil = Date.now() + 60_000; last = new Error('Gemini quota exceeded.'); continue; }
-      if (!response.ok) { last = new Error(response.status >= 500 ? 'Gemini service error.' : 'Gemini request was rejected.'); continue; }
+      if (!response.ok) { last = new Error(response.status >= 500 ? 'Gemini service error.' : `Gemini request was rejected (${response.status}).`); continue; }
       const raw = await response.json(); const text = raw.candidates?.[0]?.content?.parts?.find((part: { text?: string }) => part.text)?.text; if (!text) throw new Error('Gemini returned an empty response.');
-      const analysis = normalize(JSON.parse(text), mode, String(known?.actualCountry || '')); if (!languageMatches(analysis, language)) { last = new Error('Gemini returned mixed-language output.'); continue; } if (['analyze', 'analyze360', 'clue'].includes(mode) && !rationalesAreSpecific(analysis)) { last = new Error('Gemini returned vague candidate reasoning.'); continue; }
+      const analysis = normalize(JSON.parse(text), mode, String(known?.actualCountry || '')); if (!languageMatches(analysis, language)) { last = new Error('Gemini returned mixed-language output.'); continue; } if (['analyze', 'analyze360', 'clue'].includes(mode) && !rationalesAreSpecific(analysis)) { groundedFallback ||= { analysis, model: model.trim(), generatedAt: Date.now() }; last = new Error('Gemini returned vague candidate reasoning.'); continue; }
       return { analysis, model: model.trim(), generatedAt: Date.now() };
     } catch (error) { last = error instanceof Error && error.name === 'TimeoutError' ? new Error('Gemini request timed out.') : error as Error; }
   }
+  if (groundedFallback) return groundedFallback;
   throw last;
 }
 

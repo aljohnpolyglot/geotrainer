@@ -211,13 +211,14 @@ const vagueRationale = [
   /характерн\w* для|похож\w* на|типичн\w* для/iu,
   /stämmer överens med|liknar|typisk(?:t)? för/iu,
 ];
-export const coachRationalesAreSpecific = (analysis: CoachAnalysis) => analysis.candidates.every((candidate) => !!candidate.rationale && !vagueRationale.some((pattern) => pattern.test(candidate.rationale!)));
+export const coachRationalesAreSpecific = (analysis: CoachAnalysis) => analysis.candidates.every((candidate) => !!candidate.rationale && (candidate.rationale.length >= 180 || !vagueRationale.some((pattern) => pattern.test(candidate.rationale!))));
 
 export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string; style?: CoachStyle; depth?: ExplanationDepth }, fetcher: typeof fetch = fetch) {
   if (!carousel.size) throw new Error('No Gemini keys are configured.');
   const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
   const deadline = Date.now() + 60_000;
   let lastError = new Error('Gemini Coach is unavailable.');
+  let groundedFallback: { analysis: CoachAnalysis; model: string; generatedAt: number } | undefined;
   for (const model of models) {
     for (let attempt = 0; attempt < Math.max(1, carousel.size); attempt++) {
       if (Date.now() >= deadline) throw new Error('Gemini request timed out.');
@@ -235,7 +236,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
             contents: [{ role: 'user', parts: [{ text: buildCoachPrompt(request.mode, context, knowledge, metaKnowledge, request.language, request.style, request.depth) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
-            generationConfig: { temperature: 0.25, maxOutputTokens: request.depth === 'deep' ? 1600 : request.depth === 'short' ? 700 : 1000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
+            generationConfig: { temperature: 0.25, maxOutputTokens: request.depth === 'deep' ? 3400 : request.depth === 'short' ? 1600 : 2400, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
           }),
         });
         if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
@@ -246,7 +247,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
         if (!text) { lastError = new Error('Gemini returned an empty response.'); continue; }
         const analysis = normalizeCoachAnalysis(JSON.parse(text), request.mode, String(context?.actualCountry || ''));
         if (!coachLanguageMatches(analysis, request.language)) { lastError = new Error('Gemini returned mixed-language output.'); continue; }
-        if (['analyze', 'analyze360', 'clue'].includes(request.mode) && !coachRationalesAreSpecific(analysis)) { lastError = new Error('Gemini returned vague candidate reasoning.'); continue; }
+        if (['analyze', 'analyze360', 'clue'].includes(request.mode) && !coachRationalesAreSpecific(analysis)) { groundedFallback ||= { analysis, model, generatedAt: Date.now() }; lastError = new Error('Gemini returned vague candidate reasoning.'); continue; }
         return { analysis, model, generatedAt: Date.now() };
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') { lastError = new Error('Gemini request timed out.'); break; }
@@ -256,6 +257,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
       }
     }
   }
+  if (groundedFallback) return groundedFallback;
   throw lastError;
 }
 

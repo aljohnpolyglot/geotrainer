@@ -169,8 +169,19 @@ test('candidate normalization drops codes outside the supported country catalog'
 test('Coach rejects candidate rationales that claim fit without explaining a distinguishing feature', () => {
   const vague = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'NL', confidence: .7, rationale: 'La segnaletica è coerente con gli standard olandesi.' }] }, 'analyze');
   const specific = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'NL', confidence: .7, rationale: 'I semafori hanno pannelli di contrasto bianchi e una disposizione sospesa diversa dai candidati vicini.' }] }, 'analyze');
+  const comparative = normalizeCoachAnalysis({ ...validAnalysis, candidates: [{ countryCode: 'NL', confidence: .7, rationale: 'Questa strada è comune nei Paesi Bassi perché combina una pista ciclabile separata, targhe gialle leggibili e linee laterali standardizzate. Il Belgio può condividere la pista, ma non le targhe gialle; la mancanza di queste ultime ribalterebbe il confronto.' }] }, 'analyze');
   assert.equal(coachRationalesAreSpecific(vague), false);
   assert.equal(coachRationalesAreSpecific(specific), true);
+  assert.equal(coachRationalesAreSpecific(comparative), true);
+});
+
+test('Coach returns a grounded response instead of a service outage when detail retries are unavailable', async () => {
+  let calls = 0;
+  const vague = { ...validAnalysis, candidates: [{ countryCode: 'HU', confidence: .4, rationale: 'This is typical of Hungary.' }] };
+  const fetcher = (async () => ++calls === 1 ? geminiResponse(JSON.stringify(vague)) : geminiResponse('', 403)) as typeof fetch;
+  const result = await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze', mimeType: 'image/jpeg', imageData: 'YWJj' }, fetcher);
+  assert.equal(result.analysis.candidates[0].countryCode, 'HU');
+  assert.equal(calls, 2);
 });
 
 test('automatic Coach capture requests the exact pano and current orientation without storing imagery', async () => {
@@ -241,12 +252,18 @@ test('Coach bounds user context before inserting it into a prompt', () => {
 test('the same image gets genuinely different coaching instructions while sharing evidence rules', () => {
   const quick = buildCoachPrompt('analyze', undefined, [], [], 'en', 'quick', 'normal');
   const meta = buildCoachPrompt('analyze', undefined, [], [], 'en', 'meta', 'deep');
+  const elimination = buildCoachPrompt('analyze', undefined, [], [], 'en', 'elimination', 'normal');
   const geography = buildCoachPrompt('analyze', undefined, [], [], 'en', 'deep-geography', 'short');
+  const memory = buildCoachPrompt('analyze', undefined, [], [], 'en', 'memory', 'normal');
+  const analyst = buildCoachPrompt('analyze', undefined, [], [], 'en', 'pro-analyst', 'deep');
   assert.match(quick, /QUICK GUESS.*short conclusion.*ranked countries/i);
   assert.match(meta, /META COACH.*S\/A\/B\/C\/D.*REGIONIFIER/i);
+  assert.match(elimination, /ELIMINATION COACH.*candidate pool.*best separator/i);
   assert.match(geography, /DEEP GEOGRAPHY.*FUNCTION.*CAUSE.*HUMAN RESPONSE/i);
-  for (const prompt of [quick, meta, geography]) assert.match(prompt, /major candidate.*main confuser.*highest-information decider/i);
-  for (const prompt of [quick, meta, geography]) assert.match(prompt, /positive evidence.*negative or missing evidence.*main confuser.*highest-information decider/i);
+  assert.match(memory, /MEMORY COACH.*memory anchor.*recall questions/i);
+  assert.match(analyst, /PRO ANALYST.*positive evidence.*(?:highest-information|information gain)/i);
+  for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /major candidate.*main confuser.*highest-information decider/i);
+  for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /positive evidence.*negative or missing evidence.*main confuser.*highest-information decider/i);
   assert.match(geography, /WHAT.*FUNCTION.*CAUSE.*HUMAN RESPONSE.*VISIBLE RESULT.*GEOGUESSR VALUE/i);
-  assert.doesNotMatch(`${quick}${meta}${geography}`, /ADAPTIVE/i);
+  assert.doesNotMatch(`${quick}${meta}${elimination}${geography}${memory}${analyst}`, /ADAPTIVE/i);
 });

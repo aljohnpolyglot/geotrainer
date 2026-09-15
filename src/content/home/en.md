@@ -513,16 +513,3 @@ Meta Study contains 359 locally hosted lessons normalized from the paired OpenGu
 Meta Learn selects unfinished lessons only. After all 359 are completed, its Learn option is greyed out and cannot be selected.
 
 Leaving an unfinished Learn or Play session preserves it. The next entry offers **Resume**, **Start new**, or **Back**. Coverage includes a continuous **Mastery** heat layer: repeated successful reviews and long intervals gradually brighten countries and individual locations, while lapses reduce intensity. Meta lessons based on camera generation, Google vehicles, coverage, rifts, trekkers, or other imagery artifacts show a warning because later Street View updates can make them outdated.
-
-## AI Coach styles and depth
-
-Open **Settings → AI Coach** to choose a preferred style and an independent explanation depth. Fresh profiles use **Always ask before analysis**, so Analyze and Analyze clue first offer the six styles; choosing a preferred style in Settings turns that extra picker off. You can re-enable it at any time. Short keeps the chosen method quickly readable, Normal balances play and learning, and Deep adds only relevant context. Depth never changes the coaching method, and Coach never switches styles automatically.
-
-- **⚡ Quick Guess** is the concise current Coach: likely countries, relative-likelihood estimates, strongest visible clues, and confidence. It is fastest during play but teaches less.
-- **🎯 Meta Coach** grades GeoGuessr clues by strength, role, reliability, and confusers. It is best for No Move and practical metas, but coverage clues can change.
-- **🚫 Elimination Coach** asks what the scene argues against, keeps a plausible pool, and names the best next discriminator. It reduces anchoring but can read more slowly.
-- **🌍 Deep Geography** explains supported clues through what they are, their function, causes, human response, visible result, and GeoGuessr value. It builds causal intuition but says when one image cannot support a historical or economic explanation.
-- **🧠 Memory Coach** creates truthful anchors, contrast pairs, counter-clues, and recall questions. It supports retention but keeps exceptions visible.
-- **🏆 Pro Analyst** weighs positive, negative, independent, and low-value evidence, then highlights calibration and information gain. It is strongest for close advanced calls but its percentages remain AI estimates, not measured probabilities.
-
-All styles begin with the same visible evidence. Observed facts are separated from reasonable inference and unsupported speculation; unreadable acronyms, unknown organizations, crops, history, geology, regulations, and industries are not invented or used as country evidence. Candidate explanations identify the actual feature, whether it is country-level or regional, the main confuser, the separating clue, and what to inspect next. A regional read appears only when the image supports one; otherwise Coach says evidence is insufficient.
