@@ -14,9 +14,14 @@ import type {
 } from '../types';
 import { COUNTRIES } from './countries';
 import { resolveClueImages } from '../services/clueImages';
-import { detectedTimeZone, nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
+import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
 import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
+import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
+import { nextGeneralizationLevel } from './reviewVariation';
+import { intervalsFor, reviewGradeForPerformance } from './reviewGrading';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
+export { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
+export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore } from './reviewGrading';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [
@@ -26,8 +31,6 @@ export const STORE_NAMES = [
 export type StoreName = (typeof STORE_NAMES)[number];
 export type TrainerDbChange = { operation: string; allowsSavedContentDecrease?: boolean };
 const changeListeners = new Set<(change: TrainerDbChange) => void>(); const notifyChange = (change: TrainerDbChange) => changeListeners.forEach((listener) => listener(change));
-export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = { strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1, relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650, maximumAnswerSeconds: 60, reviewOrder: 'random', reviewDayResetMinutes: 0, reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true };
-export function shuffleInPlace<T>(items: T[], random = Math.random) { for (let index = items.length - 1; index > 0; index--) { const swap = Math.floor(random() * (index + 1)); [items[index], items[swap]] = [items[swap], items[index]]; } return items; }
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
@@ -48,38 +51,12 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     samplingMode: source.samplingMode === 'balanced' ? 'balanced' : 'natural',
     panoramaSource,
     allowContributors: panoramaSource !== 'official',
+    allowInteriors: source.allowInteriors === true,
     timeLimitSeconds: [0, 30, 60, 90, 120].includes(Number(source.timeLimitSeconds)) ? Number(source.timeLimitSeconds) : 0,
   };
 };
-export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferences => {
-  const source = value && typeof value === 'object' ? value as Partial<SchedulerPreferences> : {};
-  const number = (key: keyof SchedulerPreferences, min: number, max: number) => Math.min(max, Math.max(min, Number(source[key]) || DEFAULT_SCHEDULER_PREFERENCES[key] as number));
-  const auto = source.reviewTimeZoneAuto !== false;
-  let timeZone = typeof source.reviewTimeZone === 'string' ? source.reviewTimeZone.trim() : '';
-  try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
-  return { strictness: source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced', newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000), firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440), easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500), maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'due' ? 'due' : 'random', reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto };
-};
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
-const intervalsFor = (oldInterval: number, preferences = DEFAULT_SCHEDULER_PREFERENCES): Record<ReviewGrade, number> => ({
-  again: preferences.relearningMinutes / 1440,
-  hard: Math.max(1, oldInterval * 1.5),
-  good: Math.max(3, oldInterval * 2),
-  easy: Math.max(7, oldInterval * 2.5),
-});
-export const reviewGradeForScore = (score: number): ReviewGrade =>
-  score < 2000 ? 'again' : score < 3000 ? 'hard' : score < 4500 ? 'good' : 'easy';
-
-const scoreThresholds = { beginner: [1500, 2500, 4200], balanced: [2000, 3000, 4500], pro: [4800, 4900, 5000] } as const;
-const correctionThresholds = { beginner: 1500, balanced: 3000, pro: 4800 } as const;
-export const passingScoreFor = (strictness: SchedulerPreferences['strictness']) => correctionThresholds[strictness];
-export const reviewGradeForPerformance = (score: number, timeSpentSeconds: number, correctCountry = true, maximumAnswerSeconds = 60, strictness: SchedulerPreferences['strictness'] = 'balanced'): ReviewGrade => {
-  const [againBelow, hardBelow, easyAt] = scoreThresholds[strictness];
-  if (!correctCountry || score < againBelow) return 'again';
-  if (score < hardBelow || timeSpentSeconds > maximumAnswerSeconds) return 'hard';
-  if (score < easyAt || timeSpentSeconds > maximumAnswerSeconds / 2) return 'good';
-  return 'easy';
-};
 export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, preferences: SchedulerPreferences): ReviewRecord {
   const at = attempt.reviewedAt || attempt.createdAt;
   if (attempt.source !== 'review' || (review.lastReviewedAt || 0) > at) return review;
@@ -88,12 +65,6 @@ export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, p
   if (review.lastReviewedAt === at) return attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
   return { ...review, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
 }
-export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced') =>
-  guessedCountryCode !== countryCode || score < passingScoreFor(strictness);
-export const gameMistakes = (attempts: Attempt[], gameId: string, strictness: SchedulerPreferences['strictness']) => attempts.filter((attempt) => attempt.gameId === gameId && isCountryMistake(attempt.score, attempt.countryCode, attempt.guessedCountryCode, strictness)).sort((a, b) => a.roundNumber - b.roundNumber);
-
-export const reviewGradeForCorrection = (score: number, countryCode: string, guessedCountryCode?: string, strictness: SchedulerPreferences['strictness'] = 'balanced'): ReviewGrade =>
-  isCountryMistake(score, countryCode, guessedCountryCode, strictness) ? 'again' : 'hard';
 
 let database: Promise<IDBDatabase> | undefined;
 const request = <T>(value: IDBRequest<T>) =>
@@ -285,6 +256,11 @@ export const trainerDb = {
   clues: async () => resolveClueImages((await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt)),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
+  async reviewState(panoId: string): Promise<ReviewRecord | undefined> {
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
+    return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : get<ReviewRecord>('reviews', panoId);
+  },
   setSetting: async (key: string, value: unknown) => {
     const previous = await get<SettingRecord>('settings', key);
     if (previous && JSON.stringify(previous.value) === JSON.stringify(value)) return;
@@ -375,7 +351,7 @@ export const trainerDb = {
     return queue.filter((attempt) => reviewByPano.get(attempt.panoId)?.reviewCount || newIds.has(attempt.id)).slice(0, Math.max(0, preferences.maximumReviewsPerDay - reviewsToday));
   },
 
-  async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number): Promise<ReviewRecord> {
+  async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord> {
     const [storedReviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
     const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     const previous = target ? nearbyReview(coalesceNearbyReviews(storedReviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : await get<ReviewRecord>('reviews', panoId);
@@ -392,9 +368,19 @@ export const trainerDb = {
       lapseCount: (previous?.lapseCount || 0) + (grade === 'again' ? 1 : 0),
       reviewCount: (previous?.reviewCount || 0) + 1,
       lastReviewedAt: now,
+      ...(variation?.kind && variation.kind !== 'original' ? { generalizationLevel: nextGeneralizationLevel(previous?.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: now } : {}),
     };
     await put('reviews', next);
     return next;
+  },
+
+  async updateReviewGeneralization(panoId: string, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord | undefined> {
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
+    const previous = target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : undefined;
+    if (!previous || !variation.kind || variation.kind === 'original') return previous;
+    const next = { ...previous, generalizationLevel: nextGeneralizationLevel(previous.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: Date.now() };
+    await put('reviews', next); return next;
   },
 
   async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord> {

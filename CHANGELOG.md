@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-17
+
+- Added optional maturity-aware Review view variation with a 0–100 difficulty setting, heading-first progression, conservative geographic candidate checks, original-view fallback, and independent contraction after failed generalized recall.
+- Kept every varied Review on its original canonical card while recording the shown panorama, heading, distance, and generalization level on the attempt.
+- Added deletion for Personal Notebook notes in My Clues, including linked-image suppression and cloud-safe deletion markers.
+- Kept sticky table labels compact on phones so country names no longer cover Statistics values while horizontally scrolling.
+- Added persisted, default-off interior Street View toggles for Custom Learn and Play.
+- Added shared panorama and map preferences for imagery dates, road labels, mobile motion viewing, movement controls, map type, touch gestures, clickable places, and GeoTrainer light/dark map styling.
+- Fixed resumed Play rounds counting closed time as hours of active round time.
+- Clarified session history with compact same-day time ranges and readable dedicated row columns.
+- Added a workspace camera control that copies four transient 90° Street View directions as one 360° clipboard image.
+
 ## 2026-09-16
 
 - Added an explicit Settings saving state, blocked duplicate submissions, preserved errors in the open modal, and confirmed successful saves after the modal closes.

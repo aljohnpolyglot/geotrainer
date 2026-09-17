@@ -14,6 +14,7 @@ import { ReviewPanel } from "./TrainerHubReview";
 import { TrainerHubClues } from "./TrainerHubClues";
 import type { HistoryKind, HubTab, StatisticsSection, TrainerHubProps } from "./trainerHubTypes";
 import { countryName, useHubTranslate } from "./trainerHubUtils";
+import { deleteNotebookHistoryNote } from "../services/coachHistory";
 
 const dayStart = () => new Date().setHours(0, 0, 0, 0);
 
@@ -124,7 +125,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
       {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={gradedAttempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {visitedStatistics && <div hidden={tab !== "statistics"}><StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} />} historyPanel={historyPanel} /></div>}
       {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
-      {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onTrainCountries={onTrainCountries} />}
+      {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onDeleteNote={(note) => { void deleteNotebookHistoryNote(note).then(load); }} onTrainCountries={onTrainCountries} />}
       {visitedCoverage && <div hidden={tab !== "coverage"}><CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} /></div>}
       {tab === "history" && historyPanel}
     </div>}

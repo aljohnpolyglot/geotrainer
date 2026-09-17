@@ -4,6 +4,7 @@ import test from 'node:test';
 type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
+let panoramaRequests: Array<{ source?: string }> = [];
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
 
 class LatLng {
@@ -13,8 +14,9 @@ class LatLng {
 }
 
 class StreetViewService {
-  getPanorama(_request: unknown, callback: (data: unknown, status: string) => void) {
+  getPanorama(request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
+    panoramaRequests.push(request as { source?: string });
     const result = results.shift()!;
     setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright ?? '© Google' }, result.status || 'OK'), result.delay || 0);
   }
@@ -116,6 +118,17 @@ test('contributor-only generation rejects official panoramas', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
   const found = await new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, { ...rural, panoramaSource: 'contributor' });
   assert.equal(found.panoId, 'contributor');
+});
+
+test('interiors are excluded by default and allowed only when enabled', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const generator = new StreetViewLocationGenerator();
+  currentResults = [{ lat: 7.7, lng: 7, pano: 'outdoor', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
+  await generator.findRandomLocation(['IT'], undefined, undefined, rural);
+  assert.equal(panoramaRequests[0].source, 'OUTDOOR');
+  currentResults = [{ lat: 7.8, lng: 7, pano: 'indoor-eligible', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
+  await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, allowInteriors: true });
+  assert.equal('source' in panoramaRequests[0], false);
 });
 
 test('an aborted lookup cannot return a stale panorama', async () => {

@@ -62,6 +62,14 @@ test('cloud merge unions Notebook and Coach histories instead of deleting one de
   assert.deepEqual(settings.find(({ key }) => key === 'coach.notes')?.value.map(({ id }) => id), ['local-coach', 'cloud-coach']);
 });
 
+test('a newer Personal-note deletion marker is not resurrected by cloud merge', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.settings.push({ key: 'notebook.notes', value: [{ id: 'note', text: 'old', updatedAt: 10 }], updatedAt: 10 });
+  local.data.settings.push({ key: 'notebook.notes', value: [{ id: 'note', text: 'old', updatedAt: 10, deletedAt: 30 }], updatedAt: 30 });
+  const note = (mergeBackups(cloud, local).data.settings[0] as { value: Array<{ deletedAt?: number }> }).value[0];
+  assert.equal(note.deletedAt, 30);
+});
+
 test('upload-side merge keeps Personal clues and Notebook notes from both origins', () => {
   const deployed = backup('deployed', 10); const localhost = backup('localhost', 20);
   deployed.data.clues.push({ id: 'wall-image', panoId: 'wall', createdAt: 10 });
@@ -84,12 +92,12 @@ test('cloud merge preserves the first and later photo notes saved on one panoram
   assert.deepEqual(((merged.data.settings as Array<{ key: string; value: Array<{ id: string }> }>).find(({ key }) => key === 'notebook.notes')?.value || []).map(({ id }) => id), ['third-note', 'second-note', 'first-note']);
 });
 
-test('cloud merge includes review, language, UI, audio, game, and workspace settings', () => {
+test('cloud merge includes review, language, UI, audio, map, game, and workspace settings', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
-  for (const key of ['schedulerPreferences', 'languagePreferences', 'preference.darkMode', 'preference.audio', 'gamePreferences', 'workspace.paused.study']) {
+  for (const key of ['schedulerPreferences', 'languagePreferences', 'preference.darkMode', 'preference.audio', 'mapPreferences', 'gamePreferences', 'workspace.paused.study']) {
     cloud.data.settings.push({ key, value: `cloud-${key}`, updatedAt: 20 }); local.data.settings.push({ key, value: `local-${key}`, updatedAt: 10 });
   }
-  assert.deepEqual((mergeBackups(cloud, local).data.settings as Array<{ value: string }>).map(({ value }) => value), ['cloud-schedulerPreferences', 'cloud-languagePreferences', 'cloud-preference.darkMode', 'cloud-preference.audio', 'cloud-gamePreferences', 'cloud-workspace.paused.study']);
+  assert.deepEqual((mergeBackups(cloud, local).data.settings as Array<{ value: string }>).map(({ value }) => value), ['cloud-schedulerPreferences', 'cloud-languagePreferences', 'cloud-preference.darkMode', 'cloud-preference.audio', 'cloud-mapPreferences', 'cloud-gamePreferences', 'cloud-workspace.paused.study']);
 });
 
 test('cloud merge keeps the most recently graded review across devices', () => {
@@ -97,6 +105,13 @@ test('cloud merge keeps the most recently graded review across devices', () => {
   cloud.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 30, lastReviewedAt: 20, gradingHistory: [{ grade: 'good', at: 20 }] });
   local.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 15, lastReviewedAt: 10, gradingHistory: [{ grade: 'hard', at: 10 }] });
   assert.deepEqual(mergeBackups(cloud, local).data.reviews, [cloud.data.reviews[0]]);
+});
+
+test('cloud merge keeps the newest independent generalization state', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.reviews.push({ id: 'pano', panoId: 'pano', generalizationLevel: 2, generalizationUpdatedAt: 30 });
+  local.data.reviews.push({ id: 'pano', panoId: 'pano', generalizationLevel: 4, generalizationUpdatedAt: 20 });
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { generalizationLevel: number }).generalizationLevel, 2);
 });
 
 test('token refresh does not trigger a visible full sync', () => {

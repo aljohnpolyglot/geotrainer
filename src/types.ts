@@ -99,12 +99,26 @@ export interface SchedulerPreferences {
   reviewDayResetMinutes?: number;
   reviewTimeZone?: string;
   reviewTimeZoneAuto?: boolean;
+  reviewViewVariationEnabled?: boolean;
+  reviewViewVariationDifficulty?: number;
 }
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
-export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; }
+export type MapTypePreference = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
+export type MapGesturePreference = 'auto' | 'cooperative' | 'greedy';
+export interface MapPreferences {
+  showImageryDate: boolean;
+  showRoadLabels: boolean;
+  motionTracking: boolean;
+  movementStyle: 'click' | 'arrows';
+  mapType: MapTypePreference;
+  gestureHandling: MapGesturePreference;
+  clickableIcons: boolean;
+  geotrainerMapStyle: boolean;
+}
+export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; }
 
 export interface GameSettings {
   roundCount: number;
@@ -121,6 +135,7 @@ export interface GameSettings {
   samplingMode?: SamplingMode;
   panoramaSource?: PanoramaSource; // Optional for backwards-compatible saved games
   allowContributors?: boolean; // Optional for backwards-compatible saved games
+  allowInteriors?: boolean; // Optional for backwards-compatible saved games
   timeLimitSeconds: number; // 0 = unlimited, or 30, 60, 90, 120, 180
 }
 
@@ -231,6 +246,14 @@ export interface Attempt {
   aiAssisted?: boolean;
   learnSource?: LearnSource;
   metaLessonId?: string;
+  heading?: number;
+  shownPanoId?: string;
+  shownLat?: number;
+  shownLng?: number;
+  shownHeading?: number;
+  distanceFromAnchorM?: number;
+  reviewViewKind?: 'original' | 'heading' | 'spatial';
+  generalizationLevel?: number;
 }
 
 export interface MetaLesson {
@@ -292,6 +315,7 @@ export interface NotebookNote {
   category?: string;
   clueId?: string;
   updatedAt: number;
+  deletedAt?: number;
 }
 
 export interface CoachHistoryNote {
@@ -316,6 +340,8 @@ export interface ReviewRecord {
   lapseCount: number;
   reviewCount: number;
   lastReviewedAt?: number;
+  generalizationLevel?: number;
+  generalizationUpdatedAt?: number;
 }
 
 export interface TrainingSession {
@@ -324,6 +350,12 @@ export interface TrainingSession {
   endedAt?: number;
   activeTimeSeconds: number;
 }
+
+export type ActiveWorkspace =
+  | { mode: 'home' }
+  | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string }
+  | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {
   key: string;

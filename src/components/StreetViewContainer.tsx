@@ -12,6 +12,7 @@ import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { useMapPreferences } from '../services/mapPreferences';
 
 interface StreetViewContainerProps {
   currentLocation: LocationResult | null;
@@ -49,6 +50,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   onViewChanged,
 }) => {
   const { ui } = useLanguagePreferences();
+  const mapPreferences = useMapPreferences();
   const t = (key: string) => translate(ui, key);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panoInstanceRef = useRef<google.maps.StreetViewPanorama | null>(null);
@@ -166,18 +168,19 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     if (!panoInstanceRef.current) {
       const panorama = new google.maps.StreetViewPanorama(containerRef.current, {
         // Spoiler-free training requirements:
-        showRoadLabels: false,
+        showRoadLabels: mapPreferences.showRoadLabels,
         addressControl: false,
         linksControl: canMove,
-        clickToGo: canMove,
+        clickToGo: canMove && mapPreferences.movementStyle === 'click',
         panControl: false,
         zoomControl: canZoom,
         scrollwheel: canZoom,
         disableDoubleClickZoom: !canZoom,
         fullscreenControl: true,
         enableCloseButton: false,
-        motionTracking: false,
-        motionTrackingControl: false,
+        imageDateControl: mapPreferences.showImageryDate,
+        motionTracking: mapPreferences.motionTracking,
+        motionTrackingControl: mapPreferences.motionTracking,
         // Solution attribution per skill guidelines
         // @ts-expect-error internalUsageAttributionIds is required by GMP governance
         internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
@@ -230,10 +233,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       // Update options dynamically if mode or settings changed
       panoInstanceRef.current.setOptions({
         linksControl: canMove,
-        clickToGo: canMove,
+        clickToGo: canMove && mapPreferences.movementStyle === 'click',
         zoomControl: canZoom,
         scrollwheel: canZoom,
         disableDoubleClickZoom: !canZoom,
+        showRoadLabels: mapPreferences.showRoadLabels,
+        imageDateControl: mapPreferences.showImageryDate,
+        motionTracking: mapPreferences.motionTracking,
+        motionTrackingControl: mapPreferences.motionTracking,
       });
     }
 
@@ -246,20 +253,19 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       const targetPano = savedView?.panoId || currentLocation.panoId;
       panorama.setVisible(true);
       google.maps.event.trigger(panorama, 'resize');
-      if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; return; }
-      pendingPanoRef.current = targetPano;
-      panorama.setPano(targetPano);
-
       const initialPov = {
         heading: savedView?.heading ?? currentLocation.heading ?? Math.floor(Math.random() * 360),
         pitch: savedView?.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;
+      if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; panorama.setPov(initialPov); panorama.setZoom(savedView?.zoom ?? 1); return; }
+      pendingPanoRef.current = targetPano;
+      panorama.setPano(targetPano);
       panorama.setPov(initialPov);
       panorama.setZoom(savedView?.zoom ?? 1);
       panorama.setVisible(true);
     }
-  }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView]);
+  }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView, mapPreferences.showRoadLabels, mapPreferences.showImageryDate, mapPreferences.motionTracking, mapPreferences.movementStyle]);
 
   useEffect(() => {
     const container = containerRef.current;

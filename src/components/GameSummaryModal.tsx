@@ -11,6 +11,7 @@ import { COUNTRIES } from '../data/countries';
 import { Trophy, RotateCcw, History, X, ExternalLink, MapPin, Target } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
 
 interface GameSummaryModalProps {
   game: GameRecord;
@@ -30,6 +31,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
   onGoToLocation,
 }) => {
   const { ui } = useLanguagePreferences();
+  const mapPreferences = useMapPreferences();
   const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -57,10 +59,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
       streetViewControl: false,
       fullscreenControl: false,
       zoomControl: true,
-      styles: [
-        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-      ],
+      ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       // Solution attribution per skill guidelines
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
@@ -138,7 +137,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
     });
 
     map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
-  }, [game, onGoToLocation]);
+  }, [game, onGoToLocation, mapPreferences]);
 
   return (
     <div

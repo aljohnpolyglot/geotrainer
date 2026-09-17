@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Files, Images, Lightbulb, NotebookPen, X } from 'lucide-react';
+import { Camera, Check, Files, Images, Lightbulb, LoaderCircle, NotebookPen, TriangleAlert, X } from 'lucide-react';
 import type { ClueRecord, CoachAnalysis, CoachHistoryNote, NotebookNote } from '../types';
 import { trainerDb } from '../data/trainerDb';
 import { CountryFlag } from './CountryFlag';
@@ -15,6 +15,7 @@ import { saveNotebookHistoryNote } from '../services/coachHistory';
 import { richClipboardHtmlToMarkdown } from '../services/richClipboard';
 import { clearWorkspaceDraft, readWorkspaceDraft, writeWorkspaceDraft } from '../services/workspaceDrafts';
 import { notebookClueLinks, visibleNotebookNotes } from './trainerHubUtils';
+import { captureStreetView360 } from '../services/streetViewSnapshot';
 
 export type MetaAid = { id: string; imageUrl: string; text?: string; note?: string; temporallySensitive?: boolean };
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
@@ -47,6 +48,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [noteFormKey, setNoteFormKey] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [capture360, setCapture360] = useState<'idle' | 'busy' | 'copied' | 'error'>('idle');
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
   useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues(), trainerDb.locations()]).then(([personal = [], coach = [], attempts, visits, savedClues, locations]) => { if (!active) return;
@@ -55,13 +57,15 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
     attempts.forEach((item) => { if (nearbyReviewPoint(current, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode })) relatedPanos.add(item.panoId); });
     const nearbyClues = savedClues.filter((item) => relatedPanos.has(item.panoId) || (typeof item.lat === 'number' && typeof item.lng === 'number' && nearbyReviewPoint(current, { panoId: item.panoId, lat: item.lat, lng: item.lng, countryCode: item.countryCode })));
-    nearbyClues.forEach((item) => relatedPanos.add(item.panoId)); setClues((previous) => [...new Map([...previous, ...nearbyClues].map((item) => [item.id, item])).values()].sort((a, b) => b.createdAt - a.createdAt));
+    const deletedClueIds = new Set(personal.filter((item) => item.deletedAt && item.clueId).map((item) => item.clueId!)); const visibleNearbyClues = nearbyClues.filter((item) => !deletedClueIds.has(item.id));
+    nearbyClues.forEach((item) => relatedPanos.add(item.panoId)); setClues((previous) => [...new Map([...previous.filter((item) => !deletedClueIds.has(item.id)), ...visibleNearbyClues].map((item) => [item.id, item])).values()].sort((a, b) => b.createdAt - a.createdAt));
     const coachByRun = new Map(coach.filter((item) => relatedPanos.has(item.panoId)).map((item) => [`${item.generatedAt}:${item.mode}:${item.model}`, item]));
     [...visits, ...attempts].filter((item) => relatedPanos.has(item.panoId) && item.coachAnalysis && item.coachGeneratedAt && item.coachMode).forEach((item) => { const model = item.coachModel || 'Gemini'; const key = `${item.coachGeneratedAt}:${item.coachMode}:${model}`; if (!coachByRun.has(key)) coachByRun.set(key, { id: `coach-legacy:${key}`, panoId: item.panoId, countryCode: item.countryCode, mode: item.coachMode!, model, generatedAt: item.coachGeneratedAt!, analysis: item.coachAnalysis! }); });
     const relevantPersonal = personal.filter((item) => relatedPanos.has(item.panoId) || !!item.clueId && nearbyClues.some((clue) => clue.id === item.clueId)); const personalLinks = notebookClueLinks(nearbyClues, relevantPersonal); const displayedPersonal = visibleNotebookNotes(relevantPersonal, personalLinks);
     const linkedClues = new Set([...personalLinks.values(), ...[...coachByRun.values()].flatMap((item) => item.clueId ? [item.clueId] : [])]);
-    const currentNotes = [...displayedPersonal.map((item) => { const linked = nearbyClues.find((clue) => clue.id === personalLinks.get(item)); return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: linked?.imageDataUrl, missingImage: !!item.clueId && (!linked || !linked.imageDataUrl), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', imageUrl: item.clueId ? nearbyClues.find((clue) => clue.id === item.clueId)?.imageDataUrl : undefined, analysis: item.analysis, at: item.generatedAt })), ...nearbyClues.filter((item) => !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))];
-    setNotes((previous) => [...new Map([...previous, ...currentNotes].map((item) => [item.id, item])).values()].sort((a, b) => b.at - a.at));
+    const currentNotes = [...displayedPersonal.map((item) => { const linked = visibleNearbyClues.find((clue) => clue.id === personalLinks.get(item)); return { id: item.id || `personal:${item.updatedAt}`, source: t('Personal'), text: item.text, category: item.category, imageUrl: linked?.imageDataUrl, missingImage: !!item.clueId && (!linked || !linked.imageDataUrl), analysis: linked && (linked.analysis.description || linked.analysis.strongClues.length) ? linked.analysis : undefined, at: item.updatedAt }; }), ...[...coachByRun.values()].map((item) => ({ id: item.id, source: t('AI-assisted'), text: item.analysis.description || '', imageUrl: item.clueId ? visibleNearbyClues.find((clue) => clue.id === item.clueId)?.imageDataUrl : undefined, analysis: item.analysis, at: item.generatedAt })), ...visibleNearbyClues.filter((item) => !linkedClues.has(item.id)).map((item) => ({ id: item.id, source: t(item.origin === 'personal' ? 'Personal' : 'AI-assisted'), text: item.analysis.description || '', imageUrl: item.imageDataUrl, analysis: item.analysis, at: item.createdAt }))];
+    const deletedNoteIds = new Set(personal.filter((item) => item.deletedAt).map((item) => item.id || `personal:${item.updatedAt}`));
+    setNotes((previous) => [...new Map([...previous.filter((item) => !deletedNoteIds.has(item.id)), ...currentNotes].map((item) => [item.id, item])).values()].sort((a, b) => b.at - a.at));
   }); return () => { active = false; }; }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
   useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
   useEffect(() => {
@@ -79,9 +83,15 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     await Promise.all([clearWorkspaceDraft('note', panoId), clearWorkspaceDraft('clue', panoId)]); setNoteFormKey((value) => value + 1);
     window.setTimeout(() => setNoteSaved(false), 700); await onNoteSaved();
   };
+  const copy360 = async () => {
+    if (capture360 === 'busy') return; setCapture360('busy');
+    try { if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') throw new Error(); const blob = await captureStreetView360(panoId); await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); setCapture360('copied'); window.setTimeout(() => setCapture360('idle'), 1800); }
+    catch { setCapture360('error'); window.setTimeout(() => setCapture360('idle'), 3000); }
+  };
 
   return <>
     <div className="learning-aids" aria-label={t('Learning aids')}>
+      <button type="button" disabled={capture360 === 'busy'} aria-busy={capture360 === 'busy'} onClick={() => void copy360()} title={t(capture360 === 'busy' ? 'Capturing 360° view…' : capture360 === 'copied' ? '360° view copied' : capture360 === 'error' ? 'Could not copy 360° view' : 'Copy 360° view to clipboard')}>{capture360 === 'busy' ? <LoaderCircle className="spin" size={17} /> : capture360 === 'copied' ? <Check size={17} /> : capture360 === 'error' ? <TriangleAlert size={17} /> : <Camera size={17} />}<span>{t(capture360 === 'busy' ? 'Capturing 360° view…' : capture360 === 'copied' ? '360° view copied' : capture360 === 'error' ? 'Could not copy 360° view' : 'Copy 360° view to clipboard')}</span><i aria-hidden="true">360°</i></button>
       {lesson && <button type="button" aria-pressed={open === 'meta'} onClick={() => setOpen(open === 'meta' ? null : 'meta')} title={t('Meta')}><Lightbulb size={17} /><span>{t('Meta')}</span></button>}
       <button type="button" aria-pressed={open === 'clues'} onClick={() => setOpen(open === 'clues' ? null : 'clues')} title={t('Show Clues')}><Images size={17} /><span>{t('Show Clues')}</span><b>{clues.length}</b></button>
       <button type="button" aria-pressed={open === 'notebook'} onClick={() => setOpen(open === 'notebook' ? null : 'notebook')} title={t('Notebook')}><NotebookPen size={17} /><span>{t('Notebook')}</span></button>

@@ -101,7 +101,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.scheduleFirstPlay('pano-first-play', 'again')).intervalDays, 21);
   await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), maximumIntervalDays: 30, easyFirstIntervalDays: 90 });
   assert.equal((await trainerDb.scheduleFirstPlay('pano-clamped-play', 'easy')).intervalDays, 30);
-  await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), strictness: 'pro', maximumAnswerSeconds: 45 });
+  await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), strictness: 'pro', maximumAnswerSeconds: 45, reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 73 });
   assert.equal((await trainerDb.schedulerPreferences()).strictness, 'pro');
 
   await trainerDb.saveVisit({ id: 'visit-1', panoId: 'pano-new', lat: 52.5, lng: 13.4, countryCode: 'DE', collectionId: 'world', openedAt: 1, closedAt: 2, activeTimeSeconds: 1, wasRevealed: false, bookmarked: false });
@@ -127,6 +127,8 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.reviews()).length, expected.reviews);
   assert.equal((await trainerDb.clues()).length, 1);
   assert.equal((await trainerDb.schedulerPreferences()).maximumAnswerSeconds, 45);
+  assert.equal((await trainerDb.schedulerPreferences()).reviewViewVariationEnabled, true);
+  assert.equal((await trainerDb.schedulerPreferences()).reviewViewVariationDifficulty, 73);
   await importBackup(backup, 'merge');
   assert.equal((await trainerDb.locations()).length, expected.locations);
   assert.equal((await trainerDb.attempts()).length, expected.attempts);
@@ -200,12 +202,13 @@ test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: 17, environment: 'ocean' }, false), {
     roundCount: 5, collectionId: 'world', canMove: false, canPan: true, canZoom: true, showCompass: false, aiCoachEnabled: true,
-    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', panoramaSource: 'official', allowContributors: false, timeLimitSeconds: 0,
+    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', panoramaSource: 'official', allowContributors: false, allowInteriors: false, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');
   assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);
   assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);
+  assert.equal(normalizeGamePreferences({ allowInteriors: true }).allowInteriors, true);
 });
 
 test('fresh review settings randomize with a deterministic Fisher-Yates shuffle', async () => {
@@ -213,4 +216,7 @@ test('fresh review settings randomize with a deterministic Fisher-Yates shuffle'
   assert.equal(normalizeSchedulerPreferences(undefined).reviewOrder, 'random');
   assert.deepEqual(shuffleInPlace([1, 2, 3, 4], () => 0), [2, 3, 4, 1]);
   assert.equal(normalizeSchedulerPreferences({ reviewOrder: 'due' }).reviewOrder, 'due');
+  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationEnabled, false);
+  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationDifficulty, 50);
+  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 140 }).reviewViewVariationDifficulty, 100);
 });

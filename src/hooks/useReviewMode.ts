@@ -4,6 +4,7 @@ import { calculateDistanceKm, calculateRoundScore } from '../services/gameLogic'
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
+import { planReviewVariation } from '../data/reviewVariation';
 
 type ReviewStat = { previous: number; current: number; grade: ReviewGrade };
 type SavedReviewSession = { attemptIds: string[]; source: string; kind?: ReviewSessionKind; initialTotal: number; compass?: boolean; stats?: ReviewStat[] };
@@ -30,13 +31,21 @@ export function useReviewMode(ctx: any) {
   const [reviewComplete, setReviewComplete] = useState(false);
   const reviewGradingRef = useRef(false);
   const reviewRestoreAttemptedRef = useRef(false);
+  const reviewVariationRef = useRef<{ kind: 'original' | 'heading' | 'spatial'; level: number; distanceM: number; shownPanoId: string; shownHeading?: number } | undefined>(undefined);
 
   const openReviewAttempt = useCallback(async (attempt: Attempt) => {
+    reviewVariationRef.current = undefined;
     setReviewAttempt(attempt); setReviewResult(null); setReviewAttemptRecord(null); setReviewElapsed(0); setCurrentLocation(null); setCoachNote(null); setIsLoading(true); setErrorMessage(null);
     try {
-      const reopened = await defaultLocationGenerator.reopenLocation({ panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode });
+      const [preferences, review, attempts] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attempts()]);
+      const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
+      const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
+      const recentlyShown = new Set(attempts.filter((item) => item.source === 'review' && item.panoId === attempt.panoId && item.shownPanoId).sort((a, b) => b.createdAt - a.createdAt).slice(0, 3).map((item) => item.shownPanoId!));
+      const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown).catch(() => defaultLocationGenerator.reopenLocation(anchor));
+      const kind = plan.kind === 'spatial' && reopened.panoId !== attempt.panoId && !reopened.isFallback ? 'spatial' : plan.kind === 'heading' ? 'heading' : 'original';
+      reviewVariationRef.current = { kind, level: kind === 'spatial' ? plan.generalizationLevel : 0, distanceM: kind === 'spatial' ? calculateDistanceKm(attempt.actualLat, attempt.actualLng, reopened.lat, reopened.lng) * 1000 : 0, shownPanoId: reopened.panoId, shownHeading: reopened.heading };
       setCurrentLocation(reopened); roundStartTimeRef.current = Date.now();
-      const [attempts, intervals] = await Promise.all([trainerDb.attempts(), trainerDb.reviewIntervals(attempt.panoId)]);
+      const intervals = await trainerDb.reviewIntervals(attempt.panoId);
       setReviewHistory(attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt)); setReviewIntervals(intervals);
     } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Review location is unavailable.'); setReviewAttempt(null); } finally { setIsLoading(false); }
   }, [setCoachNote, setCurrentLocation, setErrorMessage, setIsLoading, setReviewAttempt, roundStartTimeRef]);
@@ -74,7 +83,8 @@ export function useReviewMode(ctx: any) {
     const timeSpentSeconds = Math.max(1, Math.round((Date.now() - roundStartTimeRef.current) / 1000));
     const round: GameRound = { roundNumber: 1, location: { ...currentLocation, lat: reviewAttempt.actualLat, lng: reviewAttempt.actualLng, countryCode: reviewAttempt.countryCode }, guess, distanceKm, score, timeSpentSeconds };
     const id = `review-attempt-${crypto.randomUUID()}`;
-    const attempt: Attempt = { id, gameId: `review-${new Date().toISOString().slice(0, 10)}`, roundNumber: 1, panoId: reviewAttempt.panoId, actualLat: reviewAttempt.actualLat, actualLng: reviewAttempt.actualLng, countryCode: reviewAttempt.countryCode, guessedLat: guess?.lat ?? null, guessedLng: guess?.lng ?? null, guessedCountryCode: guess ? (await reverseGeocodeLocation(guess.lat, guess.lng))?.countryCode : undefined, distanceKm, score, timeSpentSeconds, collectionId: reviewAttempt.collectionId, canMove: reviewAttempt.canMove, canPan: reviewAttempt.canPan, canZoom: reviewAttempt.canZoom, showCompass: ctx.reviewCompass, environment: reviewAttempt.environment ?? 'mixed', environmentRequested: reviewAttempt.environmentRequested ?? reviewAttempt.environment ?? 'mixed', urbanLevel: reviewAttempt.urbanLevel ?? 3, samplingMode: reviewAttempt.samplingMode ?? 'natural', createdAt: Date.now(), source: 'review', sourceAttemptId: reviewAttempt.id, locationId: reviewAttempt.panoId, reviewAttemptId: id, isFallbackPanorama: !!currentLocation.isFallback, fallbackPanorama: currentLocation.isFallback, originalPanoId: currentLocation.originalPanoId, learnSource: reviewAttempt.learnSource, metaLessonId: reviewAttempt.metaLessonId, ...(coachNote ? { coachUsed: true, coachMode: coachNote.mode, coachModel: coachNote.model, coachGeneratedAt: coachNote.generatedAt, coachAnalysis: coachNote.analysis } : {}) };
+    const variation = reviewVariationRef.current;
+    const attempt: Attempt = { id, gameId: `review-${new Date().toISOString().slice(0, 10)}`, roundNumber: 1, panoId: reviewAttempt.panoId, actualLat: reviewAttempt.actualLat, actualLng: reviewAttempt.actualLng, countryCode: reviewAttempt.countryCode, guessedLat: guess?.lat ?? null, guessedLng: guess?.lng ?? null, guessedCountryCode: guess ? (await reverseGeocodeLocation(guess.lat, guess.lng))?.countryCode : undefined, distanceKm, score, timeSpentSeconds, collectionId: reviewAttempt.collectionId, canMove: reviewAttempt.canMove, canPan: reviewAttempt.canPan, canZoom: reviewAttempt.canZoom, showCompass: ctx.reviewCompass, environment: reviewAttempt.environment ?? 'mixed', environmentRequested: reviewAttempt.environmentRequested ?? reviewAttempt.environment ?? 'mixed', urbanLevel: reviewAttempt.urbanLevel ?? 3, samplingMode: reviewAttempt.samplingMode ?? 'natural', createdAt: Date.now(), source: 'review', sourceAttemptId: reviewAttempt.id, locationId: reviewAttempt.panoId, reviewAttemptId: id, isFallbackPanorama: !!currentLocation.isFallback, fallbackPanorama: currentLocation.isFallback, originalPanoId: currentLocation.originalPanoId, learnSource: reviewAttempt.learnSource, metaLessonId: reviewAttempt.metaLessonId, ...(variation ? { shownPanoId: variation.shownPanoId, shownLat: currentLocation.lat, shownLng: currentLocation.lng, shownHeading: variation.shownHeading, distanceFromAnchorM: variation.distanceM, reviewViewKind: variation.kind, generalizationLevel: variation.level } : {}), ...(coachNote ? { coachUsed: true, coachMode: coachNote.mode, coachModel: coachNote.model, coachGeneratedAt: coachNote.generatedAt, coachAnalysis: coachNote.analysis } : {}) };
     setReviewAttemptRecord(attempt); setReviewResult(round); setIsSubmittingGuess(false);
   }, [coachNote, currentLocation, reviewAttempt, reviewResult, roundStartTimeRef, setIsSubmittingGuess, ctx.reviewCompass]);
 
@@ -85,8 +95,9 @@ export function useReviewMode(ctx: any) {
     const grade = reviewKind === 'correction' ? reviewGradeForCorrection(reviewResult.score, reviewAttemptRecord.countryCode, reviewAttemptRecord.guessedCountryCode, schedulerPreferences.strictness) : reviewGradeForPerformance(reviewResult.score, reviewResult.timeSpentSeconds, correctCountry, schedulerPreferences.maximumAnswerSeconds, schedulerPreferences.strictness);
     reviewGradingRef.current = true;
     try {
-      const previous = (await trainerDb.reviews()).find((item) => item.panoId === reviewAttempt.panoId); const scheduled = shouldScheduleReview(reviewKind, previous, Date.now(), schedulerPreferences);
-      const schedule = scheduled ? await trainerDb.gradeReview(reviewAttempt.panoId, grade, reviewKind === 'correction' && grade !== 'again' ? 1 : undefined) : previous;
+      const previous = await trainerDb.reviewState(reviewAttempt.panoId); const scheduled = shouldScheduleReview(reviewKind, previous, Date.now(), schedulerPreferences);
+      const variation = { level: reviewAttemptRecord.generalizationLevel, kind: reviewAttemptRecord.reviewViewKind };
+      const schedule = scheduled ? await trainerDb.gradeReview(reviewAttempt.panoId, grade, reviewKind === 'correction' && grade !== 'again' ? 1 : undefined, variation) : await trainerDb.updateReviewGeneralization(reviewAttempt.panoId, grade, variation) || previous;
       await trainerDb.saveAttempt({ ...reviewAttemptRecord, grade, reviewedAt: Date.now(), previousDueAt: previous?.dueAt, nextDueAt: schedule?.dueAt, intervalDays: schedule?.intervalDays });
       const stats = [...reviewStats, { previous: reviewAttempt.score, current: reviewResult.score, grade }]; setReviewStats(stats);
       const remaining = reviewQueue.slice(1); if (grade === 'again') remaining.push(reviewAttempt); setReviewQueue(remaining); setTrainerRefreshKey((key: number) => key + 1);

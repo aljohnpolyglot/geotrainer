@@ -40,6 +40,10 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 Svaret döljs tills du gissar. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
+I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
+
+**Variationssvårighet** går från 0 till 100. Vid 0 används exakt originalvyn. 100 tillåter den största säkra variationen för tillräckligt mogna kort; det betyder inte maximalt avstånd vid varje repetition. Nya eller svaga kort stannar vid originalet eller mycket nära, medan mogna kort gradvis kan visas längre bort. Om du missar en mer varierad vy blir kommande vyer försiktigare utan att skapa ett nytt kort. Hittar GeoTrainer inget lämpligt panorama, eller misslyckas sökningen, används originalvyn automatiskt.
+
 ## AI-coach och ledtrådar
 
 Spel använder samma lärverktygsrad som Studier: Anteckningsbok, antalet tillgängliga anteckningar i närheten och AI-coach när den är aktiverad i spelinställningen.
@@ -114,7 +118,9 @@ Kombinera vägmarkeringar, körsida, skriftsystem, stolpar, terräng, arkitektur
 
 ## Lär, Meta och Anteckningsbok
 
-Lär har tre vägar. **Anpassad** behåller samlingar och miljöer. **Meta** öppnar guidade lektioner vid sparad panorama och riktning. **Utforska karta** visar Street View-täckning. I Meta och kartan öppnar Avslöja det vanliga platskortet, där Spara för repetition schemalägger senare kartträning. Kartan använder Tillbaka till världskartan i stället för Nästa. Anpassat lärande och Spel använder officiella Google-bilder som standard; välj blandat för både officiella panoraman och bidragsgivarpanoraman eller välj endast bidragsgivare.
+**360°-kameran** i arbetsytan kopierar fyra riktningar från det aktuella panoramat som en enda bild. Bilden skickas direkt till urklipp och sparas inte i GeoTrainer.
+
+Lär har tre vägar. **Anpassad** behåller samlingar och miljöer. **Meta** öppnar guidade lektioner vid sparad panorama och riktning. **Utforska karta** visar Street View-täckning. I Meta och kartan öppnar Avslöja det vanliga platskortet, där Spara för repetition schemalägger senare kartträning. Kartan använder Tillbaka till världskartan i stället för Nästa. Anpassat lärande och Spel använder officiella Google-bilder som standard; välj blandat för både officiella panoraman och bidragsgivarpanoraman eller välj endast bidragsgivare. **Tillåt inomhusmiljöer** är avstängt som standard i båda inställningarna; när det aktiveras kan Google visa Street View-täckning både inomhus och utomhus. Under **Inställningar → Visning** kan du styra gatunamn, bilddatum, telefonrörelse, förflyttning, karttyp, gester, klickbara platser och GeoTrainer-färger. Gatunamn och klickbara platser är avstängda som standard för att undvika oavsiktliga ledtrådar.
 
 Glödlampan uppe till höger öppnar och stänger förklaringen. Förstarådet kan stängas en gång eller döljas permanent utan att lektioner tas bort. Ett Meta visas i **Mina ledtrådar** först när platsen uttryckligen sparas för repetition. Under repetition visas bara referensbilden före svaret; hela texten visas efteråt och lärverktygen förblir tillgängliga tills du väljer nästa repetition.
 

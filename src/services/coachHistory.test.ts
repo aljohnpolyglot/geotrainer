@@ -19,3 +19,12 @@ test('concurrent Notebook saves are both retained', async () => {
   await Promise.all([1, 2].map((updatedAt) => saveNotebookHistoryNote({ id: `personal-${updatedAt}`, panoId: 'pano', countryCode: 'IT', text: `Note ${updatedAt}`, updatedAt })));
   assert.deepEqual((await trainerDb.setting<Array<{ id: string }>>('notebook.notes'))?.map(({ id }) => id), ['personal-2', 'personal-1']);
 });
+
+test('Personal Notebook deletion leaves a sync-safe hidden marker', async () => {
+  const { deleteNotebookHistoryNote, saveNotebookHistoryNote } = await import('./coachHistory');
+  const { trainerDb } = await import('../data/trainerDb');
+  const note = { id: 'personal-delete', panoId: 'pano', countryCode: 'SE', text: 'bollard', updatedAt: 50 };
+  await saveNotebookHistoryNote(note); await deleteNotebookHistoryNote(note);
+  const saved = (await trainerDb.setting<Array<{ id: string; deletedAt?: number }>>('notebook.notes'))?.find(({ id }) => id === note.id);
+  assert.ok(saved?.deletedAt);
+});

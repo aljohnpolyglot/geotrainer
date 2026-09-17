@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateDistanceKm, calculateRoundScore, compassDirection } from './gameLogic';
+import { calculateDistanceKm, calculateRoundScore, compassDirection, restoredRoundElapsed } from './gameLogic';
 
 test('distance and score remain bounded at gameplay edges', () => {
   assert.equal(calculateDistanceKm(10, 20, 10, 20), 0);
@@ -15,4 +15,10 @@ test('compass direction wraps headings at north', () => {
   assert.equal(compassDirection(359), 'N');
   assert.equal(compassDirection(212), 'SW');
   assert.equal(compassDirection(-90), 'W');
+});
+
+test('resuming Play keeps active round time without counting closed hours', () => {
+  assert.equal(restoredRoundElapsed(75, null, 0), 75);
+  assert.equal(restoredRoundElapsed(undefined, 45, 60), 15);
+  assert.equal(restoredRoundElapsed(undefined, null, 0), 0);
 });

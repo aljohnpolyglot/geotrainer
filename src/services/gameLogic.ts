@@ -66,6 +66,12 @@ export function formatTime(seconds: number): string {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
+export function restoredRoundElapsed(savedElapsed: unknown, savedRemaining: unknown, timeLimitSeconds: number): number {
+  if (Number.isFinite(savedElapsed)) return Math.max(0, Math.floor(Number(savedElapsed)));
+  if (timeLimitSeconds > 0 && Number.isFinite(savedRemaining)) return Math.max(0, Math.min(timeLimitSeconds, timeLimitSeconds - Number(savedRemaining)));
+  return 0;
+}
+
 export function compassDirection(heading: number): string {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round((((heading % 360) + 360) % 360) / 45) % 8];
 }

@@ -3,6 +3,7 @@ import { LoaderCircle, MapPinned, X } from 'lucide-react';
 import type { LocationResult } from '../types';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
 
 export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
   open: boolean;
@@ -11,6 +12,7 @@ export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
   onSelect: (location: Omit<LocationResult, 'countryCode'>) => void;
 }) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
+  const mapPreferences = useMapPreferences();
   const element = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
   const onSelectRef = useRef(onSelect);
@@ -25,7 +27,7 @@ export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
 
   useEffect(() => {
     if (!initialized || !mapsReady || !element.current || typeof google === 'undefined') return;
-    map.current = new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false });
+    map.current = new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')) });
     const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map.current);
     const service = new google.maps.StreetViewService();
     const listener = map.current.addListener('click', async (event: google.maps.MapMouseEvent) => {
@@ -42,6 +44,8 @@ export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
     });
     return () => { listener.remove(); coverage.setMap(null); if (map.current) google.maps.event.clearInstanceListeners(map.current); map.current = null; };
   }, [initialized, mapsReady]);
+
+  useEffect(() => { map.current?.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences]);
 
   useEffect(() => {
     if (open && map.current) requestAnimationFrame(() => google.maps.event.trigger(map.current!, 'resize'));

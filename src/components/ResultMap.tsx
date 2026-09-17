@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
+import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
 
 type Point = { lat: number; lng: number };
 
@@ -13,6 +14,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
   active?: boolean;
 }) {
   const { ui } = useLanguagePreferences();
+  const mapPreferences = useMapPreferences();
   const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -22,7 +24,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
     if (!element.current || typeof google === 'undefined') return;
     const map = new google.maps.Map(element.current, {
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
-      styles: [{ featureType: 'poi', stylers: [{ visibility: 'off' }] }, { featureType: 'transit', stylers: [{ visibility: 'off' }] }],
+      ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
     mapRef.current = map;
@@ -32,6 +34,8 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       boundsRef.current = null;
     };
   }, [fullscreenControl]);
+
+  useEffect(() => { mapRef.current?.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences]);
 
   useEffect(() => {
     const map = mapRef.current;

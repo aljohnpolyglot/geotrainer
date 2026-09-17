@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { CheckCircle2, LoaderCircle, X } from 'lucide-react';
 import { DEFAULT_SCHEDULER_PREFERENCES, effectiveReviewDueAt, nextScheduledReviewAt, normalizeSchedulerPreferences, trainerDb } from '../data/trainerDb';
 import { DEFAULT_LANGUAGE_PREFERENCES, LANGUAGE_OPTIONS, normalizeLanguagePreferences, translate } from '../services/language';
-import type { CompassStyle, LanguagePreferences, ReviewRecord, SchedulerPreferences, SupportedLanguage } from '../types';
+import type { CompassStyle, LanguagePreferences, MapPreferences, ReviewRecord, SchedulerPreferences, SupportedLanguage } from '../types';
 import { announceLanguagePreferences } from '../services/useLanguagePreferences';
 import { DEFAULT_AUDIO_PREFERENCES, normalizeAudioPreferences, setAudioPreferences, type AudioPreferences } from '../services/audio';
 import { reloadPage } from '../services/devDiagnostics';
 import { COACH_STYLES, DEFAULT_COACH_PREFERENCES, EXPLANATION_DEPTHS, coachGuide, coachStyleLabel, normalizeCoachPreferences } from '../services/coachPreferences';
 import type { CoachPreferences } from '../types';
+import { clampReviewViewVariationDifficulty, reviewVariationCheckpoint } from '../data/reviewVariation';
+import { announceMapPreferences, DEFAULT_MAP_PREFERENCES, normalizeMapPreferences } from '../services/mapPreferences';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
@@ -35,6 +37,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   const [audio, setAudio] = useState<AudioPreferences>(DEFAULT_AUDIO_PREFERENCES);
   const [tab, setTab] = useState<SettingsTab>('language');
   const [coach, setCoach] = useState<CoachPreferences>(DEFAULT_COACH_PREFERENCES);
+  const [mapPreferences, setMapPreferences] = useState<MapPreferences>(DEFAULT_MAP_PREFERENCES);
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   useEffect(() => {
@@ -45,7 +48,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
 
   useEffect(() => {
     if (!open) return;
-    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<AudioPreferences>('preference.audio'), trainerDb.reviews(), trainerDb.setting<CoachPreferences>('coachPreferences')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedAudio, savedReviews, savedCoach]) => {
+    void Promise.all([trainerDb.setting<LanguagePreferences>('languagePreferences'), trainerDb.setting<SchedulerPreferences>('schedulerPreferences'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<SettingsTab>('preferences.tab'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting<AudioPreferences>('preference.audio'), trainerDb.reviews(), trainerDb.setting<CoachPreferences>('coachPreferences'), trainerDb.setting<MapPreferences>('mapPreferences')]).then(([languageValue, schedulerValue, savedCompassStyle, savedTab, savedDarkMode, savedAudio, savedReviews, savedCoach, savedMapPreferences]) => {
       setLanguages(normalizeLanguagePreferences(languageValue));
       setLoadedGameLanguage(normalizeLanguagePreferences(languageValue).game);
       setScheduler(normalizeSchedulerPreferences(schedulerValue));
@@ -54,6 +57,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       setAudio(normalizeAudioPreferences(savedAudio));
       setReviews(savedReviews);
       setCoach(normalizeCoachPreferences(savedCoach));
+      setMapPreferences(normalizeMapPreferences(savedMapPreferences));
       if (savedTab === 'language' || savedTab === 'coach' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
     });
   }, [open]);
@@ -68,8 +72,10 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
     const nextScheduler = normalizeSchedulerPreferences(scheduler);
     const nextAudio = normalizeAudioPreferences(audio); setAudioPreferences(nextAudio);
     try {
-      await Promise.all([Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio), trainerDb.setSetting('coachPreferences', normalizeCoachPreferences(coach))]), new Promise((resolve) => window.setTimeout(resolve, 450))]);
+      const nextMapPreferences = normalizeMapPreferences(mapPreferences);
+      await Promise.all([Promise.all([trainerDb.setSetting('languagePreferences', nextLanguages), trainerDb.setSetting('schedulerPreferences', nextScheduler), trainerDb.setSetting('preference.compassStyle', compassStyle), trainerDb.setSetting('preference.darkMode', darkMode), trainerDb.setSetting('preference.audio', nextAudio), trainerDb.setSetting('coachPreferences', normalizeCoachPreferences(coach)), trainerDb.setSetting('mapPreferences', nextMapPreferences)]), new Promise((resolve) => window.setTimeout(resolve, 450))]);
       window.dispatchEvent(new CustomEvent('geotrainer:coach-preferences'));
+      document.documentElement.classList.toggle('dark', darkMode); announceMapPreferences(nextMapPreferences);
       announceLanguagePreferences(nextLanguages);
       onChange?.(nextLanguages, compassStyle, darkMode);
       setSaveState('saved');
@@ -78,7 +84,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
     } catch { setSaveState('error'); }
   };
   if (!open) return saveState === 'saved' ? <div className="settings-saved-toast" role="status" aria-live="polite"><CheckCircle2 size={19} />{translate(languages.ui, 'Settings saved')}</div> : null;
-  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])]; const guide = coachGuide(languages.ui);
+  const previewScheduler = normalizeSchedulerPreferences(scheduler); const previewNow = Date.now(); const previewAt = nextScheduledReviewAt(reviews, previewNow, previewScheduler); const hasDueReviews = reviews.some((review) => effectiveReviewDueAt(review, previewScheduler) <= previewNow); const timeZones = [...new Set([previewScheduler.reviewTimeZone, ...NATIVE_TIME_ZONES])]; const guide = coachGuide(languages.ui); const variationCheckpoint = reviewVariationCheckpoint(scheduler.reviewViewVariationDifficulty);
 
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="language-settings preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
@@ -104,10 +110,24 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         <label>{translate(languages.ui, 'SFX volume')} · {Math.round(audio.sfxVolume * 100)}%<input type="range" min="0" max="1" step="0.05" disabled={!audio.sfxEnabled} value={audio.sfxVolume} onChange={(event) => setAudio({ ...audio, sfxVolume: Number(event.target.value) })} /></label>
         <label className="settings-checkbox"><input type="checkbox" checked={audio.musicEnabled} onChange={(event) => setAudio({ ...audio, musicEnabled: event.target.checked })} />{translate(languages.ui, 'Ambient music')}</label>
         <label>{translate(languages.ui, 'Music volume')} · {Math.round(audio.musicVolume * 100)}%<input type="range" min="0" max="1" step="0.05" disabled={!audio.musicEnabled} value={audio.musicVolume} onChange={(event) => setAudio({ ...audio, musicVolume: Number(event.target.value) })} /></label>
-      </fieldset></>}
+      </fieldset><fieldset className="map-settings"><legend>{translate(languages.ui, 'Panorama')}</legend><div className="settings-option-grid">
+        <label className="settings-checkbox settings-detail"><input type="checkbox" checked={mapPreferences.showRoadLabels} onChange={(event) => setMapPreferences({ ...mapPreferences, showRoadLabels: event.target.checked })} /><span><strong>{translate(languages.ui, 'Road labels')}</strong><small>{translate(languages.ui, 'Show street names inside Street View. Off is usually better for recognition practice.')}</small></span></label>
+        <label className="settings-checkbox settings-detail"><input type="checkbox" checked={mapPreferences.showImageryDate} onChange={(event) => setMapPreferences({ ...mapPreferences, showImageryDate: event.target.checked })} /><span><strong>{translate(languages.ui, 'Imagery date')}</strong><small>{translate(languages.ui, 'Show Google’s capture-date control on panoramas.')}</small></span></label>
+        <label className="settings-checkbox settings-detail"><input type="checkbox" checked={mapPreferences.motionTracking} onChange={(event) => setMapPreferences({ ...mapPreferences, motionTracking: event.target.checked })} /><span><strong>{translate(languages.ui, 'Motion viewing')}</strong><small>{translate(languages.ui, 'On supported phones, look around by moving the device.')}</small></span></label>
+        <label>{translate(languages.ui, 'Movement controls')}<select value={mapPreferences.movementStyle} onChange={(event) => setMapPreferences({ ...mapPreferences, movementStyle: event.target.value as MapPreferences['movementStyle'] })}><option value="click">{translate(languages.ui, 'Click and arrows')}</option><option value="arrows">{translate(languages.ui, 'Arrows only')}</option></select></label>
+      </div></fieldset><fieldset className="map-settings"><legend>{translate(languages.ui, 'Maps')}</legend><div className="settings-option-grid">
+        <label>{translate(languages.ui, 'Map type')}<select value={mapPreferences.mapType} onChange={(event) => setMapPreferences({ ...mapPreferences, mapType: event.target.value as MapPreferences['mapType'] })}><option value="roadmap">{translate(languages.ui, 'Road map')}</option><option value="satellite">{translate(languages.ui, 'Satellite')}</option><option value="hybrid">{translate(languages.ui, 'Hybrid')}</option><option value="terrain">{translate(languages.ui, 'Terrain')}</option></select></label>
+        <label>{translate(languages.ui, 'Touch gestures')}<select value={mapPreferences.gestureHandling} onChange={(event) => setMapPreferences({ ...mapPreferences, gestureHandling: event.target.value as MapPreferences['gestureHandling'] })}><option value="auto">{translate(languages.ui, 'Automatic')}</option><option value="cooperative">{translate(languages.ui, 'Two fingers')}</option><option value="greedy">{translate(languages.ui, 'One finger')}</option></select></label>
+        <label className="settings-checkbox settings-detail"><input type="checkbox" checked={mapPreferences.clickableIcons} onChange={(event) => setMapPreferences({ ...mapPreferences, clickableIcons: event.target.checked })} /><span><strong>{translate(languages.ui, 'Clickable map places')}</strong><small>{translate(languages.ui, 'Allow place icons to open Google information. Keep off to avoid accidental clues.')}</small></span></label>
+        <label className="settings-checkbox settings-detail"><input type="checkbox" checked={mapPreferences.geotrainerMapStyle} onChange={(event) => setMapPreferences({ ...mapPreferences, geotrainerMapStyle: event.target.checked })} /><span><strong>{translate(languages.ui, 'GeoTrainer map style')}</strong><small>{translate(languages.ui, 'Match map colors to GeoTrainer’s light or dark appearance.')}</small></span></label>
+      </div></fieldset></>}
       {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
         <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={Number.isNaN(scheduler.newCardsPerDay) ? '' : scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
         <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={Number.isNaN(scheduler.maximumReviewsPerDay) ? '' : scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
+      </fieldset>
+      <fieldset className="review-view-settings"><legend>{translate(languages.ui, 'Review view')}</legend>
+        <label className="settings-checkbox"><input type="checkbox" checked={scheduler.reviewViewVariationEnabled === true} onChange={(event) => setScheduler((current) => ({ ...current, reviewViewVariationEnabled: event.target.checked }))} /><span><strong>{translate(languages.ui, 'Vary review view')}</strong><small>{translate(languages.ui, 'Test memory from other views in the same nearby area as a location becomes better learned.')}</small></span></label>
+        {scheduler.reviewViewVariationEnabled && <div className="review-variation-slider"><label htmlFor="review-variation-difficulty"><span>{translate(languages.ui, 'Variation difficulty')}</span><strong>{clampReviewViewVariationDifficulty(scheduler.reviewViewVariationDifficulty)}</strong></label><p>{translate(languages.ui, 'Controls how aggressively GeoTrainer varies well-learned cards. New and weak cards stay near the original.')}</p><input id="review-variation-difficulty" type="range" min="0" max="100" step="1" list="review-variation-checkpoints" value={clampReviewViewVariationDifficulty(scheduler.reviewViewVariationDifficulty)} onChange={(event) => setScheduler((current) => ({ ...current, reviewViewVariationDifficulty: Number(event.target.value) }))} /><datalist id="review-variation-checkpoints">{[0, 25, 50, 75, 100].map((value) => <option key={value} value={value} />)}</datalist><div className="range-endpoints"><span>0</span><span>100</span></div><p className="review-variation-explanation"><strong>{translate(languages.ui, `Variation ${variationCheckpoint} label`)}</strong>{translate(languages.ui, `Variation ${variationCheckpoint} description`)}</p></div>}
       </fieldset>
       <fieldset className="scheduling-settings"><legend>{translate(languages.ui, 'scheduling')}</legend>
         <label>{translate(languages.ui, 'strictness')}<select value={scheduler.strictness} onChange={(event) => setScheduler((current) => ({ ...current, strictness: event.target.value as SchedulerPreferences['strictness'] }))}><option value="beginner">{translate(languages.ui, 'beginner')}</option><option value="balanced">{translate(languages.ui, 'balanced')}</option><option value="pro">{translate(languages.ui, 'pro')}</option></select></label>

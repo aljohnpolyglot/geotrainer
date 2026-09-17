@@ -5,6 +5,7 @@ import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
 import { CoverageChoropleth } from "./CoverageChoropleth";
 import type { CoverageOverlay } from "./trainerHubUtils";
+import { mapPresentationOptions, useMapPreferences } from "../services/mapPreferences";
 
 interface CoverageMapProps {
   locations: TrainerLocation[];
@@ -16,6 +17,7 @@ interface CoverageMapProps {
 
 export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: CoverageMapProps) {
   const t = useHubTranslate();
+  const mapPreferences = useMapPreferences();
   const element = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map>();
   const markers = useRef<google.maps.Marker[]>([]);
@@ -25,7 +27,8 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
 
   useEffect(() => {
     if (!element.current || typeof google === "undefined") return;
-    map.current ||= new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, mapTypeControl: false, streetViewControl: false, fullscreenControl: false });
+    map.current ||= new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains("dark")) });
+    map.current.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains("dark")));
     preview.current ||= new google.maps.InfoWindow({ disableAutoPan: true });
     const render = () => {
       markers.current.forEach((marker) => marker.setMap(null));
@@ -85,7 +88,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
       markers.current.forEach((marker) => { google.maps.event.clearInstanceListeners(marker); marker.setMap(null); });
       markers.current = [];
     };
-  }, [locations, attempts, reviews, overlay, t]);
+  }, [locations, attempts, reviews, overlay, t, mapPreferences]);
 
   useEffect(() => {
     if (!element.current) return;

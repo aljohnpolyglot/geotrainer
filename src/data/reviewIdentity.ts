@@ -19,6 +19,7 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
   const gradingHistory = [...kept.gradingHistory, ...duplicate.gradingHistory]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
     .sort((a, b) => a.at - b.at);
+  const generalization = (duplicate.generalizationUpdatedAt || 0) > (kept.generalizationUpdatedAt || 0) ? duplicate : kept;
   return {
     ...kept,
     dueAt: Math.min(kept.dueAt, duplicate.dueAt),
@@ -27,6 +28,8 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
     lapseCount: kept.lapseCount + duplicate.lapseCount,
     reviewCount: kept.reviewCount + duplicate.reviewCount,
     lastReviewedAt: Math.max(kept.lastReviewedAt || 0, duplicate.lastReviewedAt || 0) || undefined,
+    generalizationLevel: generalization.generalizationLevel,
+    generalizationUpdatedAt: generalization.generalizationUpdatedAt,
   };
 };
 

@@ -5,6 +5,7 @@
 - Preserve Study, Play, Review, IndexedDB history, bookmarks, coverage, and saved-game compatibility.
 - Prefer small changes that reuse existing components and services; do not redesign unrelated UI.
 - Keep Street View imagery transient. Never download or persist it unless the user explicitly asks.
+- Keep workspace 360° clipboard captures transient: combine four quarter-turn views in memory, copy one image, and never add it to IndexedDB, cloud storage, clues, or history.
 - Persist one current-view screenshot when the user explicitly saves a location or submits a Play answer; treat older records without screenshots as valid.
 - Compress explicitly uploaded or captured Notebook and AI Coach clue images, sync them to private per-user Supabase Storage, and render that exact hosted image in Available notes and My Clues. Preserve local-only fallback for signed-out or offline saves.
 - My Clues rows and details must show the hosted preview, note type, note text, and exact creation time when present; never substitute a general panorama screenshot for a submitted clue image.
@@ -52,9 +53,12 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
+- Keep review-view variation anchored to one canonical card: alternate headings or nearby panoramas may record shown-view metadata and independent generalization progress, but must never create encounters, cards, discoveries, or mastery duplicates; failures contract variation and lookup failures fall back to the anchor view.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card, never invents a score, and must remain recognized as saved after reload.
 - Environment is a generator/filter dimension, not a duplicate collection system.
 - The Official / Mixed / Contributor imagery selector filters only newly generated Custom Learn and Play locations and defaults to Official; it does not alter Meta, Explore Map, saved locations, History, or Review.
+- The interior-imagery toggle filters only newly generated Custom Learn and Play locations, defaults to off, and leaves Meta, Explore Map, saved locations, History, and Review unchanged.
+- Keep panorama and base-map display preferences in the existing Settings → Display tab, using the shared fieldset, switch-row, select, light/dark, and mobile-scroll styling. Apply them consistently to Learn, Play, Review, Explore, Coverage, guess, result, and summary surfaces; session restrictions such as No Move still take precedence. Road labels and clickable place icons default to off to reduce accidental clues.
 - Country and city datasets are local data files, not UI-component constants.
 - Configure the Google Maps JavaScript loader through one shared promise so development remounts cannot call `setOptions` twice. Keep already-opened map surfaces mounted while their tab or panel is hidden, and resize the retained instance when it becomes visible again; rely on Google's browser cache rather than persisting map imagery locally.
 - Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
@@ -73,6 +77,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Make every meaningful Coach clue comparative: explain what is visible, why it matters, what it supports and argues against, whether it is national or regional, its confusers, and what would confirm or overturn it. Major candidate rationales must include positive and missing evidence, why they rank above or below nearby candidates, and a high-information decider; correlated generic scenery must not be double-counted.
 - Persist clue-image and unsaved Notebook drafts across reloads, scoped to the current panorama. Completed Coach analyses belong in Available notes rather than the active Coach panel.
 - Preserve paused Learn and Play workspaces separately. When a saved workspace exists, entering that mode must offer Resume and Start new, with Back returning to the prior screen.
+- Persist Play round timers as accumulated active seconds; resuming must never count time spent closed, hidden, or on another surface.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
 - Refresh Available notes and its badge immediately after every Notebook save in every mode; do not depend on Study-only scheduling side effects.

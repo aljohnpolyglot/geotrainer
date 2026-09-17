@@ -10,6 +10,7 @@ import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useDraggablePanel } from '../hooks/useDraggablePanel';
 import { playUiSound } from '../services/audio';
+import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
@@ -27,6 +28,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   elapsedTimeSeconds,
 }) => {
   const { ui } = useLanguagePreferences();
+  const mapPreferences = useMapPreferences();
   const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
@@ -53,16 +55,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       zoomControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM,
       },
-      styles: [
-        {
-          featureType: 'poi',
-          stylers: [{ visibility: 'off' }],
-        },
-        {
-          featureType: 'transit',
-          stylers: [{ visibility: 'off' }],
-        },
-      ],
+      ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       // Solution attribution per skill guidelines
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
@@ -115,6 +108,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       mapInstanceRef.current = null;
     };
   }, [mapsReady]);
+
+  useEffect(() => { mapInstanceRef.current?.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences]);
 
   useEffect(() => {
     const container = mapContainerRef.current;

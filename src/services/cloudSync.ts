@@ -37,11 +37,11 @@ const keys: Record<StoreName, string> = {
   sessions: 'id',
   clues: 'id',
 };
-const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
+const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), Number(record.generalizationUpdatedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
 const noteSettings = new Set(['notebook.notes', 'coach.notes']);
 const mergeNotes = (left: unknown, right: unknown) => {
   const notes = new Map<string, Record<string, unknown>>();
-  for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) notes.set(String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`), item);
+  for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) { const key = String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`); const previous = notes.get(key); if (!previous || Number(item.deletedAt || item.updatedAt || item.generatedAt || 0) >= Number(previous.deletedAt || previous.updatedAt || previous.generatedAt || 0)) notes.set(key, item); }
   return [...notes.values()].sort((a, b) => Number(b.updatedAt || b.generatedAt || 0) - Number(a.updatedAt || a.generatedAt || 0));
 };
 
@@ -133,7 +133,7 @@ const emptyAnalysis = (): CoachAnalysis => ({ confidence: 'low', region: '', can
 async function repairMissingNotebookClues(userId: string) {
   const [notes, clues] = await Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.clues()]);
   const existing = new Set(clues.map((clue) => clue.id));
-  const missing = (notes || []).filter((note): note is NotebookNote & { clueId: string } => !!note.clueId && !existing.has(note.clueId));
+  const missing = (notes || []).filter((note): note is NotebookNote & { clueId: string } => !note.deletedAt && !!note.clueId && !existing.has(note.clueId));
   if (!missing.length) return 0;
   const stored = await resolveStoredClueImages(userId, missing.map((note) => note.clueId));
   let repaired = 0;

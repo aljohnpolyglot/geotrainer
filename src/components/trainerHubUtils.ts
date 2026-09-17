@@ -7,7 +7,10 @@ import type { CountryStats } from "./trainerHubTypes";
 
 export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
 export const timestamp = (value: number, locale: string) => new Date(value).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'medium' });
-export const timestampRange = (start: number, end: number, locale: string) => `${timestamp(start, locale)} – ${timestamp(end, locale)}`;
+export const timestampRange = (start: number, end: number, locale: string) => {
+  const from = new Date(start); const to = new Date(end); const sameDay = from.getFullYear() === to.getFullYear() && from.getMonth() === to.getMonth() && from.getDate() === to.getDate();
+  return sameDay ? `${from.toLocaleDateString(locale, { dateStyle: 'medium' })}, ${from.toLocaleTimeString(locale, { timeStyle: 'short' })}–${to.toLocaleTimeString(locale, { timeStyle: 'short' })}` : `${timestamp(start, locale)} – ${timestamp(end, locale)}`;
+};
 export const elapsed = (seconds: number) => {
   const total = Math.max(0, Math.round(seconds)); const minutes = Math.floor(total / 60); const remainder = total % 60;
   return minutes ? `${minutes}m ${remainder}s` : `${remainder}s`;
@@ -17,6 +20,7 @@ export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) =>
   const used = new Set<string>(); const links = new Map<NotebookNote, string>();
   notes.forEach((note) => {
     if (!note.clueId || !clues.some((clue) => clue.id === note.clueId)) return;
+    if (note.deletedAt) { used.add(note.clueId); links.set(note, note.clueId); return; }
     const richer = !String(note.text || '').trim() && !note.category ? notes.find((other) => other !== note && (!!String(other.text || '').trim() || !!other.category) && (other.panoId === note.panoId || other.countryCode === note.countryCode) && Math.abs(other.updatedAt - note.updatedAt) <= 300_000) : undefined;
     used.add(note.clueId); links.set(richer || note, note.clueId);
   });
@@ -26,15 +30,15 @@ export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) =>
 };
 export const visibleNotebookNotes = (notes: NotebookNote[], links: Map<NotebookNote, string>) => {
   const linkedIds = new Set(links.values());
-  return notes.filter((note) => !!String(note.text || '').trim() || !!note.category || links.has(note) || !!note.clueId && !linkedIds.has(note.clueId));
+  return notes.filter((note) => !note.deletedAt && (!!String(note.text || '').trim() || !!note.category || links.has(note) || !!note.clueId && !linkedIds.has(note.clueId)));
 };
 export const missingNotebookPhotoNotes = (clues: ClueRecord[], notes: NotebookNote[], failedImages = new Set<string>()) => {
   const byId = new Map(clues.map((clue) => [clue.id, clue]));
-  return notes.filter((note) => {
+  return notes.filter((note) => !note.deletedAt && (() => {
     if (!note.clueId) return false;
     const clue = byId.get(note.clueId);
     return !clue || !clue.imageDataUrl || failedImages.has(clue.id);
-  });
+  })());
 };
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
   const noteLinks = notebookClueLinks(clues, notes); const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);

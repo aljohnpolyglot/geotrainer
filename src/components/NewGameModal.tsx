@@ -59,6 +59,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [urbanLevel, setUrbanLevel] = useState<UrbanLevel>(3);
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
+  const [allowInteriors, setAllowInteriors] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -69,7 +70,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setTimeLimitSeconds(value.timeLimitSeconds);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
     });
     return () => { active = false; };
   }, [isOpen, defaultShowCompass, collections]);
@@ -108,6 +109,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       samplingMode,
       panoramaSource,
       allowContributors: panoramaSource !== 'official',
+      allowInteriors,
       timeLimitSeconds,
     };
     void trainerDb.setSetting('gamePreferences', settings);
@@ -325,6 +327,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </button>
           </div>
           <label className="panorama-source-setting">{t('Street View imagery')}<select value={panoramaSource} onChange={(event) => setPanoramaSource(event.target.value as PanoramaSource)}><option value="official">{t('Official only')}</option><option value="mixed">{t('Official + contributor')}</option><option value="contributor">{t('Contributor only')}</option></select></label>
+          <button type="button" role="switch" aria-checked={allowInteriors} onClick={() => setAllowInteriors((value) => !value)} className={`game-compass-setting ${allowInteriors ? 'enabled' : ''}`} title={t('Include indoor Street View panoramas when available.')}><span>{t('Allow interiors')}</span><strong>{allowInteriors ? t('Enabled') : t('Disabled')}</strong></button>
 
           {/* 5. Timer Option */}
           <div className="space-y-1.5">

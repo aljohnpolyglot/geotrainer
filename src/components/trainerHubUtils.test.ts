@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryCounts, coverageCountryValues, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, visibleNotebookNotes } from './trainerHubUtils';
+import { coverageCountryCounts, coverageCountryValues, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, timestampRange, visibleNotebookNotes } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -51,6 +51,14 @@ test('an explicit missing image stays broken instead of stealing another same-pa
   assert.deepEqual(visibleNotebookNotes([broken] as never, links), [broken]);
 });
 
+test('deleted Personal notes and their linked images stay out of My Clues totals', () => {
+  const clue = { id: 'deleted-image', panoId: 'pano', countryCode: 'SE', origin: 'personal' };
+  const note = { id: 'deleted-note', panoId: 'pano', countryCode: 'SE', text: 'bollard', clueId: clue.id, updatedAt: 10, deletedAt: 20 };
+  const links = notebookClueLinks([clue] as never, [note]);
+  assert.equal(visibleNotebookNotes([note], links).length, 0);
+  assert.equal(savedClueCount([clue] as never, [note], [], []), 0);
+});
+
 test('photo integrity detects absent records, unresolved paths, and failed signed images only', () => {
   const notes = [{ id: 'absent', clueId: 'missing' }, { id: 'unsigned', clueId: 'path' }, { id: 'failed', clueId: 'url' }, { id: 'text' }];
   const clues = [{ id: 'path', imagePath: 'u/path.jpg', imageDataUrl: '' }, { id: 'url', imagePath: 'u/url.jpg', imageDataUrl: 'https://signed' }];
@@ -73,4 +81,10 @@ test('country heat values normalize counts and preserve score and weakness scale
 test('coverage distinguishes unique panoramas from repeated encounters', () => {
   const locations = [{ countryCode: 'IE', encounterCount: 50 }, { countryCode: 'IE', encounterCount: 33 }, { countryCode: 'HU', encounterCount: 2 }];
   assert.deepEqual(coverageCountryCounts(locations as never), { IE: { panoramas: 2, encounters: 83 }, HU: { panoramas: 1, encounters: 2 } });
+});
+
+test('same-day session ranges show the date once with a compact time span', () => {
+  const value = timestampRange(new Date(2026, 8, 17, 12, 50).getTime(), new Date(2026, 8, 17, 13, 11).getTime(), 'en');
+  assert.equal((value.match(/2026/g) || []).length, 1);
+  assert.match(value, /12:50.*1:11/);
 });
