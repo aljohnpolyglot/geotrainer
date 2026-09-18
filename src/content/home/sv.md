@@ -34,6 +34,16 @@ I anpassat lärande och spel erbjuder **Inomhusbilder** Endast utomhus (standard
 
 Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en JSON-fil från Map Maker med en lista över platser eller `customCoordinates`; varje plats behöver giltig latitud och longitud. Filen måste vara mindre än 10 MB. Föregående finns före Visa och blir tillgänglig när du har besökt två platser. Nästa går framåt genom platserna i den här lärsessionen innan en ny plats väljs. X till höger i sidhuvudet öppnar valet av lärläge igen. Kartan stannar på den här enheten; ladda upp den igen på andra enheter. Platsvariation 0 behåller den uppladdade vyn; 100 söker Street View upp till 1 km bort och faller tillbaka till en ursprunglig plats om det behövs. Minus minimerar platskortet och maximera fyller skärmen.
 
+### Välj prioritet för lärandet
+
+Prioritet styr hur **nya platser i Anpassat lärande** väljs efter samling, landsmix, miljö, bildkälla och inomhusfilter. Det påverkar inte Uppladdad karta, Meta, Utforska karta, Spel eller Repetition.
+
+- **Slumpmässigt** (standard) väljer ur det möjliga urvalet utan att använda din historik. Använd det för variation eller en neutral rundtur i samlingen.
+- **Bekanta platser** väljer en tidigare mött möjlig plats som utgångspunkt och söker ungefär 1–12 km runt den. Det tränar omgivningen och närliggande vyer i stället för att upprepa exakt samma panorama.
+- **Minst erfarenhet** väljer först ett osynligt eller minst besökt möjligt land och siktar sedan på landets största geografiska blinda fläck: området längst från platser du redan känner till. Normalisering efter landets storlek hindrar stora länder från att alltid vinna lika lägen. I en samling med ett land fylls luckor inom landet; i landsmixar, kontinenter och Världen balanseras länder innan deras luckor fylls.
+
+Om det inte finns någon möjlig historik börjar Bekanta platser och Minst erfarenhet från det valda urvalet som Slumpmässigt. Street View-täckning och aktiva filter avgör fortfarande om målområdet kan ge ett panorama, så en närliggande tillgänglig vy kan användas när den exakta platsen saknar täckning.
+
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
 
 ## Spelläge
@@ -81,7 +91,7 @@ Anteckningsboken bevarar inklistrade rubriker, fetstil och punktlistor. Externa 
 
 ## Samlingar och inställningar
 
-Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet.
+Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet. Gränsernas bredd och färg kan justeras med en direkt förhandsvisning; regiongränser är avstängda som standard och kan aktiveras separat.
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
@@ -145,6 +155,8 @@ Meta-studier innehåller 359 lokalt lagrade lektioner, normaliserade från den p
 Meta väljer bara oavslutade lektioner. När alla 359 är klara gråas alternativet i Lär dig ut och kan inte längre väljas.
 
 En oavslutad Studie- eller Spelsession sparas. När du återvänder kan du välja **Återuppta**, **Starta nytt** eller **Tillbaka**. Täckningen har ett kontinuerligt värmelager för **Behärskning**: många lyckade repetitioner och långa intervall gör länder och platser gradvis ljusare, medan missar sänker intensiteten. Ett panorama som öppnas från Täckning har AI Coach, Anteckningsbok, länkad Meta och Tillgängliga anteckningar; en sparning skapar eller återanvänder dess repetitionskort. Bildberoende Meta-ledtrådar visar en varning eftersom Street View-uppdateringar kan göra dem inaktuella.
+
+I Täckning kan du dra ländernas värmekarta och zooma med mushjulet, reglaget eller knapparna. Klicka på ett land för att öppna dess regionkarta med samma lager. Regionerna bestäms utifrån sparade platsuppgifter eller via Google Maps när kartan öppnas. Vissa länder saknar regionkarta; platser vars region inte kan avgöras förblir ofärgade.
 
 ## AI-coachstilar och förklaringsdjup
 

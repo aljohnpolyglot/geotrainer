@@ -69,6 +69,7 @@ export interface LocationRequestContext {
   collectionId?: string;
   excludedPanoIds?: ReadonlySet<string>;
   requireNavigation?: boolean;
+  preferredCandidate?: { lat: number; lng: number; countryCode: string; minRadiusKm?: number; radiusKm?: number };
 }
 
 export type AppMode = 'study' | 'play' | 'review';
@@ -105,10 +106,13 @@ export interface SchedulerPreferences {
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
+export type LearnPriority = 'random' | 'familiar' | 'least-exposure';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
 export type MapTypePreference = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
 export type MapPalettePreference = 'auto' | 'light' | 'dark';
 export type ResultMapZoomPreference = 'closest' | 'country' | 'region' | 'world';
+export type CountryBorderWidth = 'thin' | 'standard' | 'bold';
+export type CountryBorderColor = 'auto' | 'light' | 'dark' | 'accent';
 export type MapGesturePreference = 'auto' | 'cooperative' | 'greedy';
 export interface MapPreferences {
   showImageryDate: boolean;
@@ -121,6 +125,9 @@ export interface MapPreferences {
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   showCountryBorders?: boolean;
+  showRegionBorders?: boolean;
+  countryBorderWidth?: CountryBorderWidth;
+  countryBorderColor?: CountryBorderColor;
 }
 export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; }
 

@@ -4,6 +4,10 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { mapPresentationOptions, resultMapZoomLimit, useMapPreferences } from '../services/mapPreferences';
 
 type Point = { lat: number; lng: number };
+const fitResultBounds = (map: google.maps.Map, bounds: google.maps.LatLngBounds, zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
+  map.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
+  google.maps.event.addListenerOnce(map, 'idle', () => { const limit = resultMapZoomLimit(zoomPreference); if ((map.getZoom() || 0) > limit) map.setZoom(limit); });
+};
 
 export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false, active = true, resizeKey }: {
   actual: Point;
@@ -58,12 +62,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
     if (previousGuess) addMarker(previousGuess, t('previousGuess'), '#2563eb', 6);
-    map.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
-    const idle = map.addListener('idle', () => {
-      const zoomLimit = resultMapZoomLimit(mapPreferences.resultMapZoom);
-      if ((map.getZoom() || 0) > zoomLimit) map.setZoom(zoomLimit);
-      google.maps.event.removeListener(idle);
-    });
+    fitResultBounds(map, bounds, mapPreferences.resultMapZoom);
     return () => {
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
@@ -75,10 +74,10 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
     if (!active || !mapRef.current || !boundsRef.current) return;
     const frame = requestAnimationFrame(() => {
       google.maps.event.trigger(mapRef.current!, 'resize');
-      mapRef.current?.fitBounds(boundsRef.current!, { top: 48, right: 48, bottom: 48, left: 48 });
+      fitResultBounds(mapRef.current!, boundsRef.current!, mapPreferences.resultMapZoom);
     });
     return () => cancelAnimationFrame(frame);
-  }, [active, resizeKey]);
+  }, [active, resizeKey, mapPreferences.resultMapZoom]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

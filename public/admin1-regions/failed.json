@@ -1,0 +1,142 @@
+[
+  {
+    "country": "Antarctica",
+    "pageUrl": "https://simplemaps.com/svg/country/aq#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/aq/all/aq.svg"
+  },
+  {
+    "country": "Aruba",
+    "pageUrl": "https://simplemaps.com/svg/country/aw#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/aw/all/aw.svg"
+  },
+  {
+    "country": "British Virgin Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/vg#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/vg/all/vg.svg"
+  },
+  {
+    "country": "Cayman Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/ky#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/ky/all/ky.svg"
+  },
+  {
+    "country": "Curaco (Netherlands)",
+    "pageUrl": "https://simplemaps.com/svg/country/cw#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/cw/all/cw.svg"
+  },
+  {
+    "country": "Faeroe Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/fo#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/fo/all/fo.svg"
+  },
+  {
+    "country": "Falkland Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/fk#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/fk/all/fk.svg"
+  },
+  {
+    "country": "Gibraltar",
+    "pageUrl": "https://simplemaps.com/svg/country/gi#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gi/all/gi.svg"
+  },
+  {
+    "country": "Guam",
+    "pageUrl": "https://simplemaps.com/svg/country/gu#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gu/all/gu.svg"
+  },
+  {
+    "country": "Guernsey",
+    "pageUrl": "https://simplemaps.com/svg/country/gg#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gg/all/gg.svg"
+  },
+  {
+    "country": "Heard Island and McDonald Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/hm#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/hm/all/hm.svg"
+  },
+  {
+    "country": "Isle of Man",
+    "pageUrl": "https://simplemaps.com/svg/country/im#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/im/all/im.svg"
+  },
+  {
+    "country": "Jersey",
+    "pageUrl": "https://simplemaps.com/svg/country/je#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/je/all/je.svg"
+  },
+  {
+    "country": "Kiribati",
+    "pageUrl": "https://simplemaps.com/svg/country/ki#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/ki/all/ki.svg"
+  },
+  {
+    "country": "Macau",
+    "pageUrl": "https://simplemaps.com/svg/country/mo#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mo/all/mo.svg"
+  },
+  {
+    "country": "Monaco",
+    "pageUrl": "https://simplemaps.com/svg/country/mc#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mc/all/mc.svg"
+  },
+  {
+    "country": "Niue",
+    "pageUrl": "https://simplemaps.com/svg/country/nu#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/nu/all/nu.svg"
+  },
+  {
+    "country": "Norfolk Island",
+    "pageUrl": "https://simplemaps.com/svg/country/nf#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/nf/all/nf.svg"
+  },
+  {
+    "country": "Pitcairn Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/pn#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/pn/all/pn.svg"
+  },
+  {
+    "country": "Puerto Rico",
+    "pageUrl": "https://simplemaps.com/svg/country/pr#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/pr/all/pr.svg"
+  },
+  {
+    "country": "Saint Martin (Dutch)",
+    "pageUrl": "https://simplemaps.com/svg/country/sx#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/sx/all/sx.svg"
+  },
+  {
+    "country": "Saint Martin (French)",
+    "pageUrl": "https://simplemaps.com/svg/country/mf#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mf/all/mf.svg"
+  },
+  {
+    "country": "Saint-Barthélemy",
+    "pageUrl": "https://simplemaps.com/svg/country/bl#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/bl/all/bl.svg"
+  },
+  {
+    "country": "South Georgia and South Sandwich Islands",
+    "pageUrl": "https://simplemaps.com/svg/country/gs#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gs/all/gs.svg"
+  },
+  {
+    "country": "Tokelau",
+    "pageUrl": "https://simplemaps.com/svg/country/tk#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/tk/all/tk.svg"
+  },
+  {
+    "country": "Tuvalu",
+    "pageUrl": "https://simplemaps.com/svg/country/tv#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/tv/all/tv.svg"
+  },
+  {
+    "country": "Vatican City",
+    "pageUrl": "https://simplemaps.com/svg/country/va#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/va/all/va.svg"
+  },
+  {
+    "country": "Western Sahara",
+    "pageUrl": "https://simplemaps.com/svg/country/eh#all",
+    "error": "Could not determine country code from https://simplemaps.com/static/svg/country/eh/all/eh.svg"
+  }
+]

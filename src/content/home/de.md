@@ -83,6 +83,16 @@ Für benutzerdefiniertes Lernen und Spielen gibt es bei **Innenaufnahmen** Nur d
 
 Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladene Karte. Für eine hochgeladene Karte wähle eine Map-Maker-JSON-Datei mit einer Ortsliste oder `customCoordinates`; jeder Ort braucht gültige Breiten- und Längengrade. Die Datei muss kleiner als 10 MB sein. Zurück steht vor Anzeigen und ist nach dem zweiten besuchten Ort verfügbar. Weiter geht zuerst durch bereits besuchte Orte voran und wählt danach einen neuen Ort. Das X rechts im Kopfbereich öffnet die Auswahl des Lernmodus. Die Karte bleibt auf diesem Gerät; lade sie auf anderen Geräten erneut hoch. Ortsvariation 0 behält die hochgeladene Ansicht; 100 sucht Street View bis zu 1 km entfernt und fällt bei Bedarf auf einen ursprünglichen Ort zurück. Minus minimiert die Ortskarte, Maximieren füllt den Bildschirm.
 
+### Lernpriorität wählen
+
+Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgewählt werden, nachdem Sammlung, Ländermischung, Umgebung, Bildquelle und Innenraumfilter angewendet wurden. Sie verändert Hochgeladene Karte, Meta, Karte erkunden, Spiel und Wiederholung nicht.
+
+- **Zufällig** (Standard) wählt ohne Gewichtung durch deinen Verlauf aus dem geeigneten Pool. Nutze es für Abwechslung oder eine neutrale Tour durch die Sammlung.
+- **Vertraute Orte** nimmt einen bereits besuchten geeigneten Ort als Ausgangspunkt und sucht ungefähr 1–12 km darum herum. So lernst du die Umgebung und erkennst nahe Ansichten, ohne dasselbe Panorama genau zu wiederholen.
+- **Wenigste Erfahrung** wählt zuerst ein ungesehenes oder am seltensten besuchtes geeignetes Land und zielt dann auf dessen größten geografischen blinden Fleck: das Gebiet mit der größten Entfernung zu bereits bekannten Orten. Die Normalisierung nach Landesgröße verhindert, dass große Länder jeden Gleichstand gewinnen. Bei einem Land werden dessen Lücken gefüllt; bei Ländermischungen, Kontinenten und Welt werden zuerst die Länder ausgeglichen.
+
+Wenn kein geeigneter Verlauf vorhanden ist, beginnen Vertraute Orte und Wenigste Erfahrung wie Zufällig im gewählten Pool. Street-View-Abdeckung und aktive Filter bestimmen weiterhin, ob das Zielgebiet ein Panorama liefern kann; fehlt am exakten Punkt die Abdeckung, kann eine nahe verfügbare Ansicht verwendet werden.
+
 Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisarten ohne Punktedruck.
 
 ### Lernen einrichten
@@ -162,7 +172,7 @@ GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. K
 
 ## Planung und Einstellungen
 
-Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell oder Dunkel behält die gewählte Farbe für Straßen- und Geländekarten bei. Satellitenbilder behalten ihre Farben. Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt.
+Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell oder Dunkel behält die gewählte Farbe für Straßen- und Geländekarten bei. Satellitenbilder behalten ihre Farben. Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
 
 ### Strengegrad
 
@@ -304,7 +314,7 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 
 ### Abdeckungskarte
 
-Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine detaillierte SVG-Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl. Die neutrale Farbe bedeutet je nach Ebene „noch nicht begegnet“, „keine gewerteten Versuche“ oder „kein Wiederholungsverlauf“—nicht fehlende Google-Maps-Abdeckung.
+Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine detaillierte SVG-Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen. Du kannst die Heatmap ziehen und mit Mausrad, Schieberegler oder Tasten zoomen. Ein Klick auf ein Land öffnet die regionale Heatmap mit derselben Ebene. Regionen werden anhand gespeicherter Ortsangaben oder beim Öffnen über Google Maps zugeordnet. Für manche Länder fehlen regionale Kartendaten; Orte ohne eindeutige Region bleiben ungefärbt. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl. Die neutrale Farbe bedeutet je nach Ebene „noch nicht begegnet“, „keine gewerteten Versuche“ oder „kein Wiederholungsverlauf“—nicht fehlende Google-Maps-Abdeckung.
 
 Einmal geöffnete Ergebnis-, Erkundungs-, Abdeckungs- und Statistikkarten bleiben beim Ausblenden ihres Fensters oder Reiters geladen und öffnen dadurch ohne erneute Karteninitialisierung. Kartenkacheln verwenden den Browser- und Google-Maps-Cache; GeoTrainer speichert Karten- oder Street-View-Bilder nicht lokal.
 

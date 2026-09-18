@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { MapPreferences, ResultMapZoomPreference } from '../types';
+import type { CountryBorderColor, CountryBorderWidth, MapPreferences, ResultMapZoomPreference } from '../types';
 import { trainerDb } from '../data/trainerDb';
 
 export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
@@ -13,6 +13,9 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   gestureHandling: 'auto',
   clickableIcons: false,
   showCountryBorders: true,
+  showRegionBorders: false,
+  countryBorderWidth: 'thin',
+  countryBorderColor: 'auto',
 };
 
 export const normalizeMapPreferences = (value: unknown): MapPreferences => {
@@ -28,10 +31,15 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
     showCountryBorders: source.showCountryBorders !== false,
+    showRegionBorders: source.showRegionBorders === true,
+    countryBorderWidth: source.countryBorderWidth === 'standard' || source.countryBorderWidth === 'bold' ? source.countryBorderWidth : 'thin',
+    countryBorderColor: source.countryBorderColor === 'light' || source.countryBorderColor === 'dark' || source.countryBorderColor === 'accent' ? source.countryBorderColor : 'auto',
   };
 };
 
-export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 4 : zoom === 'world' ? 2 : 5;
+export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 7 : zoom === 'world' ? 2 : 5;
+export const countryBorderWeight = (width: CountryBorderWidth = 'thin') => width === 'bold' ? 1.25 : width === 'standard' ? .75 : .35;
+export const countryBorderColor = (color: CountryBorderColor = 'auto', dark = false) => color === 'light' ? '#d9edf5' : color === 'dark' ? '#203845' : color === 'accent' ? '#4d9cff' : dark ? '#8fb5c4' : '#526c79';
 
 const MAP_PREFERENCES_EVENT = 'geotrainer:map-preferences';
 export const announceMapPreferences = (preferences: MapPreferences) => window.dispatchEvent(new CustomEvent(MAP_PREFERENCES_EVENT, { detail: normalizeMapPreferences(preferences) }));
@@ -68,11 +76,12 @@ const DARK_STYLE: google.maps.MapTypeStyle[] = [
 
 export function mapPresentationOptions(preferences: MapPreferences, dark: boolean): google.maps.MapOptions {
   const useDark = preferences.mapPalette === 'dark' || (preferences.mapPalette !== 'light' && dark);
-  const borderStyle: google.maps.MapTypeStyle = { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: preferences.showCountryBorders === false ? [{ visibility: 'off' }] : [{ visibility: 'on' }, { color: useDark ? '#8fb5c4' : '#526c79' }, { weight: 1.5 }] };
+  const borderStyle: google.maps.MapTypeStyle = { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: preferences.showCountryBorders === false ? [{ visibility: 'off' }] : [{ visibility: 'on' }, { color: countryBorderColor(preferences.countryBorderColor, useDark) }, { weight: countryBorderWeight(preferences.countryBorderWidth) }] };
+  const regionStyle: google.maps.MapTypeStyle = { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: preferences.showRegionBorders === true ? [{ visibility: 'on' }, { color: countryBorderColor(preferences.countryBorderColor, useDark) }, { weight: Math.max(.2, countryBorderWeight(preferences.countryBorderWidth) * .6) }] : [{ visibility: 'off' }] };
   return {
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    styles: [...(useDark ? DARK_STYLE : LIGHT_STYLE), borderStyle],
+    styles: [...(useDark ? DARK_STYLE : LIGHT_STYLE), regionStyle, borderStyle],
   };
 }

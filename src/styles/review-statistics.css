@@ -44,7 +44,7 @@
 .location-card-drag-handle button, .location-card-drag-handle a { display: inline-grid; min-width: 32px; min-height: 32px; place-items: center; }
 .location-card-drag-handle > div:first-child, .location-card-drag-handle > div:first-child > div:last-child { min-width: 0; }.location-card-drag-handle h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (max-width: 600px) { .location-card-drag-handle button, .location-card-drag-handle a { min-width: 44px; min-height: 44px; } }
-#revealed-location-card.expanded { position: fixed; right: 20px; bottom: 20px; left: auto; z-index: 95; display: flex; flex-direction: column; width: min(92vw, 42rem); height: min(65vh, 560px); max-width: 42rem; max-height: 560px; overflow-y: auto; scrollbar-width: thin; }
+#revealed-location-card.expanded { position: fixed; right: auto; bottom: 20px; left: 20px; z-index: 95; display: flex; flex-direction: column; width: min(92vw, 42rem); height: min(65vh, 560px); max-width: 42rem; max-height: 560px; overflow-y: auto; scrollbar-width: thin; transform: none; }
 #revealed-location-card.expanded .study-result-map { flex: 1; min-height: 220px; }
 #revealed-location-card.expanded .study-result-map .result-map-canvas { height: 100%; }
 #revealed-location-card[hidden] { display: none; }

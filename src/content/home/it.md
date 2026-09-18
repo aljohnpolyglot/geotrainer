@@ -34,6 +34,16 @@ Nello Studio personalizzato e nel Gioco, **Copertura interna** offre Solo estern
 
 Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricata. Per Mappa caricata, scegli un JSON di Map Maker con un elenco di luoghi o `customCoordinates`; ogni luogo richiede latitudine e longitudine valide. Il file deve essere inferiore a 10 MB. Precedente si trova prima di Rivela e diventa disponibile dopo aver visitato due luoghi. Avanti ripercorre prima i luoghi già visitati, poi ne sceglie uno nuovo. La X a destra nell’intestazione apre la scelta della modalità. La mappa resta su questo dispositivo; caricala anche sugli altri dispositivi. La variazione 0 mantiene la vista caricata; 100 cerca Street View entro 1 km e torna a un luogo originale se necessario. Il pulsante meno minimizza la scheda del luogo e ingrandisci la espande a tutto schermo.
 
+### Scegliere una priorità di apprendimento
+
+La priorità cambia il modo in cui vengono scelte le **nuove località di Apprendimento personalizzato** dopo aver applicato raccolta, combinazione di paesi, ambiente, fonte delle immagini e filtro per interni. Non modifica Mappa caricata, Meta, Esplora mappa, Gioco o Ripasso.
+
+- **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. Usalo per ottenere varietà o visitare la raccolta senza ponderazione.
+- **Luoghi familiari** sceglie come punto di partenza una località idonea già incontrata e cerca approssimativamente entro 1–12 km. Serve a imparare i dintorni e riconoscere viste vicine senza ripetere esattamente lo stesso panorama.
+- **Minore esposizione** sceglie prima un paese idoneo mai visto o con meno incontri, quindi punta al suo maggiore punto cieco geografico: l’area più lontana dalle località già conosciute. La normalizzazione per dimensione evita che i paesi grandi vincano ogni parità. Con un solo paese colma le lacune interne; con più paesi, un continente o il Mondo bilancia prima i paesi.
+
+Quando non esiste una cronologia idonea, Luoghi familiari e Minore esposizione iniziano dal gruppo selezionato come Casuale. La copertura Street View e i filtri attivi determinano comunque se l’area scelta può fornire un panorama; se il punto esatto non è coperto, può essere usata una vista disponibile nelle vicinanze.
+
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio. Lo stato salvato viene ripristinato dopo il ricaricamento, quindi l’azione non ricompare.
 
 ## Modalità Gioco
@@ -75,7 +85,7 @@ Il Taccuino conserva titoli, grassetto ed elenchi puntati incollati. Le risposte
 
 ## Raccolte e preferenze
 
-In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro o Scuro mantiene la scelta per le mappe stradali e del terreno. Le immagini satellitari conservano i propri colori. I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata.
+In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro o Scuro mantiene la scelta per le mappe stradali e del terreno. Le immagini satellitari conservano i propri colori. I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 
@@ -139,6 +149,8 @@ Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla catt
 Meta seleziona solo le lezioni non completate. Dopo aver completato tutte le 359 lezioni, l’opzione in Impara viene disattivata e non è più selezionabile.
 
 Una sessione Studio o Gioco incompleta viene conservata. Al rientro puoi scegliere **Riprendi**, **Inizia da capo** o **Indietro**. La copertura include una mappa di calore continua della **Padronanza**: molti ripassi riusciti e intervalli lunghi illuminano gradualmente paesi e luoghi, mentre gli errori riducono l’intensità. Un panorama aperto da Copertura offre Coach IA, Taccuino, Meta collegata e Note disponibili; il salvataggio crea o riutilizza la sua scheda di Ripasso. Gli indizi Meta dipendenti dalle immagini mostrano un avviso perché gli aggiornamenti di Street View possono renderli obsoleti.
+
+In Copertura, trascina la mappa di calore per paese e usa la rotellina, il cursore o i pulsanti per cambiare zoom. Fai clic su un paese per aprire la sua mappa regionale con lo stesso livello. Le regioni vengono individuate dai dati salvati del luogo o da Google Maps all’apertura. Alcuni paesi non hanno una mappa regionale; i luoghi senza una regione identificabile restano senza colore.
 
 ## Stili e profondità del Coach IA
 

@@ -34,6 +34,16 @@ Dans l’étude personnalisée et le jeu, **Couverture intérieure** propose Ext
 
 Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte importée. Pour Carte importée, choisissez un JSON Map Maker contenant une liste de lieux ou `customCoordinates` ; chaque lieu doit avoir une latitude et une longitude valides. Le fichier doit faire moins de 10 Mo. Précédent se trouve avant Révéler et devient disponible après la visite de deux lieux. Suivant parcourt d’abord les lieux déjà vus avant d’en choisir un autre. La croix à droite de l’en-tête ouvre le choix du mode. La carte reste sur cet appareil ; importez-la aussi sur tout autre appareil utilisé. La variation 0 conserve la vue importée ; 100 cherche Street View jusqu’à 1 km autour et revient à un lieu initial si nécessaire. Le bouton moins réduit la fiche du lieu et agrandir la déploie sur tout l’écran.
 
+### Choisir une priorité d’apprentissage
+
+La priorité modifie la sélection des **nouveaux lieux de l’apprentissage personnalisé** après l’application de la collection, du mélange de pays, de l’environnement, de la source d’images et du filtre intérieur. Elle ne change pas Carte importée, Méta, Explorer la carte, Jeu ou Révision.
+
+- **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Utilisez-le pour varier les lieux ou parcourir la collection sans pondération.
+- **Lieux familiers** prend comme point de départ un lieu admissible déjà rencontré et cherche dans un rayon d’environ 1 à 12 km. Il aide à apprendre les environs et à reconnaître des vues proches sans répéter exactement le même panorama.
+- **Moins exploré** choisit d’abord un pays admissible jamais vu ou le moins rencontré, puis vise sa plus grande zone aveugle géographique : la zone la plus éloignée des lieux déjà connus. La normalisation selon la taille empêche les grands pays de gagner chaque égalité. Avec un seul pays, il comble ses lacunes ; avec plusieurs pays, un continent ou le Monde, il équilibre d’abord les pays.
+
+Sans historique admissible, Lieux familiers et Moins exploré commencent dans l’ensemble sélectionné comme Aléatoire. La couverture Street View et les filtres actifs déterminent toujours si la zone visée peut fournir un panorama ; une vue disponible à proximité peut donc être utilisée si le point exact n’est pas couvert.
+
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif. L’état enregistré est restauré après rechargement, donc l’action ne réapparaît pas.
 
 ## Mode Jeu
@@ -75,7 +85,7 @@ Le Carnet conserve les titres, le gras et les listes à puces collés. Les répo
 
 ## Collections et préférences
 
-Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** propose Auto, Clair ou Sombre. Le **Zoom de la carte des résultats** propose Au plus près, Pays, Région du pays ou Monde ; Pays est le choix par défaut. Auto suit l’apparence de l’application ; Clair ou Sombre garde le choix pour les plans routiers et de relief. Les images satellite conservent leurs couleurs. Les frontières des pays sont visibles par défaut et peuvent être masquées ; elles n’apparaissent que lorsqu’une frontière se trouve dans la zone affichée.
+Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** propose Auto, Clair ou Sombre. Le **Zoom de la carte des résultats** propose Au plus près, Pays, Région du pays ou Monde ; Pays est le choix par défaut. Auto suit l’apparence de l’application ; Clair ou Sombre garde le choix pour les plans routiers et de relief. Les images satellite conservent leurs couleurs. Les frontières des pays sont visibles par défaut et peuvent être masquées ; elles n’apparaissent que lorsqu’une frontière se trouve dans la zone affichée. L’épaisseur et la couleur des frontières sont réglables avec un aperçu en direct ; les frontières régionales sont désactivées par défaut et peuvent être activées séparément.
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 
@@ -139,6 +149,8 @@ L’étude Méta contient 359 leçons hébergées localement, normalisées depui
 Méta sélectionne uniquement les leçons non terminées. Une fois les 359 achevées, son option d’apprentissage est grisée et ne peut plus être sélectionnée.
 
 Une session Étude ou Jeu inachevée est conservée. À votre retour, choisissez **Reprendre**, **Recommencer** ou **Retour**. La couverture propose une carte thermique continue de **Maîtrise** : de nombreuses révisions réussies et de longs intervalles éclaircissent progressivement les pays et lieux, tandis que les échecs réduisent l’intensité. Un panorama ouvert depuis Couverture propose Coach IA, Carnet, Méta liée et Notes disponibles ; un enregistrement crée ou réutilise sa carte de révision. Les indices Méta dépendant de l’imagerie affichent un avertissement, car les mises à jour Street View peuvent les rendre obsolètes.
+
+Dans Couverture, faites glisser la carte thermique par pays et utilisez la molette, le curseur ou les boutons pour zoomer. Cliquez sur un pays pour ouvrir sa carte régionale avec la même couche. Les régions sont déterminées à partir des lieux enregistrés ou de Google Maps à l’ouverture. Certains pays ne disposent pas de carte régionale ; les lieux dont la région reste inconnue ne sont pas colorés.
 
 ## Styles et profondeur du Coach IA
 

@@ -34,6 +34,16 @@ No Estudo personalizado e no Jogo, **Cobertura interna** oferece Somente exterio
 
 Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 10 MB. Anterior fica antes de Revelar e é ativado depois de visitar dois locais. Próximo avança primeiro pelos locais já vistos e depois escolhe um novo. O X à direita do cabeçalho abre a escolha do modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar. A variação 0 mantém a vista enviada; 100 procura Street View até 1 km ao redor e volta a um local original quando necessário. O botão de menos minimiza a ficha do local e maximizar a expande para toda a tela.
 
+### Escolher uma prioridade de aprendizagem
+
+A prioridade muda como os **novos locais do Aprendizado personalizado** são escolhidos depois da coleção, mistura de países, ambiente, fonte das imagens e filtro de interiores. Ela não altera Mapa enviado, Meta, Explorar mapa, Jogo ou Revisão.
+
+- **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. Use para obter variedade ou percorrer a coleção sem ponderação.
+- **Locais familiares** escolhe um local elegível já encontrado como ponto de partida e procura aproximadamente entre 1 e 12 km ao redor dele. Use para aprender os arredores e reconhecer vistas próximas sem repetir o panorama exato.
+- **Menor exposição** escolhe primeiro um país elegível ainda não visto ou com menos encontros e depois mira seu maior ponto cego geográfico: a área mais distante dos locais que você já conhece. A normalização pelo tamanho evita que países grandes vençam todos os empates. Em uma coleção de um país, preenche lacunas internas; em misturas, continentes ou Mundo, equilibra os países antes de preencher suas lacunas.
+
+Quando não há histórico elegível, Locais familiares e Menor exposição começam no conjunto selecionado como Aleatório. A cobertura do Street View e os filtros ativos ainda determinam se a área alvo pode fornecer um panorama; uma vista disponível próxima pode ser usada quando o ponto exato não tem cobertura.
+
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
 
 ## Modo Jogo
@@ -75,7 +85,7 @@ O Caderno preserva títulos, negrito e listas com marcadores ao colar. Respostas
 
 ## Coleções e preferências
 
-Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro ou Escuro mantêm a escolha nos mapas rodoviários e de relevo. Imagens de satélite mantêm suas cores. As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa.
+Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro ou Escuro mantêm a escolha nos mapas rodoviários e de relevo. Imagens de satélite mantêm suas cores. As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 
@@ -139,6 +149,8 @@ O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captur
 Meta seleciona apenas lições não concluídas. Depois que as 359 forem concluídas, a opção em Aprender fica desativada e não pode mais ser escolhida.
 
 Uma sessão de Estudo ou Jogo inacabada fica preservada. Ao voltar, escolha **Retomar**, **Começar de novo** ou **Voltar**. A cobertura inclui um mapa de calor contínuo de **Domínio**: muitas revisões bem-sucedidas e intervalos longos iluminam gradualmente países e locais, enquanto erros reduzem a intensidade. Um panorama aberto da Cobertura oferece Coach de IA, Caderno, Meta vinculada e Notas disponíveis; salvar cria ou reutiliza seu cartão de Revisão. Pistas Meta dependentes da imagem mostram um aviso porque atualizações do Street View podem torná-las desatualizadas.
+
+Na Cobertura, arraste o mapa de calor por país e use a roda do mouse, o controle deslizante ou os botões para ajustar o zoom. Clique em um país para abrir seu mapa regional com a mesma camada. As regiões são identificadas pelos dados salvos do local ou pelo Google Maps ao abrir o mapa. Alguns países não têm mapa regional; locais sem região identificada ficam sem cor.
 
 ## Estilos e profundidade do Coach de IA
 

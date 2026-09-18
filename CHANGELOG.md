@@ -2,8 +2,18 @@
 
 ## 2026-09-18
 
+- Added Learn priority modes for random practice, familiar nearby places, and least-exposed geographic blind spots across single-country, mixed-country, continent, and world collections.
+- Changed country Exposure heatmap colors to a fixed progression so the currently most-visited country is not automatically shown at maximum intensity.
+- Added clickable country heatmaps that open lazily loaded regional maps, use saved or Google-resolved regions, show region and city names on hover, and include US states.
+- Added Google Maps-style heatmap panning, wheel zoom, touch pinch zoom, a vertical zoom slider, contained page scrolling, and mobile-sized controls.
+- Kept regional maps hidden behind a loading skeleton until location matching completes, stopped repeated modal reloads, and used a fixed exposure scale so one visit is not shown at maximum intensity.
+- Replaced active Play and Review exit actions with the same right-side X pattern used by Learn.
+- Reduced enabled country-border stroke weights so Thin stays subtle even at World scale, and hid regional borders by default to prevent stacked boundary lines.
+- Added Settings → Display → Maps controls for country-border width and color plus a separate Regional borders switch.
+- Added a live Google-map-style border preview in Maps settings before changes are saved.
 - Added a Result map zoom setting with Closest, Country, Country region, and World presets; Country is the default so revealed maps do not open at street level.
 - Matched the maximized Learn location card to the compact Pinpoint map size instead of filling the entire viewport.
+- Kept the compact maximized Learn location card anchored to the left instead of moving it across the screen.
 - Fixed Known clues modal rows without images so note text uses the full width and action buttons stay together at the top; on phones, clue details stack below any image and the list fills the screen.
 - Added a 0–100 nearby-location slider to Uploaded map Learn, with exact placement at 0 and up to 1 km variation at 100; paused Learn sessions retain the setting.
 - Made the revealed Learn location card's minus and maximize controls distinct, and let its maximize button and the Play/Review guess-map maximize button fill the viewport.
@@ -15,6 +25,7 @@
 - Replaced the interior toggle in Custom Learn and Play with an Outdoors/Mixed dropdown, and added Auto/Light/Dark map colors in Settings → Display.
 - Added Map Maker JSON upload as a fourth Learn path and a Play location source, with exact panorama selection, local map retention, and normal progress tracking.
 - Added an X action in Learn to return directly to setup and choose a new mode.
+- Reused Learn's simple X control for active Play and Review exit actions.
 - Skipped unchanged cloud backup reads and kept imported map files out of cloud backups to reduce Supabase usage.
 
 ## 2026-09-17

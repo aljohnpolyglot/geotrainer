@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+    
+<!--********* Copyright (c) 2024 Pareto Softare, LLC DBA Simplemaps.com ***************************************
+************* Free for Commercial Use, full terms at  https://simplemaps.com/resources/svg-license ************
+************* Attribution is appreciated! https://simplemaps.com *******************************************-->
+
+<svg baseprofile="tiny" fill="#6f9c76" height="91" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewbox="0 0 1000 91" width="1000" xmlns="http://www.w3.org/2000/svg">
+ <g id="features">
+  <path d="M55.4 87.3l0.1 0 0 0.1-0.1-0.1z" id="UM86" name="Jarvis Island">
+  </path>
+  <path d="M9.7 85.7l0.1 0 0 0.1-0.1 0 0-0.1z" id="UM81" name="Baker Island">
+  </path>
+  <path d="M7.3 4.5l0 0.1-0.1 0 0.1-0.1z" id="UM71" name="Midway Islands">
+  </path>
+  <path d="M49.8 69.9l0 0.1-0.1 0 0-0.1 0.1 0-0.1 0 0.1 0z" id="UM95" name="Palmyra Atoll">
+  </path>
+ </g>
+ <g id="points">
+  <circle class="1.0414370719421184|-160.18749951996176" cx="55" cy="83.4" id="0">
+  </circle>
+  <circle class="12.48307117923427|11.833476196694775" cx="532.9" cy="51.3" id="1">
+  </circle>
+  <circle class="26.785113813349454|149.45025677002002" cx="915.2" cy="9" id="2">
+  </circle>
+ </g>
+ <g id="label_points">
+  <circle class="Johnston Atoll" cx="29" cy="39.2" id="UM67">
+  </circle>
+  <circle class="Jarvis Island" cx="55.5" cy="87.3" id="UM86">
+  </circle>
+  <circle class="Baker Island" cx="9.8" cy="85.8" id="UM81">
+  </circle>
+  <circle class="Howland Island" cx="9.3" cy="84.1" id="UM84">
+  </circle>
+  <circle class="Wake Atoll" cx="962.9" cy="31.7" id="UM79">
+  </circle>
+  <circle class="Midway Islands" cx="7.3" cy="4.6" id="UM71">
+  </circle>
+  <circle class="Navassa Island" cx="291.6" cy="34.3" id="UM76">
+  </circle>
+  <circle class="Palmyra Atoll" cx="49.8" cy="69.9" id="UM95">
+  </circle>
+ </g>
+</svg>

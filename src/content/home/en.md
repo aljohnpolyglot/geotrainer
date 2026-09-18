@@ -99,6 +99,16 @@ The **Indoor coverage** dropdown defaults to **Outdoors only**. Choose **Mixed i
 
 Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Uploaded map, select a Map Maker or GeoGuessr JSON export. A plain list of locations or a map with `customCoordinates` is accepted; each usable entry needs numeric latitude and longitude, while `panoId` and `heading` keep its exact view when available. Invalid entries are skipped. The file must be under 10 MB and contain at least one valid location. **Location variation** runs from 0 to 100: 0 opens the uploaded panorama or its coordinate exactly, while higher values search for nearby Street View imagery up to 1 km away at 100. If no nearby imagery opens, the app uses an original map location. This applies only to Uploaded map Learn; uploaded Play rounds use the original map locations. Choose **Start learning** to sample that map. **Previous** sits before Reveal and becomes available after you visit a second location; **Next** moves forward through places visited in this session before drawing another. The **X** on the right of the Learn header opens setup to choose another path. Previously seen map locations can appear again after the available locations are used.
 
+### Choosing a learning priority
+
+Priority changes how **new Custom Learn locations** are chosen after the collection, country mix, environment, imagery source, and indoor filters are applied. It does not change Uploaded map, Meta, Explore Map, Play, or Review.
+
+- **Random** (default) samples the eligible pool without using your history. Use it for variety or an unbiased tour of the selected collection.
+- **Familiar places** chooses a previously encountered eligible location as an anchor and searches roughly 1–12 km around it. Use it to learn the surroundings and recognize nearby views rather than repeat the exact panorama.
+- **Least exposure** first chooses an unseen or least-encountered eligible country, then targets its largest geographic blind spot: the area farthest from locations you already know. Country-size normalization keeps large countries from winning every tie. In a one-country collection it fills gaps inside that country; in a country mix, continent, or World collection it balances countries before filling their gaps.
+
+When no eligible history exists, Familiar places and Least exposure begin from the selected pool like Random. Street View coverage and the active filters still decide whether a requested area can produce a panorama, so a nearby available view may be used when the exact target has no coverage.
+
 Uploaded map files stay on this device. Progress from locations you study or play can still appear in your account. To use the same map on another device, upload the file there and start a new session. A removed or unavailable Street View panorama may be skipped; if no usable panoramas remain, upload another map or change learning paths.
 
 ### Studying a panorama
@@ -316,7 +326,7 @@ Start with Balanced defaults. Change one group at a time and observe the queue f
 
 Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
 
-Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area.
+Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
 
 ## Progress and statistics
 
@@ -348,7 +358,7 @@ Coverage shows panoramas you actually encountered in Study, Play, or Review. It 
 
 Saving a Study location and submitting a Play answer also saves the current view for its coverage preview. Older locations without a saved view remain valid and still open in Street View. An opened Coverage panorama includes AI Coach, Notebook, linked Meta, and Available notes; saving there creates or reuses its Review card.
 
-Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A detailed SVG country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data. On Exposure, hover a country for its exact encounter count. The neutral map color means not encountered, no scored attempts, or no Review history according to the selected layer; it does not describe Google Maps availability.
+Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A detailed SVG country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data. Drag the heatmap and use the mouse wheel, slider, or zoom buttons to explore it. Click a country to open its regional heatmap. Regional colors use the same selected layer and assign encountered places to regions using saved location details or Google Maps geocoding when opened. Some countries have no regional map in the bundled data, and locations whose region cannot be identified remain unshaded. On Exposure, hover a country for its exact encounter count. The neutral map color means not encountered, no scored attempts, or no Review history according to the selected layer; it does not describe Google Maps availability.
 
 Once opened, embedded result, Explore, Coverage, and Statistics maps remain warm while their panel or tab is hidden, so reopening does not initialize the same map again. Map tiles use the browser and Google Maps cache; GeoTrainer does not persist map or Street View imagery locally.
 

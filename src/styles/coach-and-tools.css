@@ -126,7 +126,7 @@
   #new-game-dialog > div:nth-child(2) { padding: 18px !important; }
   :is(#round-result-modal, #game-summary-modal) > div > div:first-child::before { display: none; }
   #revealed-location-card { left: 12px; bottom: 12px; width: calc(100vw - 24px); }
-  #revealed-location-card.expanded { right: 12px; bottom: 12px; left: auto; width: calc(100vw - 24px); height: min(52vh, 360px); max-width: none; max-height: 360px; }
+  #revealed-location-card.expanded { right: auto; bottom: 12px; left: 12px; width: calc(100vw - 24px); height: min(52vh, 360px); max-width: none; max-height: 360px; transform: none; }
   #guess-map-widget { position: fixed; left: 12px; right: auto; bottom: max(12px, env(safe-area-inset-bottom)); }
   #guess-map-widget.expanded { width: calc(100vw - 24px); height: min(52vh, 360px); }
   #guess-map-widget.collapsed { width: auto; height: 48px; opacity: .96; }

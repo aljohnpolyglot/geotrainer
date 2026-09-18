@@ -7,6 +7,7 @@ export interface ReverseGeocodeResult {
   formattedAddress: string;
   locality?: string;
   adminArea?: string;
+  adminAreaCode?: string;
   route?: string;
   countryName?: string;
   countryCode?: string;
@@ -60,6 +61,8 @@ export async function reverseGeocodeLocation(lat: number, lng: number): Promise<
     const first = response.results[0];
     let locality: string | undefined;
     let adminArea: string | undefined;
+    let adminAreaCode: string | undefined;
+    let fallbackAdminArea: string | undefined;
     let route: string | undefined;
     let countryName: string | undefined;
     let countryCode: string | undefined;
@@ -70,9 +73,11 @@ export async function reverseGeocodeLocation(lat: number, lng: number): Promise<
         if (!locality && (comp.types.includes('locality') || comp.types.includes('postal_town') || comp.types.includes('sublocality_level_1'))) {
           locality = comp.long_name;
         }
-        if (!adminArea && (comp.types.includes('administrative_area_level_1') || comp.types.includes('administrative_area_level_2'))) {
+        if (!adminArea && comp.types.includes('administrative_area_level_1')) {
           adminArea = comp.long_name;
+          adminAreaCode = comp.short_name;
         }
+        if (!fallbackAdminArea && comp.types.includes('administrative_area_level_2')) fallbackAdminArea = comp.long_name;
         if (!route && comp.types.includes('route')) {
           route = comp.long_name;
         }
@@ -84,10 +89,12 @@ export async function reverseGeocodeLocation(lat: number, lng: number): Promise<
       if (locality && adminArea) break;
     }
 
+    adminArea ||= fallbackAdminArea;
     const parsed: ReverseGeocodeResult = {
       formattedAddress: first.formatted_address,
       locality,
       adminArea,
+      adminAreaCode,
       route,
       countryName,
       countryCode,

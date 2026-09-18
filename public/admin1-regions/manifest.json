@@ -1,0 +1,1593 @@
+{
+  "createdAt": "2026-09-18T06:52:48.856Z",
+  "source": "https://simplemaps.com",
+  "countriesDownloaded": 206,
+  "countriesFailed": 28,
+  "totalRegions": 4005,
+  "countries": [
+    {
+      "country": "Free Blank Afghanistan Map in SVG | Simplemaps.com",
+      "countryCode": "af",
+      "pageUrl": "https://simplemaps.com/svg/country/af#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/af/admin1/af.svg",
+      "regionCount": 34
+    },
+    {
+      "country": "Albania",
+      "countryCode": "al",
+      "pageUrl": "https://simplemaps.com/svg/country/al#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/al/admin1/al.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Algeria",
+      "countryCode": "dz",
+      "pageUrl": "https://simplemaps.com/svg/country/dz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/dz/admin1/dz.svg",
+      "regionCount": 58
+    },
+    {
+      "country": "American Samoa",
+      "countryCode": "as",
+      "pageUrl": "https://simplemaps.com/svg/country/as#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/as/admin1/as.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Andorra",
+      "countryCode": "ad",
+      "pageUrl": "https://simplemaps.com/svg/country/ad#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ad/admin1/ad.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Angola",
+      "countryCode": "ao",
+      "pageUrl": "https://simplemaps.com/svg/country/ao#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ao/admin1/ao.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Anguilla",
+      "countryCode": "ai",
+      "pageUrl": "https://simplemaps.com/svg/country/ai#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ai/admin1/ai.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Antigua and Barbuda",
+      "countryCode": "ag",
+      "pageUrl": "https://simplemaps.com/svg/country/ag#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ag/admin1/ag.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Argentina",
+      "countryCode": "ar",
+      "pageUrl": "https://simplemaps.com/svg/country/ar#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ar/admin1/ar.svg",
+      "regionCount": 24
+    },
+    {
+      "country": "Armenia",
+      "countryCode": "am",
+      "pageUrl": "https://simplemaps.com/svg/country/am#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/am/admin1/am.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Austria",
+      "countryCode": "at",
+      "pageUrl": "https://simplemaps.com/svg/country/at#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/at/admin1/at.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Azerbaijan",
+      "countryCode": "az",
+      "pageUrl": "https://simplemaps.com/svg/country/az#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/az/admin1/az.svg",
+      "regionCount": 77
+    },
+    {
+      "country": "Bahamas",
+      "countryCode": "bs",
+      "pageUrl": "https://simplemaps.com/svg/country/bs#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bs/admin1/bs.svg",
+      "regionCount": 32
+    },
+    {
+      "country": "Bahrain",
+      "countryCode": "bh",
+      "pageUrl": "https://simplemaps.com/svg/country/bh#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bh/admin1/bh.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "pageUrl": "https://simplemaps.com/svg/country/bd#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bd/admin1/bd.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Barbados",
+      "countryCode": "bb",
+      "pageUrl": "https://simplemaps.com/svg/country/bb#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bb/admin1/bb.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Belarus",
+      "countryCode": "by",
+      "pageUrl": "https://simplemaps.com/svg/country/by#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/by/admin1/by.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Belgium",
+      "countryCode": "be",
+      "pageUrl": "https://simplemaps.com/svg/country/be#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/be/admin1/be.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Belize",
+      "countryCode": "bz",
+      "pageUrl": "https://simplemaps.com/svg/country/bz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bz/admin1/bz.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Benin",
+      "countryCode": "bj",
+      "pageUrl": "https://simplemaps.com/svg/country/bj#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bj/admin1/bj.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Bermuda",
+      "countryCode": "bm",
+      "pageUrl": "https://simplemaps.com/svg/country/bm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bm/admin1/bm.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Bhutan",
+      "countryCode": "bt",
+      "pageUrl": "https://simplemaps.com/svg/country/bt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bt/admin1/bt.svg",
+      "regionCount": 20
+    },
+    {
+      "country": "Bolivia",
+      "countryCode": "bo",
+      "pageUrl": "https://simplemaps.com/svg/country/bo#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bo/admin1/bo.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Bosnia and Herzegovina",
+      "countryCode": "ba",
+      "pageUrl": "https://simplemaps.com/svg/country/ba#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ba/admin1/ba.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Botswana",
+      "countryCode": "bw",
+      "pageUrl": "https://simplemaps.com/svg/country/bw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bw/admin1/bw.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Brazil",
+      "countryCode": "br",
+      "pageUrl": "https://simplemaps.com/svg/country/br#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/br/admin1/br.svg",
+      "regionCount": 27
+    },
+    {
+      "country": "Brunei",
+      "countryCode": "bn",
+      "pageUrl": "https://simplemaps.com/svg/country/bn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bn/admin1/bn.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Bulgaria",
+      "countryCode": "bg",
+      "pageUrl": "https://simplemaps.com/svg/country/bg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bg/admin1/bg.svg",
+      "regionCount": 28
+    },
+    {
+      "country": "Burkina Faso",
+      "countryCode": "bf",
+      "pageUrl": "https://simplemaps.com/svg/country/bf#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bf/admin1/bf.svg",
+      "regionCount": 45
+    },
+    {
+      "country": "Burundi",
+      "countryCode": "bi",
+      "pageUrl": "https://simplemaps.com/svg/country/bi#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/bi/admin1/bi.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Cambodia",
+      "countryCode": "kh",
+      "pageUrl": "https://simplemaps.com/svg/country/kh#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kh/admin1/kh.svg",
+      "regionCount": 25
+    },
+    {
+      "country": "Cameroon",
+      "countryCode": "cm",
+      "pageUrl": "https://simplemaps.com/svg/country/cm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cm/admin1/cm.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Cape Verde",
+      "countryCode": "cv",
+      "pageUrl": "https://simplemaps.com/svg/country/cv#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cv/admin1/cv.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Central African Republic",
+      "countryCode": "cf",
+      "pageUrl": "https://simplemaps.com/svg/country/cf#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cf/admin1/cf.svg",
+      "regionCount": 17
+    },
+    {
+      "country": "Chad",
+      "countryCode": "td",
+      "pageUrl": "https://simplemaps.com/svg/country/td#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/td/admin1/td.svg",
+      "regionCount": 23
+    },
+    {
+      "country": "Chile",
+      "countryCode": "cl",
+      "pageUrl": "https://simplemaps.com/svg/country/cl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cl/admin1/cl.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "China",
+      "countryCode": "cn",
+      "pageUrl": "https://simplemaps.com/svg/country/cn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cn/admin1/cn.svg",
+      "regionCount": 34
+    },
+    {
+      "country": "Colombia",
+      "countryCode": "co",
+      "pageUrl": "https://simplemaps.com/svg/country/co#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/co/admin1/co.svg",
+      "regionCount": 33
+    },
+    {
+      "country": "Comoros",
+      "countryCode": "km",
+      "pageUrl": "https://simplemaps.com/svg/country/km#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/km/admin1/km.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Cook Islands",
+      "countryCode": "ck",
+      "pageUrl": "https://simplemaps.com/svg/country/ck#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ck/admin1/ck.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Costa Rica",
+      "countryCode": "cr",
+      "pageUrl": "https://simplemaps.com/svg/country/cr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cr/admin1/cr.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Croatia",
+      "countryCode": "hr",
+      "pageUrl": "https://simplemaps.com/svg/country/hr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/hr/admin1/hr.svg",
+      "regionCount": 21
+    },
+    {
+      "country": "Cuba",
+      "countryCode": "cu",
+      "pageUrl": "https://simplemaps.com/svg/country/cu#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cu/admin1/cu.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Cyprus",
+      "countryCode": "cy",
+      "pageUrl": "https://simplemaps.com/svg/country/cy#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cy/admin1/cy.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Czech Republic",
+      "countryCode": "cz",
+      "pageUrl": "https://simplemaps.com/svg/country/cz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cz/admin1/cz.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Côte d'Ivoire",
+      "countryCode": "ci",
+      "pageUrl": "https://simplemaps.com/svg/country/ci#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ci/admin1/ci.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Democratic Republic of the Congo",
+      "countryCode": "cd",
+      "pageUrl": "https://simplemaps.com/svg/country/cd#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cd/admin1/cd.svg",
+      "regionCount": 26
+    },
+    {
+      "country": "Denmark",
+      "countryCode": "dk",
+      "pageUrl": "https://simplemaps.com/svg/country/dk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/dk/admin1/dk.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Djibouti",
+      "countryCode": "dj",
+      "pageUrl": "https://simplemaps.com/svg/country/dj#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/dj/admin1/dj.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Dominica",
+      "countryCode": "dm",
+      "pageUrl": "https://simplemaps.com/svg/country/dm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/dm/admin1/dm.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Dominican Republic",
+      "countryCode": "do",
+      "pageUrl": "https://simplemaps.com/svg/country/do#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/do/admin1/do.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Ecuador",
+      "countryCode": "ec",
+      "pageUrl": "https://simplemaps.com/svg/country/ec#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ec/admin1/ec.svg",
+      "regionCount": 24
+    },
+    {
+      "country": "Egypt",
+      "countryCode": "eg",
+      "pageUrl": "https://simplemaps.com/svg/country/eg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/eg/admin1/eg.svg",
+      "regionCount": 27
+    },
+    {
+      "country": "El Salvador",
+      "countryCode": "sv",
+      "pageUrl": "https://simplemaps.com/svg/country/sv#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sv/admin1/sv.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Equatorial Guinea",
+      "countryCode": "gq",
+      "pageUrl": "https://simplemaps.com/svg/country/gq#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gq/admin1/gq.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Eritrea",
+      "countryCode": "er",
+      "pageUrl": "https://simplemaps.com/svg/country/er#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/er/admin1/er.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Estonia",
+      "countryCode": "ee",
+      "pageUrl": "https://simplemaps.com/svg/country/ee#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ee/admin1/ee.svg",
+      "regionCount": 79
+    },
+    {
+      "country": "Ethiopia",
+      "countryCode": "et",
+      "pageUrl": "https://simplemaps.com/svg/country/et#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/et/admin1/et.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Fiji",
+      "countryCode": "fj",
+      "pageUrl": "https://simplemaps.com/svg/country/fj#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/fj/admin1/fj.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Finland",
+      "countryCode": "fi",
+      "pageUrl": "https://simplemaps.com/svg/country/fi#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/fi/admin1/fi.svg",
+      "regionCount": 19
+    },
+    {
+      "country": "France",
+      "countryCode": "fr",
+      "pageUrl": "https://simplemaps.com/svg/country/fr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/fr/admin1/fr.svg",
+      "regionCount": 13
+    },
+    {
+      "country": "French Polynesia",
+      "countryCode": "pf",
+      "pageUrl": "https://simplemaps.com/svg/country/pf#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pf/admin1/pf.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "French Southern and Antarctic Lands",
+      "countryCode": "tf",
+      "pageUrl": "https://simplemaps.com/svg/country/tf#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tf/admin1/tf.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Gabon",
+      "countryCode": "ga",
+      "pageUrl": "https://simplemaps.com/svg/country/ga#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ga/admin1/ga.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Georgia",
+      "countryCode": "ge",
+      "pageUrl": "https://simplemaps.com/svg/country/ge#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ge/admin1/ge.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Germany",
+      "countryCode": "de",
+      "pageUrl": "https://simplemaps.com/svg/country/de#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/de/admin1/de.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Ghana",
+      "countryCode": "gh",
+      "pageUrl": "https://simplemaps.com/svg/country/gh#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gh/admin1/gh.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Greece",
+      "countryCode": "gr",
+      "pageUrl": "https://simplemaps.com/svg/country/gr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gr/admin1/gr.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Greenland",
+      "countryCode": "gl",
+      "pageUrl": "https://simplemaps.com/svg/country/gl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gl/admin1/gl.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Grenada",
+      "countryCode": "gd",
+      "pageUrl": "https://simplemaps.com/svg/country/gd#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gd/admin1/gd.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Guatemala",
+      "countryCode": "gt",
+      "pageUrl": "https://simplemaps.com/svg/country/gt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gt/admin1/gt.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Guinea",
+      "countryCode": "gn",
+      "pageUrl": "https://simplemaps.com/svg/country/gn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gn/admin1/gn.svg",
+      "regionCount": 34
+    },
+    {
+      "country": "Guinea-Bissau",
+      "countryCode": "gw",
+      "pageUrl": "https://simplemaps.com/svg/country/gw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gw/admin1/gw.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Guyana",
+      "countryCode": "gy",
+      "pageUrl": "https://simplemaps.com/svg/country/gy#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gy/admin1/gy.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Haiti",
+      "countryCode": "ht",
+      "pageUrl": "https://simplemaps.com/svg/country/ht#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ht/admin1/ht.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Honduras",
+      "countryCode": "hn",
+      "pageUrl": "https://simplemaps.com/svg/country/hn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/hn/admin1/hn.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Hong Kong",
+      "countryCode": "hk",
+      "pageUrl": "https://simplemaps.com/svg/country/hk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/hk/admin1/hk.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Hungary",
+      "countryCode": "hu",
+      "pageUrl": "https://simplemaps.com/svg/country/hu#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/hu/admin1/hu.svg",
+      "regionCount": 43
+    },
+    {
+      "country": "Iceland",
+      "countryCode": "is",
+      "pageUrl": "https://simplemaps.com/svg/country/is#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/is/admin1/is.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "India",
+      "countryCode": "in",
+      "pageUrl": "https://simplemaps.com/svg/country/in#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/in/admin1/in.svg",
+      "regionCount": 36
+    },
+    {
+      "country": "Indonesia",
+      "countryCode": "id",
+      "pageUrl": "https://simplemaps.com/svg/country/id#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/id/admin1/id.svg",
+      "regionCount": 34
+    },
+    {
+      "country": "Iran",
+      "countryCode": "ir",
+      "pageUrl": "https://simplemaps.com/svg/country/ir#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ir/admin1/ir.svg",
+      "regionCount": 30
+    },
+    {
+      "country": "Iraq",
+      "countryCode": "iq",
+      "pageUrl": "https://simplemaps.com/svg/country/iq#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/iq/admin1/iq.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Ireland",
+      "countryCode": "ie",
+      "pageUrl": "https://simplemaps.com/svg/country/ie#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ie/admin1/ie.svg",
+      "regionCount": 26
+    },
+    {
+      "country": "Israel",
+      "countryCode": "il",
+      "pageUrl": "https://simplemaps.com/svg/country/il#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/il/admin1/il.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Italy",
+      "countryCode": "it",
+      "pageUrl": "https://simplemaps.com/svg/country/it#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/it/admin1/it.svg",
+      "regionCount": 20
+    },
+    {
+      "country": "Jamaica",
+      "countryCode": "jm",
+      "pageUrl": "https://simplemaps.com/svg/country/jm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/jm/admin1/jm.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Japan",
+      "countryCode": "jp",
+      "pageUrl": "https://simplemaps.com/svg/country/jp#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/jp/admin1/jp.svg",
+      "regionCount": 47
+    },
+    {
+      "country": "Jordan",
+      "countryCode": "jo",
+      "pageUrl": "https://simplemaps.com/svg/country/jo#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/jo/admin1/jo.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Kazakhstan",
+      "countryCode": "kz",
+      "pageUrl": "https://simplemaps.com/svg/country/kz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kz/admin1/kz.svg",
+      "regionCount": 20
+    },
+    {
+      "country": "Kenya",
+      "countryCode": "ke",
+      "pageUrl": "https://simplemaps.com/svg/country/ke#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ke/admin1/ke.svg",
+      "regionCount": 47
+    },
+    {
+      "country": "Kosovo",
+      "countryCode": "xk",
+      "pageUrl": "https://simplemaps.com/svg/country/xk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/xk/admin1/xk.svg",
+      "regionCount": 30
+    },
+    {
+      "country": "Kuwait",
+      "countryCode": "kw",
+      "pageUrl": "https://simplemaps.com/svg/country/kw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kw/admin1/kw.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Kyrgyzstan",
+      "countryCode": "kg",
+      "pageUrl": "https://simplemaps.com/svg/country/kg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kg/admin1/kg.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Laos",
+      "countryCode": "la",
+      "pageUrl": "https://simplemaps.com/svg/country/la#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/la/admin1/la.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Latvia",
+      "countryCode": "lv",
+      "pageUrl": "https://simplemaps.com/svg/country/lv#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lv/admin1/lv.svg",
+      "regionCount": 42
+    },
+    {
+      "country": "Lebanon",
+      "countryCode": "lb",
+      "pageUrl": "https://simplemaps.com/svg/country/lb#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lb/admin1/lb.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Lesotho",
+      "countryCode": "ls",
+      "pageUrl": "https://simplemaps.com/svg/country/ls#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ls/admin1/ls.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Liberia",
+      "countryCode": "lr",
+      "pageUrl": "https://simplemaps.com/svg/country/lr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lr/admin1/lr.svg",
+      "regionCount": 15
+    },
+    {
+      "country": "Libya",
+      "countryCode": "ly",
+      "pageUrl": "https://simplemaps.com/svg/country/ly#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ly/admin1/ly.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Liechtenstein",
+      "countryCode": "li",
+      "pageUrl": "https://simplemaps.com/svg/country/li#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/li/admin1/li.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Lithuania",
+      "countryCode": "lt",
+      "pageUrl": "https://simplemaps.com/svg/country/lt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lt/admin1/lt.svg",
+      "regionCount": 60
+    },
+    {
+      "country": "Luxembourg",
+      "countryCode": "lu",
+      "pageUrl": "https://simplemaps.com/svg/country/lu#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lu/admin1/lu.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Macedonia",
+      "countryCode": "mk",
+      "pageUrl": "https://simplemaps.com/svg/country/mk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mk/admin1/mk.svg",
+      "regionCount": 80
+    },
+    {
+      "country": "Madagascar",
+      "countryCode": "mg",
+      "pageUrl": "https://simplemaps.com/svg/country/mg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mg/admin1/mg.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Malawi",
+      "countryCode": "mw",
+      "pageUrl": "https://simplemaps.com/svg/country/mw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mw/admin1/mw.svg",
+      "regionCount": 28
+    },
+    {
+      "country": "Malaysia",
+      "countryCode": "my",
+      "pageUrl": "https://simplemaps.com/svg/country/my#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/my/admin1/my.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Maldives",
+      "countryCode": "mv",
+      "pageUrl": "https://simplemaps.com/svg/country/mv#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mv/admin1/mv.svg",
+      "regionCount": 21
+    },
+    {
+      "country": "Mali",
+      "countryCode": "ml",
+      "pageUrl": "https://simplemaps.com/svg/country/ml#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ml/admin1/ml.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Malta",
+      "countryCode": "mt",
+      "pageUrl": "https://simplemaps.com/svg/country/mt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mt/admin1/mt.svg",
+      "regionCount": 68
+    },
+    {
+      "country": "Marshall Islands",
+      "countryCode": "mh",
+      "pageUrl": "https://simplemaps.com/svg/country/mh#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mh/admin1/mh.svg",
+      "regionCount": 2
+    },
+    {
+      "country": "Mauritania",
+      "countryCode": "mr",
+      "pageUrl": "https://simplemaps.com/svg/country/mr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mr/admin1/mr.svg",
+      "regionCount": 15
+    },
+    {
+      "country": "Mauritius",
+      "countryCode": "mu",
+      "pageUrl": "https://simplemaps.com/svg/country/mu#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mu/admin1/mu.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Mexico",
+      "countryCode": "mx",
+      "pageUrl": "https://simplemaps.com/svg/country/mx#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mx/admin1/mx.svg",
+      "regionCount": 32
+    },
+    {
+      "country": "Micronesia",
+      "countryCode": "fm",
+      "pageUrl": "https://simplemaps.com/svg/country/fm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/fm/admin1/fm.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Moldova",
+      "countryCode": "md",
+      "pageUrl": "https://simplemaps.com/svg/country/md#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/md/admin1/md.svg",
+      "regionCount": 37
+    },
+    {
+      "country": "Mongolia",
+      "countryCode": "mn",
+      "pageUrl": "https://simplemaps.com/svg/country/mn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mn/admin1/mn.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Montenegro",
+      "countryCode": "me",
+      "pageUrl": "https://simplemaps.com/svg/country/me#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/me/admin1/me.svg",
+      "regionCount": 24
+    },
+    {
+      "country": "Montserrat",
+      "countryCode": "ms",
+      "pageUrl": "https://simplemaps.com/svg/country/ms#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ms/admin1/ms.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Morocco",
+      "countryCode": "ma",
+      "pageUrl": "https://simplemaps.com/svg/country/ma#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ma/admin1/ma.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Mozambique",
+      "countryCode": "mz",
+      "pageUrl": "https://simplemaps.com/svg/country/mz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mz/admin1/mz.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Myanmar",
+      "countryCode": "mm",
+      "pageUrl": "https://simplemaps.com/svg/country/mm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mm/admin1/mm.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Namibia",
+      "countryCode": "na",
+      "pageUrl": "https://simplemaps.com/svg/country/na#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/na/admin1/na.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Nauru",
+      "countryCode": "nr",
+      "pageUrl": "https://simplemaps.com/svg/country/nr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/nr/admin1/nr.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Nepal",
+      "countryCode": "np",
+      "pageUrl": "https://simplemaps.com/svg/country/np#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/np/admin1/np.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Netherlands",
+      "countryCode": "nl",
+      "pageUrl": "https://simplemaps.com/svg/country/nl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/nl/admin1/nl.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "New Caledonia",
+      "countryCode": "nc",
+      "pageUrl": "https://simplemaps.com/svg/country/nc#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/nc/admin1/nc.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "New Zealand",
+      "countryCode": "nz",
+      "pageUrl": "https://simplemaps.com/svg/country/nz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/nz/admin1/nz.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Nicaragua",
+      "countryCode": "ni",
+      "pageUrl": "https://simplemaps.com/svg/country/ni#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ni/admin1/ni.svg",
+      "regionCount": 17
+    },
+    {
+      "country": "Niger",
+      "countryCode": "ne",
+      "pageUrl": "https://simplemaps.com/svg/country/ne#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ne/admin1/ne.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Nigeria",
+      "countryCode": "ng",
+      "pageUrl": "https://simplemaps.com/svg/country/ng#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ng/admin1/ng.svg",
+      "regionCount": 37
+    },
+    {
+      "country": "North Korea",
+      "countryCode": "kp",
+      "pageUrl": "https://simplemaps.com/svg/country/kp#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kp/admin1/kp.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Northern Mariana Islands",
+      "countryCode": "mp",
+      "pageUrl": "https://simplemaps.com/svg/country/mp#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/mp/admin1/mp.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Norway",
+      "countryCode": "no",
+      "pageUrl": "https://simplemaps.com/svg/country/no#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/no/admin1/no.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Oman",
+      "countryCode": "om",
+      "pageUrl": "https://simplemaps.com/svg/country/om#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/om/admin1/om.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Pakistan",
+      "countryCode": "pk",
+      "pageUrl": "https://simplemaps.com/svg/country/pk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pk/admin1/pk.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Palau",
+      "countryCode": "pw",
+      "pageUrl": "https://simplemaps.com/svg/country/pw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pw/admin1/pw.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Palestine",
+      "countryCode": "ps",
+      "pageUrl": "https://simplemaps.com/svg/country/ps#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ps/admin1/ps.svg",
+      "regionCount": 2
+    },
+    {
+      "country": "Panama",
+      "countryCode": "pa",
+      "pageUrl": "https://simplemaps.com/svg/country/pa#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pa/admin1/pa.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Papua New Guinea",
+      "countryCode": "pg",
+      "pageUrl": "https://simplemaps.com/svg/country/pg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pg/admin1/pg.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Paraguay",
+      "countryCode": "py",
+      "pageUrl": "https://simplemaps.com/svg/country/py#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/py/admin1/py.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Peru",
+      "countryCode": "pe",
+      "pageUrl": "https://simplemaps.com/svg/country/pe#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pe/admin1/pe.svg",
+      "regionCount": 26
+    },
+    {
+      "country": "Philippines",
+      "countryCode": "ph",
+      "pageUrl": "https://simplemaps.com/svg/country/ph#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ph/admin1/ph.svg",
+      "regionCount": 17
+    },
+    {
+      "country": "Poland",
+      "countryCode": "pl",
+      "pageUrl": "https://simplemaps.com/svg/country/pl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pl/admin1/pl.svg",
+      "regionCount": 16
+    },
+    {
+      "country": "Portugal",
+      "countryCode": "pt",
+      "pageUrl": "https://simplemaps.com/svg/country/pt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pt/admin1/pt.svg",
+      "regionCount": 20
+    },
+    {
+      "country": "Qatar",
+      "countryCode": "qa",
+      "pageUrl": "https://simplemaps.com/svg/country/qa#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/qa/admin1/qa.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Republic of Congo",
+      "countryCode": "cg",
+      "pageUrl": "https://simplemaps.com/svg/country/cg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/cg/admin1/cg.svg",
+      "regionCount": 12
+    },
+    {
+      "country": "Romania",
+      "countryCode": "ro",
+      "pageUrl": "https://simplemaps.com/svg/country/ro#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ro/admin1/ro.svg",
+      "regionCount": 42
+    },
+    {
+      "country": "Russian Federation",
+      "countryCode": "ru",
+      "pageUrl": "https://simplemaps.com/svg/country/ru#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ru/admin1/ru.svg",
+      "regionCount": 83
+    },
+    {
+      "country": "Rwanda",
+      "countryCode": "rw",
+      "pageUrl": "https://simplemaps.com/svg/country/rw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/rw/admin1/rw.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Saint Helena, Ascension, and Tristan da Cunha",
+      "countryCode": "sh",
+      "pageUrl": "https://simplemaps.com/svg/country/sh#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sh/admin1/sh.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Saint Kitts and Nevis",
+      "countryCode": "kn",
+      "pageUrl": "https://simplemaps.com/svg/country/kn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kn/admin1/kn.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Saint Lucia",
+      "countryCode": "lc",
+      "pageUrl": "https://simplemaps.com/svg/country/lc#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lc/admin1/lc.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "Saint Pierre and Miquelon",
+      "countryCode": "pm",
+      "pageUrl": "https://simplemaps.com/svg/country/pm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/pm/admin1/pm.svg",
+      "regionCount": 2
+    },
+    {
+      "country": "Saint Vincent and the Grenadines",
+      "countryCode": "vc",
+      "pageUrl": "https://simplemaps.com/svg/country/vc#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/vc/admin1/vc.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Samoa",
+      "countryCode": "ws",
+      "pageUrl": "https://simplemaps.com/svg/country/ws#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ws/admin1/ws.svg",
+      "regionCount": 11
+    },
+    {
+      "country": "San Marino",
+      "countryCode": "sm",
+      "pageUrl": "https://simplemaps.com/svg/country/sm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sm/admin1/sm.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "Saudi Arabia",
+      "countryCode": "sa",
+      "pageUrl": "https://simplemaps.com/svg/country/sa#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sa/admin1/sa.svg",
+      "regionCount": 13
+    },
+    {
+      "country": "Senegal",
+      "countryCode": "sn",
+      "pageUrl": "https://simplemaps.com/svg/country/sn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sn/admin1/sn.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Serbia",
+      "countryCode": "rs",
+      "pageUrl": "https://simplemaps.com/svg/country/rs#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/rs/admin1/rs.svg",
+      "regionCount": 25
+    },
+    {
+      "country": "Seychelles",
+      "countryCode": "sc",
+      "pageUrl": "https://simplemaps.com/svg/country/sc#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sc/admin1/sc.svg",
+      "regionCount": 27
+    },
+    {
+      "country": "Sierra Leone",
+      "countryCode": "sl",
+      "pageUrl": "https://simplemaps.com/svg/country/sl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sl/admin1/sl.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Singapore",
+      "countryCode": "sg",
+      "pageUrl": "https://simplemaps.com/svg/country/sg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sg/admin1/sg.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Slovakia",
+      "countryCode": "sk",
+      "pageUrl": "https://simplemaps.com/svg/country/sk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sk/admin1/sk.svg",
+      "regionCount": 8
+    },
+    {
+      "country": "Slovenia",
+      "countryCode": "si",
+      "pageUrl": "https://simplemaps.com/svg/country/si#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/si/admin1/si.svg",
+      "regionCount": 212
+    },
+    {
+      "country": "Solomon Islands",
+      "countryCode": "sb",
+      "pageUrl": "https://simplemaps.com/svg/country/sb#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sb/admin1/sb.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Somalia",
+      "countryCode": "so",
+      "pageUrl": "https://simplemaps.com/svg/country/so#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/so/admin1/so.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "South Africa",
+      "countryCode": "za",
+      "pageUrl": "https://simplemaps.com/svg/country/za#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/za/admin1/za.svg",
+      "regionCount": 9
+    },
+    {
+      "country": "South Korea",
+      "countryCode": "kr",
+      "pageUrl": "https://simplemaps.com/svg/country/kr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/kr/admin1/kr.svg",
+      "regionCount": 17
+    },
+    {
+      "country": "South Sudan",
+      "countryCode": "ss",
+      "pageUrl": "https://simplemaps.com/svg/country/ss#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ss/admin1/ss.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Spain",
+      "countryCode": "es",
+      "pageUrl": "https://simplemaps.com/svg/country/es#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/es/admin1/es.svg",
+      "regionCount": 19
+    },
+    {
+      "country": "Sri Lanka",
+      "countryCode": "lk",
+      "pageUrl": "https://simplemaps.com/svg/country/lk#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/lk/admin1/lk.svg",
+      "regionCount": 25
+    },
+    {
+      "country": "Sudan",
+      "countryCode": "sd",
+      "pageUrl": "https://simplemaps.com/svg/country/sd#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sd/admin1/sd.svg",
+      "regionCount": 18
+    },
+    {
+      "country": "Suriname",
+      "countryCode": "sr",
+      "pageUrl": "https://simplemaps.com/svg/country/sr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sr/admin1/sr.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Swaziland",
+      "countryCode": "sz",
+      "pageUrl": "https://simplemaps.com/svg/country/sz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sz/admin1/sz.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "Sweden",
+      "countryCode": "se",
+      "pageUrl": "https://simplemaps.com/svg/country/se#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/se/admin1/se.svg",
+      "regionCount": 21
+    },
+    {
+      "country": "Switzerland",
+      "countryCode": "ch",
+      "pageUrl": "https://simplemaps.com/svg/country/ch#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ch/admin1/ch.svg",
+      "regionCount": 26
+    },
+    {
+      "country": "Syria",
+      "countryCode": "sy",
+      "pageUrl": "https://simplemaps.com/svg/country/sy#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/sy/admin1/sy.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "São Tomé and Principe",
+      "countryCode": "st",
+      "pageUrl": "https://simplemaps.com/svg/country/st#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/st/admin1/st.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "Taiwan",
+      "countryCode": "tw",
+      "pageUrl": "https://simplemaps.com/svg/country/tw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tw/admin1/tw.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Tajikistan",
+      "countryCode": "tj",
+      "pageUrl": "https://simplemaps.com/svg/country/tj#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tj/admin1/tj.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Tanzania",
+      "countryCode": "tz",
+      "pageUrl": "https://simplemaps.com/svg/country/tz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tz/admin1/tz.svg",
+      "regionCount": 31
+    },
+    {
+      "country": "Thailand",
+      "countryCode": "th",
+      "pageUrl": "https://simplemaps.com/svg/country/th#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/th/admin1/th.svg",
+      "regionCount": 78
+    },
+    {
+      "country": "The Gambia",
+      "countryCode": "gm",
+      "pageUrl": "https://simplemaps.com/svg/country/gm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/gm/admin1/gm.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Timor-Leste",
+      "countryCode": "tl",
+      "pageUrl": "https://simplemaps.com/svg/country/tl#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tl/admin1/tl.svg",
+      "regionCount": 13
+    },
+    {
+      "country": "Togo",
+      "countryCode": "tg",
+      "pageUrl": "https://simplemaps.com/svg/country/tg#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tg/admin1/tg.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Tonga",
+      "countryCode": "to",
+      "pageUrl": "https://simplemaps.com/svg/country/to#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/to/admin1/to.svg",
+      "regionCount": 5
+    },
+    {
+      "country": "Trinidad and Tobago",
+      "countryCode": "tt",
+      "pageUrl": "https://simplemaps.com/svg/country/tt#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tt/admin1/tt.svg",
+      "regionCount": 15
+    },
+    {
+      "country": "Tunisia",
+      "countryCode": "tn",
+      "pageUrl": "https://simplemaps.com/svg/country/tn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tn/admin1/tn.svg",
+      "regionCount": 24
+    },
+    {
+      "country": "Turkey",
+      "countryCode": "tr",
+      "pageUrl": "https://simplemaps.com/svg/country/tr#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tr/admin1/tr.svg",
+      "regionCount": 81
+    },
+    {
+      "country": "Turkmenistan",
+      "countryCode": "tm",
+      "pageUrl": "https://simplemaps.com/svg/country/tm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tm/admin1/tm.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Turks and Caicos Islands",
+      "countryCode": "tc",
+      "pageUrl": "https://simplemaps.com/svg/country/tc#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/tc/admin1/tc.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Uganda",
+      "countryCode": "ug",
+      "pageUrl": "https://simplemaps.com/svg/country/ug#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ug/admin1/ug.svg",
+      "regionCount": 135
+    },
+    {
+      "country": "Ukraine",
+      "countryCode": "ua",
+      "pageUrl": "https://simplemaps.com/svg/country/ua#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ua/admin1/ua.svg",
+      "regionCount": 27
+    },
+    {
+      "country": "United Arab Emirates",
+      "countryCode": "ae",
+      "pageUrl": "https://simplemaps.com/svg/country/ae#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ae/admin1/ae.svg",
+      "regionCount": 7
+    },
+    {
+      "country": "United States Minor Outlying Islands",
+      "countryCode": "um",
+      "pageUrl": "https://simplemaps.com/svg/country/um#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/um/admin1/um.svg",
+      "regionCount": 4
+    },
+    {
+      "country": "United States Virgin Islands",
+      "countryCode": "vi",
+      "pageUrl": "https://simplemaps.com/svg/country/vi#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/vi/admin1/vi.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Uruguay",
+      "countryCode": "uy",
+      "pageUrl": "https://simplemaps.com/svg/country/uy#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/uy/admin1/uy.svg",
+      "regionCount": 19
+    },
+    {
+      "country": "Uzbekistan",
+      "countryCode": "uz",
+      "pageUrl": "https://simplemaps.com/svg/country/uz#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/uz/admin1/uz.svg",
+      "regionCount": 14
+    },
+    {
+      "country": "Vanuatu",
+      "countryCode": "vu",
+      "pageUrl": "https://simplemaps.com/svg/country/vu#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/vu/admin1/vu.svg",
+      "regionCount": 6
+    },
+    {
+      "country": "Venezuela",
+      "countryCode": "ve",
+      "pageUrl": "https://simplemaps.com/svg/country/ve#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ve/admin1/ve.svg",
+      "regionCount": 25
+    },
+    {
+      "country": "Vietnam",
+      "countryCode": "vn",
+      "pageUrl": "https://simplemaps.com/svg/country/vn#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/vn/admin1/vn.svg",
+      "regionCount": 63
+    },
+    {
+      "country": "Wallis and Futuna",
+      "countryCode": "wf",
+      "pageUrl": "https://simplemaps.com/svg/country/wf#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/wf/admin1/wf.svg",
+      "regionCount": 3
+    },
+    {
+      "country": "Yemen",
+      "countryCode": "ye",
+      "pageUrl": "https://simplemaps.com/svg/country/ye#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/ye/admin1/ye.svg",
+      "regionCount": 22
+    },
+    {
+      "country": "Zambia",
+      "countryCode": "zm",
+      "pageUrl": "https://simplemaps.com/svg/country/zm#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/zm/admin1/zm.svg",
+      "regionCount": 10
+    },
+    {
+      "country": "Zimbabwe",
+      "countryCode": "zw",
+      "pageUrl": "https://simplemaps.com/svg/country/zw#admin1",
+      "svgUrl": "https://simplemaps.com/static/svg/country/zw/admin1/zw.svg",
+      "regionCount": 10
+    }
+  ],
+  "failures": [
+    {
+      "country": "Antarctica",
+      "pageUrl": "https://simplemaps.com/svg/country/aq#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/aq/all/aq.svg"
+    },
+    {
+      "country": "Aruba",
+      "pageUrl": "https://simplemaps.com/svg/country/aw#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/aw/all/aw.svg"
+    },
+    {
+      "country": "British Virgin Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/vg#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/vg/all/vg.svg"
+    },
+    {
+      "country": "Cayman Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/ky#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/ky/all/ky.svg"
+    },
+    {
+      "country": "Curaco (Netherlands)",
+      "pageUrl": "https://simplemaps.com/svg/country/cw#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/cw/all/cw.svg"
+    },
+    {
+      "country": "Faeroe Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/fo#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/fo/all/fo.svg"
+    },
+    {
+      "country": "Falkland Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/fk#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/fk/all/fk.svg"
+    },
+    {
+      "country": "Gibraltar",
+      "pageUrl": "https://simplemaps.com/svg/country/gi#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gi/all/gi.svg"
+    },
+    {
+      "country": "Guam",
+      "pageUrl": "https://simplemaps.com/svg/country/gu#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gu/all/gu.svg"
+    },
+    {
+      "country": "Guernsey",
+      "pageUrl": "https://simplemaps.com/svg/country/gg#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gg/all/gg.svg"
+    },
+    {
+      "country": "Heard Island and McDonald Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/hm#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/hm/all/hm.svg"
+    },
+    {
+      "country": "Isle of Man",
+      "pageUrl": "https://simplemaps.com/svg/country/im#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/im/all/im.svg"
+    },
+    {
+      "country": "Jersey",
+      "pageUrl": "https://simplemaps.com/svg/country/je#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/je/all/je.svg"
+    },
+    {
+      "country": "Kiribati",
+      "pageUrl": "https://simplemaps.com/svg/country/ki#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/ki/all/ki.svg"
+    },
+    {
+      "country": "Macau",
+      "pageUrl": "https://simplemaps.com/svg/country/mo#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mo/all/mo.svg"
+    },
+    {
+      "country": "Monaco",
+      "pageUrl": "https://simplemaps.com/svg/country/mc#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mc/all/mc.svg"
+    },
+    {
+      "country": "Niue",
+      "pageUrl": "https://simplemaps.com/svg/country/nu#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/nu/all/nu.svg"
+    },
+    {
+      "country": "Norfolk Island",
+      "pageUrl": "https://simplemaps.com/svg/country/nf#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/nf/all/nf.svg"
+    },
+    {
+      "country": "Pitcairn Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/pn#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/pn/all/pn.svg"
+    },
+    {
+      "country": "Puerto Rico",
+      "pageUrl": "https://simplemaps.com/svg/country/pr#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/pr/all/pr.svg"
+    },
+    {
+      "country": "Saint Martin (Dutch)",
+      "pageUrl": "https://simplemaps.com/svg/country/sx#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/sx/all/sx.svg"
+    },
+    {
+      "country": "Saint Martin (French)",
+      "pageUrl": "https://simplemaps.com/svg/country/mf#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/mf/all/mf.svg"
+    },
+    {
+      "country": "Saint-Barthélemy",
+      "pageUrl": "https://simplemaps.com/svg/country/bl#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/bl/all/bl.svg"
+    },
+    {
+      "country": "South Georgia and South Sandwich Islands",
+      "pageUrl": "https://simplemaps.com/svg/country/gs#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/gs/all/gs.svg"
+    },
+    {
+      "country": "Tokelau",
+      "pageUrl": "https://simplemaps.com/svg/country/tk#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/tk/all/tk.svg"
+    },
+    {
+      "country": "Tuvalu",
+      "pageUrl": "https://simplemaps.com/svg/country/tv#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/tv/all/tv.svg"
+    },
+    {
+      "country": "Vatican City",
+      "pageUrl": "https://simplemaps.com/svg/country/va#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/va/all/va.svg"
+    },
+    {
+      "country": "Western Sahara",
+      "pageUrl": "https://simplemaps.com/svg/country/eh#all",
+      "error": "Could not determine country code from https://simplemaps.com/static/svg/country/eh/all/eh.svg"
+    }
+  ]
+}

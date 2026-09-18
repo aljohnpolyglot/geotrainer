@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+    
+<!--********* Copyright (c) 2024 Pareto Softare, LLC DBA Simplemaps.com ***************************************
+************* Free for Commercial Use, full terms at  https://simplemaps.com/resources/svg-license ************
+************* Attribution is appreciated! https://simplemaps.com *******************************************-->
+
+<svg baseprofile="tiny" fill="#6f9c76" height="1000" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewbox="0 0 1000 1000" width="1000" xmlns="http://www.w3.org/2000/svg">
+ <g id="features">
+  <path d="M502.7 952.9l0.5 0.5 0.2 0.3 0.1 0.5-0.8 0.3-1-0.5-1.8-1.4 0-0.2 0.2-0.6 0.2-0.2 0.3-0.1 1.2-0.1 0.3 0.1 0.2 0.2 0.2 0.9 0.2 0.3z m-59.6-105.1l0.3-0.4 0.1-0.1 1.2 0.1 0.4 0.3 0.4 0.4 0.5 0.3-0.1 0.3-0.1 0.1-0.1 0.1-0.2 0.1-0.8 0.9-0.5 0.3-0.3 0-0.7-0.7-0.8-0.7 0.3-0.3 0.4-0.7z" id="SHTA" name="Tristan da Cunha">
+  </path>
+  <path d="M607.9 251l0.3 0 0.8 0 0.3-0.2 0.2 0.5 0.2 0.4 0 0.4-0.1 0.3-0.2 0.5-0.3 0.2-0.3 0.1-0.4 0.3-0.1-0.1 0-0.1-0.1-0.1-0.1-0.1-0.4 0.4-0.4 0.2-0.4 0.1-0.5-0.2-0.2-0.3 0.1-0.3 0.1-0.3 0.1-0.4 0.2-0.3 0.4-0.4 0.4-0.4 0.4-0.2z" id="SHHL" name="Saint Helena">
+  </path>
+  <path d="M391.8 45.6l0.3 0.4 0.9 0.7 0.4 0.5-0.3 0.1-0.6 0.3-0.2 0.2-0.3 0.1-0.7 0-0.3 0.1-0.4-0.1-0.1-0.3-0.1-0.3-0.1-0.3 0.3-0.4 0.4-0.9 0.3-0.2 0.1 0.1 0.1 0.1 0.1 0 0.2-0.1z" id="SHAC" name="Ascension">
+  </path>
+ </g>
+ <g id="points">
+  <circle class="-38.77188079003032|-13.97934729788821" cx="401.3" cy="901.7" id="0">
+  </circle>
+  <circle class="-25.763872926638115|-9.595680305261135" cx="511" cy="515.3" id="1">
+  </circle>
+  <circle class="-9.503863097397858|-6.088746711159475" cx="598.7" cy="86.6" id="2">
+  </circle>
+ </g>
+ <g id="label_points">
+  <circle class="Tristan da Cunha" cx="501.7" cy="952.7" id="SHTA">
+  </circle>
+  <circle class="Saint Helena" cx="608.2" cy="252.1" id="SHHL">
+  </circle>
+  <circle class="Ascension" cx="391.6" cy="46.9" id="SHAC">
+  </circle>
+ </g>
+</svg>

@@ -168,7 +168,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       const randomCountryCode = eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
       const environment = options.environment === 'mixed' ? chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);
-      const candidate = this.generateCandidate(randomCountryCode, attempt, { ...options, environment });
+      const preferred = context.preferredCandidate?.countryCode === randomCountryCode && attempt <= 5 ? context.preferredCandidate : undefined;
+      const candidate: { lat: number; lng: number; city?: CitySeed } = preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.radiusKm || 15, Math.random) : this.generateCandidate(randomCountryCode, attempt, { ...options, environment });
 
       onStatusUpdate?.(
         attempt > 1 ? `Searching coverage (attempt ${attempt}/${maxAttempts})...` : 'Finding random location...'

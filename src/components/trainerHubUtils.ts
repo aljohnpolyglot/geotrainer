@@ -54,7 +54,7 @@ export function coverageCountryCounts(locations: TrainerLocation[]): Record<stri
     return counts;
   }, {});
 }
-export const coverageCountryValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, now = Date.now()) => {
+export const coverageCountryValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, now = Date.now(), countScaleFloor = 1) => {
   const panos = new Map(locations.map((item) => [item.id, item.countryCode]));
   const grouped = new Map<string, { locations: TrainerLocation[]; attempts: Attempt[]; reviews: ReviewRecord[] }>();
   locations.forEach((item) => grouped.set(item.countryCode, { locations: [...(grouped.get(item.countryCode)?.locations || []), item], attempts: grouped.get(item.countryCode)?.attempts || [], reviews: grouped.get(item.countryCode)?.reviews || [] }));
@@ -66,9 +66,11 @@ export const coverageCountryValues = (locations: TrainerLocation[], attempts: At
     const mastery = group.reviews.length ? group.reviews.reduce((sum, item) => sum + Math.min(1, Math.log2(item.intervalDays + 1) / 10) * Math.min(1, item.reviewCount / 20) * (1 - Math.min(.65, item.lapseCount / Math.max(1, item.reviewCount))), 0) / group.reviews.length : null;
     return [code, overlay === "exposure" ? group.locations.reduce((sum, item) => sum + item.encounterCount, 0) : overlay === "accuracy" ? accuracy : overlay === "score" ? (group.attempts.length ? group.attempts.reduce((sum, item) => sum + item.score, 0) / group.attempts.length / 5000 : null) : overlay === "weakness" ? (accuracy === null ? null : 1 - accuracy) : overlay === "due" ? group.reviews.filter((item) => item.dueAt <= now).length : mastery] as const;
   });
-  const ceiling = Math.max(1, ...raw.map(([, value]) => value || 0));
+  const ceiling = Math.max(countScaleFloor, ...raw.map(([, value]) => value || 0));
   return Object.fromEntries(raw.map(([code, value]) => [code, value === null ? null : (overlay === "exposure" || overlay === "due") ? value / ceiling : value])) as Record<string, number | null>;
 };
+export const coverageRegionValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, regionByPano: Record<string, string>) =>
+  coverageCountryValues(locations.flatMap((item) => regionByPano[item.panoId] ? [{ ...item, countryCode: regionByPano[item.panoId] }] : []), attempts, reviews, overlay, Date.now(), overlay === 'exposure' ? 10 : overlay === 'due' ? 5 : 1);
 export type CoverageSortKey = keyof Pick<CountryStats, "name" | "seen" | "played" | "reviewed" | "correct" | "wrong" | "accuracy" | "average" | "best" | "lastSeen" | "clues">;
 export const sortCoverageCountries = (items: CountryStats[], key: CoverageSortKey, direction: 1 | -1) => [...items].sort((a, b) => {
   const left = a[key]; const right = b[key];

@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import type { TrainerLocation } from '../types';
+import { learningPriorityTarget } from './learningPriority';
+
+const location = (countryCode: string, lat: number, lng: number, encounterCount = 1): TrainerLocation => ({ id: `${countryCode}-${lat}-${lng}`, panoId: `${countryCode}-${lat}-${lng}`, countryCode, lat, lng, encounterCount, firstSeenAt: 1, lastSeenAt: 1 });
+
+test('learning priorities reuse familiar areas and send least exposure toward geographic gaps', () => {
+  const known = [location('SE', 55.4, 13), location('SE', 69, 20), location('NO', 60, 10, 4)];
+  const familiar = learningPriorityTarget('familiar', ['SE', 'NO'], known, () => 0);
+  assert.equal(familiar.preferredCandidate?.lat, 55.4);
+  assert.equal(familiar.preferredCandidate?.minRadiusKm, 1);
+  const weakCountry = learningPriorityTarget('least-exposure', ['SE', 'NO'], known, () => 0);
+  assert.deepEqual(weakCountry.countryCodes, ['SE']);
+  assert.notEqual(weakCountry.preferredCandidate?.lat, known[0].lat);
+  const unseen = learningPriorityTarget('least-exposure', ['SE', 'FI'], known, () => 0);
+  assert.deepEqual(unseen.countryCodes, ['FI']);
+});
+
+test('least exposure keeps the same rule for one country, mixed pools, continents, and world', () => {
+  const known = [location('SE', 56, 13, 2), location('NO', 60, 10, 4), location('JP', 35, 139, 1)];
+  assert.deepEqual(learningPriorityTarget('least-exposure', ['SE'], known, () => 0).countryCodes, ['SE']);
+  assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO'], known, () => 0).countryCodes, ['SE']);
+  assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'FI'], known, () => 0).countryCodes, ['FI']);
+  assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'JP', 'BR'], known, () => 0).countryCodes, ['BR']);
+});
+
+test('equal country exposure is resolved by the larger normalized geographic blind spot', () => {
+  const denseSweden = [location('SE', 55.5, 13), location('SE', 59.3, 18), location('SE', 63.8, 20), location('SE', 67.8, 21)];
+  const sparseNorway = [location('NO', 60, 10, 4)];
+  assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO'], [...denseSweden, ...sparseNorway], () => 0).countryCodes, ['NO']);
+});
