@@ -2,6 +2,7 @@
 
 ## 2026-09-18
 
+- Fixed Known clues modal rows without images so note text uses the full width and action buttons stay together at the top; on phones, clue details stack below any image and the list fills the screen.
 - Added a 0–100 nearby-location slider to Uploaded map Learn, with exact placement at 0 and up to 1 km variation at 100; paused Learn sessions retain the setting.
 - Made the revealed Learn location card's minus and maximize controls distinct, and let its maximize button and the Play/Review guess-map maximize button fill the viewport.
 - Removed the redundant GeoTrainer map-style checkbox; Auto, Light, and Dark now directly control map colors, including for profiles that previously disabled the old switch.
