@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { test } from 'node:test';
 import { moveImportedHistory, parseImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
@@ -13,6 +15,13 @@ test('Map Maker exports retain valid exact locations without adding the map to c
   assert.deepEqual(map.points, [{ lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 }, { lat: 40, lng: -3 }]);
   assert.deepEqual(withoutImportedMaps([{ key: `local.importedMap:${map.id}` }, { key: 'local.currentMapId' }, { key: 'gamePreferences' }]), [{ key: 'gamePreferences' }]);
   assert.throws(() => parseImportedMap('{"customCoordinates":[{"lat":91,"lng":0}]}', 'bad.json'), /no valid/i);
+});
+
+test('bundled official-only NBA fixture is ready for headless uploaded-map checks', () => {
+  const file = path.resolve(process.cwd(), 'test-maps/nba-teams-city-vicinity-OFFICIAL-GOOGLE.json');
+  const map = parseImportedMap(fs.readFileSync(file, 'utf8'), path.basename(file));
+  assert.equal(map.points.length, 29);
+  assert.ok(map.points.every((point) => point.panoId));
 });
 
 test('uploaded Learn visits move backward and forward before drawing a new location', () => {
