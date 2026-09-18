@@ -63,7 +63,6 @@ import { useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioPreferences } from './services/audio';
 import { restoredRoundElapsed } from './services/gameLogic';
-
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
 const ENVIRONMENT_STORAGE_KEY = 'sv_environment';
@@ -104,7 +103,6 @@ export default function App() {
   const [schedulerStrictness, setSchedulerStrictness] = useState<SchedulerPreferences['strictness']>('balanced');
   const [summaryMistakes, setSummaryMistakes] = useState<{ gameId: string; attempts: Attempt[] } | null>(null);
 
-  // Exact location reveal & bookmarks state (Study mode)
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [bookmarks, setBookmarks] = useState<BookmarkLocation[]>([]);
   const [compassPreference, setCompassPreference] = useState(() => localStorage.getItem(COMPASS_STORAGE_KEY) !== 'false');
@@ -151,6 +149,7 @@ export default function App() {
   const latestGenerationRequestRef = useRef(0);
   const latestPanoramaSyncRef = useRef(0);
   const recentStudyPanosRef = useRef<string[]>([]);
+  const studyImportedMapIdRef = useRef<string>();
   const currentLocationRef = useRef<LocationResult | null>(null);
   const generationPendingRef = useRef(false);
   const isMapsReadyRef = useRef<boolean>(false);
@@ -202,7 +201,7 @@ export default function App() {
 
   const learn = useLearnSources({ setAppMode, setShowHome, setStudySetupOpen: setIsStudySetupOpen,
     setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed });
-  const { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startMeta,
+  const { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta,
     nextMeta, startMap, openMapLocation, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource } = learn;
 
   const study = useStudyMode({
@@ -216,7 +215,7 @@ export default function App() {
     reviewInitialTotal, setStudyReviewSaving, studyReviewSaving, setStudyReviewSaved,
     setAppMode, setShowHome, isGameActive, gameSettings, setCoveragePreview, setIsFullscreen, setStatusMessage,
     isRevealed, restoredStudyPanoRef, isStudySetupOpen, setIsStudySetupOpen, allCollections,
-    learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true),
+    learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true), studyImportedMapIdRef,
   });
   const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
@@ -234,14 +233,14 @@ export default function App() {
   };
   const startFreshMode = (mode: 'study' | 'play') => {
     setResumePrompt(null); setPausedWorkspaces((saved) => ({ ...saved, [mode]: undefined })); void trainerDb.setSetting(`workspace.paused.${mode}`, null);
-    setCurrentLocation(null); setIsGameActive(false); setGameRounds([]); setActiveRoundResult(null); setGameSettings(null);
+    abortControllerRef.current?.abort(); setMapPickerOpen(false); setCurrentLocation(null); setIsGameActive(false); setGameRounds([]); setActiveRoundResult(null); setGameSettings(null);
     if (mode === 'study') { setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
     else { setShowHome(false); setAppMode('play'); setIsNewGameModalOpen(true); }
   };
   const resumePausedMode = () => {
     const workspace = resumePrompt && pausedWorkspaces[resumePrompt]; if (!workspace) return setResumePrompt(null);
     setResumePrompt(null); setShowHome(false);
-    if (workspace.mode === 'study') { restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId); setAppMode('study'); setCurrentLocation(workspace.location); setIsRevealed(false); setIsStudySetupOpen(false); return; }
+    if (workspace.mode === 'study') { studyImportedMapIdRef.current = workspace.importedMapId; restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId); setAppMode('study'); setCurrentLocation(workspace.location); setIsRevealed(false); setIsStudySetupOpen(false); return; }
     if (workspace.mode === 'play') { setAppMode('play'); setIsGameActive(true); setGameSettings(workspace.settings); setGameRounds(workspace.rounds || []); setCurrentRoundIndex(workspace.currentRoundIndex || 0); setActiveRoundResult(workspace.activeRoundResult || null); gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult; setCurrentLocation(workspace.currentLocation); restoredPlayPanoRef.current = workspace.currentLocation?.panoId || null; const elapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds); roundStartTimeRef.current = Date.now() - elapsed * 1000; setPlayElapsed(elapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - elapsed) : null); }
   };
 
@@ -309,7 +308,7 @@ export default function App() {
           const restoredElapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds); roundStartTimeRef.current = Date.now() - restoredElapsed * 1000;
           setPlayElapsed(restoredElapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - restoredElapsed) : null);
         } else if (workspace?.mode === 'study' && isLocation(workspace.location)) {
-          restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId); setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
+          studyImportedMapIdRef.current = workspace.importedMapId; restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId); setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
         }
         workspaceRestoreAttemptedRef.current = true;
         setDbReady(true);
@@ -339,7 +338,7 @@ export default function App() {
         : appMode === 'play' && isGameActive && gameSettings
           ? playWorkspaceRef.current!
           : appMode === 'study' && currentLocation
-            ? { mode: 'study', location: locationForWorkspace(currentLocation), learnSource, ...(activeMetaLesson?.id ? { metaLessonId: activeMetaLesson.id } : {}) }
+            ? { mode: 'study', location: locationForWorkspace(currentLocation), learnSource, ...(activeMetaLesson?.id ? { metaLessonId: activeMetaLesson.id } : {}), ...(learnSource === 'uploaded' && studyImportedMapIdRef.current ? { importedMapId: studyImportedMapIdRef.current } : {}) }
             : { mode: 'home' };
     void trainerDb.setSetting('workspace.active', value);
     if (value.mode === 'study' || value.mode === 'play') { setPausedWorkspaces((saved) => ({ ...saved, [value.mode]: value })); void trainerDb.setSetting(`workspace.paused.${value.mode}`, value); }
@@ -348,14 +347,14 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
-      if (studyReviewSaving || isModalOpen || isNewGameModalOpen || isHistoryModalOpen || activeRoundResult || summaryGameRecord || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
+      if (studyReviewSaving || isStudySetupOpen || isModalOpen || isNewGameModalOpen || isHistoryModalOpen || activeRoundResult || summaryGameRecord || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
       if (appMode === 'study') {
         if (learnSource !== 'map' && (event.code === 'Space' || event.key.toLowerCase() === 'n')) { event.preventDefault(); handleNextLearn(); }
         else if (event.key.toLowerCase() === 'r') { event.preventDefault(); setIsRevealed((previous) => !previous); }
       }
     };
     window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeRoundResult, appMode, handleNextLearn, isHistoryModalOpen, isModalOpen, isNewGameModalOpen, learnSource, studyReviewSaving, summaryGameRecord]);
+  }, [activeRoundResult, appMode, handleNextLearn, isHistoryModalOpen, isModalOpen, isNewGameModalOpen, isStudySetupOpen, learnSource, studyReviewSaving, summaryGameRecord]);
 
   // Handle saving custom collection
   const handleSaveCollection = (collection: Omit<Collection, 'isCustom'>) => {
@@ -428,6 +427,7 @@ export default function App() {
         onReview={() => { if (isGameActive && !window.confirm('Leave the active game and open Review?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('review'); setShowHome(false); setAppMode('review'); }}
 
         onExitReview={() => { clearReviewSession(); setCurrentLocation(null); }}
+        onRestartLearn={() => startFreshMode('study')}
         onStatistics={() => { if (isGameActive && !window.confirm('Leave the active game and open Statistics?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('statistics'); setShowHome(false); setAppMode('review'); }}
         onClues={() => { if (isGameActive && !window.confirm('Leave the active game and open Clues?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('clues'); setShowHome(false); setAppMode('review'); }}
         onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn}
@@ -459,7 +459,7 @@ export default function App() {
         onDataChanged={() => { void Promise.all([trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games()]).then(([collections, savedBookmarks, games]) => { setCustomCollections(collections); setBookmarks(savedBookmarks); setPastGames(games); setTrainerRefreshKey((key) => key + 1); }); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
-        onSaveForReview={() => void handleSaveStudyForReview(learnSource === 'custom')}
+        onSaveForReview={() => void handleSaveStudyForReview(learnSource === 'custom' || learnSource === 'uploaded')}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
@@ -486,7 +486,7 @@ export default function App() {
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
         onCloseSummary={() => setSummaryGameRecord(null)}
         onGoToLocation={(location) => { setSummaryGameRecord(null); setIsGameActive(false); setCurrentLocation(location); setAppMode('study'); setIsRevealed(true); }}
-        onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { startCustom(); handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
+        onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.importedMapId; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
         onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview(false) : undefined}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onDeleteGame={(id) => { const updated = dbReady ? pastGames.filter((game) => game.id !== id) : deleteGameRecord(id); setPastGames(updated); void trainerDb.deleteGame(id); }}

@@ -83,6 +83,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Refresh Available notes and its badge immediately after every Notebook save in every mode; do not depend on Study-only scheduling side effects.
 - Meta Learn selects only unfinished lessons and becomes visibly disabled in Learn setup after all lessons are completed.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.
+- Keep uploaded Map Maker JSON pools local to the device; Learn and Play sample their exact listed panoramas or nearby coordinates, while saved attempts and Review progress remain compatible with cloud sync.
 - Persist active Review progress, including completed-card statistics, so reloads preserve both the queue and the displayed position; label current, remaining, and saved progress explicitly on every viewport.
 - Render every collection selector with the shared World, Continents, Trainer drills, regions, and custom-collections hierarchy.
 

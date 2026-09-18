@@ -39,6 +39,8 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
   return {
     roundCount: Number.isInteger(rounds) && rounds >= 1 && rounds <= 100 ? rounds : 5,
     collectionId: typeof source.collectionId === 'string' ? source.collectionId : 'world',
+    ...(typeof source.importedMapId === 'string' ? { importedMapId: source.importedMapId } : {}),
+    ...(typeof source.importedMapName === 'string' ? { importedMapName: source.importedMapName } : {}),
     ...(typeof source.countryCode === 'string' && source.countryCode in COUNTRIES ? { countryCode: source.countryCode } : {}),
     ...(countryCodes.length ? { countryCodes } : {}),
     canMove: typeof source.canMove === 'boolean' ? source.canMove : true,

@@ -30,9 +30,13 @@ Une réponse faible revient plus tôt ; une réponse solide attend plus longtemp
 
 ## Mode Étude
 
+Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte importée. Pour Carte importée, choisissez un JSON Map Maker contenant une liste de lieux ou `customCoordinates` ; chaque lieu doit avoir une latitude et une longitude valides. Le fichier doit faire moins de 10 Mo. Utilisez Suivant pour changer de lieu ou la croix de l’en-tête pour choisir un autre mode. La carte reste sur cet appareil ; importez-la aussi sur tout autre appareil utilisé.
+
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif. L’état enregistré est restauré après rechargement, donc l’action ne réapparaît pas.
 
 ## Mode Jeu
+
+Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les manches de la carte utilisent ses lieux et peuvent les répéter si les manches sont plus nombreuses.
 
 Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus.
 

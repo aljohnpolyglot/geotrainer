@@ -56,6 +56,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
   }, [prepare]);
 
   const startCustom = useCallback(() => { setLearnSource('custom'); setActiveMetaLesson(undefined); setMapPickerOpen(false); }, []);
+  const startUploaded = useCallback(() => { setLearnSource('uploaded'); setActiveMetaLesson(undefined); setMapPickerOpen(false); }, []);
 
   const openMapLocation = useCallback(async (location: Omit<LocationResult, 'countryCode'>) => {
     setIsLoading(true); setErrorMessage(null);
@@ -74,10 +75,10 @@ export function useLearnSources(ctx: LearnSourceContext) {
   }, []);
 
   const restoreLearnSource = useCallback((source?: LearnSource, metaLessonId?: string) => {
-    const restored = source === 'meta' || source === 'map' ? source : 'custom';
+    const restored = source === 'meta' || source === 'map' || source === 'uploaded' ? source : 'custom';
     setLearnSource(restored); setActiveMetaLesson(restored === 'meta' ? metaLessonById(metaLessonId) : undefined);
   }, []);
 
-  return { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startMeta, nextMeta, startMap,
+  return { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta, nextMeta, startMap,
     openMapLocation, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource };
 }

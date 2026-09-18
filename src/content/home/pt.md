@@ -30,9 +30,13 @@ O [GeoGuessr](https://www.geoguessr.com/) se destaca em exploração, variedade 
 
 ## Modo Estudo
 
+Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 10 MB. Use Próximo para outro local ou o X no cabeçalho para escolher outro modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar.
+
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
 
 ## Modo Jogo
+
+Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do mapa enviado usam seus locais e podem repeti-los se houver menos locais que rodadas.
 
 Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
 

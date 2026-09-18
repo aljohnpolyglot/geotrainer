@@ -30,9 +30,13 @@ En svag gissning återkommer tidigare, ett säkert svar senare. Avstånd och po�
 
 ## Lär
 
+Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en JSON-fil från Map Maker med en lista över platser eller `customCoordinates`; varje plats behöver giltig latitud och longitud. Filen måste vara mindre än 10 MB. Nästa visar en annan plats och X i sidhuvudet öppnar valet av lärläge igen. Kartan stannar på den här enheten; ladda upp den igen på andra enheter.
+
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
 
 ## Spelläge
+
+I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omgångarna använder platser från filen och kan upprepa dem om det finns fler omgångar än platser.
 
 Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
 

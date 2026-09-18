@@ -14,6 +14,7 @@ import { supabase } from './supabase';
 import { resolveStoredClueImages, uploadClueImage } from './clueImages';
 import type { ClueRecord, CoachAnalysis, NotebookNote } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
+import { IMPORTED_MAP_PREFIX } from './importedMap';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
 
@@ -103,6 +104,7 @@ export const shouldSyncAuthEvent = (event: AuthChangeEvent, previousUserId?: str
 
 export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((clue) => clue.imagePath ? { ...clue, imageDataUrl: '' } : clue);
 export const withoutEmbeddedLocationImages = (locations: Record<string, unknown>[]) => locations.map(({ imageDataUrl: _image, ...location }) => location);
+export const withoutImportedMaps = (settings: Array<{ key: string }>) => settings.filter((item) => !item.key.startsWith(IMPORTED_MAP_PREFIX) && item.key !== 'local.currentMapId');
 export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
 export const shouldPullCloud = (now: number, previous: number, interval = 60_000) => !previous || now - previous >= interval;
 export const savedContentCounts = (backup: TrainerBackup) => ({
@@ -164,6 +166,15 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
       if (hosted !== clue) { await trainerDb.saveClue(hosted); hostedImage = true; }
     }
     if (hostedImage) backup = await createBackup(false);
+    const localSignature = backupSignature({ ...backup, data: { ...backup.data,
+      clues: withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]),
+      locations: withoutEmbeddedLocationImages(backup.data.locations as Record<string, unknown>[]),
+      settings: withoutImportedMaps(backup.data.settings as Array<{ key: string }>),
+    } });
+    if (syncedUserId === userId && syncedBackup === localSignature) {
+      if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
+      return;
+    }
     let remote = knownRemote;
     if (remote === undefined) {
       const { data, error } = await retryCloud(() => supabase.from('user_backups').select('backup').eq('user_id', userId).maybeSingle());
@@ -182,6 +193,7 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
     }
     backup.data.clues = withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]);
     backup.data.locations = withoutEmbeddedLocationImages(backup.data.locations as Record<string, unknown>[]);
+    backup.data.settings = withoutImportedMaps(backup.data.settings as Array<{ key: string }>);
     const signature = backupSignature(backup);
     if (syncedUserId === userId && syncedBackup === signature) {
       if (announce) update({ phase: 'synced', message: 'Progress backed up.' });

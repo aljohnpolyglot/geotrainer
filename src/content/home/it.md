@@ -30,9 +30,13 @@ Un tentativo debole torna prima, una risposta solida più tardi. Distanza e punt
 
 ## Modalità Studio
 
+Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricata. Per Mappa caricata, scegli un JSON di Map Maker con un elenco di luoghi o `customCoordinates`; ogni luogo richiede latitudine e longitudine valide. Il file deve essere inferiore a 10 MB. Usa Avanti per un altro luogo o la X nell’intestazione per scegliere un’altra modalità. La mappa resta su questo dispositivo; caricala anche sugli altri dispositivi.
+
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio. Lo stato salvato viene ripristinato dopo il ricaricamento, quindi l’azione non ricompare.
 
 ## Modalità Gioco
+
+Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano i luoghi del file e possono ripeterli se i round sono più numerosi.
 
 Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
 

@@ -412,7 +412,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
             </div>
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold text-stone-100">{t('Location Search Failed')}</h2>
-              <p className="text-xs text-stone-400 leading-relaxed">{errorMessage}</p>
+              <p className="text-xs text-stone-400 leading-relaxed">{t(errorMessage)}</p>
             </div>
             <button
               onClick={onNextLocation}

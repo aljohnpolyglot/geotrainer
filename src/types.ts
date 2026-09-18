@@ -72,7 +72,7 @@ export interface LocationRequestContext {
 }
 
 export type AppMode = 'study' | 'play' | 'review';
-export type LearnSource = 'custom' | 'meta' | 'map';
+export type LearnSource = 'custom' | 'meta' | 'map' | 'uploaded';
 export type ReviewSessionKind = 'practice' | 'due' | 'correction';
 export type SupportedLanguage = 'en' | 'es' | 'pt' | 'fr' | 'de' | 'it' | 'ru' | 'sv';
 export type CompassStyle = 'bar' | 'dial';
@@ -123,6 +123,8 @@ export interface EnvironmentSettings { environment: Environment; urbanLevel: Urb
 export interface GameSettings {
   roundCount: number;
   collectionId: string;
+  importedMapId?: string;
+  importedMapName?: string;
   countryCode?: string; // Optional single-country pool; omitted for saved-game compatibility
   countryCodes?: string[]; // Optional focused comparison pool; omitted for saved-game compatibility
   canMove: boolean; // Walking along roads
@@ -354,7 +356,7 @@ export interface TrainingSession {
 export type ActiveWorkspace =
   | { mode: 'home' }
   | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
-  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; importedMapId?: string }
   | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {

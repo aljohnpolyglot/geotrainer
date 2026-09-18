@@ -23,6 +23,8 @@ import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
 import { CountryMixPicker } from './CountryMixPicker';
 import { CollectionOptions } from './CollectionOptions';
+import { ImportedMapUpload } from './ImportedMapUpload';
+import { getImportedMap, type ImportedMap } from '../services/importedMap';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -60,6 +62,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
   const [allowInteriors, setAllowInteriors] = useState(false);
+  const [locationSource, setLocationSource] = useState<'generated' | 'uploaded'>('generated');
+  const [importedMap, setImportedMap] = useState<ImportedMap>();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -71,6 +75,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setCountryCodes([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
       setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
+      setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
+      void (value.importedMapId ? getImportedMap(value.importedMapId) : trainerDb.setting<string>('local.currentMapId').then((id) => id && getImportedMap(id))).then((map) => { if (active) setImportedMap(map || undefined); });
     });
     return () => { active = false; };
   }, [isOpen, defaultShowCompass, collections]);
@@ -98,6 +104,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
     const settings = {
       roundCount,
       collectionId: selectedCollectionId,
+      ...(locationSource === 'uploaded' && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
       ...(countryCodes.length ? { countryCodes } : {}),
       canMove,
       canPan,
@@ -112,6 +119,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       allowInteriors,
       timeLimitSeconds,
     };
+    if (locationSource === 'uploaded' && !importedMap) return;
     void trainerDb.setSetting('gamePreferences', settings);
     onStartGame(settings);
   };
@@ -152,6 +160,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
         {/* Settings Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
+          <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded')}><option value="generated">{t('Generated locations')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
+          {locationSource === 'uploaded' && <ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
           <div className="space-y-1.5">
             <label className="text-stone-300 font-semibold uppercase tracking-wider flex items-center gap-1.5">
@@ -186,6 +197,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             <label>{t('Sampling')}<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option></select></label>
           </div>
           <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
+          </>}
 
           {/* 2. Number of Rounds / Batch Size */}
           <div className="space-y-1.5">
@@ -374,6 +386,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           <button
             type="button"
             onClick={handleStart}
+            disabled={locationSource === 'uploaded' && !importedMap}
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
           >
             <Play className="w-4 h-4 fill-white text-white" />

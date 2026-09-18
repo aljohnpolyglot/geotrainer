@@ -79,6 +79,8 @@ Ein Ergebnis zeigt, wie eine Runde lief. GeoTrainer nimmt schwache Orte mit in u
 
 ## Lernmodus
 
+Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladene Karte. Für eine hochgeladene Karte wähle eine Map-Maker-JSON-Datei mit einer Ortsliste oder `customCoordinates`; jeder Ort braucht gültige Breiten- und Längengrade. Die Datei muss kleiner als 10 MB sein. Mit Weiter öffnest du einen anderen Ort, mit dem X im Kopfbereich wählst du einen neuen Lernmodus. Die Karte bleibt auf diesem Gerät; lade sie auf anderen Geräten erneut hoch.
+
 Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisarten ohne Punktedruck.
 
 ### Lernen einrichten
@@ -108,6 +110,8 @@ Gemischt, Städtisch, Vorstädtisch und Ländlich steuern die gewünschte Umgebu
 Diese Werte steuern die Suche, garantieren aber wegen begrenzter Street-View-Abdeckung kein exaktes Ergebnis.
 
 ## Spielmodus
+
+Wähle in den Spieleinstellungen Generierte Orte oder Hochgeladene Karte. Die Runden verwenden Orte aus der Datei und können sie wiederholen, wenn es mehr Runden als Orte gibt.
 
 ### Spieleinstellungen
 

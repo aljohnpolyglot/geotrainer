@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-18
+
+- Added Map Maker JSON upload as a fourth Learn path and a Play location source, with exact panorama selection, local map retention, and normal progress tracking.
+- Added an X action in Learn to return directly to setup and choose a new mode.
+- Skipped unchanged cloud backup reads and kept imported map files out of cloud backups to reduce Supabase usage.
+
 ## 2026-09-17
 
 - Added optional maturity-aware Review view variation with a 0–100 difficulty setting, heading-first progression, conservative geographic candidate checks, original-view fallback, and independent contraction after failed generalized recall.

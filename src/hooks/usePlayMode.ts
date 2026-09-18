@@ -7,6 +7,7 @@ import { isLatestRequest } from '../services/requestIntegrity';
 import { reviewGradeForPerformance, trainerDb } from '../data/trainerDb';
 import { COUNTRIES } from '../data/countries';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
+import { pickImportedLocation } from '../services/importedMap';
 
 export function usePlayMode(ctx: any) {
   const { allCollections, currentLocation, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed,
@@ -24,27 +25,30 @@ export function usePlayMode(ctx: any) {
   const [isSubmittingGuess, setLocalSubmittingGuess] = useState(false);
   const gameIdRef = useRef('');
   const roundSubmittedRef = useRef(false);
+  const generationFailedRef = useRef(false);
   const setSubmitting = (value: boolean) => { setLocalSubmittingGuess(value); setIsSubmittingGuess(value); };
 
   const fetchLocationForRound = useCallback(async (settings: GameSettings) => {
     const col = allCollections.find((item: any) => item.id === settings.collectionId) || allCollections[0];
     const countryCodes = settings.countryCodes?.length ? settings.countryCodes : settings.countryCode ? [settings.countryCode] : col?.countryCodes;
-    if (!col || !countryCodes?.length) { setErrorMessage('Game collection has no valid countries.'); return; }
+    if (!settings.importedMapId && (!col || !countryCodes?.length)) { generationFailedRef.current = true; setErrorMessage('Game collection has no valid countries.'); return; }
     const requestId = ++latestGenerationRequestRef.current; generationPendingRef.current = true; abortControllerRef.current?.abort();
     const abortController = new AbortController(); abortControllerRef.current = abortController;
     setCurrentLocation(null); setIsLoading(true); setErrorMessage(null); setIsRevealed(false); ctx.setStatusMessage('Finding round location...');
     try {
-      const result = await defaultLocationGenerator.findRandomLocation(countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, requireNavigation: settings.canMove });
-      if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
-    } catch (err: unknown) { if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (err instanceof Error && err.name === 'AbortError')) return; setErrorMessage(err instanceof Error ? err.message : 'Failed to generate game location'); }
+      const result = settings.importedMapId
+        ? await pickImportedLocation(settings.importedMapId, new Set(gameRounds.map((round) => round.location.panoId)), abortController.signal, settings.canMove)
+        : await defaultLocationGenerator.findRandomLocation(countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, requireNavigation: settings.canMove });
+      if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationFailedRef.current = false; setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
+    } catch (err: unknown) { if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (err instanceof Error && err.name === 'AbortError')) return; generationFailedRef.current = true; setErrorMessage(err instanceof Error ? err.message : 'Failed to generate game location'); }
     finally { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); ctx.setStatusMessage(''); } }
-  }, [abortControllerRef, allCollections, ctx, generationPendingRef, latestGenerationRequestRef, roundStartTimeRef, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
+  }, [abortControllerRef, allCollections, ctx, gameRounds, generationPendingRef, latestGenerationRequestRef, roundStartTimeRef, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
 
   const handleStartGame = useCallback((settings: GameSettings) => {
-    setShowHome(false); ctx.setIsNewGameModalOpen(false); setAppMode('play'); setIsGameActive(true); setGameSettings(settings); setGameRounds([]); setCurrentRoundIndex(0); setActiveRoundResult(null); setSummaryGameRecord(null); gameIdRef.current = `game-${crypto.randomUUID()}`; roundSubmittedRef.current = false; if (mapsReady) void fetchLocationForRound(settings);
+    generationFailedRef.current = false; setShowHome(false); ctx.setIsNewGameModalOpen(false); setAppMode('play'); setIsGameActive(true); setGameSettings(settings); setGameRounds([]); setCurrentRoundIndex(0); setActiveRoundResult(null); setSummaryGameRecord(null); gameIdRef.current = `game-${crypto.randomUUID()}`; roundSubmittedRef.current = false; if (mapsReady) void fetchLocationForRound(settings);
   }, [ctx, fetchLocationForRound, mapsReady, setAppMode, setGameSettings, setShowHome]);
 
-  useEffect(() => { if (mapsReady && isGameActive && gameSettings && !currentLocation && !ctx.isLoading) void fetchLocationForRound(gameSettings); }, [currentLocation, fetchLocationForRound, gameSettings, isGameActive, mapsReady, ctx.isLoading]);
+  useEffect(() => { if (mapsReady && isGameActive && gameSettings && !currentLocation && !ctx.isLoading && !generationFailedRef.current) void fetchLocationForRound(gameSettings); }, [currentLocation, fetchLocationForRound, gameSettings, isGameActive, mapsReady, ctx.isLoading]);
   useEffect(() => {
     const target = restoredPlayPanoRef?.current;
     if (!isGameActive) { if (restoredPlayPanoRef) restoredPlayPanoRef.current = null; return; }
@@ -80,7 +84,7 @@ export function usePlayMode(ctx: any) {
     if (currentRoundIndex + 1 < gameSettings.roundCount) { setCurrentRoundIndex((index) => index + 1); setActiveRoundResult(null); void fetchLocationForRound(gameSettings); return; }
     const totalScore = gameRounds.reduce((acc, round) => acc + round.score, 0); const col = allCollections.find((item: any) => item.id === gameSettings.collectionId) || allCollections[0];
     const focus = gameSettings.countryCodes?.length ? gameSettings.countryCodes : gameSettings.countryCode ? [gameSettings.countryCode] : [];
-    const completedGame: GameRecord = { id: gameIdRef.current, createdAt: Date.now(), collectionId: gameSettings.collectionId, collectionName: focus.length ? focus.map((code) => COUNTRIES[code]?.name || code).join(' + ') : col.name, settings: gameSettings, totalScore, maxPossibleScore: gameSettings.roundCount * 5000, rounds: gameRounds };
+    const completedGame: GameRecord = { id: gameIdRef.current, createdAt: Date.now(), collectionId: gameSettings.collectionId, collectionName: gameSettings.importedMapName || (focus.length ? focus.map((code) => COUNTRIES[code]?.name || code).join(' + ') : col.name), settings: gameSettings, totalScore, maxPossibleScore: gameSettings.roundCount * 5000, rounds: gameRounds };
     setPastGames(dbReady ? [completedGame, ...pastGames] : ctx.saveGameRecord(completedGame)); void trainerDb.saveGame(completedGame); setIsGameActive(false); setActiveRoundResult(null); setSummaryGameRecord(completedGame);
   }, [allCollections, currentRoundIndex, dbReady, fetchLocationForRound, gameRounds, gameSettings, pastGames, setPastGames, ctx]);
 

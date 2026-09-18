@@ -95,6 +95,10 @@ Study differs from Review in intent: Study introduces or explores freely chosen 
 
 Choose a collection or build a focused country mix, then choose the environment and sampling style. The country list follows the selected collection and starts at all countries. Add several commonly confused countries to alternate between them in either Study or Play.
 
+Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Uploaded map, select a Map Maker or GeoGuessr JSON export. A plain list of locations or a map with `customCoordinates` is accepted; each usable entry needs numeric latitude and longitude, while `panoId` and `heading` keep its exact view when available. Invalid entries are skipped. The file must be under 10 MB and contain at least one valid location. Choose **Start learning** to sample that map, **Next** to draw another location, or the **X** in the Learn header to return to Learn setup and choose a new path. Previously seen map locations can appear again after the available locations are used.
+
+Uploaded map files stay on this device. Progress from locations you study or play can still appear in your account. To use the same map on another device, upload the file there and start a new session. A removed or unavailable Street View panorama may be skipped; if no usable panoramas remain, upload another map or change learning paths.
+
 ### Studying a panorama
 
 1. Scan the whole scene before zooming into one object.
@@ -123,6 +127,7 @@ Play measures unaided recall in scored rounds. It supports short drills and long
 
 ### Game setup
 
+- Location source — choose Generated locations for the usual collection and environment controls, or Uploaded map to select a Map Maker JSON file. Uploaded games draw rounds from that file and keep its name in Past Games. If the map has fewer locations than rounds, locations may repeat.
 - Round count — choose 1 to 100 rounds.
 - Collection — choose the country pool.
 - Country mix — use the full collection, choose one target country, or add several commonly confused countries as a focused pool. Remove a flag pill to take a country back out.
@@ -512,7 +517,7 @@ External guides are community references. Check several clues together and allow
 
 The **360° camera** in the workspace copies four directions from the current panorama as one image. The image goes directly to your clipboard and is not saved in GeoTrainer.
 
-Learn has three paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Reveal and Next stay at the bottom of the visible viewport, including fullscreen, while mobile learning tools form a side rail below the map controls. Custom Learn and Play default to official Google imagery; the imagery selector can instead mix official and contributor panoramas or request contributor-only coverage. **Allow interiors** is off by default in both setups; when enabled, Google may return indoor as well as outdoor Street View coverage. In **Settings → Display**, panorama controls can show road labels or image dates, enable phone motion viewing, and choose click-and-arrow or arrow-only movement. Map controls choose road, satellite, hybrid, or terrain views, touch behavior, clickable places, and GeoTrainer-matched colors. Road labels and clickable places default to off to reduce accidental clues.
+Learn has four paths. **Custom** keeps the familiar collection and environment flow. **Meta** opens guided clue lessons at their recorded panorama and heading. **Uploaded map** samples places from a Map Maker JSON file. **Explore Map** shows Street View coverage; click a covered road to enter that panorama. Meta and Explore Map use Reveal to toggle the normal location card, where Save for Review schedules later pinpoint practice. Explore Map uses Back to world map instead of Next. Reveal and Next stay at the bottom of the visible viewport, including fullscreen, while mobile learning tools form a side rail below the map controls. Custom Learn and Play default to official Google imagery; the imagery selector can instead mix official and contributor panoramas or request contributor-only coverage. **Allow interiors** is off by default in both setups; when enabled, Google may return indoor as well as outdoor Street View coverage. In **Settings → Display**, panorama controls can show road labels or image dates, enable phone motion viewing, and choose click-and-arrow or arrow-only movement. Map controls choose road, satellite, hybrid, or terrain views, touch behavior, clickable places, and GeoTrainer-matched colors. Road labels and clickable places default to off to reduce accidental clues.
 
 In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, Meta remains fully accessible before and after the guess.
 
