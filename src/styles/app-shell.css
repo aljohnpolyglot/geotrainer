@@ -10,6 +10,7 @@
 .header-primary { width: 100%; }
 .mobile-drawer { display: contents; }
 .mobile-menu-backdrop { display: none; }
+.mobile-review-context { display: none; }
 .header-actions { margin-inline-start: auto; }
 .header-actions .utility-action span { display: none; }
 .primary-route-nav {
@@ -283,6 +284,7 @@ tbody tr.never-seen { color: #74858e; }
 .grade-actions button:hover { background: var(--panel-2); }
 
 @media (max-width: 900px) {
+  #app-topbar.mobile-nav-open { z-index: 100; }
   #app-topbar::before { display: none; }
   .hub-header { align-items: start; flex-direction: column; padding: 18px 20px 0; gap: 14px; }
   .hub-tabs { width: 100%; overflow-x: auto; }
@@ -306,6 +308,9 @@ tbody tr.never-seen { color: #74858e; }
   .header-primary > * { margin-inline-start: 0 !important; }
   #app-topbar .home-button { width: 44px; height: 44px; }
   .mobile-menu-toggle { position: relative; z-index: 42; display: inline-grid; grid-column: 3; width: 44px; height: 44px; padding: 0; place-items: center; color: #fff; background: #051c2a; border: 1px solid rgba(138,215,232,.3); border-radius: 3px; cursor: pointer; }
+  .mobile-review-context { grid-column: 2; grid-row: 1; display: grid; min-width: 0; justify-items: center; color: #fff; font-size: 11px; line-height: 1.3; text-align: center; }
+  .mobile-review-context strong { overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; }
+  .mobile-review-context small { color: var(--sky); font-size: 10px; }
   .mobile-menu-backdrop { position: fixed; z-index: 38; inset: 0; background: rgba(1,13,20,.62); border: 0; }
   .mobile-nav-open .mobile-menu-backdrop { display: block; }
   .mobile-drawer { position: fixed; z-index: 40; inset: 0 0 0 auto; display: none; width: min(320px, 86vw); padding: 72px 14px 20px; overflow-y: auto; color: #fff; background: var(--storm); box-shadow: -18px 0 48px rgba(0,10,18,.42); }
@@ -323,6 +328,7 @@ tbody tr.never-seen { color: #74858e; }
   .study-viewport-actions .study-reveal-label { max-width: min(120px, 24vw); }
   .study-viewport-actions #random-next-btn > span:first-of-type { display: inline; }
   .review-source { display: none; }
+  .header-actions .review-live-context { display: none; }
 }
 
 @media (max-width: 640px) {

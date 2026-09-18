@@ -2,6 +2,7 @@
 
 ## 2026-09-18
 
+- Kept the mobile Play guess action in view, cleared the active-session menu overlap, moved Review progress into the mobile header, made result dialogs more compact, and added a default-on country-border toggle.
 - Fixed Light and Auto map colors showing a dark base map; Light now applies a complete light style on every map surface.
 - Replaced the interior toggle in Custom Learn and Play with an Outdoors/Mixed dropdown, and added Auto/Light/Dark map colors in Settings → Display.
 - Added Map Maker JSON upload as a fourth Learn path and a Play location source, with exact panorama selection, local map retention, and normal progress tracking.

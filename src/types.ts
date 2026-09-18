@@ -118,6 +118,7 @@ export interface MapPreferences {
   mapPalette?: MapPalettePreference;
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
+  showCountryBorders?: boolean;
   geotrainerMapStyle: boolean;
 }
 export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; }

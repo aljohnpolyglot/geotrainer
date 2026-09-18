@@ -150,7 +150,7 @@ Movable games reject isolated panoramas that cannot support the chosen rule. Thi
 
 ### Making a guess
 
-Place the marker on the map and submit it. The round result shows the actual location, distance, score, and answer context. A timer reaching zero submits according to the active game flow.
+Place the marker on the map and submit it. On phones, the Precision place control floats above the bottom of the visible screen; tap it to open the guess map without scrolling. The round result shows the actual location, distance, score, and answer context. A timer reaching zero submits according to the active game flow.
 
 Submitting a Play answer saves the current Street View image with that location for later coverage and history previews. This does not create a clue unless you explicitly save one.
 
@@ -172,7 +172,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-The result compares your current pinpoint with the actual location and may show previous attempts for context. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
+The result compares your current pinpoint with the actual location and may show previous attempts for context. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 ### Automatic grading
 
@@ -316,7 +316,7 @@ Start with Balanced defaults. Change one group at a time and observe the queue f
 
 Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
 
-Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. The selection applies to road and terrain maps across Learn, Play, Review, Explore, Coverage, guesses, results, and summaries. Satellite imagery keeps its own colors. The separate GeoTrainer map-style switch controls whether the app's map styling is used.
+Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. The selection applies to road and terrain maps across Learn, Play, Review, Explore, Coverage, guesses, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. The separate GeoTrainer map-style switch controls whether the app's map styling is used.
 
 ## Progress and statistics
 

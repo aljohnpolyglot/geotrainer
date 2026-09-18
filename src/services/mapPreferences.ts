@@ -11,6 +11,7 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   mapPalette: 'auto',
   gestureHandling: 'auto',
   clickableIcons: false,
+  showCountryBorders: true,
   geotrainerMapStyle: true,
 };
 
@@ -25,6 +26,7 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     mapPalette: source.mapPalette === 'light' || source.mapPalette === 'dark' ? source.mapPalette : 'auto',
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
+    showCountryBorders: source.showCountryBorders !== false,
     geotrainerMapStyle: source.geotrainerMapStyle !== false,
   };
 };
@@ -64,10 +66,11 @@ const DARK_STYLE: google.maps.MapTypeStyle[] = [
 
 export function mapPresentationOptions(preferences: MapPreferences, dark: boolean): google.maps.MapOptions {
   const useDark = preferences.mapPalette === 'dark' || (preferences.mapPalette !== 'light' && dark);
+  const borderStyle: google.maps.MapTypeStyle = { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: preferences.showCountryBorders === false ? [{ visibility: 'off' }] : [{ visibility: 'on' }, { color: useDark ? '#8fb5c4' : '#526c79' }, { weight: 1.5 }] };
   return {
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    styles: preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : [],
+    styles: [...(preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : []), borderStyle],
   };
 }

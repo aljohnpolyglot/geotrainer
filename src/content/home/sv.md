@@ -44,6 +44,8 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 ## Repetition och schemaläggning
 
+På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
+
 Svaret döljs tills du gissar. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
@@ -79,7 +81,7 @@ Anteckningsboken bevarar inklistrade rubriker, fetstil och punktlistor. Externa 
 
 ## Samlingar och inställningar
 
-Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger.
+Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet.
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 

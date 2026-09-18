@@ -126,20 +126,32 @@
   #new-game-dialog > div:nth-child(2) { padding: 18px !important; }
   :is(#round-result-modal, #game-summary-modal) > div > div:first-child::before { display: none; }
   #revealed-location-card { left: 12px; bottom: 12px; width: calc(100vw - 24px); }
-  #guess-map-widget { right: 12px; bottom: 12px; }
+  #guess-map-widget { position: fixed; left: 12px; right: auto; bottom: max(12px, env(safe-area-inset-bottom)); }
   #guess-map-widget.expanded { width: calc(100vw - 24px); height: min(52vh, 360px); }
   #guess-map-widget.collapsed { width: auto; height: 48px; opacity: .96; }
   #guess-map-widget.collapsed > div:first-child { min-height: 48px; padding-block: 2px; border-bottom: 0 !important; }
   #guess-map-widget.collapsed > div:nth-child(2), #guess-map-widget.collapsed > div:last-child { display: none; }
   #guess-map-widget > div:first-child button { display: inline-grid; width: 44px; height: 44px; padding: 0; place-items: center; }
-  .review-result-backdrop { padding: 0; place-items: end center; }
-  .review-result-panel { max-height: calc(100vh - 8px); border-radius: 12px 12px 0 0; grid-template-rows: auto auto minmax(220px, 40vh) auto auto; }
-  .review-result-header { align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px; }
-  .review-comparison { width: 100%; justify-content: space-between; gap: 8px; }
+  .panorama-tools.review-result-tools { top: 72px; right: 12px; left: 12px; flex-direction: row; max-width: calc(100vw - 24px); overflow-x: auto; scrollbar-width: thin; }
+  .panorama-tools.review-result-tools .learning-aids { flex-direction: row; }
+  .review-result-backdrop { padding: 128px 12px 12px; place-items: end center; }
+  .review-result-panel { max-height: min(78dvh, 640px, calc(100dvh - 140px)); border-radius: 12px; }
+  .review-result-header { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px; }
+  .review-comparison { display: grid; grid-template-columns: 1fr 1fr auto; width: 100%; gap: 8px; }
+  .review-comparison strong { font-size: 11px; }
+  .review-comparison b { font-size: 13px; }
+  .review-result-map { height: min(28dvh, 220px); min-height: 150px; }
+  .review-next-action { position: sticky; bottom: 0; z-index: 3; padding: 8px 12px; background: var(--paper); }
+  .review-next-action span { display: none; }
+  .review-next-action button { width: 100%; min-height: 44px; }
   .review-result-panel .grade-actions { grid-template-columns: repeat(4, 1fr); padding: 10px; gap: 5px; }
   .review-result-panel .grade-actions button { min-height: 64px; }
   .review-history { margin-inline: 14px; }
   .review-live-context { display: inline-flex; }
+  .header-actions .review-live-context { display: none; }
+  #round-result-modal > div { height: min(72dvh, 560px); max-height: calc(100dvh - 24px); }
+  #round-result-modal > div > div:first-child { padding: 10px 12px; gap: 8px; }
+  #round-result-modal > div > div:last-child { padding: 10px 12px; gap: 8px; flex-wrap: wrap; }
   .compass-toggle span { display: none; }
   .street-compass { top: 10px; left: 10px; transform: scale(.88); transform-origin: top left; }
   .street-compass-bar { top: 10px; width: min(220px, calc(100% - 110px)); }
