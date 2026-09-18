@@ -2,7 +2,7 @@
 
 A private, browser-local Street View study, play, and spaced-review trainer built with React, TypeScript, and Vite.
 
-Country bounds and city seeds are generation hints, not claims of exhaustive Street View coverage. City coverage is derived from GeoNames `cities15000` and `countryInfo`; continent/subregion labels use the REST Countries open dataset plus documented learning-region overrides for Baltics, Nordics, Central Europe, Balkans, Caucasus, and the Middle East.
+Country bounds and city seeds are generation hints, not claims of exhaustive Street View coverage. City coverage and regional city pools are derived from the CC BY 4.0 [GeoNames](https://www.geonames.org/) `cities15000`, `admin1CodesASCII`, and `countryInfo` data; continent/subregion labels use the REST Countries open dataset plus documented learning-region overrides for Baltics, Nordics, Central Europe, Balkans, Caucasus, and the Middle East.
 
 ## Local setup
 

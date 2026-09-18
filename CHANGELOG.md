@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-09-19
+
+- Added optional region and city pool pills beneath focused countries in Learn and Play, with alphabetical regions, population or alphabetical city ordering, and lazy local data for 31,491 cities across 2,790 regional pools.
+- Matched Statistics' due-now count and today's due bar to the daily-limited Review queue.
+- Added the revealed city, region, road, and formatted address to Review results alongside the exact coordinates.
+- Added uploaded-map Learn progress, session-wide no-repeat traversal, Previous-only completion, and unique uploaded Play rounds capped to the map size.
+- Added city, region, and country autocomplete with automatic zoom to Explore Map.
+- Limited new Personal Notebook text to 1,000 characters with a visible counter and storage-level enforcement.
+- Added the missing local Australia state and territory Coverage map.
+- Kept least-exposure targets on verified in-country seeds so target-weakness practice no longer wastes retries on bounding-box ocean points.
+
 ## 2026-09-18
 
 - Added Learn priority modes for random practice, familiar nearby places, and least-exposed geographic blind spots across single-country, mixed-country, continent, and world collections.

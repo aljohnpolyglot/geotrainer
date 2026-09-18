@@ -70,6 +70,7 @@ export interface LocationRequestContext {
   excludedPanoIds?: ReadonlySet<string>;
   requireNavigation?: boolean;
   preferredCandidate?: { lat: number; lng: number; countryCode: string; minRadiusKm?: number; radiusKm?: number };
+  locationTargets?: LocationPoolTarget[];
 }
 
 export type AppMode = 'study' | 'play' | 'review';
@@ -108,6 +109,11 @@ export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
 export type LearnPriority = 'random' | 'familiar' | 'least-exposure';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
+export interface CityPoolCity { name: string; lat: number; lng: number; population: number; class: 'major' | 'regional' | 'local'; urbanRadiusKm: number; }
+export interface CityPoolRegion { id: string; name: string; cities: CityPoolCity[]; }
+export type LocationPoolTarget =
+  | { kind: 'region'; countryCode: string; regionId: string; regionName: string }
+  | { kind: 'city'; countryCode: string; regionId: string; regionName: string; city: CityPoolCity };
 export type MapTypePreference = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
 export type MapPalettePreference = 'auto' | 'light' | 'dark';
 export type ResultMapZoomPreference = 'closest' | 'country' | 'region' | 'world';
@@ -138,6 +144,7 @@ export interface GameSettings {
   importedMapName?: string;
   countryCode?: string; // Optional single-country pool; omitted for saved-game compatibility
   countryCodes?: string[]; // Optional focused comparison pool; omitted for saved-game compatibility
+  locationTargets?: LocationPoolTarget[]; // Optional regional/city pools; omitted for saved-game compatibility
   canMove: boolean; // Walking along roads
   canPan: boolean;  // 360 camera rotation
   canZoom: boolean; // Zoom in / out
@@ -367,7 +374,7 @@ export interface TrainingSession {
 export type ActiveWorkspace =
   | { mode: 'home' }
   | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
-  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; importedMapId?: string; importedMapVariation?: number }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number }
   | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {

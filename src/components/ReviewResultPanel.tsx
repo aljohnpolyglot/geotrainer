@@ -1,4 +1,5 @@
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Building, Compass, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
 import type { Attempt, GameRound } from '../types';
@@ -6,6 +7,13 @@ import { ResultMap } from './ResultMap';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CountryFlag } from './CountryFlag';
+import { reverseGeocodeLocation, type ReverseGeocodeResult } from '../services/geocoding';
+
+export const reviewLocationDetails = (value: ReverseGeocodeResult | null, unavailable: string) => ({
+  primaryArea: [value?.locality, value?.adminArea].filter(Boolean).join(', '),
+  route: value?.route || '',
+  address: value?.formattedAddress || (value ? '' : unavailable),
+});
 
 export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, advancing, onNext }: {
   round: GameRound;
@@ -22,6 +30,17 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const improvement = round.score - sourceAttempt.score;
   const previousGuess = sourceAttempt.guessedLat === null || sourceAttempt.guessedLng === null ? null : { lat: sourceAttempt.guessedLat, lng: sourceAttempt.guessedLng };
   const country = COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
+  const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(true);
+  useEffect(() => {
+    let active = true;
+    setGeocodeData(null); setIsGeocoding(true);
+    reverseGeocodeLocation(sourceAttempt.actualLat, sourceAttempt.actualLng)
+      .then((result) => { if (active) { setGeocodeData(result); setIsGeocoding(false); } })
+      .catch(() => { if (active) setIsGeocoding(false); });
+    return () => { active = false; };
+  }, [sourceAttempt.actualLat, sourceAttempt.actualLng]);
+  const locationDetails = reviewLocationDetails(geocodeData, t('addressUnavailable'));
 
   return (
     <div className="review-result-backdrop" role="dialog" aria-labelledby="review-result-title">
@@ -30,7 +49,14 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
           <div>
             <span className="review-context">{position} / {total} · {sourceLabel}</span>
             <h2 id="review-result-title"><CountryFlag code={sourceAttempt.countryCode} />{country}</h2>
-            <p className="review-coordinates">{round.location.lat.toFixed(5)}°, {round.location.lng.toFixed(5)}°</p>
+            <div className="review-location-details" aria-live="polite">
+              {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
+                {locationDetails.primaryArea && <strong><Building size={13} />{locationDetails.primaryArea}</strong>}
+                {locationDetails.route && <span><MapPin size={13} />{locationDetails.route}</span>}
+                {locationDetails.address && <small>{locationDetails.address}</small>}
+              </>}
+            </div>
+            <p className="review-coordinates">{sourceAttempt.actualLat.toFixed(5)}°, {sourceAttempt.actualLng.toFixed(5)}°</p>
           </div>
           <div className="review-comparison" aria-label={t('previousCurrentScores')}>
             <span>{t('previous')}<strong>{sourceAttempt.score.toLocaleString()} {t('pts')} · {sourceAttempt.distanceKm === null ? t('noGuess') : formatDistance(sourceAttempt.distanceKm)}</strong></span>

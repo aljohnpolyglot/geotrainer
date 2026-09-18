@@ -8,12 +8,9 @@ const randomItem = <T,>(items: T[], random: () => number) => items[Math.floor(ra
 
 const blindSpot = (countryCode: string, known: TrainerLocation[]): { candidate: PreferredCandidate; score: number } | undefined => {
   const country = COUNTRIES[countryCode];
-  if (!country || !known.length) return undefined;
+  if (!country || !known.length || !country.samplePoints.length) return undefined;
   const { minLat, maxLat, minLng, maxLng } = country.bounds;
-  const candidates = [...country.samplePoints, ...Array.from({ length: 15 }, (_, index) => ({
-    lat: minLat + (maxLat - minLat) * ((index % 5) + .5) / 5,
-    lng: minLng + (maxLng - minLng) * (Math.floor(index / 5) + .5) / 3,
-  }))];
+  const candidates = country.samplePoints;
   const target = candidates.reduce((best, candidate) => {
     const distance = Math.min(...known.map((item) => calculateDistanceKm(candidate.lat, candidate.lng, item.lat, item.lng)));
     return distance > best.distance ? { candidate, distance } : best;

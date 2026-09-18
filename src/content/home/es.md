@@ -36,6 +36,8 @@ Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subid
 
 ### Elegir una prioridad de aprendizaje
 
+El aprendizaje con mapa subido muestra la posición y el total (por ejemplo, **1/50**), no repite panoramas durante la sesión y oculta **Siguiente** al llegar al último lugar, dejando solo **Anterior**. En Juego, las rondas se limitan al número de lugares del mapa para evitar repeticiones. En Explorar mapa puedes buscar una ciudad, región o país y elegir una sugerencia para acercar el mapa. El texto personal del Cuaderno admite hasta 1000 caracteres por guardado y muestra un contador bajo el editor.
+
 La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje personalizado** después de aplicar la colección, la mezcla de países, el entorno, la fuente de imágenes y el filtro de interiores. No cambia Mapa subido, Meta, Explorar mapa, Juego ni Repaso.
 
 - **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. Úsalo para obtener variedad o recorrer la colección sin ponderación.
@@ -46,6 +48,8 @@ Si no existe historial apto, Lugares conocidos y Menor exposición empiezan desd
 
 Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación. El estado guardado se recupera al recargar, por lo que la acción no vuelve a aparecer.
 
+Después de añadir países, puedes añadir regiones y ciudades como píldoras independientes. Las regiones aparecen alfabéticamente; las ciudades se ordenan por importancia según la población de forma predeterminada y también pueden ordenarse alfabéticamente. **Todas las ciudades disponibles** usa los puntos de ciudad incluidos para esa región; no representa todo el polígono administrativo ni garantiza cada carretera o zona rural.
+
 ## Modo Juego
 
 En la configuración de Juego, elige Lugares generados o Mapa subido. Los turnos del mapa subido usan sus lugares y pueden repetirlos si hay menos lugares que turnos.
@@ -54,7 +58,7 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 ## Repaso y programación
 
-Repaso oculta la respuesta hasta tu conjetura. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
+Repaso oculta la respuesta hasta tu conjetura. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
 ## Entrenador de IA y pistas
 

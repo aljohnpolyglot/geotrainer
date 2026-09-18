@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Collection, Environment, GameSettings, PanoramaSource, SamplingMode, UrbanLevel } from '../types';
+import { Collection, Environment, GameSettings, LocationPoolTarget, PanoramaSource, SamplingMode, UrbanLevel } from '../types';
 import { TRAINING_PRESETS } from '../data/collections';
 import { normalizeGamePreferences, trainerDb } from '../data/trainerDb';
 import {
@@ -25,6 +25,7 @@ import { CountryMixPicker } from './CountryMixPicker';
 import { CollectionOptions } from './CollectionOptions';
 import { ImportedMapUpload } from './ImportedMapUpload';
 import { getImportedMap, type ImportedMap } from '../services/importedMap';
+import { LocationPoolPicker } from './LocationPoolPicker';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -51,6 +52,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [customRounds, setCustomRounds] = useState(false);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('world');
   const [countryCodes, setCountryCodes] = useState<string[]>([]);
+  const [locationTargets, setLocationTargets] = useState<LocationPoolTarget[]>([]);
   const [canMove, setCanMove] = useState<boolean>(true);
   const [canPan, setCanPan] = useState<boolean>(true);
   const [canZoom, setCanZoom] = useState<boolean>(true);
@@ -72,7 +74,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       if (!active) return;
       const value = normalizeGamePreferences(stored, defaultShowCompass);
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
-      setCountryCodes([]);
+      setCountryCodes([]); setLocationTargets([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
       setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
       setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
@@ -102,10 +104,11 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
   const handleStart = () => {
     const settings = {
-      roundCount,
+      roundCount: locationSource === 'uploaded' && importedMap ? Math.min(roundCount, importedMap.points.length) : roundCount,
       collectionId: selectedCollectionId,
       ...(locationSource === 'uploaded' && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
       ...(countryCodes.length ? { countryCodes } : {}),
+      ...(locationTargets.length ? { locationTargets } : {}),
       canMove,
       canPan,
       canZoom,
@@ -161,7 +164,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
         {/* Settings Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
           <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded')}><option value="generated">{t('Generated locations')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
-          {locationSource === 'uploaded' && <ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {locationSource === 'uploaded' && <ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); setRoundCount((count) => Math.min(count, map.points.length)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
           <div className="space-y-1.5">
@@ -171,7 +174,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </label>
             <select
               value={selectedCollectionId}
-              onChange={(e) => { setSelectedCollectionId(e.target.value); setCountryCodes([]); }}
+              onChange={(e) => { setSelectedCollectionId(e.target.value); setCountryCodes([]); setLocationTargets([]); }}
               className="w-full bg-stone-950 border border-stone-800 hover:border-stone-700 rounded-xl px-3.5 py-2.5 text-stone-100 text-xs font-medium focus:outline-hidden focus:border-amber-500 transition-colors cursor-pointer"
             >
               <CollectionOptions collections={collections} customLabel={t('Custom collections')} />
@@ -180,8 +183,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
           <div className="game-country-choice">
             <label>{t('Country mix')}</label>
-            <CountryMixPicker value={countryCodes} availableCodes={selectedCollection?.countryCodes || []} onChange={setCountryCodes} />
+            <CountryMixPicker value={countryCodes} availableCodes={selectedCollection?.countryCodes || []} onChange={(codes) => { setCountryCodes(codes); setLocationTargets((targets) => targets.filter((target) => codes.includes(target.countryCode))); }} />
           </div>
+          {!!countryCodes.length && <div className="game-country-choice"><label>{t('Location pools')}</label><LocationPoolPicker countryCodes={countryCodes} value={locationTargets} onChange={setLocationTargets} /></div>}
 
           <div className="environment-game-settings">
             <label>{t('Environment')}
@@ -196,7 +200,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </label>}
             <label>{t('Sampling')}<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option></select></label>
           </div>
-          <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
+          <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setLocationTargets([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
           </>}
 
           {/* 2. Number of Rounds / Batch Size */}

@@ -4,13 +4,13 @@ import { ankiStatistics, calendarLevel, dayLabel } from '../analytics/anki';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
-type Props = { attempts: Attempt[]; reviews: ReviewRecord[]; visits: StudyVisit[]; locations: TrainerLocation[] };
+type Props = { attempts: Attempt[]; reviews: ReviewRecord[]; visits: StudyVisit[]; locations: TrainerLocation[]; readyDueCount: number };
 const pct = (value: number, total: number) => total ? `${Math.round(value / total * 100)}%` : '0%';
 
-export function AnkiStatistics({ attempts, reviews, visits, locations }: Props) {
+export function AnkiStatistics({ attempts, reviews, visits, locations, readyDueCount }: Props) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
   const [selectedDue, setSelectedDue] = useState<{ day: number; count: number } | null>(null);
-  const stats = useMemo(() => ankiStatistics(attempts, reviews, visits, locations), [attempts, reviews, visits, locations]);
+  const stats = useMemo(() => ankiStatistics(attempts, reviews, visits, locations, Date.now(), readyDueCount), [attempts, reviews, visits, locations, readyDueCount]);
   const futureMax = Math.max(1, ...stats.futureDue.map((item) => item.count));
   const activityMax = Math.max(1, ...stats.calendar.map((item) => item.count));
   const addedMax = Math.max(1, ...stats.added.map((item) => item.count));

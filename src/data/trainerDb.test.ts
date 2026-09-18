@@ -208,6 +208,7 @@ test('saved game preferences are normalized before reuse', async () => {
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');
   assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);
   assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);
+  assert.equal(normalizeGamePreferences({ locationTargets: [{ kind: 'region', countryCode: 'PH', regionId: 'PH.NCR', regionName: 'National Capital Region' }, { kind: 'city', countryCode: 'ZZ' }] }).locationTargets?.length, 1);
   assert.equal(normalizeGamePreferences({ allowInteriors: true }).allowInteriors, true);
 });
 

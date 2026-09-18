@@ -56,6 +56,7 @@ export interface AppTopBarProps {
   cluesActive: boolean;
   studyReviewSaving: boolean;
   learnSource: LearnSource;
+  uploadedProgress?: { position: number; total: number };
   onHome: () => void;
   onStudy: () => void;
   onPlay: () => void;
@@ -79,7 +80,7 @@ export function AppTopBar({
   appMode, showHome, isGameActive, currentLocation, isLoading, isRevealed,
   gameSettings, currentRoundIndex, currentTotalScore, timeRemaining,
   pastGamesCount, reviewAttempt, reviewStatsLength, reviewInitialTotal,
-  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource,
+  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, uploadedProgress,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
   onReveal, onNextLocation, onPreviousLocation, canPreviousLocation, onAbandonGame,
   onOpenHistory, onOpenNewGame, onOpenPreferences, onToggleFullscreen,
@@ -88,8 +89,9 @@ export function AppTopBar({
   const t = (key: string) => translate(ui, key);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
-  const studyActions = !showHome && appMode === 'study' && <div className="study-viewport-actions" role="group" aria-label={t('navLearn')}>
+  const studyActions = !showHome && appMode === 'study' && <div className={`study-viewport-actions${learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total ? ' uploaded-complete' : ''}`} role="group" aria-label={t('navLearn')}>
     {learnSource === 'uploaded' && <button type="button" onClick={onPreviousLocation} disabled={!canPreviousLocation || isLoading || studyReviewSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md bg-stone-100 enabled:hover:bg-white text-stone-950 disabled:bg-stone-700 disabled:text-stone-400 disabled:cursor-not-allowed"><ArrowLeft className="w-3.5 h-3.5" /><span>{t('Previous')}</span></button>}
+    {learnSource === 'uploaded' && uploadedProgress && <span className="uploaded-learn-progress" aria-label={`${t('Progress')} ${uploadedProgress.position} ${t('of')} ${uploadedProgress.total}`}>{uploadedProgress.position}/{uploadedProgress.total}</span>}
     <button id="reveal-location-btn" onClick={onReveal} disabled={!currentLocation || isLoading} title={isRevealed ? t('Hide exact location (R)') : t('Reveal exact location (R)')} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${isRevealed ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30' : 'bg-stone-950 text-stone-300 border-stone-800 hover:border-stone-700 hover:text-stone-100'} disabled:opacity-50 disabled:cursor-not-allowed`}>
       {isRevealed && currentLocation ? <><img src={getFlagCdnUrl(currentLocation.countryCode, 40)} srcSet={`${getFlagCdnUrl(currentLocation.countryCode, 40)} 1x, ${getFlagCdnUrl(currentLocation.countryCode, 80)} 2x`} alt="" width="18" height="13" className="w-4.5 h-3 rounded-xs object-cover border border-stone-600/60 flex-shrink-0" referrerPolicy="no-referrer" /><span className="study-reveal-label font-semibold text-white">{COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode}</span><EyeOff className="w-3.5 h-3.5 text-amber-400 ml-0.5" /></> : <><Eye className="w-3.5 h-3.5 text-stone-400" /><span>{t('Reveal')}</span></>}
     </button>

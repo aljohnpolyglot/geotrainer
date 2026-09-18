@@ -31,6 +31,8 @@
 .primary-route-nav button.bg-stone-800 svg { color: var(--ink) !important; }
 .study-viewport-actions { position: fixed; z-index: 50; inset-block-end: max(18px, env(safe-area-inset-bottom)); inset-inline-start: 50%; display: flex; gap: 10px; transform: translateX(-50%); }
 .study-viewport-actions > button { min-height: 46px; box-shadow: 0 10px 28px rgba(0,18,29,.32); }
+.study-viewport-actions.uploaded-complete #random-next-btn { display: none; }
+.uploaded-learn-progress { align-self: center; padding: 6px 9px; color: #fff; background: var(--storm); border-radius: 4px; box-shadow: 0 10px 28px rgba(0,18,29,.24); font: 750 12px/1 ui-monospace, monospace; }
 .study-reveal-label { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .button, .review-reveal {

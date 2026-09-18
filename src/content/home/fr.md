@@ -36,6 +36,8 @@ Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte
 
 ### Choisir une priorité d’apprentissage
 
+L’apprentissage avec une carte importée affiche la position et le total (par exemple **1/50**), ne répète pas de panorama pendant la session et masque **Suivant** au dernier lieu afin de ne laisser que **Précédent**. Dans le Jeu, le nombre de manches est limité au nombre de lieux de la carte pour éviter les répétitions. Dans Explorer la carte, recherchez une ville, une région ou un pays puis choisissez une suggestion pour y zoomer. Le texte personnel du Carnet est limité à 1 000 caractères par enregistrement et un compteur apparaît sous l’éditeur.
+
 La priorité modifie la sélection des **nouveaux lieux de l’apprentissage personnalisé** après l’application de la collection, du mélange de pays, de l’environnement, de la source d’images et du filtre intérieur. Elle ne change pas Carte importée, Méta, Explorer la carte, Jeu ou Révision.
 
 - **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Utilisez-le pour varier les lieux ou parcourir la collection sans pondération.
@@ -46,6 +48,8 @@ Sans historique admissible, Lieux familiers et Moins exploré commencent dans l�
 
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif. L’état enregistré est restauré après rechargement, donc l’action ne réapparaît pas.
 
+Après avoir ajouté des pays, vous pouvez ajouter des régions et des villes sous forme de pastilles indépendantes. Les régions sont classées par ordre alphabétique ; les villes sont classées par importance selon leur population par défaut, avec une option alphabétique. **Toutes les villes disponibles** utilise les points de ville inclus dans la région ; ce choix ne couvre pas tout le polygone administratif et ne garantit pas chaque route ou zone rurale.
+
 ## Mode Jeu
 
 Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les manches de la carte utilisent ses lieux et peuvent les répéter si les manches sont plus nombreuses.
@@ -54,7 +58,7 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 ## Révision et planification
 
-La réponse reste cachée jusqu’à votre estimation. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
+La réponse reste cachée jusqu’à votre estimation. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices
 

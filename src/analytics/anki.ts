@@ -26,7 +26,7 @@ const localDay = (stamp: number, offset: number) => {
   return date.getTime();
 };
 
-export function ankiStatistics(attempts: Attempt[], reviews: ReviewRecord[], visits: StudyVisit[], locations: TrainerLocation[], now = Date.now()): AnkiStats {
+export function ankiStatistics(attempts: Attempt[], reviews: ReviewRecord[], visits: StudyVisit[], locations: TrainerLocation[], now = Date.now(), readyDueCount?: number): AnkiStats {
   const today = startOfDay(now);
   const events: ReviewEvent[] = reviews.flatMap((review) => review.gradingHistory.map((item) => ({ at: item.at, grade: item.grade, panoId: review.panoId })));
   const completedEvents = events.filter((event) => event.at <= now);
@@ -42,7 +42,7 @@ export function ankiStatistics(attempts: Attempt[], reviews: ReviewRecord[], vis
   completedEvents.forEach((event) => { grades[event.grade] = (grades[event.grade] || 0) + 1; });
   const futureDue = Array.from({ length: 31 }, (_, offset) => {
     const day = localDay(now, offset);
-    return { day, count: reviews.filter((review) => startOfDay(review.dueAt) === day).length };
+    return { day, count: offset === 0 && readyDueCount !== undefined ? readyDueCount : reviews.filter((review) => startOfDay(review.dueAt) === day).length };
   });
   const calendar = Array.from({ length: 84 }, (_, offset) => {
     const day = localDay(now, offset - 83);
@@ -64,7 +64,7 @@ export function ankiStatistics(attempts: Attempt[], reviews: ReviewRecord[], vis
     today: completedEvents.filter((event) => event.at >= today).length,
     last7: completedEvents.filter((event) => event.at >= localDay(now, -6)).length,
     all: completedEvents.length,
-    due: reviews.filter((review) => review.dueAt <= now).length,
+    due: readyDueCount ?? reviews.filter((review) => review.dueAt <= now).length,
     cards,
     mastery: masteryTier(cards.mature),
     grades,

@@ -36,6 +36,8 @@ Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricat
 
 ### Scegliere una priorità di apprendimento
 
+L’apprendimento con una mappa caricata mostra posizione e totale (per esempio **1/50**), non ripete panorami nella sessione e nasconde **Avanti** nell’ultimo luogo, lasciando solo **Precedente**. Nel Gioco, il numero di round è limitato ai luoghi della mappa per evitare ripetizioni. In Esplora mappa puoi cercare una città, una regione o un paese e scegliere un suggerimento per ingrandire quella zona. Il testo personale del Taccuino è limitato a 1000 caratteri per salvataggio e un contatore appare sotto l’editor.
+
 La priorità cambia il modo in cui vengono scelte le **nuove località di Apprendimento personalizzato** dopo aver applicato raccolta, combinazione di paesi, ambiente, fonte delle immagini e filtro per interni. Non modifica Mappa caricata, Meta, Esplora mappa, Gioco o Ripasso.
 
 - **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. Usalo per ottenere varietà o visitare la raccolta senza ponderazione.
@@ -46,15 +48,17 @@ Quando non esiste una cronologia idonea, Luoghi familiari e Minore esposizione i
 
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio. Lo stato salvato viene ripristinato dopo il ricaricamento, quindi l’azione non ricompare.
 
+Dopo aver aggiunto i paesi, puoi aggiungere regioni e città come pillole separate. Le regioni sono in ordine alfabetico; le città sono ordinate per importanza in base alla popolazione per impostazione predefinita e possono essere ordinate alfabeticamente. **Tutte le città disponibili** usa i punti città inclusi nella regione; non copre l’intero confine amministrativo e non garantisce ogni strada o area rurale.
+
 ## Modalità Gioco
 
-Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano i luoghi del file e possono ripeterli se i round sono più numerosi.
+Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano luoghi unici del file e il loro numero viene limitato ai luoghi disponibili.
 
 Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
 
 ## Ripasso e programmazione
 
-La soluzione resta nascosta fino alla stima. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
+La soluzione resta nascosta fino alla stima. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
 ## Coach IA e indizi
 

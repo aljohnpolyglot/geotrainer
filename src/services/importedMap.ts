@@ -59,7 +59,6 @@ export async function pickImportedLocation(mapId: string, excluded = new Set<str
     const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;
     if (countryCode) return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading };
   }
-  if (excluded.size) return pickImportedLocation(mapId, new Set(), signal, requireNavigation, variation);
-  if (variation) return pickImportedLocation(mapId, new Set(), signal, requireNavigation);
+  if (variation) return pickImportedLocation(mapId, excluded, signal, requireNavigation);
   throw new Error('No available Street View locations remain in this map.');
 }

@@ -46,3 +46,10 @@ test('Anki statistics aggregate review history, maturity, due days, and activity
   assert.equal(stats.calendar.at(-1)?.count, 2);
   assert.deepEqual(masteryTier(1000), { name: 'Atlas', current: 1000, next: 2500, progress: 0 });
 });
+
+test('Anki today counts use the daily-limited ready queue when provided', () => {
+  const reviews = Array.from({ length: 5 }, (_, index) => review(`due-${index}`, 1, [], now));
+  const stats = ankiStatistics([], reviews, [], [], now, 3);
+  assert.equal(stats.due, 3);
+  assert.equal(stats.futureDue[0].count, 3);
+});

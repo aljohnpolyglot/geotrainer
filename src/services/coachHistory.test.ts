@@ -14,10 +14,12 @@ test('concurrent Coach completions are both retained', async () => {
 });
 
 test('concurrent Notebook saves are both retained', async () => {
-  const { saveNotebookHistoryNote } = await import('./coachHistory');
+  const { NOTEBOOK_NOTE_MAX_LENGTH, saveNotebookHistoryNote } = await import('./coachHistory');
   const { trainerDb } = await import('../data/trainerDb');
   await Promise.all([1, 2].map((updatedAt) => saveNotebookHistoryNote({ id: `personal-${updatedAt}`, panoId: 'pano', countryCode: 'IT', text: `Note ${updatedAt}`, updatedAt })));
   assert.deepEqual((await trainerDb.setting<Array<{ id: string }>>('notebook.notes'))?.map(({ id }) => id), ['personal-2', 'personal-1']);
+  await saveNotebookHistoryNote({ id: 'personal-long', panoId: 'pano', countryCode: 'IT', text: 'å'.repeat(NOTEBOOK_NOTE_MAX_LENGTH + 5), updatedAt: 3 });
+  assert.equal((await trainerDb.setting<Array<{ id: string; text: string }>>('notebook.notes'))?.find(({ id }) => id === 'personal-long')?.text.length, NOTEBOOK_NOTE_MAX_LENGTH);
 });
 
 test('Personal Notebook deletion leaves a sync-safe hidden marker', async () => {

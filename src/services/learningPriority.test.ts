@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { TrainerLocation } from '../types';
+import { COUNTRIES } from '../data/countries';
 import { learningPriorityTarget } from './learningPriority';
 
 const location = (countryCode: string, lat: number, lng: number, encounterCount = 1): TrainerLocation => ({ id: `${countryCode}-${lat}-${lng}`, panoId: `${countryCode}-${lat}-${lng}`, countryCode, lat, lng, encounterCount, firstSeenAt: 1, lastSeenAt: 1 });
@@ -29,4 +30,10 @@ test('equal country exposure is resolved by the larger normalized geographic bli
   const denseSweden = [location('SE', 55.5, 13), location('SE', 59.3, 18), location('SE', 63.8, 20), location('SE', 67.8, 21)];
   const sparseNorway = [location('NO', 60, 10, 4)];
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO'], [...denseSweden, ...sparseNorway], () => 0).countryCodes, ['NO']);
+});
+
+test('least exposure targets verified in-country seeds instead of bounding-box ocean points', () => {
+  const target = learningPriorityTarget('least-exposure', ['AU'], [location('AU', -33.87, 151.21)], () => 0).preferredCandidate;
+  assert.ok(target);
+  assert.ok(COUNTRIES.AU.samplePoints.some((point) => point.lat === target.lat && point.lng === target.lng));
 });

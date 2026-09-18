@@ -36,6 +36,8 @@ Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa envi
 
 ### Escolher uma prioridade de aprendizagem
 
+O aprendizado com mapa enviado mostra a posição e o total (por exemplo, **1/50**), não repete panoramas na sessão e oculta **Próximo** no último local, deixando apenas **Anterior**. No Jogo, o número de rodadas é limitado à quantidade de locais do mapa para evitar repetições. Em Explorar mapa, pesquise uma cidade, região ou país e escolha uma sugestão para aproximar o mapa. O texto pessoal do Caderno aceita até 1000 caracteres por salvamento e mostra um contador abaixo do editor.
+
 A prioridade muda como os **novos locais do Aprendizado personalizado** são escolhidos depois da coleção, mistura de países, ambiente, fonte das imagens e filtro de interiores. Ela não altera Mapa enviado, Meta, Explorar mapa, Jogo ou Revisão.
 
 - **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. Use para obter variedade ou percorrer a coleção sem ponderação.
@@ -46,6 +48,8 @@ Quando não há histórico elegível, Locais familiares e Menor exposição come
 
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
 
+Depois de adicionar países, você pode adicionar regiões e cidades como pílulas independentes. As regiões aparecem em ordem alfabética; as cidades usam por padrão a importância pela população e também podem ser ordenadas alfabeticamente. **Todas as cidades disponíveis** usa os pontos de cidades incluídos na região; não representa todo o polígono administrativo nem garante cada estrada ou área rural.
+
 ## Modo Jogo
 
 Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do mapa enviado usam seus locais e podem repeti-los se houver menos locais que rodadas.
@@ -54,7 +58,7 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 ## Revisão e agendamento
 
-A resposta fica oculta até o palpite. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
+A resposta fica oculta até o palpite. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ## Coach de IA e pistas
 

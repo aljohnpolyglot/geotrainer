@@ -95,11 +95,15 @@ Study differs from Review in intent: Study introduces or explores freely chosen 
 
 Choose a collection or build a focused country mix, then choose the environment and sampling style. The country list follows the selected collection and starts at all countries. Add several commonly confused countries to alternate between them in either Study or Play.
 
+After adding countries, you may add region and city pools as removable pills. Regions are alphabetical; cities default to importance by population and can be switched to alphabetical order. A region’s **All available cities** entry samples its bundled city seeds, while a city entry targets that city’s surrounding Street View coverage. These are city-centred pools, not complete administrative polygons, so **All available cities** does not promise every road or rural area in the region.
+
 The **Indoor coverage** dropdown defaults to **Outdoors only**. Choose **Mixed indoors and outdoors** to allow either kind when Google has it. Google Street View has no reliable indoor-only search, so this choice does not promise an indoor panorama. It affects newly generated Custom Learn locations only, not Uploaded map, Meta, Explore Map, saved places, or Review.
 
-Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Uploaded map, select a Map Maker or GeoGuessr JSON export. A plain list of locations or a map with `customCoordinates` is accepted; each usable entry needs numeric latitude and longitude, while `panoId` and `heading` keep its exact view when available. Invalid entries are skipped. The file must be under 10 MB and contain at least one valid location. **Location variation** runs from 0 to 100: 0 opens the uploaded panorama or its coordinate exactly, while higher values search for nearby Street View imagery up to 1 km away at 100. If no nearby imagery opens, the app uses an original map location. This applies only to Uploaded map Learn; uploaded Play rounds use the original map locations. Choose **Start learning** to sample that map. **Previous** sits before Reveal and becomes available after you visit a second location; **Next** moves forward through places visited in this session before drawing another. The **X** on the right of the Learn header opens setup to choose another path. Previously seen map locations can appear again after the available locations are used.
+Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Uploaded map, select a Map Maker or GeoGuessr JSON export. A plain list of locations or a map with `customCoordinates` is accepted; each usable entry needs numeric latitude and longitude, while `panoId` and `heading` keep its exact view when available. Invalid entries are skipped. The file must be under 10 MB and contain at least one valid location. **Location variation** runs from 0 to 100: 0 opens the uploaded panorama or its coordinate exactly, while higher values search for nearby Street View imagery up to 1 km away at 100. If no nearby imagery opens, the app uses an original map location. This applies only to Uploaded map Learn; uploaded Play rounds use the original map locations. Choose **Start learning** to sample that map. **Previous** sits before Reveal and becomes available after you visit a second location; **Next** moves forward through places visited in this session before drawing another. The **X** on the right of the Learn header opens setup to choose another path. A completed uploaded-map run stops at its final unique panorama.
 
 ### Choosing a learning priority
+
+Uploaded-map Learn shows the current place and list total (for example, **1/50**), does not repeat a panorama during that run, and removes **Next** at the final place so only **Previous** remains. Uploaded Play limits the round count to the map’s location count rather than repeating entries. In Explore Map, search for a city, region, or country and choose an autocomplete result to zoom there. Personal Notebook text is limited to 1,000 characters per save; the counter beneath the editor shows the remaining capacity.
 
 Priority changes how **new Custom Learn locations** are chosen after the collection, country mix, environment, imagery source, and indoor filters are applied. It does not change Uploaded map, Meta, Explore Map, Play, or Review.
 
@@ -139,7 +143,7 @@ Play measures unaided recall in scored rounds. It supports short drills and long
 
 ### Game setup
 
-- Location source — choose Generated locations for the usual collection and environment controls, or Uploaded map to select a Map Maker JSON file. Uploaded games draw rounds from that file and keep its name in Past Games. If the map has fewer locations than rounds, locations may repeat.
+- Location source — choose Generated locations for the usual collection and environment controls, or Uploaded map to select a Map Maker JSON file. Uploaded games draw unique rounds from that file, keep its name in Past Games, and cap the round count at the number of uploaded locations.
 - Round count — choose 1 to 100 rounds.
 - Collection — choose the country pool.
 - Country mix — use the full collection, choose one target country, or add several commonly confused countries as a focused pool. Remove a flag pill to take a country back out.
@@ -182,7 +186,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-The result compares your current pinpoint with the actual location and may show previous attempts for context. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
+The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 ### Automatic grading
 

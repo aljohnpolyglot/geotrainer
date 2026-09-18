@@ -85,6 +85,8 @@ Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladen
 
 ### Lernpriorität wählen
 
+Das Lernen mit hochgeladener Karte zeigt Position und Gesamtzahl (zum Beispiel **1/50**), wiederholt während der Sitzung kein Panorama und blendet **Weiter** am letzten Ort aus, sodass nur **Zurück** bleibt. Im Spiel wird die Rundenzahl auf die Zahl der Kartenorte begrenzt, damit keine Einträge wiederholt werden. In Karte erkunden kannst du nach Stadt, Region oder Land suchen und einen Vorschlag wählen, um dorthin zu zoomen. Persönlicher Notizbuchtext ist pro Speicherung auf 1.000 Zeichen begrenzt; unter dem Editor steht ein Zähler.
+
 Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgewählt werden, nachdem Sammlung, Ländermischung, Umgebung, Bildquelle und Innenraumfilter angewendet wurden. Sie verändert Hochgeladene Karte, Meta, Karte erkunden, Spiel und Wiederholung nicht.
 
 - **Zufällig** (Standard) wählt ohne Gewichtung durch deinen Verlauf aus dem geeigneten Pool. Nutze es für Abwechslung oder eine neutrale Tour durch die Sammlung.
@@ -98,6 +100,8 @@ Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisart
 ### Lernen einrichten
 
 Wähle eine ganze Sammlung, ein einzelnes Zielland oder einen Ländermix für typische Verwechslungen. Jedes gewählte Land erscheint als Flaggen-Pille und kann einzeln entfernt werden.
+
+Nach dem Hinzufügen von Ländern kannst du Regionen und Städte als eigene Pillen hinzufügen. Regionen sind alphabetisch sortiert; Städte werden standardmäßig nach Bedeutung anhand der Einwohnerzahl sortiert und können alphabetisch angezeigt werden. **Alle verfügbaren Städte** verwendet die enthaltenen Stadtpunkte einer Region; dies deckt nicht das gesamte Verwaltungsgebiet ab und garantiert nicht jede Straße oder ländliche Gegend.
 
 ### Ein Panorama untersuchen
 
@@ -160,7 +164,7 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 ### Nach der Antwort
 
-Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
+Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
 ### Automatische Bewertung
 

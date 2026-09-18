@@ -36,6 +36,8 @@ Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en 
 
 ### Välj prioritet för lärandet
 
+Lärande med en uppladdad karta visar position och total (till exempel **1/50**), upprepar inga panoraman under sessionen och döljer **Nästa** på den sista platsen så att bara **Föregående** återstår. I Spel begränsas antalet rundor till kartans antal platser för att undvika upprepningar. I Utforska karta kan du söka efter en stad, region eller ett land och välja ett förslag för att zooma dit. Personlig text i Anteckningsboken är begränsad till 1000 tecken per sparning och en räknare visas under redigeraren.
+
 Prioritet styr hur **nya platser i Anpassat lärande** väljs efter samling, landsmix, miljö, bildkälla och inomhusfilter. Det påverkar inte Uppladdad karta, Meta, Utforska karta, Spel eller Repetition.
 
 - **Slumpmässigt** (standard) väljer ur det möjliga urvalet utan att använda din historik. Använd det för variation eller en neutral rundtur i samlingen.
@@ -45,6 +47,8 @@ Prioritet styr hur **nya platser i Anpassat lärande** väljs efter samling, lan
 Om det inte finns någon möjlig historik börjar Bekanta platser och Minst erfarenhet från det valda urvalet som Slumpmässigt. Street View-täckning och aktiva filter avgör fortfarande om målområdet kan ge ett panorama, så en närliggande tillgänglig vy kan användas när den exakta platsen saknar täckning.
 
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
+
+När du har lagt till länder kan du lägga till regioner och städer som egna brickor. Regioner visas alfabetiskt; städer sorteras som standard efter betydelse utifrån befolkning och kan även sorteras alfabetiskt. **Alla tillgängliga städer** använder de inkluderade stadspunkterna i regionen; valet täcker inte hela den administrativa gränsen och garanterar inte varje väg eller landsbygdsområde.
 
 ## Spelläge
 
@@ -56,7 +60,7 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 
-Svaret döljs tills du gissar. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
+Svaret döljs tills du gissar. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
 

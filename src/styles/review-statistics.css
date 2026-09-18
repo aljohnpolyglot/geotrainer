@@ -12,8 +12,14 @@
 .coverage-study-backdrop { position: fixed; inset: 0; z-index: 105; display: grid; place-items: center; padding: 18px; background: rgba(3,20,30,.84); }.coverage-study-panel { display: grid; grid-template-rows: auto minmax(0,1fr); width: min(1120px, 100%); height: min(760px, calc(100vh - 36px)); overflow: hidden; color: var(--carbon); background: var(--paper); border-radius: 12px; box-shadow: var(--shadow-sheet); }.coverage-study-panel > header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 16px; }.coverage-study-panel header span { color: var(--blue); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }.coverage-study-panel h2 { margin: 2px 0; font-size: 20px; }.coverage-study-panel header p { margin: 0; color: var(--muted); font-size: 11px; }.coverage-study-panel header button { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }.coverage-study-view { position: relative; min-height: 0; overflow: hidden; background: #000; }
 .review-result-panel { width: min(920px, 100%); max-height: calc(100vh - 36px); overflow: auto; color: var(--carbon); background: var(--paper); border-radius: 12px; box-shadow: var(--shadow-sheet); }
 .review-result-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 20px; }
+.review-result-header > div:first-child { min-width: 0; max-width: 420px; }
 .review-result-header h2 { margin: 5px 0 2px; font-size: 22px; }
 .review-context { color: var(--blue); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+.review-location-details { display: grid; gap: 3px; margin: 7px 0 4px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.review-location-details strong, .review-location-details span { display: flex; align-items: center; gap: 5px; }
+.review-location-details strong { color: var(--carbon); }
+.review-location-details svg { flex: 0 0 auto; color: var(--blue); }
+.review-location-details small { font-size: 10px; line-height: 1.35; }
 .review-coordinates { margin: 0; color: var(--muted); font: 12px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .review-comparison { display: flex; align-items: center; gap: 22px; }
 .review-comparison span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }

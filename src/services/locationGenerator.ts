@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EnvironmentSettings, LocationGenerator, LocationRequestContext, LocationResult, UrbanLevel } from '../types';
+import { CityPoolCity, EnvironmentSettings, LocationGenerator, LocationRequestContext, LocationResult, UrbanLevel } from '../types';
 import { COUNTRIES } from '../data/countries';
 import cityData from '../data/cities.json';
 import { reverseGeocodeLocation } from './geocoding';
 import { calculateDistanceKm } from './gameLogic';
 import { chooseReviewCandidate, type ReviewCandidate, type ReviewVariationPlan } from '../data/reviewVariation';
+import { pickLocationTargetCity, resolveLocationTargets } from './cityPools';
 
 export interface CitySeed {
   name: string;
@@ -43,6 +44,11 @@ const around = (seed: CitySeed, minKm: number, maxKm: number, random: () => numb
     lat: seed.lat + Math.cos(bearing) * distance / 111.32,
     lng: seed.lng + Math.sin(bearing) * distance / (111.32 * Math.max(.2, Math.cos(seed.lat * Math.PI / 180))),
   };
+};
+
+export const sampleCityPoolCandidate = (city: CityPoolCity, environment: Exclude<EnvironmentSettings['environment'], 'mixed'>, random = Math.random) => {
+  const distances = environment === 'urban' ? [.12, .7] : environment === 'suburban' ? [.55, 1.6] : [1.5, 3];
+  return { ...around(city, city.urbanRadiusKm * distances[0], city.urbanRadiusKm * distances[1], random), city };
 };
 
 export function sampleEnvironmentCandidate(countryCode: string, settings: EnvironmentSettings, random = Math.random) {
@@ -155,6 +161,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
     const sv = this.getService();
     const maxAttempts = options.environment === 'rural' ? 30 : 20;
+    const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
+    if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       if (signal?.aborted) {
@@ -165,11 +173,12 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       const eligibleCountries = options.samplingMode === 'balanced'
         ? countryCodes.filter((code) => (this.balancedCounts.get(code) || 0) === Math.min(...countryCodes.map((item) => this.balancedCounts.get(item) || 0)))
         : countryCodes;
-      const randomCountryCode = eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
-      const environment = options.environment === 'mixed' ? chooseMixedEnvironment(this.mixedHistory) : options.environment;
+      const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
+      const randomCountryCode = focused?.target.countryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
+      const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);
       const preferred = context.preferredCandidate?.countryCode === randomCountryCode && attempt <= 5 ? context.preferredCandidate : undefined;
-      const candidate: { lat: number; lng: number; city?: CitySeed } = preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.radiusKm || 15, Math.random) : this.generateCandidate(randomCountryCode, attempt, { ...options, environment });
+      const candidate: { lat: number; lng: number; city?: CitySeed } = focused ? sampleCityPoolCandidate(focused.city, environment) : preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.radiusKm || 15, Math.random) : this.generateCandidate(randomCountryCode, attempt, { ...options, environment });
 
       onStatusUpdate?.(
         attempt > 1 ? `Searching coverage (attempt ${attempt}/${maxAttempts})...` : 'Finding random location...'

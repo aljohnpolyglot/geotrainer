@@ -3,6 +3,7 @@ import type { CoachHistoryNote, NotebookNote } from '../types';
 
 let writes = Promise.resolve();
 let notebookWrites = Promise.resolve();
+export const NOTEBOOK_NOTE_MAX_LENGTH = 1000;
 
 export function saveCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
   const next = writes.then(async () => {
@@ -16,7 +17,7 @@ export function saveCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
 export function saveNotebookHistoryNote(note: NotebookNote): Promise<void> {
   const next = notebookWrites.then(async () => {
     const saved = await trainerDb.setting<NotebookNote[]>('notebook.notes') || [];
-    await trainerDb.setSetting('notebook.notes', [note, ...saved]);
+    await trainerDb.setSetting('notebook.notes', [{ ...note, text: note.text.slice(0, NOTEBOOK_NOTE_MAX_LENGTH) }, ...saved]);
   });
   notebookWrites = next.catch(() => {});
   return next;
