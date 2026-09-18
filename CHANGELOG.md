@@ -2,6 +2,8 @@
 
 ## 2026-09-18
 
+- Added Previous before Reveal in Uploaded map Learn, so learners can revisit sampled locations and move forward again with Next.
+- Moved Learn's X to the right side of the header, with a hover and focus hint explaining that it opens Learn setup.
 - Kept the mobile Play guess action in view, cleared the active-session menu overlap, moved Review progress into the mobile header, made result dialogs more compact, and added a default-on country-border toggle.
 - Fixed Light and Auto map colors showing a dark base map; Light now applies a complete light style on every map surface.
 - Replaced the interior toggle in Custom Learn and Play with an Outdoors/Mixed dropdown, and added Auto/Light/Dark map colors in Settings → Display.

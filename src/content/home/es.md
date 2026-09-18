@@ -32,7 +32,7 @@ Un mal intento vuelve antes y una respuesta sólida espera más. La distancia y 
 
 En Estudio personalizado y Juego, **Cobertura interior** ofrece Solo exteriores (predeterminado) o Mixto: interiores y exteriores. Google no ofrece una búsqueda fiable de solo interiores; el modo mixto puede mostrar cualquiera de los dos. No cambia los mapas subidos, Meta, Explorar mapa ni Repaso.
 
-Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subido. En Mapa subido, selecciona un JSON de Map Maker con una lista de lugares o `customCoordinates`; cada lugar necesita latitud y longitud válidas. El archivo debe pesar menos de 10 MB. Usa Siguiente para otro lugar o la X de la cabecera para volver a elegir el modo. El mapa queda en este dispositivo; si continúas en otro, vuelve a subirlo allí.
+Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subido. En Mapa subido, selecciona un JSON de Map Maker con una lista de lugares o `customCoordinates`; cada lugar necesita latitud y longitud válidas. El archivo debe pesar menos de 10 MB. Anterior está antes de Revelar y se activa después de visitar dos lugares. Siguiente avanza por los lugares ya vistos antes de elegir uno nuevo. La X a la derecha de la cabecera abre la elección del modo. El mapa queda en este dispositivo; si continúas en otro, vuelve a subirlo allí.
 
 Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación. El estado guardado se recupera al recargar, por lo que la acción no vuelve a aparecer.
 

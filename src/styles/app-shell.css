@@ -5,6 +5,11 @@
   border-color: var(--line) !important;
   box-shadow: 0 8px 22px rgba(0, 0, 0, .25);
 }
+#app-topbar.mode-study .header-primary { padding-right: 48px; }
+#app-topbar.mode-study:has(.learn-restart-button:is(:hover,:focus-visible)) { z-index: 60; }
+#app-topbar .learn-restart-button { position: absolute; top: 13px; right: 12px; width: 36px; height: 36px; color: #fff; background: var(--storm); border: 1px solid var(--rule); }
+#app-topbar .learn-restart-button:hover,#app-topbar .learn-restart-button:focus-visible { color: var(--storm); background: var(--lime); border-color: var(--lime); }
+#app-topbar .learn-restart-button:is(:hover,:focus-visible)::after { content: attr(data-tooltip); position: absolute; top: calc(100% + 7px); right: 0; width: max-content; max-width: min(240px, calc(100vw - 24px)); padding: 7px 9px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; box-shadow: var(--shadow-sheet); font-size: 12px; font-weight: 700; text-align: center; white-space: normal; pointer-events: none; }
 .primary-route-nav { position: absolute; inset-inline-start: 50%; transform: translateX(-50%); }
 @media (max-width: 1100px) { .primary-route-nav { position: static; transform: none; } }
 .header-primary { width: 100%; }
@@ -304,6 +309,8 @@ tbody tr.never-seen { color: #74858e; }
 
 @media (max-width: 900px) {
   #app-topbar { display: block; width: 100%; min-width: 0; height: 60px; padding: 8px 12px; }
+  #app-topbar.mode-study .header-primary { padding-right: 0; }
+  #app-topbar .learn-restart-button { top: 8px; right: 68px; width: 44px; height: 44px; }
   .header-primary { display: grid !important; width: 100%; min-width: 0; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; }
   .header-primary > * { margin-inline-start: 0 !important; }
   #app-topbar .home-button { width: 44px; height: 44px; }

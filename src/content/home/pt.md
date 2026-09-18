@@ -32,7 +32,7 @@ O [GeoGuessr](https://www.geoguessr.com/) se destaca em exploração, variedade 
 
 No Estudo personalizado e no Jogo, **Cobertura interna** oferece Somente exteriores (padrão) ou Misto: interiores e exteriores. O Google não oferece uma busca confiável apenas por interiores; o modo misto pode mostrar ambos. Isso não altera mapas enviados, Meta, Explorar mapa ou Revisão.
 
-Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 10 MB. Use Próximo para outro local ou o X no cabeçalho para escolher outro modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar.
+Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 10 MB. Anterior fica antes de Revelar e é ativado depois de visitar dois locais. Próximo avança primeiro pelos locais já vistos e depois escolhe um novo. O X à direita do cabeçalho abre a escolha do modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar.
 
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
 

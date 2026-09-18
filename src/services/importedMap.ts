@@ -5,6 +5,13 @@ import { calculateDistanceKm } from './gameLogic';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
 export type ImportedMap = { id: string; name: string; points: MapPoint[] };
+export type ImportedMapHistory = { locations: LocationResult[]; index: number };
+export const moveImportedHistory = (history: ImportedMapHistory, direction: 'previous' | 'next', location?: LocationResult): ImportedMapHistory => {
+  const index = history.index + (direction === 'next' ? 1 : -1);
+  if (index < 0) return history;
+  if (index < history.locations.length) return { ...history, index };
+  return direction === 'next' && location ? { locations: [...history.locations, location], index } : history;
+};
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
 
 export function parseImportedMap(json: string, name: string): ImportedMap {

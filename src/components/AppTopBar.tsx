@@ -67,6 +67,8 @@ export interface AppTopBarProps {
   onClues: () => void;
   onReveal: () => void;
   onNextLocation: () => void;
+  onPreviousLocation: () => void;
+  canPreviousLocation: boolean;
   onAbandonGame: () => void;
   onOpenHistory: () => void;
   onOpenNewGame: () => void;
@@ -80,7 +82,7 @@ export function AppTopBar({
   pastGamesCount, reviewAttempt, reviewStatsLength, reviewInitialTotal,
   reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
-  onReveal, onNextLocation, onAbandonGame,
+  onReveal, onNextLocation, onPreviousLocation, canPreviousLocation, onAbandonGame,
   onOpenHistory, onOpenNewGame, onOpenPreferences, onToggleFullscreen,
 }: AppTopBarProps) {
   const { ui } = useLanguagePreferences();
@@ -88,6 +90,7 @@ export function AppTopBar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
   const studyActions = !showHome && appMode === 'study' && <div className="study-viewport-actions" role="group" aria-label={t('navLearn')}>
+    {learnSource === 'uploaded' && <button type="button" onClick={onPreviousLocation} disabled={!canPreviousLocation || isLoading || studyReviewSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md bg-stone-100 enabled:hover:bg-white text-stone-950 disabled:bg-stone-700 disabled:text-stone-400 disabled:cursor-not-allowed"><ArrowLeft className="w-3.5 h-3.5" /><span>{t('Previous')}</span></button>}
     <button id="reveal-location-btn" onClick={onReveal} disabled={!currentLocation || isLoading} title={isRevealed ? t('Hide exact location (R)') : t('Reveal exact location (R)')} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${isRevealed ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30' : 'bg-stone-950 text-stone-300 border-stone-800 hover:border-stone-700 hover:text-stone-100'} disabled:opacity-50 disabled:cursor-not-allowed`}>
       {isRevealed && currentLocation ? <><img src={getFlagCdnUrl(currentLocation.countryCode, 40)} srcSet={`${getFlagCdnUrl(currentLocation.countryCode, 40)} 1x, ${getFlagCdnUrl(currentLocation.countryCode, 80)} 2x`} alt="" width="18" height="13" className="w-4.5 h-3 rounded-xs object-cover border border-stone-600/60 flex-shrink-0" referrerPolicy="no-referrer" /><span className="study-reveal-label font-semibold text-white">{COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode}</span><EyeOff className="w-3.5 h-3.5 text-amber-400 ml-0.5" /></> : <><Eye className="w-3.5 h-3.5 text-stone-400" /><span>{t('Reveal')}</span></>}
     </button>
@@ -98,7 +101,6 @@ export function AppTopBar({
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
         {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" onClick={onNextLocation} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold text-stone-200 bg-stone-950 border border-stone-700"><ArrowLeft size={14} /><span className="hidden md:inline">{t('Back to world map')}</span></button>}
-        {!showHome && appMode === 'study' && <button type="button" className="icon-button" onClick={onRestartLearn} aria-label={t('Start new Learn mode')} title={t('Start new Learn mode')}><XCircle size={16} /></button>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewStatsLength + 1}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
         <button type="button" className="mobile-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={t('Navigation')} onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button>
         <button type="button" className="mobile-menu-backdrop" aria-label={t('close')} onClick={() => setMobileMenuOpen(false)} />
@@ -126,6 +128,7 @@ export function AppTopBar({
       </div>
         </div>
       </div>
+      {!showHome && appMode === 'study' && <button type="button" className="icon-button learn-restart-button" onClick={onRestartLearn} aria-label={t('Start new Learn mode')} data-tooltip={t('Start new Learn mode')}><X size={18} /></button>}
     </header>
     {studyActions && createPortal(studyActions, document.body)}
   </>;

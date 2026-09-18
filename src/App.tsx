@@ -217,7 +217,7 @@ export default function App() {
     isRevealed, restoredStudyPanoRef, isStudySetupOpen, setIsStudySetupOpen, allCollections,
     learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true), studyImportedMapIdRef,
   });
-  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handleMapsLoaded,
+  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handlePreviousUploaded, canPreviousUploaded, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
   const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
@@ -430,7 +430,7 @@ export default function App() {
         onRestartLearn={() => startFreshMode('study')}
         onStatistics={() => { if (isGameActive && !window.confirm('Leave the active game and open Statistics?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('statistics'); setShowHome(false); setAppMode('review'); }}
         onClues={() => { if (isGameActive && !window.confirm('Leave the active game and open Clues?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('clues'); setShowHome(false); setAppMode('review'); }}
-        onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn}
+        onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn} onPreviousLocation={handlePreviousUploaded} canPreviousLocation={canPreviousUploaded}
         onAbandonGame={handleAbandonGame} onOpenHistory={() => setIsHistoryModalOpen(true)}
         onOpenNewGame={() => setIsNewGameModalOpen(true)} onOpenPreferences={() => setPreferencesOpen(true)}
         onToggleFullscreen={toggleFullscreen}
@@ -486,7 +486,7 @@ export default function App() {
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
         onCloseSummary={() => setSummaryGameRecord(null)}
         onGoToLocation={(location) => { setSummaryGameRecord(null); setIsGameActive(false); setCurrentLocation(location); setAppMode('study'); setIsRevealed(true); }}
-        onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.importedMapId; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
+        onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.source === 'uploaded' ? settings.importedMapId : undefined; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
         onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview(false) : undefined}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onDeleteGame={(id) => { const updated = dbReady ? pastGames.filter((game) => game.id !== id) : deleteGameRecord(id); setPastGames(updated); void trainerDb.deleteGame(id); }}

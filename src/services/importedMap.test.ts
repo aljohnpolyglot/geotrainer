@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseImportedMap } from './importedMap';
+import { moveImportedHistory, parseImportedMap } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -13,4 +13,16 @@ test('Map Maker exports retain valid exact locations without adding the map to c
   assert.deepEqual(map.points, [{ lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 }, { lat: 40, lng: -3 }]);
   assert.deepEqual(withoutImportedMaps([{ key: `local.importedMap:${map.id}` }, { key: 'local.currentMapId' }, { key: 'gamePreferences' }]), [{ key: 'gamePreferences' }]);
   assert.throws(() => parseImportedMap('{"customCoordinates":[{"lat":91,"lng":0}]}', 'bad.json'), /no valid/i);
+});
+
+test('uploaded Learn visits move backward and forward before drawing a new location', () => {
+  const first = { lat: 1, lng: 2, panoId: 'first', countryCode: 'SG' };
+  const second = { lat: 3, lng: 4, panoId: 'second', countryCode: 'SG' };
+  const start = moveImportedHistory({ locations: [], index: -1 }, 'next', first);
+  assert.strictEqual(moveImportedHistory(start, 'previous'), start);
+  const pair = moveImportedHistory(start, 'next', second);
+  const back = moveImportedHistory(pair, 'previous');
+  assert.equal(back.locations[back.index].panoId, 'first');
+  assert.deepEqual(moveImportedHistory(back, 'next').locations, pair.locations);
+  assert.equal(moveImportedHistory(back, 'next').index, 1);
 });
