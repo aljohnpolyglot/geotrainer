@@ -10,7 +10,7 @@ import { hasRemainingMetaLessons } from '../data/metaLessons';
 import { ImportedMapUpload } from './ImportedMapUpload';
 import { getImportedMap, type ImportedMap } from '../services/importedMap';
 
-export type StudySetup = { source: LearnSource; collectionId: string; countryCodes?: string[]; importedMapId?: string; environment: Environment; urbanLevel: UrbanLevel; samplingMode: SamplingMode; panoramaSource: PanoramaSource; allowInteriors: boolean; showCompass: boolean };
+export type StudySetup = { source: LearnSource; collectionId: string; countryCodes?: string[]; importedMapId?: string; importedMapVariation?: number; environment: Environment; urbanLevel: UrbanLevel; samplingMode: SamplingMode; panoramaSource: PanoramaSource; allowInteriors: boolean; showCompass: boolean };
 
 export function StudySetupModal({ open, collections, initial, onClose, onStart }: { open: boolean; collections: Collection[]; initial: StudySetup; onClose: () => void; onStart: (settings: StudySetup) => void }) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
@@ -37,7 +37,7 @@ export function StudySetupModal({ open, collections, initial, onClose, onStart }
         <label>{t('Street View imagery')}<select value={settings.panoramaSource} onChange={(event) => setSettings({ ...settings, panoramaSource: event.target.value as PanoramaSource })}><option value="official">{t('Official only')}</option><option value="mixed">{t('Official + contributor')}</option><option value="contributor">{t('Contributor only')}</option></select></label>
         <label>{t('Indoor coverage')}<select value={settings.allowInteriors ? 'mixed' : 'outdoor'} onChange={(event) => setSettings({ ...settings, allowInteriors: event.target.value === 'mixed' })}><option value="outdoor">{t('Outdoors only')}</option><option value="mixed">{t('Mixed indoors and outdoors')}</option></select></label>
       </div>}
-      {settings.source === 'uploaded' && <ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+      {settings.source === 'uploaded' && <><ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); void trainerDb.setSetting('local.currentMapId', map.id); }} /><div className="setup-field imported-map-variation"><label htmlFor="imported-map-variation">{t('Location variation')} <output htmlFor="imported-map-variation">{settings.importedMapVariation ?? 0}</output></label><input id="imported-map-variation" type="range" min="0" max="100" value={settings.importedMapVariation ?? 0} onChange={(event) => setSettings({ ...settings, importedMapVariation: Number(event.target.value) })} /><small>{t('0 uses uploaded locations; 100 explores up to 1 km nearby.')}</small></div></>}
     </div>
     <footer><button className="button primary" disabled={(settings.source === 'meta' && metaAvailable !== true) || (settings.source === 'uploaded' && !importedMap)} onClick={() => onStart({ ...settings, importedMapId: importedMap?.id, showCompass: true })}><Play size={16} />{t(settings.source === 'custom' ? 'Start learning' : settings.source === 'meta' ? 'Start Meta lessons' : settings.source === 'uploaded' ? 'Start learning' : 'Open world map')}</button></footer>
   </section></div>;

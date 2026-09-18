@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { moveImportedHistory, parseImportedMap } from './importedMap';
+import { moveImportedHistory, parseImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -25,4 +25,16 @@ test('uploaded Learn visits move backward and forward before drawing a new locat
   assert.equal(back.locations[back.index].panoId, 'first');
   assert.deepEqual(moveImportedHistory(back, 'next').locations, pair.locations);
   assert.equal(moveImportedHistory(back, 'next').index, 1);
+});
+
+test('uploaded variation keeps zero exact and bounds nearby positions', () => {
+  const point = { lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 };
+  assert.strictEqual(varyImportedPoint(point, 0), point);
+  const varied = varyImportedPoint(point, 100, () => 1);
+  assert.equal(varied.panoId, undefined);
+  assert.equal(varied.heading, 123);
+  assert.ok(Math.abs(varied.lat - point.lat) < .01);
+  assert.ok(Math.abs(varied.lng - point.lng) < .02);
+  assert.deepEqual(varyImportedPoint(point, -5), point);
+  assert.strictEqual(varyImportedPoint(point, Number.NaN), point);
 });

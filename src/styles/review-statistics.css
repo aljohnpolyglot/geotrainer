@@ -41,6 +41,13 @@
 .review-next-action button { min-width: 150px; padding: 11px 18px; color: #fff; background: var(--blue); border: 0; border-radius: 4px; font-weight: 800; cursor: pointer; }
 .study-result-map { height: 170px; margin-bottom: 10px; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
 .study-result-map .result-map-canvas { min-height: 170px; }
+.location-card-drag-handle button, .location-card-drag-handle a { display: inline-grid; min-width: 32px; min-height: 32px; place-items: center; }
+.location-card-drag-handle > div:first-child, .location-card-drag-handle > div:first-child > div:last-child { min-width: 0; }.location-card-drag-handle h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 600px) { .location-card-drag-handle button, .location-card-drag-handle a { min-width: 44px; min-height: 44px; } }
+#revealed-location-card.expanded { position: fixed; inset: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) 8px; z-index: 95; display: flex; flex-direction: column; width: auto; max-width: none; max-height: none; overflow-y: auto; scrollbar-width: thin; }
+#revealed-location-card.expanded .study-result-map { flex: 1; min-height: 220px; }
+#revealed-location-card.expanded .study-result-map .result-map-canvas { height: 100%; }
+#revealed-location-card[hidden] { display: none; }
 .location-card-drag-handle { cursor: grab; touch-action: none; }.location-card-drag-handle.dragging { cursor: grabbing; }
 .study-review-save { padding: 9px 0 10px; border-top: 1px solid var(--rule); }
 .study-review-save button { width: 100%; padding: 8px; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 3px; font-weight: 800; cursor: pointer; }

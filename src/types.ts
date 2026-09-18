@@ -119,7 +119,6 @@ export interface MapPreferences {
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   showCountryBorders?: boolean;
-  geotrainerMapStyle: boolean;
 }
 export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; }
 
@@ -359,7 +358,7 @@ export interface TrainingSession {
 export type ActiveWorkspace =
   | { mode: 'home' }
   | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
-  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; importedMapId?: string }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; importedMapId?: string; importedMapVariation?: number }
   | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {

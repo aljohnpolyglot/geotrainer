@@ -174,7 +174,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     <div
       ref={panelRef}
       id="guess-map-widget"
-      style={dragStyle}
+      style={isExpanded ? undefined : dragStyle}
       className={`absolute bottom-5 right-5 z-20 ${isExpanded ? 'expanded' : 'collapsed'} ${dragging ? '' : 'transition-[width,height] duration-300 ease-out'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
         isExpanded
           ? 'w-[92vw] max-w-2xl h-[65vh] max-h-[560px]'
@@ -204,8 +204,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           <button
             onClick={() => setIsExpanded((prev) => !prev)}
             aria-expanded={isExpanded}
-            aria-label={isExpanded ? t('Minimize map') : t('Enlarge map for precision')}
-            title={isExpanded ? t('Minimize map') : t('Enlarge map for precision')}
+            aria-label={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
+            title={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
             className="p-1 rounded text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

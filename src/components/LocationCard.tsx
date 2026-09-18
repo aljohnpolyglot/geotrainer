@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { LocationResult } from "../types";
 import { COUNTRIES } from "../data/countries";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
-import { MapPin, ExternalLink, Minimize2, Compass, Building } from "lucide-react";
+import { MapPin, ExternalLink, Maximize2, Minimize2, Minus, Compass, Building } from "lucide-react";
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
@@ -29,7 +29,9 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState<boolean>(true);
   const [flagError, setFlagError] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
+  useEffect(() => { if (hidden) setIsExpanded(false); }, [hidden]);
 
   const resolvedCountryCode = geocodeData?.countryCode || location.countryCode;
   const country = COUNTRIES[resolvedCountryCode];
@@ -81,7 +83,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const primaryArea = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
   return (
-    <div ref={panelRef} style={dragStyle} hidden={hidden} id="revealed-location-card" className="absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text">
+    <div ref={panelRef} style={isExpanded ? undefined : dragStyle} hidden={hidden} id="revealed-location-card" className={`absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text${isExpanded ? ' expanded' : ''}`}>
       {/* Header: Country + Flag CDN + Close */}
       <div {...dragHandleProps} className={`location-card-drag-handle flex items-start justify-between gap-3 mb-3${dragging ? ' dragging' : ''}`}>
         <div className="flex items-center space-x-2.5">
@@ -94,14 +96,15 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
 
           <div>
             <div className="flex items-center space-x-1.5">
-              <h3 className="text-base font-bold text-white tracking-tight leading-none">{countryName}</h3>
+              <h3 title={countryName} className="text-base font-bold text-white tracking-tight leading-none">{countryName}</h3>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-1">
-          <a href={mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}><ExternalLink className="w-4 h-4" /></a>
-          <button onClick={onHide} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minimize2 className="w-4 h-4" /></button>
+          <a href={mapsUrl} target="_blank" rel="noreferrer" aria-label={t('Open in Google Maps')} className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}><ExternalLink className="w-4 h-4" /></a>
+          <button onClick={() => { setIsExpanded(false); onHide(); }} aria-label={t('Hide location spoilers (R)')} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minus className="w-4 h-4" /></button>
+          <button onClick={() => setIsExpanded((value) => !value)} aria-expanded={isExpanded} aria-label={t(isExpanded ? 'Restore location card' : 'Maximize location card')} title={t(isExpanded ? 'Restore location card' : 'Maximize location card')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0">{isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}</button>
         </div>
       </div>
 
@@ -143,7 +146,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
         </div>
       </div>
 
-      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl active={!hidden} />
+      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl active={!hidden} resizeKey={isExpanded} />
 
       {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">

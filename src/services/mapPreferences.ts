@@ -12,7 +12,6 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   gestureHandling: 'auto',
   clickableIcons: false,
   showCountryBorders: true,
-  geotrainerMapStyle: true,
 };
 
 export const normalizeMapPreferences = (value: unknown): MapPreferences => {
@@ -27,7 +26,6 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
     showCountryBorders: source.showCountryBorders !== false,
-    geotrainerMapStyle: source.geotrainerMapStyle !== false,
   };
 };
 
@@ -71,6 +69,6 @@ export function mapPresentationOptions(preferences: MapPreferences, dark: boolea
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    styles: [...(preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : []), borderStyle],
+    styles: [...(useDark ? DARK_STYLE : LIGHT_STYLE), borderStyle],
   };
 }

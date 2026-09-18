@@ -2,6 +2,9 @@
 
 ## 2026-09-18
 
+- Added a 0–100 nearby-location slider to Uploaded map Learn, with exact placement at 0 and up to 1 km variation at 100; paused Learn sessions retain the setting.
+- Made the revealed Learn location card's minus and maximize controls distinct, and let its maximize button and the Play/Review guess-map maximize button fill the viewport.
+- Removed the redundant GeoTrainer map-style checkbox; Auto, Light, and Dark now directly control map colors, including for profiles that previously disabled the old switch.
 - Added Previous before Reveal in Uploaded map Learn, so learners can revisit sampled locations and move forward again with Next.
 - Moved Learn's X to the right side of the header, with a hover and focus hint explaining that it opens Learn setup.
 - Kept the mobile Play guess action in view, cleared the active-session menu overlap, moved Review progress into the mobile header, made result dialogs more compact, and added a default-on country-border toggle.

@@ -5,13 +5,14 @@ import { mapPresentationOptions, useMapPreferences } from '../services/mapPrefer
 
 type Point = { lat: number; lng: number };
 
-export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false, active = true }: {
+export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false, active = true, resizeKey }: {
   actual: Point;
   guess: Point | null;
   previousGuess?: Point | null;
   className?: string;
   fullscreenControl?: boolean;
   active?: boolean;
+  resizeKey?: boolean;
 }) {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
@@ -76,7 +77,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       mapRef.current?.fitBounds(boundsRef.current!, { top: 48, right: 48, bottom: 48, left: 48 });
     });
     return () => cancelAnimationFrame(frame);
-  }, [active]);
+  }, [active, resizeKey]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

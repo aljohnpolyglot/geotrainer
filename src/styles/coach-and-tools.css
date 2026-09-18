@@ -157,3 +157,4 @@
   .street-compass-bar { top: 10px; width: min(220px, calc(100% - 110px)); }
 }
 .meta-temporal-warning { display: block; margin-top: 11px; padding-top: 9px; color: var(--muted); border-top: 1px solid var(--rule); font-size: 11px; line-height: 1.45; }
+#guess-map-widget.expanded { position: fixed; inset: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) 8px; z-index: 95; width: auto; height: auto; max-width: none; max-height: none; opacity: 1; }

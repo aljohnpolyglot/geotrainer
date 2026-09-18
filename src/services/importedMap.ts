@@ -31,22 +31,35 @@ export function parseImportedMap(json: string, name: string): ImportedMap {
 export const saveImportedMap = (map: ImportedMap) => trainerDb.setSetting(`${IMPORTED_MAP_PREFIX}${map.id}`, map);
 export const getImportedMap = (id: string) => trainerDb.setting<ImportedMap>(`${IMPORTED_MAP_PREFIX}${id}`);
 
-export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false): Promise<LocationResult> {
+export function varyImportedPoint(point: MapPoint, variation: number, random = Math.random): MapPoint {
+  const metres = Number.isFinite(variation) ? Math.min(100, Math.max(0, variation)) * 10 : 0;
+  if (!metres) return point;
+  const distance = Math.sqrt(random()) * metres;
+  const bearing = random() * Math.PI * 2;
+  const lat = Math.max(-90, Math.min(90, point.lat + Math.cos(bearing) * distance / 111_320));
+  const lng = ((point.lng + Math.sin(bearing) * distance / (111_320 * Math.max(.01, Math.cos(point.lat * Math.PI / 180))) + 540) % 360) - 180;
+  return { lat, lng, heading: point.heading };
+}
+
+export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false, variation = 0): Promise<LocationResult> {
   const map = await getImportedMap(mapId);
   if (!map?.points.length) throw new Error('Upload this map again on this device to continue.');
+  variation = Number.isFinite(variation) ? Math.min(100, Math.max(0, variation)) : 0;
   const service = new google.maps.StreetViewService();
   const shuffled = shuffleInPlace([...map.points]);
   for (const point of shuffled) {
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     if (point.panoId && excluded.has(point.panoId)) continue;
-    const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => service.getPanorama(point.panoId ? { pano: point.panoId! } : { location: point, radius: 100 }, (result, status) => resolve(status === google.maps.StreetViewStatus.OK ? result : null)));
+    const target = varyImportedPoint(point, variation);
+    const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => service.getPanorama(target.panoId ? { pano: target.panoId } : { location: target, radius: 100 }, (result, status) => resolve(status === google.maps.StreetViewStatus.OK ? result : null)));
     if (!data?.location?.pano || !data.location.latLng || excluded.has(data.location.pano) || (requireNavigation && !data.links?.length)) continue;
     const lat = data.location.latLng.lat(), lng = data.location.latLng.lng();
-    if (calculateDistanceKm(lat, lng, point.lat, point.lng) > .25) continue;
+    if (calculateDistanceKm(lat, lng, point.lat, point.lng) > (variation ? Math.max(.1, variation / 100) : .25)) continue;
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;
     if (countryCode) return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading };
   }
-  if (excluded.size) return pickImportedLocation(mapId, new Set(), signal, requireNavigation);
+  if (excluded.size) return pickImportedLocation(mapId, new Set(), signal, requireNavigation, variation);
+  if (variation) return pickImportedLocation(mapId, new Set(), signal, requireNavigation);
   throw new Error('No available Street View locations remain in this map.');
 }
