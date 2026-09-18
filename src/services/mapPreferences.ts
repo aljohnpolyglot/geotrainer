@@ -45,6 +45,9 @@ export function useMapPreferences() {
 }
 
 const LIGHT_STYLE: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#f3f1e8' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#253b46' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
   { featureType: 'landscape', stylers: [{ color: '#f3f1e8' }] },
   { featureType: 'water', stylers: [{ color: '#a9d7e5' }] },
   { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
@@ -60,12 +63,11 @@ const DARK_STYLE: google.maps.MapTypeStyle[] = [
 ];
 
 export function mapPresentationOptions(preferences: MapPreferences, dark: boolean): google.maps.MapOptions {
-  const mapId = import.meta.env?.VITE_GOOGLE_MAP_ID?.trim();
   const useDark = preferences.mapPalette === 'dark' || (preferences.mapPalette !== 'light' && dark);
   return {
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    ...(mapId ? { mapId } : { styles: preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : [] }),
+    styles: preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : [],
   };
 }

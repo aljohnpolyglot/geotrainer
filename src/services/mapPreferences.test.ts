@@ -12,6 +12,9 @@ test('map preferences use safe defaults and normalize persisted choices', () => 
     mapType: 'terrain', mapPalette: 'auto', gestureHandling: 'cooperative', clickableIcons: true, geotrainerMapStyle: false,
   });
   const preferences = normalizeMapPreferences({ mapPalette: 'dark' });
+  const light = mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'light' }), true);
   assert.deepEqual(mapPresentationOptions(preferences, false).styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), true).styles);
-  assert.notDeepEqual(mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'light' }), true).styles, mapPresentationOptions(preferences, true).styles);
+  assert.deepEqual(light.styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), false).styles);
+  assert.deepEqual(light.styles?.[0], { elementType: 'geometry', stylers: [{ color: '#f3f1e8' }] });
+  assert.equal('mapId' in light, false);
 });

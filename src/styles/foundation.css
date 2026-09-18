@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --ink: #081018;
   --panel: #101b25;
@@ -22,4 +22,3 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
   outline: 2px solid var(--signal); outline-offset: 2px;
 }
 button:disabled { cursor: not-allowed; opacity: .48; }
-
