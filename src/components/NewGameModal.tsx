@@ -339,7 +339,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             </button>
           </div>
           <label className="panorama-source-setting">{t('Street View imagery')}<select value={panoramaSource} onChange={(event) => setPanoramaSource(event.target.value as PanoramaSource)}><option value="official">{t('Official only')}</option><option value="mixed">{t('Official + contributor')}</option><option value="contributor">{t('Contributor only')}</option></select></label>
-          <button type="button" role="switch" aria-checked={allowInteriors} onClick={() => setAllowInteriors((value) => !value)} className={`game-compass-setting ${allowInteriors ? 'enabled' : ''}`} title={t('Include indoor Street View panoramas when available.')}><span>{t('Allow interiors')}</span><strong>{allowInteriors ? t('Enabled') : t('Disabled')}</strong></button>
+          <label className="panorama-source-setting">{t('Indoor coverage')}<select value={allowInteriors ? 'mixed' : 'outdoor'} onChange={(event) => setAllowInteriors(event.target.value === 'mixed')}><option value="outdoor">{t('Outdoors only')}</option><option value="mixed">{t('Mixed indoors and outdoors')}</option></select></label>
 
           {/* 5. Timer Option */}
           <div className="space-y-1.5">

@@ -30,6 +30,8 @@ O [GeoGuessr](https://www.geoguessr.com/) se destaca em exploração, variedade 
 
 ## Modo Estudo
 
+No Estudo personalizado e no Jogo, **Cobertura interna** oferece Somente exteriores (padrão) ou Misto: interiores e exteriores. O Google não oferece uma busca confiável apenas por interiores; o modo misto pode mostrar ambos. Isso não altera mapas enviados, Meta, Explorar mapa ou Revisão.
+
 Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 10 MB. Use Próximo para outro local ou o X no cabeçalho para escolher outro modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar.
 
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
@@ -72,6 +74,8 @@ Quando o recorte tem um objeto principal claro em primeiro plano, o Coach o anal
 O Caderno preserva títulos, negrito e listas com marcadores ao colar. Respostas externas não são verificadas automaticamente; mantenha detalhes ilegíveis como incertos e confira cada afirmação com o que realmente aparece.
 
 ## Coleções e preferências
+
+Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. Automático acompanha a aparência do aplicativo; Claro ou Escuro mantêm a escolha nos mapas rodoviários e de relevo. Imagens de satélite mantêm suas cores.
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 

@@ -30,6 +30,8 @@ Un tentativo debole torna prima, una risposta solida più tardi. Distanza e punt
 
 ## Modalità Studio
 
+Nello Studio personalizzato e nel Gioco, **Copertura interna** offre Solo esterni (predefinito) o Misto: interni ed esterni. Google non offre una ricerca affidabile dei soli interni; il modo misto può mostrare entrambi. Mappe caricate, Meta, Esplora mappa e Ripasso non cambiano.
+
 Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricata. Per Mappa caricata, scegli un JSON di Map Maker con un elenco di luoghi o `customCoordinates`; ogni luogo richiede latitudine e longitudine valide. Il file deve essere inferiore a 10 MB. Usa Avanti per un altro luogo o la X nell’intestazione per scegliere un’altra modalità. La mappa resta su questo dispositivo; caricala anche sugli altri dispositivi.
 
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio. Lo stato salvato viene ripristinato dopo il ricaricamento, quindi l’azione non ricompare.
@@ -72,6 +74,8 @@ Se il ritaglio mostra un soggetto principale evidente in primo piano, il Coach a
 Il Taccuino conserva titoli, grassetto ed elenchi puntati incollati. Le risposte esterne non vengono verificate automaticamente: mantieni incerti i dettagli illeggibili e confronta ogni affermazione con ciò che è davvero visibile.
 
 ## Raccolte e preferenze
+
+In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. Automatico segue l’aspetto dell’app; Chiaro o Scuro mantiene la scelta per le mappe stradali e del terreno. Le immagini satellitari conservano i propri colori.
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 

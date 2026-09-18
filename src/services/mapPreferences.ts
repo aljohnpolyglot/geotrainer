@@ -8,6 +8,7 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   motionTracking: false,
   movementStyle: 'click',
   mapType: 'roadmap',
+  mapPalette: 'auto',
   gestureHandling: 'auto',
   clickableIcons: false,
   geotrainerMapStyle: true,
@@ -21,6 +22,7 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     motionTracking: source.motionTracking === true,
     movementStyle: source.movementStyle === 'arrows' ? 'arrows' : 'click',
     mapType: source.mapType === 'satellite' || source.mapType === 'hybrid' || source.mapType === 'terrain' ? source.mapType : 'roadmap',
+    mapPalette: source.mapPalette === 'light' || source.mapPalette === 'dark' ? source.mapPalette : 'auto',
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
     geotrainerMapStyle: source.geotrainerMapStyle !== false,
@@ -58,11 +60,12 @@ const DARK_STYLE: google.maps.MapTypeStyle[] = [
 ];
 
 export function mapPresentationOptions(preferences: MapPreferences, dark: boolean): google.maps.MapOptions {
-  const mapId = import.meta.env.VITE_GOOGLE_MAP_ID?.trim();
+  const mapId = import.meta.env?.VITE_GOOGLE_MAP_ID?.trim();
+  const useDark = preferences.mapPalette === 'dark' || (preferences.mapPalette !== 'light' && dark);
   return {
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    ...(mapId ? { mapId } : preferences.geotrainerMapStyle ? { styles: dark ? DARK_STYLE : LIGHT_STYLE } : {}),
+    ...(mapId ? { mapId } : { styles: preferences.geotrainerMapStyle ? (useDark ? DARK_STYLE : LIGHT_STYLE) : [] }),
   };
 }

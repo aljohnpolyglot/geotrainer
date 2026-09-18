@@ -107,6 +107,7 @@ export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
 export type MapTypePreference = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
+export type MapPalettePreference = 'auto' | 'light' | 'dark';
 export type MapGesturePreference = 'auto' | 'cooperative' | 'greedy';
 export interface MapPreferences {
   showImageryDate: boolean;
@@ -114,6 +115,7 @@ export interface MapPreferences {
   motionTracking: boolean;
   movementStyle: 'click' | 'arrows';
   mapType: MapTypePreference;
+  mapPalette?: MapPalettePreference;
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   geotrainerMapStyle: boolean;

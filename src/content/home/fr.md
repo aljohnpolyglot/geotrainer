@@ -30,6 +30,8 @@ Une réponse faible revient plus tôt ; une réponse solide attend plus longtemp
 
 ## Mode Étude
 
+Dans l’étude personnalisée et le jeu, **Couverture intérieure** propose Extérieur uniquement (par défaut) ou Mixte : intérieur et extérieur. Google ne fournit pas de recherche fiable limitée aux intérieurs ; le mode mixte peut montrer les deux. Ce réglage ne modifie pas les cartes importées, Meta, Explorer la carte ni la Révision.
+
 Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte importée. Pour Carte importée, choisissez un JSON Map Maker contenant une liste de lieux ou `customCoordinates` ; chaque lieu doit avoir une latitude et une longitude valides. Le fichier doit faire moins de 10 Mo. Utilisez Suivant pour changer de lieu ou la croix de l’en-tête pour choisir un autre mode. La carte reste sur cet appareil ; importez-la aussi sur tout autre appareil utilisé.
 
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif. L’état enregistré est restauré après rechargement, donc l’action ne réapparaît pas.
@@ -72,6 +74,8 @@ Si le recadrage montre un sujet principal évident au premier plan, le Coach l�
 Le Carnet conserve les titres, le gras et les listes à puces collés. Les réponses externes ne sont pas vérifiées automatiquement : laissez les détails illisibles incertains et confrontez chaque affirmation à ce qui est réellement visible.
 
 ## Collections et préférences
+
+Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** propose Auto, Clair ou Sombre. Auto suit l’apparence de l’application ; Clair ou Sombre garde le choix pour les plans routiers et de relief. Les images satellite conservent leurs couleurs.
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 

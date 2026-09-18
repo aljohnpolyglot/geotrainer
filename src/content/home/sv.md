@@ -30,6 +30,8 @@ En svag gissning återkommer tidigare, ett säkert svar senare. Avstånd och po�
 
 ## Lär
 
+I anpassat lärande och spel erbjuder **Inomhusbilder** Endast utomhus (standard) eller Blandat: inne och ute. Google har ingen tillförlitlig sökning efter enbart inomhusbilder; blandat läge kan visa båda. Uppladdade kartor, Meta, Utforska karta och Repetition påverkas inte.
+
 Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en JSON-fil från Map Maker med en lista över platser eller `customCoordinates`; varje plats behöver giltig latitud och longitud. Filen måste vara mindre än 10 MB. Nästa visar en annan plats och X i sidhuvudet öppnar valet av lärläge igen. Kartan stannar på den här enheten; ladda upp den igen på andra enheter.
 
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
@@ -76,6 +78,8 @@ När beskärningen har ett tydligt huvudobjekt i förgrunden analyserar coachen 
 Anteckningsboken bevarar inklistrade rubriker, fetstil och punktlistor. Externa svar verifieras inte automatiskt, så håll oläsliga detaljer osäkra och kontrollera varje påstående mot det som faktiskt syns.
 
 ## Samlingar och inställningar
+
+Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger.
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 

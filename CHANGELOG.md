@@ -2,6 +2,7 @@
 
 ## 2026-09-18
 
+- Replaced the interior toggle in Custom Learn and Play with an Outdoors/Mixed dropdown, and added Auto/Light/Dark map colors in Settings → Display.
 - Added Map Maker JSON upload as a fourth Learn path and a Play location source, with exact panorama selection, local map retention, and normal progress tracking.
 - Added an X action in Learn to return directly to setup and choose a new mode.
 - Skipped unchanged cloud backup reads and kept imported map files out of cloud backups to reduce Supabase usage.

@@ -79,6 +79,8 @@ Ein Ergebnis zeigt, wie eine Runde lief. GeoTrainer nimmt schwache Orte mit in u
 
 ## Lernmodus
 
+Für benutzerdefiniertes Lernen und Spielen gibt es bei **Innenaufnahmen** Nur draußen (Standard) oder Gemischt: drinnen und draußen. Google bietet keine verlässliche Suche nur nach Innenaufnahmen; Gemischt kann beides zeigen. Hochgeladene Karten, Meta, Karte erkunden und Wiederholung bleiben unverändert.
+
 Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladene Karte. Für eine hochgeladene Karte wähle eine Map-Maker-JSON-Datei mit einer Ortsliste oder `customCoordinates`; jeder Ort braucht gültige Breiten- und Längengrade. Die Datei muss kleiner als 10 MB sein. Mit Weiter öffnest du einen anderen Ort, mit dem X im Kopfbereich wählst du einen neuen Lernmodus. Die Karte bleibt auf diesem Gerät; lade sie auf anderen Geräten erneut hoch.
 
 Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisarten ohne Punktedruck.
@@ -159,6 +161,8 @@ Land, Entfernung, Punktzahl, Antwortzeit und Strengegrad ergeben intern die näc
 GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Werden fällige Karten zurückgehalten, meldet die Ansicht das erreichte Tageslimit, statt alle Wiederholungen als abgeschlossen zu bezeichnen.
 
 ## Planung und Einstellungen
+
+Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. Automatisch folgt dem App-Design; Hell oder Dunkel behält die gewählte Farbe für Straßen- und Geländekarten bei. Satellitenbilder behalten ihre Farben.
 
 ### Strengegrad
 
