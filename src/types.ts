@@ -108,6 +108,7 @@ export type SamplingMode = 'natural' | 'balanced';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
 export type MapTypePreference = 'roadmap' | 'satellite' | 'hybrid' | 'terrain';
 export type MapPalettePreference = 'auto' | 'light' | 'dark';
+export type ResultMapZoomPreference = 'closest' | 'country' | 'region' | 'world';
 export type MapGesturePreference = 'auto' | 'cooperative' | 'greedy';
 export interface MapPreferences {
   showImageryDate: boolean;
@@ -116,6 +117,7 @@ export interface MapPreferences {
   movementStyle: 'click' | 'arrows';
   mapType: MapTypePreference;
   mapPalette?: MapPalettePreference;
+  resultMapZoom?: ResultMapZoomPreference;
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   showCountryBorders?: boolean;

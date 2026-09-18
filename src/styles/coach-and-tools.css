@@ -126,6 +126,7 @@
   #new-game-dialog > div:nth-child(2) { padding: 18px !important; }
   :is(#round-result-modal, #game-summary-modal) > div > div:first-child::before { display: none; }
   #revealed-location-card { left: 12px; bottom: 12px; width: calc(100vw - 24px); }
+  #revealed-location-card.expanded { right: 12px; bottom: 12px; left: auto; width: calc(100vw - 24px); height: min(52vh, 360px); max-width: none; max-height: 360px; }
   #guess-map-widget { position: fixed; left: 12px; right: auto; bottom: max(12px, env(safe-area-inset-bottom)); }
   #guess-map-widget.expanded { width: calc(100vw - 24px); height: min(52vh, 360px); }
   #guess-map-widget.collapsed { width: auto; height: 48px; opacity: .96; }
@@ -157,4 +158,3 @@
   .street-compass-bar { top: 10px; width: min(220px, calc(100% - 110px)); }
 }
 .meta-temporal-warning { display: block; margin-top: 11px; padding-top: 9px; color: var(--muted); border-top: 1px solid var(--rule); font-size: 11px; line-height: 1.45; }
-#guess-map-widget.expanded { position: fixed; inset: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) 8px; z-index: 95; width: auto; height: auto; max-width: none; max-height: none; opacity: 1; }

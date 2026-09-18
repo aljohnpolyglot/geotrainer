@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { MapPreferences } from '../types';
+import type { MapPreferences, ResultMapZoomPreference } from '../types';
 import { trainerDb } from '../data/trainerDb';
 
 export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
@@ -9,6 +9,7 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   movementStyle: 'click',
   mapType: 'roadmap',
   mapPalette: 'auto',
+  resultMapZoom: 'country',
   gestureHandling: 'auto',
   clickableIcons: false,
   showCountryBorders: true,
@@ -23,11 +24,14 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     movementStyle: source.movementStyle === 'arrows' ? 'arrows' : 'click',
     mapType: source.mapType === 'satellite' || source.mapType === 'hybrid' || source.mapType === 'terrain' ? source.mapType : 'roadmap',
     mapPalette: source.mapPalette === 'light' || source.mapPalette === 'dark' ? source.mapPalette : 'auto',
+    resultMapZoom: source.resultMapZoom === 'closest' || source.resultMapZoom === 'region' || source.resultMapZoom === 'world' ? source.resultMapZoom : 'country',
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
     showCountryBorders: source.showCountryBorders !== false,
   };
 };
+
+export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 4 : zoom === 'world' ? 2 : 5;
 
 const MAP_PREFERENCES_EVENT = 'geotrainer:map-preferences';
 export const announceMapPreferences = (preferences: MapPreferences) => window.dispatchEvent(new CustomEvent(MAP_PREFERENCES_EVENT, { detail: normalizeMapPreferences(preferences) }));

@@ -75,7 +75,7 @@ El Cuaderno conserva títulos, negrita y listas con viñetas al pegar. Las respu
 
 ## Colecciones y preferencias
 
-En Configuración → Pantalla → Mapas, **Paleta de colores del mapa** permite Automático, Claro u Oscuro. Automático sigue la apariencia de la aplicación; Claro u Oscuro mantienen el color elegido en los mapas de carreteras y relieve. Las imágenes de satélite conservan sus colores. Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo aparecen cuando hay una frontera en el área visible del mapa.
+En Configuración → Pantalla → Mapas, **Paleta de colores del mapa** permite Automático, Claro u Oscuro. **Zoom del mapa de resultados** ofrece Más cercano, País, Región del país o Mundo; País es el valor predeterminado. Automático sigue la apariencia de la aplicación; Claro u Oscuro mantienen el color elegido en los mapas de carreteras y relieve. Las imágenes de satélite conservan sus colores. Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo aparecen cuando hay una frontera en el área visible del mapa.
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.
 

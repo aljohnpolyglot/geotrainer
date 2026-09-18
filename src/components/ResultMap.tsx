@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
+import { mapPresentationOptions, resultMapZoomLimit, useMapPreferences } from '../services/mapPreferences';
 
 type Point = { lat: number; lng: number };
 
@@ -60,7 +60,8 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
     if (previousGuess) addMarker(previousGuess, t('previousGuess'), '#2563eb', 6);
     map.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
     const idle = map.addListener('idle', () => {
-      if ((map.getZoom() || 0) > 15) map.setZoom(14);
+      const zoomLimit = resultMapZoomLimit(mapPreferences.resultMapZoom);
+      if ((map.getZoom() || 0) > zoomLimit) map.setZoom(zoomLimit);
       google.maps.event.removeListener(idle);
     });
     return () => {
@@ -68,7 +69,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       lines.forEach((line) => line.setMap(null));
       if (boundsRef.current === bounds) boundsRef.current = null;
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng, ui]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
     if (!active || !mapRef.current || !boundsRef.current) return;
