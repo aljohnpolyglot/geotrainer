@@ -35,5 +35,5 @@ export function learningPriorityTarget(priority: LearnPriority, countryCodes: st
   const gaps = leastSeen.flatMap((countryCode) => { const gap = blindSpot(countryCode, known.filter((item) => item.countryCode === countryCode)); return gap ? [{ countryCode, ...gap }] : []; });
   const largest = Math.max(...gaps.map((item) => item.score));
   const target = randomItem(gaps.filter((item) => item.score === largest), random);
-  return { countryCodes: [target.countryCode], preferredCandidate: target.candidate };
+  return target ? { countryCodes: [target.countryCode], preferredCandidate: target.candidate } : { countryCodes: [randomItem(leastSeen, random)] };
 }

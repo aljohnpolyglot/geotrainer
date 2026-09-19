@@ -1,7 +1,16 @@
 # Changelog
 
+## 2026-09-20
+
+- Added a responsive Notebook image cropper from the preview’s lower-right edit control, and replaced the fictional border diagram with a live Google map preview.
+- Moved uploaded Learn progress into the header beside Review progress, and kept Least exposure focused on its geographic target while widening to nearby available Street View coverage.
+
 ## 2026-09-19
 
+- Made a whole-region selection replace its individual city selections and added the missing Canadian province and territory Coverage map.
+- Split region and city selection into separate dropdowns and removable pills in Learn and Play. Empty selections restore country-wide or region-wide defaults.
+- Reset temporary Learn country pools when opening a new setup, fixing World showing only Germany after leaving a focused session.
+- Start least-exposure searches at their target before widening locally, restore coverage-seed retries for Mixed environments, and translate the panorama lookup failure message.
 - Added optional region and city pool pills beneath focused countries in Learn and Play, with alphabetical regions, population or alphabetical city ordering, and lazy local data for 31,491 cities across 2,790 regional pools.
 - Matched Statistics' due-now count and today's due bar to the daily-limited Review queue.
 - Added the revealed city, region, road, and formatted address to Review results alongside the exact coordinates.

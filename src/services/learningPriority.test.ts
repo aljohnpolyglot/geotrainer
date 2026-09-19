@@ -37,3 +37,10 @@ test('least exposure targets verified in-country seeds instead of bounding-box o
   assert.ok(target);
   assert.ok(COUNTRIES.AU.samplePoints.some((point) => point.lat === target.lat && point.lng === target.lng));
 });
+
+test('least exposure keeps a valid country when no geographic seed is available', () => {
+  const original = COUNTRIES.DE.samplePoints;
+  COUNTRIES.DE.samplePoints = [];
+  try { assert.deepEqual(learningPriorityTarget('least-exposure', ['DE'], [location('DE', 52.52, 13.405)], () => 0), { countryCodes: ['DE'] }); }
+  finally { COUNTRIES.DE.samplePoints = original; }
+});

@@ -48,7 +48,7 @@ Quando não há histórico elegível, Locais familiares e Menor exposição come
 
 Estudo é um primeiro contato sem nota. Escolha a coleção inteira, um país-alvo ou uma mistura de países que você costuma confundir; cada país aparece como uma pílula com bandeira removível. Salvar uma pista cria automaticamente um cartão reutilizável de Revisão sem inventar pontuação. O estado salvo é restaurado após recarregar, então a ação não reaparece.
 
-Depois de adicionar países, você pode adicionar regiões e cidades como pílulas independentes. As regiões aparecem em ordem alfabética; as cidades usam por padrão a importância pela população e também podem ser ordenadas alfabeticamente. **Todas as cidades disponíveis** usa os pontos de cidades incluídos na região; não representa todo o polígono administrativo nem garante cada estrada ou área rural.
+Use os menus separados **Regiões** e **Cidades** e remova seleções pelas pílulas. As regiões são agrupadas por país e as cidades por região. Sem regiões selecionadas, vale o conjunto normal do país inteiro. Sem cidades selecionadas numa região, todas as disponíveis são incluídas; escolher cidades restringe apenas essa região. Remover uma região remove suas cidades; remover a última cidade restaura todas as disponíveis. Depois de adicionar países, você pode adicionar regiões e cidades como pílulas independentes. As regiões aparecem em ordem alfabética; as cidades usam por padrão a importância pela população e também podem ser ordenadas alfabeticamente. **Todas as cidades disponíveis** usa os pontos de cidades incluídos na região; não representa todo o polígono administrativo nem garante cada estrada ou área rural. Ao abrir uma nova configuração de Aprender após sair de uma sessão focada, World e a lista completa de países são restaurados; Retomar mantém a sessão salva. Menor exposição procura primeiro no ponto escolhido e depois amplia a busca local. Em Misto, novas tentativas usam pontos de cobertura do país e mantêm os filtros. Se não houver resultado, tente o próximo local ou ajuste os filtros; a cobertura não é garantida.
 
 ## Modo Jogo
 
@@ -135,6 +135,8 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizagem do GeoGuessr, documentação e recursos para criar mapas.
 
 ## Aprender, Meta e Caderno
+
+Imagens coladas, enviadas ou capturadas no Caderno podem ser recortadas antes da análise ou do salvamento. Use o controle de edição no canto inferior direito da prévia, arraste a área ou os cantos e aplique o recorte.
 
 A **câmera 360°** no espaço de trabalho copia quatro direções do panorama atual como uma única imagem. A imagem vai diretamente para a área de transferência e não é salva no GeoTrainer.
 

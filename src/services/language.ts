@@ -1,4 +1,5 @@
 import type { LanguagePreferences, SupportedLanguage } from '../types';
+import { LOCATION_SETUP_COPY } from './locationSetupCopy';
 
 export const LANGUAGE_OPTIONS: Array<{ code: SupportedLanguage; label: string; nativeLabel: string; flagCode: string }> = [
   { code: 'en', label: 'English', nativeLabel: 'English', flagCode: 'gb' },
@@ -292,6 +293,7 @@ const REMAINING_UI: Record<string, Partial<Record<SupportedLanguage, string>>> =
   Delete: { en: 'Delete', es: 'Eliminar', pt: 'Excluir', fr: 'Supprimer', de: 'Löschen', it: 'Elimina', ru: 'Удалить', sv: 'Ta bort' },
   selected: { en: 'selected', es: 'seleccionados', pt: 'selecionados', fr: 'sélectionnés', de: 'ausgewählt', it: 'selezionati', ru: 'выбрано', sv: 'valda' },
   cancel: { en: 'Cancel', es: 'Cancelar', pt: 'Cancelar', fr: 'Annuler', de: 'Abbrechen', it: 'Annulla', ru: 'Отмена', sv: 'Avbryt' },
+  Edit:{en:'Edit',es:'Editar',pt:'Editar',fr:'Modifier',de:'Bearbeiten',it:'Modifica',ru:'Изменить',sv:'Redigera'}, 'Crop image':{en:'Crop image',es:'Recortar imagen',pt:'Recortar imagem',fr:'Recadrer l’image',de:'Bild zuschneiden',it:'Ritaglia immagine',ru:'Обрезать изображение',sv:'Beskär bild'}, 'Clue image crop preview':{en:'Clue image crop preview',es:'Vista previa del recorte',pt:'Prévia do recorte',fr:'Aperçu du recadrage',de:'Vorschau des Bildausschnitts',it:'Anteprima del ritaglio',ru:'Предпросмотр обрезки',sv:'Förhandsvisning av beskärning'}, 'Drag to position crop':{en:'Drag to position crop',es:'Arrastra para colocar el recorte',pt:'Arraste para posicionar o recorte',fr:'Faites glisser pour placer le recadrage',de:'Ziehen, um den Ausschnitt zu positionieren',it:'Trascina per posizionare il ritaglio',ru:'Перетащите область обрезки',sv:'Dra för att placera beskärningen'}, 'Resize crop':{en:'Resize crop',es:'Cambiar tamaño del recorte',pt:'Redimensionar recorte',fr:'Redimensionner le recadrage',de:'Ausschnitt skalieren',it:'Ridimensiona ritaglio',ru:'Изменить размер обрезки',sv:'Ändra beskärningens storlek'}, 'Reset crop':{en:'Reset crop',es:'Restablecer recorte',pt:'Redefinir recorte',fr:'Réinitialiser',de:'Ausschnitt zurücksetzen',it:'Ripristina ritaglio',ru:'Сбросить обрезку',sv:'Återställ beskärning'}, 'Apply crop':{en:'Apply crop',es:'Aplicar recorte',pt:'Aplicar recorte',fr:'Appliquer le recadrage',de:'Ausschnitt anwenden',it:'Applica ritaglio',ru:'Применить обрезку',sv:'Använd beskärning'}, 'Cropping…':{en:'Cropping…',es:'Recortando…',pt:'Recortando…',fr:'Recadrage…',de:'Wird zugeschnitten…',it:'Ritaglio…',ru:'Обрезка…',sv:'Beskär…'},
   saving: { en: 'Saving…', es: 'Guardando…', pt: 'Salvando…', fr: 'Enregistrement…', de: 'Speichern…', it: 'Salvataggio…', ru: 'Сохранение…', sv: 'Sparar…' },
   'Cloud field log': { en: 'Cloud field log', es: 'Registro de campo en la nube', pt: 'Registro de campo na nuvem', fr: 'Journal de terrain cloud', de: 'Cloud-Feldprotokoll', it: 'Registro di campo cloud', ru: 'Облачный полевой журнал', sv: 'Molnfältlogg' },
   'Close account window': { en: 'Close account window', es: 'Cerrar ventana de cuenta', pt: 'Fechar janela da conta', fr: 'Fermer la fenêtre du compte', de: 'Kontofenster schließen', it: 'Chiudi finestra account', ru: 'Закрыть окно аккаунта', sv: 'Stäng kontofönster' },
@@ -490,6 +492,6 @@ const COPY_OVERRIDES: Record<string, Partial<Record<SupportedLanguage, string>>>
 };
 
 export function translate(code: SupportedLanguage, key: string): string {
-  return COPY_OVERRIDES[key]?.[code] || HUB_TRANSLATIONS[code]?.[key] || SHELL[code]?.[key] || UI_TRANSLATIONS[code]?.[key] || EXTRA_UI[key]?.[code] || REMAINING_UI[key]?.[code] || STATISTICS_TRANSLATIONS[key]?.[code] || HUB_TRANSLATIONS.en[key] || SHELL.en[key] || UI_TRANSLATIONS.en[key] || REMAINING_UI[key]?.en || key;
+  return LOCATION_SETUP_COPY[key]?.[code] || COPY_OVERRIDES[key]?.[code] || HUB_TRANSLATIONS[code]?.[key] || SHELL[code]?.[key] || UI_TRANSLATIONS[code]?.[key] || EXTRA_UI[key]?.[code] || REMAINING_UI[key]?.[code] || STATISTICS_TRANSLATIONS[key]?.[code] || HUB_TRANSLATIONS.en[key] || SHELL.en[key] || UI_TRANSLATIONS.en[key] || REMAINING_UI[key]?.en || key;
 }
 

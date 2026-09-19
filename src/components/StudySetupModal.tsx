@@ -10,16 +10,17 @@ import { hasRemainingMetaLessons } from '../data/metaLessons';
 import { ImportedMapUpload } from './ImportedMapUpload';
 import { getImportedMap, type ImportedMap } from '../services/importedMap';
 import { LocationPoolPicker } from './LocationPoolPicker';
+import { normalizeStudySetup } from '../services/studySetup';
 
 export type StudySetup = { source: LearnSource; collectionId: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number; environment: Environment; urbanLevel: UrbanLevel; samplingMode: SamplingMode; priority: LearnPriority; panoramaSource: PanoramaSource; allowInteriors: boolean; showCompass: boolean };
 
 export function StudySetupModal({ open, collections, initial, onClose, onStart }: { open: boolean; collections: Collection[]; initial: StudySetup; onClose: () => void; onStart: (settings: StudySetup) => void }) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
-  const [settings, setSettings] = useState(initial);
+  const [settings, setSettings] = useState(() => normalizeStudySetup(initial, collections));
   const [metaAvailable, setMetaAvailable] = useState<boolean | null>(null);
   const [importedMap, setImportedMap] = useState<ImportedMap>();
   useEffect(() => { if (!open) return; let active = true; void trainerDb.setting<string>('local.currentMapId').then(async (id) => { const map = id && await getImportedMap(id); if (active) setImportedMap(map || undefined); }); return () => { active = false; }; }, [open]);
-  useEffect(() => { if (!open) return; let active = true; setSettings(initial); setMetaAvailable(null); void trainerDb.attempts().then((attempts) => { if (!active) return; const available = hasRemainingMetaLessons(attempts); setMetaAvailable(available); if (!available) setSettings((value) => value.source === 'meta' ? { ...value, source: 'custom' } : value); }); return () => { active = false; }; }, [open]);
+  useEffect(() => { if (!open) return; let active = true; setSettings(normalizeStudySetup(initial, collections)); setMetaAvailable(null); void trainerDb.attempts().then((attempts) => { if (!active) return; const available = hasRemainingMetaLessons(attempts); setMetaAvailable(available); if (!available) setSettings((value) => value.source === 'meta' ? { ...value, source: 'custom' } : value); }); return () => { active = false; }; }, [open]);
   if (!open) return null;
   const collection = collections.find((item) => item.id === settings.collectionId);
   const choices: Array<{ source: LearnSource; icon: typeof SlidersHorizontal; title: string; description: string }> = [

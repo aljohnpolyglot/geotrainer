@@ -21,3 +21,13 @@ test('Australia regional coverage includes every state and territory pool', () =
   assert.equal(Object.keys(regions).length, 8);
   for (const id of Object.keys(regions)) assert.match(svg, new RegExp(`id="${id}"`));
 });
+
+test('Canada regional coverage includes every province and territory', () => {
+  const directory = path.resolve(process.cwd(), 'public/admin1-regions/ca');
+  const regions = JSON.parse(fs.readFileSync(path.join(directory, 'regions.json'), 'utf8')) as Record<string, string>;
+  const svg = fs.readFileSync(path.join(directory, 'ca.svg'), 'utf8');
+  assert.equal(Object.keys(regions).length, 13);
+  for (const id of Object.keys(regions)) assert.match(svg, new RegExp(`id="${id}"`));
+  assert.equal(findRegionId('CA', regions, 'Québec', 'QC'), 'CAQC');
+  assert.equal(findRegionId('CA', regions, 'Newfoundland and Labrador', 'NL'), 'CANL');
+});

@@ -48,7 +48,7 @@ Si no existe historial apto, Lugares conocidos y Menor exposición empiezan desd
 
 Estudio es un primer encuentro sin nota. Elige una colección completa, un país objetivo o una mezcla de países que suelas confundir; cada país aparece como una píldora con bandera que puedes quitar. Guardar una pista crea automáticamente una tarjeta reutilizable de Repaso sin inventar una puntuación. El estado guardado se recupera al recargar, por lo que la acción no vuelve a aparecer.
 
-Después de añadir países, puedes añadir regiones y ciudades como píldoras independientes. Las regiones aparecen alfabéticamente; las ciudades se ordenan por importancia según la población de forma predeterminada y también pueden ordenarse alfabéticamente. **Todas las ciudades disponibles** usa los puntos de ciudad incluidos para esa región; no representa todo el polígono administrativo ni garantiza cada carretera o zona rural.
+Usa los desplegables separados **Regiones** y **Ciudades** y elimina selecciones con sus etiquetas. Las regiones se agrupan por país y las ciudades por región. Sin regiones seleccionadas se usa el país completo. Sin ciudades seleccionadas en una región se incluyen todas las disponibles; elegir ciudades limita solo esa región. Quitar una región elimina sus ciudades; quitar su última ciudad restaura todas las disponibles. Después de añadir países, puedes añadir regiones y ciudades como píldoras independientes. Las regiones aparecen alfabéticamente; las ciudades se ordenan por importancia según la población de forma predeterminada y también pueden ordenarse alfabéticamente. **Todas las ciudades disponibles** usa los puntos de ciudad incluidos para esa región; no representa todo el polígono administrativo ni garantiza cada carretera o zona rural. Al iniciar una nueva configuración de Aprender tras salir de una sesión centrada en países, se restaura World y la lista completa de países; Reanudar conserva la sesión guardada. Menor exposición busca primero en el punto elegido y luego amplía la búsqueda local. En Mixto, los reintentos usan puntos de cobertura del país y mantienen los filtros. Si no hay coincidencias, prueba el siguiente lugar o ajusta los filtros; la cobertura no está garantizada.
 
 ## Modo Juego
 
@@ -135,6 +135,8 @@ Combina marcas viales, lado de conducción, alfabetos, postes, relieve, arquitec
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizaje de GeoGuessr, documentación y recursos para crear mapas.
 
 ## Aprender, Meta y Cuaderno
+
+Las imágenes pegadas, subidas o capturadas en el Cuaderno se pueden recortar antes de analizarlas o guardarlas. Usa el control de edición en la esquina inferior derecha de la vista previa, arrastra el área o sus esquinas y aplica el recorte.
 
 La **cámara de 360°** del espacio de trabajo copia cuatro direcciones del panorama actual como una sola imagen. La imagen va directamente al portapapeles y no se guarda en GeoTrainer.
 

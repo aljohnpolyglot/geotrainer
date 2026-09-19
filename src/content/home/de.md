@@ -101,7 +101,7 @@ Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisart
 
 Wähle eine ganze Sammlung, ein einzelnes Zielland oder einen Ländermix für typische Verwechslungen. Jedes gewählte Land erscheint als Flaggen-Pille und kann einzeln entfernt werden.
 
-Nach dem Hinzufügen von Ländern kannst du Regionen und Städte als eigene Pillen hinzufügen. Regionen sind alphabetisch sortiert; Städte werden standardmäßig nach Bedeutung anhand der Einwohnerzahl sortiert und können alphabetisch angezeigt werden. **Alle verfügbaren Städte** verwendet die enthaltenen Stadtpunkte einer Region; dies deckt nicht das gesamte Verwaltungsgebiet ab und garantiert nicht jede Straße oder ländliche Gegend.
+Verwende die getrennten Auswahllisten **Regionen** und **Städte** und entferne Auswahlen über ihre Pillen. Regionen sind nach Land und Städte nach Region gruppiert. Ohne ausgewählte Region gilt der normale landesweite Pool. Ohne ausgewählte Stadt einer Region sind alle verfügbaren Städte enthalten; einzelne Städte grenzen nur diese Region ein. Das Entfernen einer Region entfernt ihre Städte; das Entfernen ihrer letzten Stadt stellt alle verfügbaren Städte wieder her. Nach dem Hinzufügen von Ländern kannst du Regionen und Städte als eigene Pillen hinzufügen. Regionen sind alphabetisch sortiert; Städte werden standardmäßig nach Bedeutung anhand der Einwohnerzahl sortiert und können alphabetisch angezeigt werden. **Alle verfügbaren Städte** verwendet die enthaltenen Stadtpunkte einer Region; dies deckt nicht das gesamte Verwaltungsgebiet ab und garantiert nicht jede Straße oder ländliche Gegend. Eine neue Lernkonfiguration nach einer gezielten Sitzung stellt World und die vollständige Länderliste wieder her; Fortsetzen behält die gespeicherte Sitzung. Geringste Erfahrung zuerst sucht zunächst am gewählten Punkt und erweitert dann lokal. Bei Gemischt nutzen weitere Versuche Abdeckungspunkte des Landes unter Beibehaltung der Filter. Ohne Treffer versuche den nächsten Ort oder ändere die Filter; Abdeckung ist nicht garantiert.
 
 ### Ein Panorama untersuchen
 
@@ -471,6 +471,8 @@ Lerne, warum ein Hinweis regional variiert, wo er unzuverlässig wird und womit 
 Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechne mit veralteten Bildern, regionalen Ausnahmen und Änderungen in Street View.
 
 ## Lernen, Meta und Notizbuch
+
+Eingefügte, hochgeladene oder aufgenommene Notizbuchbilder können vor Analyse oder Speichern zugeschnitten werden. Öffne unten rechts in der Vorschau die Bearbeitung, verschiebe den Ausschnitt oder seine Eckpunkte und wende ihn an.
 
 Die **360°-Kamera** im Arbeitsbereich kopiert vier Richtungen des aktuellen Panoramas als ein Bild. Das Bild wird direkt in die Zwischenablage gelegt und nicht in GeoTrainer gespeichert.
 

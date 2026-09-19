@@ -4,7 +4,7 @@ import test from 'node:test';
 type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
-let panoramaRequests: Array<{ source?: string }> = [];
+let panoramaRequests: Array<{ source?: string; location?: LatLng; radius?: number }> = [];
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
 
 class LatLng {
@@ -16,7 +16,7 @@ class LatLng {
 class StreetViewService {
   getPanorama(request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
-    panoramaRequests.push(request as { source?: string });
+    panoramaRequests.push(request as { source?: string; location?: LatLng; radius?: number });
     const result = results.shift()!;
     setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright ?? '© Google' }, result.status || 'OK'), result.delay || 0);
   }
@@ -129,6 +129,32 @@ test('interiors are excluded by default and allowed only when enabled', async ()
   currentResults = [{ lat: 7.8, lng: 7, pano: 'indoor-eligible', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, allowInteriors: true });
   assert.equal('source' in panoramaRequests[0], false);
+});
+
+test('least-exposure searches the target before jitter and Mixed retries recover around coverage seeds', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const { COUNTRIES } = await import('../data/countries');
+  const anchor = { countryCode: 'DE', lat: 52.52, lng: 13.405, radiusKm: 40 };
+  currentResults = [
+    ...Array.from({ length: 10 }, (_, index) => ({ lat: 80 + index, lng: 0, pano: `missing-${index}`, countryCode: 'DE', status: 'ZERO_RESULTS' })),
+    { lat: 50.08, lng: 14.43, pano: 'wrong-border', countryCode: 'CZ', links: [{}] },
+    { lat: 52.52, lng: 13.405, pano: 'german-coverage', countryCode: 'DE', links: [{}] },
+  ];
+  results = [...currentResults]; panoramaRequests = [];
+  const originalRandom = Math.random; Math.random = () => .5;
+  try {
+    const found = await new StreetViewLocationGenerator().findRandomLocation(['DE'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { preferredCandidate: anchor, requireNavigation: true });
+    assert.equal(panoramaRequests[0].location!.lat(), anchor.lat);
+    assert.equal(panoramaRequests[0].location!.lng(), anchor.lng);
+    assert.equal(panoramaRequests[0].radius, 12000);
+    assert.equal(panoramaRequests[1].radius, 16000);
+    assert.equal(panoramaRequests[2].radius, 32000);
+    const seed = COUNTRIES.DE.samplePoints[Math.floor(COUNTRIES.DE.samplePoints.length * .5)];
+    assert.notEqual(panoramaRequests[10].location!.lat(), seed.lat);
+    assert.notEqual(panoramaRequests[10].location!.lng(), seed.lng);
+    assert.equal(found.panoId, 'german-coverage');
+    assert.equal(found.countryCode, 'DE');
+  } finally { Math.random = originalRandom; }
 });
 
 test('an aborted lookup cannot return a stale panorama', async () => {

@@ -48,7 +48,7 @@ Sans historique admissible, Lieux familiers et Moins exploré commencent dans l�
 
 Étude est une première rencontre non notée. Choisissez une collection, un pays cible ou un groupe de pays souvent confondus ; chaque pays devient une pastille avec drapeau que vous pouvez retirer. Enregistrer un indice crée automatiquement une carte de Révision sans score fictif. L’état enregistré est restauré après rechargement, donc l’action ne réapparaît pas.
 
-Après avoir ajouté des pays, vous pouvez ajouter des régions et des villes sous forme de pastilles indépendantes. Les régions sont classées par ordre alphabétique ; les villes sont classées par importance selon leur population par défaut, avec une option alphabétique. **Toutes les villes disponibles** utilise les points de ville inclus dans la région ; ce choix ne couvre pas tout le polygone administratif et ne garantit pas chaque route ou zone rurale.
+Utilisez les listes séparées **Régions** et **Villes** et retirez les sélections avec leurs pastilles. Les régions sont regroupées par pays, les villes par région. Sans région sélectionnée, le choix porte sur tout le pays. Sans ville sélectionnée dans une région, toutes ses villes disponibles sont incluses ; choisir des villes limite uniquement cette région. Retirer une région retire ses villes ; retirer sa dernière ville rétablit toutes ses villes disponibles. Après avoir ajouté des pays, vous pouvez ajouter des régions et des villes sous forme de pastilles indépendantes. Les régions sont classées par ordre alphabétique ; les villes sont classées par importance selon leur population par défaut, avec une option alphabétique. **Toutes les villes disponibles** utilise les points de ville inclus dans la région ; ce choix ne couvre pas tout le polygone administratif et ne garantit pas chaque route ou zone rurale. Une nouvelle configuration Apprendre après une session ciblée rétablit World et la liste complète des pays ; Reprendre conserve la session enregistrée. Le mode de moindre exposition cherche d’abord au point choisi, puis élargit localement. En mode Mixte, les nouvelles tentatives utilisent des points de couverture du pays en conservant les filtres. Sans résultat, essayez le lieu suivant ou modifiez les filtres ; la couverture n’est pas garantie.
 
 ## Mode Jeu
 
@@ -135,6 +135,8 @@ Croisez marquages routiers, sens de circulation, écritures, poteaux, relief, ar
 - [Learnable Meta](https://learnablemeta.com/) — cartes d’apprentissage GeoGuessr, documentation et ressources de création de cartes.
 
 ## Apprendre, Méta et Carnet
+
+Les images collées, importées ou capturées dans le Carnet peuvent être recadrées avant l’analyse ou l’enregistrement. Utilisez la commande en bas à droite de l’aperçu, déplacez la zone ou ses poignées, puis appliquez le recadrage.
 
 La **caméra à 360°** de l’espace de travail copie quatre directions du panorama actuel dans une seule image. L’image est placée directement dans le presse-papiers et n’est pas enregistrée dans GeoTrainer.
 

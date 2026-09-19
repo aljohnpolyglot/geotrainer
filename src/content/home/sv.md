@@ -48,7 +48,7 @@ Om det inte finns någon möjlig historik börjar Bekanta platser och Minst erfa
 
 Studera är ett första möte utan betyg. Välj hela samlingen, ett målland eller en grupp länder som du ofta blandar ihop; varje land visas som en borttagbar flaggbricka. När du sparar en ledtråd skapas automatiskt ett repetitionskort utan påhittad poäng. Det sparade läget återställs efter omladdning, så åtgärden visas inte igen.
 
-När du har lagt till länder kan du lägga till regioner och städer som egna brickor. Regioner visas alfabetiskt; städer sorteras som standard efter betydelse utifrån befolkning och kan även sorteras alfabetiskt. **Alla tillgängliga städer** använder de inkluderade stadspunkterna i regionen; valet täcker inte hela den administrativa gränsen och garanterar inte varje väg eller landsbygdsområde.
+Använd de separata listorna **Regioner** och **Städer** och ta bort val med deras brickor. Regioner grupperas efter land och städer efter region. Utan valda regioner används den vanliga poolen för hela landet. Utan valda städer i en region ingår alla tillgängliga städer; valda städer begränsar bara den regionen. Om du tar bort en region tas dess städer också bort; om du tar bort den sista staden återställs alla tillgängliga städer i regionen. När du har lagt till länder kan du lägga till regioner och städer som egna brickor. Regioner visas alfabetiskt; städer sorteras som standard efter betydelse utifrån befolkning och kan även sorteras alfabetiskt. **Alla tillgängliga städer** använder de inkluderade stadspunkterna i regionen; valet täcker inte hela den administrativa gränsen och garanterar inte varje väg eller landsbygdsområde. En ny Lär-inställning efter en fokuserad session återställer World och hela landslistan; Återuppta behåller den sparade sessionen. Minst exponering först söker först vid den valda punkten och utökar sedan sökningen lokalt. I Blandat använder nya försök landets täckningspunkter med filtren kvar. Om ingen plats hittas, prova nästa plats eller ändra filtren; täckning kan inte garanteras.
 
 ## Spelläge
 
@@ -141,6 +141,8 @@ Kombinera vägmarkeringar, körsida, skriftsystem, stolpar, terräng, arkitektur
 - [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-lärkartor, dokumentation och resurser för att skapa kartor.
 
 ## Lär, Meta och Anteckningsbok
+
+Inklistrade, uppladdade och fångade bilder i Anteckningsboken kan beskäras före analys eller sparning. Använd redigeringsknappen nere till höger i förhandsvisningen, dra området eller dess hörn och använd beskärningen.
 
 **360°-kameran** i arbetsytan kopierar fyra riktningar från det aktuella panoramat som en enda bild. Bilden skickas direkt till urklipp och sparas inte i GeoTrainer.
 

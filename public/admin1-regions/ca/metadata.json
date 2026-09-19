@@ -1,0 +1,8 @@
+{
+  "country": "Canada",
+  "countryCode": "ca",
+  "source": "Natural Earth 1:50m Admin 1 states and provinces",
+  "sourceUrl": "https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-1-states-provinces/",
+  "license": "public domain",
+  "regionCount": 13
+}

@@ -48,7 +48,7 @@ Quando non esiste una cronologia idonea, Luoghi familiari e Minore esposizione i
 
 Studio è un primo incontro senza voto. Scegli la raccolta intera, un paese obiettivo o un gruppo di paesi che confondi spesso; ogni paese appare come una pillola con bandiera rimovibile. Salvare un indizio crea automaticamente una scheda di Ripasso senza inventare un punteggio. Lo stato salvato viene ripristinato dopo il ricaricamento, quindi l’azione non ricompare.
 
-Dopo aver aggiunto i paesi, puoi aggiungere regioni e città come pillole separate. Le regioni sono in ordine alfabetico; le città sono ordinate per importanza in base alla popolazione per impostazione predefinita e possono essere ordinate alfabeticamente. **Tutte le città disponibili** usa i punti città inclusi nella regione; non copre l’intero confine amministrativo e non garantisce ogni strada o area rurale.
+Usa i menu separati **Regioni** e **Città** e rimuovi le selezioni dalle rispettive pillole. Le regioni sono raggruppate per paese e le città per regione. Senza regioni selezionate si usa il normale insieme nazionale. Senza città selezionate in una regione sono incluse tutte quelle disponibili; scegliere città limita solo quella regione. Rimuovere una regione elimina le sue città; rimuovere la sua ultima città ripristina tutte quelle disponibili. Dopo aver aggiunto i paesi, puoi aggiungere regioni e città come pillole separate. Le regioni sono in ordine alfabetico; le città sono ordinate per importanza in base alla popolazione per impostazione predefinita e possono essere ordinate alfabeticamente. **Tutte le città disponibili** usa i punti città inclusi nella regione; non copre l’intero confine amministrativo e non garantisce ogni strada o area rurale. Una nuova configurazione Impara dopo una sessione mirata ripristina World e l’elenco completo dei paesi; Riprendi mantiene la sessione salvata. Minore esposizione cerca prima nel punto scelto, poi amplia la ricerca locale. In modalità Mista, i tentativi successivi usano punti di copertura del paese mantenendo i filtri. Senza risultati, prova il luogo successivo o modifica i filtri; la copertura non è garantita.
 
 ## Modalità Gioco
 
@@ -135,6 +135,8 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 - [Learnable Meta](https://learnablemeta.com/) — mappe didattiche per GeoGuessr, documentazione e risorse per creare mappe.
 
 ## Impara, Meta e Taccuino
+
+Le immagini incollate, caricate o acquisite nel Taccuino possono essere ritagliate prima dell’analisi o del salvataggio. Usa il controllo di modifica in basso a destra nell’anteprima, trascina l’area o gli angoli e applica il ritaglio.
 
 La **fotocamera a 360°** nell’area di lavoro copia quattro direzioni del panorama corrente come un’unica immagine. L’immagine viene inviata direttamente agli appunti e non viene salvata in GeoTrainer.
 

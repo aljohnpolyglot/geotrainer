@@ -67,3 +67,8 @@
 .notebook-note-limit { display: block; margin-block-start: 4px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: end; }
 .street-view-explorer-search { display: flex; min-width: min(440px,45vw); min-height: 42px; align-items: center; gap: 8px; padding-inline-start: 11px; color: var(--carbon); background: var(--paper); border-radius: 4px; }.street-view-explorer-search input { min-width: 0; flex: 1; padding: 8px 0; color: var(--carbon); background: transparent; border: 0; outline: 0; font-size: 16px; }.street-view-explorer-search button { align-self: stretch; padding-inline: 14px; color: #fff; background: var(--blue); border-radius: 0 4px 4px 0; font-size: 12px; font-weight: 800; }.street-view-explorer-search button:focus-visible,.street-view-explorer-search input:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
 @media (max-width: 720px) { .street-view-explorer > header { flex-wrap: wrap; }.street-view-explorer-search { order: 3; width: 100%; min-width: 0; }.street-view-explorer-map { min-height: 0; } }
+.location-pool-field { display: grid; gap: 8px; min-width: 0; }
+.location-pool-field > label { display: grid; gap: 7px; }
+.location-pool-field .country-mix-chips button { max-width: 100%; text-align: left; }
+.location-pool-field .country-mix-chips span { min-width: 0; overflow-wrap: anywhere; }
+.location-pool-field .country-mix-chips svg, .location-pool-field .country-flag { flex-shrink: 0; }
