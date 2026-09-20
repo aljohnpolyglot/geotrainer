@@ -44,16 +44,17 @@ export function deleteCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
   return next;
 }
 
-export function splitDuplicateNotes<T extends { text: string; category?: string; imageUrl?: string; analysis?: unknown }>(notes: T[]) {
+export function splitDuplicateNotes<T extends { text: string; category?: string; imageUrl?: string; imageKey?: string; analysis?: unknown }>(notes: T[]) {
   const body = (note: T) => note.text.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
   const text = (note: T) => `${body(note)}\n${note.category || ''}`;
-  const score = (note: T) => Number(!!note.imageUrl) * 4 + Number(!!text(note).trim()) * 2 + Number(!!note.category) + Number(!!note.analysis);
+  const image = (note: T) => note.imageKey || note.imageUrl;
+  const score = (note: T) => Number(!!image(note)) * 4 + Number(!!text(note).trim()) * 2 + Number(!!note.category) + Number(!!note.analysis);
   const unique: T[] = []; const duplicates: T[] = [];
   for (const note of notes) {
     const meaningful = !!text(note).trim();
-    const sameImage = note.imageUrl ? unique.filter((item) => item.imageUrl === note.imageUrl) : [];
+    const sameImage = image(note) ? unique.filter((item) => image(item) === image(note)) : [];
     const blank = sameImage.find((item) => !text(item).trim());
-    const match = sameImage.find((item) => text(item) === text(note)) || (!meaningful ? sameImage.find((item) => text(item).trim()) : blank) || (body(note) ? unique.find((item) => body(item) === body(note) && (!item.imageUrl || !note.imageUrl)) : unique.find((item) => !item.imageUrl && text(item) === text(note)));
+    const match = sameImage.find((item) => text(item) === text(note)) || (!meaningful ? sameImage.find((item) => text(item).trim()) : blank) || (body(note) ? unique.find((item) => body(item) === body(note) && (!image(item) || !image(note))) : !image(note) ? unique.find((item) => !image(item) && text(item) === text(note)) : undefined);
     if (!match) unique.push(note);
     else if (score(note) > score(match)) { unique[unique.indexOf(match)] = note; duplicates.push(match); }
     else duplicates.push(note);

@@ -40,10 +40,12 @@ test('Available notes remove only same-image blanks or exact repeats', async () 
     { id: 'other-caption', text: 'Yellow center line', imageUrl: 'image-a' },
     { id: 'different', text: 'Blue bus', imageUrl: 'image-b' },
     { id: 'empty', text: '' },
+    { id: 'cloud-copy', text: '', imageUrl: 'signed-url-b', imageKey: 'same-image' },
+    { id: 'cloud-copy-again', text: '', imageUrl: 'signed-url-c', imageKey: 'same-image' },
   ];
   const result = splitDuplicateNotes(rows);
-  assert.deepEqual(result.unique.map(({ id }) => id), ['rich', 'other-caption', 'different', 'empty']);
-  assert.deepEqual(result.duplicates.map(({ id }) => id), ['image-only', 'caption-only']);
+  assert.deepEqual(result.unique.map(({ id }) => id), ['rich', 'other-caption', 'different', 'empty', 'cloud-copy']);
+  assert.deepEqual(result.duplicates.map(({ id }) => id), ['image-only', 'caption-only', 'cloud-copy-again']);
 });
 
 test('editing a Notebook note replaces its previous version', async () => {

@@ -2,6 +2,7 @@
 
 ## 2026-09-20
 
+- Fixed Available notes duplicate cleanup when identical cloud images use different signed URLs.
 - Added editable saved-clue notes, full-screen clue images, sync-safe clue deletion, exact image/text duplicate cleanup, and hours/minutes activity totals on Home; removed the photo-recovery summary warning.
 - Added a full-screen saved-image viewer from clue thumbnails, with backdrop, Escape, and mobile-safe close controls.
 - Added consistent detail and Street View location actions to every My Clues entry that has a saved panorama, plus persisted-view thumbnails for legacy 360° Coach analyses.
