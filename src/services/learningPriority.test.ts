@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
-import { learningPriorityTarget } from './learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder } from './learningPriority';
 
 const location = (countryCode: string, lat: number, lng: number, encounterCount = 1): TrainerLocation => ({ id: `${countryCode}-${lat}-${lng}`, panoId: `${countryCode}-${lat}-${lng}`, countryCode, lat, lng, encounterCount, firstSeenAt: 1, lastSeenAt: 1 });
 
@@ -24,6 +24,16 @@ test('least exposure keeps the same rule for one country, mixed pools, continent
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO'], known, () => 0).countryCodes, ['SE']);
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'FI'], known, () => 0).countryCodes, ['FI']);
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'JP', 'BR'], known, () => 0).countryCodes, ['BR']);
+  assert.deepEqual(leastExposureCountryOrder(['SE', 'NO', 'JP', 'BR'], known, 'BR'), ['BR', 'JP', 'SE', 'NO']);
+});
+
+test('real learner pools keep least-exposure fallback order', () => {
+  const histories = [
+    { name: 'confusion pair', codes: ['NL', 'BE'], known: [location('NL', 52.1, 5.3, 2), location('BE', 50.8, 4.4, 7)], first: 'NL', expected: ['NL', 'BE'] },
+    { name: 'continental study', codes: ['FR', 'DE', 'ES', 'IT'], known: [location('FR', 48.8, 2.3, 8), location('DE', 52.5, 13.4, 4), location('IT', 41.9, 12.5, 2)], first: 'ES', expected: ['ES', 'IT', 'DE', 'FR'] },
+    { name: 'world study', codes: ['US', 'BR', 'JP', 'ZA'], known: [location('US', 40.7, -74, 12), location('BR', -23.5, -46.6, 3), location('JP', 35.7, 139.7, 6)], first: 'ZA', expected: ['ZA', 'BR', 'JP', 'US'] },
+  ];
+  histories.forEach(({ name, codes, known, first, expected }) => assert.deepEqual(leastExposureCountryOrder(codes, known, first), expected, name));
 });
 
 test('equal country exposure is resolved by the larger normalized geographic blind spot', () => {
@@ -54,4 +64,14 @@ test('least exposure fills grey regional coverage before revisiting a represente
   const target = learningPriorityTarget('least-exposure', ['SE'], known, () => 0, regions);
   assert.equal(target.preferredCandidate?.lat, 65.6);
   assert.equal(target.preferredCandidate?.lng, 22);
+});
+
+test('a large-country study targets its grey region before revisiting the encountered side', () => {
+  const regions = [
+    { id: 'AU.NSW', name: 'New South Wales', cities: [{ name: 'Sydney', lat: -33.87, lng: 151.21, population: 1, class: 'major' as const, urbanRadiusKm: 16 }] },
+    { id: 'AU.WA', name: 'Western Australia', cities: [{ name: 'Perth', lat: -31.95, lng: 115.86, population: 1, class: 'major' as const, urbanRadiusKm: 16 }] },
+  ];
+  const target = learningPriorityTarget('least-exposure', ['AU'], [{ ...location('AU', -33.87, 151.21, 12), adminArea: 'New South Wales' }], () => 0, regions);
+  assert.equal(target.preferredCandidate?.lat, -31.95);
+  assert.equal(target.preferredCandidate?.lng, 115.86);
 });

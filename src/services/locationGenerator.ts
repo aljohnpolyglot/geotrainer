@@ -161,8 +161,10 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
     const sv = this.getService();
     const batchAttempts = options.environment === 'rural' ? 30 : 20;
+    const countryBatchAttempts = 4;
     const maxAttempts = context.maxAttempts ?? Infinity;
     const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
+    const preferredCountryCodes = context.preferredCountryCodes?.filter((code) => countryCodes.includes(code));
     if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -175,7 +177,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         ? countryCodes.filter((code) => (this.balancedCounts.get(code) || 0) === Math.min(...countryCodes.map((item) => this.balancedCounts.get(item) || 0)))
         : countryCodes;
       const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
-      const randomCountryCode = focused?.target.countryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
+      const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[Math.floor((attempt - 1) / countryBatchAttempts) % preferredCountryCodes.length] : undefined;
+      const randomCountryCode = focused?.target.countryCode || preferredCountryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);

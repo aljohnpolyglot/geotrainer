@@ -70,6 +70,7 @@ export interface LocationRequestContext {
   excludedPanoIds?: ReadonlySet<string>;
   requireNavigation?: boolean;
   preferredCandidate?: { lat: number; lng: number; countryCode: string; minRadiusKm?: number; radiusKm?: number };
+  preferredCountryCodes?: readonly string[];
   locationTargets?: LocationPoolTarget[];
   /** Test/diagnostic ceiling; normal generation retries until aborted. */
   maxAttempts?: number;

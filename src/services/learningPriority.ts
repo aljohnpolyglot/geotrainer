@@ -6,6 +6,12 @@ import { normalizeRegionName } from './regionHeatmap';
 type PreferredCandidate = NonNullable<LocationRequestContext['preferredCandidate']>;
 
 const randomItem = <T,>(items: T[], random: () => number) => items[Math.floor(random() * items.length)];
+const countryExposure = (countryCode: string, locations: TrainerLocation[]) => locations.filter((item) => item.countryCode === countryCode).reduce((sum, item) => sum + item.encounterCount, 0);
+
+export const leastExposureCountryOrder = (countryCodes: string[], locations: TrainerLocation[], firstCountryCode?: string) => {
+  const remaining = countryCodes.filter((code) => code !== firstCountryCode).sort((a, b) => countryExposure(a, locations) - countryExposure(b, locations));
+  return firstCountryCode && countryCodes.includes(firstCountryCode) ? [firstCountryCode, ...remaining] : remaining;
+};
 
 const blindSpot = (countryCode: string, known: TrainerLocation[]): { candidate: PreferredCandidate; score: number } | undefined => {
   const country = COUNTRIES[countryCode];
@@ -56,7 +62,7 @@ export function learningPriorityTarget(priority: LearnPriority, countryCodes: st
     if (candidate) return { countryCodes, preferredCandidate: candidate };
   }
   if (!known.length) return { countryCodes };
-  const counts = new Map(countryCodes.map((code) => [code, known.filter((item) => item.countryCode === code).reduce((sum, item) => sum + item.encounterCount, 0)]));
+  const counts = new Map(countryCodes.map((code) => [code, countryExposure(code, known)]));
   const minimum = Math.min(...counts.values());
   const leastSeen = countryCodes.filter((code) => counts.get(code) === minimum);
   const unseen = leastSeen.filter((code) => !known.some((item) => item.countryCode === code));

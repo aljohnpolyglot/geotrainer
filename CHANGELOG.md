@@ -2,6 +2,7 @@
 
 ## 2026-09-20
 
+- Fixed multi-country Least exposure searches getting trapped on one sparse target; they now try its least-exposed region first, then quickly cycle through the remaining countries from least to most exposure until a panorama is found or the learner leaves.
 - Made Least exposure fill unvisited local regions before revisiting represented regions, including in single-country Learn pools.
 - Kept Learn and Play panorama searches retrying until success or cancellation, and increased country-border contrast on Google and Coverage maps.
 - Fixed Available notes duplicate cleanup when identical cloud images use different signed URLs.
