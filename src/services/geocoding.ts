@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { COUNTRIES } from '../data/countries';
+import { calculateDistanceKm } from './gameLogic';
+
 export interface ReverseGeocodeResult {
   formattedAddress: string;
   locality?: string;
@@ -15,6 +18,9 @@ export interface ReverseGeocodeResult {
 
 const geocodeCache = new Map<string, ReverseGeocodeResult>();
 let geocoderInstance: google.maps.Geocoder | null = null;
+
+export const normalizeReverseGeocodeCountry = (countryCode: string | undefined, lat: number, lng: number) => countryCode?.toUpperCase()
+  || (COUNTRIES.XK.samplePoints.some((point) => calculateDistanceKm(lat, lng, point.lat, point.lng) <= 20) ? 'XK' : undefined);
 
 function getGeocoder(): google.maps.Geocoder {
   if (!geocoderInstance) {
@@ -97,7 +103,7 @@ export async function reverseGeocodeLocation(lat: number, lng: number): Promise<
       adminAreaCode,
       route,
       countryName,
-      countryCode,
+      countryCode: normalizeReverseGeocodeCountry(countryCode, lat, lng),
     };
 
     geocodeCache.set(cacheKey, parsed);

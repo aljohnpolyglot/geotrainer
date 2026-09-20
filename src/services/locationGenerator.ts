@@ -25,6 +25,7 @@ const classesForLevel = (level: UrbanLevel) => level === 1 ? ['major'] : level =
 const mixedWeights = { urban: 35, suburban: 20, rural: 45 } as const;
 export const isOfficialGooglePanorama = (data: Pick<google.maps.StreetViewPanoramaData, 'copyright'>) => /\bGoogle\b/i.test(data.copyright || '');
 export const acceptsPanoramaSource = (official: boolean, source: EnvironmentSettings['panoramaSource'], allowContributors?: boolean) => { const mode = source || (allowContributors === true ? 'mixed' : 'official'); return mode === 'mixed' || (mode === 'official' ? official : !official); };
+const usesTightSeedSearch = (countryCode: string) => { const points = COUNTRIES[countryCode]?.samplePoints || []; return !!points.length && points.length <= 2 && points.every((a) => points.every((b) => calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= 2)); };
 
 export function chooseMixedEnvironment(recent: string[], random = Math.random): Exclude<EnvironmentSettings['environment'], 'mixed'> {
   const blocked = recent.length >= 2 && recent.at(-1) === recent.at(-2) ? recent.at(-1) : '';
@@ -121,6 +122,10 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       throw new Error(`Country ${countryCode} not found in database`);
     }
 
+    if (usesTightSeedSearch(countryCode)) {
+      const seed = country.samplePoints[Math.floor(Math.random() * country.samplePoints.length)];
+      return around({ ...seed, name: '', population: 0, class: 'local', urbanRadiusKm: 1 }, 0, .5, Math.random);
+    }
     if (settings.environment !== 'mixed') return sampleEnvironmentCandidate(countryCode, settings);
     const hasSeeds = country.samplePoints && country.samplePoints.length > 0;
 
@@ -165,6 +170,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     const maxAttempts = context.maxAttempts ?? Infinity;
     const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
     const preferredCountryCodes = context.preferredCountryCodes?.filter((code) => countryCodes.includes(code));
+    let preferredCountryOffset = 0;
     if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -177,7 +183,9 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         ? countryCodes.filter((code) => (this.balancedCounts.get(code) || 0) === Math.min(...countryCodes.map((item) => this.balancedCounts.get(item) || 0)))
         : countryCodes;
       const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
-      const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[Math.floor((attempt - 1) / countryBatchAttempts) % preferredCountryCodes.length] : undefined;
+      const preferredCountryPosition = attempt - 1 + preferredCountryOffset;
+      const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[Math.floor(preferredCountryPosition / countryBatchAttempts) % preferredCountryCodes.length] : undefined;
+      const skipPreferredCountry = () => { preferredCountryOffset += countryBatchAttempts - preferredCountryPosition % countryBatchAttempts - 1; };
       const randomCountryCode = focused?.target.countryCode || preferredCountryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
@@ -193,7 +201,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
       try {
         // Query nearest official outdoor street view panorama within search radius
-        const baseRadius = environment === 'urban' ? 8000 : environment === 'suburban' ? 12000 : 15000;
+        const baseRadius = usesTightSeedSearch(randomCountryCode) ? 1000 : environment === 'urban' ? 8000 : environment === 'suburban' ? 12000 : 15000;
         const radius = preferred ? Math.min(40000, Math.max(baseRadius, 8000 * 2 ** Math.max(0, strategyAttempt - 1))) : baseRadius;
 
         const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => {
@@ -230,12 +238,13 @@ export class StreetViewLocationGenerator implements LocationGenerator {
           if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
           if (!resolvedCountry || resolvedCountry !== randomCountryCode || !countryCodes.includes(resolvedCountry)) {
             console.warn(`Rejected panorama country mismatch: requested ${randomCountryCode}, resolved ${resolvedCountry || 'unknown'}`);
+            skipPreferredCountry();
             continue;
           }
           const cityDistance = candidate.city ? calculateDistanceKm(lat, lng, candidate.city.lat, candidate.city.lng) : null;
-          if (environment === 'urban' && cityDistance !== null && cityDistance > candidate.city!.urbanRadiusKm * 1.25) continue;
-          if (environment === 'suburban' && cityDistance !== null && (cityDistance < candidate.city!.urbanRadiusKm * .3 || cityDistance > candidate.city!.urbanRadiusKm * 2)) continue;
-          if (environment === 'rural' && (CITIES[resolvedCountry] || []).some((city) => calculateDistanceKm(lat, lng, city.lat, city.lng) <= Math.max(10, city.urbanRadiusKm * 1.25))) continue;
+          if (options.environment !== 'mixed' && environment === 'urban' && cityDistance !== null && cityDistance > candidate.city!.urbanRadiusKm * 1.25) continue;
+          if (options.environment !== 'mixed' && environment === 'suburban' && cityDistance !== null && (cityDistance < candidate.city!.urbanRadiusKm * .3 || cityDistance > candidate.city!.urbanRadiusKm * 2)) continue;
+          if (options.environment !== 'mixed' && environment === 'rural' && (CITIES[resolvedCountry] || []).some((city) => calculateDistanceKm(lat, lng, city.lat, city.lng) <= Math.max(10, city.urbanRadiusKm * 1.25))) continue;
           this.balancedCounts.set(resolvedCountry, (this.balancedCounts.get(resolvedCountry) || 0) + 1);
           return {
             countryCode: resolvedCountry,

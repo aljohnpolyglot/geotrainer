@@ -173,6 +173,31 @@ test('a prioritized country widens to the selected pool after its search batch',
   } finally { Math.random = originalRandom; }
 });
 
+test('a confirmed border mismatch immediately advances to the next prioritized country', async () => {
+  currentResults = [
+    { lat: 48.8, lng: 2.3, pano: 'wrong-border', countryCode: 'FR', links: [{}] },
+    { lat: 41.9, lng: 12.5, pano: 'italian-fallback', countryCode: 'IT', links: [{}] },
+  ];
+  results = [...currentResults]; panoramaCalls = 0;
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const found = await new StreetViewLocationGenerator().findRandomLocation(['DE', 'IT'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { preferredCountryCodes: ['DE', 'IT'], requireNavigation: true, maxAttempts: 2 });
+  assert.equal(found.countryCode, 'IT');
+  assert.equal(panoramaCalls, 2);
+});
+
+test('sparse-seed microstates avoid coarse country bounds and wide border searches', async () => {
+  currentResults = [{ lat: 43.73718, lng: 7.42145, pano: 'monaco', countryCode: 'MC', links: [{}] }];
+  results = [...currentResults]; panoramaRequests = [];
+  const originalRandom = Math.random; Math.random = () => .5;
+  try {
+    const { StreetViewLocationGenerator } = await import('./locationGenerator');
+    await new StreetViewLocationGenerator().findRandomLocation(['MC'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { requireNavigation: true, maxAttempts: 1 });
+    assert.ok(Math.abs(panoramaRequests[0].location!.lat() - 43.73718) < .01);
+    assert.ok(Math.abs(panoramaRequests[0].location!.lng() - 7.42145) < .01);
+    assert.equal(panoramaRequests[0].radius, 1000);
+  } finally { Math.random = originalRandom; }
+});
+
 test('an aborted lookup cannot return a stale panorama', async () => {
   currentResults = [{ lat: 3.33, lng: 3, pano: 'stale', countryCode: 'IT', delay: 10 }];
   results = [...currentResults];
