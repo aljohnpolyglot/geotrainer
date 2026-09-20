@@ -2,6 +2,9 @@
 
 ## 2026-09-20
 
+- Added the standard status toast while the workspace 360° screenshot is being captured, copied, or fails.
+- Reduced the crop dialog footer to compact, accessible icon controls.
+- Added the same confirmation toast when visual clues and Notebook notes finish saving.
 - Kept the current Learn panorama open after Save for Review; moving to the next location is now always an explicit action.
 - Fixed multi-country Least exposure searches getting trapped on one sparse target; they now try its least-exposed region first, immediately skip confirmed border mismatches, and quickly cycle through the remaining countries from least to most exposure until a panorama is found or the learner leaves. Kosovo can recover its code when Google omits it, while sparse-seed microstates use tight local searches instead of coarse country bounds.
 - Made Least exposure fill unvisited local regions before revisiting represented regions, including in single-country Learn pools.

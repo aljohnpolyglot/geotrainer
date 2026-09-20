@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Camera, Clipboard, Crop, Upload } from 'lucide-react';
+import { Camera, Check, Clipboard, Crop, Upload } from 'lucide-react';
 import type { CoachAnalysis } from '../types';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { countryDisplayName, translate } from '../services/language';
@@ -34,6 +34,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
   const [analysis, setAnalysis] = useState<CoachAnalysis>();
   const [status, setStatus] = useState('');
   const [saved, setSaved] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
   const [busy, setBusy] = useState(false);
   const [choosingStyle, setChoosingStyle] = useState(false);
   const [cropping, setCropping] = useState(false);
@@ -79,7 +80,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
       const styled = { ...value.analysis, style, depth: coachPreferences.depth }; setAnalysis(styled); onAnalyze?.();
       const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: styled });
       if (clueId) onSaved?.(clueId);
-      setSaved(true); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
+      setSaved(true); setSavedToast(true); window.setTimeout(() => setSavedToast(false), 1800); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -92,7 +93,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     if (!isCurrent()) return;
     replaceImage(value.imageDataUrl);
   });
-  return <details className={`clue-capture${expanded ? ' expanded' : ''}`} open={expanded || undefined}>
+  return <><details className={`clue-capture${expanded ? ' expanded' : ''}`} open={expanded || undefined}>
     <summary className={expanded ? 'clue-capture-summary-hidden' : undefined}><Clipboard size={14} /> {t('knownClues')}</summary>
     <div className="clue-drop" tabIndex={0} onPaste={(event) => void choose(event.clipboardData.files[0])}>
       {image ? <><img src={image} alt={t('clueToAnalyze')} /><button type="button" className="clue-crop-button" onClick={() => setCropping(true)} aria-label={t('Crop image')} title={t('Crop image')}><Crop size={15} /><span>{t('Edit')}</span></button></> : <p>{t('clueDropHint')}</p>}
@@ -116,8 +117,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
       {!!analysis.contradictions?.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].contradictions)}</strong><ul>{analysis.contradictions.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
       {!!analysis.confusions.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].confusions)}</strong><ul>{analysis.confusions.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
       {!!analysis.nextThingsToInspect.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].next)}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
-      {saved && <p className="coach-autosaved" role="status">{t('savedAutomatically')}</p>}
     </div>}
     {cropping && image && <ImageCropModal image={image} t={t} onCancel={() => setCropping(false)} onApply={(value) => { replaceImage(value); setCropping(false); }} />}
-  </details>;
+  </details>{savedToast && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('savedVisualClue')}</div>}</>;
 }

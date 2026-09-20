@@ -105,6 +105,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Supported UI/game/AI locales are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish. Do not add Tagalog, Bisaya, or Indonesian unless explicitly requested later.
 - Use TypeScript and existing project patterns; add no dependency when the platform or current stack is sufficient.
 - Reuse the Learn header X control and styling for equivalent Play and Review exit actions; keep one shared UI pattern.
+- Prefer compact icon-only buttons for familiar actions in dense tool surfaces; keep text for primary or ambiguous actions, and always give icon-only controls accessible labels and tooltips.
 - Never let a source file exceed 500 lines. Split it before adding code that would cross the limit.
 - Put shared logic in the existing service/data layer and keep React components focused on UI.
 - Add one focused runnable test for non-trivial branches and failure handling.

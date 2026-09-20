@@ -138,7 +138,7 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 
 Imagens coladas, enviadas ou capturadas no Caderno podem ser recortadas antes da análise ou do salvamento. Use o controle de edição no canto inferior direito da prévia, arraste a área ou os cantos e aplique o recorte.
 
-A **câmera 360°** no espaço de trabalho copia quatro direções do panorama atual como uma única imagem. A imagem vai diretamente para a área de transferência e não é salva no GeoTrainer.
+A **câmera 360°** no espaço de trabalho copia quatro direções do panorama atual como uma única imagem. Uma notificação mostra o progresso e confirma se a cópia foi concluída. A imagem vai diretamente para a área de transferência e não é salva no GeoTrainer.
 
 Aprender tem três caminhos. **Personalizado** mantém coleções e ambientes. **Meta** abre lições guiadas no panorama e direção registrados. **Explorar mapa** mostra a cobertura do Street View. Em Meta e no mapa, Revelar abre o cartão normal, onde Salvar para revisão agenda a prática de localização. O mapa usa Voltar ao mapa-múndi no lugar de Próximo. Aprender personalizado e Jogo usam imagens oficiais do Google por padrão; o seletor permite misturar panoramas oficiais e de colaboradores ou solicitar somente panoramas de colaboradores. **Permitir interiores** fica desativado por padrão nas duas configurações; quando ativado, o Google pode retornar cobertura interna e externa do Street View. Em **Configurações → Exibição**, você pode controlar nomes de ruas, data da imagem, movimento do telefone, modo de deslocamento, tipo de mapa, gestos, locais clicáveis e cores do GeoTrainer. Nomes de ruas e locais clicáveis começam desativados para evitar pistas acidentais.
 

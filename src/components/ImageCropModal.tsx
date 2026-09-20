@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { Crop, RotateCcw, X } from 'lucide-react';
+import { Check, Crop, LoaderCircle, RotateCcw, X } from 'lucide-react';
 import { cropImageDataUrl, DEFAULT_IMAGE_CROP, moveImageCrop, resizeImageCrop, type CropCorner, type ImageCrop } from '../services/imageCrop';
 
 type DragState = { kind: 'move' | CropCorner; x: number; y: number; crop: ImageCrop };
@@ -31,7 +31,7 @@ export function ImageCropModal({ image, t, onCancel, onApply }: { image: string;
           </div>
         </div>
       </div>
-      <footer><button type="button" onClick={() => setCrop(DEFAULT_IMAGE_CROP)}><RotateCcw size={15} />{t('Reset crop')}</button><span><button type="button" onClick={onCancel}>{t('cancel')}</button><button type="button" disabled={applying} onClick={() => void apply()}>{t(applying ? 'Cropping…' : 'Apply crop')}</button></span></footer>
+      <footer><button type="button" onClick={() => setCrop(DEFAULT_IMAGE_CROP)} aria-label={t('Reset crop')} title={t('Reset crop')}><RotateCcw size={17} /></button><span><button type="button" onClick={onCancel} aria-label={t('cancel')} title={t('cancel')}><X size={18} /></button><button type="button" disabled={applying} onClick={() => void apply()} aria-label={t(applying ? 'Cropping…' : 'Apply crop')} title={t(applying ? 'Cropping…' : 'Apply crop')}>{applying ? <LoaderCircle className="spin" size={18} /> : <Check size={18} />}</button></span></footer>
     </section>
   </div>;
 }
