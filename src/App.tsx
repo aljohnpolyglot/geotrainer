@@ -394,7 +394,7 @@ export default function App() {
     if (appMode === 'study' && currentVisitRef.current && currentVisitRef.current.panoId === currentLocationRef.current?.panoId) {
       Object.assign(currentVisitRef.current, { coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis });
       await trainerDb.saveVisit({ ...currentVisitRef.current });
-      await handleSaveStudyForReview(false);
+      await handleSaveStudyForReview();
     } else if (appMode === 'review') {
       setReviewAttemptRecord((attempt) => attempt ? { ...attempt, coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis } : attempt);
     }
@@ -406,7 +406,7 @@ export default function App() {
     const id = `clue-${crypto.randomUUID()}`;
     await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: savedClue.generatedAt, ...savedClue });
     if (appMode === 'play') playAiAssistedRef.current = true;
-    if (appMode === 'study') await handleSaveStudyForReview(false);
+    if (appMode === 'study') await handleSaveStudyForReview();
     setTrainerRefreshKey((key) => key + 1);
     return id;
   }, [appMode, handleSaveStudyForReview]);
@@ -459,7 +459,7 @@ export default function App() {
         onDataChanged={() => { void Promise.all([trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games()]).then(([collections, savedBookmarks, games]) => { setCustomCollections(collections); setBookmarks(savedBookmarks); setPastGames(games); setTrainerRefreshKey((key) => key + 1); }); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
-        onSaveForReview={() => void handleSaveStudyForReview(learnSource === 'custom' || learnSource === 'uploaded')}
+        onSaveForReview={() => void handleSaveStudyForReview()}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
@@ -487,7 +487,7 @@ export default function App() {
         onCloseSummary={() => setSummaryGameRecord(null)}
         onGoToLocation={(location) => { setSummaryGameRecord(null); setIsGameActive(false); setCurrentLocation(location); setAppMode('study'); setIsRevealed(true); }}
         onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.source === 'uploaded' ? settings.importedMapId : undefined; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
-        onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview(false) : undefined}
+        onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview() : undefined}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onDeleteGame={(id) => { const updated = dbReady ? pastGames.filter((game) => game.id !== id) : deleteGameRecord(id); setPastGames(updated); void trainerDb.deleteGame(id); }}
         onClearGames={() => { if (!dbReady) clearGameHistory(); setPastGames([]); void trainerDb.clearGames(); }}
