@@ -9,6 +9,7 @@ import { isCurrentPanorama, isLatestRequest } from '../services/requestIntegrity
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { getImportedMap, moveImportedHistory, pickImportedLocation, type ImportedMapHistory } from '../services/importedMap';
 import { learningPriorityTarget } from '../services/learningPriority';
+import { loadCityPools } from '../services/cityPools';
 
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
@@ -80,7 +81,12 @@ export function useStudyMode(ctx: any) {
     setCurrentLocation(null); setCoachNote(null); setStudyReviewSaved(false); setIsLoading(true); setErrorMessage(null); setIsRevealed(false);
     ctx.setStatusMessage('Finding random Street View panorama...');
     try {
-      const target: ReturnType<typeof learningPriorityTarget> = importedMapId || studyLocationTargetsRef.current.length || studyPriorityRef.current === 'random' ? { countryCodes: collection.countryCodes } : learningPriorityTarget(studyPriorityRef.current, collection.countryCodes, await trainerDb.locations());
+      let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };
+      if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
+        const history = await trainerDb.locations();
+        target = learningPriorityTarget(studyPriorityRef.current, collection.countryCodes, history);
+        if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
+      }
       const result = importedMapId
         ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current)
         : await defaultLocationGenerator.findRandomLocation(target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, locationTargets: studyLocationTargetsRef.current });

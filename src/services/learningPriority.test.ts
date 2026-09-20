@@ -44,3 +44,14 @@ test('least exposure keeps a valid country when no geographic seed is available'
   try { assert.deepEqual(learningPriorityTarget('least-exposure', ['DE'], [location('DE', 52.52, 13.405)], () => 0), { countryCodes: ['DE'] }); }
   finally { COUNTRIES.DE.samplePoints = original; }
 });
+
+test('least exposure fills grey regional coverage before revisiting a represented region', () => {
+  const regions = [
+    { id: 'SE.1', name: 'South', cities: [{ name: 'South', lat: 55.6, lng: 13, population: 1, class: 'local' as const, urbanRadiusKm: 8 }] },
+    { id: 'SE.2', name: 'North', cities: [{ name: 'North', lat: 65.6, lng: 22, population: 1, class: 'local' as const, urbanRadiusKm: 8 }] },
+  ];
+  const known = [{ ...location('SE', 55.6, 13, 8), adminArea: 'South County' }];
+  const target = learningPriorityTarget('least-exposure', ['SE'], known, () => 0, regions);
+  assert.equal(target.preferredCandidate?.lat, 65.6);
+  assert.equal(target.preferredCandidate?.lng, 22);
+});

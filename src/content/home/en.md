@@ -109,7 +109,7 @@ Priority changes how **new Custom Learn locations** are chosen after the collect
 
 - **Random** (default) samples the eligible pool without using your history. Use it for variety or an unbiased tour of the selected collection.
 - **Familiar places** chooses a previously encountered eligible location as an anchor and searches roughly 1–12 km around it. Use it to learn the surroundings and recognize nearby views rather than repeat the exact panorama.
-- **Least exposure** first chooses an unseen or least-encountered eligible country, then targets its largest geographic blind spot: the area farthest from locations you already know. Country-size normalization keeps large countries from winning every tie. In a one-country collection it fills gaps inside that country; in a country mix, continent, or World collection it balances countries before filling their gaps.
+- **Least exposure** first chooses an unseen or least-encountered eligible country, fills bundled regions that are still grey on Coverage, then targets the largest remaining geographic blind spot. Country-size normalization keeps large countries from winning every tie. This regional pass also applies to one-country collections; regions without a usable local seed fall back to the country-wide gap search.
 
 When no eligible history exists, Familiar places and Least exposure begin from the selected pool like Random. Street View coverage and the active filters still decide whether a requested area can produce a panorama, so a nearby available view may be used when the exact target has no coverage.
 

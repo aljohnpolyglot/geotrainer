@@ -42,7 +42,7 @@ La priorità cambia il modo in cui vengono scelte le **nuove località di Appren
 
 - **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. Usalo per ottenere varietà o visitare la raccolta senza ponderazione.
 - **Luoghi familiari** sceglie come punto di partenza una località idonea già incontrata e cerca approssimativamente entro 1–12 km. Serve a imparare i dintorni e riconoscere viste vicine senza ripetere esattamente lo stesso panorama.
-- **Minore esposizione** sceglie prima un paese idoneo mai visto o con meno incontri, quindi punta al suo maggiore punto cieco geografico: l’area più lontana dalle località già conosciute. La normalizzazione per dimensione evita che i paesi grandi vincano ogni parità. Con un solo paese colma le lacune interne; con più paesi, un continente o il Mondo bilancia prima i paesi.
+- **Minore esposizione** sceglie prima un paese idoneo mai visto o con meno incontri, riempie le regioni incluse ancora grigie in Copertura e poi punta alla maggiore lacuna geografica rimasta. Questo passaggio regionale vale anche per le raccolte di un solo paese; le regioni senza un punto locale utilizzabile tornano alla ricerca nell’intero paese.
 
 Quando non esiste una cronologia idonea, Luoghi familiari e Minore esposizione iniziano dal gruppo selezionato come Casuale. La copertura Street View e i filtri attivi determinano comunque se l’area scelta può fornire un panorama; se il punto esatto non è coperto, può essere usata una vista disponibile nelle vicinanze.
 

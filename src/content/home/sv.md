@@ -42,7 +42,7 @@ Prioritet styr hur **nya platser i Anpassat lärande** väljs efter samling, lan
 
 - **Slumpmässigt** (standard) väljer ur det möjliga urvalet utan att använda din historik. Använd det för variation eller en neutral rundtur i samlingen.
 - **Bekanta platser** väljer en tidigare mött möjlig plats som utgångspunkt och söker ungefär 1–12 km runt den. Det tränar omgivningen och närliggande vyer i stället för att upprepa exakt samma panorama.
-- **Minst erfarenhet** väljer först ett osynligt eller minst besökt möjligt land och siktar sedan på landets största geografiska blinda fläck: området längst från platser du redan känner till. Normalisering efter landets storlek hindrar stora länder från att alltid vinna lika lägen. I en samling med ett land fylls luckor inom landet; i landsmixar, kontinenter och Världen balanseras länder innan deras luckor fylls.
+- **Minst erfarenhet** väljer först ett osynligt eller minst besökt möjligt land, fyller inkluderade regioner som fortfarande är grå i Täckning och siktar sedan på den största återstående geografiska luckan. Regionsteget gäller även samlingar med ett enda land; regioner utan en användbar lokal punkt faller tillbaka till den landsomfattande lucksökningen.
 
 Om det inte finns någon möjlig historik börjar Bekanta platser och Minst erfarenhet från det valda urvalet som Slumpmässigt. Street View-täckning och aktiva filter avgör fortfarande om målområdet kan ge ett panorama, så en närliggande tillgänglig vy kan användas när den exakta platsen saknar täckning.
 

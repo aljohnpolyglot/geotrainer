@@ -42,7 +42,7 @@ A prioridade muda como os **novos locais do Aprendizado personalizado** são esc
 
 - **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. Use para obter variedade ou percorrer a coleção sem ponderação.
 - **Locais familiares** escolhe um local elegível já encontrado como ponto de partida e procura aproximadamente entre 1 e 12 km ao redor dele. Use para aprender os arredores e reconhecer vistas próximas sem repetir o panorama exato.
-- **Menor exposição** escolhe primeiro um país elegível ainda não visto ou com menos encontros e depois mira seu maior ponto cego geográfico: a área mais distante dos locais que você já conhece. A normalização pelo tamanho evita que países grandes vençam todos os empates. Em uma coleção de um país, preenche lacunas internas; em misturas, continentes ou Mundo, equilibra os países antes de preencher suas lacunas.
+- **Menor exposição** escolhe primeiro um país elegível ainda não visto ou com menos encontros, preenche as regiões incluídas que ainda aparecem em cinza na Cobertura e depois mira a maior lacuna geográfica restante. Essa etapa regional também vale para coleções de um único país; regiões sem um ponto local utilizável voltam à busca de lacunas no país inteiro.
 
 Quando não há histórico elegível, Locais familiares e Menor exposição começam no conjunto selecionado como Aleatório. A cobertura do Street View e os filtros ativos ainda determinam se a área alvo pode fornecer um panorama; uma vista disponível próxima pode ser usada quando o ponto exato não tem cobertura.
 

@@ -42,7 +42,7 @@ La priorité modifie la sélection des **nouveaux lieux de l’apprentissage per
 
 - **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Utilisez-le pour varier les lieux ou parcourir la collection sans pondération.
 - **Lieux familiers** prend comme point de départ un lieu admissible déjà rencontré et cherche dans un rayon d’environ 1 à 12 km. Il aide à apprendre les environs et à reconnaître des vues proches sans répéter exactement le même panorama.
-- **Moins exploré** choisit d’abord un pays admissible jamais vu ou le moins rencontré, puis vise sa plus grande zone aveugle géographique : la zone la plus éloignée des lieux déjà connus. La normalisation selon la taille empêche les grands pays de gagner chaque égalité. Avec un seul pays, il comble ses lacunes ; avec plusieurs pays, un continent ou le Monde, il équilibre d’abord les pays.
+- **Moins exploré** choisit d’abord un pays admissible jamais vu ou le moins rencontré, remplit les régions incluses encore grises dans la Couverture, puis vise la plus grande lacune géographique restante. Cette étape régionale s’applique aussi aux collections d’un seul pays ; une région sans point local utilisable revient à la recherche nationale.
 
 Sans historique admissible, Lieux familiers et Moins exploré commencent dans l’ensemble sélectionné comme Aléatoire. La couverture Street View et les filtres actifs déterminent toujours si la zone visée peut fournir un panorama ; une vue disponible à proximité peut donc être utilisée si le point exact n’est pas couvert.
 

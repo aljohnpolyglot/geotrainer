@@ -42,7 +42,7 @@ La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje pers
 
 - **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. Úsalo para obtener variedad o recorrer la colección sin ponderación.
 - **Lugares conocidos** elige como punto de partida una ubicación apta que ya encontraste y busca aproximadamente entre 1 y 12 km a su alrededor. Sirve para aprender los alrededores y reconocer vistas cercanas sin repetir el panorama exacto.
-- **Menor exposición** elige primero un país apto nunca visto o con menos encuentros y después apunta a su mayor punto ciego geográfico: la zona más alejada de las ubicaciones que ya conoces. La normalización por tamaño evita que los países grandes ganen todos los empates. Con un solo país rellena sus huecos; con varios países, un continente o Mundo equilibra primero los países.
+- **Menor exposición** elige primero un país apto nunca visto o con menos encuentros, rellena las regiones incluidas que aún aparecen grises en Cobertura y después apunta al mayor hueco geográfico restante. Este paso regional también se aplica a colecciones de un solo país; si una región no tiene un punto local utilizable, se vuelve a la búsqueda de huecos de todo el país.
 
 Si no existe historial apto, Lugares conocidos y Menor exposición empiezan desde el conjunto seleccionado como Aleatorio. La cobertura de Street View y los filtros activos siguen determinando si el área objetivo puede ofrecer un panorama, por lo que puede usarse una vista disponible cercana cuando el punto exacto no tiene cobertura.
 

@@ -2,6 +2,7 @@
 
 ## 2026-09-20
 
+- Made Least exposure fill unvisited local regions before revisiting represented regions, including in single-country Learn pools.
 - Kept Learn and Play panorama searches retrying until success or cancellation, and increased country-border contrast on Google and Coverage maps.
 - Fixed Available notes duplicate cleanup when identical cloud images use different signed URLs.
 - Added editable saved-clue notes, full-screen clue images, sync-safe clue deletion, exact image/text duplicate cleanup, and hours/minutes activity totals on Home; removed the photo-recovery summary warning.

@@ -91,7 +91,7 @@ Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgew�
 
 - **Zufällig** (Standard) wählt ohne Gewichtung durch deinen Verlauf aus dem geeigneten Pool. Nutze es für Abwechslung oder eine neutrale Tour durch die Sammlung.
 - **Vertraute Orte** nimmt einen bereits besuchten geeigneten Ort als Ausgangspunkt und sucht ungefähr 1–12 km darum herum. So lernst du die Umgebung und erkennst nahe Ansichten, ohne dasselbe Panorama genau zu wiederholen.
-- **Wenigste Erfahrung** wählt zuerst ein ungesehenes oder am seltensten besuchtes geeignetes Land und zielt dann auf dessen größten geografischen blinden Fleck: das Gebiet mit der größten Entfernung zu bereits bekannten Orten. Die Normalisierung nach Landesgröße verhindert, dass große Länder jeden Gleichstand gewinnen. Bei einem Land werden dessen Lücken gefüllt; bei Ländermischungen, Kontinenten und Welt werden zuerst die Länder ausgeglichen.
+- **Wenigste Erfahrung** wählt zuerst ein ungesehenes oder am seltensten besuchtes geeignetes Land, füllt enthaltene Regionen, die in Abdeckung noch grau sind, und zielt danach auf die größte verbleibende geografische Lücke. Dieser regionale Schritt gilt auch für Sammlungen mit nur einem Land; Regionen ohne nutzbaren lokalen Ausgangspunkt fallen auf die landesweite Lückensuche zurück.
 
 Wenn kein geeigneter Verlauf vorhanden ist, beginnen Vertraute Orte und Wenigste Erfahrung wie Zufällig im gewählten Pool. Street-View-Abdeckung und aktive Filter bestimmen weiterhin, ob das Zielgebiet ein Panorama liefern kann; fehlt am exakten Punkt die Abdeckung, kann eine nahe verfügbare Ansicht verwendet werden.
 
