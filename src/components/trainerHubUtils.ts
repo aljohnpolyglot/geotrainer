@@ -41,6 +41,7 @@ export const missingNotebookPhotoNotes = (clues: ClueRecord[], notes: NotebookNo
   })());
 };
 export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas: LearnedMeta[], coachNotes: CoachHistoryNote[] = []) => {
+  coachNotes = coachNotes.filter((note) => !note.deletedAt);
   const noteLinks = notebookClueLinks(clues, notes); const linked = new Set([...noteLinks.values(), ...coachNotes.flatMap((note) => note.clueId ? [note.clueId] : [])]);
   return clues.filter((clue) => !linked.has(clue.id)).length + visibleNotebookNotes(notes, noteLinks).length + metas.length + coachNotes.length;
 };

@@ -165,7 +165,9 @@
 .metric-strip:first-child strong { color: var(--signal); }
 .progress-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 36px; }
 .progress-columns h2, .smart-collections h2, .queue-head h2, .data-panel h2 { margin: 0 0 12px; font-size: 15px; }
-.data-row { width: 100%; display: flex; justify-content: space-between; padding: 11px 0; color: var(--text); background: transparent; border: 0; border-bottom: 1px solid var(--line); text-align: left; cursor: pointer; }
+.data-row { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; column-gap: 12px; padding: 11px 0; color: var(--text); background: transparent; border: 0; border-bottom: 1px solid var(--line); text-align: left; cursor: pointer; }
+.data-row > span { min-width: 0; display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.data-row > b, .data-row > strong, .data-row > .icon-button { justify-self: end; }
 .data-row:hover span { color: var(--signal); }
 .data-row strong { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; }
 .empty { max-width: 65ch; color: var(--muted); font-size: 13px; line-height: 1.55; }

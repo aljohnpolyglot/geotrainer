@@ -30,7 +30,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, pausedStudy, pausedPlay]) => { if (!active) return; setStatus({
         locations: locations.length,
         attempts: attempts.length,
-        clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes),
+        clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes.filter((note) => !note.deletedAt)),
         due: reviews.filter((review) => effectiveReviewDueAt(review, scheduler) <= Date.now()).length,
         nextDue: nextScheduledReviewAt(reviews, Date.now(), scheduler) ?? null,
         scheduled: reviews.length > 0,
@@ -50,6 +50,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       : status.due
         ? { action: onReview, icon: <Target size={18} />, title: t('Review weak places'), detail: `${status.due} ${t('reviewsDueToday')}` }
         : { action: onStudy, icon: <BookOpen size={18} />, title: t('Continue learning'), detail: t('Open a fresh panorama') };
+  const activeDuration = status.minutes < 60 ? `${status.minutes}m` : `${Math.floor(status.minutes / 60)}h ${status.minutes % 60}m`;
 
   return (
     <section className="main-menu">
@@ -71,7 +72,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
         <div className="menu-status">
           <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>
           <span><strong>{status.attempts.toLocaleString()}</strong> {t('attempts retained')}</span>
-          <span><strong>{status.minutes.toLocaleString()}</strong> {t('active minutes')}</span>
+          <span><strong>{activeDuration}</strong> {t('active minutes')}</span>
           <span><strong>{status.clues.toLocaleString()}</strong> {t('knownClues')}</span>
         </div>
         <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>

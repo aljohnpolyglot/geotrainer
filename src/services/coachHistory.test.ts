@@ -30,3 +30,36 @@ test('Personal Notebook deletion leaves a sync-safe hidden marker', async () => 
   const saved = (await trainerDb.setting<Array<{ id: string; deletedAt?: number }>>('notebook.notes'))?.find(({ id }) => id === note.id);
   assert.ok(saved?.deletedAt);
 });
+
+test('Available notes remove only same-image blanks or exact repeats', async () => {
+  const { splitDuplicateNotes } = await import('./coachHistory');
+  const rows = [
+    { id: 'image-only', text: '', imageUrl: 'image-a' },
+    { id: 'rich', text: ' Bus sign ', category: 'Signs', imageUrl: 'image-a' },
+    { id: 'caption-only', text: 'bus   sign' },
+    { id: 'other-caption', text: 'Yellow center line', imageUrl: 'image-a' },
+    { id: 'different', text: 'Blue bus', imageUrl: 'image-b' },
+    { id: 'empty', text: '' },
+  ];
+  const result = splitDuplicateNotes(rows);
+  assert.deepEqual(result.unique.map(({ id }) => id), ['rich', 'other-caption', 'different', 'empty']);
+  assert.deepEqual(result.duplicates.map(({ id }) => id), ['image-only', 'caption-only']);
+});
+
+test('editing a Notebook note replaces its previous version', async () => {
+  const { saveNotebookHistoryNote } = await import('./coachHistory');
+  const { trainerDb } = await import('../data/trainerDb');
+  const id = 'editable-note';
+  await saveNotebookHistoryNote({ id, panoId: 'edit-pano', countryCode: 'UY', text: 'Old', updatedAt: 1 });
+  await saveNotebookHistoryNote({ id, panoId: 'edit-pano', countryCode: 'UY', text: 'New', updatedAt: 2 });
+  const saved = (await trainerDb.setting<Array<{ id: string; text: string }>>('notebook.notes'))?.filter((note) => note.id === id);
+  assert.deepEqual(saved, [{ id, panoId: 'edit-pano', countryCode: 'UY', text: 'New', updatedAt: 2, deletedAt: undefined }]);
+});
+
+test('Coach deletion creates a sync-safe marker even for legacy history', async () => {
+  const { deleteCoachHistoryNote } = await import('./coachHistory');
+  const { trainerDb } = await import('../data/trainerDb');
+  const analysis: CoachAnalysis = { confidence: 'low', region: '', candidates: [], strongClues: [], weakClues: [], confusions: [], nextThingsToInspect: [], extraCards: [] };
+  await deleteCoachHistoryNote({ id: 'legacy', panoId: 'pano', countryCode: 'SE', mode: 'analyze', model: 'test', generatedAt: 70, analysis });
+  assert.ok((await trainerDb.setting<Array<{ id: string; deletedAt?: number }>>('coach.notes'))?.find(({ id }) => id === 'legacy')?.deletedAt);
+});

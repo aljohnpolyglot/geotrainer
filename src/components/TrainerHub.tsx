@@ -14,7 +14,8 @@ import { ReviewPanel } from "./TrainerHubReview";
 import { TrainerHubClues } from "./TrainerHubClues";
 import type { HistoryKind, HubTab, StatisticsSection, TrainerHubProps } from "./trainerHubTypes";
 import { countryName, useHubTranslate } from "./trainerHubUtils";
-import { deleteNotebookHistoryNote } from "../services/coachHistory";
+import { deleteNotebookHistoryNote, saveNotebookHistoryNote } from "../services/coachHistory";
+import { splitDuplicateClues } from "../data/clueDedup";
 
 const dayStart = () => new Date().setHours(0, 0, 0, 0);
 
@@ -82,8 +83,10 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     const [nextLocations, nextAttempts, nextGames, nextVisits, nextReviews, nextSessions, nextClues, nextScheduler, nextMetas, nextNotes, nextCoachNotes, savedOnlyMigrated, readyDue] = await Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.games(), trainerDb.studyVisits(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.clues(), trainerDb.schedulerPreferences(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.reviewQueue({ due: true })]);
     const savedMetaIds = savedMetaLessonIds(nextAttempts);
     const visibleMetas = savedOnlyMigrated ? nextMetas || [] : (nextMetas || []).filter((meta) => savedMetaIds.has(meta.id));
+    const dedupedClues = splitDuplicateClues(nextClues, nextNotes || []);
+    if (dedupedClues.duplicates.length) await Promise.all(dedupedClues.duplicates.map((clue) => trainerDb.deleteClue(clue.id)));
     if (!savedOnlyMigrated) void Promise.all([trainerDb.setSetting('meta.learned', visibleMetas), trainerDb.setSetting('meta.savedOnlyMigrated', true)]);
-    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setReadyDueCount(readyDue.length); setSessions(meaningfulSessions(nextSessions, nextAttempts, nextVisits)); setClues(nextClues); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setCoachNotes(nextCoachNotes || []); setLoaded(true);
+    setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setReadyDueCount(readyDue.length); setSessions(meaningfulSessions(nextSessions, nextAttempts, nextVisits)); setClues(dedupedClues.unique); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setCoachNotes((nextCoachNotes || []).filter((note) => !note.deletedAt)); setLoaded(true);
   };
   useEffect(() => { void load(); }, [refreshKey]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);
@@ -126,7 +129,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
       {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={gradedAttempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {visitedStatistics && <div hidden={tab !== "statistics"}><StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} readyDueCount={readyDueCount} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} />} historyPanel={historyPanel} /></div>}
       {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
-      {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onDeleteNote={(note) => { void deleteNotebookHistoryNote(note).then(load); }} onTrainCountries={onTrainCountries} />}
+      {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} locations={locations} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onDeleteNote={(note) => { void deleteNotebookHistoryNote(note).then(load); }} onSaveNote={async (note) => { await saveNotebookHistoryNote(note); await load(); }} onTrainCountries={onTrainCountries} />}
       {visitedCoverage && <div hidden={tab !== "coverage"}><CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} onReview={onReview} /></div>}
       {tab === "history" && historyPanel}
     </div>}

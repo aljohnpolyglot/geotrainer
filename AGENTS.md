@@ -70,6 +70,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Build every Coach style from the same visible-observation pass, keep speculative identities and causal stories out of country evidence, and describe likelihood percentages as AI estimates rather than measured probabilities.
 - Keep Play's panorama learning toolbar aligned with Study and expose the same Notebook and Available notes count; its existing AI Coach preference may still hide Coach only.
 - Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
+- Allow Available notes entries to be deleted in place, and automatically retain the richest duplicate when either its normalized caption or exact image matches another entry.
 - Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
 - Supply country-specific external reference facts only during post-reveal Coach explanations, and mention a fact only when its feature is visibly present in the submitted imagery.
 - In pasted-clue analysis, prioritize an obvious foreground subject selected by the user and treat the surrounding scene as supporting or contradictory context; state when the subject is unreadable instead of misidentifying it.
@@ -83,6 +84,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Persist Play round timers as accumulated active seconds; resuming must never count time spent closed, hidden, or on another surface.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
 - Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
+- Collapse only exact repeated clue images whose meaningful note and description are identical or where one copy is blank; preserve the same image as separate entries when its meaningful text differs, and keep clue deletion markers through cloud merges.
 - Refresh Available notes and its badge immediately after every Notebook save in every mode; do not depend on Study-only scheduling side effects.
 - Meta Learn selects only unfinished lessons and becomes visibly disabled in Learn setup after all lessons are completed.
 - Keep focused country pools available in both Study and Play so users can mix commonly confused countries without creating a collection.

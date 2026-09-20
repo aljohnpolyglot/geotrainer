@@ -15,6 +15,7 @@ import { resolveStoredClueImages, uploadClueImage } from './clueImages';
 import type { ClueRecord, CoachAnalysis, NotebookNote } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
 import { IMPORTED_MAP_PREFIX } from './importedMap';
+import { splitDuplicateClues } from '../data/clueDedup';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
 
@@ -39,7 +40,7 @@ const keys: Record<StoreName, string> = {
   clues: 'id',
 };
 const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), Number(record.generalizationUpdatedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
-const noteSettings = new Set(['notebook.notes', 'coach.notes']);
+const noteSettings = new Set(['notebook.notes', 'coach.notes', 'clues.deleted']);
 const mergeNotes = (left: unknown, right: unknown) => {
   const notes = new Map<string, Record<string, unknown>>();
   for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) { const key = String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`); const previous = notes.get(key); if (!previous || Number(item.deletedAt || item.updatedAt || item.generatedAt || 0) >= Number(previous.deletedAt || previous.updatedAt || previous.generatedAt || 0)) notes.set(key, item); }
@@ -58,6 +59,11 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
     }
     return [name, [...records.values()]];
   })) as TrainerBackup['data'];
+
+  const settings = data.settings as Array<{ key: string; value?: unknown }>;
+  const notes = (settings.find((item) => item.key === 'notebook.notes')?.value || []) as NotebookNote[];
+  const deleted = new Set(((settings.find((item) => item.key === 'clues.deleted')?.value || []) as Array<{ id: string }>).map((item) => item.id));
+  data.clues = splitDuplicateClues((data.clues as ClueRecord[]).filter((clue) => !deleted.has(clue.id)), notes).unique;
 
   return {
     format: 'street-view-trainer',

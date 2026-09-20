@@ -316,6 +316,7 @@ export interface ClueRecord {
   createdAt: number;
   imageDataUrl: string;
   imagePath?: string;
+  imageFingerprint?: string;
   model: string;
   analysis: CoachAnalysis;
   origin?: 'personal' | 'coach';
@@ -347,6 +348,7 @@ export interface CoachHistoryNote {
   generatedAt: number;
   analysis: CoachAnalysis;
   clueId?: string;
+  deletedAt?: number;
 }
 
 export type ReviewGrade = 'again' | 'hard' | 'good' | 'easy';

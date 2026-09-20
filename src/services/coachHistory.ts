@@ -17,7 +17,8 @@ export function saveCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
 export function saveNotebookHistoryNote(note: NotebookNote): Promise<void> {
   const next = notebookWrites.then(async () => {
     const saved = await trainerDb.setting<NotebookNote[]>('notebook.notes') || [];
-    await trainerDb.setSetting('notebook.notes', [{ ...note, text: note.text.slice(0, NOTEBOOK_NOTE_MAX_LENGTH) }, ...saved]);
+    const trimmed = { ...note, text: note.text.slice(0, NOTEBOOK_NOTE_MAX_LENGTH), deletedAt: undefined };
+    await trainerDb.setSetting('notebook.notes', [trimmed, ...saved.filter((item) => !note.id || item.id !== note.id)]);
   });
   notebookWrites = next.catch(() => {});
   return next;
@@ -31,4 +32,31 @@ export function deleteNotebookHistoryNote(note: NotebookNote): Promise<void> {
   });
   notebookWrites = next.catch(() => {});
   return next;
+}
+
+export function deleteCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
+  const next = writes.then(async () => {
+    const saved = await trainerDb.setting<CoachHistoryNote[]>('coach.notes') || [];
+    const deleted = { ...note, deletedAt: Date.now() };
+    await trainerDb.setSetting('coach.notes', saved.some((item) => item.id === note.id) ? saved.map((item) => item.id === note.id ? deleted : item) : [deleted, ...saved]);
+  });
+  writes = next.catch(() => {});
+  return next;
+}
+
+export function splitDuplicateNotes<T extends { text: string; category?: string; imageUrl?: string; analysis?: unknown }>(notes: T[]) {
+  const body = (note: T) => note.text.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+  const text = (note: T) => `${body(note)}\n${note.category || ''}`;
+  const score = (note: T) => Number(!!note.imageUrl) * 4 + Number(!!text(note).trim()) * 2 + Number(!!note.category) + Number(!!note.analysis);
+  const unique: T[] = []; const duplicates: T[] = [];
+  for (const note of notes) {
+    const meaningful = !!text(note).trim();
+    const sameImage = note.imageUrl ? unique.filter((item) => item.imageUrl === note.imageUrl) : [];
+    const blank = sameImage.find((item) => !text(item).trim());
+    const match = sameImage.find((item) => text(item) === text(note)) || (!meaningful ? sameImage.find((item) => text(item).trim()) : blank) || (body(note) ? unique.find((item) => body(item) === body(note) && (!item.imageUrl || !note.imageUrl)) : unique.find((item) => !item.imageUrl && text(item) === text(note)));
+    if (!match) unique.push(note);
+    else if (score(note) > score(match)) { unique[unique.indexOf(match)] = note; duplicates.push(match); }
+    else duplicates.push(note);
+  }
+  return { unique, duplicates };
 }

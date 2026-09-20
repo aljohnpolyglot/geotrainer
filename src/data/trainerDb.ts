@@ -19,6 +19,7 @@ import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor, reviewGradeForPerformance } from './reviewGrading';
+import { clueImageFingerprint } from './clueDedup';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore } from './reviewGrading';
@@ -289,8 +290,12 @@ export const trainerDb = {
   saveAttempt: (attempt: Attempt) => put('attempts', attempt),
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
   saveSession: (session: TrainingSession) => put('sessions', session),
-  saveClue: (clue: ClueRecord) => put('clues', clue),
-  deleteClue: (id: string) => remove('clues', id),
+  saveClue: (clue: ClueRecord) => put('clues', { ...clue, imageFingerprint: clue.imageFingerprint || clueImageFingerprint(clue.imageDataUrl) || undefined }),
+  deleteClue: async (id: string) => {
+    const deleted = (await get<SettingRecord>('settings', 'clues.deleted'))?.value as Array<{ id: string; deletedAt: number }> | undefined;
+    await put('settings', { key: 'clues.deleted', value: [{ id, deletedAt: Date.now() }, ...(deleted || []).filter((item) => item.id !== id)], updatedAt: Date.now() });
+    await remove('clues', id);
+  },
   saveBookmark: (bookmark: BookmarkLocation) => put('bookmarks', bookmark),
   deleteBookmark: (panoId: string) => remove('bookmarks', panoId),
   saveCollection: (collection: Collection) => put('collections', { ...collection, isCustom: true }),

@@ -70,6 +70,15 @@ test('a newer Personal-note deletion marker is not resurrected by cloud merge', 
   assert.equal(note.deletedAt, 30);
 });
 
+test('cloud merge honors clue deletions and removes only obvious image duplicates', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  const imageDataUrl = 'data:image/png;base64,SAME';
+  cloud.data.clues.push({ id: 'deleted', imageDataUrl }, { id: 'blank', imageDataUrl, createdAt: 10, analysis: { description: '', strongClues: [] } });
+  local.data.clues.push({ id: 'captioned', imageDataUrl, createdAt: 20, analysis: { description: 'Yellow center line', strongClues: [] } }, { id: 'different', imageDataUrl, createdAt: 30, analysis: { description: 'Black chevron', strongClues: [] } });
+  local.data.settings.push({ key: 'clues.deleted', value: [{ id: 'deleted', deletedAt: 40 }], updatedAt: 40 });
+  assert.deepEqual((mergeBackups(cloud, local).data.clues as Array<{ id: string }>).map(({ id }) => id), ['captioned', 'different']);
+});
+
 test('upload-side merge keeps Personal clues and Notebook notes from both origins', () => {
   const deployed = backup('deployed', 10); const localhost = backup('localhost', 20);
   deployed.data.clues.push({ id: 'wall-image', panoId: 'wall', createdAt: 10 });

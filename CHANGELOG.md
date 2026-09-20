@@ -2,6 +2,12 @@
 
 ## 2026-09-20
 
+- Added editable saved-clue notes, full-screen clue images, sync-safe clue deletion, exact image/text duplicate cleanup, and hours/minutes activity totals on Home; removed the photo-recovery summary warning.
+- Added a full-screen saved-image viewer from clue thumbnails, with backdrop, Escape, and mobile-safe close controls.
+- Added consistent detail and Street View location actions to every My Clues entry that has a saved panorama, plus persisted-view thumbnails for legacy 360° Coach analyses.
+- Aligned statistics country counts to the far right of each row, with arrows in a separate action column.
+- Added subtle in-place deletion to Available notes and automatic collapsing of image-only, caption-only, and richer duplicate variants.
+- Replaced Explore Map's Google-powered place autocomplete and geocoding with suggestions from the bundled city and country catalog.
 - Added a responsive Notebook image cropper from the preview’s lower-right edit control, and replaced the fictional border diagram with a live Google map preview.
 - Moved uploaded Learn progress into the header beside Review progress, and kept Least exposure focused on its geographic target while widening to nearby available Street View coverage.
 
