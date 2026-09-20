@@ -38,8 +38,8 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
 };
 
 export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 7 : zoom === 'world' ? 2 : 5;
-export const countryBorderWeight = (width: CountryBorderWidth = 'thin') => width === 'bold' ? 1.25 : width === 'standard' ? .75 : .35;
-export const countryBorderColor = (color: CountryBorderColor = 'auto', dark = false) => color === 'light' ? '#d9edf5' : color === 'dark' ? '#203845' : color === 'accent' ? '#4d9cff' : dark ? '#8fb5c4' : '#526c79';
+export const countryBorderWeight = (width: CountryBorderWidth = 'thin') => width === 'bold' ? 1.75 : width === 'standard' ? 1.15 : .75;
+export const countryBorderColor = (color: CountryBorderColor = 'auto', dark = false) => color === 'light' ? '#e7f7ff' : color === 'dark' ? '#152f3d' : color === 'accent' ? '#4d9cff' : dark ? '#b6d8e3' : '#385563';
 
 const MAP_PREFERENCES_EVENT = 'geotrainer:map-preferences';
 export const announceMapPreferences = (preferences: MapPreferences) => window.dispatchEvent(new CustomEvent(MAP_PREFERENCES_EVENT, { detail: normalizeMapPreferences(preferences) }));

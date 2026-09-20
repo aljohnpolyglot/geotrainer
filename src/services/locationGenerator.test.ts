@@ -167,6 +167,17 @@ test('an aborted lookup cannot return a stale panorama', async () => {
   await assert.rejects(lookup, (error: Error) => error.name === 'AbortError');
 });
 
+test('normal generation keeps retrying while diagnostics can set a ceiling', async () => {
+  currentResults = [
+    { lat: 0, lng: 0, pano: '', countryCode: 'IT', status: 'ZERO_RESULTS' },
+    { lat: 0, lng: 0, pano: '', countryCode: 'IT', status: 'ZERO_RESULTS' },
+  ];
+  results = [...currentResults]; panoramaCalls = 0;
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  await assert.rejects(new StreetViewLocationGenerator().findRandomLocation(['IT'], undefined, undefined, rural, { maxAttempts: 2 }), /Could not find/);
+  assert.equal(panoramaCalls, 2);
+});
+
 test('review reopen tries pano id before marking a coordinate fallback', async () => {
   results = [
     { lat: 0, lng: 0, pano: 'missing', countryCode: 'SI', status: 'ZERO_RESULTS' },

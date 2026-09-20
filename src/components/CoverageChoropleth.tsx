@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import worldMap from '../assets/simple-world-map.svg?raw';
 import { trainerDb } from '../data/trainerDb';
 import { CLOUD_IMPORT_EVENT } from '../services/cloudSyncEvent';
@@ -6,6 +6,7 @@ import type { Attempt, ReviewRecord, TrainerLocation } from '../types';
 import { countryName, coverageCountryCounts, coverageCountryValues, useHubTranslate, type CoverageOverlay } from './trainerHubUtils';
 import { ZoomableSvgMap } from './ZoomableSvgMap';
 import { CoverageRegionModal } from './CoverageRegionModal';
+import { countryBorderColor, countryBorderWeight, useMapPreferences } from '../services/mapPreferences';
 
 const PALETTES = {
   warm: ['#fee8c8', '#fdbb84', '#e34a33', '#b30000'],
@@ -29,6 +30,7 @@ const colorMap = (values: Record<string, number | null>, colors: readonly string
 
 export function CoverageChoropleth({ locations, attempts, reviews, overlay }: { locations: TrainerLocation[]; attempts: Attempt[]; reviews: ReviewRecord[]; overlay: CoverageOverlay }) {
   const t = useHubTranslate();
+  const mapPreferences = useMapPreferences();
   const [palette, setPalette] = useState<MapPalette>('warm');
   const [selectedCountry, setSelectedCountry] = useState<string>();
   useEffect(() => {
@@ -44,7 +46,9 @@ export function CoverageChoropleth({ locations, attempts, reviews, overlay }: { 
   const emptyLabel = t(overlay === 'exposure' ? 'Not encountered' : overlay === 'due' || overlay === 'mastery' ? 'No review history' : 'No scored attempts');
   const details = useMemo(() => overlay === 'exposure' ? Object.fromEntries(Object.keys(counts).map((code) => [code, `${counts[code].panoramas} ${t('panoramas')} · ${counts[code].encounters} ${t('encounters')}`])) : {}, [counts, overlay, t]);
   const svg = useMemo(() => colorMap(values, colors, label, emptyLabel, details), [values, colors, label, emptyLabel, details]);
-  return <section className="coverage-choropleth">
+  const dark = mapPreferences.mapPalette === 'dark' || mapPreferences.mapPalette !== 'light' && document.documentElement.classList.contains('dark');
+  const borderStyle = { '--coverage-border': mapPreferences.showCountryBorders === false ? 'transparent' : countryBorderColor(mapPreferences.countryBorderColor, dark), '--coverage-border-width': mapPreferences.showCountryBorders === false ? '0' : countryBorderWeight(mapPreferences.countryBorderWidth) } as CSSProperties;
+  return <section className="coverage-choropleth" style={borderStyle}>
     <header><h3>{t('Country heatmap')}</h3><label>{t('Map palette')}<select value={palette} onChange={(event) => { const value = event.target.value as MapPalette; setPalette(value); void trainerDb.setSetting('coverage.mapPalette', value); }}><option value="warm">{t('Warm')}</option><option value="blue">{t('Blue')}</option><option value="green">{t('Green')}</option><option value="purple">{t('Purple')}</option></select></label></header>
     <div className="coverage-choropleth-map">
       <ZoomableSvgMap svg={svg} onPathClick={setSelectedCountry} />

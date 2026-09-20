@@ -2,6 +2,7 @@
 
 ## 2026-09-20
 
+- Kept Learn and Play panorama searches retrying until success or cancellation, and increased country-border contrast on Google and Coverage maps.
 - Fixed Available notes duplicate cleanup when identical cloud images use different signed URLs.
 - Added editable saved-clue notes, full-screen clue images, sync-safe clue deletion, exact image/text duplicate cleanup, and hours/minutes activity totals on Home; removed the photo-recovery summary warning.
 - Added a full-screen saved-image viewer from clue thumbnails, with backdrop, Escape, and mobile-safe close controls.

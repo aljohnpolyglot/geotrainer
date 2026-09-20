@@ -160,7 +160,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     }
 
     const sv = this.getService();
-    const maxAttempts = options.environment === 'rural' ? 30 : 20;
+    const batchAttempts = options.environment === 'rural' ? 30 : 20;
+    const maxAttempts = context.maxAttempts ?? Infinity;
     const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
     if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
 
@@ -175,21 +176,22 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         : countryCodes;
       const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
       const randomCountryCode = focused?.target.countryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
-      const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : attempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
+      const strategyAttempt = (attempt - 1) % batchAttempts + 1;
+      const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);
       const preferred = context.preferredCandidate?.countryCode === randomCountryCode ? context.preferredCandidate : undefined;
       const candidate: { lat: number; lng: number; city?: CitySeed } = focused ? sampleCityPoolCandidate(focused.city, environment === 'mixed' ? 'urban' : environment)
-        : preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.minRadiusKm ? preferred.radiusKm || 15 : Math.min(preferred.radiusKm ?? 15, attempt === 1 ? 0 : 2 ** (attempt - 2)), Math.random)
-        : this.generateCandidate(randomCountryCode, environment === 'mixed' ? attempt - 10 : attempt, { ...options, environment });
+        : preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.minRadiusKm ? preferred.radiusKm || 15 : Math.min(preferred.radiusKm ?? 15, strategyAttempt === 1 ? 0 : 2 ** (strategyAttempt - 2)), Math.random)
+        : this.generateCandidate(randomCountryCode, environment === 'mixed' ? strategyAttempt - 10 : strategyAttempt, { ...options, environment });
 
       onStatusUpdate?.(
-        attempt > 1 ? `Searching coverage (attempt ${attempt}/${maxAttempts})...` : 'Finding random location...'
+        attempt > 1 ? `Searching coverage (attempt ${attempt})...` : 'Finding random location...'
       );
 
       try {
         // Query nearest official outdoor street view panorama within search radius
         const baseRadius = environment === 'urban' ? 8000 : environment === 'suburban' ? 12000 : 15000;
-        const radius = preferred ? Math.min(40000, Math.max(baseRadius, 8000 * 2 ** Math.max(0, attempt - 1))) : baseRadius;
+        const radius = preferred ? Math.min(40000, Math.max(baseRadius, 8000 * 2 ** Math.max(0, strategyAttempt - 1))) : baseRadius;
 
         const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => {
           sv.getPanorama(
@@ -248,7 +250,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       }
 
       // Brief delay between retries
-      await new Promise((r) => setTimeout(r, 60));
+      await new Promise((r) => setTimeout(r, attempt % batchAttempts ? 150 : 1500));
     }
 
     throw new Error('Could not find a valid Street View panorama. Please click "Next Location" to try again.');

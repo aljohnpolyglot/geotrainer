@@ -245,7 +245,7 @@ button.attempt-row:hover { background: var(--panel); }
 .coverage-choropleth-zoom button:disabled { cursor: default; opacity: .4; }
 .coverage-choropleth-zoom input[type="range"] { width: 32px; height: 78px; margin: 2px 0; accent-color: var(--blue); writing-mode: vertical-lr; direction: rtl; cursor: ns-resize; }
 .coverage-choropleth-svg { display: block; width: 100%; height: auto; }
-.coverage-choropleth-svg path { stroke: color-mix(in srgb, var(--text) 34%, transparent); stroke-width: .55; vector-effect: non-scaling-stroke; transition: fill .18s ease; }
+.coverage-choropleth-svg path { stroke: var(--coverage-border, color-mix(in srgb, var(--text) 55%, transparent)); stroke-width: var(--coverage-border-width, .75); vector-effect: non-scaling-stroke; transition: fill .18s ease; }
 .coverage-choropleth-map .coverage-choropleth-svg path[role="button"] { cursor: pointer; }
 .coverage-choropleth-svg path[role="button"]:is(:hover, :focus-visible) { stroke: var(--blue); stroke-width: 2; outline: none; }
 .coverage-choropleth-svg path:focus { outline: none !important; }

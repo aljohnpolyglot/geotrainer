@@ -71,6 +71,8 @@ export interface LocationRequestContext {
   requireNavigation?: boolean;
   preferredCandidate?: { lat: number; lng: number; countryCode: string; minRadiusKm?: number; radiusKm?: number };
   locationTargets?: LocationPoolTarget[];
+  /** Test/diagnostic ceiling; normal generation retries until aborted. */
+  maxAttempts?: number;
 }
 
 export type AppMode = 'study' | 'play' | 'review';

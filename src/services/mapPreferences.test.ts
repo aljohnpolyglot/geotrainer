@@ -19,7 +19,7 @@ test('map preferences use safe defaults and normalize persisted choices', () => 
   assert.deepEqual(mapPresentationOptions(normalizeMapPreferences({ geotrainerMapStyle: false, mapPalette: 'light' }), true).styles, light.styles);
   assert.equal('mapId' in light, false);
   assert.deepEqual(light.styles?.at(-2), { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] });
-  assert.deepEqual(light.styles?.at(-1), { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ visibility: 'on' }, { color: '#526c79' }, { weight: 0.35 }] });
+  assert.deepEqual(light.styles?.at(-1), { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ visibility: 'on' }, { color: '#385563' }, { weight: 0.75 }] });
   assert.deepEqual(mapPresentationOptions(normalizeMapPreferences({ showCountryBorders: false }), false).styles?.at(-1), { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] });
 });
 
@@ -29,9 +29,9 @@ test('result map zoom presets cap the revealed result view', () => {
   assert.equal(resultMapZoomLimit('region'), 7);
   assert.equal(resultMapZoomLimit('world'), 2);
   assert.equal(normalizeMapPreferences({ resultMapZoom: 'region' }).resultMapZoom, 'region');
-  assert.equal(countryBorderWeight('thin'), .35);
-  assert.equal(countryBorderWeight('standard'), .75);
-  assert.equal(countryBorderWeight('bold'), 1.25);
+  assert.equal(countryBorderWeight('thin'), .75);
+  assert.equal(countryBorderWeight('standard'), 1.15);
+  assert.equal(countryBorderWeight('bold'), 1.75);
   assert.equal(countryBorderColor('accent'), '#4d9cff');
-  assert.equal(countryBorderColor('auto', true), '#8fb5c4');
+  assert.equal(countryBorderColor('auto', true), '#b6d8e3');
 });
