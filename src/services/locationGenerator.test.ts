@@ -235,6 +235,19 @@ test('review reopen tries pano id before marking a coordinate fallback', async (
   assert.equal(found.isFallbackPanorama, true);
 });
 
+test('review rejects a stale panorama id that resolves far from its saved answer', async () => {
+  results = [
+    { lat: 12.6, lng: -8, pano: 'wrong-mali', countryCode: 'ML' },
+    { lat: -12.16, lng: 96.82, pano: 'near-cocos', countryCode: 'CC' },
+  ];
+  panoramaCalls = 0;
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const found = await new StreetViewLocationGenerator().reopenLocation({ panoId: 'stale', lat: -12.16, lng: 96.82, countryCode: 'CC' });
+  assert.equal(found.panoId, 'near-cocos');
+  assert.equal(found.isFallbackPanorama, true);
+  assert.equal(panoramaCalls, 2);
+});
+
 test('latest-request and reveal guards reject stale async completions', async () => {
   const { isCurrentPanorama, isLatestRequest } = await import('./requestIntegrity');
   let latest = 0;

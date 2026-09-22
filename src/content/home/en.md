@@ -184,7 +184,7 @@ Review presents scheduled locations when they are due. It is a real recall test,
 
 ### Before the guess
 
-The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. All learning tools remain available, and anything you deliberately open—including saved note text, Meta explanations, Coach candidates, and probabilities—is shown in full. The Review header shows your current card, remaining cards, and when session progress is saved; reloading restores the completed-card count instead of restarting the display at card one.
+The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. If an old panorama ID now resolves more than 10 km from its saved answer, Review uses nearby imagery at the saved coordinates instead of showing the wrong scene; if no valid replacement exists, the card does not open. All learning tools remain available, and anything you deliberately open—including saved note text, Meta explanations, Coach candidates, and probabilities—is shown in full. The Review header shows your current card, remaining cards, and when session progress is saved; reloading restores the completed-card count instead of restarting the display at card one.
 
 ### After the guess
 

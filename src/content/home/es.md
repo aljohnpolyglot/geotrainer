@@ -60,7 +60,7 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 ## Repaso y programación
 
-Repaso oculta la respuesta hasta tu conjetura. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
+Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
 ## Entrenador de IA y pistas
 

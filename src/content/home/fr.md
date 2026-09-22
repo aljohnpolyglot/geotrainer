@@ -60,7 +60,7 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 ## Révision et planification
 
-La réponse reste cachée jusqu’à votre estimation. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
+La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant ouvre un panorama à plus de 10 km de la réponse enregistrée, la Révision utilise une vue valide près des coordonnées enregistrées ou n’ouvre pas la carte. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices
 

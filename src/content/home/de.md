@@ -162,7 +162,7 @@ Beendete und unterbrochene Spiele erscheinen unter Frühere Spiele. Zusammenfass
 
 ### Vor der Antwort
 
-Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere verräterische Metadaten. Du musst zuerst selbst tippen.
+Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere verräterische Metadaten. Löst Google eine alte Panorama-ID mehr als 10 km vom gespeicherten Ziel entfernt auf, verwendet die Wiederholung stattdessen ein gültiges Panorama nahe den gespeicherten Koordinaten oder öffnet die Karte nicht. Du musst zuerst selbst tippen.
 
 ### Nach der Antwort
 

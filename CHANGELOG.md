@@ -7,6 +7,7 @@
 - Marked checked Uploaded-map source entries complete so Next cannot draw them again, including with location variation, and labeled the header counter as Source progress.
 - Plotted every saved prior guess as a blue marker on the Review result map and persisted a completed grade before showing the result, so reloading cannot reopen a passed card as unanswered.
 - Made Study, Learn, Play, and Review workspace saves strictly local-first, ordered rapid IndexedDB writes, and kept automatic cloud pulls silent so slow connections cannot roll back active progress.
+- Prevented Review from showing a stale panorama that resolves far from its saved answer, and ignored late panorama lookups from the previous card.
 
 ## 2026-09-22
 

@@ -60,7 +60,7 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 ## Revisão e agendamento
 
-A resposta fica oculta até o palpite. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
+A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais de 10 km da resposta salva, a Revisão usa uma vista válida perto das coordenadas salvas ou não abre o cartão. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ## Coach de IA e pistas
 

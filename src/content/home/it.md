@@ -60,7 +60,7 @@ Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 
 
 ## Ripasso e programmazione
 
-La soluzione resta nascosta fino alla stima. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
+La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
 ## Coach IA e indizi
 

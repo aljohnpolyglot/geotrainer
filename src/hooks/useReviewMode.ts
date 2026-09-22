@@ -5,6 +5,7 @@ import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
 import { planReviewVariation } from '../data/reviewVariation';
+import { isLatestRequest } from '../services/requestIntegrity';
 
 type ReviewStat = { previous: number; current: number; grade: ReviewGrade };
 type SavedReviewSession = { attemptIds: string[]; source: string; kind?: ReviewSessionKind; initialTotal: number; compass?: boolean; stats?: ReviewStat[] };
@@ -33,8 +34,10 @@ export function useReviewMode(ctx: any) {
   const reviewGradingRef = useRef(false);
   const reviewRestoreAttemptedRef = useRef(false);
   const reviewVariationRef = useRef<{ kind: 'original' | 'heading' | 'spatial'; level: number; distanceM: number; shownPanoId: string; shownHeading?: number } | undefined>(undefined);
+  const reviewOpenRequestRef = useRef(0);
 
   const openReviewAttempt = useCallback(async (attempt: Attempt) => {
+    const requestId = ++reviewOpenRequestRef.current;
     reviewVariationRef.current = undefined;
     setReviewAttempt(attempt); setReviewResult(null); setReviewAttemptRecord(null); setReviewElapsed(0); setCurrentLocation(null); setCoachNote(null); setIsLoading(true); setErrorMessage(null);
     try {
@@ -42,13 +45,14 @@ export function useReviewMode(ctx: any) {
       const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
       const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
       const recentlyShown = new Set(attempts.filter((item) => item.source === 'review' && item.panoId === attempt.panoId && item.shownPanoId).sort((a, b) => b.createdAt - a.createdAt).slice(0, 3).map((item) => item.shownPanoId!));
-      const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown).catch(() => defaultLocationGenerator.reopenLocation(anchor));
+      const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown);
+      if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
       const kind = plan.kind === 'spatial' && reopened.panoId !== attempt.panoId && !reopened.isFallback ? 'spatial' : plan.kind === 'heading' ? 'heading' : 'original';
       reviewVariationRef.current = { kind, level: kind === 'spatial' ? plan.generalizationLevel : 0, distanceM: kind === 'spatial' ? calculateDistanceKm(attempt.actualLat, attempt.actualLng, reopened.lat, reopened.lng) * 1000 : 0, shownPanoId: reopened.panoId, shownHeading: reopened.heading };
       setCurrentLocation(reopened); roundStartTimeRef.current = Date.now();
       const intervals = await trainerDb.reviewIntervals(attempt.panoId);
       setReviewHistory(attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt)); setReviewIntervals(intervals);
-    } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Review location is unavailable.'); setReviewAttempt(null); } finally { setIsLoading(false); }
+    } catch (error) { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) { setErrorMessage(error instanceof Error ? error.message : 'Review location is unavailable.'); setReviewAttempt(null); } } finally { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) setIsLoading(false); }
   }, [setCoachNote, setCurrentLocation, setErrorMessage, setIsLoading, setReviewAttempt, roundStartTimeRef]);
 
   const handleStartReview = useCallback(async (attempt: Attempt, queue: Attempt[] = [attempt], source = 'History', kind: ReviewSessionKind = 'practice') => {
@@ -108,6 +112,6 @@ export function useReviewMode(ctx: any) {
     else await openReviewAttempt(reviewQueue[0]);
   }, [openReviewAttempt, reviewAttempt, reviewAttemptRecord, reviewQueue, reviewResult, setCurrentLocation, setReviewAttempt]);
 
-  const clearReviewSession = useCallback(() => { setReviewAttempt(null); setReviewResult(null); setReviewAttemptRecord(null); setReviewQueue([]); setReviewComplete(false); void trainerDb.setSetting('review.active', null); }, [setReviewAttempt]);
+  const clearReviewSession = useCallback(() => { reviewOpenRequestRef.current += 1; setReviewAttempt(null); setReviewResult(null); setReviewAttemptRecord(null); setReviewQueue([]); setReviewComplete(false); void trainerDb.setSetting('review.active', null); }, [setReviewAttempt]);
   return { reviewResult, setReviewResult, reviewAttemptRecord, setReviewAttemptRecord, reviewQueue, setReviewQueue, reviewOriginalQueue, reviewSource, reviewKind, reviewHistory, reviewIntervals, reviewElapsed, reviewInitialTotal, reviewStats, reviewComplete, reviewGradingRef, handleStartReview, handleReviewGuess, handleReviewNext, clearReviewSession, openReviewAttempt };
 }

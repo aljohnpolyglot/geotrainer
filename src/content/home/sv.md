@@ -62,7 +62,7 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 
-Svaret döljs tills du gissar. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
+Svaret döljs tills du gissar. Om ett gammalt panorama-ID öppnar en vy mer än 10 km från det sparade svaret använder Repetition en giltig vy nära de sparade koordinaterna eller öppnar inte kortet. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
 

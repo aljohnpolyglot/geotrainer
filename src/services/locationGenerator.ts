@@ -276,7 +276,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         ));
       });
     const original = await lookup({ pano: location.panoId });
-    if (original?.location?.pano && original.location.latLng) {
+    if (original?.location?.pano && original.location.latLng && calculateDistanceKm(location.lat, location.lng, original.location.latLng.lat(), original.location.latLng.lng()) <= 10) {
       return {
         ...location,
         panoId: original.location.pano,
@@ -303,6 +303,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
   async resolveReviewLocation(location: LocationResult, plan: ReviewVariationPlan, recentlyShown = new Set<string>()): Promise<LocationResult> {
     const anchor = await this.reopenLocation(location);
+    const resolvedAnchorCountry = (await reverseGeocodeLocation(anchor.lat, anchor.lng))?.countryCode;
+    if (resolvedAnchorCountry && resolvedAnchorCountry !== location.countryCode) throw new Error('The saved panorama no longer matches this Review location.');
     if (anchor.isFallback || plan.kind !== 'spatial' || !plan.maxDistanceM) return { ...anchor, heading: plan.kind === 'spatial' ? anchor.heading : plan.heading ?? anchor.heading };
     const sv = this.getService(); const radians = Math.PI / 180; const latitudeScale = 1 / 111_320;
     const targets = [.9, .7, .5, .3].map((scale, index) => {
