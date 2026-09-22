@@ -8,8 +8,11 @@ type PreferredCandidate = NonNullable<LocationRequestContext['preferredCandidate
 const randomItem = <T,>(items: T[], random: () => number) => items[Math.floor(random() * items.length)];
 const countryExposure = (countryCode: string, locations: TrainerLocation[]) => locations.filter((item) => item.countryCode === countryCode).reduce((sum, item) => sum + item.encounterCount, 0);
 
-export const leastExposureCountryOrder = (countryCodes: string[], locations: TrainerLocation[], firstCountryCode?: string) => {
-  const remaining = countryCodes.filter((code) => code !== firstCountryCode).sort((a, b) => countryExposure(a, locations) - countryExposure(b, locations));
+export const leastExposureCountryOrder = (countryCodes: string[], locations: TrainerLocation[], firstCountryCode?: string, random = Math.random) => {
+  const remaining = countryCodes.filter((code) => code !== firstCountryCode)
+    .map((code) => ({ code, exposure: countryExposure(code, locations), tie: random() }))
+    .sort((a, b) => a.exposure - b.exposure || a.tie - b.tie)
+    .map((item) => item.code);
   return firstCountryCode && countryCodes.includes(firstCountryCode) ? [firstCountryCode, ...remaining] : remaining;
 };
 

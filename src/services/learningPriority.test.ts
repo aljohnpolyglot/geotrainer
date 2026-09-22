@@ -24,7 +24,7 @@ test('least exposure keeps the same rule for one country, mixed pools, continent
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO'], known, () => 0).countryCodes, ['SE']);
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'FI'], known, () => 0).countryCodes, ['FI']);
   assert.deepEqual(learningPriorityTarget('least-exposure', ['SE', 'NO', 'JP', 'BR'], known, () => 0).countryCodes, ['BR']);
-  assert.deepEqual(leastExposureCountryOrder(['SE', 'NO', 'JP', 'BR'], known, 'BR'), ['BR', 'JP', 'SE', 'NO']);
+  assert.deepEqual(leastExposureCountryOrder(['SE', 'NO', 'JP', 'BR'], known, 'BR', () => 0), ['BR', 'JP', 'SE', 'NO']);
 });
 
 test('real learner pools keep least-exposure fallback order', () => {
@@ -33,7 +33,12 @@ test('real learner pools keep least-exposure fallback order', () => {
     { name: 'continental study', codes: ['FR', 'DE', 'ES', 'IT'], known: [location('FR', 48.8, 2.3, 8), location('DE', 52.5, 13.4, 4), location('IT', 41.9, 12.5, 2)], first: 'ES', expected: ['ES', 'IT', 'DE', 'FR'] },
     { name: 'world study', codes: ['US', 'BR', 'JP', 'ZA'], known: [location('US', 40.7, -74, 12), location('BR', -23.5, -46.6, 3), location('JP', 35.7, 139.7, 6)], first: 'ZA', expected: ['ZA', 'BR', 'JP', 'US'] },
   ];
-  histories.forEach(({ name, codes, known, first, expected }) => assert.deepEqual(leastExposureCountryOrder(codes, known, first), expected, name));
+  histories.forEach(({ name, codes, known, first, expected }) => assert.deepEqual(leastExposureCountryOrder(codes, known, first, () => 0), expected, name));
+});
+
+test('equal-exposure fallback countries are shuffled instead of walked alphabetically', () => {
+  const draws = [.9, .1, .5]; let index = 0;
+  assert.deepEqual(leastExposureCountryOrder(['AF', 'AL', 'AU'], [], undefined, () => draws[index++]), ['AL', 'AU', 'AF']);
 });
 
 test('equal country exposure is resolved by the larger normalized geographic blind spot', () => {
