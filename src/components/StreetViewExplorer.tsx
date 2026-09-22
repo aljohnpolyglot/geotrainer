@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { LoaderCircle, MapPinned, Search, X } from 'lucide-react';
 import type { LocationResult } from '../types';
 import { translate } from '../services/language';
@@ -22,6 +22,8 @@ export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
   const suggestions = useMemo(() => searchMapPlaces(query), [query]);
   onSelectRef.current = onSelect;
   uiRef.current = ui;
@@ -56,20 +58,26 @@ export function StreetViewExplorer({ open, mapsReady, onClose, onSelect }: {
 
   const openPlace = (place: MapSearchResult) => {
     if (!map.current) return;
-    setQuery(place.label); setError('');
+    setQuery(place.label); setError(''); setSuggestionsOpen(false); setActiveSuggestion(-1);
     if (place.bounds) map.current.fitBounds({ south: place.bounds.minLat, west: place.bounds.minLng, north: place.bounds.maxLat, east: place.bounds.maxLng });
     else { map.current.panTo({ lat: place.lat, lng: place.lng }); map.current.setZoom(10); }
   };
 
   const findPlace = () => {
-    const place = exactMapPlace(query) || suggestions[0];
+    const place = exactMapPlace(query) || suggestions[activeSuggestion] || suggestions[0];
     if (place) openPlace(place);
     else if (query.trim()) setError(t('Place not found. Try a city, region, or country.'));
   };
 
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowDown' && suggestions.length) { event.preventDefault(); setSuggestionsOpen(true); setActiveSuggestion((index) => Math.min(index + 1, suggestions.length - 1)); }
+    if (event.key === 'ArrowUp' && suggestions.length) { event.preventDefault(); setSuggestionsOpen(true); setActiveSuggestion((index) => Math.max(index - 1, 0)); }
+    if (event.key === 'Escape') { setSuggestionsOpen(false); setActiveSuggestion(-1); }
+  };
+
   if (!initialized) return null;
   return <section hidden={!open} className="street-view-explorer" aria-labelledby="street-view-explorer-title">
-    <header><div><MapPinned size={20} /><span><h2 id="street-view-explorer-title">{t('Explore Street View')}</h2><p>{t('Click blue coverage to open a panorama.')}</p></span></div><form className="street-view-explorer-search" role="search" onSubmit={(event) => { event.preventDefault(); findPlace(); }}><Search size={16} /><input type="search" list="street-view-place-suggestions" value={query} onChange={(event) => { const value = event.target.value; setQuery(value); const place = exactMapPlace(value); if (place) openPlace(place); }} placeholder={t('Search city, region, or country')} aria-label={t('Search city, region, or country')} autoComplete="off" /><datalist id="street-view-place-suggestions">{suggestions.map((place) => <option key={place.id} value={place.label} />)}</datalist><button type="submit">{t('Search')}</button></form><button className="icon-button" onClick={onClose} aria-label={t('close')}><X size={18} /></button></header>
+    <header><div><MapPinned size={20} /><span><h2 id="street-view-explorer-title">{t('Explore Street View')}</h2><p>{t('Click blue coverage to open a panorama.')}</p></span></div><form className="street-view-explorer-search" role="search" onSubmit={(event) => { event.preventDefault(); findPlace(); }}><Search size={16} /><input type="search" value={query} onChange={(event) => { const value = event.target.value; setQuery(value); setSuggestionsOpen(true); setActiveSuggestion(-1); const place = exactMapPlace(value); if (place) openPlace(place); }} onFocus={() => setSuggestionsOpen(true)} onKeyDown={handleSearchKeyDown} onBlur={() => window.setTimeout(() => setSuggestionsOpen(false), 120)} placeholder={t('Search city, region, or country')} aria-label={t('Search city, region, or country')} aria-controls="street-view-place-suggestions" aria-expanded={suggestionsOpen && suggestions.length > 0} aria-activedescendant={activeSuggestion >= 0 ? `street-view-place-${suggestions[activeSuggestion].id}` : undefined} autoComplete="off" role="combobox" />{suggestionsOpen && query.trim() && suggestions.length > 0 && <div id="street-view-place-suggestions" className="street-view-place-suggestions" role="listbox">{suggestions.map((place, index) => <button type="button" role="option" aria-selected={index === activeSuggestion} id={`street-view-place-${place.id}`} key={place.id} onMouseDown={(event) => event.preventDefault()} onClick={() => openPlace(place)}><span>{place.label}</span>{place.bounds ? <small>{t('Country')}</small> : <small>{t('City')}</small>}</button>)}</div>}<button type="submit">{t('Search')}</button></form><button className="icon-button" onClick={onClose} aria-label={t('close')}><X size={18} /></button></header>
     <div ref={element} className="street-view-explorer-map" aria-label={t('Street View coverage map')} />
     {(loading || error) && <div className={`street-view-explorer-status${error ? ' error' : ''}`} role="status">{loading && <LoaderCircle size={16} className="animate-spin" />}{loading ? t('Opening Street View…') : error}</div>}
   </section>;

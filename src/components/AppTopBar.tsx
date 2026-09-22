@@ -56,6 +56,7 @@ export interface AppTopBarProps {
   cluesActive: boolean;
   studyReviewSaving: boolean;
   learnSource: LearnSource;
+  mapPickerOpen?: boolean;
   uploadedProgress?: { position: number; total: number };
   onHome: () => void;
   onStudy: () => void;
@@ -80,7 +81,7 @@ export function AppTopBar({
   appMode, showHome, isGameActive, currentLocation, isLoading, isRevealed,
   gameSettings, currentRoundIndex, currentTotalScore, timeRemaining,
   pastGamesCount, reviewAttempt, reviewStatsLength, reviewInitialTotal,
-  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, uploadedProgress,
+  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
   onReveal, onNextLocation, onPreviousLocation, canPreviousLocation, onAbandonGame,
   onOpenHistory, onOpenNewGame, onOpenPreferences, onToggleFullscreen,
@@ -130,7 +131,7 @@ export function AppTopBar({
       </div>
         </div>
       </div>
-      {!showHome && appMode === 'study' && <button type="button" className="icon-button mode-exit-button" onClick={onRestartLearn} aria-label={t('Start new Learn mode')} data-tooltip={t('Start new Learn mode')}><X size={18} /></button>}
+      {!showHome && appMode === 'study' && !mapPickerOpen && <button type="button" className="icon-button mode-exit-button" onClick={onRestartLearn} aria-label={t('Start new Learn mode')} data-tooltip={t('Start new Learn mode')}><X size={18} /></button>}
       {!showHome && appMode === 'play' && isGameActive && <button type="button" className="icon-button mode-exit-button" onClick={() => navigate(onAbandonGame)} aria-label={t('Abandon game')} data-tooltip={t('Abandon game')}><X size={18} /></button>}
       {!showHome && appMode === 'review' && reviewAttempt && <button type="button" className="icon-button mode-exit-button" onClick={() => navigate(onExitReview)} aria-label={t('Exit review')} data-tooltip={t('Exit review')}><X size={18} /></button>}
     </header>
