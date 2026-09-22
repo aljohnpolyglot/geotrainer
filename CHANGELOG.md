@@ -4,6 +4,7 @@
 
 - Fixed phone-to-PC Review syncing by flushing pending progress when the app is backgrounded and combining grading history from both devices without rolling back the newest schedule.
 - Added a top-right minimize control to Review results and a compact View result action so the panorama remains available for study before continuing.
+- Fixed World and other multi-country Least exposure searches lingering on sparse countries; every unsuccessful lookup now advances to the next country in exposure order.
 
 ## 2026-09-20
 

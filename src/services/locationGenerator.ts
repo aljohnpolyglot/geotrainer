@@ -166,11 +166,9 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
     const sv = this.getService();
     const batchAttempts = options.environment === 'rural' ? 30 : 20;
-    const countryBatchAttempts = 4;
     const maxAttempts = context.maxAttempts ?? Infinity;
     const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
     const preferredCountryCodes = context.preferredCountryCodes?.filter((code) => countryCodes.includes(code));
-    let preferredCountryOffset = 0;
     if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -183,9 +181,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         ? countryCodes.filter((code) => (this.balancedCounts.get(code) || 0) === Math.min(...countryCodes.map((item) => this.balancedCounts.get(item) || 0)))
         : countryCodes;
       const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
-      const preferredCountryPosition = attempt - 1 + preferredCountryOffset;
-      const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[Math.floor(preferredCountryPosition / countryBatchAttempts) % preferredCountryCodes.length] : undefined;
-      const skipPreferredCountry = () => { preferredCountryOffset += countryBatchAttempts - preferredCountryPosition % countryBatchAttempts - 1; };
+      const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[(attempt - 1) % preferredCountryCodes.length] : undefined;
       const randomCountryCode = focused?.target.countryCode || preferredCountryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
@@ -238,7 +234,6 @@ export class StreetViewLocationGenerator implements LocationGenerator {
           if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
           if (!resolvedCountry || resolvedCountry !== randomCountryCode || !countryCodes.includes(resolvedCountry)) {
             console.warn(`Rejected panorama country mismatch: requested ${randomCountryCode}, resolved ${resolvedCountry || 'unknown'}`);
-            skipPreferredCountry();
             continue;
           }
           const cityDistance = candidate.city ? calculateDistanceKm(lat, lng, candidate.city.lat, candidate.city.lng) : null;

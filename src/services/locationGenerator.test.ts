@@ -157,19 +157,19 @@ test('least-exposure searches the target before jitter and Mixed retries recover
   } finally { Math.random = originalRandom; }
 });
 
-test('a prioritized country widens to the selected pool after its search batch', async () => {
+test('a prioritized country advances through the selected pool after each miss', async () => {
   currentResults = [
-    ...Array.from({ length: 4 }, (_, index) => ({ lat: 70 + index, lng: 0, pano: '', countryCode: 'DE', status: 'ZERO_RESULTS' })),
+    { lat: 70, lng: 0, pano: '', countryCode: 'DE', status: 'ZERO_RESULTS' },
     { lat: 41.9, lng: 12.5, pano: 'italian-fallback', countryCode: 'IT', links: [{}] },
   ];
   results = [...currentResults]; panoramaCalls = 0;
   const originalRandom = Math.random; Math.random = () => 0;
   try {
     const { StreetViewLocationGenerator } = await import('./locationGenerator');
-    const found = await new StreetViewLocationGenerator().findRandomLocation(['DE', 'IT'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { preferredCountryCodes: ['DE', 'IT'], requireNavigation: true, maxAttempts: 5 });
+    const found = await new StreetViewLocationGenerator().findRandomLocation(['DE', 'IT'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { preferredCountryCodes: ['DE', 'IT'], requireNavigation: true, maxAttempts: 2 });
     assert.equal(found.panoId, 'italian-fallback');
     assert.equal(found.countryCode, 'IT');
-    assert.equal(panoramaCalls, 5);
+    assert.equal(panoramaCalls, 2);
   } finally { Math.random = originalRandom; }
 });
 
