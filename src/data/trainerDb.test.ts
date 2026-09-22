@@ -159,6 +159,16 @@ test('workspace settings preserve Coach history and scoped drafts', async () => 
   assert.equal((await readWorkspaceDraft<{ panoId: string; text: string }>('note', 'pano-a'))?.text, 'bollard');
 });
 
+test('rapid local workspace saves finish in call order', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  await initTrainerDb(); await clearTrainerDbForTesting();
+  await Promise.all([
+    trainerDb.setSetting('workspace.active', { mode: 'study', location: 'first' }),
+    trainerDb.setSetting('workspace.active', { mode: 'study', location: 'latest' }),
+  ]);
+  assert.deepEqual(await trainerDb.setting('workspace.active'), { mode: 'study', location: 'latest' });
+});
+
 test('due queue enforces same-day limits and persists review session kind', async () => {
   const { clearTrainerDbForTesting, createBackup, importBackup, initTrainerDb, trainerDb } = await import('./trainerDb');
   await initTrainerDb();

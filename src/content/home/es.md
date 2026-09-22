@@ -103,7 +103,7 @@ Consulta lugares, intentos, cola pendiente, rendimiento, historial y tiempo acti
 
 ## Sincronización en la nube
 
-La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al conectarte, se combina el historial de calificaciones de Repaso de cada dispositivo; prevalecen el ajuste más reciente y la programación calificada más tarde. Al salir de la aplicación se inicia cualquier carga pendiente. La nube se vuelve a comprobar al enfocar cada pantalla y actualiza la aplicación abierta sin recargar ni sustituir el espacio de trabajo activo. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
+La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. El progreso de Estudio, Juego y Repaso se guarda primero en este navegador; la sincronización continúa silenciosamente en segundo plano, por lo que una conexión lenta no retrasa el guardado local ni reinicia el espacio de trabajo activo. Al conectarte, se combina el historial de calificaciones de cada dispositivo; prevalecen el ajuste más reciente y la programación calificada más tarde. Al salir se inicia cualquier carga pendiente. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
 
 ## Solución de problemas
 

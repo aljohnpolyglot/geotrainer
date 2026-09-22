@@ -103,7 +103,7 @@ Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in prim
 
 ## Sincronizzazione cloud
 
-L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la cronologia delle valutazioni di Ripasso di ogni dispositivo viene unita; prevalgono l’impostazione più recente e la programmazione valutata per ultima. Uscire dall’app avvia ogni caricamento in sospeso. Il cloud viene ricontrollato quando ogni schermata torna attiva e aggiorna l’app aperta senza ricaricare né sostituire lo spazio di lavoro attivo. Senza accesso, localhost e il sito pubblicato restano separati.
+L’account è facoltativo e l’allenamento locale funziona senza accesso. I progressi di Studio, Gioco e Ripasso vengono salvati prima in questo browser; la sincronizzazione prosegue silenziosamente in background, quindi una connessione lenta non ritarda il salvataggio locale e non reimposta lo spazio di lavoro attivo. Se collegato, la cronologia delle valutazioni di ogni dispositivo viene unita; prevalgono l’impostazione più recente e la programmazione valutata per ultima. Uscire dall’app avvia ogni caricamento in sospeso. Senza accesso, localhost e il sito pubblicato restano separati.
 
 ## Risoluzione dei problemi
 

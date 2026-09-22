@@ -392,7 +392,7 @@ Open the account entry on the homepage and use Google or email. Signing in ident
 
 ### What sync does
 
-Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review grading history from each device is combined, while the newest saved setting and most recently graded schedule win. Leaving the app starts any pending upload; returning periodically checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
+Study, Play, and Review progress is saved to this browser first. Cloud sync then runs quietly in the background, so a slow connection never delays the local save or resets the active workspace. Compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues remain available across signed-in devices and site instances. Review grading history from each device is combined, while the newest saved setting and most recently graded schedule win. Leaving the app starts any pending upload; returning periodically checks for newer cloud progress without replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 

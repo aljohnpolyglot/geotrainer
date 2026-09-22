@@ -109,7 +109,7 @@ Se platser, försök, kö, resultat, historik och aktiv tid i förgrunden under 
 
 ## Molnsynkronisering
 
-Konto är valfritt och lokal träning fungerar utan inloggning. När du är inloggad slås bedömningshistoriken för Repetition ihop från varje enhet; den senaste inställningen och det senast bedömda schemat vinner. När du lämnar appen startas väntande uppladdningar. Molnet kontrolleras när varje skärm får fokus och uppdaterar den öppna appen utan omladdning eller byte av den aktiva arbetsytan. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
+Konto är valfritt och lokal träning fungerar utan inloggning. Framsteg i Lär, Spela och Repetition sparas först i den här webbläsaren; synkroniseringen fortsätter tyst i bakgrunden, så en långsam anslutning fördröjer inte den lokala lagringen och återställer inte den aktiva arbetsytan. När du är inloggad slås bedömningshistoriken från varje enhet ihop; den senaste inställningen och det senast bedömda schemat vinner. När du lämnar appen startas väntande uppladdningar. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
 
 ## Felsökning
 

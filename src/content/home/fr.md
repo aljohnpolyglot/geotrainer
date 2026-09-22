@@ -103,7 +103,7 @@ Consultez lieux, tentatives, file, performances, historique et temps actif au pr
 
 ## Synchronisation cloud
 
-Le compte est facultatif et l’entraînement local fonctionne sans connexion. Une fois connecté, l’historique des notes de Révision de chaque appareil est combiné ; le réglage le plus récent et la planification notée en dernier l’emportent. Quitter l’application lance tout envoi en attente. Le cloud est vérifié lorsque chaque écran reprend le focus et met à jour l’application ouverte sans rechargement ni remplacement de l’espace de travail actif. Sans connexion, localhost et le site publié restent séparés.
+Le compte est facultatif et l’entraînement local fonctionne sans connexion. La progression d’Étude, de Jeu et de Révision est d’abord enregistrée dans ce navigateur ; la synchronisation continue silencieusement en arrière-plan, donc une connexion lente ne retarde pas l’enregistrement local et ne réinitialise pas l’espace de travail actif. Une fois connecté, l’historique des notes de chaque appareil est combiné ; le réglage le plus récent et la planification notée en dernier l’emportent. Quitter l’application lance tout envoi en attente. Sans connexion, localhost et le site publié restent séparés.
 
 ## Dépannage
 

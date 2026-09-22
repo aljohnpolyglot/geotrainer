@@ -103,7 +103,7 @@ Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primei
 
 ## Sincronização na nuvem
 
-A conta é opcional e o treino local funciona sem login. Quando conectada, o histórico de avaliações de Revisão de cada dispositivo é combinado; vencem a configuração mais recente e o agendamento avaliado por último. Sair do app inicia qualquer envio pendente. A nuvem é verificada ao voltar a cada tela e atualiza o app aberto sem recarregar nem substituir o espaço de trabalho ativo. Sem login, localhost e o site publicado ficam separados.
+A conta é opcional e o treino local funciona sem login. O progresso de Estudo, Jogo e Revisão é salvo primeiro neste navegador; a sincronização continua silenciosamente em segundo plano, portanto uma conexão lenta não atrasa o salvamento local nem redefine o espaço de trabalho ativo. Quando conectada, o histórico de avaliações de cada dispositivo é combinado; vencem a configuração mais recente e o agendamento avaliado por último. Sair do app inicia qualquer envio pendente. Sem login, localhost e o site publicado ficam separados.
 
 ## Solução de problemas
 

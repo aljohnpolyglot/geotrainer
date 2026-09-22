@@ -77,21 +77,19 @@ export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, p
   if (review.lastReviewedAt === at) return attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
   return { ...review, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
 }
-
 let database: Promise<IDBDatabase> | undefined;
+let settingWrites = Promise.resolve();
 const request = <T>(value: IDBRequest<T>) =>
   new Promise<T>((resolve, reject) => {
     value.onsuccess = () => resolve(value.result);
     value.onerror = () => reject(value.error);
   });
-
 const complete = (transaction: IDBTransaction) =>
   new Promise<void>((resolve, reject) => {
     transaction.oncomplete = () => resolve();
     transaction.onerror = () => reject(transaction.error);
     transaction.onabort = () => reject(transaction.error || new Error('Database transaction aborted'));
   });
-
 function openDatabase(): Promise<IDBDatabase> {
   if (database) return database;
   database = new Promise((resolve, reject) => {
@@ -126,17 +124,14 @@ function openDatabase(): Promise<IDBDatabase> {
   });
   return database;
 }
-
 async function all<T>(storeName: StoreName): Promise<T[]> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).getAll()) as Promise<T[]>;
 }
-
 async function get<T>(storeName: StoreName, key: IDBValidKey): Promise<T | undefined> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).get(key)) as Promise<T | undefined>;
 }
-
 async function put<T>(storeName: StoreName, value: T): Promise<void> {
   const db = await openDatabase();
   const tx = db.transaction(storeName, 'readwrite');
@@ -144,7 +139,6 @@ async function put<T>(storeName: StoreName, value: T): Promise<void> {
   await complete(tx);
   notifyChange({ operation: `put:${storeName}` });
 }
-
 async function remove(storeName: StoreName, key: IDBValidKey): Promise<void> {
   const db = await openDatabase();
   const tx = db.transaction(storeName, 'readwrite');
@@ -273,10 +267,13 @@ export const trainerDb = {
     const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : get<ReviewRecord>('reviews', panoId);
   },
-  setSetting: async (key: string, value: unknown) => {
-    const previous = await get<SettingRecord>('settings', key);
-    if (previous && JSON.stringify(previous.value) === JSON.stringify(value)) return;
-    await put('settings', { key, value, updatedAt: Date.now() });
+  setSetting: (key: string, value: unknown) => {
+    const write = settingWrites.then(async () => {
+      const previous = await get<SettingRecord>('settings', key);
+      if (!previous || JSON.stringify(previous.value) !== JSON.stringify(value)) await put('settings', { key, value, updatedAt: Date.now() });
+    });
+    settingWrites = write.catch(() => {});
+    return write;
   },
   saveGame: (game: GameRecord) => put('games', game),
   deleteGame: (id: string) => remove('games', id),

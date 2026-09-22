@@ -48,6 +48,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Show Review improvement, Sessions, and every History tab 10 entries per page; reset History to page one when its tab or filters change.
 - Count foreground time across Study, active Play, and active Review work, including panorama movement and learning-aid use; persist it when switching surfaces or returning home. Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
+- Commit Study, Learn, Play, and Review progress to IndexedDB before cloud work; preserve local write order, re-read local state after network waits, and keep automatic syncing silent and non-blocking.
 - Coalesce local cloud-sync bursts, flush pending writes when the app is backgrounded, skip unchanged whole-backup writes, throttle repeated focus-triggered cloud pulls, merge Review grading history across devices, and serialize read-modify-write updates such as Coach history so reliability fixes do not recreate Supabase I/O amplification.
 - Merge the latest remote backup before every whole-backup upload so localhost and deployed origins using the same account converge without replacing each other's unique records.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.

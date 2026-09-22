@@ -206,8 +206,9 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
     }
     if (remote) {
       validateBackup(remote);
-      const merged = mergeBackups(remote as TrainerBackup, backup);
-      if (JSON.stringify(merged.data) !== JSON.stringify(backup.data)) {
+      const latestLocal = await createBackup(false);
+      const merged = mergeBackups(remote as TrainerBackup, latestLocal);
+      if (JSON.stringify(merged.data) !== JSON.stringify(latestLocal.data)) {
         applyingCloud = true;
         try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(backup, 'upload cloud merge'); } finally { applyingCloud = false; }
         backup = merged;
@@ -246,7 +247,7 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
   }
 }
 
-async function syncSession(session: Session | null): Promise<void> {
+async function syncSession(session: Session | null, announce = false): Promise<void> {
   activeUserId = session?.user.id;
   if (!session) {
     syncedUserId = undefined; syncedBackup = ''; lastPullAt = 0;
@@ -254,13 +255,13 @@ async function syncSession(session: Session | null): Promise<void> {
     return;
   }
 
-  update({ email: session.user.email, phase: 'syncing', message: 'Merging cloud and local progress…' });
+  update(announce ? { email: session.user.email, phase: 'syncing', message: 'Merging cloud and local progress…' } : { email: session.user.email });
   try {
     let importedCloud = false;
     await initTrainerDb();
-    const local = await createBackup(false);
     const { data, error } = await retryCloud(() => supabase!.from('user_backups').select('backup').eq('user_id', session.user.id).maybeSingle());
     if (error) throw error;
+    const local = await createBackup(false);
     syncedUserId = session.user.id;
     syncedBackup = '';
     if (data?.backup) {
@@ -273,12 +274,12 @@ async function syncSession(session: Session | null): Promise<void> {
         importedCloud = true;
       }
     }
-    await upload(session.user.id, true, data?.backup);
+    await upload(session.user.id, announce, data?.backup);
     lastPullAt = Date.now();
     if (importedCloud) announceCloudImport();
   } catch (error) {
     applyingCloud = false;
-    update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync failed.' });
+    if (announce) update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync failed.' });
   }
 }
 
@@ -308,7 +309,7 @@ export const cloudSync = {
       supabase.auth.onAuthStateChange((event, session) => {
         const previousUserId = activeUserId;
         activeUserId = session?.user.id;
-        if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session), 0);
+        if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session, true), 0);
       });
       window.addEventListener('online', () => void upload().catch(() => {}));
       const refresh = createQuietSyncScheduler(() => {

@@ -346,7 +346,7 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Synchronisierte Daten
 
-Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Der Bewertungsverlauf wird geräteübergreifend kombiniert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Zeitplan gewinnen. Beim Verlassen der App startet eine ausstehende Übertragung. Beim Zurückkehren prüft die App regelmäßig auf neuen Cloud-Fortschritt und übernimmt ihn ohne Neuladen oder Ersetzen des aktiven Arbeitsstands. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+Fortschritt aus Lernen, Spielen und Wiederholen wird zuerst in diesem Browser gespeichert. Die Cloud-Synchronisierung läuft danach still im Hintergrund, sodass eine langsame Verbindung das lokale Speichern nicht verzögert und den aktiven Arbeitsstand nicht zurücksetzt. Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Der Bewertungsverlauf wird geräteübergreifend kombiniert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Zeitplan gewinnen. Beim Verlassen der App startet eine ausstehende Übertragung. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
 
 ### Offline arbeiten und abmelden
 
