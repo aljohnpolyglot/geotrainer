@@ -58,7 +58,7 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 ## Revisão e agendamento
 
-A resposta fica oculta até o palpite. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
+A resposta fica oculta até o palpite. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ## Coach de IA e pistas
 
@@ -101,7 +101,7 @@ Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primei
 
 ## Sincronização na nuvem
 
-A conta é opcional e o treino local funciona sem login. Quando conectada, a sincronização inclui progresso e preferências de Revisão, idioma, interface, áudio e jogo; vencem a configuração mais recente e a Revisão avaliada por último. A nuvem é verificada ao voltar a cada tela e atualiza o app aberto sem recarregar nem substituir o espaço de trabalho ativo. Sem login, localhost e o site publicado ficam separados.
+A conta é opcional e o treino local funciona sem login. Quando conectada, o histórico de avaliações de Revisão de cada dispositivo é combinado; vencem a configuração mais recente e o agendamento avaliado por último. Sair do app inicia qualquer envio pendente. A nuvem é verificada ao voltar a cada tela e atualiza o app aberto sem recarregar nem substituir o espaço de trabalho ativo. Sem login, localhost e o site publicado ficam separados.
 
 ## Solução de problemas
 

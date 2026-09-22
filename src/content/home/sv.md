@@ -60,7 +60,7 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 
-Svaret döljs tills du gissar. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
+Svaret döljs tills du gissar. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
 
@@ -107,7 +107,7 @@ Se platser, försök, kö, resultat, historik och aktiv tid i förgrunden under 
 
 ## Molnsynkronisering
 
-Konto är valfritt och lokal träning fungerar utan inloggning. När du är inloggad synkroniseras framsteg samt inställningar för Repetition, språk, gränssnitt, ljud och spel; den senaste inställningen och den senast bedömda Repetitionen vinner. Molnet kontrolleras när varje skärm får fokus och uppdaterar den öppna appen utan omladdning eller byte av den aktiva arbetsytan. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
+Konto är valfritt och lokal träning fungerar utan inloggning. När du är inloggad slås bedömningshistoriken för Repetition ihop från varje enhet; den senaste inställningen och det senast bedömda schemat vinner. När du lämnar appen startas väntande uppladdningar. Molnet kontrolleras när varje skärm får fokus och uppdaterar den öppna appen utan omladdning eller byte av den aktiva arbetsytan. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
 
 ## Felsökning
 

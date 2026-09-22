@@ -109,18 +109,21 @@ test('cloud merge includes review, language, UI, audio, map, game, and workspace
   assert.deepEqual((mergeBackups(cloud, local).data.settings as Array<{ value: string }>).map(({ value }) => value), ['cloud-schedulerPreferences', 'cloud-languagePreferences', 'cloud-preference.darkMode', 'cloud-preference.audio', 'cloud-mapPreferences', 'cloud-gamePreferences', 'cloud-workspace.paused.study']);
 });
 
-test('cloud merge keeps the most recently graded review across devices', () => {
+test('cloud merge keeps the newest schedule and every grading event across devices', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
-  cloud.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 30, lastReviewedAt: 20, gradingHistory: [{ grade: 'good', at: 20 }] });
-  local.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 15, lastReviewedAt: 10, gradingHistory: [{ grade: 'hard', at: 10 }] });
-  assert.deepEqual(mergeBackups(cloud, local).data.reviews, [cloud.data.reviews[0]]);
+  const cloudReview = { id: 'pano', panoId: 'pano', dueAt: 30, intervalDays: 3, lastReviewedAt: 20, gradingHistory: [{ grade: 'good', at: 20 }], reviewCount: 1, lapseCount: 0 };
+  cloud.data.reviews.push(cloudReview);
+  local.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 15, intervalDays: 1, lastReviewedAt: 10, gradingHistory: [{ grade: 'hard', at: 10 }], reviewCount: 1, lapseCount: 0 });
+  assert.deepEqual(mergeBackups(cloud, local).data.reviews, [{ ...cloudReview, gradingHistory: [{ grade: 'hard', at: 10 }, { grade: 'good', at: 20 }], reviewCount: 2 }]);
 });
 
 test('cloud merge keeps the newest independent generalization state', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
-  cloud.data.reviews.push({ id: 'pano', panoId: 'pano', generalizationLevel: 2, generalizationUpdatedAt: 30 });
-  local.data.reviews.push({ id: 'pano', panoId: 'pano', generalizationLevel: 4, generalizationUpdatedAt: 20 });
-  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { generalizationLevel: number }).generalizationLevel, 2);
+  cloud.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 30, intervalDays: 3, lastReviewedAt: 30, gradingHistory: [], reviewCount: 1, lapseCount: 0, generalizationLevel: 1, generalizationUpdatedAt: 10 });
+  local.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 20, intervalDays: 1, lastReviewedAt: 20, gradingHistory: [], reviewCount: 1, lapseCount: 0, generalizationLevel: 4, generalizationUpdatedAt: 40 });
+  const merged = mergeBackups(cloud, local).data.reviews[0] as { dueAt: number; generalizationLevel: number };
+  assert.equal(merged.dueAt, 30);
+  assert.equal(merged.generalizationLevel, 4);
 });
 
 test('token refresh does not trigger a visible full sync', () => {

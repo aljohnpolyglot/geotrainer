@@ -58,7 +58,7 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 ## Repaso y programación
 
-Repaso oculta la respuesta hasta tu conjetura. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
+Repaso oculta la respuesta hasta tu conjetura. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
 ## Entrenador de IA y pistas
 
@@ -101,7 +101,7 @@ Consulta lugares, intentos, cola pendiente, rendimiento, historial y tiempo acti
 
 ## Sincronización en la nube
 
-La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al conectarte, se sincronizan el progreso y los ajustes de Repaso, idioma, interfaz, audio y juego; prevalecen el ajuste más reciente y el Repaso calificado más tarde. La nube se vuelve a comprobar al enfocar cada pantalla y actualiza la aplicación abierta sin recargar ni sustituir el espacio de trabajo activo. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
+La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. Al conectarte, se combina el historial de calificaciones de Repaso de cada dispositivo; prevalecen el ajuste más reciente y la programación calificada más tarde. Al salir de la aplicación se inicia cualquier carga pendiente. La nube se vuelve a comprobar al enfocar cada pantalla y actualiza la aplicación abierta sin recargar ni sustituir el espacio de trabajo activo. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
 
 ## Solución de problemas
 

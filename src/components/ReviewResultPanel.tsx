@@ -1,4 +1,4 @@
-import { AlertTriangle, Building, Compass, MapPin } from 'lucide-react';
+import { AlertTriangle, Building, Compass, Eye, MapPin, Minus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
@@ -32,19 +32,23 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const country = COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
+  const [minimized, setMinimized] = useState(false);
   useEffect(() => {
     let active = true;
-    setGeocodeData(null); setIsGeocoding(true);
+    setGeocodeData(null); setIsGeocoding(true); setMinimized(false);
     reverseGeocodeLocation(sourceAttempt.actualLat, sourceAttempt.actualLng)
       .then((result) => { if (active) { setGeocodeData(result); setIsGeocoding(false); } })
       .catch(() => { if (active) setIsGeocoding(false); });
     return () => { active = false; };
-  }, [sourceAttempt.actualLat, sourceAttempt.actualLng]);
+  }, [sourceAttempt.id, sourceAttempt.actualLat, sourceAttempt.actualLng]);
   const locationDetails = reviewLocationDetails(geocodeData, t('addressUnavailable'));
+
+  if (minimized) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
 
   return (
     <div className="review-result-backdrop" role="dialog" aria-labelledby="review-result-title">
       <section className="review-result-panel">
+        <button type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         <header className="review-result-header">
           <div>
             <span className="review-context">{position} / {total} · {sourceLabel}</span>

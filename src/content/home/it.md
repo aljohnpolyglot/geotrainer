@@ -58,7 +58,7 @@ Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 
 
 ## Ripasso e programmazione
 
-La soluzione resta nascosta fino alla stima. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
+La soluzione resta nascosta fino alla stima. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
 ## Coach IA e indizi
 
@@ -101,7 +101,7 @@ Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in prim
 
 ## Sincronizzazione cloud
 
-L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la sincronizzazione include progressi e preferenze di Ripasso, lingua, interfaccia, audio e gioco; prevalgono l’impostazione più recente e il Ripasso valutato per ultimo. Il cloud viene ricontrollato quando ogni schermata torna attiva e aggiorna l’app aperta senza ricaricare né sostituire lo spazio di lavoro attivo. Senza accesso, localhost e il sito pubblicato restano separati.
+L’account è facoltativo e l’allenamento locale funziona senza accesso. Se collegato, la cronologia delle valutazioni di Ripasso di ogni dispositivo viene unita; prevalgono l’impostazione più recente e la programmazione valutata per ultima. Uscire dall’app avvia ogni caricamento in sospeso. Il cloud viene ricontrollato quando ogni schermata torna attiva e aggiorna l’app aperta senza ricaricare né sostituire lo spazio di lavoro attivo. Senza accesso, localhost e il sito pubblicato restano separati.
 
 ## Risoluzione dei problemi
 

@@ -12,7 +12,7 @@ import {
 } from '../data/trainerDb';
 import { supabase } from './supabase';
 import { resolveStoredClueImages, uploadClueImage } from './clueImages';
-import type { ClueRecord, CoachAnalysis, NotebookNote } from '../types';
+import type { ClueRecord, CoachAnalysis, NotebookNote, ReviewRecord } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
 import { IMPORTED_MAP_PREFIX } from './importedMap';
 import { splitDuplicateClues } from '../data/clueDedup';
@@ -39,12 +39,28 @@ const keys: Record<StoreName, string> = {
   sessions: 'id',
   clues: 'id',
 };
-const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : name === 'reviews' ? Math.max(Number(record.lastReviewedAt || 0), Number(record.generalizationUpdatedAt || 0), ...(Array.isArray(record.gradingHistory) ? record.gradingHistory.map((item) => Number((item as { at?: number }).at || 0)) : [0])) : undefined;
+const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : undefined;
 const noteSettings = new Set(['notebook.notes', 'coach.notes', 'clues.deleted']);
 const mergeNotes = (left: unknown, right: unknown) => {
   const notes = new Map<string, Record<string, unknown>>();
   for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) { const key = String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`); const previous = notes.get(key); if (!previous || Number(item.deletedAt || item.updatedAt || item.generatedAt || 0) >= Number(previous.deletedAt || previous.updatedAt || previous.generatedAt || 0)) notes.set(key, item); }
   return [...notes.values()].sort((a, b) => Number(b.updatedAt || b.generatedAt || 0) - Number(a.updatedAt || a.generatedAt || 0));
+};
+const reviewedAt = (record: ReviewRecord) => Math.max(record.lastReviewedAt || 0, ...(record.gradingHistory || []).map((item) => item.at));
+const mergeReviews = (left: ReviewRecord, right: ReviewRecord): ReviewRecord => {
+  const latest = reviewedAt(right) >= reviewedAt(left) ? right : left;
+  const generalization = (right.generalizationUpdatedAt || (right.generalizationLevel !== undefined ? reviewedAt(right) : 0)) >= (left.generalizationUpdatedAt || (left.generalizationLevel !== undefined ? reviewedAt(left) : 0)) ? right : left;
+  const gradingHistory = [...(left.gradingHistory || []), ...(right.gradingHistory || [])]
+    .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
+    .sort((a, b) => a.at - b.at);
+  return {
+    ...latest,
+    gradingHistory,
+    reviewCount: Math.max(left.reviewCount || 0, right.reviewCount || 0, gradingHistory.length),
+    lapseCount: Math.max(left.lapseCount || 0, right.lapseCount || 0, gradingHistory.filter((item) => item.grade === 'again').length),
+    ...(generalization.generalizationLevel !== undefined ? { generalizationLevel: generalization.generalizationLevel } : {}),
+    ...(generalization.generalizationUpdatedAt !== undefined ? { generalizationUpdatedAt: generalization.generalizationUpdatedAt } : {}),
+  };
 };
 
 export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): TrainerBackup {
@@ -54,7 +70,8 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
     const records = new Map<string, unknown>();
     for (const item of [...(cloud.data[name] || []), ...(local.data[name] || [])]) {
       const record = item as Record<string, unknown>; const recordKey = String(record[key]); const previous = records.get(recordKey) as Record<string, unknown> | undefined;
-      if (previous && name === 'settings' && noteSettings.has(recordKey)) records.set(recordKey, { ...(revision(name, record)! >= revision(name, previous)! ? record : previous), value: mergeNotes(previous.value, record.value), updatedAt: Math.max(revision(name, record)!, revision(name, previous)!) });
+      if (previous && name === 'reviews') records.set(recordKey, mergeReviews(previous as unknown as ReviewRecord, record as unknown as ReviewRecord));
+      else if (previous && name === 'settings' && noteSettings.has(recordKey)) records.set(recordKey, { ...(revision(name, record)! >= revision(name, previous)! ? record : previous), value: mergeNotes(previous.value, record.value), updatedAt: Math.max(revision(name, record)!, revision(name, previous)!) });
       else if (!previous || revision(name, record) === undefined || revision(name, record)! >= revision(name, previous)!) records.set(recordKey, item);
     }
     return [name, [...records.values()]];
@@ -299,7 +316,10 @@ export const cloudSync = {
         void supabase.auth.getSession().then(({ data }) => data.session && syncSession(data.session)).catch(() => {});
       }, 250);
       window.addEventListener('focus', refresh);
-      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(); });
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') refresh();
+        else void upload().catch(() => {});
+      });
     } catch (error) {
       update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync could not start.' });
     }

@@ -147,7 +147,7 @@
   .panorama-tools.review-result-tools .learning-aids { flex-direction: row; }
   .review-result-backdrop { padding: 128px 12px 12px; place-items: end center; }
   .review-result-panel { max-height: min(78dvh, 640px, calc(100dvh - 140px)); border-radius: 12px; }
-  .review-result-header { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px; }
+  .review-result-header { align-items: flex-start; flex-direction: column; gap: 8px; padding: 12px 60px 12px 12px; }
   .review-comparison { display: grid; grid-template-columns: 1fr 1fr auto; width: 100%; gap: 8px; }
   .review-comparison strong { font-size: 11px; }
   .review-comparison b { font-size: 13px; }

@@ -186,7 +186,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
+The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 ### Automatic grading
 
@@ -388,7 +388,7 @@ Open the account entry on the homepage and use Google or email. Signing in ident
 
 ### What sync does
 
-Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review, language, display, audio, and game settings sync as preferences; the newest saved setting and most recently graded Review record win. Returning to the app periodically checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
+Cloud sync keeps compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues available across signed-in devices and site instances. Review grading history from each device is combined, while the newest saved setting and most recently graded schedule win. Leaving the app starts any pending upload; returning periodically checks for newer cloud progress and updates the open app without reloading or replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 

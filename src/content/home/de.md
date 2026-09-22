@@ -164,7 +164,7 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 ### Nach der Antwort
 
-Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
+Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
 ### Automatische Bewertung
 
@@ -342,7 +342,7 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Synchronisierte Daten
 
-Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Wiederholungs-, Sprach-, Darstellungs-, Audio- und Spieleinstellungen werden synchronisiert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Wiederholungseintrag gewinnen. Beim Zurückkehren prüft die App regelmäßig auf neuen Cloud-Fortschritt und übernimmt ihn ohne Neuladen oder Ersetzen des aktiven Arbeitsstands. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Der Bewertungsverlauf wird geräteübergreifend kombiniert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Zeitplan gewinnen. Beim Verlassen der App startet eine ausstehende Übertragung. Beim Zurückkehren prüft die App regelmäßig auf neuen Cloud-Fortschritt und übernimmt ihn ohne Neuladen oder Ersetzen des aktiven Arbeitsstands. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
 
 ### Offline arbeiten und abmelden
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-22
+
+- Fixed phone-to-PC Review syncing by flushing pending progress when the app is backgrounded and combining grading history from both devices without rolling back the newest schedule.
+- Added a top-right minimize control to Review results and a compact View result action so the panorama remains available for study before continuing.
+
 ## 2026-09-20
 
 - Added the standard status toast while the workspace 360° screenshot is being captured, copied, or fails.

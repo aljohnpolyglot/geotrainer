@@ -58,7 +58,7 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 ## Révision et planification
 
-La réponse reste cachée jusqu’à votre estimation. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
+La réponse reste cachée jusqu’à votre estimation. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices
 
@@ -101,7 +101,7 @@ Consultez lieux, tentatives, file, performances, historique et temps actif au pr
 
 ## Synchronisation cloud
 
-Le compte est facultatif et l’entraînement local fonctionne sans connexion. Une fois connecté, la synchronisation inclut la progression et les réglages de Révision, langue, interface, audio et jeu ; le réglage le plus récent et la Révision notée en dernier l’emportent. Le cloud est vérifié lorsque chaque écran reprend le focus et met à jour l’application ouverte sans rechargement ni remplacement de l’espace de travail actif. Sans connexion, localhost et le site publié restent séparés.
+Le compte est facultatif et l’entraînement local fonctionne sans connexion. Une fois connecté, l’historique des notes de Révision de chaque appareil est combiné ; le réglage le plus récent et la planification notée en dernier l’emportent. Quitter l’application lance tout envoi en attente. Le cloud est vérifié lorsque chaque écran reprend le focus et met à jour l’application ouverte sans rechargement ni remplacement de l’espace de travail actif. Sans connexion, localhost et le site publié restent séparés.
 
 ## Dépannage
 
