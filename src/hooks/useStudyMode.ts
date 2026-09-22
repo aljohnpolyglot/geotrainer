@@ -8,7 +8,7 @@ import { reverseGeocodeLocation } from '../services/geocoding';
 import { isCurrentPanorama, isLatestRequest } from '../services/requestIntegrity';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { getImportedMap, moveImportedHistory, pickImportedLocation, type ImportedMapHistory } from '../services/importedMap';
-import { learningPriorityTarget, leastExposureCountryOrder } from '../services/learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
 
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
@@ -83,15 +83,16 @@ export function useStudyMode(ctx: any) {
     try {
       let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };
       let preferredCountryCodes: string[] | undefined;
+      const priorityCountryCodes = studyPriorityRef.current === 'least-exposure' && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
       if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
         const history = await trainerDb.locations();
-        target = learningPriorityTarget(studyPriorityRef.current, collection.countryCodes, history);
+        target = learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
         if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
-        if (target.countryCodes.length === 1 && collection.countryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(collection.countryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...collection.countryCodes.filter((code: string) => code !== target.countryCodes[0])];
+        if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
       }
       const result = importedMapId
         ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current)
-        : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? collection.countryCodes : target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
+        : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
       recentStudyPanosRef.current = [result.panoId, ...recentStudyPanosRef.current.filter((id: string) => id !== result.panoId)].slice(0, 15);
       if (importedMapId) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress({ position: uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current }); }

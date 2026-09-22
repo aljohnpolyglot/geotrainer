@@ -113,6 +113,8 @@ Priority changes how **new Custom Learn locations** are chosen after the collect
 
 When no eligible history exists, Familiar places and Least exposure begin from the selected pool like Random. In a multi-country Least exposure search, GeoTrainer tries the chosen grey or least-exposed country and its regional target first. Every unsuccessful lookup, including a panorama identified outside the requested country, advances immediately. After one unseen target misses, countries with proven encounter coverage are tried from least to most exposure before more unknown countries; equal ties are shuffled. The order repeats until a panorama is found or you leave. Street View coverage and the active filters still decide whether a requested area can produce a panorama, so a nearby available view may be used when the exact target has no coverage.
 
+For World Least exposure, a bundled coverage scan skips countries whose included seeds found no navigable official panorama. Focused country pools still search every selected country.
+
 Uploaded map files stay on this device. Progress from locations you study or play can still appear in your account. To use the same map on another device, upload the file there and start a new session. A removed or unavailable Street View panorama may be skipped; if no usable panoramas remain, upload another map or change learning paths.
 
 ### Studying a panorama

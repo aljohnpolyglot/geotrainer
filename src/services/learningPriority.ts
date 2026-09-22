@@ -2,11 +2,14 @@ import { COUNTRIES } from '../data/countries';
 import type { CityPoolRegion, LearnPriority, LocationRequestContext, TrainerLocation } from '../types';
 import { calculateDistanceKm } from './gameLogic';
 import { normalizeRegionName } from './regionHeatmap';
+import coverageTraining from '../data/streetViewCoverageTraining.json';
 
 type PreferredCandidate = NonNullable<LocationRequestContext['preferredCandidate']>;
 
 const randomItem = <T,>(items: T[], random: () => number) => items[Math.floor(random() * items.length)];
 const countryExposure = (countryCode: string, locations: TrainerLocation[]) => locations.filter((item) => item.countryCode === countryCode).reduce((sum, item) => sum + item.encounterCount, 0);
+const trainedCoverage = new Set<string>(coverageTraining.reliableCountryCodes);
+export const trainedWorldCountries = (countryCodes: string[]) => countryCodes.filter((code) => trainedCoverage.has(code));
 
 export const leastExposureCountryOrder = (countryCodes: string[], locations: TrainerLocation[], firstCountryCode?: string, random = Math.random) => {
   const remaining = countryCodes.filter((code) => code !== firstCountryCode)

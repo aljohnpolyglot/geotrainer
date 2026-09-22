@@ -2,9 +2,13 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
-import { learningPriorityTarget, leastExposureCountryOrder } from './learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from './learningPriority';
 
 const location = (countryCode: string, lat: number, lng: number, encounterCount = 1): TrainerLocation => ({ id: `${countryCode}-${lat}-${lng}`, panoId: `${countryCode}-${lat}-${lng}`, countryCode, lat, lng, encounterCount, firstSeenAt: 1, lastSeenAt: 1 });
+
+test('World least exposure ignores countries that failed coverage training', () => {
+  assert.deepEqual(trainedWorldCountries(['AF', 'US']), ['US']);
+});
 
 test('learning priorities reuse familiar areas and send least exposure toward geographic gaps', () => {
   const known = [location('SE', 55.4, 13), location('SE', 69, 20), location('NO', 60, 10, 4)];

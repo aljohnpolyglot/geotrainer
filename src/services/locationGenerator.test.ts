@@ -35,7 +35,7 @@ Object.assign(globalThis, {
     StreetViewService, Geocoder, LatLng,
     StreetViewStatus: { OK: 'OK' },
     StreetViewPreference: { NEAREST: 'NEAREST' },
-    StreetViewSource: { OUTDOOR: 'OUTDOOR' },
+    StreetViewSource: { GOOGLE: 'GOOGLE', OUTDOOR: 'OUTDOOR' },
   } },
 });
 
@@ -120,15 +120,18 @@ test('contributor-only generation rejects official panoramas', async () => {
   assert.equal(found.panoId, 'contributor');
 });
 
-test('interiors are excluded by default and allowed only when enabled', async () => {
+test('official generation uses the native Google source filter', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
   const generator = new StreetViewLocationGenerator();
   currentResults = [{ lat: 7.7, lng: 7, pano: 'outdoor', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, rural);
-  assert.equal(panoramaRequests[0].source, 'OUTDOOR');
+  assert.equal(panoramaRequests[0].source, 'GOOGLE');
   currentResults = [{ lat: 7.8, lng: 7, pano: 'indoor-eligible', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, allowInteriors: true });
-  assert.equal('source' in panoramaRequests[0], false);
+  assert.equal(panoramaRequests[0].source, 'GOOGLE');
+  currentResults = [{ lat: 7.9, lng: 7, pano: 'mixed-outdoor', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
+  await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, panoramaSource: 'mixed' });
+  assert.equal(panoramaRequests[0].source, 'OUTDOOR');
 });
 
 test('least-exposure searches the target before jitter and Mixed retries recover around coverage seeds', async () => {

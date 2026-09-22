@@ -95,6 +95,8 @@ Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgew�
 
 Wenn kein geeigneter Verlauf vorhanden ist, beginnen Vertraute Orte und Wenigste Erfahrung wie Zufällig im gewählten Pool. Bei einer Suche mit Wenigste Erfahrung und mehreren Ländern versucht GeoTrainer zuerst das gewählte graue oder am wenigsten besuchte Land und dessen regionales Ziel. Jede erfolglose Suche, auch bei einem Panorama außerhalb des angeforderten Landes, geht sofort weiter. Scheitert ein ungesehenes Land, folgen Länder mit bereits bestätigter Abdeckung von der geringsten bis zur höchsten Erfahrung, bevor weitere unbekannte Länder versucht werden; Gleichstände werden gemischt. Die Reihenfolge wiederholt sich, bis ein Panorama gefunden wird oder du die Ansicht verlässt. Street-View-Abdeckung und aktive Filter bestimmen weiterhin, ob das Zielgebiet ein Panorama liefern kann; fehlt am exakten Punkt die Abdeckung, kann eine nahe verfügbare Ansicht verwendet werden.
 
+Bei Welt mit Wenigste Erfahrung überspringt eine integrierte Abdeckungsprüfung Länder, deren Punkte kein navigierbares offizielles Panorama fanden. Fokussierte Länderpools durchsuchen weiterhin alle ausgewählten Länder.
+
 Lernen ist eine unbewertete erste Begegnung für Beobachtung und neue Hinweisarten ohne Punktedruck. Nach dem Speichern für die Wiederholung bleibt das aktuelle Panorama geöffnet; mit Weiter wechselst du ausdrücklich zum nächsten Ort.
 
 ### Lernen einrichten

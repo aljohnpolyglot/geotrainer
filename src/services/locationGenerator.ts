@@ -208,7 +208,9 @@ export class StreetViewLocationGenerator implements LocationGenerator {
               location: new google.maps.LatLng(candidate.lat, candidate.lng),
               radius,
               preference: google.maps.StreetViewPreference.NEAREST,
-              ...(options.allowInteriors ? {} : { source: google.maps.StreetViewSource.OUTDOOR }),
+              ...((options.panoramaSource || (options.allowContributors === true ? 'mixed' : 'official')) === 'official'
+                ? { source: google.maps.StreetViewSource.GOOGLE }
+                : options.allowInteriors ? {} : { source: google.maps.StreetViewSource.OUTDOOR }),
             },
             (panoData, status) => {
               if (status === google.maps.StreetViewStatus.OK && panoData) {

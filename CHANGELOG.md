@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-23
+
+- Made Official Learn and Play searches ask Google directly for official panoramas instead of repeatedly receiving and rejecting nearby contributor imagery.
+- Added a browser-authorized coverage training scan and used its bundled results to skip zero-hit countries only in World Least exposure; focused country pools remain unchanged.
+
 ## 2026-09-22
 
 - Fixed phone-to-PC Review syncing by flushing pending progress when the app is backgrounded and combining grading history from both devices without rolling back the newest schedule.
