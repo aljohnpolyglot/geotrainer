@@ -10,8 +10,8 @@ const countryExposure = (countryCode: string, locations: TrainerLocation[]) => l
 
 export const leastExposureCountryOrder = (countryCodes: string[], locations: TrainerLocation[], firstCountryCode?: string, random = Math.random) => {
   const remaining = countryCodes.filter((code) => code !== firstCountryCode)
-    .map((code) => ({ code, exposure: countryExposure(code, locations), tie: random() }))
-    .sort((a, b) => a.exposure - b.exposure || a.tie - b.tie)
+    .map((code) => { const exposure = countryExposure(code, locations); return { code, exposure, proven: exposure > 0, tie: random() }; })
+    .sort((a, b) => Number(b.proven) - Number(a.proven) || a.exposure - b.exposure || a.tie - b.tie)
     .map((item) => item.code);
   return firstCountryCode && countryCodes.includes(firstCountryCode) ? [firstCountryCode, ...remaining] : remaining;
 };

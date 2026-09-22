@@ -41,6 +41,11 @@ test('equal-exposure fallback countries are shuffled instead of walked alphabeti
   assert.deepEqual(leastExposureCountryOrder(['AF', 'AL', 'AU'], [], undefined, () => draws[index++]), ['AL', 'AU', 'AF']);
 });
 
+test('an unseen target falls back to proven coverage before trying more unknown countries', () => {
+  const known = [location('AU', -33.9, 151.2, 2), location('DE', 52.5, 13.4, 4)];
+  assert.deepEqual(leastExposureCountryOrder(['AF', 'AL', 'AU', 'DE'], known, 'AF', () => 0), ['AF', 'AU', 'DE', 'AL']);
+});
+
 test('equal country exposure is resolved by the larger normalized geographic blind spot', () => {
   const denseSweden = [location('SE', 55.5, 13), location('SE', 59.3, 18), location('SE', 63.8, 20), location('SE', 67.8, 21)];
   const sparseNorway = [location('NO', 60, 10, 4)];

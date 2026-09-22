@@ -7,6 +7,7 @@
 - Restyled Explore Map place suggestions as an accessible themed search list, centered the search field, and removed the duplicate Learn exit button while the map picker is open.
 - Reduced production location-generation logs to a concise country-mismatch warning without coordinates or panorama identifiers, and documented the required private clue-image migration for Supabase deployments.
 - Sped up World Least exposure searches by randomizing countries tied at the same exposure level instead of crawling long alphabetical runs with sparse Street View coverage.
+- Made multi-country Least exposure try one unseen target, then fall back immediately to the learner’s least-encountered countries with proven coverage before testing more unknown countries.
 - Fixed World and other multi-country Least exposure searches lingering on sparse countries; every unsuccessful lookup now advances to the next country in exposure order.
 
 ## 2026-09-20
