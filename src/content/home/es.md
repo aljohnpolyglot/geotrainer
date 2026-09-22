@@ -36,7 +36,7 @@ Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subid
 
 ### Elegir una prioridad de aprendizaje
 
-El aprendizaje con mapa subido muestra la posición y el total (por ejemplo, **1/50**), no repite panoramas durante la sesión y oculta **Siguiente** al llegar al último lugar, dejando solo **Anterior**. En Juego, las rondas se limitan al número de lugares del mapa para evitar repeticiones. En Explorar mapa puedes buscar una ciudad o un país y elegir una sugerencia del catálogo integrado de GeoTrainer para acercar el mapa. El texto personal del Cuaderno admite hasta 1000 caracteres por guardado y muestra un contador bajo el editor.
+El aprendizaje con mapa subido etiqueta el progreso de la fuente (por ejemplo, **Fuente: 1/50**). Cada entrada se marca como completada al comprobarla, por lo que **Siguiente** no puede volver a elegirla aunque una variación cercana abra otro panorama; las entradas rotas también se omiten una sola vez. Al terminar, se oculta **Siguiente** y queda **Anterior**. En Juego tampoco se repiten entradas de la fuente. En Explorar mapa puedes buscar una ciudad o un país y elegir una sugerencia del catálogo integrado de GeoTrainer para acercar el mapa. El texto personal del Cuaderno admite hasta 1000 caracteres por guardado y muestra un contador bajo el editor.
 
 La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje personalizado** después de aplicar la colección, la mezcla de países, el entorno, la fuente de imágenes y el filtro de interiores. No cambia Mapa subido, Meta, Explorar mapa, Juego ni Repaso.
 
@@ -175,3 +175,5 @@ En **Ajustes → Coach de IA** puedes elegir **Preguntar siempre antes del anál
 
 Todos parten de las mismas observaciones visibles y separan lo observado de la inferencia y la especulación. Cada candidato debe explicar la característica concreta, su alcance nacional o regional, el principal confusor, qué los separa y qué pista aumentaría más la confianza. No se inventan siglas, organizaciones, cultivos, historia, geología, industrias ni normas.
 Durante un Repaso activo, la cabecera indica la tarjeta actual, las tarjetas restantes y que el progreso está guardado. Al recargar, se conserva el número de tarjetas ya completadas.
+
+El mapa del resultado muestra en azul todas las respuestas anteriores con coordenadas, en rojo la de hoy y en verde la respuesta correcta. La calificación y la cola siguiente se guardan antes de mostrar el resultado, por lo que recargar después de aprobar continúa con la tarjeta siguiente.

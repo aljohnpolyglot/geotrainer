@@ -4,6 +4,8 @@
 
 - Made Official Learn and Play searches ask Google directly for official panoramas instead of repeatedly receiving and rejecting nearby contributor imagery.
 - Added a browser-authorized coverage training scan and used its bundled results to skip zero-hit countries only in World Least exposure; focused country pools remain unchanged.
+- Marked checked Uploaded-map source entries complete so Next cannot draw them again, including with location variation, and labeled the header counter as Source progress.
+- Plotted every saved prior guess as a blue marker on the Review result map and persisted a completed grade before showing the result, so reloading cannot reopen a passed card as unanswered.
 
 ## 2026-09-22
 

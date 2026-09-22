@@ -9,10 +9,10 @@ const fitResultBounds = (map: google.maps.Map, bounds: google.maps.LatLngBounds,
   google.maps.event.addListenerOnce(map, 'idle', () => { const limit = resultMapZoomLimit(zoomPreference); if ((map.getZoom() || 0) > limit) map.setZoom(limit); });
 };
 
-export function ResultMap({ actual, guess, previousGuess, className = '', fullscreenControl = false, active = true, resizeKey }: {
+export function ResultMap({ actual, guess, previousGuesses = [], className = '', fullscreenControl = false, active = true, resizeKey }: {
   actual: Point;
   guess: Point | null;
-  previousGuess?: Point | null;
+  previousGuesses?: Point[];
   className?: string;
   fullscreenControl?: boolean;
   active?: boolean;
@@ -24,6 +24,7 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
   const element = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
+  const previousGuessKey = previousGuesses.map((point) => `${point.lat},${point.lng}`).join('|');
 
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
@@ -61,14 +62,14 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
       addMarker(guess, t('currentGuess'), '#ef4444');
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
-    if (previousGuess) addMarker(previousGuess, t('previousGuess'), '#2563eb', 6);
+    previousGuesses.forEach((point) => addMarker(point, t('previousGuess'), '#2563eb', 6));
     fitResultBounds(map, bounds, mapPreferences.resultMapZoom);
     return () => {
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
       if (boundsRef.current === bounds) boundsRef.current = null;
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuess?.lat, previousGuess?.lng, ui, mapPreferences.resultMapZoom]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
     if (!active || !mapRef.current || !boundsRef.current) return;
@@ -81,6 +82,6 @@ export function ResultMap({ actual, guess, previousGuess, className = '', fullsc
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
-    <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuess && <span className="previous">{t('previous')}</span>}</div>
+    <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
   </div>;
 }

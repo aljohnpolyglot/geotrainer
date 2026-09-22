@@ -26,6 +26,7 @@ export const latestStudyVisit = (visits: StudyVisit[], panoId: string) => visits
 
 export function useStudyMode(ctx: any) {
   const uploadedHistoryRef = useRef<ImportedMapHistory>({ locations: [], index: -1 });
+  const uploadedCompletedRef = useRef(new Set<number>());
   const uploadedTotalRef = useRef(0);
   const skipUploadedSeedRef = useRef(false);
   const [canPreviousUploaded, setCanPreviousUploaded] = useState(false);
@@ -56,7 +57,7 @@ export function useStudyMode(ctx: any) {
     ++latestGenerationRequestRef.current; ++latestPanoramaSyncRef.current;
     abortControllerRef.current?.abort(); generationPendingRef.current = false;
     uploadedHistoryRef.current = history; setCanPreviousUploaded(history.index > 0);
-    setUploadedProgress(uploadedTotalRef.current ? { position: history.index + 1, total: uploadedTotalRef.current } : undefined);
+    setUploadedProgress(uploadedTotalRef.current ? { position: history.locations[history.index]?.importedMapProgress ?? history.index + 1, total: uploadedTotalRef.current } : undefined);
     setCoachNote(null); setStudyReviewSaved(false); setIsRevealed(false); setErrorMessage(null); setIsLoading(false); ctx.setStatusMessage('');
     setCurrentLocation(history.locations[history.index]);
   };
@@ -67,10 +68,12 @@ export function useStudyMode(ctx: any) {
   };
   const fetchNextLocation = useCallback(async () => {
     const importedMapId = ctx.studyImportedMapIdRef.current;
+    const previousLocation = currentLocation;
     if (importedMapId) {
+      if (!uploadedHistoryRef.current.locations.length && !currentLocation) uploadedCompletedRef.current = new Set();
       uploadedTotalRef.current = (await getImportedMap(importedMapId))?.points.length || 0;
       if (skipUploadedSeedRef.current) skipUploadedSeedRef.current = false;
-      else if (!uploadedHistoryRef.current.locations.length && currentLocation) uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', currentLocation);
+      else if (!uploadedHistoryRef.current.locations.length && currentLocation) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', currentLocation); (currentLocation.importedMapCompletedPointIndexes || (currentLocation.importedMapPointIndex === undefined ? [] : [currentLocation.importedMapPointIndex])).forEach((index) => uploadedCompletedRef.current.add(index)); }
       const next = moveImportedHistory(uploadedHistoryRef.current, 'next');
       if (next !== uploadedHistoryRef.current) { openUploadedHistory(next); return; }
     }
@@ -91,15 +94,16 @@ export function useStudyMode(ctx: any) {
         if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
       }
       const result = importedMapId
-        ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current)
+        ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current, uploadedCompletedRef.current)
         : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
       recentStudyPanosRef.current = [result.panoId, ...recentStudyPanosRef.current.filter((id: string) => id !== result.panoId)].slice(0, 15);
-      if (importedMapId) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress({ position: uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current }); }
+      if (importedMapId) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress({ position: result.importedMapProgress ?? uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current }); }
       setCurrentLocation(result);
     } catch (error: unknown) {
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (error instanceof Error && error.name === 'AbortError')) return;
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to generate random location');
+      if (importedMapId && uploadedTotalRef.current && uploadedCompletedRef.current.size >= uploadedTotalRef.current && previousLocation) { const completedLocation = { ...previousLocation, importedMapProgress: uploadedTotalRef.current, importedMapCompletedPointIndexes: [...uploadedCompletedRef.current] }; uploadedHistoryRef.current = { ...uploadedHistoryRef.current, locations: uploadedHistoryRef.current.locations.map((item, index) => index === uploadedHistoryRef.current.index ? completedLocation : item) }; setCurrentLocation(completedLocation); setUploadedProgress({ position: uploadedTotalRef.current, total: uploadedTotalRef.current }); }
+      else setErrorMessage(error instanceof Error ? error.message : 'Failed to generate random location');
     } finally {
       if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); ctx.setStatusMessage(''); }
     }

@@ -47,6 +47,7 @@ export interface AppTopBarProps {
   timeRemaining: number | null;
   pastGamesCount: number;
   reviewAttempt: { id: string } | null;
+  reviewResultVisible: boolean;
   reviewStatsLength: number;
   reviewInitialTotal: number;
   reviewQueueLength: number;
@@ -80,7 +81,7 @@ export interface AppTopBarProps {
 export function AppTopBar({
   appMode, showHome, isGameActive, currentLocation, isLoading, isRevealed,
   gameSettings, currentRoundIndex, currentTotalScore, timeRemaining,
-  pastGamesCount, reviewAttempt, reviewStatsLength, reviewInitialTotal,
+  pastGamesCount, reviewAttempt, reviewResultVisible, reviewStatsLength, reviewInitialTotal,
   reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
   onReveal, onNextLocation, onPreviousLocation, canPreviousLocation, onAbandonGame,
@@ -89,6 +90,7 @@ export function AppTopBar({
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const reviewPosition = Math.max(1, reviewStatsLength + (reviewResultVisible ? 0 : 1));
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
   const studyActions = !showHome && appMode === 'study' && <div className={`study-viewport-actions${learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total ? ' uploaded-complete' : ''}`} role="group" aria-label={t('navLearn')}>
     {learnSource === 'uploaded' && <button type="button" onClick={onPreviousLocation} disabled={!canPreviousLocation || isLoading || studyReviewSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md bg-stone-100 enabled:hover:bg-white text-stone-950 disabled:bg-stone-700 disabled:text-stone-400 disabled:cursor-not-allowed"><ArrowLeft className="w-3.5 h-3.5" /><span>{t('Previous')}</span></button>}
@@ -101,9 +103,9 @@ export function AppTopBar({
     <header id="app-topbar" className={`${mobileMenuOpen ? 'mobile-nav-open ' : ''}${isRevealed ? 'location-revealed ' : ''}mode-${appMode} h-14 px-3 sm:px-5 bg-stone-900 border-b border-stone-800 flex items-center justify-between z-30 flex-shrink-0 gap-2`}>
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
-        {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-mobile-context"><strong>{uploadedProgress.position}/{uploadedProgress.total}</strong><small>{t('Progress')}</small></span>}
+        {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-mobile-context"><strong>{uploadedProgress.position}/{uploadedProgress.total}</strong><small>{t('Source')}</small></span>}
         {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" onClick={onNextLocation} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold text-stone-200 bg-stone-950 border border-stone-700"><ArrowLeft size={14} /><span className="hidden md:inline">{t('Back to world map')}</span></button>}
-        {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewStatsLength + 1}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
+        {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewPosition}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
         <button type="button" className="mobile-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={t('Navigation')} onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button>
         <button type="button" className="mobile-menu-backdrop" aria-label={t('close')} onClick={() => setMobileMenuOpen(false)} />
         <div className="mobile-drawer">
@@ -123,9 +125,9 @@ export function AppTopBar({
         </div>}
 
       <div className="header-actions flex items-center space-x-1.5 sm:space-x-2">
-        {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-live-context">{uploadedProgress.position} {t('of')} {uploadedProgress.total}</span>}
+        {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-live-context">{t('Source')}: {uploadedProgress.position}/{uploadedProgress.total}</span>}
         {!showHome && appMode === 'play' && (isGameActive ? timeRemaining !== null && <div className={`flex items-center space-x-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border ${timeRemaining <= 10 ? 'bg-rose-950/80 border-rose-600 text-rose-400 animate-pulse' : 'bg-stone-950 border-stone-800 text-amber-300'}`}><Clock className="w-3.5 h-3.5" /><span>{formatTime(timeRemaining)}</span></div> : <><button onClick={() => navigate(onOpenHistory)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-stone-950 text-stone-300 border border-stone-800 hover:border-stone-700 rounded-lg text-xs font-medium transition-colors cursor-pointer"><History className="w-3.5 h-3.5 text-amber-400" /><span className="hidden sm:inline">{t('Past Games')}</span><span className="text-[10px] font-mono bg-stone-800 text-stone-300 px-1.5 py-0.2 rounded-full">{pastGamesCount}</span></button><button onClick={() => navigate(onOpenNewGame)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-[#171000] font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md cursor-pointer active:scale-98"><Play className="w-3.5 h-3.5 fill-stone-950 text-stone-950" /><span>{t('New Game')}</span></button></>)}
-        {!showHome && appMode === 'review' && reviewAttempt && <><span className="review-live-context">{reviewStatsLength + 1} {t('of')} {Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')} · {t('Progress saved')}</span><span className="review-source">{t('Source')}: {reviewSource}</span></>}
+        {!showHome && appMode === 'review' && reviewAttempt && <><span className="review-live-context">{reviewPosition} {t('of')} {Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')} · {t('Progress saved')}</span><span className="review-source">{t('Source')}: {reviewSource}</span></>}
         <button onClick={() => navigate(onOpenPreferences)} title={t('Preferences')} aria-label={t('Preferences')} className="utility-action p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"><Settings2 className="w-4 h-4" /><span>{t('Preferences')}</span></button>
         <button onClick={() => navigate(onToggleFullscreen)} title={isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')} aria-label={isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')} className="utility-action p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer">{isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}<span>{isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')}</span></button>
       </div>

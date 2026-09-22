@@ -36,7 +36,7 @@ Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte
 
 ### Choisir une priorité d’apprentissage
 
-L’apprentissage avec une carte importée affiche la position et le total (par exemple **1/50**), ne répète pas de panorama pendant la session et masque **Suivant** au dernier lieu afin de ne laisser que **Précédent**. Dans le Jeu, le nombre de manches est limité au nombre de lieux de la carte pour éviter les répétitions. Dans Explorer la carte, recherchez une ville ou un pays puis choisissez une suggestion du catalogue intégré de GeoTrainer pour y zoomer. Le texte personnel du Carnet est limité à 1 000 caractères par enregistrement et un compteur apparaît sous l’éditeur.
+L’apprentissage avec une carte importée identifie la progression de la source (par exemple **Source : 1/50**). Chaque entrée est marquée comme terminée après vérification : **Suivant** ne peut donc pas la reprendre même si une variation proche ouvre un autre panorama ; une entrée défectueuse n’est également testée qu’une fois. À la fin, **Suivant** disparaît et seul **Précédent** reste. Le Jeu évite aussi de répéter les entrées source. Dans Explorer la carte, recherchez une ville ou un pays puis choisissez une suggestion du catalogue intégré de GeoTrainer pour y zoomer. Le texte personnel du Carnet est limité à 1 000 caractères par enregistrement et un compteur apparaît sous l’éditeur.
 
 La priorité modifie la sélection des **nouveaux lieux de l’apprentissage personnalisé** après l’application de la collection, du mélange de pays, de l’environnement, de la source d’images et du filtre intérieur. Elle ne change pas Carte importée, Méta, Explorer la carte, Jeu ou Révision.
 
@@ -175,3 +175,5 @@ Dans **Paramètres → Coach IA**, choisissez **Toujours demander avant l’anal
 
 Tous partent des mêmes observations et séparent observation, inférence et spéculation. Chaque candidat explique le détail concret, sa portée nationale ou régionale, la confusion principale, ce qui les distingue et l’indice qui augmenterait le plus la confiance. Aucun sigle, organisme, culture, fait historique, cause géologique, industrie ou règle n’est inventé.
 Pendant une Révision active, l’en-tête indique la carte actuelle, les cartes restantes et que la progression est enregistrée. Un rechargement conserve le nombre de cartes déjà terminées.
+
+La carte du résultat affiche en bleu toutes les estimations précédentes avec coordonnées, en rouge celle du jour et en vert la réponse. La note et la prochaine file sont enregistrées avant l’affichage du résultat ; recharger après une réussite passe donc à la carte suivante.

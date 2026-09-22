@@ -103,7 +103,7 @@ Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Upload
 
 ### Choosing a learning priority
 
-Uploaded-map Learn shows the current place and list total (for example, **1/50**), does not repeat a panorama during that run, and removes **Next** at the final place so only **Previous** remains. Uploaded Play limits the round count to the map’s location count rather than repeating entries. In Explore Map, search for a city or country and choose a suggestion from GeoTrainer’s built-in catalog to zoom there. Personal Notebook text is limited to 1,000 characters per save; the counter beneath the editor shows the remaining capacity.
+Uploaded-map Learn labels source progress (for example, **Source: 1/50**). Each uploaded source entry is marked done when checked, so **Next** cannot draw it again even if nearby variation resolves to another panorama; broken entries are also skipped once. **Next** disappears when the source is complete, leaving **Previous**. Uploaded Play likewise avoids repeating source entries and limits the round count to the map’s location count. In Explore Map, search for a city or country and choose a suggestion from GeoTrainer’s built-in catalog to zoom there. Personal Notebook text is limited to 1,000 characters per save; the counter beneath the editor shows the remaining capacity.
 
 Priority changes how **new Custom Learn locations** are chosen after the collection, country mix, environment, imagery source, and indoor filters are applied. It does not change Uploaded map, Meta, Explore Map, Play, or Review.
 
@@ -189,6 +189,8 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 ### After the guess
 
 The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
+
+The result map plots every saved prior guess with coordinates in blue, today’s guess in red, and the answer in green. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
 
 ### Automatic grading
 

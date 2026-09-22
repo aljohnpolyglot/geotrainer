@@ -36,7 +36,7 @@ Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa envi
 
 ### Escolher uma prioridade de aprendizagem
 
-O aprendizado com mapa enviado mostra a posição e o total (por exemplo, **1/50**), não repete panoramas na sessão e oculta **Próximo** no último local, deixando apenas **Anterior**. No Jogo, o número de rodadas é limitado à quantidade de locais do mapa para evitar repetições. Em Explorar mapa, pesquise uma cidade ou país e escolha uma sugestão do catálogo integrado do GeoTrainer para aproximar o mapa. O texto pessoal do Caderno aceita até 1000 caracteres por salvamento e mostra um contador abaixo do editor.
+O aprendizado com mapa enviado identifica o progresso da fonte (por exemplo, **Fonte: 1/50**). Cada entrada é marcada como concluída ao ser verificada, portanto **Próximo** não pode escolhê-la novamente mesmo que uma variação próxima abra outro panorama; entradas quebradas também são ignoradas uma única vez. Ao concluir, **Próximo** desaparece e resta **Anterior**. O Jogo também não repete entradas da fonte. Em Explorar mapa, pesquise uma cidade ou país e escolha uma sugestão do catálogo integrado do GeoTrainer para aproximar o mapa. O texto pessoal do Caderno aceita até 1000 caracteres por salvamento e mostra um contador abaixo do editor.
 
 A prioridade muda como os **novos locais do Aprendizado personalizado** são escolhidos depois da coleção, mistura de países, ambiente, fonte das imagens e filtro de interiores. Ela não altera Mapa enviado, Meta, Explorar mapa, Jogo ou Revisão.
 
@@ -175,3 +175,5 @@ Em **Configurações → Coach de IA**, escolha **Sempre perguntar antes da aná
 
 Todos usam as mesmas observações e separam observado, inferido e especulativo. Cada candidato explica a característica concreta, se é nacional ou regional, o principal confusor, o que os separa e qual pista aumentaria mais a confiança. Siglas, organizações, cultivos, história, geologia, indústrias e regras não são inventados.
 Durante uma Revisão ativa, o cabeçalho mostra o cartão atual, os cartões restantes e que o progresso foi salvo. Recarregar preserva a contagem de cartões já concluídos.
+
+O mapa do resultado mostra em azul todos os palpites anteriores com coordenadas, em vermelho o palpite de hoje e em verde a resposta. A nota e a próxima fila são salvas antes de o resultado aparecer; recarregar após uma aprovação segue para o próximo cartão.

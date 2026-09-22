@@ -38,6 +38,9 @@ export interface LocationResult {
   environmentRequested?: Environment;
   urbanLevel?: UrbanLevel;
   heading?: number;
+  importedMapPointIndex?: number;
+  importedMapProgress?: number;
+  importedMapCompletedPointIndexes?: number[];
 }
 
 export interface BookmarkLocation {

@@ -36,7 +36,7 @@ Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricat
 
 ### Scegliere una priorità di apprendimento
 
-L’apprendimento con una mappa caricata mostra posizione e totale (per esempio **1/50**), non ripete panorami nella sessione e nasconde **Avanti** nell’ultimo luogo, lasciando solo **Precedente**. Nel Gioco, il numero di round è limitato ai luoghi della mappa per evitare ripetizioni. In Esplora mappa puoi cercare una città o un paese e scegliere un suggerimento dal catalogo integrato di GeoTrainer per ingrandire quella zona. Il testo personale del Taccuino è limitato a 1000 caratteri per salvataggio e un contatore appare sotto l’editor.
+L’apprendimento con una mappa caricata etichetta l’avanzamento della fonte (per esempio **Fonte: 1/50**). Ogni voce viene segnata come completata dopo il controllo, quindi **Avanti** non può sceglierla di nuovo anche se una variazione vicina apre un altro panorama; anche le voci non funzionanti vengono saltate una sola volta. Alla fine **Avanti** scompare e rimane **Precedente**. Anche il Gioco evita di ripetere le voci della fonte. In Esplora mappa puoi cercare una città o un paese e scegliere un suggerimento dal catalogo integrato di GeoTrainer per ingrandire quella zona. Il testo personale del Taccuino è limitato a 1000 caratteri per salvataggio e un contatore appare sotto l’editor.
 
 La priorità cambia il modo in cui vengono scelte le **nuove località di Apprendimento personalizzato** dopo aver applicato raccolta, combinazione di paesi, ambiente, fonte delle immagini e filtro per interni. Non modifica Mappa caricata, Meta, Esplora mappa, Gioco o Ripasso.
 
@@ -175,3 +175,5 @@ In **Impostazioni → Coach IA** scegli **Chiedi sempre prima dell’analisi** o
 
 Tutti partono dalle stesse osservazioni e separano osservato, inferito e speculativo. Ogni candidato spiega la caratteristica concreta, il valore nazionale o regionale, il confusore principale, cosa li separa e l’indizio che aumenterebbe di più la confidenza. Sigle, organizzazioni, colture, storia, geologia, industrie e regole non vengono inventate.
 Durante un Ripasso attivo, l’intestazione mostra la scheda corrente, quelle rimanenti e che i progressi sono salvati. Dopo il ricaricamento resta corretto il numero delle schede già completate.
+
+La mappa del risultato mostra in blu tutti i tentativi precedenti con coordinate, in rosso quello di oggi e in verde la risposta. Il voto e la coda successiva vengono salvati prima di mostrare il risultato; dopo un esito positivo, ricaricare passa quindi alla scheda seguente.

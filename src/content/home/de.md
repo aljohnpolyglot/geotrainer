@@ -85,7 +85,7 @@ Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladen
 
 ### Lernpriorität wählen
 
-Das Lernen mit hochgeladener Karte zeigt Position und Gesamtzahl (zum Beispiel **1/50**), wiederholt während der Sitzung kein Panorama und blendet **Weiter** am letzten Ort aus, sodass nur **Zurück** bleibt. Im Spiel wird die Rundenzahl auf die Zahl der Kartenorte begrenzt, damit keine Einträge wiederholt werden. In Karte erkunden kannst du nach Stadt oder Land suchen und einen Vorschlag aus dem integrierten GeoTrainer-Katalog wählen, um dorthin zu zoomen. Persönlicher Notizbuchtext ist pro Speicherung auf 1.000 Zeichen begrenzt; unter dem Editor steht ein Zähler.
+Das Lernen mit hochgeladener Karte kennzeichnet den Quellenfortschritt (zum Beispiel **Quelle: 1/50**). Jeder Eintrag wird nach der Prüfung als erledigt markiert, sodass **Weiter** ihn auch dann nicht erneut auswählt, wenn eine nahe Variation ein anderes Panorama öffnet; fehlerhafte Einträge werden ebenfalls nur einmal geprüft. Am Ende verschwindet **Weiter**, sodass nur **Zurück** bleibt. Auch im Spiel werden Quelleneinträge nicht wiederholt. In Karte erkunden kannst du nach Stadt oder Land suchen und einen Vorschlag aus dem integrierten GeoTrainer-Katalog wählen, um dorthin zu zoomen. Persönlicher Notizbuchtext ist pro Speicherung auf 1.000 Zeichen begrenzt; unter dem Editor steht ein Zähler.
 
 Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgewählt werden, nachdem Sammlung, Ländermischung, Umgebung, Bildquelle und Innenraumfilter angewendet wurden. Sie verändert Hochgeladene Karte, Meta, Karte erkunden, Spiel und Wiederholung nicht.
 
@@ -167,6 +167,8 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 ### Nach der Antwort
 
 Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
+
+Die Ergebniskarte zeigt alle gespeicherten früheren Tipps mit Koordinaten blau, den heutigen Tipp rot und die Lösung grün. Bewertung und nächste Warteschlange werden vor dem Ergebnis gespeichert; nach einem bestandenen Ergebnis lädt die Seite daher mit der nächsten Karte weiter.
 
 ### Automatische Bewertung
 

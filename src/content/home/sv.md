@@ -36,7 +36,7 @@ Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en 
 
 ### Välj prioritet för lärandet
 
-Lärande med en uppladdad karta visar position och total (till exempel **1/50**), upprepar inga panoraman under sessionen och döljer **Nästa** på den sista platsen så att bara **Föregående** återstår. I Spel begränsas antalet rundor till kartans antal platser för att undvika upprepningar. I Utforska karta kan du söka efter en stad eller ett land och välja ett förslag från GeoTrainers inbyggda katalog för att zooma dit. Personlig text i Anteckningsboken är begränsad till 1000 tecken per sparning och en räknare visas under redigeraren.
+Lärande med en uppladdad karta märker källans förlopp, till exempel **Källa: 1/50**. Varje post markeras som klar efter kontrollen, så **Nästa** kan inte välja den igen även om en närliggande variation öppnar ett annat panorama; trasiga poster kontrolleras också bara en gång. När källan är klar döljs **Nästa** och bara **Föregående** återstår. Spel upprepar inte heller källposter. I Utforska karta kan du söka efter en stad eller ett land och välja ett förslag från GeoTrainers inbyggda katalog för att zooma dit. Personlig text i Anteckningsboken är begränsad till 1000 tecken per sparning och en räknare visas under redigeraren.
 
 Prioritet styr hur **nya platser i Anpassat lärande** väljs efter samling, landsmix, miljö, bildkälla och inomhusfilter. Det påverkar inte Uppladdad karta, Meta, Utforska karta, Spel eller Repetition.
 
@@ -181,3 +181,5 @@ Under **Inställningar → AI Coach** väljer du **Fråga alltid före analys** 
 
 Alla stilar börjar med samma synliga observationer. De skiljer direkt observerat från rimlig slutsats och spekulation. Oläsliga förkortningar, okända organisationer, grödor, historiska händelser, geologi, regler och industrier får inte uppfinnas eller driva landsgissningen. Varje kandidat ska förklara den konkreta synliga egenskapen, om den är landsnivå eller bara regional/stödjande, huvudförväxlingen, vad som skiljer den och vilken ytterligare ledtråd som skulle öka säkerheten. En regional bedömning visas bara när bilden faktiskt stöder den.
 Under en aktiv repetition visar sidhuvudet aktuellt kort, antal återstående kort och att framstegen är sparade. Efter omladdning behålls antalet redan slutförda kort.
+
+Resultatkartan visar alla sparade tidigare gissningar med koordinater i blått, dagens gissning i rött och svaret i grönt. Betyget och nästa kö sparas innan resultatet visas, så en omladdning efter ett godkänt svar fortsätter till nästa kort.

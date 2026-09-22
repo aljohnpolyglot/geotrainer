@@ -27,8 +27,7 @@ import {
   StreetViewState,
   LearnSource,
   PanoramaSource, ActiveWorkspace, LearnPriority, LocationPoolTarget,
-} from './types';
-import {
+} from './types'; import {
   BUILT_IN_COLLECTIONS,
   BUILT_IN_COLLECTION_GROUPS,
   getCustomCollections,
@@ -86,8 +85,8 @@ const locationForWorkspace = (location: LocationResult): LocationResult => ({
   ...(location.isFallback ? { isFallback: true } : {}),
   ...(location.originalPanoId ? { originalPanoId: location.originalPanoId } : {}),
   ...(location.heading !== undefined ? { heading: location.heading } : {}),
+  ...(location.importedMapPointIndex !== undefined ? { importedMapPointIndex: location.importedMapPointIndex } : {}), ...(location.importedMapProgress !== undefined ? { importedMapProgress: location.importedMapProgress } : {}), ...(location.importedMapCompletedPointIndexes?.length ? { importedMapCompletedPointIndexes: location.importedMapCompletedPointIndexes } : {}),
 });
-
 export default function App() {
   const [appMode, setAppMode] = useState<AppMode>('study');
   const [customCollections, setCustomCollections] = useState<Collection[]>([]);
@@ -419,7 +418,7 @@ export default function App() {
         gameSettings={gameSettings} currentRoundIndex={currentRoundIndex}
         currentTotalScore={currentTotalScore} timeRemaining={timeRemaining}
         pastGamesCount={pastGames.length} reviewAttempt={reviewAttempt}
-        reviewStatsLength={reviewStats.length} reviewInitialTotal={reviewInitialTotal}
+        reviewResultVisible={!!reviewResult} reviewStatsLength={reviewStats.length} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource}
         isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress}
         mapPickerOpen={mapPickerOpen}

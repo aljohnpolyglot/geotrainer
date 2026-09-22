@@ -14,6 +14,7 @@ export const reviewLocationDetails = (value: ReverseGeocodeResult | null, unavai
   route: value?.route || '',
   address: value?.formattedAddress || (value ? '' : unavailable),
 });
+export const reviewGuessHistory = (history: Attempt[]) => history.flatMap((attempt) => attempt.guessedLat === null || attempt.guessedLng === null ? [] : [{ lat: attempt.guessedLat, lng: attempt.guessedLng }]);
 
 export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, advancing, onNext }: {
   round: GameRound;
@@ -28,7 +29,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const improvement = round.score - sourceAttempt.score;
-  const previousGuess = sourceAttempt.guessedLat === null || sourceAttempt.guessedLng === null ? null : { lat: sourceAttempt.guessedLat, lng: sourceAttempt.guessedLng };
+  const previousGuesses = reviewGuessHistory(history);
   const country = COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
@@ -70,7 +71,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         </header>
 
         {round.location.isFallback && <p className="review-fallback"><AlertTriangle size={14} /> {t('fallbackReview')}</p>}
-        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuess={previousGuess} className="review-result-map" />
+        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} className="review-result-map" />
 
         <div className="review-next-action">
           <span>{t('schedulingFromScore')}</span>

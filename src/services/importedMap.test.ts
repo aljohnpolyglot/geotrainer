@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { moveImportedHistory, parseImportedMap, varyImportedPoint } from './importedMap';
+import { moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -46,4 +46,9 @@ test('uploaded variation keeps zero exact and bounds nearby positions', () => {
   assert.ok(Math.abs(varied.lng - point.lng) < .02);
   assert.deepEqual(varyImportedPoint(point, -5), point);
   assert.strictEqual(varyImportedPoint(point, Number.NaN), point);
+});
+
+test('completed uploaded source entries cannot be selected again', () => {
+  const points = [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }];
+  assert.deepEqual(remainingImportedPoints(points, new Set([0, 2])), [{ point: points[1], index: 1 }]);
 });
