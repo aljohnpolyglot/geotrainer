@@ -11,7 +11,7 @@ Country bounds and city seeds are generation hints, not claims of exhaustive Str
 3. Optional cloud sync: set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` from the Supabase project's **Connect** dialog.
 4. Run `npm run dev` and open <http://localhost:3000>.
 
-For cloud backup, create a Supabase project, run [`supabase/migrations/001_user_backups.sql`](supabase/migrations/001_user_backups.sql) in its SQL Editor, then copy the project URL and **publishable** key from **Connect** into `.env`. Never use a Supabase secret or `service_role` key in a `VITE_` variable.
+For cloud backup, create a Supabase project and run [`supabase/migrations/001_user_backups.sql`](supabase/migrations/001_user_backups.sql) in its SQL Editor. To enable private Notebook and Coach clue-image sync, also run [`supabase/migrations/002_clue_images.sql`](supabase/migrations/002_clue_images.sql). If the Data API reports that `user_backups` is not exposed, add the `public` schema/table to the project's Data API exposed schemas, then copy the project URL and **publishable** key from **Connect** into `.env`. Never use a Supabase secret or `service_role` key in a `VITE_` variable.
 
 Google sign-in requires enabling **Authentication → Providers → Google** in Supabase with a Google Web OAuth client. Use the callback URL shown on that provider page and allow `http://localhost:3000` during development. For branded confirmation mail, paste [`supabase/templates/confirmation.html`](supabase/templates/confirmation.html) into **Authentication → Email Templates → Confirm signup** and set the subject to `Confirm your GeoTrainer account`.
 

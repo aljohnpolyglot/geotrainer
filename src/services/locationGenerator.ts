@@ -7,6 +7,8 @@ import { CityPoolCity, EnvironmentSettings, LocationGenerator, LocationRequestCo
 import { COUNTRIES } from '../data/countries';
 import cityData from '../data/cities.json';
 import { reverseGeocodeLocation } from './geocoding';
+
+const devDiagnostics = typeof import.meta.env !== 'undefined' && import.meta.env.DEV;
 import { calculateDistanceKm } from './gameLogic';
 import { chooseReviewCandidate, type ReviewCandidate, type ReviewVariationPlan } from '../data/reviewVariation';
 import { pickLocationTargetCity, resolveLocationTargets } from './cityPools';
@@ -226,11 +228,11 @@ export class StreetViewLocationGenerator implements LocationGenerator {
           const lat = data.location.latLng.lat();
           const lng = data.location.latLng.lng();
           if (context.excludedPanoIds?.has(data.location.pano)) {
-            if (context.requestId !== undefined) console.debug('[location-generation]', { requestId: context.requestId, requestedCountryCode: randomCountryCode, candidateLat: candidate.lat, candidateLng: candidate.lng, returnedPanoId: data.location.pano, returnedPanoLat: lat, returnedPanoLng: lng, resolvedCountryCode: 'excluded', collectionId: context.collectionId });
+            if (devDiagnostics && context.requestId !== undefined) console.debug('[location-generation]', { requestId: context.requestId, requestedCountryCode: randomCountryCode, candidateLat: candidate.lat, candidateLng: candidate.lng, returnedPanoId: data.location.pano, returnedPanoLat: lat, returnedPanoLng: lng, resolvedCountryCode: 'excluded', collectionId: context.collectionId });
             continue;
           }
           const resolvedCountry = (await reverseGeocodeLocation(lat, lng))?.countryCode;
-          if (context.requestId !== undefined) console.debug('[location-generation]', { requestId: context.requestId, requestedCountryCode: randomCountryCode, candidateLat: candidate.lat, candidateLng: candidate.lng, returnedPanoId: data.location.pano, returnedPanoLat: lat, returnedPanoLng: lng, resolvedCountryCode: resolvedCountry, collectionId: context.collectionId });
+          if (devDiagnostics && context.requestId !== undefined) console.debug('[location-generation]', { requestId: context.requestId, requestedCountryCode: randomCountryCode, candidateLat: candidate.lat, candidateLng: candidate.lng, returnedPanoId: data.location.pano, returnedPanoLat: lat, returnedPanoLng: lng, resolvedCountryCode: resolvedCountry, collectionId: context.collectionId });
           if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
           if (!resolvedCountry || resolvedCountry !== randomCountryCode || !countryCodes.includes(resolvedCountry)) {
             console.warn(`Rejected panorama country mismatch: requested ${randomCountryCode}, resolved ${resolvedCountry || 'unknown'}`);
