@@ -62,6 +62,17 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais de 10 km da resposta salva, a Revisão usa uma vista válida perto das coordenadas salvas ou não abre o cartão. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
+### Personalizar a revisão
+
+- **Novos cartões / dia** limita cartões nunca revisados. **Máximo de revisões / dia** limita toda a fila pronta, incluindo cartões novos e antigos. Os dois limites valem juntos. Com 50 novos e 500 revisões máximas, 110 cartões podem estar vencidos, mas só 108 prontos se dois novos excederem o limite. Início e Revisão mostram a quantidade realmente disponível; aumentar o máximo total não ignora o limite de novos cartões.
+- **Rigor da avaliação** controla a nota automática: Iniciante tolera maior distância, Equilibrado combina país e precisão, e Pro exige resultado mais forte. País, distância, pontuação e tempo são considerados; não há botões manuais Novamente/Difícil/Bom/Fácil.
+- **Primeira revisão**, **etapa de reaprendizado**, **primeiro intervalo excelente** e **intervalo máximo** controlam o primeiro vencimento, o retorno após erro, a espera após um primeiro resultado excelente e o teto de cartões maduros.
+- **Tempo máximo de resposta** influencia a fluência da avaliação, sem necessariamente criar contagem regressiva. **Ordem** escolhe mais antigos primeiro ou fila aleatória.
+- **Hora de redefinição** e **fuso horário** definem o início do novo dia e a renovação dos limites. A detecção automática segue o dispositivo; desligue-a para escolher o fuso. A prévia mostra a próxima revisão real.
+- **Variar vista de revisão** mantém o mesmo cartão e agenda, mas pode mudar a direção ou usar um panorama próximo em cartões maduros. Zero mantém a vista original; erros reduzem a variação e falhas de busca retornam à âncora sem duplicar cartões.
+
+Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
+
 ## Coach de IA e pistas
 
 Jogo usa a mesma barra de aprendizagem de Estudo: Caderno, contagem de notas disponíveis próximas e Coach de IA quando ativado na configuração da partida.
@@ -176,4 +187,4 @@ Em **Configurações → Coach de IA**, escolha **Sempre perguntar antes da aná
 Todos usam as mesmas observações e separam observado, inferido e especulativo. Cada candidato explica a característica concreta, se é nacional ou regional, o principal confusor, o que os separa e qual pista aumentaria mais a confiança. Siglas, organizações, cultivos, história, geologia, indústrias e regras não são inventados.
 Durante uma Revisão ativa, o cabeçalho mostra o cartão atual, os cartões restantes e que o progresso foi salvo. Recarregar preserva a contagem de cartões já concluídos.
 
-O mapa do resultado mostra em azul todos os palpites anteriores com coordenadas, em vermelho o palpite de hoje e em verde a resposta. A nota e a próxima fila são salvas antes de o resultado aparecer; recarregar após uma aprovação segue para o próximo cartão.
+O mapa do resultado mantém a resposta verde centralizada e afasta o zoom até mostrar o palpite vermelho de hoje e todos os palpites anteriores com coordenadas em azul. O zoom escolhido é a escala mais próxima permitida. A nota e a próxima fila são salvas antes de o resultado aparecer; recarregar após uma aprovação segue para o próximo cartão.

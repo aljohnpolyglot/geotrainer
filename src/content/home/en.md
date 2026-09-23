@@ -190,7 +190,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
-The result map plots every saved prior guess with coordinates in blue, today’s guess in red, and the answer in green. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
+The result map keeps the answer centered in green, then zooms out enough to show today’s guess in red and every saved prior guess with coordinates in blue. The selected result-map zoom remains the closest allowed scale. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
 
 ### Automatic grading
 
@@ -212,7 +212,9 @@ Strictness affects future grading; it does not rewrite old attempts.
 
 ### Daily limits
 
-New cards per day limits how many unseen review cards enter the queue. Maximum reviews per day limits the total due workload. Fresh profiles default to 50 new cards and 500 total reviews per day; saved choices remain unchanged. Locations within 50 metres in the same country share one Review card, including cards created by Save for Review, Notebook, Coach, or Play.
+**New cards per day** limits cards that have never been reviewed. **Maximum reviews per day** caps the entire ready queue, including new and previously reviewed cards. Both limits apply at the same time. For example, with 50 new cards and 500 maximum reviews, 110 cards can be due while only 108 are ready if two of the due cards exceed the new-card allowance. Home and Review show the actionable ready count; Review separately reports cards held by daily limits. Raising the total limit does not bypass the new-card limit. Fresh profiles default to 50 new cards and 500 total reviews per day; saved choices remain unchanged.
+
+A card counts against the new-card limit only until its first completed Review. Reviews already completed during the current review day reduce the remaining total allowance. Locations within 50 metres in the same country share one Review card, including cards created by Save for Review, Notebook, Coach, or Play.
 
 ### First review and relearning
 
@@ -226,9 +228,15 @@ Maximum interval caps how far a mature location can be scheduled into the future
 
 Maximum answer seconds helps distinguish fluent recall from a correct answer reached only after prolonged searching. It is a grading input, not necessarily a visible countdown.
 
+### Review view variation
+
+Vary review view keeps one canonical card and schedule but may change its heading or use a nearby panorama as the location becomes well learned. Variation difficulty controls how aggressively mature cards vary; 0 always uses the original view. New, weak, or recently failed cards stay close to the anchor. A failed varied view makes later variation more conservative, and lookup failure falls back to the saved view without creating a duplicate card.
+
 ### Due order and day boundary
 
 Oldest due prioritizes the longest-waiting cards. Random mixes the due queue. The review reset time and timezone define when a new study day begins, which prevents midnight sessions from splitting unexpectedly. Choose the timezone from the dropdown or use automatic detection. Preferences shows the actual next scheduled review as both a local date and the remaining hours and minutes.
+
+Use **Save** to apply changes. Strictness and interval settings affect later grading and scheduling; they do not rewrite saved attempts. Daily-limit and order changes affect the next queue calculation immediately.
 
 ## Custom practice
 

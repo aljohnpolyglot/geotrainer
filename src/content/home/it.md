@@ -62,6 +62,17 @@ Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 
 
 La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
+### Personalizzare il ripasso
+
+- **Nuove schede / giorno** limita le schede mai ripassate. **Ripassi massimi / giorno** limita l’intera coda pronta, comprese le schede nuove. I due limiti valgono insieme. Con 50 nuove e 500 ripassi massimi, 110 schede possono essere in scadenza ma solo 108 pronte se due nuove superano il limite. Home e Ripasso mostrano il numero realmente disponibile; aumentare il massimo totale non ignora il limite delle nuove schede.
+- **Severità di valutazione** controlla il voto automatico: Principiante tollera più distanza, Bilanciato combina paese e precisione, Pro richiede un risultato più forte. Sono considerati paese, distanza, punteggio e tempo; non esistono pulsanti manuali Ancora/Difficile/Buono/Facile.
+- **Primo ripasso**, **passaggio di riapprendimento**, **primo intervallo eccellente** e **intervallo massimo** regolano prima scadenza, ritorno dopo un errore, attesa dopo un primo risultato eccellente e tetto delle schede mature.
+- **Tempo massimo di risposta** influenza la fluidità della valutazione senza creare necessariamente un conto alla rovescia. **Ordine** sceglie le più vecchie prima o una coda casuale.
+- **Ora di ripristino** e **fuso orario** definiscono il nuovo giorno e il rinnovo dei limiti. Il rilevamento automatico segue il dispositivo; disattivalo per scegliere il fuso. L’anteprima mostra il prossimo ripasso reale.
+- **Varia vista di ripasso** conserva la stessa scheda e pianificazione, ma può cambiare direzione o usare un panorama vicino per schede mature. Zero conserva la vista originale; gli errori riducono la variazione e una ricerca fallita torna all’ancora senza duplicati.
+
+Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
+
 ## Coach IA e indizi
 
 Gioco usa la stessa barra di apprendimento di Studio: Taccuino, conteggio delle note disponibili nelle vicinanze e Coach IA quando è attivato nella configurazione della partita.

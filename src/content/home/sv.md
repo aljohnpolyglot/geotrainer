@@ -62,6 +62,17 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Va
 
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 
+### Anpassa repetition
+
+- **Nya kort / dag** begränsar kort som aldrig har repeterats. **Maximalt antal repetitioner / dag** begränsar hela kön, både nya och tidigare repeterade kort. Båda gränserna gäller samtidigt. Med 50 nya kort och högst 500 repetitioner kan 110 kort vara förfallna men bara 108 vara redo om två nya kort ligger över gränsen. Start och Repetition visar det antal som faktiskt kan göras; Repetition visar separat hur många som väntar bakom dagsgränserna. En högre totalgräns åsidosätter inte gränsen för nya kort.
+- **Bedömningsnivå** styr den automatiska bedömningen: Nybörjare tolererar större avstånd, Balanserad väger land och precision, och Proffs kräver starkare resultat. Land, avstånd, poäng och svarstid används; inga manuella Igen/Svårt/Bra/Lätt-knappar visas.
+- **Första repetition av nytt kort** anger väntetiden före ett nytt kort blir förfallet. **Återinlärningssteg** anger hur snart ett misslyckat kort kan återkomma samma dag. **Första utmärkta intervall** ger ett mycket starkt första svar längre väntetid. **Maximalt intervall** sätter taket för mogna kort.
+- **Maximal svarstid** påverkar bedömningen av hur flytande minnet var; det är inte automatiskt en synlig nedräkning. **Ordning** väljer äldst förfallna först eller slumpmässig kö.
+- **Återställningstid** och **tidszon** bestämmer när en ny repetitionsdag och nya dagsgränser börjar. Automatisk tidszon följer enheten; stäng av den för att välja zon själv. Förhandsvisningen visar nästa verkliga repetitionstid.
+- **Variera repetitionsvy** behåller samma kort och schema men kan ändra riktning eller välja ett närliggande panorama för väl inlärda platser. Svårighet 0 använder originalet. Svaga eller misslyckade kort hålls närmare originalet, och en misslyckad sökning faller tillbaka utan att skapa dubletter.
+
+Välj **Spara** för att använda ändringarna. Bedömning och intervall påverkar framtida schemaläggning och skriver inte om gamla försök; gränser och köordning används vid nästa köberäkning.
+
 Svaret döljs tills du gissar. Om ett gammalt panorama-ID öppnar en vy mer än 10 km från det sparade svaret använder Repetition en giltig vy nära de sparade koordinaterna eller öppnar inte kortet. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
@@ -182,4 +193,4 @@ Under **Inställningar → AI Coach** väljer du **Fråga alltid före analys** 
 Alla stilar börjar med samma synliga observationer. De skiljer direkt observerat från rimlig slutsats och spekulation. Oläsliga förkortningar, okända organisationer, grödor, historiska händelser, geologi, regler och industrier får inte uppfinnas eller driva landsgissningen. Varje kandidat ska förklara den konkreta synliga egenskapen, om den är landsnivå eller bara regional/stödjande, huvudförväxlingen, vad som skiljer den och vilken ytterligare ledtråd som skulle öka säkerheten. En regional bedömning visas bara när bilden faktiskt stöder den.
 Under en aktiv repetition visar sidhuvudet aktuellt kort, antal återstående kort och att framstegen är sparade. Efter omladdning behålls antalet redan slutförda kort.
 
-Resultatkartan visar alla sparade tidigare gissningar med koordinater i blått, dagens gissning i rött och svaret i grönt. Betyget och nästa kö sparas innan resultatet visas, så en omladdning efter ett godkänt svar fortsätter till nästa kort.
+Resultatkartan håller det gröna svaret centrerat och zoomar ut tills dagens röda gissning och alla sparade tidigare gissningar med koordinater i blått syns. Den valda resultatzoomen är den närmaste tillåtna nivån. Betyget och nästa kö sparas innan resultatet visas, så en omladdning efter ett godkänt svar fortsätter till nästa kort.

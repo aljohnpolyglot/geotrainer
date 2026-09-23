@@ -60,6 +60,17 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 ## Révision et planification
 
+### Personnaliser la révision
+
+- **Nouvelles cartes / jour** limite les cartes jamais révisées. **Révisions maximum / jour** limite toute la file prête, nouvelles cartes comprises. Les deux limites s’appliquent ensemble. Avec 50 nouvelles cartes et 500 révisions maximum, 110 cartes peuvent être dues mais seulement 108 prêtes si deux nouvelles cartes dépassent leur limite. Accueil et Révision affichent le nombre réellement disponible ; augmenter le maximum total ne contourne pas la limite des nouvelles cartes.
+- **Niveau d’exigence** règle la notation automatique : Débutant tolère davantage de distance, Équilibré combine pays et précision, et Pro exige un résultat plus fort. Pays, distance, score et temps sont pris en compte ; il n’y a pas de boutons manuels Encore/Difficile/Bon/Facile.
+- **Première révision**, **étape de réapprentissage**, **premier intervalle excellent** et **intervalle maximum** règlent la première échéance, le retour après un échec, l’attente après un excellent premier résultat et le plafond des cartes maîtrisées.
+- **Temps de réponse maximum** influence la fluidité de la notation sans créer forcément un compte à rebours. **Ordre** choisit les plus anciennes d’abord ou une file aléatoire.
+- **Heure de réinitialisation** et **fuseau horaire** définissent le début d’une nouvelle journée et le renouvellement des limites. La détection automatique suit l’appareil ; désactivez-la pour choisir le fuseau. L’aperçu montre la prochaine révision réelle.
+- **Varier la vue de révision** conserve la même carte et le même planning, mais peut changer l’orientation ou utiliser un panorama proche pour une carte maîtrisée. Zéro garde la vue d’origine ; un échec réduit la variation et une recherche infructueuse revient à l’ancre sans créer de doublon.
+
+Choisissez **Enregistrer** pour appliquer les changements. Exigence et intervalles modifient la planification future sans réécrire les tentatives ; limites et ordre s’appliquent au prochain calcul de la file.
+
 La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant ouvre un panorama à plus de 10 km de la réponse enregistrée, la Révision utilise une vue valide près des coordonnées enregistrées ou n’ouvre pas la carte. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices

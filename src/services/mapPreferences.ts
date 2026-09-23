@@ -38,6 +38,14 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
 };
 
 export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 7 : zoom === 'world' ? 2 : 5;
+const mercatorY = (lat: number) => { const sine = Math.sin(Math.max(-85.0511, Math.min(85.0511, lat)) * Math.PI / 180); return .5 - Math.log((1 + sine) / (1 - sine)) / (4 * Math.PI); };
+export const centeredResultMapZoom = (answer: { lat: number; lng: number }, points: Array<{ lat: number; lng: number }>, width: number, height: number, padding = 32) => {
+  const answerY = mercatorY(answer.lat);
+  const maxLng = Math.max(0, ...points.map((point) => { const delta = Math.abs(point.lng - answer.lng) % 360 / 360; return Math.min(delta, 1 - delta); }));
+  const maxLat = Math.max(0, ...points.map((point) => Math.abs(mercatorY(point.lat) - answerY)));
+  const axisZoom = (pixels: number, delta: number) => delta ? Math.log2(Math.max(1, pixels - padding * 2) / (512 * delta)) : 21;
+  return Math.max(0, Math.min(21, Math.floor(Math.min(axisZoom(width, maxLng), axisZoom(height, maxLat)))));
+};
 export const countryBorderWeight = (width: CountryBorderWidth = 'thin') => width === 'bold' ? 1.75 : width === 'standard' ? 1.15 : .75;
 export const countryBorderColor = (color: CountryBorderColor = 'auto', dark = false) => color === 'light' ? '#e7f7ff' : color === 'dark' ? '#152f3d' : color === 'accent' ? '#4d9cff' : dark ? '#b6d8e3' : '#385563';
 

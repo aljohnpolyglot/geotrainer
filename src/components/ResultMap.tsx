@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { mapPresentationOptions, resultMapZoomLimit, useMapPreferences } from '../services/mapPreferences';
+import { centeredResultMapZoom, mapPresentationOptions, resultMapZoomLimit, useMapPreferences } from '../services/mapPreferences';
 
 type Point = { lat: number; lng: number };
-const fitResultBounds = (map: google.maps.Map, bounds: google.maps.LatLngBounds, zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
-  map.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
-  google.maps.event.addListenerOnce(map, 'idle', () => { const limit = resultMapZoomLimit(zoomPreference); if ((map.getZoom() || 0) > limit) map.setZoom(limit); });
+const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: Point, points: Point[], zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
+  map.setCenter(actual);
+  map.setZoom(Math.min(resultMapZoomLimit(zoomPreference), centeredResultMapZoom(actual, points, element.clientWidth, element.clientHeight)));
 };
 
 export function ResultMap({ actual, guess, previousGuesses = [], className = '', fullscreenControl = false, active = true, resizeKey }: {
@@ -23,7 +23,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
+  const pointsRef = useRef<Point[]>([]);
   const previousGuessKey = previousGuesses.map((point) => `${point.lat},${point.lng}`).join('|');
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
     return () => {
       google.maps.event.clearInstanceListeners(map);
       if (mapRef.current === map) mapRef.current = null;
-      boundsRef.current = null;
+      pointsRef.current = [];
     };
   }, [fullscreenControl]);
 
@@ -45,13 +45,12 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
-    const bounds = new google.maps.LatLngBounds();
-    boundsRef.current = bounds;
+    if (!map || !element.current) return;
+    const points = [actual, ...(guess ? [guess] : []), ...previousGuesses];
+    pointsRef.current = points;
     const markers: google.maps.Marker[] = [];
     const lines: google.maps.Polyline[] = [];
     const addMarker = (position: Point, title: string, color: string, scale = 7) => {
-      bounds.extend(position);
       markers.push(new google.maps.Marker({
         position, map, title,
         icon: { path: google.maps.SymbolPath.CIRCLE, scale, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3 },
@@ -63,22 +62,22 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
     previousGuesses.forEach((point) => addMarker(point, t('previousGuess'), '#2563eb', 6));
-    fitResultBounds(map, bounds, mapPreferences.resultMapZoom);
+    positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom);
     return () => {
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
-      if (boundsRef.current === bounds) boundsRef.current = null;
+      if (pointsRef.current === points) pointsRef.current = [];
     };
   }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
-    if (!active || !mapRef.current || !boundsRef.current) return;
+    if (!active || !mapRef.current || !element.current || !pointsRef.current.length) return;
     const frame = requestAnimationFrame(() => {
       google.maps.event.trigger(mapRef.current!, 'resize');
-      fitResultBounds(mapRef.current!, boundsRef.current!, mapPreferences.resultMapZoom);
+      positionResultMap(mapRef.current!, element.current!, actual, pointsRef.current, mapPreferences.resultMapZoom);
     });
     return () => cancelAnimationFrame(frame);
-  }, [active, resizeKey, mapPreferences.resultMapZoom]);
+  }, [active, actual.lat, actual.lng, resizeKey, mapPreferences.resultMapZoom]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

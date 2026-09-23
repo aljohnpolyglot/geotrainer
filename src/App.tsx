@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Collection,
   LocationResult,
@@ -171,7 +171,7 @@ export default function App() {
 
   useEffect(() => installAudio(), []);
 
-  const allCollections = [...BUILT_IN_COLLECTIONS, ...customCollections, ...(temporaryCollection ? [temporaryCollection] : [])];
+  const allCollections = useMemo(() => [...BUILT_IN_COLLECTIONS, ...customCollections, ...(temporaryCollection ? [temporaryCollection] : [])], [customCollections, temporaryCollection]);
   const activeCollection = allCollections.find((collection) => collection.id === selectedCollectionId) || BUILT_IN_COLLECTIONS[0];
   const activeCollectionRef = useRef(activeCollection);
   activeCollectionRef.current = activeCollection;

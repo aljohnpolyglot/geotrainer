@@ -168,7 +168,7 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
-Die Ergebniskarte zeigt alle gespeicherten früheren Tipps mit Koordinaten blau, den heutigen Tipp rot und die Lösung grün. Bewertung und nächste Warteschlange werden vor dem Ergebnis gespeichert; nach einem bestandenen Ergebnis lädt die Seite daher mit der nächsten Karte weiter.
+Die Ergebniskarte hält die Lösung grün in der Mitte und zoomt so weit heraus, dass der heutige Tipp in Rot und alle gespeicherten früheren Tipps mit Koordinaten in Blau sichtbar bleiben. Der gewählte Ergebniszoom ist dabei die engste erlaubte Ansicht. Bewertung und nächste Warteschlange werden vor dem Ergebnis gespeichert; nach einem bestandenen Ergebnis lädt die Seite daher mit der nächsten Karte weiter.
 
 ### Automatische Bewertung
 
@@ -179,6 +179,17 @@ Land, Entfernung, Punktzahl, Antwortzeit und Strengegrad ergeben intern die näc
 GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. Karten im erneuten Lernen können nach ihrer Minuteneinstellung noch am selben Tag zurückkehren. Werden fällige Karten zurückgehalten, meldet die Ansicht das erreichte Tageslimit, statt alle Wiederholungen als abgeschlossen zu bezeichnen.
 
 ## Planung und Einstellungen
+
+### Wiederholung anpassen
+
+- **Neue Karten / Tag** begrenzt Karten, die noch nie wiederholt wurden. **Maximale Wiederholungen / Tag** begrenzt die gesamte bereite Warteschlange einschließlich neuer Karten. Beide Grenzen gelten gleichzeitig. Bei 50 neuen Karten und maximal 500 Wiederholungen können 110 Karten fällig, aber nur 108 bereit sein, wenn zwei neue Karten die Grenze überschreiten. Start und Wiederholung zeigen die tatsächlich verfügbare Zahl; eine höhere Gesamtgrenze umgeht die Grenze für neue Karten nicht.
+- **Bewertungsstrenge** steuert die automatische Bewertung: Anfänger toleriert größere Abstände, Ausgewogen verbindet Land und Genauigkeit, Profi verlangt ein stärkeres Ergebnis. Land, Entfernung, Punktzahl und Antwortzeit fließen ein; manuelle Nochmal/Schwer/Gut/Leicht-Schaltflächen gibt es nicht.
+- **Erste Wiederholung**, **Wiederlernschritt**, **erstes Exzellent-Intervall** und **maximales Intervall** steuern erste Fälligkeit, Rückkehr nach einem Fehler, Wartezeit nach einem ausgezeichneten ersten Ergebnis und die Obergrenze reifer Karten.
+- **Maximale Antwortzeit** beeinflusst die Bewertung der Abrufflüssigkeit, ohne zwingend einen Countdown zu erzeugen. **Reihenfolge** wählt älteste Fälligkeit zuerst oder eine zufällige Warteschlange.
+- **Rücksetzzeit** und **Zeitzone** bestimmen den Beginn des neuen Wiederholungstags und die Erneuerung der Grenzen. Automatische Erkennung folgt dem Gerät; schalte sie aus, um die Zone selbst zu wählen. Die Vorschau zeigt die tatsächliche nächste Wiederholung.
+- **Wiederholungsansicht variieren** behält dieselbe Karte und Planung, kann bei reifen Karten aber Blickrichtung oder nahes Panorama ändern. Null nutzt die Originalansicht; Fehler verringern die Variation und eine fehlgeschlagene Suche fällt ohne Dublette auf den Anker zurück.
+
+Wähle **Speichern**, um Änderungen anzuwenden. Strenge und Intervalle beeinflussen künftige Planung, ohne gespeicherte Versuche umzuschreiben; Grenzen und Reihenfolge gelten bei der nächsten Berechnung der Warteschlange.
 
 Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell oder Dunkel behält die gewählte Farbe für Straßen- und Geländekarten bei. Satellitenbilder behalten ihre Farben. Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
 

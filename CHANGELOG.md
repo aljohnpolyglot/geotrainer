@@ -1,7 +1,14 @@
 # Changelog
 
+## 2026-09-24
+
+- Centered Play and Review answer maps on the correct location and zoomed out only as far as needed to keep current and prior guesses visible.
+- Centered the minimized Review result restore action along the bottom of the panorama.
+- Matched the Home Review count to the daily-limited ready queue shown on the Review screen.
+
 ## 2026-09-23
 
+- Kept selected Learn and Play countries stable so single-country searches cannot silently fall back to the full collection.
 - Made Official Learn and Play searches ask Google directly for official panoramas instead of repeatedly receiving and rejecting nearby contributor imagery.
 - Added a browser-authorized coverage training scan and used its bundled results to skip zero-hit countries only in World Least exposure; focused country pools remain unchanged.
 - Marked checked Uploaded-map source entries complete so Next cannot draw them again, including with location variation, and labeled the header counter as Source progress.

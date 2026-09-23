@@ -62,6 +62,17 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
+### Personalizar el repaso
+
+- **Tarjetas nuevas / día** limita las tarjetas nunca repasadas. **Máximo de repasos / día** limita toda la cola lista, incluidas tarjetas nuevas y anteriores. Ambos límites se aplican juntos. Con 50 nuevas y 500 repasos máximos, puede haber 110 pendientes pero solo 108 listas si dos tarjetas nuevas superan su límite. Inicio y Repaso muestran la cantidad realmente disponible; aumentar el máximo total no evita el límite de tarjetas nuevas.
+- **Exigencia de evaluación** controla la calificación automática: Principiante tolera más distancia, Equilibrado combina país y precisión, y Pro exige un resultado más fuerte. Se usan país, distancia, puntuación y tiempo; no hay botones manuales Otra vez/Difícil/Bien/Fácil.
+- **Primer repaso**, **paso de reaprendizaje**, **primer intervalo excelente** e **intervalo máximo** controlan respectivamente el primer vencimiento, el regreso tras fallar, la espera tras un primer resultado excelente y el techo para tarjetas maduras.
+- **Tiempo máximo de respuesta** influye en la fluidez de la calificación, no crea necesariamente una cuenta atrás. **Orden** elige más antiguas primero o una cola aleatoria.
+- **Hora de reinicio** y **zona horaria** definen cuándo empieza un nuevo día y se renuevan los límites. La detección automática sigue el dispositivo; desactívala para elegir la zona. La vista previa muestra el siguiente repaso real.
+- **Variar vista de repaso** conserva la misma tarjeta y planificación, pero puede cambiar el rumbo o usar un panorama cercano en tarjetas maduras. Cero conserva la vista original; los fallos reducen la variación y cualquier búsqueda fallida vuelve al ancla sin duplicar tarjetas.
+
+Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afectan la programación futura sin reescribir intentos guardados; los límites y el orden se aplican al recalcular la cola.
+
 ## Entrenador de IA y pistas
 
 Juego usa la misma barra de aprendizaje que Estudio: Cuaderno, el contador de notas cercanas disponibles y el entrenador de IA cuando está activado en la configuración de la partida.

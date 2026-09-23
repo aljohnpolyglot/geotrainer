@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { ArrowRight, BookOpen, BookOpenText, ChevronRight, Cloud, Gamepad2, MapPinned, Target } from 'lucide-react';
-import { effectiveReviewDueAt, nextScheduledReviewAt, trainerDb } from '../data/trainerDb';
+import { nextScheduledReviewAt, trainerDb } from '../data/trainerDb';
 import { cloudSync } from '../services/cloudSync';
 import { CloudAccountDialog } from './CloudAccountDialog';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -26,12 +26,12 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
 
   useEffect(() => {
     let active = true;
-    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.studyVisits(), trainerDb.schedulerPreferences(), trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.setting<{ mode?: string }>('workspace.paused.study'), trainerDb.setting<{ mode?: string; rounds?: unknown[]; settings?: { roundCount?: number } }>('workspace.paused.play')])
-      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, pausedStudy, pausedPlay]) => { if (!active) return; setStatus({
+    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.studyVisits(), trainerDb.schedulerPreferences(), trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.setting<{ mode?: string }>('workspace.paused.study'), trainerDb.setting<{ mode?: string; rounds?: unknown[]; settings?: { roundCount?: number } }>('workspace.paused.play'), trainerDb.reviewQueue({ due: true })])
+      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, pausedStudy, pausedPlay, readyReviews]) => { if (!active) return; setStatus({
         locations: locations.length,
         attempts: attempts.length,
         clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes.filter((note) => !note.deletedAt)),
-        due: reviews.filter((review) => effectiveReviewDueAt(review, scheduler) <= Date.now()).length,
+        due: readyReviews.length,
         nextDue: nextScheduledReviewAt(reviews, Date.now(), scheduler) ?? null,
         scheduled: reviews.length > 0,
         timeZone: scheduler.reviewTimeZone,

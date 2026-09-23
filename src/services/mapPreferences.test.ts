@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, resultMapZoomLimit } from './mapPreferences';
+import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, resultMapZoomLimit } from './mapPreferences';
 
 test('map preferences use safe defaults and normalize persisted choices', () => {
   assert.deepEqual(normalizeMapPreferences(undefined), {
@@ -34,4 +34,13 @@ test('result map zoom presets cap the revealed result view', () => {
   assert.equal(countryBorderWeight('bold'), 1.75);
   assert.equal(countryBorderColor('accent'), '#4d9cff');
   assert.equal(countryBorderColor('auto', true), '#b6d8e3');
+});
+
+test('result maps stay answer-centered while fitting every guess', () => {
+  const answer = { lat: 37.5, lng: 34 };
+  const guesses = [{ lat: 41, lng: 29 }, { lat: 48, lng: 68 }];
+  assert.equal(centeredResultMapZoom(answer, guesses, 860, 400), 4);
+  assert.equal(centeredResultMapZoom(answer, [answer], 860, 400), 21);
+  assert.ok(centeredResultMapZoom({ lat: 0, lng: 179 }, [{ lat: 0, lng: -179 }], 860, 400) > 6);
+  assert.ok(centeredResultMapZoom(answer, guesses, 360, 240) < centeredResultMapZoom(answer, guesses, 860, 400));
 });
