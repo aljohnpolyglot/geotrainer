@@ -123,7 +123,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
   const aiAssistedCount = useMemo(() => attempts.filter((item) => item.source === 'play' && item.aiAssisted === true).length, [attempts]);
   const updateIncludeAiAssisted = (value: boolean) => { setIncludeAiAssisted(value); void trainerDb.setSetting('workspace.statistics', { includeAiAssisted: value }); };
   const bounds = rangeBounds(range, Date.now(), custom);
-  const play = useMemo(() => performanceAttempts(attempts, false, includeAiAssisted), [attempts, includeAiAssisted]);
+  const play = useMemo(() => performanceAttempts(attempts, true, includeAiAssisted), [attempts, includeAiAssisted]);
   const ranged = useMemo(() => filterByRange<Attempt>(play, (item) => item.createdAt, bounds).filter((item) => (!environment || environmentOf(item) === environment) && (!movement || movementMode(item) === movement) && (!collection || item.collectionId === collection)), [play, bounds.from, bounds.to, environment, movement, collection]);
   const all = metrics(play);
   const thirtyBounds = rangeBounds("30d");
@@ -134,7 +134,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
   const balanced = countryBalancedAccuracy(ranged);
   const active = activeSeconds(sessions, bounds);
   const todayBounds = rangeBounds("today");
-  const todayPlay = filterByRange<Attempt>(play, (item) => item.createdAt, todayBounds);
+  const todayPlay = filterByRange<Attempt>(play.filter((item) => item.source === 'play'), (item) => item.createdAt, todayBounds);
   const todayVisits = filterByRange<StudyVisit>(visits, (item) => item.openedAt, todayBounds);
   const modeStats = ['Standard', 'No Move', 'NMPZ'].map((mode) => {
     const items = ranged.filter((item) => movementMode(item) === mode);
@@ -145,7 +145,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
       <div className="statistics-title">
         <div>
           <h2>{t('Training progress')}</h2>
-          <p>{t(includeAiAssisted ? 'Canonical history only · AI-assisted Play included' : 'Canonical history only · AI-assisted Play excluded')}</p>
+          <p>{t(includeAiAssisted ? 'Play + Review history · AI-assisted Play included' : 'Play + Review history · AI-assisted Play excluded')}</p>
         </div>
         <nav>
           {(["overview", "geography", "progress", "reviews", "confusions", "coverage", "sessions", "locations", "history"] as StatisticsSection[]).map((item) => (

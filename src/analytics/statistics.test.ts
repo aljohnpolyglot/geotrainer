@@ -66,12 +66,12 @@ test('review improvement links source attempt and remains chronological', () => 
   assert.equal(value.improvements[0].score, 3000);
 });
 
-test('directional and symmetric confusions are counted independently', () => {
-  const items = [...Array.from({ length: 3 }, () => attempt('EE', 'LV')), ...Array.from({ length: 2 }, () => attempt('LV', 'EE'))];
-  const value = confusions(items);
-  assert.equal(value.directional.find((item) => item.codes.join(':') === 'EE:LV')?.count, 3);
+test('directional and symmetric confusions include Review attempts', () => {
+  const items = [...Array.from({ length: 3 }, () => attempt('EE', 'LV')), attempt('EE', 'LV', { source: 'review' }), ...Array.from({ length: 2 }, () => attempt('LV', 'EE'))];
+  const value = confusions(performanceAttempts(items, true));
+  assert.equal(value.directional.find((item) => item.codes.join(':') === 'EE:LV')?.count, 4);
   assert.equal(value.directional.find((item) => item.codes.join(':') === 'LV:EE')?.count, 2);
-  assert.equal(value.symmetric[0].count, 5);
+  assert.equal(value.symmetric[0].count, 6);
 });
 
 test('large deterministic fixture covers at least twenty countries without NaN', () => {

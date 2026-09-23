@@ -306,7 +306,7 @@ Fortschritt fasst heutige und gesamte Orte, Versuche, fällige Wiederholungen un
 
 ### Leistung
 
-Statistik vergleicht Lernen, Spielen und Wiederholen über verschiedene Zeiträume. Ländergenauigkeit, Durchschnittspunktzahl, schwache Länder und Verwechslungen sind über längere Zeit aussagekräftiger als an einem einzelnen Tag.
+Leistung, Geografie, Fortschritt und Verwechslungen kombinieren kanonische Spiel- und Wiederholungsversuche im gewählten Zeitraum; das KI-Kontrollkästchen betrifft nur das Spiel. Verdeckte oder geschlossene Zeit erhöht neue Antwortzeiten nicht. Ländergenauigkeit, Durchschnittspunktzahl, schwache Länder und Verwechslungen sind über längere Zeit aussagekräftiger als an einem einzelnen Tag.
 
 Der Verbesserungsverlauf zeigt zuerst die neuesten 10 Einträge. Sitzungen und alle Verlauf-Tabs zeigen ebenfalls 10 Einträge pro Seite. Mit Zurück und Weiter unter jeder Liste erreichst du ältere Ergebnisse; ein anderer Tab oder Filter springt auf Seite eins zurück.
 

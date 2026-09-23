@@ -346,7 +346,7 @@ Progress summarizes today and all-time activity, due reviews, countries encounte
 
 ### Performance
 
-Statistics can compare Study, Play, and Review activity over selected periods. On mobile, swipe the section tabs and wide tables horizontally; the page stays in Statistics while those rows scroll. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
+Performance, Geography, Progress, and Confusions combine canonical Play and Review attempts over the selected period; the AI-assisted checkbox affects Play only. Hidden or closed time does not increase new Play or Review answer durations. On mobile, swipe the section tabs and wide tables horizontally; the page stays in Statistics while those rows scroll. Country accuracy, average score, weak countries, and common confusions become more useful across longer windows than on a single day.
 
 Review improvement history shows the newest 10 entries first. Sessions and each History tab also show 10 entries per page. Use Previous and Next beneath each list to move through older results; changing a History tab or filter returns to page one.
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRound, LocationResult, ReviewGrade, ReviewSessionKind } from '../types';
-import { calculateDistanceKm, calculateRoundScore } from '../services/gameLogic';
+import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
@@ -35,6 +35,7 @@ export function useReviewMode(ctx: any) {
   const reviewRestoreAttemptedRef = useRef(false);
   const reviewVariationRef = useRef<{ kind: 'original' | 'heading' | 'spatial'; level: number; distanceM: number; shownPanoId: string; shownHeading?: number } | undefined>(undefined);
   const reviewOpenRequestRef = useRef(0);
+  const roundPausedAtRef = useRef<number | null>(null);
 
   const openReviewAttempt = useCallback(async (attempt: Attempt) => {
     const requestId = ++reviewOpenRequestRef.current;
@@ -79,6 +80,7 @@ export function useReviewMode(ctx: any) {
   }, [compassPreference, dbReady, mapsReady, openReviewAttempt, reviewAttempt, ctx]);
 
   useEffect(() => { if (!reviewAttempt || reviewResult) return; const timer = window.setInterval(() => setReviewElapsed(Math.max(0, Math.round((Date.now() - roundStartTimeRef.current) / 1000))), 1000); return () => window.clearInterval(timer); }, [reviewAttempt, reviewResult, roundStartTimeRef]);
+  useEffect(() => { if (!reviewAttempt || reviewResult || !currentLocation) { roundPausedAtRef.current = null; return; } const visibility = () => { if (document.visibilityState === 'hidden') roundPausedAtRef.current ??= Date.now(); else { roundStartTimeRef.current = resumeRoundStartedAt(roundStartTimeRef.current, roundPausedAtRef.current, Date.now()); roundPausedAtRef.current = null; } }; visibility(); document.addEventListener('visibilitychange', visibility); return () => document.removeEventListener('visibilitychange', visibility); }, [currentLocation, reviewAttempt, reviewResult, roundStartTimeRef]);
 
   const handleReviewGuess = useCallback(async (guess: { lat: number; lng: number } | null) => {
     if (!reviewAttempt || !currentLocation || reviewResult || reviewGradingRef.current) return;

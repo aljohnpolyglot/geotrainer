@@ -43,6 +43,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
 - Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.
 - Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
+- Include canonical Play and Review attempts in performance, geography, progress, and confusion statistics; the AI-assisted checkbox affects only Play, and hidden-tab time must not increase Play or Review answer duration.
 - Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
 - Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
 - Show Review improvement, Sessions, and every History tab 10 entries per page; reset History to page one when its tab or filters change.

@@ -72,6 +72,8 @@ export function restoredRoundElapsed(savedElapsed: unknown, savedRemaining: unkn
   return 0;
 }
 
+export const resumeRoundStartedAt = (startedAt: number, pausedAt: number | null, now: number) => pausedAt === null ? startedAt : startedAt + Math.max(0, now - pausedAt);
+
 export function compassDirection(heading: number): string {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round((((heading % 360) + 360) % 360) / 45) % 8];
 }

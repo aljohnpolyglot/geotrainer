@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRecord, GameRound, GameSettings, LocationResult } from '../types';
-import { calculateDistanceKm, calculateRoundScore } from '../services/gameLogic';
+import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { isLatestRequest } from '../services/requestIntegrity';
@@ -26,6 +26,7 @@ export function usePlayMode(ctx: any) {
   const gameIdRef = useRef('');
   const roundSubmittedRef = useRef(false);
   const generationFailedRef = useRef(false);
+  const roundPausedAtRef = useRef<number | null>(null);
   const setSubmitting = (value: boolean) => { setLocalSubmittingGuess(value); setIsSubmittingGuess(value); };
 
   const fetchLocationForRound = useCallback(async (settings: GameSettings) => {
@@ -77,7 +78,8 @@ export function usePlayMode(ctx: any) {
   }, [activeRoundResult, coachNote, currentLocation, currentRoundIndex, gameSettings, playAiAssistedRef, roundStartTimeRef, setTrainerRefreshKey]);
 
   useEffect(() => { if (!isGameActive || activeRoundResult || summaryGameRecord || !currentLocation) return; const timer = window.setInterval(() => setPlayElapsed(Math.max(0, Math.round((Date.now() - roundStartTimeRef.current) / 1000))), 1000); return () => window.clearInterval(timer); }, [activeRoundResult, currentLocation, isGameActive, roundStartTimeRef, summaryGameRecord]);
-  useEffect(() => { if (!isGameActive || timeRemaining === null || activeRoundResult || summaryGameRecord) return; if (timeRemaining <= 0) { void handleGuessSubmit(null); return; } const timer = window.setInterval(() => setTimeRemaining((prev) => prev !== null && prev > 0 ? prev - 1 : 0), 1000); return () => window.clearInterval(timer); }, [activeRoundResult, handleGuessSubmit, isGameActive, summaryGameRecord, timeRemaining]);
+  useEffect(() => { if (!isGameActive || activeRoundResult || summaryGameRecord || !currentLocation) { roundPausedAtRef.current = null; return; } const visibility = () => { if (document.visibilityState === 'hidden') roundPausedAtRef.current ??= Date.now(); else { roundStartTimeRef.current = resumeRoundStartedAt(roundStartTimeRef.current, roundPausedAtRef.current, Date.now()); roundPausedAtRef.current = null; } }; visibility(); document.addEventListener('visibilitychange', visibility); return () => document.removeEventListener('visibilitychange', visibility); }, [activeRoundResult, currentLocation, isGameActive, roundStartTimeRef, summaryGameRecord]);
+  useEffect(() => { if (!isGameActive || timeRemaining === null || activeRoundResult || summaryGameRecord) return; if (timeRemaining <= 0) { void handleGuessSubmit(null); return; } const timer = window.setInterval(() => { if (document.visibilityState === 'visible') setTimeRemaining((prev) => prev !== null && prev > 0 ? prev - 1 : 0); }, 1000); return () => window.clearInterval(timer); }, [activeRoundResult, handleGuessSubmit, isGameActive, summaryGameRecord, timeRemaining]);
 
   const handleNextRound = useCallback(() => {
     if (!gameSettings) return;
