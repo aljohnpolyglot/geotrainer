@@ -16,5 +16,6 @@ test('language preferences keep only supported community languages and migrate m
 test('country names follow the selected language', () => {
   assert.equal(countryDisplayName('NL', 'it'), 'Paesi Bassi');
   assert.equal(countryDisplayName('DE', 'ru'), 'Германия');
+  assert.equal(countryDisplayName('IT', 'sv'), 'Italien');
   assert.equal(countryDisplayName('', 'sv'), '');
 });
