@@ -19,6 +19,7 @@
 - Made every table column in Statistics → Progress sortable and added a transient Street View preview to opened Coverage-map locations.
 - Simplified the Coverage location card to one Open action with an external Google Maps control, and replaced the saved-session Back link with a top-right close button.
 - Let desktop learners drag and resize the expanded revealed-location card from every edge and corner, with its embedded map following the new size.
+- Removed the expanded location card's redundant scrollbars while keeping its map responsive at every resized dimension.
 
 ## 2026-09-24
 
