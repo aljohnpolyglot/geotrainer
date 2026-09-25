@@ -2,11 +2,28 @@ import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointer
 
 type Point = { x: number; y: number };
 type Bounds = { left: number; top: number; right: number; bottom: number };
+export type PanelRect = { left: number; top: number; width: number; height: number };
+export type PanelResizeDirection = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
 
 export const clampPanelOffset = (origin: Point, delta: Point, bounds: Bounds, viewport: Point): Point => ({
   x: Math.min(origin.x + viewport.x - bounds.right, Math.max(origin.x - bounds.left, origin.x + delta.x)),
   y: Math.min(origin.y + viewport.y - bounds.bottom, Math.max(origin.y - bounds.top, origin.y + delta.y)),
 });
+
+export const movePanelRect = (origin: PanelRect, delta: Point, limits: Bounds): PanelRect => ({
+  ...origin,
+  left: Math.min(limits.right - origin.width, Math.max(limits.left, origin.left + delta.x)),
+  top: Math.min(limits.bottom - origin.height, Math.max(limits.top, origin.top + delta.y)),
+});
+
+export const resizePanelRect = (origin: PanelRect, delta: Point, direction: PanelResizeDirection, limits: Bounds, minimum: Pick<PanelRect, 'width' | 'height'>): PanelRect => {
+  let left = origin.left; let top = origin.top; let right = origin.left + origin.width; let bottom = origin.top + origin.height;
+  if (direction.includes('w')) left = Math.min(right - minimum.width, Math.max(limits.left, left + delta.x));
+  if (direction.includes('e')) right = Math.max(left + minimum.width, Math.min(limits.right, right + delta.x));
+  if (direction.includes('n')) top = Math.min(bottom - minimum.height, Math.max(limits.top, top + delta.y));
+  if (direction.includes('s')) bottom = Math.max(top + minimum.height, Math.min(limits.bottom, bottom + delta.y));
+  return { left, top, width: right - left, height: bottom - top };
+};
 
 export function useDraggablePanel<T extends HTMLElement>(): {
   panelRef: RefObject<T | null>;

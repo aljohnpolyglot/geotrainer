@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { LocationResult } from "../types";
 import { COUNTRIES } from "../data/countries";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
@@ -11,7 +11,9 @@ import { MapPin, ExternalLink, Maximize2, Minimize2, Minus, Compass, Building } 
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
-import { useDraggablePanel } from "../hooks/useDraggablePanel";
+import { movePanelRect, resizePanelRect, type PanelRect, type PanelResizeDirection, useDraggablePanel } from "../hooks/useDraggablePanel";
+
+type CardInteraction = { pointerId: number; start: { x: number; y: number }; rect: PanelRect; direction: 'move' | PanelResizeDirection };
 
 interface LocationCardProps {
   location: LocationResult;
@@ -31,8 +33,32 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const [isGeocoding, setIsGeocoding] = useState<boolean>(true);
   const [flagError, setFlagError] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedRect, setExpandedRect] = useState<PanelRect>();
+  const [adjusting, setAdjusting] = useState(false);
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
+  const interaction = useRef<CardInteraction>();
   useEffect(() => { if (hidden) setIsExpanded(false); }, [hidden]);
+
+  const limits = () => ({ left: 12, top: 64, right: window.innerWidth - 12, bottom: window.innerHeight - 12 });
+  const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: CardInteraction['direction']) => {
+    if (!isExpanded || event.button !== 0 || (direction === 'move' && (event.target as HTMLElement).closest('button, a, input, select, textarea'))) return;
+    const bounds = panelRef.current?.getBoundingClientRect(); if (!bounds) return;
+    event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId);
+    interaction.current = { pointerId: event.pointerId, start: { x: event.clientX, y: event.clientY }, rect: { left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height }, direction };
+    setAdjusting(true);
+  };
+  const resizeMove = (event: ReactPointerEvent<HTMLElement>) => {
+    const active = interaction.current; if (!active || active.pointerId !== event.pointerId) return;
+    const delta = { x: event.clientX - active.start.x, y: event.clientY - active.start.y };
+    setExpandedRect(active.direction === 'move' ? movePanelRect(active.rect, delta, limits()) : resizePanelRect(active.rect, delta, active.direction, limits(), { width: 280, height: 320 }));
+  };
+  const finishInteraction = (event: ReactPointerEvent<HTMLElement>) => {
+    if (interaction.current?.pointerId !== event.pointerId) return;
+    event.currentTarget.releasePointerCapture?.(event.pointerId); interaction.current = undefined; setAdjusting(false);
+  };
+  const expandedHandleProps = { onPointerDown: (event: ReactPointerEvent<HTMLElement>) => startInteraction(event, 'move'), onPointerMove: resizeMove, onPointerUp: finishInteraction, onPointerCancel: finishInteraction };
+  const resizeHandleProps = (direction: PanelResizeDirection) => ({ onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => startInteraction(event, direction), onPointerMove: resizeMove, onPointerUp: finishInteraction, onPointerCancel: finishInteraction });
+  const expandedStyle: CSSProperties | undefined = expandedRect ? { left: expandedRect.left, top: expandedRect.top, right: 'auto', bottom: 'auto', width: expandedRect.width, height: expandedRect.height } : undefined;
 
   const resolvedCountryCode = geocodeData?.countryCode || location.countryCode;
   const country = COUNTRIES[resolvedCountryCode];
@@ -84,9 +110,9 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const primaryArea = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
   return (
-    <div ref={panelRef} style={isExpanded ? undefined : dragStyle} hidden={hidden} id="revealed-location-card" className={`absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text${isExpanded ? ' expanded' : ''}`}>
+    <div ref={panelRef} style={isExpanded ? expandedStyle : dragStyle} hidden={hidden} id="revealed-location-card" className={`absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text${isExpanded ? ' expanded' : ''}`}>
       {/* Header: Country + Flag CDN + Close */}
-      <div {...dragHandleProps} className={`location-card-drag-handle flex items-start justify-between gap-3 mb-3${dragging ? ' dragging' : ''}`}>
+      <div {...(isExpanded ? expandedHandleProps : dragHandleProps)} className={`location-card-drag-handle flex items-start justify-between gap-3 mb-3${dragging || adjusting ? ' dragging' : ''}`}>
         <div className="flex items-center space-x-2.5">
           {/* Flag CDN badge */}
           {!flagError && flag1x ? (
@@ -104,8 +130,8 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
 
         <div className="flex items-center gap-1">
           <a href={mapsUrl} target="_blank" rel="noreferrer" aria-label={t('Open in Google Maps')} className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}><ExternalLink className="w-4 h-4" /></a>
-          <button onClick={() => { setIsExpanded(false); onHide(); }} aria-label={t('Hide location spoilers (R)')} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minus className="w-4 h-4" /></button>
-          <button onClick={() => setIsExpanded((value) => !value)} aria-expanded={isExpanded} aria-label={t(isExpanded ? 'Restore location card' : 'Maximize location card')} title={t(isExpanded ? 'Restore location card' : 'Maximize location card')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0">{isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}</button>
+          <button onClick={() => { setExpandedRect(undefined); setIsExpanded(false); onHide(); }} aria-label={t('Hide location spoilers (R)')} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minus className="w-4 h-4" /></button>
+          <button onClick={() => { setExpandedRect(undefined); setIsExpanded((value) => !value); }} aria-expanded={isExpanded} aria-label={t(isExpanded ? 'Restore location card' : 'Maximize location card')} title={t(isExpanded ? 'Restore location card' : 'Maximize location card')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0">{isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}</button>
         </div>
       </div>
 
@@ -156,6 +182,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
           </button>
         </div>
       )}
+      {isExpanded && (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] as PanelResizeDirection[]).map((direction) => <div key={direction} aria-hidden="true" className={`location-card-resize-handle ${direction}`} {...resizeHandleProps(direction)} />)}
 
     </div>
   );

@@ -92,6 +92,20 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
     return () => cancelAnimationFrame(frame);
   }, [active, actual.lat, actual.lng, resizeKey, mapPreferences.resultMapZoom, selectable]);
 
+  useEffect(() => {
+    const map = mapRef.current; const container = element.current;
+    if (!map || !container || typeof ResizeObserver === 'undefined') return;
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame); frame = requestAnimationFrame(() => {
+        google.maps.event.trigger(map, 'resize');
+        if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(map, container, actual, pointsRef.current, mapPreferences.resultMapZoom);
+      });
+    });
+    observer.observe(container);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+  }, [actual.lat, actual.lng, mapPreferences.resultMapZoom, selectable]);
+
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>

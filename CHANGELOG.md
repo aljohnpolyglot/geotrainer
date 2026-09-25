@@ -18,6 +18,7 @@
 - Made automatic Play-to-Review card creation configurable by score threshold and wrong-country answers, and opened saved-game rounds as read-only Review with a return to the recap.
 - Made every table column in Statistics → Progress sortable and added a transient Street View preview to opened Coverage-map locations.
 - Simplified the Coverage location card to one Open action with an external Google Maps control, and replaced the saved-session Back link with a top-right close button.
+- Let desktop learners drag and resize the expanded revealed-location card from every edge and corner, with its embedded map following the new size.
 
 ## 2026-09-24
 
