@@ -12,6 +12,7 @@
 - Clarified that a forgotten Review card graded Again returns later in the same session instead of appearing as an unexplained extra card.
 - Added a Supabase-independent Vercel endpoint for AI Coach, clue-camera capture, and transient 360° clipboard capture, with restricted browser origins and GitHub Pages endpoint configuration.
 - Kept the revealed Explore Map card at the learner's chosen map zoom while opening another panorama, clarified when Official-only coverage requires the mixed imagery filter, and added local city, region, and country map search labels in every supported UI language.
+- Removed the redundant Explore Map card hint because clicking the map already communicates its interaction directly.
 
 ## 2026-09-24
 

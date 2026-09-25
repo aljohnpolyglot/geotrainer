@@ -95,6 +95,5 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
-    {onSelect && <span className="result-map-select-hint">{t('Click map to move')}</span>}
   </div>;
 }
