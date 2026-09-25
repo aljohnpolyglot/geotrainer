@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import countryCatalog from '../src/data/countryCatalog.json';
 import type { CoachAnalysis, CoachMode, CoachStyle, ExplanationDepth } from '../src/types';
-import { getCountryKnowledge, getCountryMetaKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge';
+import { getCountryKnowledge, getCountryMetaKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge.js';
 
 export type { CoachAnalysis, CoachMode } from '../src/types';
 

@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { createAiCoachMiddleware } from '../server/aiCoach';
+import { createAiCoachMiddleware } from '../server/aiCoach.js';
 
 const deployedAppOrigin = 'https://aljohnpolyglot.github.io';
 const coach = createAiCoachMiddleware();
