@@ -8,6 +8,8 @@
 - Stopped ordinary Clues and Available notes reads from contacting Supabase Storage; manual sync now downloads each missing hosted clue image once into IndexedDB and reports the cached-image count.
 - Disabled background Supabase token refresh and made a production-like local server provide Coach and Street View capture at `/api/coach`, with static deployments retaining the existing Edge Function fallback.
 - Added portable `.geotrainer` export and merge-import beside Cloud sync, including all local records and cached saved photos, detailed transfer receipts, and an account-ID warning before importing another user’s file.
+- Made Explore Map's revealed location card map open another clicked Street View panorama, moved the world-map return action into a compact viewport globe button, and added imagery-source and indoor-coverage filters to the world map.
+- Clarified that a forgotten Review card graded Again returns later in the same session instead of appearing as an unexplained extra card.
 
 ## 2026-09-24
 

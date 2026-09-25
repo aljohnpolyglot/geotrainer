@@ -21,9 +21,10 @@ interface LocationCardProps {
   onSaveForReview?: () => void;
   reviewSaving?: boolean;
   reviewSaved?: boolean;
+  onMapSelect?: (point: { lat: number; lng: number }) => void;
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false, onMapSelect }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
@@ -146,7 +147,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
         </div>
       </div>
 
-      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className="study-result-map" fullscreenControl active={!hidden} resizeKey={isExpanded} />
+      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className={`study-result-map${onMapSelect ? ' selectable' : ''}`} fullscreenControl active={!hidden} resizeKey={isExpanded} onSelect={onMapSelect} />
 
       {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">

@@ -37,6 +37,7 @@
 .result-map-legend { position: absolute; z-index: 2; left: 10px; top: 10px; display: flex; gap: 9px; padding: 7px 9px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; box-shadow: 0 4px 14px rgba(8,38,58,.18); font-size: 10px; font-weight: 750; }
 .result-map-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: #22c55e; }
 .result-map-legend .current::before { background: #ef4444; }.result-map-legend .previous::before { background: #2563eb; }
+.result-map-select-hint { position: absolute; z-index: 2; right: 8px; bottom: 8px; padding: 6px 8px; color: #fff; background: var(--storm); border-radius: 3px; box-shadow: 0 4px 14px rgba(8,38,58,.18); font-size: 10px; font-weight: 750; pointer-events: none; }.study-result-map.selectable .result-map-canvas { cursor: crosshair; }
 .dark .result-map-canvas .gm-control-active { background-color: #071c29 !important; }
 .review-result-panel .grade-actions { padding: 12px 20px; }
 .review-result-panel .grade-actions button { position: relative; min-height: 70px; }

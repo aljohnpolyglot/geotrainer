@@ -104,7 +104,6 @@ export function AppTopBar({
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
         {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-mobile-context"><strong>{uploadedProgress.position}/{uploadedProgress.total}</strong><small>{t('Source')}</small></span>}
-        {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" onClick={onNextLocation} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold text-stone-200 bg-stone-950 border border-stone-700"><ArrowLeft size={14} /><span className="hidden md:inline">{t('Back to world map')}</span></button>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewPosition}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
         <button type="button" className="mobile-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={t('Navigation')} onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button>
         <button type="button" className="mobile-menu-backdrop" aria-label={t('close')} onClick={() => setMobileMenuOpen(false)} />

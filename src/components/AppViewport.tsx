@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { AppMode, Collection, CompassStyle, GameRecord, GameRound, LocationResult, ReviewGrade, ReviewSessionKind, StreetViewState, TrainerLocation } from '../types';
+import { AppMode, Collection, CompassStyle, GameRecord, GameRound, LearnSource, LocationResult, ReviewSessionKind, StreetViewState, TrainerLocation } from '../types';
 import { StreetViewContainer } from './StreetViewContainer';
 import { MainMenu } from './MainMenu';
 import { TrainerHub, HubTab } from './TrainerHub';
 import { LocationCard } from './LocationCard';
 import { GuessMap } from './GuessMap';
-import { Gamepad2, History, Play } from 'lucide-react';
+import { Gamepad2, Globe2, History, Play } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
@@ -14,6 +14,7 @@ interface AppViewportProps {
   statusMessage: string; errorMessage: string | null; mapsReady: boolean; activeCompass: boolean; compassStyle: CompassStyle;
   restoredStreetView?: StreetViewState;
   isRevealed: boolean;
+  learnSource: LearnSource;
   isGameActive: boolean; gameSettings: { roundCount: number } | null; activeRoundResult: GameRound | null;
   playElapsed: number; timeRemaining: number | null; isSubmittingGuess: boolean; reviewAttempt: { id: string } | null;
   reviewResult: GameRound | null; reviewElapsed: number; pastGames: GameRecord[];
@@ -26,18 +27,19 @@ interface AppViewportProps {
   onTrainCountries: (codes: string[], name: string) => void; onDataChanged: () => void;
   onSelectGame: (game: GameRecord) => void;
   onHideReveal: () => void; onMetadata: (details: any) => void; onSaveForReview: () => void;
+  onOpenWorldMap: () => void; onOpenMapPoint: (point: { lat: number; lng: number }) => void;
   onGuess: (guess: { lat: number; lng: number } | null) => void;
   onStreetViewChanged: (view: StreetViewState) => void;
 }
 
 export function AppViewport({
   appMode, showHome, currentLocation, isLoading, statusMessage, errorMessage, mapsReady, activeCompass, compassStyle, restoredStreetView,
-  isRevealed, isGameActive, gameSettings, activeRoundResult,
+  isRevealed, learnSource, isGameActive, gameSettings, activeRoundResult,
   playElapsed, timeRemaining, isSubmittingGuess, reviewAttempt, reviewResult, reviewElapsed, pastGames,
   allCollections, trainerRefreshKey, trainerStartTab, studyReviewSaving, studyReviewSaved,
   canMove, canPan, canZoom, onNextLocation, onMapsLoaded, onPanoramaChanged,
   onStudy, onPlay, onReview, onOpenNewGame, onOpenHistory, onOpenReview, onOpenCoverage, onTrainCountries,
-  onDataChanged, onSelectGame, onHideReveal, onMetadata, onSaveForReview, onGuess, onStreetViewChanged,
+  onDataChanged, onSelectGame, onHideReveal, onMetadata, onSaveForReview, onOpenWorldMap, onOpenMapPoint, onGuess, onStreetViewChanged,
 }: AppViewportProps) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -53,7 +55,8 @@ export function AppViewport({
     <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} canMove={canMove} canPan={canPan} canZoom={canZoom} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={appMode === 'review' ? undefined : restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && appMode === 'study' ? onPanoramaChanged : undefined} />
     {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
     {!showHome && appMode === 'review' && !reviewAttempt && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}
-    {cachedStudyReveal && <LocationCard location={cachedStudyReveal} hidden={!isRevealed} onHide={onHideReveal} onMetadata={onMetadata} onSaveForReview={onSaveForReview} reviewSaving={studyReviewSaving} reviewSaved={studyReviewSaved} />}
+    {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" className="explore-world-map-button" onClick={onOpenWorldMap} aria-label={t('Back to world map')} title={t('Back to world map')}><Globe2 size={20} /></button>}
+    {cachedStudyReveal && <LocationCard location={cachedStudyReveal} hidden={!isRevealed} onHide={onHideReveal} onMetadata={onMetadata} onSaveForReview={onSaveForReview} reviewSaving={studyReviewSaving} reviewSaved={studyReviewSaved} onMapSelect={learnSource === 'map' ? onOpenMapPoint : undefined} />}
     {!showHome && appMode === 'play' && !isGameActive && <div id="play-lobby-overlay" className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 pointer-events-none"><div id="play-lobby-card" className="max-w-md w-full bg-stone-900/95 border border-stone-800 rounded-2xl p-6 shadow-2xl space-y-4 text-center pointer-events-auto"><div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto"><Gamepad2 className="w-6 h-6" /></div><div className="space-y-1"><h2 className="text-lg font-bold text-white tracking-tight">{t('geoguessrGame')}</h2><p className="text-xs text-stone-400 max-w-xs mx-auto">{t('geoguessrDescription')}</p></div><div className="grid grid-cols-2 gap-2 text-left bg-stone-950/80 p-3 rounded-xl border border-stone-800/80 text-xs"><div><span className="text-stone-500 block text-[11px]">{t('gamesSaved')}</span><span className="font-mono font-bold text-stone-200">{pastGames.length} {t('games')}</span></div><div><span className="text-stone-500 block text-[11px]">{t('bestRecord')}</span><span className="font-mono font-bold text-amber-400">{pastGames.length > 0 ? `${Math.max(...pastGames.map((game) => game.totalScore)).toLocaleString()} ${t('pts')}` : t('noneYet')}</span></div></div><div className="space-y-2 pt-1"><button onClick={onOpenNewGame} className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-[#171000] font-bold rounded-xl shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 text-xs sm:text-sm active:scale-98"><Play className="w-4 h-4 fill-stone-950" /><span>{t('startNewGame')}</span></button>{pastGames.length > 0 && <button onClick={onOpenHistory} className="w-full py-2 bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white font-medium rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs border border-stone-700/60"><History className="w-3.5 h-3.5 text-amber-400" /><span>{t('reviewPastGames')}</span></button>}</div></div></div>}
     {!showHome && appMode === 'play' && isGameActive && currentLocation && !activeRoundResult && <GuessMap onGuess={onGuess} isSubmitting={isSubmittingGuess} mapsReady={mapsReady} timeRemaining={timeRemaining} elapsedTimeSeconds={playElapsed} />}
     {!showHome && appMode === 'review' && reviewAttempt && currentLocation && !reviewResult && <GuessMap onGuess={onGuess} isSubmitting={isSubmittingGuess} mapsReady={mapsReady} timeRemaining={null} elapsedTimeSeconds={reviewElapsed} />}

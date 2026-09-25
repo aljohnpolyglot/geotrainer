@@ -4,6 +4,8 @@ import { metaLessonById, nextMetaLesson, savedMetaLessonIds } from '../data/meta
 import { trainerDb } from '../data/trainerDb';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
+import { findExplorePanorama } from '../services/exploreMap';
+import type { PanoramaSource } from '../types';
 
 type LearnSourceContext = {
   setAppMode: (mode: AppMode) => void;
@@ -69,6 +71,12 @@ export function useLearnSources(ctx: LearnSourceContext) {
     } finally { setIsLoading(false); }
   }, [setCurrentLocation, setErrorMessage, setIsLoading]);
 
+  const openMapPoint = useCallback(async (point: { lat: number; lng: number }, panoramaSource: PanoramaSource, allowInteriors: boolean) => {
+    setIsLoading(true); setErrorMessage(null);
+    try { await openMapLocation(await findExplorePanorama(point, { panoramaSource, allowInteriors })); }
+    catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Could not open that Street View location.'); setIsLoading(false); }
+  }, [openMapLocation, setErrorMessage, setIsLoading]);
+
   const dismissMetaAdvice = useCallback((forever: boolean) => {
     setMetaAdviceOpen(false);
     if (forever) void trainerDb.setSetting('preference.metaAdviceDismissed', true);
@@ -80,5 +88,5 @@ export function useLearnSources(ctx: LearnSourceContext) {
   }, []);
 
   return { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta, nextMeta, startMap,
-    openMapLocation, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource };
+    openMapLocation, openMapPoint, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource };
 }

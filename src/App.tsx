@@ -202,7 +202,7 @@ export default function App() {
   const learn = useLearnSources({ setAppMode, setShowHome, setStudySetupOpen: setIsStudySetupOpen,
     setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed });
   const { learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta,
-    nextMeta, startMap, openMapLocation, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource } = learn;
+    nextMeta, startMap, openMapLocation, openMapPoint, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource } = learn;
   const study = useStudyMode({
     appMode, showHome, dbReady, currentLocation, setCurrentLocation, isLoading, setIsLoading, setErrorMessage,
     selectedCollectionId, setSelectedCollectionId, customCollections, setCustomCollections, bookmarks, setBookmarks,
@@ -438,7 +438,7 @@ export default function App() {
       <AppViewport
         appMode={appMode} showHome={showHome} currentLocation={currentLocation} isLoading={isLoading}
         statusMessage={statusMessage} errorMessage={errorMessage} mapsReady={mapsReady} activeCompass={activeCompass} compassStyle={compassStyle} restoredStreetView={restoredStreetView}
-        isRevealed={isRevealed}
+        isRevealed={isRevealed} learnSource={learnSource}
         isGameActive={isGameActive} gameSettings={gameSettings} activeRoundResult={activeRoundResult}
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
         reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed}
@@ -459,7 +459,7 @@ export default function App() {
         onDataChanged={() => { void Promise.all([trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games()]).then(([collections, savedBookmarks, games]) => { setCustomCollections(collections); setBookmarks(savedBookmarks); setPastGames(games); setTrainerRefreshKey((key) => key + 1); }); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
-        onSaveForReview={() => void handleSaveStudyForReview()}
+        onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => void openMapPoint(point, studyPanoramaSource, studyAllowInteriors)}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
@@ -473,7 +473,7 @@ export default function App() {
         isHistoryModalOpen={isHistoryModalOpen} isModalOpen={isModalOpen} editingCollection={editingCollection}
         pastGames={pastGames}
         allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference} activeCompass={activeCompass}
-        preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady}
+        preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady} explorePanoramaSource={studyPanoramaSource} exploreAllowInteriors={studyAllowInteriors}
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
         onToggleCompass={toggleCompass}
         onClueAnalyzed={() => { if (appMode === 'play') playAiAssistedRef.current = true; }}
@@ -487,7 +487,7 @@ export default function App() {
         onCloseSummary={() => setSummaryGameRecord(null)}
         onGoToLocation={(location) => { setSummaryGameRecord(null); setIsGameActive(false); setCurrentLocation(location); setAppMode('study'); setIsRevealed(true); }}
         onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.source === 'uploaded' ? settings.importedMapId : undefined; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
-        onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview() : undefined}
+        onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onExploreSettingsChange={(source, interiors) => { setStudyPanoramaSource(source); studyPanoramaSourceRef.current = source; setStudyAllowInteriors(interiors); studyAllowInteriorsRef.current = interiors; void Promise.all([trainerDb.setSetting('preference.panoramaSource', source), trainerDb.setSetting('preference.allowContributors', source !== 'official'), trainerDb.setSetting('preference.allowInteriors', interiors)]); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview() : undefined}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onDeleteGame={(id) => { const updated = dbReady ? pastGames.filter((game) => game.id !== id) : deleteGameRecord(id); setPastGames(updated); void trainerDb.deleteGame(id); }}
         onClearGames={() => { if (!dbReady) clearGameHistory(); setPastGames([]); void trainerDb.clearGames(); }}

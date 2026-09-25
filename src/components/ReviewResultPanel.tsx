@@ -2,7 +2,7 @@ import { AlertTriangle, Building, Compass, Eye, MapPin, Minus } from 'lucide-rea
 import { useEffect, useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
-import type { Attempt, GameRound } from '../types';
+import type { Attempt, GameRound, ReviewGrade } from '../types';
 import { ResultMap } from './ResultMap';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -16,13 +16,14 @@ export const reviewLocationDetails = (value: ReverseGeocodeResult | null, unavai
 });
 export const reviewGuessHistory = (history: Attempt[]) => history.flatMap((attempt) => attempt.guessedLat === null || attempt.guessedLng === null ? [] : [{ lat: attempt.guessedLat, lng: attempt.guessedLng }]);
 
-export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, advancing, onNext }: {
+export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, grade, advancing, onNext }: {
   round: GameRound;
   sourceAttempt: Attempt;
   history: Attempt[];
   position: number;
   total: number;
   sourceLabel: string;
+  grade?: ReviewGrade;
   advancing: boolean;
   onNext: () => void;
 }) {
@@ -74,7 +75,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} className="review-result-map" />
 
         <div className="review-next-action">
-          <span>{t('schedulingFromScore')}</span>
+          <span>{grade === 'again' ? t('This card will return later in this session.') : t('schedulingFromScore')}</span>
           <button disabled={advancing} onClick={onNext}>{advancing ? t('saving') : t('nextReview')}</button>
         </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppMode, Attempt, CoachAnalysis, CompassStyle, GameRecord, GameRound, LanguagePreferences, LearnSource, LocationResult, MetaLesson, ReviewGrade, TrainerLocation } from '../types';
+import { AppMode, Attempt, CoachAnalysis, CompassStyle, GameRecord, GameRound, LanguagePreferences, LearnSource, LocationResult, MetaLesson, PanoramaSource, ReviewGrade, TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { AiCoach } from './AiCoach';
 import { ReviewResultPanel } from './ReviewResultPanel';
@@ -31,6 +31,7 @@ interface AppOverlaysProps {
   compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
   reviewGrading: boolean;
   learnSource: LearnSource; activeMetaLesson?: MetaLesson; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
+  explorePanoramaSource: PanoramaSource; exploreAllowInteriors: boolean;
   onSaveCoach: (note: any) => Promise<void> | void; onSaveClue: (clue: any) => Promise<string | void> | string | void; onClueAnalyzed: () => void;
   onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void;
   onCloseReviewComplete: () => void; onPracticeMistakes?: () => void; onPlayAgain: () => void;
@@ -40,6 +41,7 @@ interface AppOverlaysProps {
   onSelectGame: (game: GameRecord) => void; onDeleteGame: (id: string) => void; onClearGames: () => void;
   onSaveCollection: (collection: any) => void; onDeleteCollection: (id: string) => void; onCloseCollection: () => void;
   onOpenMapLocation: (location: Omit<LocationResult, 'countryCode'>) => void; onCloseMapPicker: () => void; onDismissMetaAdvice: (forever: boolean) => void;
+  onExploreSettingsChange: (panoramaSource: PanoramaSource, allowInteriors: boolean) => void;
   onNoteSaved: () => Promise<void> | void;
   onToggleCompass: () => void;
 }
@@ -61,8 +63,8 @@ export function AppOverlays(props: AppOverlaysProps) {
     <LearningAids lesson={appMode === 'study' && learnSource === 'meta' ? studyMeta : reviewMeta}
       panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} refreshKey={trainerRefreshKey} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
     </div>}
-    <StreetViewExplorer open={mapPickerOpen} mapsReady={mapsReady} onClose={props.onCloseMapPicker} onSelect={props.onOpenMapLocation} />
-    {reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} advancing={reviewGrading} onNext={props.onNextReview} />}
+    <StreetViewExplorer open={mapPickerOpen} mapsReady={mapsReady} panoramaSource={props.explorePanoramaSource} allowInteriors={props.exploreAllowInteriors} onSettingsChange={props.onExploreSettingsChange} onClose={props.onCloseMapPicker} onSelect={props.onOpenMapLocation} />
+    {reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} grade={reviewAttemptRecord?.grade} advancing={reviewGrading} onNext={props.onNextReview} />}
     {coveragePreview && <CoverageStudyModal location={coveragePreview} onClose={props.onCloseCoverage} />}
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}

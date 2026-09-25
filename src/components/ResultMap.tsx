@@ -9,7 +9,7 @@ const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: P
   map.setZoom(Math.min(resultMapZoomLimit(zoomPreference), centeredResultMapZoom(actual, points, element.clientWidth, element.clientHeight)));
 };
 
-export function ResultMap({ actual, guess, previousGuesses = [], className = '', fullscreenControl = false, active = true, resizeKey }: {
+export function ResultMap({ actual, guess, previousGuesses = [], className = '', fullscreenControl = false, active = true, resizeKey, onSelect }: {
   actual: Point;
   guess: Point | null;
   previousGuesses?: Point[];
@@ -17,6 +17,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   fullscreenControl?: boolean;
   active?: boolean;
   resizeKey?: boolean;
+  onSelect?: (point: Point) => void;
 }) {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
@@ -42,6 +43,14 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   }, [fullscreenControl]);
 
   useEffect(() => { mapRef.current?.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !onSelect) return;
+    const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map);
+    const listener = map.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); });
+    return () => { listener.remove(); coverage.setMap(null); };
+  }, [onSelect]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -82,5 +91,6 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
+    {onSelect && <span className="result-map-select-hint">{t('Click map to move')}</span>}
   </div>;
 }
