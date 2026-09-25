@@ -210,6 +210,8 @@ Review continues through the active queue until no selected cards remain. Same-d
 
 Strictness affects future grading; it does not rewrite old attempts.
 
+**Add Play rounds to Review** is separate from grading: a future Play round creates a card when its score is below the chosen threshold or its country is wrong. Either enabled condition is enough; fresh profiles start at the active Hard/Again boundary (3,000 for Balanced).
+
 ### Daily limits
 
 **New cards per day** limits cards that have never been reviewed. **Maximum reviews per day** caps the entire ready queue, including new and previously reviewed cards. Both limits apply at the same time. For example, with 50 new cards and 500 maximum reviews, 110 cards can be due while only 108 are ready if two of the due cards exceed the new-card allowance. Home and Review show the actionable ready count; Review separately reports cards held by daily limits. Raising the total limit does not bypass the new-card limit. Fresh profiles default to 50 new cards and 500 total reviews per day; saved choices remain unchanged.

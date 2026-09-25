@@ -24,7 +24,7 @@ legacy.set('sv_game_history_v1', JSON.stringify([{
 }]));
 
 test('migration is idempotent and backup/import protects history', async () => {
-  const { clearTrainerDbForTesting, createBackup, importBackup, initTrainerDb, isCountryMistake, reviewGradeForCorrection, reviewGradeForPerformance, trainerDb } = await import('./trainerDb');
+  const { clearTrainerDbForTesting, createBackup, importBackup, initTrainerDb, isCountryMistake, reviewGradeForCorrection, reviewGradeForPerformance, shouldAutoSchedulePlayReview, trainerDb } = await import('./trainerDb');
   await initTrainerDb();
   await initTrainerDb();
   assert.equal((await trainerDb.locations()).length, 1);
@@ -92,6 +92,12 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal(reviewGradeForPerformance(4900, 12, false), 'again');
   assert.equal(reviewGradeForPerformance(4799, 12, true, 60, 'pro'), 'again');
   assert.equal(reviewGradeForPerformance(4800, 12, true, 60, 'pro'), 'hard');
+  const automaticReview = await trainerDb.schedulerPreferences();
+  assert.equal(automaticReview.autoReviewScore, 3000);
+  assert.equal(shouldAutoSchedulePlayReview(2999, 'IT', 'IT', automaticReview), true);
+  assert.equal(shouldAutoSchedulePlayReview(3000, 'IT', 'IT', automaticReview), false);
+  assert.equal(shouldAutoSchedulePlayReview(3200, 'IT', 'FR', automaticReview), true);
+  assert.equal(shouldAutoSchedulePlayReview(3200, 'IT', 'IT', automaticReview), false);
   assert.equal(isCountryMistake(4900, 'IT', 'FR'), true);
   assert.equal(reviewGradeForCorrection(3200, 'IT', 'IT'), 'hard');
   assert.equal(reviewGradeForCorrection(2999, 'IT', 'IT'), 'again');

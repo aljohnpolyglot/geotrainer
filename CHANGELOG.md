@@ -15,6 +15,9 @@
 - Removed the redundant Explore Map card hint because clicking the map already communicates its interaction directly.
 - Close Explore Map immediately when switching to another primary mode.
 - Rebalanced World natural sampling so tiny territories remain possible without crowding out broader Street View coverage.
+- Made automatic Play-to-Review card creation configurable by score threshold and wrong-country answers, and opened saved-game rounds as read-only Review with a return to the recap.
+- Made every table column in Statistics → Progress sortable and added a transient Street View preview to opened Coverage-map locations.
+- Simplified the Coverage location card to one Open action with an external Google Maps control, and replaced the saved-session Back link with a top-right close button.
 
 ## 2026-09-24
 

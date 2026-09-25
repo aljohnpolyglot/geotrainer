@@ -61,7 +61,7 @@ import { useLearnSources } from './hooks/useLearnSources';
 import { useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioPreferences } from './services/audio';
-import { restoredRoundElapsed } from './services/gameLogic';
+import { calculateDistanceKm, restoredRoundElapsed } from './services/gameLogic';
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
 const ENVIRONMENT_STORAGE_KEY = 'sv_environment';
@@ -183,8 +183,8 @@ export default function App() {
     setAppMode, mapsReady, isLoading, setStatusMessage, setIsNewGameModalOpen, saveGameRecord, restoredPlayPanoRef,
   });
   const { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex,
-    timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord,
-    setSummaryGameRecord, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound,
+    timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord, summaryRound,
+    setSummaryGameRecord, setSummaryRound, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound,
     handleAbandonGame, gameIdRef, roundSubmittedRef } = play;
   const playWorkspaceRef = useRef<Extract<ActiveWorkspace, { mode: 'play' }> | null>(null);
   playWorkspaceRef.current = isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
@@ -441,14 +441,14 @@ export default function App() {
         isRevealed={isRevealed} learnSource={learnSource}
         isGameActive={isGameActive} gameSettings={gameSettings} activeRoundResult={activeRoundResult}
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
-        reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed}
+        reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
         pastGames={pastGames} allCollections={allCollections}
         trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab}
         studyReviewSaving={studyReviewSaving} studyReviewSaved={studyReviewSaved}
         canMove={canMove} canPan={canPan} canZoom={canZoom}
         onNextLocation={appMode === 'play' && isGameActive && gameSettings ? () => void fetchLocationForRound(gameSettings) : handleNextLearn}
         onMapsLoaded={handleMapsLoaded}
-        onPanoramaChanged={(location) => void handleStudyPanoramaChanged(location)}
+        onPanoramaChanged={(location) => { if (summaryRound) setStudyReviewSaved(false); void handleStudyPanoramaChanged(location); }}
         onStudy={() => requestMode('study')}
         onPlay={() => requestMode('play')}
         onReview={() => { setShowHome(false); setTrainerStartTab('review'); setAppMode('review'); }}
@@ -459,7 +459,7 @@ export default function App() {
         onDataChanged={() => { void Promise.all([trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games()]).then(([collections, savedBookmarks, games]) => { setCustomCollections(collections); setBookmarks(savedBookmarks); setPastGames(games); setTrainerRefreshKey((key) => key + 1); }); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
-        onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => void openMapPoint(point, studyPanoramaSource, studyAllowInteriors)}
+        onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => void openMapPoint(point, studyPanoramaSource, studyAllowInteriors)} onReturnToSummary={() => { setSummaryRound(null); setCurrentLocation(null); }} onSaveSummaryLocation={() => void handleSaveStudyForReview()}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
@@ -469,7 +469,7 @@ export default function App() {
         reviewHistory={reviewHistory} reviewStats={reviewStats} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource} reviewComplete={reviewComplete}
         activeRoundResult={activeRoundResult} gameSettings={gameSettings} currentRoundIndex={currentRoundIndex}
-        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, locationTargets: studyLocationTargets, importedMapVariation: studyImportedVariationRef.current, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, priority: studyPriority, panoramaSource: studyPanoramaSource, allowInteriors: studyAllowInteriors, showCompass: compassPreference }}
+        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} summaryRound={summaryRound} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, locationTargets: studyLocationTargets, importedMapVariation: studyImportedVariationRef.current, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, priority: studyPriority, panoramaSource: studyPanoramaSource, allowInteriors: studyAllowInteriors, showCompass: compassPreference }}
         isHistoryModalOpen={isHistoryModalOpen} isModalOpen={isModalOpen} editingCollection={editingCollection}
         pastGames={pastGames}
         allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference} activeCompass={activeCompass}
@@ -484,8 +484,8 @@ export default function App() {
         onPracticeMistakes={summaryMistakes?.attempts.length && summaryMistakes.gameId === summaryGameRecord?.id ? () => { setSummaryGameRecord(null); void handleStartReview(summaryMistakes.attempts[0], summaryMistakes.attempts, 'Game mistakes', 'correction'); } : undefined}
         onPlayAgain={() => { if (summaryGameRecord) { setSummaryGameRecord(null); handleStartGame(summaryGameRecord.settings); } }}
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
-        onCloseSummary={() => setSummaryGameRecord(null)}
-        onGoToLocation={(location) => { setSummaryGameRecord(null); setIsGameActive(false); setCurrentLocation(location); setAppMode('study'); setIsRevealed(true); }}
+        onCloseSummary={() => { setSummaryRound(null); setSummaryGameRecord(null); }}
+        onOpenRound={(round) => { setStudyReviewSaved(false); setSummaryRound(round); setIsGameActive(false); setCurrentLocation(round.location); setAppMode('review'); setShowHome(false); setMapPickerOpen(false); }}
         onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') startMeta(); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.source === 'uploaded' ? settings.importedMapId : undefined; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation) setShowHome(true); }}
         onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onExploreSettingsChange={(source, interiors) => { setStudyPanoramaSource(source); studyPanoramaSourceRef.current = source; setStudyAllowInteriors(interiors); studyAllowInteriorsRef.current = interiors; void Promise.all([trainerDb.setSetting('preference.panoramaSource', source), trainerDb.setSetting('preference.allowContributors', source !== 'official'), trainerDb.setSetting('preference.allowInteriors', interiors)]); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={() => appMode === 'study' ? handleSaveStudyForReview() : undefined}
         onSelectGame={(game) => setSummaryGameRecord(game)}

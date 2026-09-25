@@ -32,7 +32,8 @@ export const worldSampleWeight = (countryCode: string) => {
   const country = COUNTRIES[countryCode]; if (!country) return 1;
   const { minLat, maxLat, minLng, maxLng } = country.bounds;
   const footprint = Math.sqrt(Math.abs((maxLat - minLat) * (maxLng - minLng) * Math.cos((minLat + maxLat) * Math.PI / 360)));
-  return Math.max(1, Math.min(8, footprint)) * Math.min(4, Math.max(1, country.samplePoints.length));
+  const cityCoverage = CITIES[countryCode]?.length || country.samplePoints.length;
+  return Math.max(1, Math.min(8, footprint)) * Math.min(4, Math.max(1, cityCoverage));
 };
 export const pickWorldCountry = (countryCodes: string[], random = Math.random) => {
   let pick = random() * countryCodes.reduce((total, code) => total + worldSampleWeight(code), 0);

@@ -69,7 +69,6 @@ export interface CoveragePanelProps {
   setClueCountry: (value: string) => void;
   load: () => Promise<void>;
   onOpen: (location: TrainerLocation) => void;
-  onReview: (attempt: Attempt) => void;
 }
 
 export interface HistoryPanelProps {

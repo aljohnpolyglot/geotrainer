@@ -103,6 +103,8 @@ export interface SchedulerPreferences {
   maximumIntervalDays: number;
   maximumAnswerSeconds: number;
   reviewOrder: 'due' | 'random';
+  autoReviewScore: number;
+  autoReviewWrongCountry: boolean;
   /** Optional migration-safe daily boundary settings. */
   reviewDayResetMinutes?: number;
   reviewTimeZone?: string;

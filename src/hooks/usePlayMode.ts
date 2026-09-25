@@ -4,7 +4,7 @@ import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { isLatestRequest } from '../services/requestIntegrity';
-import { reviewGradeForPerformance, trainerDb } from '../data/trainerDb';
+import { reviewGradeForPerformance, shouldAutoSchedulePlayReview, trainerDb } from '../data/trainerDb';
 import { COUNTRIES } from '../data/countries';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { pickImportedLocation } from '../services/importedMap';
@@ -22,6 +22,7 @@ export function usePlayMode(ctx: any) {
   const [playElapsed, setPlayElapsed] = useState(0);
   const [activeRoundResult, setActiveRoundResult] = useState<GameRound | null>(null);
   const [summaryGameRecord, setSummaryGameRecord] = useState<GameRecord | null>(null);
+  const [summaryRound, setSummaryRound] = useState<GameRound | null>(null);
   const [isSubmittingGuess, setLocalSubmittingGuess] = useState(false);
   const gameIdRef = useRef('');
   const roundSubmittedRef = useRef(false);
@@ -46,7 +47,7 @@ export function usePlayMode(ctx: any) {
   }, [abortControllerRef, allCollections, ctx, gameRounds, generationPendingRef, latestGenerationRequestRef, roundStartTimeRef, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
 
   const handleStartGame = useCallback((settings: GameSettings) => {
-    generationFailedRef.current = false; setShowHome(false); ctx.setIsNewGameModalOpen(false); setAppMode('play'); setIsGameActive(true); setGameSettings(settings); setGameRounds([]); setCurrentRoundIndex(0); setActiveRoundResult(null); setSummaryGameRecord(null); gameIdRef.current = `game-${crypto.randomUUID()}`; roundSubmittedRef.current = false; if (mapsReady) void fetchLocationForRound(settings);
+    generationFailedRef.current = false; setShowHome(false); ctx.setIsNewGameModalOpen(false); setAppMode('play'); setIsGameActive(true); setGameSettings(settings); setGameRounds([]); setCurrentRoundIndex(0); setActiveRoundResult(null); setSummaryGameRecord(null); setSummaryRound(null); gameIdRef.current = `game-${crypto.randomUUID()}`; roundSubmittedRef.current = false; if (mapsReady) void fetchLocationForRound(settings);
   }, [ctx, fetchLocationForRound, mapsReady, setAppMode, setGameSettings, setShowHome]);
 
   useEffect(() => { if (mapsReady && isGameActive && gameSettings && !currentLocation && !ctx.isLoading && !generationFailedRef.current) void fetchLocationForRound(gameSettings); }, [currentLocation, fetchLocationForRound, gameSettings, isGameActive, mapsReady, ctx.isLoading]);
@@ -73,7 +74,7 @@ export function usePlayMode(ctx: any) {
     const roundRecord: GameRound = { roundNumber: currentRoundIndex + 1, location: currentLocation, guess, distanceKm, score, timeSpentSeconds: timeSpent, guessedCountryCode };
     const attempt: Attempt = { id: `${gameIdRef.current}:${roundRecord.roundNumber}`, gameId: gameIdRef.current, roundNumber: roundRecord.roundNumber, panoId: currentLocation.panoId, actualLat: currentLocation.lat, actualLng: currentLocation.lng, countryCode: currentLocation.countryCode, guessedLat: guess?.lat ?? null, guessedLng: guess?.lng ?? null, distanceKm, score, timeSpentSeconds: timeSpent, collectionId: gameSettings.collectionId, canMove: gameSettings.canMove, canPan: gameSettings.canPan, canZoom: gameSettings.canZoom, showCompass: gameSettings.showCompass ?? true, environment: gameSettings.environment ?? 'mixed', environmentRequested: gameSettings.environment ?? 'mixed', urbanLevel: gameSettings.urbanLevel ?? 3, samplingMode: gameSettings.samplingMode ?? 'natural', createdAt: Date.now(), source: 'play', heading: getStreetViewSnapshot(currentLocation.panoId)?.heading, aiAssisted: playAiAssistedRef.current || undefined, guessedCountryCode, ...(coachNote ? { coachUsed: true, coachMode: coachNote.mode, coachModel: coachNote.model, coachGeneratedAt: coachNote.generatedAt, coachAnalysis: coachNote.analysis } : {}) };
     const scheduler = await trainerDb.schedulerPreferences(); const grade = reviewGradeForPerformance(score, timeSpent, guessedCountryCode === currentLocation.countryCode, scheduler.maximumAnswerSeconds, scheduler.strictness);
-    await Promise.all([trainerDb.encounter({ ...currentLocation, ...(imageDataUrl ? { imageDataUrl } : {}) }), trainerDb.saveAttempt(attempt), trainerDb.scheduleFirstPlay(currentLocation.panoId, grade, currentLocation)]);
+    await Promise.all([trainerDb.encounter({ ...currentLocation, ...(imageDataUrl ? { imageDataUrl } : {}) }), trainerDb.saveAttempt(attempt), shouldAutoSchedulePlayReview(score, currentLocation.countryCode, guessedCountryCode, scheduler) ? trainerDb.scheduleFirstPlay(currentLocation.panoId, grade, currentLocation) : Promise.resolve()]);
     setGameRounds((rounds) => [...rounds, roundRecord]); setActiveRoundResult(roundRecord); setSubmitting(false); setTrainerRefreshKey((key: number) => key + 1);
   }, [activeRoundResult, coachNote, currentLocation, currentRoundIndex, gameSettings, playAiAssistedRef, roundStartTimeRef, setTrainerRefreshKey]);
 
@@ -90,6 +91,6 @@ export function usePlayMode(ctx: any) {
     setPastGames(dbReady ? [completedGame, ...pastGames] : ctx.saveGameRecord(completedGame)); void trainerDb.saveGame(completedGame); setIsGameActive(false); setActiveRoundResult(null); setSummaryGameRecord(completedGame);
   }, [allCollections, currentRoundIndex, dbReady, fetchLocationForRound, gameRounds, gameSettings, pastGames, setPastGames, ctx]);
 
-  const handleAbandonGame = useCallback(() => { if (!window.confirm('Abandon this game? Current round progress will not be saved.')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setGameRounds([]); setActiveRoundResult(null); setSummaryGameRecord(null); setGameSettings(null); setTimeRemaining(null); setCurrentLocation(null); roundSubmittedRef.current = false; }, [abortControllerRef, setCurrentLocation, setGameSettings]);
-  return { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex, timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord, setSummaryGameRecord, isSubmittingGuess, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound, handleAbandonGame, gameIdRef, roundSubmittedRef };
+  const handleAbandonGame = useCallback(() => { if (!window.confirm('Abandon this game? Current round progress will not be saved.')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setGameRounds([]); setActiveRoundResult(null); setSummaryGameRecord(null); setSummaryRound(null); setGameSettings(null); setTimeRemaining(null); setCurrentLocation(null); roundSubmittedRef.current = false; }, [abortControllerRef, setCurrentLocation, setGameSettings]);
+  return { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex, timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord, setSummaryGameRecord, summaryRound, setSummaryRound, isSubmittingGuess, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound, handleAbandonGame, gameIdRef, roundSubmittedRef };
 }

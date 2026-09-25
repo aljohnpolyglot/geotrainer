@@ -20,8 +20,8 @@ import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor, reviewGradeForPerformance } from './reviewGrading';
 import { clueImageFingerprint } from './clueDedup';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
-export { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
-export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore } from './reviewGrading';
+export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
+export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore, shouldAutoSchedulePlayReview } from './reviewGrading';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [

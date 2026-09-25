@@ -25,7 +25,7 @@ interface AppOverlaysProps {
   reviewHistory: Attempt[]; reviewStats: Array<{ previous: number; current: number; grade: ReviewGrade }>;
   reviewInitialTotal: number; reviewQueueLength: number; reviewSource: string; reviewComplete: boolean;
   activeRoundResult: GameRound | null; gameSettings: any; currentRoundIndex: number; gameRounds: GameRound[];
-  summaryGameRecord: GameRecord | null; isNewGameModalOpen: boolean; isHistoryModalOpen: boolean; isStudySetupOpen: boolean; studySetup: StudySetup;
+  summaryGameRecord: GameRecord | null; summaryRound: GameRound | null; isNewGameModalOpen: boolean; isHistoryModalOpen: boolean; isStudySetupOpen: boolean; studySetup: StudySetup;
   isModalOpen: boolean; editingCollection: any;
   pastGames: GameRecord[]; allCollections: any[]; coveragePreview: TrainerLocation | null;
   compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
@@ -36,7 +36,7 @@ interface AppOverlaysProps {
   onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void;
   onCloseReviewComplete: () => void; onPracticeMistakes?: () => void; onPlayAgain: () => void;
   onNextRound: () => void;
-  onViewHistory: () => void; onCloseSummary: () => void; onGoToLocation: (location: LocationResult) => void; onCloseHistory: () => void;
+  onViewHistory: () => void; onCloseSummary: () => void; onOpenRound: (round: GameRound) => void; onCloseHistory: () => void;
   onStartGame: (settings: any) => void; onCloseNewGame: () => void; onOpenHistory: () => void; onStartStudy: (settings: StudySetup) => void; onCloseStudySetup: () => void;
   onSelectGame: (game: GameRecord) => void; onDeleteGame: (id: string) => void; onClearGames: () => void;
   onSaveCollection: (collection: any) => void; onDeleteCollection: (id: string) => void; onCloseCollection: () => void;
@@ -51,7 +51,7 @@ export function AppOverlays(props: AppOverlaysProps) {
   const t = (key: string) => translate(ui, key);
   const { appMode, showHome, currentLocation, isRevealed, reviewResult, reviewAttempt, reviewAttemptRecord, reviewHistory,
     reviewStats, reviewInitialTotal, reviewQueueLength, reviewSource, reviewComplete, activeRoundResult, gameSettings,
-    currentRoundIndex, gameRounds, summaryGameRecord, isNewGameModalOpen, isHistoryModalOpen, isStudySetupOpen, studySetup, isModalOpen,
+    currentRoundIndex, gameRounds, summaryGameRecord, summaryRound, isNewGameModalOpen, isHistoryModalOpen, isStudySetupOpen, studySetup, isModalOpen,
     editingCollection, pastGames, allCollections, coveragePreview, compassPreference, activeCompass,
     preferencesOpen, trainerRefreshKey, reviewGrading, learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
   const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
@@ -69,7 +69,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}
     {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} />}
-    {summaryGameRecord && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={props.onPracticeMistakes} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onGoToLocation={props.onGoToLocation} />}
+    {summaryGameRecord && !summaryRound && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={props.onPracticeMistakes} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onOpenRound={props.onOpenRound} />}
     <NewGameModal isOpen={isNewGameModalOpen} onClose={props.onCloseNewGame} collections={allCollections} onStartGame={props.onStartGame} onOpenHistory={props.onOpenHistory} pastGamesCount={pastGames.length} defaultShowCompass={compassPreference} />
     <StudySetupModal open={isStudySetupOpen} onClose={props.onCloseStudySetup} collections={allCollections} initial={studySetup} onStart={props.onStartStudy} />
     <GameHistoryModal isOpen={isHistoryModalOpen} onClose={props.onCloseHistory} games={pastGames} onSelectGame={props.onSelectGame} onDeleteGame={props.onDeleteGame} onClearAll={props.onClearGames} />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import type { Attempt, ReviewRecord, TrainerLocation } from "../types";
 import { countryName, date, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
@@ -12,16 +12,16 @@ interface CoverageMapProps {
   attempts: Attempt[];
   reviews: ReviewRecord[];
   onOpen: (location: TrainerLocation) => void;
-  onReview: (attempt: Attempt) => void;
 }
 
-export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: CoverageMapProps) {
+export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMapProps) {
   const t = useHubTranslate();
   const mapPreferences = useMapPreferences();
   const element = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map>();
   const markers = useRef<google.maps.Marker[]>([]);
   const preview = useRef<google.maps.InfoWindow>();
+  const panoramaPreview = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<TrainerLocation>();
   const [overlay, setOverlay] = useState<CoverageOverlay>("exposure");
 
@@ -99,6 +99,12 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!selected || !panoramaPreview.current || typeof google === 'undefined') return;
+    const panorama = new google.maps.StreetViewPanorama(panoramaPreview.current, { pano: selected.panoId, addressControl: false, clickToGo: false, disableDefaultUI: true, linksControl: false, motionTracking: false, showRoadLabels: false });
+    return () => google.maps.event.clearInstanceListeners(panorama);
+  }, [selected]);
+
   const selectedAttempts = selected ? attempts.filter((item) => item.panoId === selected.id) : [];
   const selectedReview = selected ? reviews.find((item) => item.panoId === selected.id) : undefined;
   return <>
@@ -107,14 +113,15 @@ export function CoverageMap({ locations, attempts, reviews, onOpen, onReview }: 
       {overlay === "mastery" && <div className="coverage-mastery-legend" aria-label={`${t("Mastery")} 0–100%`}><span>0%</span><i /><span>100%</span></div>}
       <div ref={element} className="coverage-map" aria-label={t("mapAria")} />
       {selected && <aside className="map-inspector">
+        <a className="icon-button inspector-external" href={`https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(selected.panoId)}`} target="_blank" rel="noreferrer" aria-label={t("openLocation")} title={t("openLocation")}><ExternalLink size={16} /></a>
         <button className="icon-button inspector-close" onClick={() => setSelected(undefined)} aria-label={t("closeLocation")}><X size={16} /></button>
         <strong className="country-name"><CountryFlag code={selected.countryCode} />{countryName(selected.countryCode)}</strong>
-        {selected.imageDataUrl && <img className="map-inspector-image" src={selected.imageDataUrl} alt="" />}
+        {selected.imageDataUrl ? <img className="map-inspector-image" src={selected.imageDataUrl} alt="" /> : <div ref={panoramaPreview} className="map-inspector-preview" />}
         <span>{date(selected.firstSeenAt)} → {date(selected.lastSeenAt)}</span>
         <span>{selected.encounterCount} {t("encounters")} · {selectedAttempts.length} {t("attemptsCount")}</span>
         <span>{t("best")} {Math.max(0, ...selectedAttempts.map((item) => item.score)).toLocaleString()} · {t("latest")} {selectedAttempts.at(-1)?.score.toLocaleString() || "—"}</span>
         <span>{selectedReview ? `${t("reviewDue")} ${date(selectedReview.dueAt)}` : t("neverReviewedMap")}</span>
-        <div className="button-row"><button className="button secondary" onClick={() => onOpen(selected)}>{t("openLocation")}</button>{selectedAttempts[0] && <button className="button primary" onClick={() => onReview(selectedAttempts[0])}>{t("reviewAction")}</button>}</div>
+        <div className="button-row map-inspector-actions"><button className="button primary" onClick={() => onOpen(selected)}>{t("openLocation")}</button></div>
       </aside>}
     </div>
     <CoverageChoropleth locations={locations} attempts={attempts} reviews={reviews} overlay={overlay} />

@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { GameRecord, LocationResult } from '../types';
+import { GameRecord, GameRound } from '../types';
 import { formatDistance, getScoreRating } from '../services/gameLogic';
 import { getFlagCdnUrl } from '../services/geocoding';
 import { COUNTRIES } from '../data/countries';
@@ -19,7 +19,7 @@ interface GameSummaryModalProps {
   onViewHistory: () => void;
   onClose: () => void;
   onPracticeMistakes?: () => void;
-  onGoToLocation?: (location: LocationResult) => void;
+  onOpenRound?: (round: GameRound) => void;
 }
 
 export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
@@ -28,7 +28,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
   onViewHistory,
   onClose,
   onPracticeMistakes,
-  onGoToLocation,
+  onOpenRound,
 }) => {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
@@ -93,9 +93,9 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
         },
       });
 
-      if (onGoToLocation) {
+      if (onOpenRound) {
         actualMarker.addListener('click', () => {
-          onGoToLocation(round.location);
+          onOpenRound(round);
         });
       }
 
@@ -137,7 +137,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
     });
 
     map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
-  }, [game, onGoToLocation, mapPreferences]);
+  }, [game, onOpenRound, mapPreferences]);
 
   return (
     <div
@@ -221,8 +221,8 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
                   <button
                     key={r.roundNumber}
                     onClick={() => {
-                      if (onGoToLocation) {
-                        onGoToLocation(r.location);
+                      if (onOpenRound) {
+                        onOpenRound(r);
                       }
                     }}
                     title={`${t('Open')} ${t('Round')} ${r.roundNumber} (${countryName})`}
