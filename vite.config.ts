@@ -65,11 +65,11 @@ function aistudioMediaPlugin(): Plugin {
 }
 
 function aiCoachPlugin(googleKey: string): Plugin {
+  const install = (server: { middlewares: { use: (middleware: ReturnType<typeof createAiCoachMiddleware>) => void } }) => { server.middlewares.use(createAiCoachMiddleware(loadGeminiKeys(), googleKey)); };
   return {
     name: 'local-ai-coach',
-    configureServer(server) {
-      server.middlewares.use(createAiCoachMiddleware(loadGeminiKeys(), googleKey));
-    },
+    configureServer: install,
+    configurePreviewServer: install,
   };
 }
 

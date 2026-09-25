@@ -120,7 +120,9 @@ Se platser, försök, kö, resultat, historik och aktiv tid i förgrunden under 
 
 ## Molnsynkronisering
 
-Konto är valfritt och lokal träning fungerar utan inloggning. Framsteg i Lär, Spela och Repetition sparas först i den här webbläsaren; synkroniseringen fortsätter tyst i bakgrunden, så en långsam anslutning fördröjer inte den lokala lagringen och återställer inte den aktiva arbetsytan. När du är inloggad slås bedömningshistoriken från varje enhet ihop; den senaste inställningen och det senast bedömda schemat vinner. När du lämnar appen startas väntande uppladdningar. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
+Konto är valfritt och lokal träning fungerar utan inloggning. Framsteg sparas först i den här webbläsaren och synkroniseringen är manuell. Tryck på **Synkronisera nu** på enheten med nya data för att hämta, slå ihop och ladda upp kort, försök och repetitionshistorik; gör sedan samma sak på de andra enheterna. Det senast bedömda schemat vinner och unika poster från varje enhet bevaras. Inloggning, sparande, återgång till appen och avslut överför inget automatiskt. Utan inloggning förblir localhost och den publicerade webbplatsen separata.
+
+Saknade privata ledtrådsbilder sparas i webbläsaren under manuell synkronisering. Ledtrådar, Tillgängliga anteckningar, Täckning och historik använder sedan den lokala kopian utan att kontakta molnlagringen.
 
 ## Felsökning
 

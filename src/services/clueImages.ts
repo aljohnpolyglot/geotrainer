@@ -10,6 +10,12 @@ const dataUrlBlob = async (dataUrl: string) => {
   return response.blob();
 };
 
+const blobDataUrl = (blob: Blob) => new Promise<string>((resolve, reject) => {
+  const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = () => reject(reader.error); reader.readAsDataURL(blob);
+});
+
+export const hostedCluePaths = (clues: ClueRecord[]) => [...new Set(clues.flatMap((clue) => clue.imagePath && !clue.imageDataUrl ? [clue.imagePath] : []))];
+
 export async function compressClueImage(dataUrl: string, maxDimension = 1024, quality = .76): Promise<string> {
   const image = new Image(); image.src = dataUrl; await image.decode();
   const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
@@ -32,14 +38,18 @@ export async function uploadClueImage(userId: string, clue: ClueRecord): Promise
   return { ...clue, imageDataUrl, imagePath };
 }
 
-export async function resolveClueImages(clues: ClueRecord[]): Promise<ClueRecord[]> {
+export async function cacheClueImages(clues: ClueRecord[]): Promise<ClueRecord[]> {
   if (!supabase) return clues;
-  const paths = [...new Set(clues.flatMap((clue) => clue.imagePath && !clue.imageDataUrl ? [clue.imagePath] : []))];
+  const paths = hostedCluePaths(clues);
   if (!paths.length) return clues;
   const { data, error } = await supabase.storage.from(CLUE_IMAGE_BUCKET).createSignedUrls(paths, 3600);
   if (error) return clues;
   const urls = new Map(data.map((item) => [item.path, item.signedUrl]));
-  return clues.map((clue) => clue.imagePath && !clue.imageDataUrl ? { ...clue, imageDataUrl: urls.get(clue.imagePath) || '' } : clue);
+  return Promise.all(clues.map(async (clue) => {
+    const url = clue.imagePath && !clue.imageDataUrl ? urls.get(clue.imagePath) : undefined;
+    if (!url) return clue;
+    try { const response = await fetch(url); return response.ok ? { ...clue, imageDataUrl: await blobDataUrl(await response.blob()) } : clue; } catch { return clue; }
+  }));
 }
 
 export async function resolveStoredClueImages(userId: string, clueIds: string[]) {

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { backupSignature, createQuietSyncScheduler, mergeBackups, retryCloud, savedContentCounts, savedContentDecreased, shouldPullCloud, shouldSyncAuthEvent, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
+import { backupSignature, buildSyncReceipt, mergeBackups, retryCloud, savedContentCounts, savedContentDecreased, sessionNeedsRefresh, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -117,6 +117,23 @@ test('cloud merge keeps the newest schedule and every grading event across devic
   assert.deepEqual(mergeBackups(cloud, local).data.reviews, [{ ...cloudReview, gradingHistory: [{ grade: 'hard', at: 10 }, { grade: 'good', at: 20 }], reviewCount: 2 }]);
 });
 
+test('manual device merge imports new cards and a review completed elsewhere', () => {
+  const phone = backup('phone-card', 10); const pc = backup('pc-card', 20);
+  phone.data.reviews.push({ id: 'shared', panoId: 'shared', dueAt: 500, intervalDays: 5, lastReviewedAt: 400, gradingHistory: [{ grade: 'good', at: 400 }], reviewCount: 2, lapseCount: 0 });
+  pc.data.reviews.push({ id: 'shared', panoId: 'shared', dueAt: 200, intervalDays: 1, lastReviewedAt: 100, gradingHistory: [{ grade: 'hard', at: 100 }], reviewCount: 1, lapseCount: 0 });
+  const merged = mergeBackups(phone, pc);
+  assert.deepEqual((merged.data.attempts as Array<{ id: string }>).map(({ id }) => id), ['phone-card', 'pc-card']);
+  assert.deepEqual(merged.data.reviews, [{ ...(phone.data.reviews[0] as Record<string, unknown>), gradingHistory: [{ grade: 'hard', at: 100 }, { grade: 'good', at: 400 }] }]);
+  assert.deepEqual(buildSyncReceipt(phone, pc, merged), { downloadedRecords: 2, deviceRecords: 2, mergedRecords: 3, addedToDevice: 1, reviewSchedulesUpdated: 1, reviewEvents: 2 });
+});
+
+test('a device that loses a concurrent write remerges the winning backup before retrying', () => {
+  const original = backup('original', 1); const phone = backup('phone', 2); const pc = backup('pc', 3);
+  const phoneUpload = mergeBackups(original, phone);
+  const pcRetry = mergeBackups(phoneUpload, pc);
+  assert.deepEqual((pcRetry.data.attempts as Array<{ id: string }>).map(({ id }) => id), ['original', 'phone', 'pc']);
+});
+
 test('cloud merge keeps the newest independent generalization state', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   cloud.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 30, intervalDays: 3, lastReviewedAt: 30, gradingHistory: [], reviewCount: 1, lapseCount: 0, generalizationLevel: 1, generalizationUpdatedAt: 10 });
@@ -124,13 +141,6 @@ test('cloud merge keeps the newest independent generalization state', () => {
   const merged = mergeBackups(cloud, local).data.reviews[0] as { dueAt: number; generalizationLevel: number };
   assert.equal(merged.dueAt, 30);
   assert.equal(merged.generalizationLevel, 4);
-});
-
-test('token refresh does not trigger a visible full sync', () => {
-  assert.equal(shouldSyncAuthEvent('TOKEN_REFRESHED', 'user-1', 'user-1'), false);
-  assert.equal(shouldSyncAuthEvent('SIGNED_IN', 'user-1', 'user-1'), false);
-  assert.equal(shouldSyncAuthEvent('SIGNED_IN', undefined, 'user-1'), true);
-  assert.equal(shouldSyncAuthEvent('SIGNED_OUT', 'user-1'), true);
 });
 
 test('cloud backup keeps hosted paths without duplicating image bytes', () => {
@@ -142,26 +152,21 @@ test('cloud backup keeps location metadata without duplicating panorama screensh
   assert.deepEqual(withoutEmbeddedLocationImages([{ id: 'pano', imageDataUrl: 'data:image/jpeg;base64,AQ==', countryCode: 'IE' }]), [{ id: 'pano', countryCode: 'IE' }]);
 });
 
-test('quiet sync coalesces a burst of local saves into one upload', async () => {
-  let uploads = 0;
-  const schedule = createQuietSyncScheduler(() => { uploads += 1; }, 10);
-  schedule(); schedule(); schedule();
-  await new Promise((resolve) => setTimeout(resolve, 25));
-  assert.equal(uploads, 1);
-});
-
 test('cloud requests retry transient failures before surfacing them', async () => {
   let calls = 0;
   const result = await retryCloud(async () => ({ error: ++calls < 2 ? new Error('temporary') : null, data: 'ok' }), 2);
   assert.equal(calls, 2); assert.equal(result.data, 'ok');
 });
 
-test('cloud sync skips unchanged backup writes and throttles repeated focus pulls', () => {
+test('cloud sync skips unchanged backup writes', () => {
   const original = backup('same', 10); const reexported = backup('same', 10);
   reexported.exportedAt = 'later';
   assert.equal(backupSignature(original), backupSignature(reexported));
-  assert.equal(shouldPullCloud(59_999, 1), false);
-  assert.equal(shouldPullCloud(60_001, 1), true);
+});
+
+test('manual sync refreshes auth only when its saved session is nearly expired', () => {
+  assert.equal(sessionNeedsRefresh({ expires_at: 1_100 }, 1_000_000), false);
+  assert.equal(sessionNeedsRefresh({ expires_at: 1_050 }, 1_000_000), true);
 });
 
 test('cloud imports notify the live app without a page reload', () => {

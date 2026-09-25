@@ -41,6 +41,9 @@
 .account-identity small { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
 .account-identity strong { overflow-wrap: anywhere; font-size: 13px; }
 .account-sync-row { display: flex; align-items: center; gap: 10px; margin: 14px 0 22px; color: var(--muted); font-size: 11px; }
+.sync-receipt { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: -10px 0 18px; overflow: hidden; background: var(--rule); border: 1px solid var(--rule); border-radius: 5px; }
+.sync-receipt div { display: flex; justify-content: space-between; gap: 8px; padding: 8px 9px; background: var(--paper); font-size: 10px; }
+.sync-receipt dt { color: var(--muted); }.sync-receipt dd { margin: 0; color: var(--carbon); font-weight: 850; }
 .account-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .account-dialog > footer { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 15px 22px; color: #49626d; background: #dfe7e8; font-size: 10px; }
 
@@ -49,4 +52,5 @@
   .account-entry .sync-state { display: none; }
   .account-auth, .account-signed-in { padding: 26px 20px; }
   .account-actions { grid-template-columns: 1fr; }
+  .sync-receipt { grid-template-columns: 1fr; }
 }

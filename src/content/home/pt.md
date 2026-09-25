@@ -114,7 +114,9 @@ Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primei
 
 ## Sincronização na nuvem
 
-A conta é opcional e o treino local funciona sem login. O progresso de Estudo, Jogo e Revisão é salvo primeiro neste navegador; a sincronização continua silenciosamente em segundo plano, portanto uma conexão lenta não atrasa o salvamento local nem redefine o espaço de trabalho ativo. Quando conectada, o histórico de avaliações de cada dispositivo é combinado; vencem a configuração mais recente e o agendamento avaliado por último. Sair do app inicia qualquer envio pendente. Sem login, localhost e o site publicado ficam separados.
+A conta é opcional e o treino local funciona sem login. O progresso é salvo primeiro neste navegador e a sincronização é manual. Pressione **Sincronizar agora** no dispositivo com trabalho novo para baixar, combinar e enviar cartões, tentativas e histórico de Revisão; depois faça o mesmo nos outros dispositivos. Vence o agendamento avaliado mais recentemente, e os registros exclusivos de cada dispositivo são preservados. Entrar, salvar, voltar ao app ou sair não transfere dados automaticamente. Sem login, localhost e o site publicado ficam separados.
+
+As imagens privadas ausentes são armazenadas neste navegador durante a sincronização manual. Abrir Pistas, Notas disponíveis, Cobertura ou o histórico usa essa cópia local e não consulta o armazenamento na nuvem.
 
 ## Solução de problemas
 
@@ -122,7 +124,7 @@ A conta é opcional e o treino local funciona sem login. O progresso de Estudo, 
 2. Controles sobre uma tela preta — teste o Street View no Google Maps com o mesmo navegador. Se a imagem também ficar preta, abra o GeoTrainer em uma janela privada sem extensões, altere a aceleração gráfica do navegador e reinicie-o. Atualize o navegador e o driver gráfico se necessário. Se apenas o GeoTrainer falhar, recarregue-o uma vez e informe o navegador, o dispositivo e as extensões ativas ao relatar o problema.
 3. Revisão vazia — jogue ou salve um local do Estudo e espere vencer.
 4. IA indisponível — continue treinando e tente mais tarde.
-5. Progresso antigo — confira a conta e aguarde a sincronização.
+5. Progresso antigo — confira a conta e pressione **Sincronizar agora** em cada dispositivo, começando pelo que contém o trabalho novo.
 
 ## Sugestões e relatos de erros
 

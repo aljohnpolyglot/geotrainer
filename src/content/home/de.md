@@ -353,11 +353,13 @@ Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Anmeldung
 
-Öffne den Kontoeintrag auf der Startseite und nutze Google oder E-Mail. Die Anmeldung identifiziert dein Konto und startet die stille Synchronisierung.
+Öffne den Kontoeintrag auf der Startseite und nutze Google oder E-Mail. Die Anmeldung identifiziert dein Konto; Fortschritt wird erst mit **Jetzt synchronisieren** übertragen.
 
 ### Synchronisierte Daten
 
-Fortschritt aus Lernen, Spielen und Wiederholen wird zuerst in diesem Browser gespeichert. Die Cloud-Synchronisierung läuft danach still im Hintergrund, sodass eine langsame Verbindung das lokale Speichern nicht verzögert und den aktiven Arbeitsstand nicht zurücksetzt. Kompatible Besuche, Versuche, Zeitpläne, Spiele, Sammlungen, Einstellungen, pausierte Arbeitsstände und Hinweise werden auf angemeldeten Geräten und Website-Instanzen zusammengeführt. Der Bewertungsverlauf wird geräteübergreifend kombiniert; die zuletzt gespeicherte Einstellung und der zuletzt bewertete Zeitplan gewinnen. Beim Verlassen der App startet eine ausstehende Übertragung. Schnelle Speichervorgänge werden gebündelt und unveränderte Sicherungen nicht erneut geschrieben. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+Fortschritt wird zuerst in diesem Browser gespeichert und die Cloud-Synchronisierung ist manuell. Drücke **Jetzt synchronisieren** zuerst auf dem Gerät mit neuen Daten, um Karten, Versuche und den Wiederholungsverlauf herunterzuladen, zusammenzuführen und hochzuladen; synchronisiere danach die anderen Geräte. Der zuletzt bewertete Zeitplan gewinnt, während eindeutige Datensätze aller Geräte erhalten bleiben. Anmeldung, Speichern, Rückkehr zur App und Verlassen übertragen nichts automatisch. Ohne Anmeldung bleiben localhost und die bereitgestellte Website getrennt.
+
+Fehlende private Hinweisbilder werden bei der manuellen Synchronisierung in diesem Browser gespeichert. Hinweise, Verfügbare Notizen, Abdeckung und Verlauf verwenden danach diese lokale Kopie, ohne den Cloud-Speicher abzufragen.
 
 ### Offline arbeiten und abmelden
 
@@ -415,7 +417,7 @@ Trainiere normal weiter und versuche es später erneut. Prüfe die Verbindung od
 
 ### Fortschritt wirkt veraltet
 
-Prüfe das verbundene Konto, warte auf Synchronisierung und lade einmal neu. Ein anderes Konto besitzt einen anderen Cloud-Verlauf.
+Prüfe das verbundene Konto und drücke auf jedem Gerät **Jetzt synchronisieren**, beginnend mit dem Gerät mit neuen Daten. Ein anderes Konto besitzt einen anderen Cloud-Verlauf.
 
 ### Google-Anmeldung schlägt fehl
 

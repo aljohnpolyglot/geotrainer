@@ -1,9 +1,8 @@
-import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 import {
   createBackup,
   importBackup,
   initTrainerDb,
-  onTrainerDbChange,
   trainerDb,
   STORE_NAMES,
   validateBackup,
@@ -11,13 +10,14 @@ import {
   type TrainerBackup,
 } from '../data/trainerDb';
 import { supabase } from './supabase';
-import { resolveStoredClueImages, uploadClueImage } from './clueImages';
+import { cacheClueImages, hostedCluePaths, resolveStoredClueImages, uploadClueImage } from './clueImages';
 import type { ClueRecord, CoachAnalysis, NotebookNote, ReviewRecord } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
 import { IMPORTED_MAP_PREFIX } from './importedMap';
 import { splitDuplicateClues } from '../data/clueDedup';
 
-type SyncPhase = 'disabled' | 'signed-out' | 'syncing' | 'synced' | 'error';
+type SyncPhase = 'disabled' | 'signed-out' | 'ready' | 'syncing' | 'synced' | 'error';
+type RemoteBackup = { backup?: unknown; updatedAt?: string };
 
 export interface CloudSyncState {
   configured: boolean;
@@ -25,6 +25,20 @@ export interface CloudSyncState {
   phase: SyncPhase;
   message: string;
   lastSyncedAt?: string;
+  receipt?: SyncReceipt;
+}
+
+export interface SyncReceipt {
+  downloadedRecords: number;
+  deviceRecords: number;
+  mergedRecords: number;
+  addedToDevice: number;
+  reviewSchedulesUpdated: number;
+  reviewEvents: number;
+  cachedImages: number;
+  uploadedRecords: number;
+  uploadChanged: boolean;
+  completedAt: string;
 }
 
 const keys: Record<StoreName, string> = {
@@ -63,6 +77,21 @@ const mergeReviews = (left: ReviewRecord, right: ReviewRecord): ReviewRecord => 
   };
 };
 
+const recordCount = (backup: TrainerBackup) => STORE_NAMES.reduce((total, name) => total + (backup.data[name]?.length || 0), 0);
+const uploadedRecordCount = (backup: TrainerBackup) => recordCount({ ...backup, data: { ...backup.data, settings: withoutImportedMaps(backup.data.settings as Array<{ key: string }>) } });
+export const buildSyncReceipt = (remote: TrainerBackup | undefined, local: TrainerBackup, merged: TrainerBackup): Omit<SyncReceipt, 'uploadedRecords' | 'uploadChanged' | 'cachedImages' | 'completedAt'> => {
+  const localReviews = new Map((local.data.reviews as ReviewRecord[]).map((review) => [review.id, review]));
+  const mergedReviews = merged.data.reviews as ReviewRecord[];
+  return {
+    downloadedRecords: remote ? recordCount(remote) : 0,
+    deviceRecords: recordCount(local),
+    mergedRecords: recordCount(merged),
+    addedToDevice: STORE_NAMES.reduce((total, name) => total + Math.max(0, (merged.data[name]?.length || 0) - (local.data[name]?.length || 0)), 0),
+    reviewSchedulesUpdated: mergedReviews.filter((review) => !localReviews.has(review.id) || reviewedAt(review) > reviewedAt(localReviews.get(review.id)!)).length,
+    reviewEvents: mergedReviews.reduce((total, review) => total + (review.gradingHistory?.length || 0), 0),
+  };
+};
+
 export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): TrainerBackup {
   const data = Object.fromEntries(STORE_NAMES.map((name) => {
     const key = keys[name];
@@ -95,21 +124,12 @@ let state: CloudSyncState = supabase
   : { configured: false, phase: 'disabled', message: 'Connect a Supabase project to enable cloud backup.' };
 const listeners = new Set<() => void>();
 let activeUserId: string | undefined;
-let uploadPromise: Promise<void> | undefined;
+let uploadPromise: Promise<boolean> | undefined;
 let uploadPending = false;
 let applyingCloud = false;
 let started = false;
 let syncedUserId: string | undefined;
 let syncedBackup = '';
-let lastPullAt = 0;
-
-export function createQuietSyncScheduler(task: () => void, delayMs = 1200) {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  return () => {
-    clearTimeout(timer);
-    timer = setTimeout(task, delayMs);
-  };
-}
 
 export async function retryCloud<T extends { error: unknown }>(task: () => PromiseLike<T>, attempts = 4): Promise<T> {
   let result = await task();
@@ -122,19 +142,16 @@ const update = (next: Partial<CloudSyncState>) => {
   listeners.forEach((listener) => listener());
 };
 
-export const shouldSyncAuthEvent = (event: AuthChangeEvent, previousUserId?: string, nextUserId?: string) =>
-  event === 'SIGNED_OUT' ? !!previousUserId : event === 'SIGNED_IN' && !!nextUserId && nextUserId !== previousUserId;
-
 export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((clue) => clue.imagePath ? { ...clue, imageDataUrl: '' } : clue);
 export const withoutEmbeddedLocationImages = (locations: Record<string, unknown>[]) => locations.map(({ imageDataUrl: _image, ...location }) => location);
 export const withoutImportedMaps = (settings: Array<{ key: string }>) => settings.filter((item) => !item.key.startsWith(IMPORTED_MAP_PREFIX) && item.key !== 'local.currentMapId');
 export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
-export const shouldPullCloud = (now: number, previous: number, interval = 60_000) => !previous || now - previous >= interval;
 export const savedContentCounts = (backup: TrainerBackup) => ({
   clues: backup.data.clues.length,
   notes: ((backup.data.settings as Array<{ key?: string; value?: unknown }>).find((item) => item.key === 'notebook.notes')?.value as unknown[] | undefined)?.length || 0,
 });
 export const savedContentDecreased = (previous: ReturnType<typeof savedContentCounts>, current: ReturnType<typeof savedContentCounts>) => current.clues < previous.clues || current.notes < previous.notes;
+export const sessionNeedsRefresh = (session: Pick<Session, 'expires_at'>, now = Date.now()) => !session.expires_at || session.expires_at * 1000 <= now + 60_000;
 const diagnosticId = () => typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 const syncSessionId = diagnosticId();
 const syncDeviceId = (() => {
@@ -172,15 +189,17 @@ async function repairMissingNotebookClues(userId: string) {
   return repaired;
 }
 
-async function upload(userId = activeUserId, announce = false, knownRemote?: unknown): Promise<void> {
-  if (!supabase || !userId || applyingCloud) return;
+async function upload(userId = activeUserId, announce = false, knownRemote?: RemoteBackup): Promise<boolean> {
+  if (!supabase || !userId || applyingCloud) return false;
   if (uploadPromise) {
     uploadPending = true;
     return uploadPromise;
   }
-  if (announce) update({ phase: 'syncing', message: 'Saving progress…' });
+  if (announce) update({ phase: 'syncing', message: 'Uploading merged progress…' });
   uploadPromise = (async () => {
     await repairMissingNotebookClues(userId);
+    const localClues = await trainerDb.clues();
+    for (const [index, clue] of (await cacheClueImages(localClues)).entries()) if (clue.imageDataUrl && !localClues[index].imageDataUrl) await trainerDb.saveClue(clue);
     let backup = await createBackup(false);
     let importedCloud = false;
     let hostedImage = false;
@@ -196,14 +215,15 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
     } });
     if (syncedUserId === userId && syncedBackup === localSignature) {
       if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
-      return;
+      return false;
     }
-    let remote = knownRemote;
-    if (remote === undefined) {
-      const { data, error } = await retryCloud(() => supabase.from('user_backups').select('backup').eq('user_id', userId).maybeSingle());
+    let remoteRecord = knownRemote;
+    if (remoteRecord === undefined) {
+      const { data, error } = await retryCloud(() => supabase.from('user_backups').select('backup,updated_at').eq('user_id', userId).maybeSingle());
       if (error) throw error;
-      remote = data?.backup;
+      remoteRecord = data ? { backup: data.backup, updatedAt: data.updated_at } : {};
     }
+    const remote = remoteRecord.backup;
     if (remote) {
       validateBackup(remote);
       const latestLocal = await createBackup(false);
@@ -222,60 +242,75 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: unk
     if (syncedUserId === userId && syncedBackup === signature) {
       if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
       if (importedCloud) announceCloudImport();
-      return;
+      return false;
     }
     const syncedAt = new Date().toISOString();
-    const { error } = await retryCloud(() => supabase.from('user_backups').upsert({
-      user_id: userId,
-      backup,
-      updated_at: syncedAt,
-    }));
-    if (error) throw error;
+    if (remoteRecord.updatedAt) {
+      const { data, error } = await retryCloud(() => supabase.from('user_backups').update({ backup, updated_at: syncedAt }).eq('user_id', userId).eq('updated_at', remoteRecord.updatedAt!).select('updated_at').maybeSingle());
+      if (error) throw error;
+      if (!data) { uploadPending = true; return false; }
+    } else {
+      const { error } = await retryCloud(() => supabase.from('user_backups').insert({ user_id: userId, backup, updated_at: syncedAt }));
+      if (error) {
+        if ((error as { code?: string }).code === '23505') { uploadPending = true; return false; }
+        throw error;
+      }
+    }
     syncedUserId = userId;
     syncedBackup = signature;
     update({ phase: 'synced', message: 'Progress backed up.', lastSyncedAt: syncedAt });
     if (importedCloud) announceCloudImport();
+    return true;
   })();
+  let uploaded: boolean;
   try {
-    await uploadPromise;
+    uploaded = await uploadPromise;
   } finally {
     uploadPromise = undefined;
   }
   if (uploadPending) {
     uploadPending = false;
-    await upload(userId);
+    uploaded = await upload(userId) || uploaded;
   }
+  return uploaded;
 }
 
 async function syncSession(session: Session | null, announce = false): Promise<void> {
   activeUserId = session?.user.id;
   if (!session) {
-    syncedUserId = undefined; syncedBackup = ''; lastPullAt = 0;
+    syncedUserId = undefined; syncedBackup = '';
     update({ email: undefined, phase: 'signed-out', message: 'Sign in to back up progress.', lastSyncedAt: undefined });
     return;
   }
 
-  update(announce ? { email: session.user.email, phase: 'syncing', message: 'Merging cloud and local progress…' } : { email: session.user.email });
+  update(announce ? { email: session.user.email, phase: 'syncing', message: 'Downloading cloud progress…', receipt: undefined } : { email: session.user.email });
   try {
     let importedCloud = false;
     await initTrainerDb();
-    const { data, error } = await retryCloud(() => supabase!.from('user_backups').select('backup').eq('user_id', session.user.id).maybeSingle());
+    const { data, error } = await retryCloud(() => supabase!.from('user_backups').select('backup,updated_at').eq('user_id', session.user.id).maybeSingle());
     if (error) throw error;
+    if (announce) update({ message: 'Merging cloud and device progress…' });
     const local = await createBackup(false);
     syncedUserId = session.user.id;
     syncedBackup = '';
+    let merged = local;
     if (data?.backup) {
       validateBackup(data.backup);
       syncedBackup = backupSignature(data.backup);
-      const merged = mergeBackups(data.backup, local);
+      merged = mergeBackups(data.backup, local);
       if (JSON.stringify(merged.data) !== JSON.stringify(local.data)) {
         applyingCloud = true;
         try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(local, 'session cloud merge'); } finally { applyingCloud = false; }
         importedCloud = true;
       }
     }
-    await upload(session.user.id, announce, data?.backup);
-    lastPullAt = Date.now();
+    const receipt = buildSyncReceipt(data?.backup as TrainerBackup | undefined, local, merged);
+    const missingImages = hostedCluePaths(await trainerDb.clues()).length;
+    const uploadChanged = await upload(session.user.id, announce, data ? { backup: data.backup, updatedAt: data.updated_at } : {});
+    const finalBackup = await createBackup(false);
+    const completedAt = new Date().toISOString();
+    const cachedImages = missingImages - hostedCluePaths(finalBackup.data.clues as ClueRecord[]).length;
+    update({ phase: 'synced', message: uploadChanged ? 'Sync complete. Merged progress uploaded.' : 'Sync complete. Cloud was already current.', lastSyncedAt: completedAt, receipt: { ...receipt, uploadedRecords: uploadedRecordCount(finalBackup), uploadChanged, cachedImages, completedAt } });
     if (importedCloud) announceCloudImport();
   } catch (error) {
     applyingCloud = false;
@@ -293,39 +328,31 @@ export const cloudSync = {
     if (started || !supabase) return;
     started = true;
     try {
-      await initTrainerDb();
-      const scheduleUpload = createQuietSyncScheduler(() => {
-        if (!activeUserId || applyingCloud) return;
-        void upload().catch((error) => update({ phase: 'error', message: error.message }));
-      }, 5000);
-      let previousCounts = savedContentCounts(await createBackup(false)); let audit = Promise.resolve();
-      onTrainerDbChange((change) => {
-        scheduleUpload();
-        if (!import.meta.env.DEV) return;
-        audit = audit.then(async () => { const current = savedContentCounts(await createBackup(false)); if (!change.allowsSavedContentDecrease) logUnexpectedDecrease(previousCounts, current, change.operation); previousCounts = current; });
-      });
       const { data } = await supabase.auth.getSession();
-      await syncSession(data.session);
-      supabase.auth.onAuthStateChange((event, session) => {
-        const previousUserId = activeUserId;
-        activeUserId = session?.user.id;
-        if (shouldSyncAuthEvent(event, previousUserId, activeUserId)) setTimeout(() => void syncSession(session, true), 0);
-      });
-      window.addEventListener('online', () => void upload().catch(() => {}));
-      const refresh = createQuietSyncScheduler(() => {
-        if (!shouldPullCloud(Date.now(), lastPullAt)) return;
-        void supabase.auth.getSession().then(({ data }) => data.session && syncSession(data.session)).catch(() => {});
-      }, 250);
-      window.addEventListener('focus', refresh);
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') refresh();
-        else void upload().catch(() => {});
+      activeUserId = data.session?.user.id;
+      if (data.session) update({ email: data.session.user.email, phase: 'ready', message: 'Press Sync now to merge this device with your cloud progress.' });
+      supabase.auth.onAuthStateChange((_event, session) => {
+        if (!session) {
+          activeUserId = undefined; syncedUserId = undefined; syncedBackup = '';
+          update({ email: undefined, phase: 'signed-out', message: 'Sign in to back up progress.', lastSyncedAt: undefined });
+        } else if (session.user.id !== activeUserId) {
+          activeUserId = session.user.id; syncedUserId = undefined; syncedBackup = '';
+          update({ email: session.user.email, phase: 'ready', message: 'Press Sync now to merge this device with your cloud progress.', lastSyncedAt: undefined });
+        }
       });
     } catch (error) {
       update({ phase: 'error', message: error instanceof Error ? error.message : 'Cloud sync could not start.' });
     }
   },
-  syncNow: () => upload(activeUserId, true),
+  async syncNow() {
+    if (!supabase) return;
+    const current = await supabase.auth.getSession();
+    if (!current.data.session) return syncSession(null, true);
+    if (!sessionNeedsRefresh(current.data.session)) return syncSession(current.data.session, true);
+    const refreshed = await supabase.auth.refreshSession();
+    if (refreshed.error) return update({ phase: 'error', message: refreshed.error.message });
+    await syncSession(refreshed.data.session, true);
+  },
   async signInWithGoogle() {
     if (!supabase) throw new Error('Supabase is not configured.');
     const { error } = await supabase.auth.signInWithOAuth({

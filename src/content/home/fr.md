@@ -114,7 +114,9 @@ Consultez lieux, tentatives, file, performances, historique et temps actif au pr
 
 ## Synchronisation cloud
 
-Le compte est facultatif et l’entraînement local fonctionne sans connexion. La progression d’Étude, de Jeu et de Révision est d’abord enregistrée dans ce navigateur ; la synchronisation continue silencieusement en arrière-plan, donc une connexion lente ne retarde pas l’enregistrement local et ne réinitialise pas l’espace de travail actif. Une fois connecté, l’historique des notes de chaque appareil est combiné ; le réglage le plus récent et la planification notée en dernier l’emportent. Quitter l’application lance tout envoi en attente. Sans connexion, localhost et le site publié restent séparés.
+Le compte est facultatif et l’entraînement local fonctionne sans connexion. La progression est d’abord enregistrée dans ce navigateur et la synchronisation est manuelle. Appuyez sur **Synchroniser maintenant** sur l’appareil contenant le nouveau travail pour télécharger, fusionner et envoyer les cartes, tentatives et l’historique de Révision, puis faites-le sur les autres appareils. La planification notée le plus récemment l’emporte et les enregistrements uniques de chaque appareil sont conservés. Se connecter, enregistrer, revenir dans l’application ou la quitter ne transfère rien automatiquement. Sans connexion, localhost et le site publié restent séparés.
+
+Les images privées manquantes sont mises en cache dans ce navigateur pendant la synchronisation manuelle. Ouvrir Indices, Notes disponibles, Couverture ou l’historique utilise cette copie locale sans interroger le stockage cloud.
 
 ## Dépannage
 
@@ -122,7 +124,7 @@ Le compte est facultatif et l’entraînement local fonctionne sans connexion. L
 2. Commandes sur un écran noir — testez Street View dans Google Maps avec le même navigateur. Si l’image y est également noire, ouvrez GeoTrainer dans une fenêtre privée sans extensions, changez le réglage d’accélération graphique du navigateur, puis relancez-le. Mettez à jour le navigateur et le pilote graphique si nécessaire. Si seul GeoTrainer échoue, rechargez-le une fois et indiquez le navigateur, l’appareil et les extensions actives dans votre signalement.
 3. Révision vide — jouez ou enregistrez un lieu d’Étude, puis attendez son échéance.
 4. IA indisponible — continuez normalement et réessayez plus tard.
-5. Progression ancienne — vérifiez le compte et attendez la fin de la synchronisation.
+5. Progression ancienne — vérifiez le compte et appuyez sur **Synchroniser maintenant** sur chaque appareil, en commençant par celui qui contient le nouveau travail.
 
 ## Suggestions et signalements de bugs
 

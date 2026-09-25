@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-25
+
+- Replaced automatic cloud traffic with a manual Sync now flow that always downloads the latest backup, merges new cards and cross-device Review history, applies it locally, and uploads the merged result.
+- Added live download, merge, and upload status plus a completion toast and detailed record, Review-update, and upload receipt.
+- Kept signed-in training fully local between manual syncs so saves, focus changes, reconnects, and backgrounding no longer consume Supabase egress.
+- Stopped ordinary Clues and Available notes reads from contacting Supabase Storage; manual sync now downloads each missing hosted clue image once into IndexedDB and reports the cached-image count.
+- Disabled background Supabase token refresh and made a production-like local server provide Coach and Street View capture at `/api/coach`, with static deployments retaining the existing Edge Function fallback.
+
 ## 2026-09-24
 
 - Centered Play and Review answer maps on the correct location and zoomed out only as far as needed to keep current and prior guesses visible.

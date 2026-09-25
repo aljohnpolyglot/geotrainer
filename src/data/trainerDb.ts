@@ -13,7 +13,6 @@ import type {
   TrainingSession,
 } from '../types';
 import { COUNTRIES } from './countries';
-import { resolveClueImages } from '../services/clueImages';
 import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
 import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
@@ -259,7 +258,7 @@ export const trainerDb = {
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),
   collections: () => all<Collection>('collections'),
   sessions: () => all<TrainingSession>('sessions'),
-  clues: async () => resolveClueImages((await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt)),
+  clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   async reviewState(panoId: string): Promise<ReviewRecord | undefined> {

@@ -396,11 +396,11 @@ An account is optional. Local training works without signing in.
 
 ### Signing in
 
-Open the account entry on the homepage and use Google or email. Signing in identifies the account and starts quiet progress sync.
+Open the account entry on the homepage and use Google or email. Signing in identifies the account but does not transfer progress until you select **Sync now**.
 
 ### What sync does
 
-Study, Play, and Review progress is saved to this browser first. Cloud sync then runs quietly in the background, so a slow connection never delays the local save or resets the active workspace. Compatible visits, attempts, review schedules, saved games, collections, preferences, paused workspaces, and saved clues remain available across signed-in devices and site instances. Review grading history from each device is combined, while the newest saved setting and most recently graded schedule win. Leaving the app starts any pending upload; returning periodically checks for newer cloud progress without replacing the active workspace. Rapid saves are combined and unchanged backups are not written again. Signed-out localhost and deployed-site data remain separate.
+Study, Play, and Review progress is always saved to this browser first. Cloud sync is manual: open the account entry and select **Sync now** on each device when you want to exchange progress. One sync downloads the latest cloud backup, combines compatible visits, attempts, new cards, review schedules, grading history, saved games, collections, preferences, paused workspaces, and saved clues, applies that merged copy locally, caches missing private clue images in this browser, then uploads the merged backup. The account panel reports each phase and retains a receipt with downloaded, local, merged, added, cached-image, Review-update, Review-event, and upload counts; a toast confirms completion. Opening Clues, Available notes, Coverage, or history uses the local cache and does not contact cloud storage. The most recently graded Review schedule wins while grading events and unique records from every device are retained. Signing in, saving, focusing, reconnecting, backgrounding, and opening the app do not transfer progress. For several devices, sync the device containing work that is not yet in the cloud first, then sync the others. Signed-out localhost and deployed-site data remain separate.
 
 ### Working offline
 
@@ -466,7 +466,7 @@ Continue training normally. Retry later, use the current-view analysis instead o
 
 ### Progress looks out of date
 
-Confirm that the intended account is connected, wait for sync to finish, and reload once. Signing into a different account produces a different cloud history.
+Confirm that the intended account is connected, select **Sync now**, and wait for it to finish. Then select **Sync now** on the other device. Signing into a different account produces a different cloud history.
 
 ### Google sign-in fails
 

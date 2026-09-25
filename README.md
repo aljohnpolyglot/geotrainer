@@ -11,6 +11,8 @@ Country bounds and city seeds are generation hints, not claims of exhaustive Str
 3. Optional cloud sync: set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` from the Supabase project's **Connect** dialog.
 4. Run `npm run dev` and open <http://localhost:3000>.
 
+For a production-like local build with AI Coach and Street View capture, run `npm run build`, then `npm run preview`. The built app prefers its same-origin `/api/coach` server. Static deployments can set `VITE_COACH_ENDPOINT` to another compatible server; when none is available, they retain the Supabase Edge Function fallback.
+
 For cloud backup, create a Supabase project and run [`supabase/migrations/001_user_backups.sql`](supabase/migrations/001_user_backups.sql) in its SQL Editor. To enable private Notebook and Coach clue-image sync, also run [`supabase/migrations/002_clue_images.sql`](supabase/migrations/002_clue_images.sql). If the Data API reports that `user_backups` is not exposed, add the `public` schema/table to the project's Data API exposed schemas, then copy the project URL and **publishable** key from **Connect** into `.env`. Never use a Supabase secret or `service_role` key in a `VITE_` variable.
 
 Google sign-in requires enabling **Authentication → Providers → Google** in Supabase with a Google Web OAuth client. Use the callback URL shown on that provider page and allow `http://localhost:3000` during development. For branded confirmation mail, paste [`supabase/templates/confirmation.html`](supabase/templates/confirmation.html) into **Authentication → Email Templates → Confirm signup** and set the subject to `Confirm your GeoTrainer account`.
@@ -23,4 +25,4 @@ The Google Cloud key must have **Maps JavaScript API** and **Street View Static 
 - `npm run lint` — TypeScript validation.
 - `npm run build` — production Vite build.
 
-Progress is stored in the browser's `street-view-trainer` IndexedDB database and quietly backed up after changes when a cloud account is connected.
+Progress is stored in the browser's `street-view-trainer` IndexedDB database. Cloud transfer happens only when **Sync now** is selected: the app downloads, merges, caches missing private clue images locally, and uploads the merged backup. Photo bytes remain in private Storage; the backup JSON contains only their paths, so ordinary app use does not repeatedly download them.

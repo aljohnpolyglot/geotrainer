@@ -19,6 +19,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [showSyncToast, setShowSyncToast] = useState(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -27,6 +28,13 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
+  useEffect(() => {
+    if (!sync.receipt) return;
+    setShowSyncToast(true);
+    const timer = window.setTimeout(() => setShowSyncToast(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [sync.receipt?.completedAt]);
+
   const authenticate = async () => {
     setBusy(true);
     setMessage('');
@@ -34,7 +42,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       const needsConfirmation = mode === 'signup'
         ? await cloudSync.signUp(email, password)
         : (await cloudSync.signIn(email, password), false);
-      setMessage(needsConfirmation ? t('Check your inbox to confirm your GeoTrainer account.') : t('Signed in. Your progress is syncing now.'));
+      setMessage(needsConfirmation ? t('Check your inbox to confirm your GeoTrainer account.') : t('Signed in. Press Sync now to merge this device.'));
       setPassword('');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : t('Authentication failed. Please try again.'));
@@ -55,7 +63,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
     }
   };
 
-  return (
+  return (<>
     <dialog ref={dialogRef} className="account-dialog" onClose={onClose} onMouseDown={(event) => {
       const bounds = event.currentTarget.getBoundingClientRect();
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
@@ -68,13 +76,23 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       {sync.email ? (
         <div className="account-signed-in">
           <span className="account-success-mark"><Check size={24} /></span>
-          <h2>{t('Your progress is protected.')}</h2>
-          <p>{t('GeoTrainer syncs progress from this browser with your account.')}</p>
+          <h2>{t('Ready for manual sync.')}</h2>
+          <p>{t('GeoTrainer merges this browser’s local progress with your private cloud backup.')}</p>
           <div className="account-identity"><small>{t('Signed in as')}</small><strong>{sync.email}</strong></div>
           <div className="account-sync-row">
-            <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase.replace('-', ' ')}</span>
-            <span>{sync.message}</span>
+            <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase === 'ready' ? t('Ready') : sync.phase === 'syncing' ? t('Syncing') : sync.phase.replace('-', ' ')}</span>
+            <span>{t(sync.message)}</span>
           </div>
+          {sync.receipt && <dl className="sync-receipt" aria-label={t('Last sync details')}>
+            <div><dt>{t('Downloaded')}</dt><dd>{sync.receipt.downloadedRecords.toLocaleString()}</dd></div>
+            <div><dt>{t('On this device')}</dt><dd>{sync.receipt.deviceRecords.toLocaleString()}</dd></div>
+            <div><dt>{t('Merged')}</dt><dd>{sync.receipt.mergedRecords.toLocaleString()}</dd></div>
+            <div><dt>{t('Added to this device')}</dt><dd>{sync.receipt.addedToDevice.toLocaleString()}</dd></div>
+            <div><dt>{t('Review schedules updated')}</dt><dd>{sync.receipt.reviewSchedulesUpdated.toLocaleString()}</dd></div>
+            <div><dt>{t('Review events retained')}</dt><dd>{sync.receipt.reviewEvents.toLocaleString()}</dd></div>
+            <div><dt>{t('Images cached locally')}</dt><dd>{sync.receipt.cachedImages.toLocaleString()}</dd></div>
+            <div><dt>{t('Upload')}</dt><dd>{sync.receipt.uploadChanged ? sync.receipt.uploadedRecords.toLocaleString() : t('Already current')}</dd></div>
+          </dl>}
           <div className="account-actions">
             <button type="button" className="auth-primary" disabled={busy || sync.phase === 'syncing'} onClick={() => void accountAction(cloudSync.syncNow)}><RefreshCw size={16} />{t('Sync now')}</button>
             <button type="button" className="auth-secondary" disabled={busy} onClick={() => void accountAction(cloudSync.signOut)}><LogOut size={16} />{t('Sign out')}</button>
@@ -106,5 +124,6 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
 
       <footer><Cloud size={14} />{t('Your progress stays available when you return.')}</footer>
     </dialog>
-  );
+    {showSyncToast && sync.receipt && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('Sync complete')}: {sync.receipt.downloadedRecords.toLocaleString()} {t('downloaded')} · {sync.receipt.mergedRecords.toLocaleString()} {t('merged')} · {t('upload confirmed')}</div>}
+  </>);
 }

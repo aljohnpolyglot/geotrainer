@@ -78,7 +78,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
         <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>
           <span className="account-entry-icon"><Cloud size={19} /></span>
           <span><strong>{sync.email ? t('Cloud account') : t('Protect your progress')}</strong><small>{sync.email || t('Sign in or create an account')}</small></span>
-          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase.replace('-', ' ')}</span>
+          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase === 'ready' ? t('Ready') : sync.phase === 'syncing' ? t('Syncing') : sync.phase.replace('-', ' ')}</span>
           <ChevronRight size={18} />
         </button>
       </div>

@@ -114,7 +114,9 @@ Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in prim
 
 ## Sincronizzazione cloud
 
-L’account è facoltativo e l’allenamento locale funziona senza accesso. I progressi di Studio, Gioco e Ripasso vengono salvati prima in questo browser; la sincronizzazione prosegue silenziosamente in background, quindi una connessione lenta non ritarda il salvataggio locale e non reimposta lo spazio di lavoro attivo. Se collegato, la cronologia delle valutazioni di ogni dispositivo viene unita; prevalgono l’impostazione più recente e la programmazione valutata per ultima. Uscire dall’app avvia ogni caricamento in sospeso. Senza accesso, localhost e il sito pubblicato restano separati.
+L’account è facoltativo e l’allenamento locale funziona senza accesso. I progressi vengono salvati prima in questo browser e la sincronizzazione è manuale. Premi **Sincronizza ora** sul dispositivo con nuovi dati per scaricare, unire e caricare schede, tentativi e cronologia di Ripasso; poi fallo sugli altri dispositivi. Prevale la programmazione valutata più di recente e i record unici di ogni dispositivo vengono conservati. Accesso, salvataggio, ritorno all’app e uscita non trasferiscono dati automaticamente. Senza accesso, localhost e il sito pubblicato restano separati.
+
+Le immagini private mancanti vengono memorizzate in questo browser durante la sincronizzazione manuale. Aprire Indizi, Note disponibili, Copertura o la cronologia usa la copia locale senza interrogare l’archivio cloud.
 
 ## Risoluzione dei problemi
 
@@ -122,7 +124,7 @@ L’account è facoltativo e l’allenamento locale funziona senza accesso. I pr
 2. Controlli su uno schermo nero — prova Street View in Google Maps nello stesso browser. Se anche lì l’immagine è nera, apri GeoTrainer in una finestra privata senza estensioni, cambia l’impostazione dell’accelerazione grafica del browser e riavvialo. Aggiorna il browser e il driver grafico se necessario. Se il problema riguarda solo GeoTrainer, ricaricalo una volta e indica browser, dispositivo ed estensioni attive nella segnalazione.
 3. Ripasso vuoto — gioca o salva un luogo da Studio e attendi la scadenza.
 4. IA non disponibile — continua e riprova più tardi.
-5. Progressi vecchi — verifica l’account e attendi la sincronizzazione.
+5. Progressi vecchi — verifica l’account e premi **Sincronizza ora** su ogni dispositivo, iniziando da quello con i nuovi dati.
 
 ## Suggerimenti e segnalazioni di bug
 
