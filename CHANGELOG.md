@@ -7,6 +7,7 @@
 - Kept signed-in training fully local between manual syncs so saves, focus changes, reconnects, and backgrounding no longer consume Supabase egress.
 - Stopped ordinary Clues and Available notes reads from contacting Supabase Storage; manual sync now downloads each missing hosted clue image once into IndexedDB and reports the cached-image count.
 - Disabled background Supabase token refresh and made a production-like local server provide Coach and Street View capture at `/api/coach`, with static deployments retaining the existing Edge Function fallback.
+- Added portable `.geotrainer` export and merge-import beside Cloud sync, including all local records and cached saved photos, detailed transfer receipts, and an account-ID warning before importing another user’s file.
 
 ## 2026-09-24
 

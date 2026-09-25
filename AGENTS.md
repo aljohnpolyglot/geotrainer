@@ -53,6 +53,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Commit Study, Learn, Play, and Review progress to IndexedDB immediately and keep cloud sync manual; signing in, saving, focusing, reconnecting, backgrounding, and opening the app must not pull or upload progress.
 - Every manual sync must fetch the latest remote backup before deciding that nothing changed, merge Review grading history and unique records across devices, apply the merged data locally, and upload the same merged backup.
 - Fetch and cache missing hosted clue images in IndexedDB only during manual sync; ordinary Clues, Available notes, Coverage, and history reads must never contact Supabase Storage.
+- Portable `.geotrainer` exports contain the complete local database and cached saved photos. Import must validate the file, warn before crossing account IDs, merge without deleting current-device progress, and apply to mounted screens without reloading.
 - Merge the latest remote backup before every whole-backup upload so localhost and deployed origins using the same account converge without replacing each other's unique records.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.

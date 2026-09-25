@@ -1,5 +1,6 @@
 .account-entry { width: 100%; min-height: 68px; display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, auto) 18px; align-items: center; gap: 12px; margin-top: 24px; padding: 12px 14px; overflow: hidden; color: var(--carbon); background: #fff; border: 1px solid var(--rule); border-radius: 8px; text-align: left; cursor: pointer; }
 .account-entry:hover { background: #e7eef0; border-color: #8fa3aa; }
+.account-entry.signed-out { grid-template-columns: 40px minmax(0, 1fr) 18px; }
 .account-entry-icon { display: grid; width: 40px; height: 40px; place-items: center; color: #fff; background: var(--storm); border-radius: 4px; }
 .account-entry > span:nth-child(2) { min-width: 0; display: grid; gap: 4px; }
 .account-entry strong { font-size: 13px; }
@@ -15,9 +16,13 @@
 .account-dialog-header span { grid-column: 2; color: var(--sky); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
 .account-dialog-header button { display: grid; width: 38px; height: 38px; place-items: center; color: #c5e4ea; background: transparent; border: 1px solid rgba(138, 215, 232, .28); border-radius: 4px; cursor: pointer; }
 .account-dialog-header button:hover { color: #fff; background: #103b52; }
+.backup-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; padding: 1px; background: var(--rule); border-bottom: 1px solid var(--rule); }
+.backup-tabs button { min-width: 0; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 9px; color: var(--muted); background: var(--paper); border: 0; font-size: 11px; font-weight: 800; cursor: pointer; }
+.backup-tabs button:hover { color: var(--carbon); background: #e7eef0; }
+.backup-tabs button[aria-selected='true'] { color: #fff; background: var(--storm); }
 .account-auth, .account-signed-in { padding: 34px; }
-.account-auth h2, .account-signed-in h2 { margin: 0 0 9px; color: var(--carbon); font-size: 28px; line-height: 1.1; letter-spacing: -.025em; }
-.account-auth > p, .account-signed-in > p { max-width: 48ch; margin: 0 0 24px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.account-auth h2, .account-signed-in h2, .account-transfer h2 { margin: 0 0 9px; color: var(--carbon); font-size: 28px; line-height: 1.1; letter-spacing: -.025em; }
+.account-auth > p, .account-signed-in > p, .account-transfer > p { max-width: 48ch; margin: 0 0 24px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 .google-signin { width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 10px; color: #202124; background: #fff; border: 1px solid #aebbc0; border-radius: 4px; font-size: 13px; font-weight: 750; cursor: pointer; }
 .google-signin:hover { background: #f7f9f9; border-color: #748992; }
 .google-mark { width: 22px; height: 22px; display: grid; place-items: center; color: #4285f4; border: 1px solid #d5dadd; border-radius: 50%; font-size: 14px; font-weight: 850; }
@@ -37,6 +42,13 @@
 .auth-primary:disabled, .auth-secondary:disabled, .google-signin:disabled { opacity: .55; cursor: wait; }
 .auth-message { min-height: 17px; margin: 13px 0 0 !important; color: #49626d !important; font-size: 11px !important; }
 .account-success-mark { display: grid; width: 50px; height: 50px; place-items: center; margin-bottom: 22px; color: #17390b; background: var(--lime); border-radius: 5px; }
+.account-transfer { padding: 34px; }
+.account-tool-mark { display: grid; width: 50px; height: 50px; place-items: center; margin-bottom: 22px; color: #fff; background: var(--blue); border-radius: 5px; }
+.account-transfer > .auth-primary { width: 100%; }
+.backup-file-input { position: fixed; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.backup-privacy-note { margin: 12px 0 0 !important; color: #49626d !important; font-size: 10px !important; }
+.account-transfer .sync-receipt { margin: 0 0 18px; }
+.account-transfer .sync-receipt dd { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .account-identity { display: grid; gap: 5px; padding: 16px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; }
 .account-identity small { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
 .account-identity strong { overflow-wrap: anywhere; font-size: 13px; }
@@ -50,7 +62,7 @@
 @media (max-width: 640px) {
   .account-entry { grid-template-columns: 40px minmax(0, 1fr) 18px; }
   .account-entry .sync-state { display: none; }
-  .account-auth, .account-signed-in { padding: 26px 20px; }
+  .account-auth, .account-signed-in, .account-transfer { padding: 26px 20px; }
   .account-actions { grid-template-columns: 1fr; }
   .sync-receipt { grid-template-columns: 1fr; }
 }

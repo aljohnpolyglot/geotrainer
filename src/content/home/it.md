@@ -118,6 +118,8 @@ L’account è facoltativo e l’allenamento locale funziona senza accesso. I pr
 
 Le immagini private mancanti vengono memorizzate in questo browser durante la sincronizzazione manuale. Aprire Indizi, Note disponibili, Copertura o la cronologia usa la copia locale senza interrogare l’archivio cloud.
 
+**Sincronizza e salva** offre anche **Esporta** e **Importa** senza accesso al cloud. L’esportazione scarica un file `.geotrainer` con l’intero database locale e le foto salvate su questo dispositivo. L’importazione convalida il file e unisce solo le informazioni mancanti o più recenti senza cancellare i progressi locali. Il file registra l’identificativo dell’account che lo ha esportato; un account diverso o l’assenza di accesso richiede conferma. Mantieni privato il file e trasferiscilo tramite Drive, OneDrive, USB o un altro luogo affidabile.
+
 ## Risoluzione dei problemi
 
 1. Panorama vuoto — passa oltre; la copertura Street View può cambiare.

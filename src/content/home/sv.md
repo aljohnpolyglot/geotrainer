@@ -124,6 +124,8 @@ Konto är valfritt och lokal träning fungerar utan inloggning. Framsteg sparas 
 
 Saknade privata ledtrådsbilder sparas i webbläsaren under manuell synkronisering. Ledtrådar, Tillgängliga anteckningar, Täckning och historik använder sedan den lokala kopian utan att kontakta molnlagringen.
 
+**Synka och säkerhetskopiera** erbjuder även **Exportera** och **Importera** utan molnåtkomst. Export hämtar en `.geotrainer`-fil med hela den lokala databasen och sparade bilder på enheten. Import validerar filen och slår bara ihop saknad eller nyare information utan att radera lokala framsteg. Filen innehåller konto-ID:t som exporterade den; ett annat konto eller utloggat läge kräver bekräftelse. Håll filen privat och överför den via Drive, OneDrive, USB eller en annan betrodd plats.
+
 ## Felsökning
 
 1. Tomt panorama — gå vidare; Street View-täckning kan ändras.

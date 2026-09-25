@@ -118,6 +118,8 @@ La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. El 
 
 Las imágenes privadas que falten se guardan en este navegador durante la sincronización manual. Abrir Pistas, Notas disponibles, Cobertura o el historial usa esa copia local y no consulta el almacenamiento en la nube.
 
+**Sincronizar y respaldar** también ofrece **Exportar** e **Importar** sin necesitar la nube. Exportar descarga un archivo `.geotrainer` con toda la base local y las fotos guardadas en este dispositivo. Importar valida el archivo y combina solo la información ausente o más reciente sin borrar el progreso local. El archivo incluye el identificador de la cuenta exportadora; si la cuenta actual es distinta o no has iniciado sesión, se pide confirmación. Mantén el archivo privado y pásalo mediante Drive, OneDrive, USB u otro lugar de confianza.
+
 ## Solución de problemas
 
 1. Panorama vacío — pasa al siguiente; la cobertura de Street View puede cambiar.

@@ -75,10 +75,10 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
           <span><strong>{activeDuration}</strong> {t('active minutes')}</span>
           <span><strong>{status.clues.toLocaleString()}</strong> {t('knownClues')}</span>
         </div>
-        <button type="button" className="account-entry" onClick={() => setAccountOpen(true)}>
+        <button type="button" className={`account-entry ${sync.email ? '' : 'signed-out'}`} onClick={() => setAccountOpen(true)}>
           <span className="account-entry-icon"><Cloud size={19} /></span>
-          <span><strong>{sync.email ? t('Cloud account') : t('Protect your progress')}</strong><small>{sync.email || t('Sign in or create an account')}</small></span>
-          <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase === 'ready' ? t('Ready') : sync.phase === 'syncing' ? t('Syncing') : sync.phase.replace('-', ' ')}</span>
+          <span><strong>{t('Sync & backup')}</strong><small>{sync.email || t('Export, import, or sign in')}</small></span>
+          {sync.email && <span className={`sync-state ${sync.phase}`}>{sync.phase === 'synced' ? t('Synced') : sync.phase === 'ready' ? t('Ready') : sync.phase === 'syncing' ? t('Syncing') : sync.phase.replace('-', ' ')}</span>}
           <ChevronRight size={18} />
         </button>
       </div>

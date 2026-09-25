@@ -118,6 +118,8 @@ Le compte est facultatif et l’entraînement local fonctionne sans connexion. L
 
 Les images privées manquantes sont mises en cache dans ce navigateur pendant la synchronisation manuelle. Ouvrir Indices, Notes disponibles, Couverture ou l’historique utilise cette copie locale sans interroger le stockage cloud.
 
+**Synchroniser et sauvegarder** propose aussi **Exporter** et **Importer** sans accès au cloud. L’exportation télécharge un fichier `.geotrainer` contenant toute la base locale et les photos enregistrées sur cet appareil. L’importation valide le fichier et fusionne uniquement les informations manquantes ou plus récentes sans effacer la progression locale. Le fichier conserve l’identifiant du compte exportateur ; un compte différent ou l’absence de connexion demande confirmation. Gardez le fichier privé et transférez-le par Drive, OneDrive, USB ou un autre emplacement fiable.
+
 ## Dépannage
 
 1. Panorama vide — passez au suivant ; la couverture Street View peut changer.

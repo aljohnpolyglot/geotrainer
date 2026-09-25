@@ -26,3 +26,5 @@ The Google Cloud key must have **Maps JavaScript API** and **Street View Static 
 - `npm run build` — production Vite build.
 
 Progress is stored in the browser's `street-view-trainer` IndexedDB database. Cloud transfer happens only when **Sync now** is selected: the app downloads, merges, caches missing private clue images locally, and uploads the merged backup. Photo bytes remain in private Storage; the backup JSON contains only their paths, so ordinary app use does not repeatedly download them.
+
+The homepage **Sync & backup** entry can also export the complete local database and cached saved photos as a `.geotrainer` file. Import validates and merges that file without replacing newer local work, and asks for confirmation when its account ID differs from the currently signed-in account.

@@ -101,6 +101,7 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
       const record = item as Record<string, unknown>; const recordKey = String(record[key]); const previous = records.get(recordKey) as Record<string, unknown> | undefined;
       if (previous && name === 'reviews') records.set(recordKey, mergeReviews(previous as unknown as ReviewRecord, record as unknown as ReviewRecord));
       else if (previous && name === 'settings' && noteSettings.has(recordKey)) records.set(recordKey, { ...(revision(name, record)! >= revision(name, previous)! ? record : previous), value: mergeNotes(previous.value, record.value), updatedAt: Math.max(revision(name, record)!, revision(name, previous)!) });
+      else if (previous && (name === 'clues' || name === 'locations')) records.set(recordKey, { ...previous, ...record, imageDataUrl: record.imageDataUrl || previous.imageDataUrl, ...(name === 'clues' ? { imagePath: record.imagePath || previous.imagePath } : {}) });
       else if (!previous || revision(name, record) === undefined || revision(name, record)! >= revision(name, previous)!) records.set(recordKey, item);
     }
     return [name, [...records.values()]];
