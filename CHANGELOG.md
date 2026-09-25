@@ -10,6 +10,7 @@
 - Added portable `.geotrainer` export and merge-import beside Cloud sync, including all local records and cached saved photos, detailed transfer receipts, and an account-ID warning before importing another user’s file.
 - Made Explore Map's revealed location card map open another clicked Street View panorama, moved the world-map return action into a compact viewport globe button, and added imagery-source and indoor-coverage filters to the world map.
 - Clarified that a forgotten Review card graded Again returns later in the same session instead of appearing as an unexplained extra card.
+- Added a Supabase-independent Vercel endpoint for AI Coach, clue-camera capture, and transient 360° clipboard capture, with restricted browser origins and GitHub Pages endpoint configuration.
 
 ## 2026-09-24
 

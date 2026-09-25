@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildCoachPrompt, callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
+import { isAllowedCoachOrigin } from '../../api/coach';
 
 const validAnalysis = {
   confidence: 'medium', region: 'Central Europe',
@@ -9,6 +10,14 @@ const validAnalysis = {
   strongClues: ['Concrete utility poles'], weakClues: ['Generic vegetation'],
   confusions: ['Serbia'], nextThingsToInspect: ['Check road edge lines'], extraCards: [],
 };
+
+test('hosted Coach accepts only configured app origins', () => {
+  assert.equal(isAllowedCoachOrigin('https://aljohnpolyglot.github.io', '', ''), true);
+  assert.equal(isAllowedCoachOrigin('http://localhost:3000', '', ''), true);
+  assert.equal(isAllowedCoachOrigin('https://preview.example', 'https://preview.example', ''), true);
+  assert.equal(isAllowedCoachOrigin('https://untrusted.example', '', ''), false);
+  assert.equal(isAllowedCoachOrigin(undefined, '', ''), false);
+});
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {
   status, headers: { 'content-type': 'application/json' },
