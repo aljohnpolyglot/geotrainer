@@ -40,7 +40,7 @@ El aprendizaje con mapa subido etiqueta el progreso de la fuente (por ejemplo, *
 
 La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje personalizado** después de aplicar la colección, la mezcla de países, el entorno, la fuente de imágenes y el filtro de interiores. No cambia Mapa subido, Meta, Explorar mapa, Juego ni Repaso.
 
-- **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. Úsalo para obtener variedad o recorrer la colección sin ponderación.
+- **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. En Mundo reduce el peso de territorios diminutos para que no dominen. Úsalo para obtener variedad o recorrer ampliamente la colección.
 - **Lugares conocidos** elige como punto de partida una ubicación apta que ya encontraste y busca aproximadamente entre 1 y 12 km a su alrededor. Sirve para aprender los alrededores y reconocer vistas cercanas sin repetir el panorama exacto.
 - **Menor exposición** elige primero un país apto nunca visto o con menos encuentros, rellena las regiones incluidas que aún aparecen grises en Cobertura y después apunta al mayor hueco geográfico restante. Este paso regional también se aplica a colecciones de un solo país; si una región no tiene un punto local utilizable, se vuelve a la búsqueda de huecos de todo el país.
 

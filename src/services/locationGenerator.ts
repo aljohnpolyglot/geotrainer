@@ -28,6 +28,17 @@ const mixedWeights = { urban: 35, suburban: 20, rural: 45 } as const;
 export const isOfficialGooglePanorama = (data: Pick<google.maps.StreetViewPanoramaData, 'copyright'>) => /\bGoogle\b/i.test(data.copyright || '');
 export const acceptsPanoramaSource = (official: boolean, source: EnvironmentSettings['panoramaSource'], allowContributors?: boolean) => { const mode = source || (allowContributors === true ? 'mixed' : 'official'); return mode === 'mixed' || (mode === 'official' ? official : !official); };
 const usesTightSeedSearch = (countryCode: string) => { const points = COUNTRIES[countryCode]?.samplePoints || []; return !!points.length && points.length <= 2 && points.every((a) => points.every((b) => calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= 2)); };
+export const worldSampleWeight = (countryCode: string) => {
+  const country = COUNTRIES[countryCode]; if (!country) return 1;
+  const { minLat, maxLat, minLng, maxLng } = country.bounds;
+  const footprint = Math.sqrt(Math.abs((maxLat - minLat) * (maxLng - minLng) * Math.cos((minLat + maxLat) * Math.PI / 360)));
+  return Math.max(1, Math.min(8, footprint)) * Math.min(4, Math.max(1, country.samplePoints.length));
+};
+export const pickWorldCountry = (countryCodes: string[], random = Math.random) => {
+  let pick = random() * countryCodes.reduce((total, code) => total + worldSampleWeight(code), 0);
+  for (const code of countryCodes) { pick -= worldSampleWeight(code); if (pick <= 0) return code; }
+  return countryCodes.at(-1)!;
+};
 
 export function chooseMixedEnvironment(recent: string[], random = Math.random): Exclude<EnvironmentSettings['environment'], 'mixed'> {
   const blocked = recent.length >= 2 && recent.at(-1) === recent.at(-2) ? recent.at(-1) : '';
@@ -184,7 +195,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         : countryCodes;
       const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
       const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[(attempt - 1) % preferredCountryCodes.length] : undefined;
-      const randomCountryCode = focused?.target.countryCode || preferredCountryCode || eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)];
+      const randomCountryCode = focused?.target.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);

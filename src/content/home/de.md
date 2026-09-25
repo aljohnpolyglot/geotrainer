@@ -89,7 +89,7 @@ Das Lernen mit hochgeladener Karte kennzeichnet den Quellenfortschritt (zum Beis
 
 Die Priorität bestimmt, wie **neue Orte im benutzerdefinierten Lernen** ausgewählt werden, nachdem Sammlung, Ländermischung, Umgebung, Bildquelle und Innenraumfilter angewendet wurden. Sie verändert Hochgeladene Karte, Meta, Karte erkunden, Spiel und Wiederholung nicht.
 
-- **Zufällig** (Standard) wählt ohne Gewichtung durch deinen Verlauf aus dem geeigneten Pool. Nutze es für Abwechslung oder eine neutrale Tour durch die Sammlung.
+- **Zufällig** (Standard) wählt aus dem geeigneten Pool ohne deinen Verlauf. In Welt verringert es das Gewicht sehr kleiner Gebiete, damit sie nicht dominieren. Nutze es für Abwechslung oder eine breite Tour durch die Sammlung.
 - **Vertraute Orte** nimmt einen bereits besuchten geeigneten Ort als Ausgangspunkt und sucht ungefähr 1–12 km darum herum. So lernst du die Umgebung und erkennst nahe Ansichten, ohne dasselbe Panorama genau zu wiederholen.
 - **Wenigste Erfahrung** wählt zuerst ein ungesehenes oder am seltensten besuchtes geeignetes Land, füllt enthaltene Regionen, die in Abdeckung noch grau sind, und zielt danach auf die größte verbleibende geografische Lücke. Dieser regionale Schritt gilt auch für Sammlungen mit nur einem Land; Regionen ohne nutzbaren lokalen Ausgangspunkt fallen auf die landesweite Lückensuche zurück.
 

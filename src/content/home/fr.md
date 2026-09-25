@@ -40,7 +40,7 @@ L’apprentissage avec une carte importée identifie la progression de la source
 
 La priorité modifie la sélection des **nouveaux lieux de l’apprentissage personnalisé** après l’application de la collection, du mélange de pays, de l’environnement, de la source d’images et du filtre intérieur. Elle ne change pas Carte importée, Méta, Explorer la carte, Jeu ou Révision.
 
-- **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Utilisez-le pour varier les lieux ou parcourir la collection sans pondération.
+- **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Dans Monde, il réduit le poids des très petits territoires pour qu’ils ne dominent pas. Utilisez-le pour varier les lieux ou parcourir largement la collection.
 - **Lieux familiers** prend comme point de départ un lieu admissible déjà rencontré et cherche dans un rayon d’environ 1 à 12 km. Il aide à apprendre les environs et à reconnaître des vues proches sans répéter exactement le même panorama.
 - **Moins exploré** choisit d’abord un pays admissible jamais vu ou le moins rencontré, remplit les régions incluses encore grises dans la Couverture, puis vise la plus grande lacune géographique restante. Cette étape régionale s’applique aussi aux collections d’un seul pays ; une région sans point local utilisable revient à la recherche nationale.
 

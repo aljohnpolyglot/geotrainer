@@ -73,6 +73,13 @@ test('randomizer rejects a different country even when it belongs to the same co
   }
 });
 
+test('World natural sampling keeps tiny territories possible without giving them equal frequency', async () => {
+  const { pickWorldCountry, worldSampleWeight } = await import('./locationGenerator');
+  assert.ok(worldSampleWeight('BR') > worldSampleWeight('AX') * 20);
+  assert.equal(pickWorldCountry(['AX', 'BR'], () => 0), 'AX');
+  assert.equal(pickWorldCountry(['AX', 'BR'], () => .1), 'BR');
+});
+
 test('recent panorama exclusion turns A, A, B into visible A, B', async () => {
   currentResults = [
     { lat: 6.66, lng: 6, pano: 'pano-a', countryCode: 'IT' },

@@ -40,7 +40,7 @@ O aprendizado com mapa enviado identifica o progresso da fonte (por exemplo, **F
 
 A prioridade muda como os **novos locais do Aprendizado personalizado** são escolhidos depois da coleção, mistura de países, ambiente, fonte das imagens e filtro de interiores. Ela não altera Mapa enviado, Meta, Explorar mapa, Jogo ou Revisão.
 
-- **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. Use para obter variedade ou percorrer a coleção sem ponderação.
+- **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. No Mundo, reduz o peso de territórios muito pequenos para que não dominem. Use para obter variedade ou percorrer amplamente a coleção.
 - **Locais familiares** escolhe um local elegível já encontrado como ponto de partida e procura aproximadamente entre 1 e 12 km ao redor dele. Use para aprender os arredores e reconhecer vistas próximas sem repetir o panorama exato.
 - **Menor exposição** escolhe primeiro um país elegível ainda não visto ou com menos encontros, preenche as regiões incluídas que ainda aparecem em cinza na Cobertura e depois mira a maior lacuna geográfica restante. Essa etapa regional também vale para coleções de um único país; regiões sem um ponto local utilizável voltam à busca de lacunas no país inteiro.
 

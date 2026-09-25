@@ -107,7 +107,7 @@ Uploaded-map Learn labels source progress (for example, **Source: 1/50**). Each 
 
 Priority changes how **new Custom Learn locations** are chosen after the collection, country mix, environment, imagery source, and indoor filters are applied. It does not change Uploaded map, Meta, Explore Map, Play, or Review.
 
-- **Random** (default) samples the eligible pool without using your history. Use it for variety or an unbiased tour of the selected collection.
+- **Random** (default) samples the eligible pool without using your history. In World, it reduces the weight of tiny territories so they do not dominate. Use it for variety or a broad tour of the selected collection.
 - **Familiar places** chooses a previously encountered eligible location as an anchor and searches roughly 1–12 km around it. Use it to learn the surroundings and recognize nearby views rather than repeat the exact panorama.
 - **Least exposure** first chooses an unseen or least-encountered eligible country, fills bundled regions that are still grey on Coverage, then targets the largest remaining geographic blind spot. Country-size normalization keeps large countries from winning every tie. This regional pass also applies to one-country collections; regions without a usable local seed fall back to the country-wide gap search.
 

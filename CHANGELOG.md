@@ -14,6 +14,7 @@
 - Kept the revealed Explore Map card at the learner's chosen map zoom while opening another panorama, clarified when Official-only coverage requires the mixed imagery filter, and added local city, region, and country map search labels in every supported UI language.
 - Removed the redundant Explore Map card hint because clicking the map already communicates its interaction directly.
 - Close Explore Map immediately when switching to another primary mode.
+- Rebalanced World natural sampling so tiny territories remain possible without crowding out broader Street View coverage.
 
 ## 2026-09-24
 

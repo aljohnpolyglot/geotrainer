@@ -40,7 +40,7 @@ L’apprendimento con una mappa caricata etichetta l’avanzamento della fonte (
 
 La priorità cambia il modo in cui vengono scelte le **nuove località di Apprendimento personalizzato** dopo aver applicato raccolta, combinazione di paesi, ambiente, fonte delle immagini e filtro per interni. Non modifica Mappa caricata, Meta, Esplora mappa, Gioco o Ripasso.
 
-- **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. Usalo per ottenere varietà o visitare la raccolta senza ponderazione.
+- **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. In Mondo riduce il peso dei territori molto piccoli, così non dominano. Usalo per ottenere varietà o visitare ampiamente la raccolta.
 - **Luoghi familiari** sceglie come punto di partenza una località idonea già incontrata e cerca approssimativamente entro 1–12 km. Serve a imparare i dintorni e riconoscere viste vicine senza ripetere esattamente lo stesso panorama.
 - **Minore esposizione** sceglie prima un paese idoneo mai visto o con meno incontri, riempie le regioni incluse ancora grigie in Copertura e poi punta alla maggiore lacuna geografica rimasta. Questo passaggio regionale vale anche per le raccolte di un solo paese; le regioni senza un punto locale utilizzabile tornano alla ricerca nell’intero paese.
 
