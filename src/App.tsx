@@ -224,7 +224,7 @@ export default function App() {
   useEffect(() => { const panoId = currentLocation?.panoId; let active = true; if (!dbReady || !panoId) { setStudyReviewSaved(false); return; } void trainerDb.attempts().then((attempts) => { if (active) setStudyReviewSaved(hasStudyReviewSource(attempts, panoId)); }); return () => { active = false; }; }, [currentLocation?.panoId, dbReady, trainerRefreshKey]);
   const handleNextLearn = useCallback(() => { if (learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total) return; if (learnSource === 'meta') nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen, uploadedProgress]);
   const requestMode = (mode: 'study' | 'play') => {
-    if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation : isGameActive)) return;
+    if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation : isGameActive)) return; setMapPickerOpen(false);
     if (mode !== 'play' && appMode === 'play') persistPlayWorkspace();
     if (pausedWorkspaces[mode]) setResumePrompt(mode);
     else if (mode === 'study') { setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
@@ -422,14 +422,14 @@ export default function App() {
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource}
         isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress}
         mapPickerOpen={mapPickerOpen}
-        onHome={() => { if (isGameActive && !window.confirm('Leave the active game and return home?')) return; persistPlayWorkspace(); abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setShowHome(true); }}
+        onHome={() => { if (isGameActive && !window.confirm('Leave the active game and return home?')) return; persistPlayWorkspace(); abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setShowHome(true); }}
         onStudy={() => { if (isGameActive && !window.confirm('Pause active game and switch to Study mode?')) return; if (isGameActive) { abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); } clearReviewSession(); requestMode('study'); }}
         onPlay={() => { clearReviewSession(); requestMode('play'); }}
-        onReview={() => { if (isGameActive && !window.confirm('Leave the active game and open Review?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('review'); setShowHome(false); setAppMode('review'); }}
+        onReview={() => { if (isGameActive && !window.confirm('Leave the active game and open Review?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setTrainerStartTab('review'); setShowHome(false); setAppMode('review'); }}
         onExitReview={() => { clearReviewSession(); setCurrentLocation(null); }}
         onRestartLearn={() => startFreshMode('study')}
-        onStatistics={() => { if (isGameActive && !window.confirm('Leave the active game and open Statistics?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('statistics'); setShowHome(false); setAppMode('review'); }}
-        onClues={() => { if (isGameActive && !window.confirm('Leave the active game and open Clues?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setTrainerStartTab('clues'); setShowHome(false); setAppMode('review'); }}
+        onStatistics={() => { if (isGameActive && !window.confirm('Leave the active game and open Statistics?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setTrainerStartTab('statistics'); setShowHome(false); setAppMode('review'); }}
+        onClues={() => { if (isGameActive && !window.confirm('Leave the active game and open Clues?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setTrainerStartTab('clues'); setShowHome(false); setAppMode('review'); }}
         onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn} onPreviousLocation={handlePreviousUploaded} canPreviousLocation={canPreviousUploaded}
         onAbandonGame={handleAbandonGame} onOpenHistory={() => setIsHistoryModalOpen(true)}
         onOpenNewGame={() => setIsNewGameModalOpen(true)} onOpenPreferences={() => setPreferencesOpen(true)}
