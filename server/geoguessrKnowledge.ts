@@ -1,5 +1,5 @@
-import dataset from './data/geoguessr-hints.json';
-import geometas from './data/geometas-hints.json';
+import dataset from './data/geoguessr-hints.json' with { type: 'json' };
+import geometas from './data/geometas-hints.json' with { type: 'json' };
 
 type SourceHint = { cat?: string; type?: string; text?: string; uniq?: string; uniq_note?: string };
 type SourceCountry = { name: string; slug: string; links?: { plonkit?: string | null }; hints?: SourceHint[] };

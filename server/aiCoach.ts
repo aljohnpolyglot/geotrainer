@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import countryCatalog from '../src/data/countryCatalog.json';
+import countryCatalog from '../src/data/countryCatalog.json' with { type: 'json' };
 import type { CoachAnalysis, CoachMode, CoachStyle, ExplanationDepth } from '../src/types';
 import { getCountryKnowledge, getCountryMetaKnowledge, type GeoKnowledgeHint } from './geoguessrKnowledge.js';
 
