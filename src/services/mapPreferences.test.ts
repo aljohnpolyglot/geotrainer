@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, resultMapZoomLimit } from './mapPreferences';
+import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, resultMapZoomLimit, shouldRecenterResultMap } from './mapPreferences';
 
 test('map preferences use safe defaults and normalize persisted choices', () => {
   assert.deepEqual(normalizeMapPreferences(undefined), {
@@ -43,4 +43,7 @@ test('result maps stay answer-centered while fitting every guess', () => {
   assert.equal(centeredResultMapZoom(answer, [answer], 860, 400), 21);
   assert.ok(centeredResultMapZoom({ lat: 0, lng: 179 }, [{ lat: 0, lng: -179 }], 860, 400) > 6);
   assert.ok(centeredResultMapZoom(answer, guesses, 360, 240) < centeredResultMapZoom(answer, guesses, 860, 400));
+  assert.equal(shouldRecenterResultMap(true, true), false);
+  assert.equal(shouldRecenterResultMap(true, false), true);
+  assert.equal(shouldRecenterResultMap(false, true), true);
 });

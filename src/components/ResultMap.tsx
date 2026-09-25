@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { centeredResultMapZoom, mapPresentationOptions, resultMapZoomLimit, useMapPreferences } from '../services/mapPreferences';
+import { centeredResultMapZoom, mapPresentationOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
 
 type Point = { lat: number; lng: number };
 const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: Point, points: Point[], zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
@@ -25,6 +25,8 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   const element = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const pointsRef = useRef<Point[]>([]);
+  const positionedRef = useRef(false);
+  const selectable = !!onSelect;
   const previousGuessKey = previousGuesses.map((point) => `${point.lat},${point.lng}`).join('|');
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
       ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
+    positionedRef.current = false;
     mapRef.current = map;
     return () => {
       google.maps.event.clearInstanceListeners(map);
@@ -71,22 +74,23 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
     previousGuesses.forEach((point) => addMarker(point, t('previousGuess'), '#2563eb', 6));
-    positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom);
+    if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom);
+    positionedRef.current = true;
     return () => {
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
       if (pointsRef.current === points) pointsRef.current = [];
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, ui, mapPreferences.resultMapZoom]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, selectable, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
     if (!active || !mapRef.current || !element.current || !pointsRef.current.length) return;
     const frame = requestAnimationFrame(() => {
       google.maps.event.trigger(mapRef.current!, 'resize');
-      positionResultMap(mapRef.current!, element.current!, actual, pointsRef.current, mapPreferences.resultMapZoom);
+      if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(mapRef.current!, element.current!, actual, pointsRef.current, mapPreferences.resultMapZoom);
     });
     return () => cancelAnimationFrame(frame);
-  }, [active, actual.lat, actual.lng, resizeKey, mapPreferences.resultMapZoom]);
+  }, [active, actual.lat, actual.lng, resizeKey, mapPreferences.resultMapZoom, selectable]);
 
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />

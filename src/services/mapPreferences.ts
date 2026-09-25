@@ -38,6 +38,7 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
 };
 
 export const resultMapZoomLimit = (zoom: ResultMapZoomPreference = 'country') => zoom === 'closest' ? 14 : zoom === 'region' ? 7 : zoom === 'world' ? 2 : 5;
+export const shouldRecenterResultMap = (selectable: boolean, positioned: boolean) => !selectable || !positioned;
 const mercatorY = (lat: number) => { const sine = Math.sin(Math.max(-85.0511, Math.min(85.0511, lat)) * Math.PI / 180); return .5 - Math.log((1 + sine) / (1 - sine)) / (4 * Math.PI); };
 export const centeredResultMapZoom = (answer: { lat: number; lng: number }, points: Array<{ lat: number; lng: number }>, width: number, height: number, padding = 32) => {
   const answerY = mercatorY(answer.lat);
