@@ -8,6 +8,8 @@ import { defaultLocationGenerator } from './locationGenerator';
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
 export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[] } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
 export type ImportedMapHistory = { locations: LocationResult[]; index: number };
+export const MAX_IMPORTED_MAP_BYTES = 20_000_000;
+export const importedMapSizeAllowed = (bytes: number) => Number.isFinite(bytes) && bytes <= MAX_IMPORTED_MAP_BYTES;
 export const moveImportedHistory = (history: ImportedMapHistory, direction: 'previous' | 'next', location?: LocationResult): ImportedMapHistory => {
   const index = history.index + (direction === 'next' ? 1 : -1);
   if (index < 0) return history;

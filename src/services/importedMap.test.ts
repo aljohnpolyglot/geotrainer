@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolJson, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
+import { geographicPoolJson, importedMapSizeAllowed, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -17,6 +17,12 @@ test('Map Maker exports retain valid exact locations without adding the map to c
   assert.deepEqual(map.points, [{ lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 }, { lat: 40, lng: -3 }]);
   assert.deepEqual(withoutImportedMaps([{ key: `local.importedMap:${map.id}` }, { key: 'local.currentMapId' }, { key: 'gamePreferences' }]), [{ key: 'gamePreferences' }]);
   assert.throws(() => parseImportedMap('{"customCoordinates":[{"lat":91,"lng":0}]}', 'bad.json'), /no valid/i);
+});
+
+test('JSON imports accept 20 MB but reject anything larger', () => {
+  assert.equal(MAX_IMPORTED_MAP_BYTES, 20_000_000);
+  assert.equal(importedMapSizeAllowed(20_000_000), true);
+  assert.equal(importedMapSizeAllowed(20_000_001), false);
 });
 
 test('bundled official-only NBA fixture is ready for headless uploaded-map checks', () => {
