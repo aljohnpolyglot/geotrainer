@@ -80,7 +80,7 @@ export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange
       const styled = { ...value.analysis, style, depth: coachPreferences.depth }; setAnalysis(styled); onAnalyze?.();
       const clueId = await onSave({ imageDataUrl: sourceImage, model: completedModel, generatedAt: completedAt, analysis: styled });
       if (clueId) onSaved?.(clueId);
-      setSaved(true); setSavedToast(true); window.setTimeout(() => setSavedToast(false), 1800); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
+      setSaved(true); setSavedToast(true); window.setTimeout(() => setSavedToast(false), 3000); setStatus(''); void writeWorkspaceDraft('clue', { panoId, imageDataUrl: sourceImage, ...(clueId ? { clueId } : {}), analysis: styled, saved: true } satisfies ClueDraft);
     });
   };
   const capture = async () => run(async (signal, isCurrent) => {
@@ -119,5 +119,5 @@ export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange
       {!!analysis.nextThingsToInspect.length && <><strong>{t(COACH_OUTPUT_LABELS[analysis.style || coachPreferences.style].next)}</strong><ul>{analysis.nextThingsToInspect.map((item) => <li key={item}><CoachRichText text={item} /></li>)}</ul></>}
     </div>}
     {cropping && image && <ImageCropModal image={image} t={t} onCancel={() => setCropping(false)} onApply={(value) => { replaceImage(value); setCropping(false); }} />}
-  </details>{savedToast && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('savedVisualClue')}</div>}</>;
+  </details>{savedToast && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('Image and analysis saved in Notebook')}</div>}</>;
 }

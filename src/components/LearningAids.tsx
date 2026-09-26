@@ -90,7 +90,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     await saveNotebookHistoryNote({ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt });
     setNote(''); setCategory(''); setCategoryOpen(false); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1);
     await Promise.all([clearWorkspaceDraft('note', panoId), clearWorkspaceDraft('clue', panoId)]); setNoteFormKey((value) => value + 1);
-    window.setTimeout(() => setNoteSaved(false), 1800); await onNoteSaved();
+    window.setTimeout(() => setNoteSaved(false), 3000); await onNoteSaved();
   };
   const copy360 = async () => {
     if (capture360 === 'busy') return; setCapture360('busy');
@@ -107,7 +107,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
       {notes.length > 0 && <button type="button" aria-pressed={open === 'available'} onClick={() => setOpen(open === 'available' ? null : 'available')} title={t('Available notes')}><Files size={17} /><span>{t('Available notes')}</span><b>{notes.length}</b></button>}
     </div>
     {capture360 !== 'idle' && <div className={`settings-saved-toast capture-360-toast${capture360 === 'error' ? ' error' : ''}`} role="status" aria-live="polite">{capture360 === 'busy' ? <LoaderCircle className="spin" size={19} /> : capture360 === 'copied' ? <Check size={19} /> : <TriangleAlert size={19} />}{t(capture360 === 'busy' ? 'Capturing 360° view…' : capture360 === 'copied' ? '360° view copied' : 'Could not copy 360° view')}</div>}
-    {noteSaved && capture360 === 'idle' && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('Saved')}</div>}
+    {noteSaved && capture360 === 'idle' && <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('Saved in Notebook')}</div>}
     {adviceOpen && lesson && <aside className="meta-advice" role="status"><p>{t('Meta clues are always available from the lightbulb in the top-right.')}</p><div><button onClick={() => onAdviceClose(false)}>{t('Okay')}</button><button onClick={() => onAdviceClose(true)}>{t("Don't show again")}</button></div></aside>}
     {open === 'meta' && lesson && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Meta')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Lightbulb size={17} />{t('Meta')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
