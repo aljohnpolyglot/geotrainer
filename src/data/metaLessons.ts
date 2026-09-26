@@ -29,3 +29,8 @@ export const nextMetaLesson = (currentId?: string, random = Math.random, complet
   const choices = currentId && remaining.length > 1 ? remaining.filter((lesson) => lesson.id !== currentId) : remaining;
   return choices[Math.floor(random() * choices.length)];
 };
+
+export const selectMetaLesson = (requestedId?: string, completed = new Set<string>(), random = Math.random): MetaLesson | undefined => {
+  const requested = metaLessonById(requestedId);
+  return requested && !completed.has(requested.id) ? requested : nextMetaLesson(undefined, random, completed);
+};

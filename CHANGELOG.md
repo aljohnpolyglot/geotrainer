@@ -2,6 +2,7 @@
 
 ## 2026-09-26
 
+- Added General and Browse views inside Learn → Meta so learners can continue randomly or search and start a specific unfinished localized lesson.
 - Made AI Coach offer post-answer explanations when reviewing a round from a finished Play game.
 - Clarified Notebook saves with localized confirmations for text notes and pasted-clue analyses, kept visible long enough to read.
 - Fixed Play round startup failing after a location was found because its Coach reset callback was missing from the Play hook context.

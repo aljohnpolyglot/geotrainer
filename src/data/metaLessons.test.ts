@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds } from './metaLessons';
+import { hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
 import translations from './metaLessonTranslations.json';
 
 test('Meta lessons reject malformed input and avoid the current lesson', () => {
@@ -28,6 +28,12 @@ test('completed Meta lessons are excluded and the catalog reports exhaustion', (
   const completed = new Set(META_LESSONS.map((lesson) => lesson.id));
   assert.equal(nextMetaLesson(undefined, () => 0, completed), undefined);
   assert.equal(hasRemainingMetaLessons(META_LESSONS.map((lesson) => ({ source: 'study' as const, metaLessonId: lesson.id }))), false);
+});
+
+test('a browsed unfinished Meta lesson starts exactly while a stale selection falls back', () => {
+  const requested = META_LESSONS[2];
+  assert.equal(selectMetaLesson(requested.id)?.id, requested.id);
+  assert.notEqual(selectMetaLesson(requested.id, new Set([requested.id]), () => 0)?.id, requested.id);
 });
 
 test('time-sensitive imagery meta is explicitly marked without changing durable clues', () => {

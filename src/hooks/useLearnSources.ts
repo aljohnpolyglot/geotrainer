@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { AppMode, LearnSource, LocationResult, MetaLesson } from '../types';
-import { metaLessonById, nextMetaLesson, savedMetaLessonIds } from '../data/metaLessons';
+import { metaLessonById, nextMetaLesson, savedMetaLessonIds, selectMetaLesson } from '../data/metaLessons';
 import { trainerDb } from '../data/trainerDb';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
@@ -41,8 +41,8 @@ export function useLearnSources(ctx: LearnSourceContext) {
     } finally { setIsLoading(false); }
   }, [prepare, setCurrentLocation, setErrorMessage, setIsLoading]);
 
-  const startMeta = useCallback(async () => {
-    const lesson = nextMetaLesson(undefined, Math.random, savedMetaLessonIds(await trainerDb.attempts()));
+  const startMeta = useCallback(async (lessonId?: string) => {
+    const lesson = selectMetaLesson(lessonId, savedMetaLessonIds(await trainerDb.attempts()));
     if (!lesson) return setErrorMessage('No Meta lessons are available.');
     void trainerDb.setting<boolean>('preference.metaAdviceDismissed').then((dismissed) => setMetaAdviceOpen(dismissed !== true));
     await openMetaLesson(lesson);
