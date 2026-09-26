@@ -2,6 +2,7 @@
 
 ## 2026-09-26
 
+- Made AI Coach offer post-answer explanations when reviewing a round from a finished Play game.
 - Clarified Notebook saves with localized confirmations for text notes and pasted-clue analyses, kept visible long enough to read.
 - Fixed Play round startup failing after a location was found because its Coach reset callback was missing from the Play hook context.
 - Expanded Learn setup to six persistent source choices, separating JSON upload and URL loading and adding an AI-described geographic pool that returns editable country, region, and city selections to Custom.

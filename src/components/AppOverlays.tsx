@@ -46,6 +46,7 @@ interface AppOverlaysProps {
   onToggleCompass: () => void;
 }
 export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | undefined, hasResult: boolean) => appMode !== 'play' || enabled !== false || hasResult;
+export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean) => appMode === 'play' ? hasPlayResult : hasReviewResult || hasSummaryRound;
 
 export function AppOverlays(props: AppOverlaysProps) {
   const { ui } = useLanguagePreferences();
@@ -58,11 +59,13 @@ export function AppOverlays(props: AppOverlaysProps) {
   const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   const playAnalysisAvailable = learningAnalysisAvailable(appMode, gameSettings?.aiCoachEnabled, !!activeRoundResult);
-  const revealedResult = appMode === 'play' ? activeRoundResult : reviewResult;
+  const revealedResult = appMode === 'play' ? activeRoundResult : reviewResult || summaryRound;
+  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound);
+  const coachGuess = appMode === 'play' ? activeRoundResult?.guessedCountryCode : summaryRound?.guessedCountryCode || reviewAttemptRecord?.guessedCountryCode;
   return <>
     {!showHome && currentLocation && <div className={`panorama-tools${appMode === 'review' && reviewResult ? ' review-result-tools' : ''}`} aria-label={t('Learning aids')}>
     {appMode !== 'play' && <button className={`map-training-toggle${activeCompass ? ' enabled' : ''}`} type="button" role="switch" aria-checked={activeCompass} onClick={props.onToggleCompass} title={`${t('compass')} ${activeCompass ? t('on') : t('off')}`}><Compass size={17} /></button>}
-    {playAnalysisAvailable && <AiCoach panoId={currentLocation.panoId} appMode={appMode} revealed={appMode === 'study' ? isRevealed : !!revealedResult} context={(appMode === 'study' ? isRevealed : revealedResult) ? { actualCountry: COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode, guessedCountry: appMode === 'play' ? (activeRoundResult?.guessedCountryCode ? COUNTRIES[activeRoundResult.guessedCountryCode]?.name || activeRoundResult.guessedCountryCode : undefined) : (reviewAttemptRecord?.guessedCountryCode ? COUNTRIES[reviewAttemptRecord.guessedCountryCode]?.name || reviewAttemptRecord.guessedCountryCode : undefined), score: revealedResult?.score, distanceKm: revealedResult?.distanceKm, previousAttempts: appMode === 'review' ? reviewHistory.slice(0, 5).map((item) => ({ guessedCountry: item.guessedCountryCode, score: item.score })) : undefined } : undefined} onSave={(note) => props.onSaveCoach({ ...note, location: currentLocation })} onSaveClue={(clue) => props.onSaveClue({ ...clue, origin: 'coach', location: currentLocation })} onClueAnalyzed={props.onClueAnalyzed} />}
+    {playAnalysisAvailable && <AiCoach panoId={currentLocation.panoId} appMode={appMode} revealed={coachRevealed} context={coachRevealed ? { actualCountry: COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode, guessedCountry: coachGuess ? COUNTRIES[coachGuess]?.name || coachGuess : undefined, score: revealedResult?.score, distanceKm: revealedResult?.distanceKm, previousAttempts: appMode === 'review' ? reviewHistory.slice(0, 5).map((item) => ({ guessedCountry: item.guessedCountryCode, score: item.score })) : undefined } : undefined} onSave={(note) => props.onSaveCoach({ ...note, location: currentLocation })} onSaveClue={(clue) => props.onSaveClue({ ...clue, origin: 'coach', location: currentLocation })} onClueAnalyzed={props.onClueAnalyzed} />}
     <LearningAids lesson={appMode === 'study' && learnSource === 'meta' ? studyMeta : reviewMeta}
       panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
     </div>}
