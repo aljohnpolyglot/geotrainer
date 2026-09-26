@@ -1,1 +1,1 @@
-[{"id":"SX.00","name":"Sint Maarten","cities":[{"name":"Philipsburg","lat":18.026,"lng":-63.04582,"population":1400,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"SX.00","name":"Sint Maarten","cities":[{"name":"Philipsburg","lat":18.026,"lng":-63.04582,"population":1400,"class":"local","urbanRadiusKm":8,"names":{"en":"Philipsburg","ru":"Филипсбург","de":"Philipsburg","pt":"Philipsburg","it":"Philipsburg","es":"Philipsburg","fr":"Philipsburg","sv":"Philipsburg"}}]}]

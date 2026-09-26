@@ -7,7 +7,7 @@ import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { isCurrentPanorama, isLatestRequest } from '../services/requestIntegrity';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
-import { getImportedMap, moveImportedHistory, pickImportedLocation, type ImportedMapHistory } from '../services/importedMap';
+import { getImportedMap, importedMapPointCount, moveImportedHistory, pickImportedLocation, type ImportedMapHistory } from '../services/importedMap';
 import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
 
@@ -71,7 +71,7 @@ export function useStudyMode(ctx: any) {
     const previousLocation = currentLocation;
     if (importedMapId) {
       if (!uploadedHistoryRef.current.locations.length && !currentLocation) uploadedCompletedRef.current = new Set();
-      uploadedTotalRef.current = (await getImportedMap(importedMapId))?.points.length || 0;
+      const importedMap = await getImportedMap(importedMapId); uploadedTotalRef.current = importedMap ? importedMapPointCount(importedMap) || 0 : 0;
       if (skipUploadedSeedRef.current) skipUploadedSeedRef.current = false;
       else if (!uploadedHistoryRef.current.locations.length && currentLocation) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', currentLocation); (currentLocation.importedMapCompletedPointIndexes || (currentLocation.importedMapPointIndex === undefined ? [] : [currentLocation.importedMapPointIndex])).forEach((index) => uploadedCompletedRef.current.add(index)); }
       const next = moveImportedHistory(uploadedHistoryRef.current, 'next');
@@ -94,11 +94,11 @@ export function useStudyMode(ctx: any) {
         if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
       }
       const result = importedMapId
-        ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current, uploadedCompletedRef.current)
+        ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current, uploadedCompletedRef.current, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current })
         : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
       recentStudyPanosRef.current = [result.panoId, ...recentStudyPanosRef.current.filter((id: string) => id !== result.panoId)].slice(0, 15);
-      if (importedMapId) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress({ position: result.importedMapProgress ?? uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current }); }
+      if (importedMapId) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress(uploadedTotalRef.current ? { position: result.importedMapProgress ?? uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current } : undefined); }
       setCurrentLocation(result);
     } catch (error: unknown) {
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (error instanceof Error && error.name === 'AbortError')) return;

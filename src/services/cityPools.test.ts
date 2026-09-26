@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import type { CityPoolRegion, LocationPoolTarget } from '../types';
-import { locationPoolChoices, locationTargetKey, pickLocationTargetCity, selectPoolCity, selectPoolRegion } from './cityPools';
+import { localizedPoolName, locationPoolChoices, locationTargetKey, pickLocationPoolFocus, pickLocationTargetCity, selectPoolCity, selectPoolRegion } from './cityPools';
 
 test('regional pools include Philippine regions and choose cities deterministically', () => {
   const regions = JSON.parse(readFileSync(new URL('../../public/city-pools/ph.json', import.meta.url), 'utf8')) as CityPoolRegion[];
@@ -29,4 +29,24 @@ test('separate region and city picks narrow a region and clearing cities restore
   assert.deepEqual(locationPoolChoices(['FR'], pools, [], 'importance')[0].regions[0].targets.map((item) => item.kind === 'city' ? item.city.name : 'all'), ['all', 'Lyon', 'Annecy']);
   assert.deepEqual(locationPoolChoices(['FR'], pools, [region], 'alphabetical')[0].regions[0].targets.map((item) => item.kind === 'city' && item.city.name), ['Annecy', 'Lyon']);
   assert.deepEqual(locationPoolChoices(['DE'], pools, [], 'importance'), []);
+});
+
+test('pool names and alphabetical sorting follow the interface language with canonical fallback', () => {
+  const cities = [
+    { name: 'Aachen', names: { sv: 'Örebro' }, lat: 1, lng: 1, population: 1, class: 'local' as const, urbanRadiusKm: 8 },
+    { name: 'Zurich', names: { sv: 'Alingsås' }, lat: 2, lng: 2, population: 1, class: 'local' as const, urbanRadiusKm: 8 },
+  ];
+  const pools = { DE: [{ id: 'DE.1', name: 'Alpha', names: { sv: 'Östra' }, cities }, { id: 'DE.2', name: 'Zulu', names: { sv: 'Västra' }, cities: [] }] };
+  const choices = locationPoolChoices(['DE'], pools, [], 'alphabetical', 'sv');
+  assert.deepEqual(choices[0].regions.map((region) => localizedPoolName(region, 'sv')), ['Västra', 'Östra']);
+  assert.deepEqual(choices[0].regions[1].targets.filter((target) => target.kind === 'city').map((target) => localizedPoolName(target.city, 'sv')), ['Alingsås', 'Örebro']);
+  assert.equal(localizedPoolName(cities[0], 'fr'), 'Aachen');
+});
+
+test('countries without selected regions remain country-wide in a mixed location pool', () => {
+  const target: LocationPoolTarget = { kind: 'region', countryCode: 'IT', regionId: 'IT.01', regionName: 'Abruzzo' };
+  const resolved = [{ target, cities: [{ name: 'Pescara', lat: 1, lng: 1, population: 1, class: 'local' as const, urbanRadiusKm: 8 }] }];
+  assert.equal(pickLocationPoolFocus(resolved, ['IT', 'AL', 'MK'], () => .99)?.countryCode, 'MK');
+  const focused = pickLocationPoolFocus(resolved, ['IT', 'AL', 'MK'], () => 0);
+  assert.equal(focused?.kind === 'target' ? focused.target.regionId : undefined, 'IT.01');
 });

@@ -1,1 +1,1 @@
-[{"id":"GI.00","name":"Gibraltar","cities":[{"name":"Gibraltar","lat":36.14474,"lng":-5.35257,"population":26544,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"GI.00","name":"Gibraltar","cities":[{"name":"Gibraltar","lat":36.14474,"lng":-5.35257,"population":26544,"class":"local","urbanRadiusKm":8,"names":{"de":"Gibraltar","en":"Gibraltar","es":"Gibraltar","fr":"Gibraltar","it":"Gibilterra","pt":"Gibraltar","ru":"Гибралтар","sv":"Gibraltar"}}]}]

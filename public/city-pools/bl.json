@@ -1,1 +1,1 @@
-[{"id":"BL.00","name":"Saint Barthelemy","cities":[{"name":"Gustavia","lat":17.89618,"lng":-62.84978,"population":5988,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"BL.00","name":"Saint Barthelemy","cities":[{"name":"Gustavia","lat":17.89618,"lng":-62.84978,"population":5988,"class":"local","urbanRadiusKm":8,"names":{"pt":"Gustávia","ru":"Густавия","en":"Gustavia","fr":"Gustavia"}}]}]

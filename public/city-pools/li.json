@@ -1,1 +1,1 @@
-[{"id":"LI.11","name":"Vaduz","cities":[{"name":"Vaduz","lat":47.14151,"lng":9.52154,"population":5197,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"LI.11","name":"Vaduz","cities":[{"name":"Vaduz","lat":47.14151,"lng":9.52154,"population":5197,"class":"local","urbanRadiusKm":8,"names":{"de":"Vaduz","en":"Vaduz","es":"Vaduz","fr":"Vaduz","it":"Vaduz","pt":"Vaduz","ru":"Вадуц","sv":"Vaduz"}}]}]

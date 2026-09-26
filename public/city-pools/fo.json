@@ -1,1 +1,1 @@
-[{"id":"FO.ST","name":"Streymoy","cities":[{"name":"Tórshavn","lat":62.00973,"lng":-6.77164,"population":13200,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"FO.ST","name":"Streymoy","cities":[{"name":"Tórshavn","lat":62.00973,"lng":-6.77164,"population":13200,"class":"local","urbanRadiusKm":8,"names":{"de":"Tórshavn","en":"Tórshavn","fr":"Tórshavn","sv":"Torshamn","es":"Tórshavn","it":"Tórshavn","pt":"Thorshavn","ru":"Торсхавн"}}],"names":{"en":"Streymoy region","fr":"Streymoy","es":"Streymoy","de":"Streymoy","pt":"Streymoy"}}]

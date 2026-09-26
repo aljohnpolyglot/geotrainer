@@ -2,6 +2,10 @@
 
 ## 2026-09-26
 
+- Expanded Learn setup to six persistent source choices, separating JSON upload and URL loading and adding an AI-described geographic pool that returns editable country, region, and city selections to Custom.
+- Added portable geographic-pool JSON downloads and automatic pool detection while preserving exact Map Maker coordinate imports, displaying the loaded source name, and keeping the source chooser reachable during long setups.
+- Kept selected countries without region pills in the country-wide sampling pool when other countries use region or city limits, and tightened multilingual AI pool requests around exclusions, islands, coasts, and language boundaries.
+- Localized Learn and Play region and city names to the interface language when GeoNames provides a translation, including locale-aware alphabetical sorting and canonical-name fallback.
 - Localized Review country names, queue source labels, dates, and scores using the selected interface language, including resumed sessions saved with older English labels.
 - Hid Notebook clue analysis during unassisted Play rounds, then enabled Coach and clue analysis after submission with a persistent minimize and restore control for post-answer study.
 - Stopped clue lists, clue images, and unsaved Notebook drafts from carrying over when moving to a different panorama.

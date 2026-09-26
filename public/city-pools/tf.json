@@ -1,1 +1,1 @@
-[{"id":"TF.03","name":"Kerguelen","cities":[{"name":"Port-aux-Français","lat":-49.34916,"lng":70.21937,"population":45,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"TF.03","name":"Kerguelen","cities":[{"name":"Port-aux-Français","lat":-49.34916,"lng":70.21937,"population":45,"class":"local","urbanRadiusKm":8,"names":{"ru":"Порт-о-Франсэ","en":"Port-aux-Français","fr":"Port-aux-Français"}}]}]

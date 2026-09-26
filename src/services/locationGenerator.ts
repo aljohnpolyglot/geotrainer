@@ -11,7 +11,7 @@ import { reverseGeocodeLocation } from './geocoding';
 const devDiagnostics = typeof import.meta.env !== 'undefined' && import.meta.env.DEV;
 import { calculateDistanceKm } from './gameLogic';
 import { chooseReviewCandidate, type ReviewCandidate, type ReviewVariationPlan } from '../data/reviewVariation';
-import { pickLocationTargetCity, resolveLocationTargets } from './cityPools';
+import { pickLocationPoolFocus, resolveLocationTargets } from './cityPools';
 
 export interface CitySeed {
   name: string;
@@ -194,9 +194,10 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       const eligibleCountries = options.samplingMode === 'balanced'
         ? countryCodes.filter((code) => (this.balancedCounts.get(code) || 0) === Math.min(...countryCodes.map((item) => this.balancedCounts.get(item) || 0)))
         : countryCodes;
-      const focused = resolvedTargets.length ? pickLocationTargetCity(resolvedTargets) : undefined;
+      const poolFocus = resolvedTargets.length ? pickLocationPoolFocus(resolvedTargets, countryCodes) : undefined;
+      const focused = poolFocus?.kind === 'target' ? poolFocus : undefined;
       const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[(attempt - 1) % preferredCountryCodes.length] : undefined;
-      const randomCountryCode = focused?.target.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
+      const randomCountryCode = poolFocus?.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCoachPrompt, callGeminiCoach, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, callGeminiPool, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 import { isAllowedCoachOrigin } from '../../api/coach';
 
@@ -21,6 +21,20 @@ test('hosted Coach accepts only configured app origins', () => {
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {
   status, headers: { 'content-type': 'application/json' },
+});
+
+test('described pools accept supported countries and discard invented places', async () => {
+  const raw = { countryCodes: ['MX', 'ZZ'], regions: [{ countryCode: 'ES', name: 'Andalusia' }, { countryCode: 'ZZ', name: 'Nowhere' }], cities: [] };
+  const normalized = normalizePoolSuggestion(raw);
+  assert.deepEqual(normalized.countryCodes, ['MX', 'ES']);
+  assert.deepEqual(normalized.regions, [{ countryCode: 'ES', name: 'Andalusia' }]);
+  let requestUrl = ''; let requestBody = '';
+  const result = await callGeminiPool(new GeminiKeyCarousel(['one']), 'países hispanohablantes', (async (url, init) => { requestUrl = String(url); requestBody = String(init?.body); return geminiResponse(JSON.stringify(raw)); }) as typeof fetch);
+  assert.deepEqual(result, normalized);
+  assert.match(requestUrl, /gemini-2\.5-flash:/);
+  assert.match(requestBody, /written in any language/);
+  assert.match(requestBody, /islands.*strict filters/);
+  assert.throws(() => normalizePoolSuggestion({ countryCodes: ['ZZ'] }), /no valid countries/i);
 });
 
 test('Coach decodes escaped Unicode before rendering localized evidence', () => {

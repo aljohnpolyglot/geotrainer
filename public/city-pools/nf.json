@@ -1,1 +1,1 @@
-[{"id":"NF.00","name":"Norfolk Island","cities":[{"name":"Kingston","lat":-29.05459,"lng":167.96628,"population":880,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"NF.00","name":"Norfolk Island","cities":[{"name":"Kingston","lat":-29.05459,"lng":167.96628,"population":880,"class":"local","urbanRadiusKm":8,"names":{"es":"Kingston","de":"Kingston","en":"Kingston","pt":"Kingston","ru":"Кингстон","fr":"Kingston"}}]}]

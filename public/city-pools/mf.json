@@ -1,1 +1,1 @@
-[{"id":"MF.00","name":"Saint Martin","cities":[{"name":"Marigot","lat":18.06819,"lng":-63.08302,"population":5700,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"MF.00","name":"Saint Martin","cities":[{"name":"Marigot","lat":18.06819,"lng":-63.08302,"population":5700,"class":"local","urbanRadiusKm":8,"names":{"ru":"Мариго","en":"Marigot","de":"Marigot","fr":"Marigot"}}]}]

@@ -117,8 +117,8 @@ export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced';
 export type LearnPriority = 'random' | 'familiar' | 'least-exposure';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
-export interface CityPoolCity { name: string; lat: number; lng: number; population: number; class: 'major' | 'regional' | 'local'; urbanRadiusKm: number; }
-export interface CityPoolRegion { id: string; name: string; cities: CityPoolCity[]; }
+export interface CityPoolCity { name: string; names?: Partial<Record<SupportedLanguage, string>>; lat: number; lng: number; population: number; class: 'major' | 'regional' | 'local'; urbanRadiusKm: number; }
+export interface CityPoolRegion { id: string; name: string; names?: Partial<Record<SupportedLanguage, string>>; cities: CityPoolCity[]; }
 export type LocationPoolTarget =
   | { kind: 'region'; countryCode: string; regionId: string; regionName: string }
   | { kind: 'city'; countryCode: string; regionId: string; regionName: string; city: CityPoolCity };

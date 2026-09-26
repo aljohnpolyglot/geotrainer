@@ -1,1 +1,1 @@
-[{"id":"FK.00","name":"Falkland Islands","cities":[{"name":"Stanley","lat":-51.69382,"lng":-57.85701,"population":2213,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"FK.00","name":"Falkland Islands","cities":[{"name":"Stanley","lat":-51.69382,"lng":-57.85701,"population":2213,"class":"local","urbanRadiusKm":8,"names":{"de":"Port Stanley","en":"Stanley","es":"Puerto Argentino","fr":"Port Stanley","it":"Port Stanley","pt":"Port Stanley","sv":"Port Stanley","ru":"Порт-Стэнли"}}]}]

@@ -18,13 +18,14 @@ import {
   History,
   Layers,
   Sparkles,
+  Download,
 } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
 import { CountryMixPicker } from './CountryMixPicker';
 import { CollectionOptions } from './CollectionOptions';
 import { ImportedMapUpload } from './ImportedMapUpload';
-import { getImportedMap, type ImportedMap } from '../services/importedMap';
+import { downloadGeographicPool, getImportedMap, importedMapPointCount, type ImportedMap } from '../services/importedMap';
 import { LocationPoolPicker } from './LocationPoolPicker';
 
 interface NewGameModalProps {
@@ -66,6 +67,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [allowInteriors, setAllowInteriors] = useState(false);
   const [locationSource, setLocationSource] = useState<'generated' | 'uploaded'>('generated');
   const [importedMap, setImportedMap] = useState<ImportedMap>();
+  const [loadedPoolName, setLoadedPoolName] = useState('');
 
   useEffect(() => {
     if (!isOpen) return;
@@ -104,7 +106,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
   const handleStart = () => {
     const settings = {
-      roundCount: locationSource === 'uploaded' && importedMap ? Math.min(roundCount, importedMap.points.length) : roundCount,
+      roundCount: locationSource === 'uploaded' && importedMap && importedMapPointCount(importedMap) ? Math.min(roundCount, importedMapPointCount(importedMap)!) : roundCount,
       collectionId: selectedCollectionId,
       ...(locationSource === 'uploaded' && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
       ...(countryCodes.length ? { countryCodes } : {}),
@@ -164,7 +166,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
         {/* Settings Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
           <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded')}><option value="generated">{t('Generated locations')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
-          {locationSource === 'uploaded' && <ImportedMapUpload map={importedMap} onChange={(map) => { setImportedMap(map); setRoundCount((count) => Math.min(count, map.points.length)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {locationSource === 'uploaded' && <ImportedMapUpload source="upload" map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
           <div className="space-y-1.5">
@@ -185,7 +187,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             <label>{t('Country mix')}</label>
             <CountryMixPicker value={countryCodes} availableCodes={selectedCollection?.countryCodes || []} onChange={(codes) => { setCountryCodes(codes); setLocationTargets((targets) => targets.filter((target) => codes.includes(target.countryCode))); }} />
           </div>
-          {!!countryCodes.length && <div className="game-country-choice"><label>{t('Location pools')}</label><LocationPoolPicker countryCodes={countryCodes} value={locationTargets} onChange={setLocationTargets} /></div>}
+          {!!countryCodes.length && <div className="game-country-choice"><label>{t('Location pools')}</label>{loadedPoolName && <small className="imported-map-current"><strong>{loadedPoolName}</strong> · {t('Geographic pool')}</small>}<LocationPoolPicker countryCodes={countryCodes} value={locationTargets} onChange={setLocationTargets} /><button type="button" className="button secondary save-location-pool" onClick={() => downloadGeographicPool(countryCodes, locationTargets)}><Download size={15} />{t('Save geographic pool')}</button></div>}
 
           <div className="environment-game-settings">
             <label>{t('Environment')}

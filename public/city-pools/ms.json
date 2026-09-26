@@ -1,1 +1,1 @@
-[{"id":"MS.01","name":"Saint Anthony","cities":[{"name":"Plymouth","lat":16.70555,"lng":-62.21292,"population":0,"class":"local","urbanRadiusKm":8}]}]
+[{"id":"MS.01","name":"Saint Anthony","cities":[{"name":"Plymouth","lat":16.70555,"lng":-62.21292,"population":0,"class":"local","urbanRadiusKm":8,"names":{"de":"Plymouth","en":"Plymouth","fr":"Plymouth","it":"Plymouth","es":"Plymouth","pt":"Plymouth","sv":"Plymouth","ru":"Плимут"}}]}]
