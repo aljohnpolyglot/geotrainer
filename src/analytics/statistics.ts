@@ -63,7 +63,7 @@ export function breakdown(attempts: Attempt[], key: (attempt: Attempt) => string
 }
 
 export const movementMode = (item: Attempt) => item.canMove ? 'Standard' : item.canPan || item.canZoom ? 'No Move' : 'NMPZ';
-export const environmentOf = (item: Attempt) => item.environmentRequested || item.environment;
+export const environmentOf = (item: Attempt) => item.environment || item.environmentRequested;
 export const countryBreakdown = (items: Attempt[]) => breakdown(items, (item) => item.countryCode);
 export const regionBreakdown = (items: Attempt[]) => breakdown(items, (item) => geographyFor(item.countryCode)?.region);
 export const continentBreakdown = (items: Attempt[]) => breakdown(items, (item) => geographyFor(item.countryCode)?.continent);

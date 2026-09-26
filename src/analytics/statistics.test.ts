@@ -55,6 +55,7 @@ test('7, 30, and 90 day ranges include their local boundary and environment filt
   const items = [attempt('EE', 'EE', { environmentRequested: 'urban' }), attempt('EE', 'LV', { environmentRequested: 'rural' })];
   const urban = breakdown(items.filter((item) => environmentOf(item) === 'urban'), environmentOf);
   assert.deepEqual(urban.map((item) => [item.key, item.attempts]), [['urban', 1]]);
+  assert.equal(environmentOf(attempt('EE', 'EE', { environment: 'rural', environmentRequested: 'mixed' })), 'rural');
 });
 
 test('review improvement links source attempt and remains chronological', () => {

@@ -5,6 +5,7 @@
 - Localized Review country names, queue source labels, dates, and scores using the selected interface language, including resumed sessions saved with older English labels.
 - Hid Notebook clue analysis during unassisted Play rounds, then enabled Coach and clue analysis after submission with a persistent minimize and restore control for post-answer study.
 - Stopped clue lists, clue images, and unsaved Notebook drafts from carrying over when moving to a different panorama.
+- Classified Mixed-pool Play rounds by their generated scene environment and paginated each Statistics confusion list at 10 entries.
 
 ## 2026-09-25
 
