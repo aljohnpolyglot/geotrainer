@@ -4,7 +4,7 @@ import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
 import type { Attempt, GameRound, ReviewGrade } from '../types';
 import { ResultMap } from './ResultMap';
-import { translate } from '../services/language';
+import { countryDisplayName, reviewSourceDisplayName, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CountryFlag } from './CountryFlag';
 import { reverseGeocodeLocation, type ReverseGeocodeResult } from '../services/geocoding';
@@ -31,7 +31,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const t = (key: string) => translate(ui, key);
   const improvement = round.score - sourceAttempt.score;
   const previousGuesses = reviewGuessHistory(history);
-  const country = COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
+  const country = countryDisplayName(sourceAttempt.countryCode, ui) || COUNTRIES[sourceAttempt.countryCode]?.name || sourceAttempt.countryCode;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
   const [minimized, setMinimized] = useState(false);
@@ -53,7 +53,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         <button type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         <header className="review-result-header">
           <div>
-            <span className="review-context">{position} / {total} · {sourceLabel}</span>
+            <span className="review-context">{position} / {total} · {reviewSourceDisplayName(ui, sourceLabel)}</span>
             <h2 id="review-result-title"><CountryFlag code={sourceAttempt.countryCode} />{country}</h2>
             <div className="review-location-details" aria-live="polite">
               {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
@@ -81,7 +81,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
 
         <details className="review-history" data-no-shortcuts>
           <summary>{t('previousAttempts')} ({history.length})</summary>
-          <div>{history.map((attempt) => <p key={attempt.id}><time>{new Date(attempt.createdAt).toLocaleDateString()}</time><span>{attempt.guessedCountryCode ? <><CountryFlag code={attempt.guessedCountryCode} />{COUNTRIES[attempt.guessedCountryCode]?.name || attempt.guessedCountryCode}</> : t('noCountry')}</span><strong>{attempt.score.toLocaleString()} {t('pts')}</strong></p>)}</div>
+          <div>{history.map((attempt) => <p key={attempt.id}><time>{new Date(attempt.createdAt).toLocaleDateString(ui)}</time><span>{attempt.guessedCountryCode ? <><CountryFlag code={attempt.guessedCountryCode} />{countryDisplayName(attempt.guessedCountryCode, ui) || COUNTRIES[attempt.guessedCountryCode]?.name || attempt.guessedCountryCode}</> : t('noCountry')}</span><strong>{attempt.score.toLocaleString(ui)} {t('pts')}</strong></p>)}</div>
         </details>
       </section>
     </div>

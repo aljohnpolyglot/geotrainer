@@ -493,4 +493,5 @@ const COPY_OVERRIDES: Record<string, Partial<Record<SupportedLanguage, string>>>
 export function translate(code: SupportedLanguage, key: string): string {
   return LOCATION_SETUP_COPY[key]?.[code] || CLOUD_SYNC_COPY[key]?.[code] || COPY_OVERRIDES[key]?.[code] || HUB_TRANSLATIONS[code]?.[key] || SHELL[code]?.[key] || UI_TRANSLATIONS[code]?.[key] || EXTRA_UI[key]?.[code] || REMAINING_UI[key]?.[code] || STATISTICS_TRANSLATIONS[key]?.[code] || HUB_TRANSLATIONS.en[key] || SHELL.en[key] || UI_TRANSLATIONS.en[key] || REMAINING_UI[key]?.en || key;
 }
+export const reviewSourceDisplayName = (code: SupportedLanguage, source: string) => translate(code, ({ 'Due Today': 'dueToday', 'Review Queue': 'tabReview', History: 'tabHistory', 'Game mistakes': 'recentMistakes' } as Record<string, string>)[source] || source);
 

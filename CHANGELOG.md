@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-26
+
+- Localized Review country names, queue source labels, dates, and scores using the selected interface language, including resumed sessions saved with older English labels.
+
 ## 2026-09-25
 
 - Replaced automatic cloud traffic with a manual Sync now flow that always downloads the latest backup, merges new cards and cross-device Review history, applies it locally, and uploads the merged result.

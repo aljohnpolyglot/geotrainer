@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { formatTime } from '../services/gameLogic';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { translate } from '../services/language';
+import { reviewSourceDisplayName, translate } from '../services/language';
 
 export interface AppTopBarProps {
   appMode: AppMode;
@@ -126,7 +126,7 @@ export function AppTopBar({
       <div className="header-actions flex items-center space-x-1.5 sm:space-x-2">
         {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-live-context">{t('Source')}: {uploadedProgress.position}/{uploadedProgress.total}</span>}
         {!showHome && appMode === 'play' && (isGameActive ? timeRemaining !== null && <div className={`flex items-center space-x-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border ${timeRemaining <= 10 ? 'bg-rose-950/80 border-rose-600 text-rose-400 animate-pulse' : 'bg-stone-950 border-stone-800 text-amber-300'}`}><Clock className="w-3.5 h-3.5" /><span>{formatTime(timeRemaining)}</span></div> : <><button onClick={() => navigate(onOpenHistory)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-stone-950 text-stone-300 border border-stone-800 hover:border-stone-700 rounded-lg text-xs font-medium transition-colors cursor-pointer"><History className="w-3.5 h-3.5 text-amber-400" /><span className="hidden sm:inline">{t('Past Games')}</span><span className="text-[10px] font-mono bg-stone-800 text-stone-300 px-1.5 py-0.2 rounded-full">{pastGamesCount}</span></button><button onClick={() => navigate(onOpenNewGame)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-[#171000] font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md cursor-pointer active:scale-98"><Play className="w-3.5 h-3.5 fill-stone-950 text-stone-950" /><span>{t('New Game')}</span></button></>)}
-        {!showHome && appMode === 'review' && reviewAttempt && <><span className="review-live-context">{reviewPosition} {t('of')} {Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')} · {t('Progress saved')}</span><span className="review-source">{t('Source')}: {reviewSource}</span></>}
+        {!showHome && appMode === 'review' && reviewAttempt && <><span className="review-live-context">{reviewPosition} {t('of')} {Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')} · {t('Progress saved')}</span><span className="review-source">{t('Source')}: {reviewSourceDisplayName(ui, reviewSource)}</span></>}
         <button onClick={() => navigate(onOpenPreferences)} title={t('Preferences')} aria-label={t('Preferences')} className="utility-action p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer"><Settings2 className="w-4 h-4" /><span>{t('Preferences')}</span></button>
         <button onClick={() => navigate(onToggleFullscreen)} title={isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')} aria-label={isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')} className="utility-action p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors cursor-pointer">{isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}<span>{isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')}</span></button>
       </div>

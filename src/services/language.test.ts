@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { countryDisplayName, normalizeLanguagePreferences, LANGUAGE_OPTIONS, translate } from './language';
+import { countryDisplayName, normalizeLanguagePreferences, LANGUAGE_OPTIONS, reviewSourceDisplayName, translate } from './language';
 
 test('language preferences keep only supported community languages and migrate missing fields', () => {
   assert.equal(LANGUAGE_OPTIONS.some((option) => (option.code as string) === 'id'), false);
@@ -17,5 +17,9 @@ test('country names follow the selected language', () => {
   assert.equal(countryDisplayName('NL', 'it'), 'Paesi Bassi');
   assert.equal(countryDisplayName('DE', 'ru'), 'Германия');
   assert.equal(countryDisplayName('IT', 'sv'), 'Italien');
+  assert.equal(countryDisplayName('FR', 'sv'), 'Frankrike');
   assert.equal(countryDisplayName('', 'sv'), '');
+  const france = { en: 'France', es: 'Francia', pt: 'França', fr: 'France', de: 'Frankreich', it: 'Francia', ru: 'Франция', sv: 'Frankrike' } as const;
+  for (const { code } of LANGUAGE_OPTIONS) assert.equal(countryDisplayName('FR', code), france[code]);
+  for (const { code } of LANGUAGE_OPTIONS.filter(({ code }) => code !== 'en')) assert.notEqual(reviewSourceDisplayName(code, 'Due Today'), 'Due Today');
 });
