@@ -66,8 +66,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
     <div id="round-result-modal" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl h-[90vh] max-h-[720px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
         {/* Top Header Card */}
-        <div className="p-4 pr-14 sm:p-5 sm:pr-14 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
-          <button type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
+        <div className="p-4 sm:p-5 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             {flag1x && <img src={flag1x} srcSet={`${flag1x} 1x, ${flag2x} 2x`} alt={`${countryName} ${t('flag')}`} width="36" height="24" className="w-9 h-6 rounded-xs object-cover border border-stone-700 shadow-sm" referrerPolicy="no-referrer" />}
             <div>
@@ -115,6 +114,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               </span>
             </div>
           </div>
+          <button type="button" className="round-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         </div>
 
         {/* Interactive Map Visualizer */}

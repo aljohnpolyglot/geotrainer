@@ -14,6 +14,9 @@
 .review-result-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 64px 18px 20px; }
 .review-result-minimize { position: absolute; top: 12px; right: 12px; z-index: 4; display: inline-grid; width: 36px; height: 36px; place-items: center; color: var(--muted); background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; }
 .review-result-minimize:hover, .review-result-minimize:focus-visible { color: var(--carbon); border-color: var(--muted); }
+.round-result-minimize { display: inline-grid; flex: 0 0 44px; width: 44px; height: 44px; place-items: center; color: #fff; background: var(--blue); border: 1px solid var(--blue); border-radius: 4px; cursor: pointer; }
+.round-result-minimize:hover, .round-result-minimize:focus-visible { background: var(--storm); border-color: var(--storm); }
+.round-result-minimize:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
 .review-result-resume { position: fixed; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; z-index: 70; display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 16px; color: #fff; background: var(--blue); border: 0; border-radius: 4px; box-shadow: var(--shadow-sheet); font-weight: 800; transform: translateX(-50%); cursor: pointer; }
 .review-result-header > div:first-child { min-width: 0; max-width: 420px; }
 .review-result-header h2 { margin: 5px 0 2px; font-size: 22px; }

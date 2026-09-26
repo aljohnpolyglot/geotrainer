@@ -40,15 +40,15 @@ export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange
   const [cropping, setCropping] = useState(false);
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
-  const initialPano = useRef(panoId);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
+    controller.current?.abort(); requestId.current += 1; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setSavedToast(false); setBusy(false); setChoosingStyle(false); setCropping(false); onBusyChange?.(false); onImageChange?.(''); onSaved?.(undefined);
     let active = true;
-    void readWorkspaceDraft<ClueDraft>('clue', initialPano.current).then((draft) => {
-      if (active && draft?.panoId === initialPano.current) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
+    void readWorkspaceDraft<ClueDraft>('clue', panoId).then((draft) => {
+      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
     });
     return () => { active = false; };
-  }, []);
+  }, [panoId]);
 
   const run = async (task: (signal: AbortSignal, isCurrent: () => boolean) => Promise<void>) => {
     controller.current?.abort();

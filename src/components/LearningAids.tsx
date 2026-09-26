@@ -22,6 +22,7 @@ export type MetaAid = { id: string; imageUrl: string; text?: string; note?: stri
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
 type NoteDraft = { panoId: string; text: string; category: string };
 type AvailableNote = { id: string; source: string; text: string; category?: string; imageUrl?: string; imageKey?: string; missingImage?: boolean; analysis?: CoachAnalysis; at: number; notebook?: NotebookNote; coach?: CoachHistoryNote; clueId?: string };
+export const cluesForPanorama = (clues: ClueRecord[], relatedPanos: Set<string>, current: { panoId: string; lat: number; lng: number; countryCode: string }) => clues.filter((item) => relatedPanos.has(item.panoId) || (typeof item.lat === 'number' && typeof item.lng === 'number' && nearbyReviewPoint(current, { panoId: item.panoId, lat: item.lat, lng: item.lng, countryCode: item.countryCode })));
 
 export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen, refreshKey, allowAnalysis = true, onAdviceClose, onSaveClue, onNoteSaved }: {
   lesson?: MetaAid;
@@ -59,10 +60,10 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     locations.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
     visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
     attempts.forEach((item) => { if (nearbyReviewPoint(current, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode })) relatedPanos.add(item.panoId); });
-    const nearbyClues = savedClues.filter((item) => relatedPanos.has(item.panoId) || (typeof item.lat === 'number' && typeof item.lng === 'number' && nearbyReviewPoint(current, { panoId: item.panoId, lat: item.lat, lng: item.lng, countryCode: item.countryCode })));
+    const nearbyClues = cluesForPanorama(savedClues, relatedPanos, current);
     const deletedCoachRuns = new Set(coach.filter((item) => item.deletedAt).map((item) => `${item.generatedAt}:${item.mode}:${item.model}`));
     const deletedClueIds = new Set([...personal.filter((item) => item.deletedAt && item.clueId).map((item) => item.clueId!), ...coach.filter((item) => item.deletedAt && item.clueId).map((item) => item.clueId!)]); const visibleNearbyClues = nearbyClues.filter((item) => !deletedClueIds.has(item.id));
-    nearbyClues.forEach((item) => relatedPanos.add(item.panoId)); setClues((previous) => [...new Map([...previous.filter((item) => !deletedClueIds.has(item.id)), ...visibleNearbyClues].map((item) => [item.id, item])).values()].sort((a, b) => b.createdAt - a.createdAt));
+    nearbyClues.forEach((item) => relatedPanos.add(item.panoId)); setClues(visibleNearbyClues.sort((a, b) => b.createdAt - a.createdAt));
     const coachByRun = new Map(coach.filter((item) => !item.deletedAt && relatedPanos.has(item.panoId)).map((item) => [`${item.generatedAt}:${item.mode}:${item.model}`, item]));
     [...visits, ...attempts].filter((item) => relatedPanos.has(item.panoId) && item.coachAnalysis && item.coachGeneratedAt && item.coachMode).forEach((item) => { const model = item.coachModel || 'Gemini'; const key = `${item.coachGeneratedAt}:${item.coachMode}:${model}`; if (!coachByRun.has(key) && !deletedCoachRuns.has(key)) coachByRun.set(key, { id: `coach-legacy:${key}`, panoId: item.panoId, countryCode: item.countryCode, mode: item.coachMode!, model, generatedAt: item.coachGeneratedAt!, analysis: item.coachAnalysis! }); });
     const relevantPersonal = personal.filter((item) => relatedPanos.has(item.panoId) || !!item.clueId && nearbyClues.some((clue) => clue.id === item.clueId)); const personalLinks = notebookClueLinks(nearbyClues, relevantPersonal); const displayedPersonal = visibleNotebookNotes(relevantPersonal, personalLinks);
@@ -73,7 +74,10 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   }); return () => { active = false; }; }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
   useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
   useEffect(() => {
-    void readWorkspaceDraft<NoteDraft>('note', panoId).then((draft) => { if (draft) { setNote(draft.text.slice(0, NOTEBOOK_NOTE_MAX_LENGTH)); setCategory(draft.category); } });
+    let active = true;
+    setClues([]); setNotes([]); setClueIndex(0); setNote(''); setCategory(''); setCategoryOpen(false); setNoteSaved(false); setNoteClueId(undefined); setNoteImage(''); setNoteFormKey((value) => value + 1);
+    void readWorkspaceDraft<NoteDraft>('note', panoId).then((draft) => { if (active && draft?.panoId === panoId) { setNote(draft.text.slice(0, NOTEBOOK_NOTE_MAX_LENGTH)); setCategory(draft.category); } });
+    return () => { active = false; };
   }, [panoId]);
   const clue = clues[clueIndex];
   const deleteAvailableNote = async (item: AvailableNote) => { setNotes((current) => current.filter((note) => note.id !== item.id)); if (item.notebook) await deleteNotebookHistoryNote(item.notebook); else if (item.coach) await Promise.all([deleteCoachHistoryNote(item.coach), item.clueId ? trainerDb.deleteClue(item.clueId) : Promise.resolve()]); else if (item.clueId) await trainerDb.deleteClue(item.clueId); setNotesRefreshKey((value) => value + 1); await onNoteSaved(); };
