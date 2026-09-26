@@ -2,6 +2,7 @@
 
 ## 2026-09-26
 
+- Fixed Play round startup failing after a location was found because its Coach reset callback was missing from the Play hook context.
 - Expanded Learn setup to six persistent source choices, separating JSON upload and URL loading and adding an AI-described geographic pool that returns editable country, region, and city selections to Custom.
 - Added portable geographic-pool JSON downloads and automatic pool detection while preserving exact Map Maker coordinate imports, displaying the loaded source name, and keeping the source chooser reachable during long setups.
 - Kept selected countries without region pills in the country-wide sampling pool when other countries use region or city limits, and tightened multilingual AI pool requests around exclusions, islands, coasts, and language boundaries.

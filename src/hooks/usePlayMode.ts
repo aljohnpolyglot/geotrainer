@@ -12,7 +12,7 @@ import { pickImportedLocation } from '../services/importedMap';
 export function usePlayMode(ctx: any) {
   const { allCollections, currentLocation, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed,
     abortControllerRef, latestGenerationRequestRef, generationPendingRef,
-    setTrainerRefreshKey, coachNote, playAiAssistedRef, roundStartTimeRef, setIsSubmittingGuess,
+    setTrainerRefreshKey, coachNote, setCoachNote, playAiAssistedRef, roundStartTimeRef, setIsSubmittingGuess,
     dbReady, pastGames, setPastGames, setShowHome, setAppMode, mapsReady, restoredPlayPanoRef } = ctx;
   const [isGameActive, setIsGameActive] = useState(false);
   const [gameSettings, setGameSettings] = useState<GameSettings | null>(null);
@@ -41,10 +41,10 @@ export function usePlayMode(ctx: any) {
       const result = settings.importedMapId
         ? await pickImportedLocation(settings.importedMapId, new Set(gameRounds.map((round) => round.location.panoId)), abortController.signal, settings.canMove, 0, new Set(gameRounds.flatMap((round) => round.location.importedMapPointIndex === undefined ? [] : [round.location.importedMapPointIndex])), { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true })
         : await defaultLocationGenerator.findRandomLocation(countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, requireNavigation: settings.canMove, locationTargets: settings.locationTargets });
-      if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationFailedRef.current = false; playAiAssistedRef.current = false; ctx.setCoachNote(null); setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
+      if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationFailedRef.current = false; playAiAssistedRef.current = false; setCoachNote(null); setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
     } catch (err: unknown) { if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (err instanceof Error && err.name === 'AbortError')) return; generationFailedRef.current = true; setErrorMessage(err instanceof Error ? err.message : 'Failed to generate game location'); }
     finally { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); ctx.setStatusMessage(''); } }
-  }, [abortControllerRef, allCollections, ctx, gameRounds, generationPendingRef, latestGenerationRequestRef, roundStartTimeRef, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
+  }, [abortControllerRef, allCollections, ctx, gameRounds, generationPendingRef, latestGenerationRequestRef, roundStartTimeRef, setCoachNote, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
 
   const handleStartGame = useCallback((settings: GameSettings) => {
     generationFailedRef.current = false; setShowHome(false); ctx.setIsNewGameModalOpen(false); setAppMode('play'); setIsGameActive(true); setGameSettings(settings); setGameRounds([]); setCurrentRoundIndex(0); setActiveRoundResult(null); setSummaryGameRecord(null); setSummaryRound(null); gameIdRef.current = `game-${crypto.randomUUID()}`; roundSubmittedRef.current = false; if (mapsReady) void fetchLocationForRound(settings);

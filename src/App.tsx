@@ -180,7 +180,7 @@ export default function App() {
     allCollections, currentLocation, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed,
     abortControllerRef, latestGenerationRequestRef, generationPendingRef, setTrainerRefreshKey, coachNote,
     playAiAssistedRef, roundStartTimeRef, setIsSubmittingGuess, dbReady, pastGames, setPastGames, setShowHome,
-    setAppMode, mapsReady, isLoading, setStatusMessage, setIsNewGameModalOpen, saveGameRecord, restoredPlayPanoRef,
+    setAppMode, mapsReady, isLoading, setStatusMessage, setCoachNote, setIsNewGameModalOpen, saveGameRecord, restoredPlayPanoRef,
   });
   const { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex,
     timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord, summaryRound,
