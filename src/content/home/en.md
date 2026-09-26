@@ -258,7 +258,7 @@ AI Coach looks for visible geographic evidence in the current panorama. Guest us
 
 Before reveal, a high-confidence analysis can add a “Most likely in” region, city, quarter, landmark, or exact-place estimate after the country ranking, but only when multiple strong visible clues support that narrower location. Generic scenes keep the estimate hidden.
 
-Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup.
+Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup. If Coach is disabled, Notebook image analysis stays hidden until the answer is submitted. The result can then be minimized to inspect the panorama with Coach and Analyze clue without marking the completed attempt as AI-assisted.
 
 Coach waits for the saved AI language before analysis, localizes candidate country names, rejects substantially mixed-language results, and retries vague country reasoning that merely says the scene is “consistent with,” “similar to,” “common in,” or “typical of” a country without a concrete distinguishing feature.
 

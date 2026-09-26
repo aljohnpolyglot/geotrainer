@@ -26,7 +26,7 @@ async function prepareImage(file: File) {
   } finally { URL.revokeObjectURL(source); }
 }
 
-export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
+export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange, onSave, onSaved, onImageChange, onAnalyze, expanded, collapseSavedAnalysis }: { panoId: string; disabled?: boolean; showAnalyze?: boolean; onBusyChange?: (busy: boolean) => void; onSave: (clue: SavedClue) => Promise<string | void> | string | void; onSaved?: (clueId?: string) => void; onImageChange?: (imageDataUrl: string) => void; onAnalyze?: () => void; expanded?: boolean; collapseSavedAnalysis?: boolean }) {
   const { ui, ai, game, ready: languageReady } = useLanguagePreferences();
   const coachPreferences = useCoachPreferences();
   const t = (key: string) => translate(ui, key);
@@ -101,7 +101,7 @@ export function ClueCapture({ panoId, disabled, onBusyChange, onSave, onSaved, o
     <div className="clue-actions">
       <label><Upload size={14} /> {t('upload')}<input disabled={disabled || busy} type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void choose(event.target.files?.[0])} /></label>
       <button disabled={disabled || busy} onClick={() => void capture()}><Camera size={14} /> {t('capture')}</button>
-<button disabled={!languageReady || disabled || busy || !image} onClick={() => coachPreferences.askEveryTime ? setChoosingStyle(true) : void analyze()}>{t('Analyze clue')}</button>
+      {showAnalyze && <button disabled={!languageReady || disabled || busy || !image} onClick={() => coachPreferences.askEveryTime ? setChoosingStyle(true) : void analyze()}>{t('Analyze clue')}</button>}
     </div>
     {choosingStyle && <CoachStylePicker selected={coachPreferences.style} onSelect={(style) => void analyze(style)} onClose={() => setChoosingStyle(false)} />}
     {status && <p className="coach-status" role="status">{status}</p>}

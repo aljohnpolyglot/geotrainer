@@ -404,11 +404,11 @@ export default function App() {
     if (!location) return;
     const id = `clue-${crypto.randomUUID()}`;
     await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: savedClue.generatedAt, ...savedClue });
-    if (appMode === 'play') playAiAssistedRef.current = true;
+    if (appMode === 'play' && !activeRoundResult) playAiAssistedRef.current = true;
     if (appMode === 'study') await handleSaveStudyForReview();
     setTrainerRefreshKey((key) => key + 1);
     return id;
-  }, [appMode, handleSaveStudyForReview]);
+  }, [activeRoundResult, appMode, handleSaveStudyForReview]);
 
   return (
     <div className="geotrainer-shell flex flex-col w-screen h-screen overflow-hidden bg-stone-950 text-stone-100 font-sans select-none">
@@ -476,7 +476,7 @@ export default function App() {
         preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady} explorePanoramaSource={studyPanoramaSource} exploreAllowInteriors={studyAllowInteriors}
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
         onToggleCompass={toggleCompass}
-        onClueAnalyzed={() => { if (appMode === 'play') playAiAssistedRef.current = true; }}
+        onClueAnalyzed={() => { if (appMode === 'play' && !activeRoundResult) playAiAssistedRef.current = true; }}
         onNextReview={() => void handleReviewNext()} onCloseCoverage={() => setCoveragePreview(null)}
         onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}

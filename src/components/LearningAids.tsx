@@ -23,7 +23,7 @@ const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Comp
 type NoteDraft = { panoId: string; text: string; category: string };
 type AvailableNote = { id: string; source: string; text: string; category?: string; imageUrl?: string; imageKey?: string; missingImage?: boolean; analysis?: CoachAnalysis; at: number; notebook?: NotebookNote; coach?: CoachHistoryNote; clueId?: string };
 
-export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen, refreshKey, onAdviceClose, onSaveClue, onNoteSaved }: {
+export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen, refreshKey, allowAnalysis = true, onAdviceClose, onSaveClue, onNoteSaved }: {
   lesson?: MetaAid;
   panoId: string;
   lat: number;
@@ -31,6 +31,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   countryCode: string;
   adviceOpen: boolean;
   refreshKey: number;
+  allowAnalysis?: boolean;
   onAdviceClose: (forever: boolean) => void;
   onSaveClue: (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach'; location?: { panoId: string; lat: number; lng: number; countryCode: string } }) => Promise<string | void> | string | void;
   onNoteSaved: () => Promise<void> | void;
@@ -121,7 +122,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     </aside>}
     {open === 'notebook' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel notebook-panel" aria-label={t('Notebook')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><NotebookPen size={17} />{t('Notebook')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
-      <><div key={noteFormKey}><ClueCapture panoId={panoId} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal', location: { panoId, lat, lng, countryCode } })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis /></div>
+      <><div key={noteFormKey}><ClueCapture panoId={panoId} showAnalyze={allowAnalysis} onSave={(clue) => onSaveClue({ ...clue, origin: 'personal', location: { panoId, lat, lng, countryCode } })} onSaved={setNoteClueId} onImageChange={setNoteImage} expanded collapseSavedAnalysis /></div>
         <label>{t('Clue category (optional)')}<div className="note-category-picker" onKeyDown={(event) => { if (event.key === 'Escape') setCategoryOpen(false); }}><button type="button" aria-expanded={categoryOpen} onClick={() => setCategoryOpen((value) => !value)}>{category ? t(category) : t('Choose a category')}<span aria-hidden="true">⌄</span></button>{categoryOpen && <div role="listbox" aria-label={t('Clue category (optional)')}><button type="button" role="option" aria-selected={!category} onClick={() => { setCategory(''); setCategoryOpen(false); setNoteSaved(false); void writeWorkspaceDraft('note', { panoId, text: note, category: '' } satisfies NoteDraft); }}>{t('Any category')}</button>{[...NOTE_CATEGORIES].sort((a, b) => t(a).localeCompare(t(b), ui)).map((item) => <button type="button" role="option" aria-selected={category === item} key={item} onClick={() => { setCategory(item); setCategoryOpen(false); setNoteSaved(false); void writeWorkspaceDraft('note', { panoId, text: note, category: item } satisfies NoteDraft); }}>{t(item)}</button>)}</div>}</div></label>
         <label>{t('Personal hint or note')}<textarea aria-describedby="notebook-note-limit" value={note} maxLength={NOTEBOOK_NOTE_MAX_LENGTH} placeholder={t('Write what you noticed, such as “bollards have a black cap.”')} onChange={(event) => updateNote(event.target.value)} onPaste={(event) => { const html = event.clipboardData.getData('text/html'); if (!html) return; event.preventDefault(); const start = event.currentTarget.selectionStart; const pasted = richClipboardHtmlToMarkdown(html); updateNote(`${note.slice(0, start)}${pasted}${note.slice(event.currentTarget.selectionEnd)}`); }} /><small id="notebook-note-limit" className="notebook-note-limit">{note.length.toLocaleString(ui)} / {NOTEBOOK_NOTE_MAX_LENGTH.toLocaleString(ui)}</small></label>
         <button className="notebook-save" disabled={noteSaved} onClick={() => void saveNotebookNote()}>{t(noteSaved ? 'Saved' : 'Save note for Review')}</button></>

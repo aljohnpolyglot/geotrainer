@@ -3,6 +3,7 @@
 ## 2026-09-26
 
 - Localized Review country names, queue source labels, dates, and scores using the selected interface language, including resumed sessions saved with older English labels.
+- Hid Notebook clue analysis during unassisted Play rounds, then enabled Coach and clue analysis after submission with a minimizable result for post-answer study.
 
 ## 2026-09-25
 

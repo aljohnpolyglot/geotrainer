@@ -8,7 +8,7 @@ import { GameRound } from "../types";
 import { formatDistance } from "../services/gameLogic";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
 import { COUNTRIES } from "../data/countries";
-import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock, Eye, Minus } from "lucide-react";
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
@@ -27,6 +27,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   const [viewIndex, setViewIndex] = useState(rounds.length - 1);
   const viewedRound = rounds[viewIndex] || round;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
+  const [minimized, setMinimized] = useState(false);
 
   const country = COUNTRIES[viewedRound.location.countryCode];
   const countryName = geocodeData?.countryName || country?.name || viewedRound.location.countryCode;
@@ -42,9 +43,11 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   }, [viewedRound.location.lat, viewedRound.location.lng]);
 
   useEffect(() => setViewIndex(rounds.length - 1), [round.roundNumber, rounds.length]);
+  useEffect(() => setMinimized(false), [round.roundNumber]);
 
   // Keyboard shortcut: Space or Enter to continue
   useEffect(() => {
+    if (minimized) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space" || e.code === "Enter") {
         e.preventDefault();
@@ -53,15 +56,18 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onNextRound]);
+  }, [minimized, onNextRound]);
 
   const placeHeadline = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
+  if (minimized) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
+
   return (
     <div id="round-result-modal" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl h-[90vh] max-h-[720px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
+      <div className="relative w-full max-w-4xl h-[90vh] max-h-[720px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
         {/* Top Header Card */}
-        <div className="p-4 sm:p-5 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
+        <div className="p-4 pr-14 sm:p-5 sm:pr-14 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
+          <button type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
           <div className="flex items-center space-x-3">
             {flag1x && <img src={flag1x} srcSet={`${flag1x} 1x, ${flag2x} 2x`} alt={`${countryName} ${t('flag')}`} width="36" height="24" className="w-9 h-6 rounded-xs object-cover border border-stone-700 shadow-sm" referrerPolicy="no-referrer" />}
             <div>
@@ -115,8 +121,8 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         <ResultMap actual={viewedRound.location} guess={viewedRound.guess} className="flex-1 w-full h-full relative bg-stone-950" />
 
         {/* Footer Action Bar */}
-        <div className="p-4 bg-stone-950 border-t border-stone-800 flex items-center justify-between">
-          <div className="text-xs text-stone-400">
+        <div className="round-result-footer p-4 bg-stone-950 border-t border-stone-800">
+          <div className="round-result-progress text-xs text-stone-400">
             {t('round')} <strong className="text-white">{viewedRound.roundNumber}</strong> {t('of')} <strong className="text-white">{totalRounds}</strong>
           </div>
 
@@ -128,14 +134,13 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               {viewIndex + 1} / {rounds.length} {t('played')}
             </span>
             <button disabled={viewIndex === rounds.length - 1} onClick={() => setViewIndex((value) => value + 1)}>
-              {t('next')} <ArrowRight size={15} />
+              {t('Next')} <ArrowRight size={15} />
             </button>
           </div>
 
-          <button onClick={onNextRound} className="inline-flex items-center gap-2 px-6 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98">
+          <button onClick={onNextRound} className="round-result-continue inline-flex items-center gap-2 px-6 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98">
             <span>{isLastRound ? t('viewGameSummary') : t('continueGame')}</span>
             <ArrowRight className="w-4 h-4 text-stone-900" />
-            <span className="text-[10px] text-stone-600 bg-stone-200 px-1.5 py-0.5 rounded font-mono">{t('Space')}</span>
           </button>
         </div>
       </div>
