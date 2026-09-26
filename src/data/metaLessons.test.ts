@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
+import { filterMetaLessonsByCompletion, hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
 import translations from './metaLessonTranslations.json';
 
 test('Meta lessons reject malformed input and avoid the current lesson', () => {
@@ -34,6 +34,14 @@ test('a browsed unfinished Meta lesson starts exactly while a stale selection fa
   const requested = META_LESSONS[2];
   assert.equal(selectMetaLesson(requested.id)?.id, requested.id);
   assert.notEqual(selectMetaLesson(requested.id, new Set([requested.id]), () => 0)?.id, requested.id);
+});
+
+test('Meta browse filters all, unfinished, and completed lessons', () => {
+  const sample = META_LESSONS.slice(0, 3);
+  const completed = new Set([sample[1].id]);
+  assert.deepEqual(filterMetaLessonsByCompletion(sample, completed, 'all'), sample);
+  assert.deepEqual(filterMetaLessonsByCompletion(sample, completed, 'unfinished').map((lesson) => lesson.id), [sample[0].id, sample[2].id]);
+  assert.deepEqual(filterMetaLessonsByCompletion(sample, completed, 'completed').map((lesson) => lesson.id), [sample[1].id]);
 });
 
 test('time-sensitive imagery meta is explicitly marked without changing durable clues', () => {

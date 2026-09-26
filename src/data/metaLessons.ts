@@ -34,3 +34,6 @@ export const selectMetaLesson = (requestedId?: string, completed = new Set<strin
   const requested = metaLessonById(requestedId);
   return requested && !completed.has(requested.id) ? requested : nextMetaLesson(undefined, random, completed);
 };
+
+export type MetaCompletionFilter = 'all' | 'unfinished' | 'completed';
+export const filterMetaLessonsByCompletion = (lessons: MetaLesson[], completed: Set<string>, filter: MetaCompletionFilter) => lessons.filter((lesson) => filter === 'all' || completed.has(lesson.id) === (filter === 'completed'));
