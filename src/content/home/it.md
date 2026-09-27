@@ -115,7 +115,7 @@ Paesi, città e ambienti guidano la generazione senza garantire copertura comple
 
 ## Progressi e statistiche
 
-Statistiche e Copertura formattano nomi dei paesi, date e numeri nella lingua dell’interfaccia selezionata anziché nelle impostazioni locali predefinite del browser.
+Statistiche e Copertura formattano nomi dei paesi, date e numeri nella lingua dell’interfaccia selezionata anziché nelle impostazioni locali predefinite del browser. La tabella dei paesi separa i panorami unici dai tentativi con punteggio; tentativi, risposte corrette ed errate, precisione e punteggi combinano Gioco e Ripasso.
 
 I luoghi salvati in Studio sono fonti non valutate: contano come attività di Studio e nuove schede, non come tentativi «Nessuna risposta» o punteggi zero. Il ricaricamento riprende la visita corrente senza aggiungere un’altra riga.
 

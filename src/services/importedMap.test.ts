@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolJson, importedMapSizeAllowed, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapSizeAllowed, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -43,6 +43,12 @@ test('geographic pool exports round-trip as editable country and region selectio
   assert.deepEqual(map.countryCodes, ['IT', 'GR']);
   assert.deepEqual(map.locationTargets, [target]);
   assert.throws(() => parseImportedMap('{"format":"geotrainer-geographic-pool","countryCodes":["XX"]}', 'bad.json'), /no valid countries/i);
+});
+
+test('geographic pool filenames use the AI description safely', () => {
+  assert.equal(geographicPoolFilename('La Liga equipos'), 'geotrainer-la-liga-equipos.json');
+  assert.equal(geographicPoolFilename('Côte d’Ivoire / Ghana'), 'geotrainer-cote-d-ivoire-ghana.json');
+  assert.equal(geographicPoolFilename(), 'geotrainer-pool.json');
 });
 
 test('uploaded Learn visits move backward and forward before drawing a new location', () => {

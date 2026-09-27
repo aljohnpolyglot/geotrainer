@@ -115,7 +115,7 @@ Los países, ciudades y entornos orientan la generación y no representan una co
 
 ## Progreso y estadísticas
 
-Estadísticas y Cobertura muestran los nombres de países, las fechas y los números con el idioma de interfaz seleccionado, no con la configuración regional predeterminada del navegador.
+Estadísticas y Cobertura muestran los nombres de países, las fechas y los números con el idioma de interfaz seleccionado, no con la configuración regional predeterminada del navegador. La tabla de países separa las ubicaciones panorámicas únicas de los intentos puntuados; intentos, aciertos, errores, precisión y puntuaciones combinan Juego y Repaso.
 
 Los lugares guardados en Estudio son fuentes sin calificar: cuentan como actividad de Estudio y tarjetas nuevas, no como intentos «Sin respuesta» ni puntuaciones cero. Recargar reanuda la visita actual sin crear otra fila.
 

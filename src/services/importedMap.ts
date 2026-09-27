@@ -43,9 +43,13 @@ export function parseImportedMap(json: string, name: string): ImportedMap {
 }
 
 export const geographicPoolJson = (countryCodes: string[], locationTargets: LocationPoolTarget[]) => JSON.stringify({ format: 'geotrainer-geographic-pool', version: 1, countryCodes, locationTargets }, null, 2);
-export function downloadGeographicPool(countryCodes: string[], locationTargets: LocationPoolTarget[]) {
+export const geographicPoolFilename = (name = '') => {
+  const slug = name.trim().normalize('NFKD').replace(/\p{M}/gu, '').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '').slice(0, 80).replace(/-+$/g, '');
+  return `geotrainer-${slug || 'pool'}.json`;
+};
+export function downloadGeographicPool(countryCodes: string[], locationTargets: LocationPoolTarget[], name?: string) {
   const href = URL.createObjectURL(new Blob([geographicPoolJson(countryCodes, locationTargets)], { type: 'application/json' }));
-  const link = document.createElement('a'); link.href = href; link.download = 'geotrainer-pool.json'; link.click(); URL.revokeObjectURL(href);
+  const link = document.createElement('a'); link.href = href; link.download = geographicPoolFilename(name); link.click(); URL.revokeObjectURL(href);
 }
 
 export const saveImportedMap = (map: ImportedMap) => trainerDb.setSetting(`${IMPORTED_MAP_PREFIX}${map.id}`, map);

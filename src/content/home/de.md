@@ -316,7 +316,7 @@ Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern 
 
 ## Fortschritt und Statistik
 
-Statistik und Abdeckung formatieren Ländernamen, Daten und Zahlen in der gewählten Oberflächensprache statt nach der Standardsprache des Browsers.
+Statistik und Abdeckung formatieren Ländernamen, Daten und Zahlen in der gewählten Oberflächensprache statt nach der Standardsprache des Browsers. Die Ländertabelle trennt eindeutige Panoramaorte von bewerteten Versuchen; Versuche, richtig, falsch, Genauigkeit und Punkte kombinieren Spiel und Wiederholung.
 
 Gespeicherte Lernorte sind unbewertete Quellen: Sie erscheinen als Lernaktivität und neue Wiederholungskarten, nicht als „Kein Tipp“-Versuche oder Nullpunkte. Beim Neuladen wird der aktuelle Lernbesuch fortgesetzt, statt eine weitere Zeile anzulegen.
 

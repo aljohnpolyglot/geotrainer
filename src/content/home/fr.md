@@ -115,7 +115,7 @@ Pays, villes et environnements orientent la génération sans garantir une couve
 
 ## Progression et statistiques
 
-Statistiques et Couverture affichent les noms de pays, les dates et les nombres selon la langue d’interface choisie plutôt que selon les paramètres régionaux du navigateur.
+Statistiques et Couverture affichent les noms de pays, les dates et les nombres selon la langue d’interface choisie plutôt que selon les paramètres régionaux du navigateur. Le tableau des pays sépare les panoramas uniques des tentatives notées ; tentatives, réussites, erreurs, précision et scores combinent Jeu et Révision.
 
 Les lieux enregistrés en Étude sont des sources non notées : ils comptent comme activité d’Étude et nouvelles cartes, jamais comme essais « Sans réponse » ou scores nuls. Un rechargement reprend la visite en cours sans ajouter de ligne.
 

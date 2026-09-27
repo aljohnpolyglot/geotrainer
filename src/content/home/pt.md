@@ -115,7 +115,7 @@ Países, cidades e ambientes orientam a geração, sem prometer cobertura comple
 
 ## Progresso e estatísticas
 
-Estatísticas e Cobertura formatam nomes de países, datas e números no idioma de interface selecionado, em vez da localidade padrão do navegador.
+Estatísticas e Cobertura formatam nomes de países, datas e números no idioma de interface selecionado, em vez da localidade padrão do navegador. A tabela de países separa locais panorâmicos únicos de tentativas pontuadas; tentativas, acertos, erros, precisão e pontuações combinam Jogo e Revisão.
 
 Locais salvos no Estudo são fontes sem nota: contam como atividade de Estudo e cartões novos, não como tentativas «Sem palpite» ou pontuações zero. Recarregar retoma a visita atual sem criar outra linha.
 

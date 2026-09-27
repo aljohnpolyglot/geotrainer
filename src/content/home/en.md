@@ -390,7 +390,7 @@ Once opened, embedded result, Explore, Coverage, and Statistics maps remain warm
 
 ### Geography table
 
-The country table compares seen, played, reviewed, correct, wrong, average, best, last-seen, and clue information. Sort columns to find neglected or weak areas.
+The country table separates unique saved panorama locations from scored attempts. Attempt counts, correct and wrong countries, accuracy, average score, and best score combine canonical Play and Review attempts; Review locations counts unique locations in the review system. Sort columns to find neglected or weak areas.
 
 ### History
 

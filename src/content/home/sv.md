@@ -121,7 +121,7 @@ Länder, städer och miljöer styr genereringen utan att lova fullständig täck
 
 ## Framsteg och statistik
 
-Statistik och Täckning formaterar landsnamn, datum och tal med det valda gränssnittsspråket i stället för webbläsarens standardlokal.
+Statistik och Täckning formaterar landsnamn, datum och tal med det valda gränssnittsspråket i stället för webbläsarens standardlokal. Landstabellen skiljer unika sparade panoramaplatser från poängsatta försök; försök, rätt, fel, noggrannhet och poäng kombinerar Spel och Repetition.
 
 Sparade Studieplatser är obedömda källor: de räknas som Studieaktivitet och nya kort, inte som ”Ingen gissning”-försök eller nollpoäng. En omladdning återupptar det aktuella besöket utan att lägga till en ny rad.
 

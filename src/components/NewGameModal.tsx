@@ -398,7 +398,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           </button>
 
           <div className="flex items-center gap-2">
-            {locationSource === 'generated' && !!countryCodes.length && <button type="button" onClick={() => downloadGeographicPool(countryCodes, locationTargets)} className="inline-flex min-h-10 items-center gap-1.5 px-2 text-xs font-semibold text-stone-400 hover:text-stone-100 transition-colors cursor-pointer"><Download className="w-3.5 h-3.5" /><span>{t('Save geographic pool')}</span></button>}
+            {locationSource === 'generated' && !!countryCodes.length && <button type="button" onClick={() => downloadGeographicPool(countryCodes, locationTargets, loadedPoolName)} className="inline-flex min-h-10 items-center gap-1.5 px-2 text-xs font-semibold text-stone-400 hover:text-stone-100 transition-colors cursor-pointer"><Download className="w-3.5 h-3.5" /><span>{t('Save geographic pool')}</span></button>}
             <button
               type="button"
               onClick={handleStart}

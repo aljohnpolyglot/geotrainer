@@ -2,6 +2,7 @@
 
 ## 2026-09-27
 
+- Clarified Coverage counts as unique locations versus combined Play and Review attempts, and named AI-described pool downloads from their description.
 - Fixed completed-round location cards so minimizing leaves a visible restore action, changed activity calendars to a clearer green intensity scale, simplified empty matrix cells, and made Coverage tables sortable.
 - Localized country names, dates, and numeric formatting throughout Statistics and its Coverage views using the selected interface language.
 - Made every explicit Notebook save create or reuse a new Review card, including after a high-scoring correct-country Play round, while note deletion only refreshes the notes list.
