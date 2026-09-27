@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { GameRecord, GameRound } from '../types';
-import { formatDistance, getScoreRating } from '../services/gameLogic';
+import { formatDistance } from '../services/gameLogic';
 import { getFlagCdnUrl } from '../services/geocoding';
 import { COUNTRIES } from '../data/countries';
 import { Trophy, RotateCcw, History, X, ExternalLink, MapPin, Target } from 'lucide-react';
@@ -34,9 +34,6 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
   const mapPreferences = useMapPreferences();
   const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const percentage = game.totalScore / (game.maxPossibleScore || 1);
-  const rating = getScoreRating(percentage);
 
   // Keyboard shortcut: Escape to exit
   useEffect(() => {
@@ -152,12 +149,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
               <Trophy className="w-6 h-6" />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t('gameCompleted')}</h1>
-                <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-800 border border-stone-700 ${rating.color}`}>
-                  {rating.title}
-                </span>
-              </div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t('gameCompleted')}</h1>
               <p className="text-xs text-stone-400 mt-0.5">
                 {t('Collection')}: <span className="text-stone-200 font-medium">{game.collectionName}</span> •{' '}
                 {game.rounds.length} {t('rounds')} • {game.settings.canMove ? t('Move allowed') : t('No Move')}

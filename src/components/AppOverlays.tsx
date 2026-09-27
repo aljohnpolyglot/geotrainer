@@ -42,7 +42,7 @@ interface AppOverlaysProps {
   onSaveCollection: (collection: any) => void; onDeleteCollection: (id: string) => void; onCloseCollection: () => void;
   onOpenMapLocation: (location: Omit<LocationResult, 'countryCode'>) => void; onCloseMapPicker: () => void; onDismissMetaAdvice: (forever: boolean) => void;
   onExploreSettingsChange: (panoramaSource: PanoramaSource, allowInteriors: boolean) => void;
-  onNoteSaved: () => Promise<void> | void;
+  onNoteSaved: (scheduleReview?: boolean) => Promise<void> | void;
   onToggleCompass: () => void;
 }
 export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | undefined, hasResult: boolean) => appMode !== 'play' || enabled !== false || hasResult;

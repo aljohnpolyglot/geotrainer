@@ -172,7 +172,7 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 ### Nach der Antwort
 
-Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
+Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Abgeschlossene Spiel- und Wiederholungsrunden erlauben dabei Bewegung, Drehen und Zoomen, auch wenn diese im ursprünglichen Durchgang eingeschränkt waren. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
 Die Ergebniskarte hält die Lösung grün in der Mitte und zoomt so weit heraus, dass der heutige Tipp in Rot und alle gespeicherten früheren Tipps mit Koordinaten in Blau sichtbar bleiben. Der gewählte Ergebniszoom ist dabei die engste erlaubte Ansicht. Bewertung und nächste Warteschlange werden vor dem Ergebnis gespeichert; nach einem bestandenen Ergebnis lädt die Seite daher mit der nächsten Karte weiter.
 
@@ -315,6 +315,8 @@ Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern 
 Öffne Einstellungen über das Zahnradsymbol. Beginne mit Ausgewogen und ändere jeweils nur eine Einstellungsgruppe, damit du ihre Auswirkung erkennen kannst.
 
 ## Fortschritt und Statistik
+
+Statistik und Abdeckung formatieren Ländernamen, Daten und Zahlen in der gewählten Oberflächensprache statt nach der Standardsprache des Browsers.
 
 Gespeicherte Lernorte sind unbewertete Quellen: Sie erscheinen als Lernaktivität und neue Wiederholungskarten, nicht als „Kein Tipp“-Versuche oder Nullpunkte. Beim Neuladen wird der aktuelle Lernbesuch fortgesetzt, statt eine weitere Zeile anzulegen.
 
@@ -497,6 +499,8 @@ Lerne, warum ein Hinweis regional variiert, wo er unzuverlässig wird und womit 
 Externe Leitfäden sind Community-Quellen. Kombiniere mehrere Hinweise und rechne mit veralteten Bildern, regionalen Ausnahmen und Änderungen in Street View.
 
 ## Lernen, Meta und Notizbuch
+
+Das ausdrückliche Speichern eines Notizbuch-Eintrags erstellt oder verwendet eine neue Wiederholungskarte, selbst nach einer hoch bewerteten Spielrunde mit richtigem Land. Ein gespeicherter Hinweis kann eine Region, Stadt, Straße oder ein anderes Detail über das Land hinaus vermitteln.
 
 Eingefügte, hochgeladene oder aufgenommene Notizbuchbilder können vor Analyse oder Speichern zugeschnitten werden. Öffne unten rechts in der Vorschau die Bearbeitung, verschiebe den Ausschnitt oder seine Eckpunkte und wende ihn an.
 

@@ -80,7 +80,7 @@ På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att 
 
 Välj **Spara** för att använda ändringarna. Bedömning och intervall påverkar framtida schemaläggning och skriver inte om gamla försök; gränser och köordning används vid nästa köberäkning.
 
-Svaret döljs tills du gissar. Om ett gammalt panorama-ID öppnar en vy mer än 10 km från det sparade svaret använder Repetition en giltig vy nära de sparade koordinaterna eller öppnar inte kortet. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
+Svaret döljs tills du gissar. Om ett gammalt panorama-ID öppnar en vy mer än 10 km från det sparade svaret använder Repetition en giltig vy nära de sparade koordinaterna eller öppnar inte kortet. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Slutförda Spel- och Repetitionsrundor låser upp förflyttning, panorering och zoomning under granskningen även om ursprungsrundan begränsade dem. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
 
@@ -120,6 +120,8 @@ Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett*
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
 ## Framsteg och statistik
+
+Statistik och Täckning formaterar landsnamn, datum och tal med det valda gränssnittsspråket i stället för webbläsarens standardlokal.
 
 Sparade Studieplatser är obedömda källor: de räknas som Studieaktivitet och nya kort, inte som ”Ingen gissning”-försök eller nollpoäng. En omladdning återupptar det aktuella besöket utan att lägga till en ny rad.
 
@@ -165,6 +167,8 @@ Kombinera vägmarkeringar, körsida, skriftsystem, stolpar, terräng, arkitektur
 - [Learnable Meta](https://learnablemeta.com/) — GeoGuessr-lärkartor, dokumentation och resurser för att skapa kartor.
 
 ## Lär, Meta och Anteckningsbok
+
+När du uttryckligen sparar en post i Anteckningsboken skapas eller återanvänds ett nytt repetitionskort även efter en spelrunda med hög poäng och rätt land. En sparad ledtråd kan lära ut en region, stad, väg eller annan detalj utöver landet.
 
 Inklistrade, uppladdade och fångade bilder i Anteckningsboken kan beskäras före analys eller sparning. Använd redigeringsknappen nere till höger i förhandsvisningen, dra området eller dess hörn och använd beskärningen.
 

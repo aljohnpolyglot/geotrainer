@@ -194,7 +194,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
+The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. Completed Play and Review rounds unlock movement, panning, and zoom for this inspection even when the original round restricted them. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 The result map keeps the answer centered in green, then zooms out enough to show today’s guess in red and every saved prior guess with coordinates in blue. The selected result-map zoom remains the closest allowed scale. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
 
@@ -353,6 +353,8 @@ Display preferences include Light or Dark palette, compass visibility, compass s
 Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
 
 ## Progress and statistics
+
+Statistics and Coverage format country names, dates, and numbers with the selected interface language instead of the browser’s default locale.
 
 Learn saves are ungraded sources, so they appear as Study activity and new Review cards—not as “No guess” attempts or zero scores. Reloading a paused Study workspace resumes its current visit rather than adding another Study row.
 
@@ -555,6 +557,8 @@ Learn why a clue varies by region, where it stops being reliable, and what it is
 External guides are community references. Check several clues together and allow for outdated imagery, regional exceptions, and Street View changes.
 
 ## Learn, Meta, and Notebook
+
+Explicitly saving a Notebook entry creates or reuses one new Review card even after a high-scoring correct-country Play round. A saved clue can teach a region, city, road, or other detail beyond the country.
 
 Pasted, uploaded, and captured Notebook images can be cropped before analysis or saving. Use the edit control in the image preview’s lower-right corner; drag the crop area or its corner handles, then apply the crop.
 

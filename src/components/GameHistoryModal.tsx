@@ -5,7 +5,6 @@
 
 import React, { useState } from 'react';
 import { GameRecord } from '../types';
-import { getScoreRating } from '../services/gameLogic';
 import {
   History,
   X,
@@ -93,9 +92,6 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
                 hour: '2-digit',
                 minute: '2-digit',
               });
-              const pct = g.totalScore / (g.maxPossibleScore || 1);
-              const rating = getScoreRating(pct);
-
               return (
                 <div
                   key={g.id}
@@ -114,9 +110,6 @@ export const GameHistoryModal: React.FC<GameHistoryModalProps> = ({
                       </span>
                       <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-400">
                         {g.rounds.length} R
-                      </span>
-                      <span className={`text-[10px] font-semibold ${rating.color}`}>
-                        {rating.title}
                       </span>
                     </div>
 

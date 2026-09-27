@@ -66,7 +66,7 @@ Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 r
 
 ## Revisão e agendamento
 
-A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais de 10 km da resposta salva, a Revisão usa uma vista válida perto das coordenadas salvas ou não abre o cartão. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
+A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais de 10 km da resposta salva, a Revisão usa uma vista válida perto das coordenadas salvas ou não abre o cartão. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. Rodadas concluídas de Jogo e Revisão liberam movimento, rotação e zoom durante essa inspeção, mesmo quando a rodada original os restringia. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ### Personalizar a revisão
 
@@ -115,6 +115,8 @@ Países, cidades e ambientes orientam a geração, sem prometer cobertura comple
 
 ## Progresso e estatísticas
 
+Estatísticas e Cobertura formatam nomes de países, datas e números no idioma de interface selecionado, em vez da localidade padrão do navegador.
+
 Locais salvos no Estudo são fontes sem nota: contam como atividade de Estudo e cartões novos, não como tentativas «Sem palpite» ou pontuações zero. Recarregar retoma a visita atual sem criar outra linha.
 
 Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primeiro plano durante Estudo, Jogo ativo e Revisão ativa, incluindo movimento pelos panoramas e uso de recursos de aprendizagem. Desempenho, Geografia, Progresso e Confusões combinam tentativas de Jogo e Revisão; a caixa de IA afeta apenas o Jogo. O tempo oculto ou fechado não aumenta novas durações de resposta. O tempo é salvo ao trocar de seção ou voltar ao Início; sessões sem visitas nem tentativas ficam ocultas. Em uma tela sensível ao toque, mantenha pressionada uma barra de **Próximos pendentes** para ver a data e a quantidade. Pistas conhecidas soma entradas pessoais, de IA e Meta sem duplicar a imagem de uma nota. Rodadas com IA entram por padrão e podem ser excluídas. O resumo separa média anterior e de hoje; o calendário colore a atividade. Locais do mesmo país a até 50 metros compartilham um cartão.
@@ -159,6 +161,8 @@ Combine faixas viárias, mão de direção, alfabetos, postes, relevo, arquitetu
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizagem do GeoGuessr, documentação e recursos para criar mapas.
 
 ## Aprender, Meta e Caderno
+
+Salvar explicitamente uma entrada do Caderno cria ou reutiliza um novo cartão de Revisão mesmo após uma rodada de Jogo com pontuação alta e país correto. Uma pista salva pode ensinar uma região, cidade, estrada ou outro detalhe além do país.
 
 Imagens coladas, enviadas ou capturadas no Caderno podem ser recortadas antes da análise ou do salvamento. Use o controle de edição no canto inferior direito da prévia, arraste a área ou os cantos e aplique o recorte.
 

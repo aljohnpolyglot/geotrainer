@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef, type CSSProperties, type PointerEve
 import { LocationResult } from "../types";
 import { COUNTRIES } from "../data/countries";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
-import { MapPin, ExternalLink, Maximize2, Minimize2, Minus, Compass, Building } from "lucide-react";
+import { MapPin, ExternalLink, Maximize2, Minimize2, Minus, Compass, Building, Eye } from "lucide-react";
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
@@ -18,7 +18,7 @@ type CardInteraction = { pointerId: number; start: { x: number; y: number }; rec
 interface LocationCardProps {
   location: LocationResult;
   hidden?: boolean;
-  onHide: () => void;
+  onHide?: () => void;
   onMetadata?: (details: { panoId: string; country?: string; countryCode?: string; exactAddress?: string; locality?: string; adminArea?: string }) => void;
   onSaveForReview?: () => void;
   reviewSaving?: boolean;
@@ -33,11 +33,13 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const [isGeocoding, setIsGeocoding] = useState<boolean>(true);
   const [flagError, setFlagError] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const [expandedRect, setExpandedRect] = useState<PanelRect>();
   const [adjusting, setAdjusting] = useState(false);
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
   const interaction = useRef<CardInteraction>();
-  useEffect(() => { if (hidden) setIsExpanded(false); }, [hidden]);
+  useEffect(() => { setMinimized(false); }, [location.panoId]);
+  useEffect(() => { if (hidden) { setIsExpanded(false); setMinimized(false); } }, [hidden]);
 
   const limits = () => ({ left: 12, top: 64, right: window.innerWidth - 12, bottom: window.innerHeight - 12 });
   const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: CardInteraction['direction']) => {
@@ -109,6 +111,8 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   // Derive human-friendly exact location headline
   const primaryArea = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
 
+  if (minimized && !hidden) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
+
   return (
     <div ref={panelRef} style={isExpanded ? expandedStyle : dragStyle} hidden={hidden} id="revealed-location-card" className={`absolute bottom-6 left-6 z-20 max-w-md w-[calc(100vw-3rem)] sm:w-96 bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl p-4 backdrop-blur-md text-stone-100 animate-in fade-in slide-in-from-bottom-3 duration-200 select-text${isExpanded ? ' expanded' : ''}`}>
       {/* Header: Country + Flag CDN + Close */}
@@ -130,7 +134,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
 
         <div className="flex items-center gap-1">
           <a href={mapsUrl} target="_blank" rel="noreferrer" aria-label={t('Open in Google Maps')} className="inline-flex items-center gap-1 p-1.5 text-stone-400 hover:text-stone-200 hover:bg-stone-800 rounded-lg transition-colors" title={t('Open in Google Maps')}><ExternalLink className="w-4 h-4" /></a>
-          <button onClick={() => { setExpandedRect(undefined); setIsExpanded(false); onHide(); }} aria-label={t('Hide location spoilers (R)')} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minus className="w-4 h-4" /></button>
+          <button onClick={() => { setExpandedRect(undefined); setIsExpanded(false); onHide ? onHide() : setMinimized(true); }} aria-label={t('Hide location spoilers (R)')} title={t('Hide location spoilers (R)')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0"><Minus className="w-4 h-4" /></button>
           <button onClick={() => { setExpandedRect(undefined); setIsExpanded((value) => !value); }} aria-expanded={isExpanded} aria-label={t(isExpanded ? 'Restore location card' : 'Maximize location card')} title={t(isExpanded ? 'Restore location card' : 'Maximize location card')} className="p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer flex-shrink-0">{isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}</button>
         </div>
       </div>

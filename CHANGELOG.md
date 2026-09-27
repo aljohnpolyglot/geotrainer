@@ -2,6 +2,11 @@
 
 ## 2026-09-27
 
+- Fixed completed-round location cards so minimizing leaves a visible restore action, changed activity calendars to a clearer green intensity scale, simplified empty matrix cells, and made Coverage tables sortable.
+- Localized country names, dates, and numeric formatting throughout Statistics and its Coverage views using the selected interface language.
+- Made every explicit Notebook save create or reuse a new Review card, including after a high-scoring correct-country Play round, while note deletion only refreshes the notes list.
+- Removed variable score-rank comments from completed-game summaries.
+- Unlocked movement, panning, and zoom while inspecting completed Play and Review rounds, including rounds originally played with movement restrictions.
 - Added animated, localized country, region, and city progress plus model-only two-pass interpretation for complex AI-described pools.
 - Restored AI Map Maker pool generation on static deployments through its dedicated Supabase endpoint and retained the configured server as the first choice.
 - Expanded Play answer reveals with the full resolved address and coordinates, removed the blue result-header labels, and spelled out Swedish `Saint` country names.

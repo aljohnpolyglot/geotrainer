@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { COUNTRIES } from "../data/countries";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
-import { translate } from "../services/language";
-import type { Attempt, ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, ReviewRecord, TrainerLocation } from "../types";
+import { countryDisplayName, translate } from "../services/language";
+import type { Attempt, ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, ReviewRecord, SupportedLanguage, TrainerLocation } from "../types";
 import type { CountryStats } from "./trainerHubTypes";
 
-export const date = (value?: number) => (value ? new Date(value).toLocaleDateString() : "—");
+export const date = (value: number | undefined, locale: SupportedLanguage) => (value ? new Date(value).toLocaleDateString(locale) : "—");
 export const timestamp = (value: number, locale: string) => new Date(value).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'medium' });
 export const timestampRange = (start: number, end: number, locale: string) => {
   const from = new Date(start); const to = new Date(end); const sameDay = from.getFullYear() === to.getFullYear() && from.getMonth() === to.getMonth() && from.getDate() === to.getDate();
@@ -15,7 +15,7 @@ export const elapsed = (seconds: number) => {
   const total = Math.max(0, Math.round(seconds)); const minutes = Math.floor(total / 60); const remainder = total % 60;
   return minutes ? `${minutes}m ${remainder}s` : `${remainder}s`;
 };
-export const countryName = (code: string) => COUNTRIES[code]?.name || code;
+export const countryName = (code: string, locale: SupportedLanguage = 'en') => countryDisplayName(code, locale) || COUNTRIES[code]?.name || code;
 export const notebookClueLinks = (clues: ClueRecord[], notes: NotebookNote[]) => {
   const used = new Set<string>(); const links = new Map<NotebookNote, string>();
   notes.forEach((note) => {
@@ -73,9 +73,9 @@ export const coverageCountryValues = (locations: TrainerLocation[], attempts: At
 export const coverageRegionValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, regionByPano: Record<string, string>) =>
   coverageCountryValues(locations.flatMap((item) => regionByPano[item.panoId] ? [{ ...item, countryCode: regionByPano[item.panoId] }] : []), attempts, reviews, overlay, Date.now(), overlay === 'exposure' ? 10 : overlay === 'due' ? 5 : 1);
 export type CoverageSortKey = keyof Pick<CountryStats, "name" | "seen" | "played" | "reviewed" | "correct" | "wrong" | "accuracy" | "average" | "best" | "lastSeen" | "clues">;
-export const sortCoverageCountries = (items: CountryStats[], key: CoverageSortKey, direction: 1 | -1) => [...items].sort((a, b) => {
+export const sortCoverageCountries = (items: CountryStats[], key: CoverageSortKey, direction: 1 | -1, locale?: SupportedLanguage) => [...items].sort((a, b) => {
   const left = a[key]; const right = b[key];
-  return (typeof left === "string" ? left.localeCompare(String(right)) : Number(left) - Number(right)) * direction;
+  return (typeof left === "string" ? left.localeCompare(String(right), locale) : Number(left) - Number(right)) * direction;
 });
 export function useHubTranslate() {
   const { ui } = useLanguagePreferences();

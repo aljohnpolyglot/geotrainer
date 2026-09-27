@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateDistanceKm, calculateRoundScore, compassDirection, restoredRoundElapsed, resumeRoundStartedAt } from './gameLogic';
+import { calculateDistanceKm, calculateRoundScore, compassDirection, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt } from './gameLogic';
 
 test('distance and score remain bounded at gameplay edges', () => {
   assert.equal(calculateDistanceKm(10, 20, 10, 20), 0);
@@ -22,4 +22,9 @@ test('resuming Play keeps active round time without counting closed hours', () =
   assert.equal(restoredRoundElapsed(undefined, 45, 60), 15);
   assert.equal(restoredRoundElapsed(undefined, null, 0), 0);
   assert.equal(resumeRoundStartedAt(1_000, 2_000, 12_000), 11_000);
+});
+
+test('completed rounds unlock panorama controls without changing active-round restrictions', () => {
+  assert.deepEqual(resultReviewControls(false, false, false, false), { canMove: false, canPan: false, canZoom: false });
+  assert.deepEqual(resultReviewControls(true, false, false, false), { canMove: true, canPan: true, canZoom: true });
 });

@@ -74,18 +74,8 @@ export function restoredRoundElapsed(savedElapsed: unknown, savedRemaining: unkn
 
 export const resumeRoundStartedAt = (startedAt: number, pausedAt: number | null, now: number) => pausedAt === null ? startedAt : startedAt + Math.max(0, now - pausedAt);
 
+export const resultReviewControls = (hasResult: boolean, canMove: boolean, canPan: boolean, canZoom: boolean) => hasResult ? { canMove: true, canPan: true, canZoom: true } : { canMove, canPan, canZoom };
+
 export function compassDirection(heading: number): string {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round((((heading % 360) + 360) % 360) / 45) % 8];
-}
-
-/**
- * Provides a rating badge based on percentage of max score
- */
-export function getScoreRating(percentage: number): { title: string; color: string } {
-  if (percentage >= 0.95) return { title: 'Geographic Prodigy', color: 'text-amber-400' };
-  if (percentage >= 0.85) return { title: 'Elite Navigator', color: 'text-emerald-400' };
-  if (percentage >= 0.7) return { title: 'Master Scout', color: 'text-sky-400' };
-  if (percentage >= 0.5) return { title: 'World Traveler', color: 'text-purple-400' };
-  if (percentage >= 0.3) return { title: 'Curious Explorer', color: 'text-stone-300' };
-  return { title: 'Apprentice Guesser', color: 'text-stone-400' };
 }

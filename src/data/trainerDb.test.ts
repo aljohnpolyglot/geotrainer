@@ -102,6 +102,11 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal(reviewGradeForCorrection(3200, 'IT', 'IT'), 'hard');
   assert.equal(reviewGradeForCorrection(2999, 'IT', 'IT'), 'again');
 
+  await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-notebook-play', panoId: 'pano-notebook-play', actualLat: 41.9, actualLng: 12.5, countryCode: 'IT', score: 4000, guessedCountryCode: 'IT' });
+  const notebookPlay = await trainerDb.queueForReview('pano-notebook-play', false, { lat: 41.9, lng: 12.5, countryCode: 'IT' });
+  assert.equal(notebookPlay.intervalDays, 0);
+  assert.equal(notebookPlay.reviewCount, 0);
+
   const firstPlay = await trainerDb.scheduleFirstPlay('pano-first-play', 'easy');
   assert.equal(firstPlay.intervalDays, 21);
   assert.equal((await trainerDb.scheduleFirstPlay('pano-first-play', 'again')).intervalDays, 21);

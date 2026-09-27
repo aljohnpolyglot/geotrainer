@@ -78,7 +78,7 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 Choisissez **Enregistrer** pour appliquer les changements. Exigence et intervalles modifient la planification future sans réécrire les tentatives ; limites et ordre s’appliquent au prochain calcul de la file.
 
-La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant ouvre un panorama à plus de 10 km de la réponse enregistrée, la Révision utilise une vue valide près des coordonnées enregistrées ou n’ouvre pas la carte. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
+La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant ouvre un panorama à plus de 10 km de la réponse enregistrée, la Révision utilise une vue valide près des coordonnées enregistrées ou n’ouvre pas la carte. Après la réponse, le résultat affiche la ville, la région, la voie, l’adresse complète et les coordonnées disponibles, comme Révéler dans Étude. Réduisez le résultat depuis son coin supérieur droit pour étudier le panorama, puis utilisez Voir le résultat pour le rouvrir. Les manches terminées de Jeu et de Révision autorisent alors le déplacement, la rotation et le zoom, même si la manche d’origine les limitait. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
 ## Coach IA et indices
 
@@ -114,6 +114,8 @@ Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 
 ## Progression et statistiques
+
+Statistiques et Couverture affichent les noms de pays, les dates et les nombres selon la langue d’interface choisie plutôt que selon les paramètres régionaux du navigateur.
 
 Les lieux enregistrés en Étude sont des sources non notées : ils comptent comme activité d’Étude et nouvelles cartes, jamais comme essais « Sans réponse » ou scores nuls. Un rechargement reprend la visite en cours sans ajouter de ligne.
 
@@ -159,6 +161,8 @@ Croisez marquages routiers, sens de circulation, écritures, poteaux, relief, ar
 - [Learnable Meta](https://learnablemeta.com/) — cartes d’apprentissage GeoGuessr, documentation et ressources de création de cartes.
 
 ## Apprendre, Méta et Carnet
+
+Enregistrer explicitement une entrée du Carnet crée ou réutilise une nouvelle carte de Révision, même après une manche de Jeu bien notée avec le bon pays. Un indice enregistré peut enseigner une région, une ville, une route ou un autre détail au-delà du pays.
 
 Les images collées, importées ou capturées dans le Carnet peuvent être recadrées avant l’analyse ou l’enregistrement. Utilisez la commande en bas à droite de l’aperçu, déplacez la zone ou ses poignées, puis appliquez le recadrage.
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Attempt, Collection, ReviewRecord, StudyVisit, TrainerLocation, TrainingSession } from "../types";
+import type { Attempt, Collection, ReviewRecord, StudyVisit, SupportedLanguage, TrainerLocation, TrainingSession } from "../types";
 import { activeSeconds, beginnerSummary, breakdown, continentBreakdown, countryBalancedAccuracy, environmentOf, filterByRange, metrics, movementMode, performanceAttempts, rangeBounds, regionBreakdown, reviewAnalytics, rollingBest, sampleLabel, type RangeKey } from "../analytics/statistics";
 import { ConfusionStatistics, CoverageStatistics, ReviewStatistics, SessionStatistics } from "./StatisticsLearning";
 import { CountryStatistics } from "./StatisticsGeography";
@@ -13,7 +13,7 @@ import type { StatisticsSection } from './trainerHubTypes';
 import { CollectionOptions } from './CollectionOptions';
 type Props = { attempts: Attempt[]; visits: StudyVisit[]; locations: TrainerLocation[]; reviews: ReviewRecord[]; readyDueCount: number; sessions: TrainingSession[]; collections: Collection[]; onTrainCountries: (codes: string[], name: string) => void; initialSection?: StatisticsSection; onSectionChange?: (section: StatisticsSection) => void; locationsPanel?: ReactNode; historyPanel?: ReactNode };
 const percent = (value: number | null) => (value === null ? "—" : `${Math.round(value * 100)}%`);
-const number = (value: number | null, digits = 0) => (value === null ? "—" : value.toLocaleString(undefined, { maximumFractionDigits: digits }));
+const number = (value: number | null, locale: SupportedLanguage, digits = 0) => (value === null ? "—" : value.toLocaleString(locale, { maximumFractionDigits: digits }));
 const duration = (seconds: number) => (seconds < 3600 ? `${Math.round(seconds / 60)}m` : `${Math.floor(seconds / 3600)}h ${Math.round((seconds % 3600) / 60)}m`);
 const signedPp = (value: number) => `${value >= 0 ? "+" : ""}${Math.round(value * 100)} pp`;
 const rangeLabels: Record<RangeKey, string> = { today: "Today", "7d": "7 days", "30d": "30 days", "90d": "90 days", year: "This year", all: "All time", custom: "Custom" };
@@ -34,13 +34,13 @@ function Ladder({ title, value }: { title: string; value: ReturnType<typeof metr
       ))}
       <div className="stats-mini">
         <span>
-          {t('Avg score')} <b>{number(value.averageScore)}</b>
+          {t('Avg score')} <b>{number(value.averageScore, ui)}</b>
         </span>
         <span>
-          {t('Median km')} <b>{number(value.medianDistance, 1)} km</b>
+          {t('Median km')} <b>{number(value.medianDistance, ui, 1)} km</b>
         </span>
         <span>
-          {t('Avg time')} <b>{number(value.averageTime, 1)}s</b>
+          {t('Avg time')} <b>{number(value.averageTime, ui, 1)}s</b>
         </span>
       </div>
     </section>
@@ -75,7 +75,7 @@ function DataTable({ rows, kind }: { rows: ReturnType<typeof breakdown>; kind: '
         <tbody>
           {sorted.map((row) => (
             <tr key={row.key}>
-              <th>{row.key}</th>
+              <th>{t(row.key)}</th>
               <td>{row.attempts}</td>
               <td>
                 {percent(row.country.rate)}
@@ -89,9 +89,9 @@ function DataTable({ rows, kind }: { rows: ReturnType<typeof breakdown>; kind: '
                 {percent(row.continent.rate)}
                 <small> n={row.continent.eligible}</small>
               </td>
-              <td>{number(row.averageScore)}</td>
-              <td>{number(row.medianDistance, 1)}</td>
-              <td>{number(row.averageTime, 1)}s</td>
+              <td>{number(row.averageScore, ui)}</td>
+              <td>{number(row.medianDistance, ui, 1)}</td>
+              <td>{number(row.averageTime, ui, 1)}s</td>
               <td>
                 <span className={`sample ${row.attempts < 15 ? "low" : ""}`}>{t(sampleLabel(row.attempts))}</span>
               </td>
@@ -247,7 +247,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
           </div>
           <section>
             <h3>{t('Movement')}</h3>
-            <div className="metric-strip">{modeStats.map((item) => <div key={item.mode}><span>{t(item.mode)}</span><strong>{item.count}</strong><small>{t('Avg score')}: {number(item.average)}</small></div>)}</div>
+            <div className="metric-strip">{modeStats.map((item) => <div key={item.mode}><span>{t(item.mode)}</span><strong>{item.count}</strong><small>{t('Avg score')}: {number(item.average, ui)}</small></div>)}</div>
           </section>
           <div className="stats-callouts">
             <span>

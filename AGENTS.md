@@ -45,6 +45,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
 - Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.
 - Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
+- Keep completed-game summaries factual; do not assign variable score ranks or performance titles.
 - Include canonical Play and Review attempts in performance, geography, progress, and confusion statistics; the AI-assisted checkbox affects only Play, and hidden-tab time must not increase Play or Review answer duration.
 - Keep the homepage Known clues total aligned with My Clues across Personal, AI-assisted, and Meta entries; do not count a Notebook-linked clue image twice.
 - Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
@@ -92,7 +93,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - In Uploaded map Learn, Previous returns through locations already drawn in the current session; Next moves forward through that history before drawing another source entry. Mark checked source entries complete so variation cannot redraw them, count skipped entries once, and label the header counter as Source progress.
 - Persist Play round timers as accumulated active seconds; resuming must never count time spent closed, hidden, or on another surface.
 - When saving a clue from Study, create its reusable Review source automatically and do not show a redundant Save for Review action afterward.
-- Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location for Review. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
+- Notebook saves are independent records: allow multiple personal notes per panorama, keep category and text optional, and treat even an empty explicit save as a request to schedule that location as a new Review card regardless of its Play score or country correctness. Opening a Meta lesson alone never saves it; only its explicit Save for Review action adds it to My Clues.
 - Collapse only exact repeated clue images whose meaningful note and description are identical or where one copy is blank; preserve the same image as separate entries when its meaningful text differs, and keep clue deletion markers through cloud merges.
 - Refresh Available notes and its badge immediately after every Notebook save in every mode; do not depend on Study-only scheduling side effects.
 - Meta Learn selects only unfinished lessons and becomes visibly disabled in Learn setup after all lessons are completed.
@@ -119,6 +120,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Put shared logic in the existing service/data layer and keep React components focused on UI.
 - Add one focused runnable test for non-trivial branches and failure handling.
 - For language changes, browser-check every supported locale for untranslated visible copy, overflow, reload persistence, and independent UI/game/AI selections.
+- Format Statistics and training-hub country names, dates, and numbers with the selected interface locale rather than the browser or English defaults.
 - For localized or AI-generated text changes, QA accented Latin and Cyrillic output in every supported locale; reject visible escape fragments or mojibake such as `00e0`, `\\u00e0`, or replacement characters.
 - For panels and modals, browser-check scroll containment at desktop and mobile sizes. Keep scrollbars thin and unobtrusive, never hide scrolling, and keep primary actions reachable without nested page scroll traps.
 - Keep AI Coach, Notebook, Meta, and saved-clue learning panels draggable by their headers and bounded inside the viewport.
@@ -126,6 +128,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep the AI Coach launcher visible while its draggable panel is open.
 - Keep the revealed location card draggable by its header, use a minimize affordance for hiding it, and expose the embedded result map's fullscreen control.
 - Keep the Review result minimizable from its top-right corner so the panorama remains available for study, with a compact restore action until the learner continues.
+- After a Play or Review answer is complete, unlock panorama movement, panning, and zoom for inspection while preserving the attempt's recorded restrictions.
 - Keep the same mobile pinpointer available in Play and Review, and anchor panorama controls to the dynamic visible viewport so browser chrome cannot cover them.
 - Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.

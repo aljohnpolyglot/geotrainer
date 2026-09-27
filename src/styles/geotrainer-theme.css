@@ -13,6 +13,10 @@
   --vermilion: #ed4b2f;
   --lime: #c9f05b;
   --sky: #8ad7e8;
+  --activity-1: #b8dfc7;
+  --activity-2: #72c28f;
+  --activity-3: #319c62;
+  --activity-4: #147343;
   --shadow-sheet: 0 18px 50px rgba(1, 13, 20, .32);
   font-family: "Aptos", "Segoe UI Variable", "Segoe UI", sans-serif;
 }

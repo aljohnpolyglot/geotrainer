@@ -35,7 +35,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   allowAnalysis?: boolean;
   onAdviceClose: (forever: boolean) => void;
   onSaveClue: (clue: { imageDataUrl: string; model: string; generatedAt: number; analysis: CoachAnalysis; origin?: 'personal' | 'coach'; location?: { panoId: string; lat: number; lng: number; countryCode: string } }) => Promise<string | void> | string | void;
-  onNoteSaved: () => Promise<void> | void;
+  onNoteSaved: (scheduleReview?: boolean) => Promise<void> | void;
 }) {
   const { ui, ai } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
   const [open, setOpen] = useState<'meta' | 'clues' | 'notebook' | 'available' | null>(null);
@@ -90,7 +90,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     await saveNotebookHistoryNote({ id: `note-${crypto.randomUUID()}`, panoId, countryCode, text: note.trim(), ...(category ? { category } : {}), ...(clueId ? { clueId } : {}), updatedAt });
     setNote(''); setCategory(''); setCategoryOpen(false); setNoteClueId(undefined); setNoteImage(''); setNoteSaved(true); setNotesRefreshKey((value) => value + 1);
     await Promise.all([clearWorkspaceDraft('note', panoId), clearWorkspaceDraft('clue', panoId)]); setNoteFormKey((value) => value + 1);
-    window.setTimeout(() => setNoteSaved(false), 3000); await onNoteSaved();
+    window.setTimeout(() => setNoteSaved(false), 3000); await onNoteSaved(true);
   };
   const copy360 = async () => {
     if (capture360 === 'busy') return; setCapture360('busy');

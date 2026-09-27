@@ -66,7 +66,7 @@ Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 ron
 
 ## Repaso y programación
 
-Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
+Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. Las rondas completadas de Juego y Repaso permiten moverse, girar y hacer zoom durante esta inspección, aunque la ronda original los restringiera. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
 
 ### Personalizar el repaso
 
@@ -115,6 +115,8 @@ Los países, ciudades y entornos orientan la generación y no representan una co
 
 ## Progreso y estadísticas
 
+Estadísticas y Cobertura muestran los nombres de países, las fechas y los números con el idioma de interfaz seleccionado, no con la configuración regional predeterminada del navegador.
+
 Los lugares guardados en Estudio son fuentes sin calificar: cuentan como actividad de Estudio y tarjetas nuevas, no como intentos «Sin respuesta» ni puntuaciones cero. Recargar reanuda la visita actual sin crear otra fila.
 
 Consulta lugares, intentos, cola pendiente, rendimiento, historial y tiempo activo en primer plano durante Estudio, Juego activo y Repaso activo, incluido moverte por panoramas y usar ayudas de aprendizaje. Rendimiento, Geografía, Progreso y Confusiones combinan intentos de Juego y Repaso; la casilla de IA afecta solo al Juego. El tiempo oculto o cerrado no aumenta las nuevas duraciones de respuesta. El tiempo se guarda al cambiar de sección o volver a Inicio; las sesiones sin visitas ni intentos se ocultan. En una pantalla táctil, mantén pulsada una barra de **Próximos pendientes** para ver la fecha y la cantidad. Pistas conocidas suma entradas personales, de IA y Meta sin duplicar la imagen de una nota. Las rondas con IA se incluyen por defecto y pueden excluirse. El resumen distingue promedio anterior y de hoy; el calendario colorea la actividad. Lugares del mismo país a menos de 50 metros comparten tarjeta.
@@ -159,6 +161,8 @@ Combina marcas viales, lado de conducción, alfabetos, postes, relieve, arquitec
 - [Learnable Meta](https://learnablemeta.com/) — mapas de aprendizaje de GeoGuessr, documentación y recursos para crear mapas.
 
 ## Aprender, Meta y Cuaderno
+
+Guardar expresamente una entrada del Cuaderno crea o reutiliza una tarjeta nueva de Repaso incluso tras una ronda de Juego con puntuación alta y país correcto. Una pista guardada puede enseñar una región, ciudad, carretera u otro detalle más allá del país.
 
 Las imágenes pegadas, subidas o capturadas en el Cuaderno se pueden recortar antes de analizarlas o guardarlas. Usa el control de edición en la esquina inferior derecha de la vista previa, arrastra el área o sus esquinas y aplica el recorte.
 

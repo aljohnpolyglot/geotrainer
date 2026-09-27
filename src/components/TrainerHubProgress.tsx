@@ -2,6 +2,7 @@ import type { Attempt, ReviewRecord, ReviewFilters, StudyVisit } from "../types"
 import type { CountryStats, HubTab } from "./trainerHubTypes";
 import { countryName, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
+import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
 interface ProgressPanelProps {
   todayVisits: StudyVisit[];
@@ -22,6 +23,7 @@ interface ProgressPanelProps {
 
 export function ProgressPanel({ todayVisits, todayAttempts, todayActive, allActive, locationsCount, countryCount, attempts, correctCount, weakCountries, confusions, dueCount, setFilters, setTab, onTrainCountries }: ProgressPanelProps) {
   const t = useHubTranslate();
+  const { ui } = useLanguagePreferences();
   return <>
     <div className="metric-strip">
       <div><span>{t("todayLocations")}</span><strong>{todayVisits.length}</strong></div>
@@ -34,12 +36,12 @@ export function ProgressPanel({ todayVisits, todayAttempts, todayActive, allActi
       <div><span>{t("countries")}</span><strong>{countryCount}</strong></div>
       <div><span>{t("attempts")}</span><strong>{attempts.length}</strong></div>
       <div><span>{t("countryAccuracy")}</span><strong>{attempts.length ? Math.round((correctCount / attempts.length) * 100) : 0}%</strong></div>
-      <div><span>{t("averageScore")}</span><strong>{attempts.length ? Math.round(attempts.reduce((sum, item) => sum + item.score, 0) / attempts.length).toLocaleString() : "—"}</strong></div>
+      <div><span>{t("averageScore")}</span><strong>{attempts.length ? Math.round(attempts.reduce((sum, item) => sum + item.score, 0) / attempts.length).toLocaleString(ui) : "—"}</strong></div>
       <div><span>{t("activeStudy")}</span><strong>{Math.round(allActive / 60)}m</strong></div>
     </div>
     <div className="progress-columns">
-      <section><h2>{t("weakCountries")}</h2>{weakCountries.length ? weakCountries.map((item) => <button className="data-row" key={item.code} onClick={() => onTrainCountries([item.code], `${t("weakCountries")} · ${item.name}`)}><span><CountryFlag code={item.code} />{item.name}</span><strong>{Math.round(item.average).toLocaleString()}</strong></button>) : <p className="empty">{t("playRoundsHint")}</p>}</section>
-      <section><h2>{t("commonConfusions")}</h2>{confusions.length ? confusions.slice(0, 5).map((item) => <button className="data-row" key={item.codes.join(":")} onClick={() => onTrainCountries(item.codes, t("commonConfusions"))}><span><CountryFlag code={item.codes[0]} />{countryName(item.codes[0])} → <CountryFlag code={item.codes[1]} />{countryName(item.codes[1])}</span><strong>{item.count}</strong></button>) : <p className="empty">{t("mistakeHint")}</p>}</section>
+      <section><h2>{t("weakCountries")}</h2>{weakCountries.length ? weakCountries.map((item) => <button className="data-row" key={item.code} onClick={() => onTrainCountries([item.code], `${t("weakCountries")} · ${item.name}`)}><span><CountryFlag code={item.code} />{item.name}</span><strong>{Math.round(item.average).toLocaleString(ui)}</strong></button>) : <p className="empty">{t("playRoundsHint")}</p>}</section>
+      <section><h2>{t("commonConfusions")}</h2>{confusions.length ? confusions.slice(0, 5).map((item) => <button className="data-row" key={item.codes.join(":")} onClick={() => onTrainCountries(item.codes, t("commonConfusions"))}><span><CountryFlag code={item.codes[0]} />{countryName(item.codes[0], ui)} → <CountryFlag code={item.codes[1]} />{countryName(item.codes[1], ui)}</span><strong>{item.count}</strong></button>) : <p className="empty">{t("mistakeHint")}</p>}</section>
       <section><h2>{t("reviewsDue")}</h2><button className="data-row" onClick={() => { setFilters({ due: true }); setTab("review"); }}><span>{t("readyNow")}</span><strong>{dueCount}</strong></button></section>
     </div>
   </>;

@@ -6,6 +6,7 @@ import { CountryFlag } from "./CountryFlag";
 import { CoverageChoropleth } from "./CoverageChoropleth";
 import type { CoverageOverlay } from "./trainerHubUtils";
 import { mapPresentationOptions, useMapPreferences } from "../services/mapPreferences";
+import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
 interface CoverageMapProps {
   locations: TrainerLocation[];
@@ -16,6 +17,7 @@ interface CoverageMapProps {
 
 export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMapProps) {
   const t = useHubTranslate();
+  const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
   const element = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map>();
@@ -56,14 +58,14 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
           map: map.current,
           position,
           label: group.length > 1 ? String(group.length) : undefined,
-          title: [...new Set(group.map((item) => countryName(item.countryCode)))].slice(0, 5).join(", "),
+          title: [...new Set(group.map((item) => countryName(item.countryCode, ui)))].slice(0, 5).join(", "),
           icon: { path: google.maps.SymbolPath.CIRCLE, scale: Math.min(18, 6 + Math.sqrt(group.length) * 2), fillColor: color, fillOpacity: .92, strokeColor: "#081018", strokeWeight: 2 },
         });
         marker.addListener("mouseover", () => {
-          const countries = [...new Set(group.map((item) => countryName(item.countryCode)))];
+          const countries = [...new Set(group.map((item) => countryName(item.countryCode, ui)))];
           const content = document.createElement("div");
           content.className = "map-cluster-preview";
-          const metric = overlay === "mastery" ? `${t("Mastery")}: ${groupReviews.length ? Math.round(mastery * 100) + "%" : "—"}` : overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString()} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
+          const metric = overlay === "mastery" ? `${t("Mastery")}: ${groupReviews.length ? Math.round(mastery * 100) + "%" : "—"}` : overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0).toLocaleString(ui)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString(ui)} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length.toLocaleString(ui)} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
           const text = document.createElement("span"); text.textContent = `${group.length} ${group.length === 1 ? t("panorama") : t("panoramas")} · ${metric} · ${countries.slice(0, 4).join(", ")}${countries.length > 4 ? ` +${countries.length - 4}` : ""}`;
           if (location.imageDataUrl) { const image = document.createElement("img"); image.src = location.imageDataUrl; image.alt = ""; content.append(image); }
           content.append(text);
@@ -88,7 +90,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
       markers.current.forEach((marker) => { google.maps.event.clearInstanceListeners(marker); marker.setMap(null); });
       markers.current = [];
     };
-  }, [locations, attempts, reviews, overlay, t, mapPreferences]);
+  }, [locations, attempts, reviews, overlay, t, mapPreferences, ui]);
 
   useEffect(() => {
     if (!element.current) return;
@@ -115,12 +117,12 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
       {selected && <aside className="map-inspector">
         <a className="icon-button inspector-external" href={`https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(selected.panoId)}`} target="_blank" rel="noreferrer" aria-label={t("openLocation")} title={t("openLocation")}><ExternalLink size={16} /></a>
         <button className="icon-button inspector-close" onClick={() => setSelected(undefined)} aria-label={t("closeLocation")}><X size={16} /></button>
-        <strong className="country-name"><CountryFlag code={selected.countryCode} />{countryName(selected.countryCode)}</strong>
+        <strong className="country-name"><CountryFlag code={selected.countryCode} />{countryName(selected.countryCode, ui)}</strong>
         {selected.imageDataUrl ? <img className="map-inspector-image" src={selected.imageDataUrl} alt="" /> : <div ref={panoramaPreview} className="map-inspector-preview" />}
-        <span>{date(selected.firstSeenAt)} → {date(selected.lastSeenAt)}</span>
+        <span>{date(selected.firstSeenAt, ui)} → {date(selected.lastSeenAt, ui)}</span>
         <span>{selected.encounterCount} {t("encounters")} · {selectedAttempts.length} {t("attemptsCount")}</span>
-        <span>{t("best")} {Math.max(0, ...selectedAttempts.map((item) => item.score)).toLocaleString()} · {t("latest")} {selectedAttempts.at(-1)?.score.toLocaleString() || "—"}</span>
-        <span>{selectedReview ? `${t("reviewDue")} ${date(selectedReview.dueAt)}` : t("neverReviewedMap")}</span>
+        <span>{t("best")} {Math.max(0, ...selectedAttempts.map((item) => item.score)).toLocaleString(ui)} · {t("latest")} {selectedAttempts.at(-1)?.score.toLocaleString(ui) || "—"}</span>
+        <span>{selectedReview ? `${t("reviewDue")} ${date(selectedReview.dueAt, ui)}` : t("neverReviewedMap")}</span>
         <div className="button-row map-inspector-actions"><button className="button primary" onClick={() => onOpen(selected)}>{t("openLocation")}</button></div>
       </aside>}
     </div>

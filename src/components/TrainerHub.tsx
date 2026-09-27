@@ -16,6 +16,7 @@ import type { HistoryKind, HubTab, StatisticsSection, TrainerHubProps } from "./
 import { countryName, useHubTranslate } from "./trainerHubUtils";
 import { deleteNotebookHistoryNote, saveNotebookHistoryNote } from "../services/coachHistory";
 import { splitDuplicateClues } from "../data/clueDedup";
+import { useLanguagePreferences } from "../services/useLanguagePreferences";
 
 const dayStart = () => new Date().setHours(0, 0, 0, 0);
 
@@ -23,6 +24,7 @@ export type { HubTab } from "./trainerHubTypes";
 
 export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainCountries, onSelectGame, initialTab = "review", initialHistoryKind = "games", initialStatisticsSection = "overview", onViewStateChange }: TrainerHubProps) {
   const t = useHubTranslate();
+  const { ui } = useLanguagePreferences();
   const [tab, setTab] = useState<HubTab>(initialTab);
   const [locations, setLocations] = useState<TrainerLocation[]>([]);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
@@ -111,8 +113,8 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     const seenLocations = locations.filter((item) => item.countryCode === code);
     const played = gradedAttempts.filter((item) => item.countryCode === code);
     const right = played.filter((item) => item.guessedCountryCode === code).length;
-    return { code, name: countryName(code), seen: seenLocations.length, played: played.length, reviewed: new Set(played.filter((item) => reviewedPanos.has(item.panoId)).map((item) => item.panoId)).size, correct: right, wrong: played.length - right, accuracy: played.length ? right / played.length : 0, average: played.length ? played.reduce((sum, item) => sum + item.score, 0) / played.length : 0, best: Math.max(0, ...played.map((item) => item.score)), lastSeen: Math.max(0, ...seenLocations.map((item) => item.lastSeenAt)), clues: clues.filter((clue) => clue.countryCode === code).length };
-  }), [locations, gradedAttempts, reviews, clues]);
+    return { code, name: countryName(code, ui), seen: seenLocations.length, played: played.length, reviewed: new Set(played.filter((item) => reviewedPanos.has(item.panoId)).map((item) => item.panoId)).size, correct: right, wrong: played.length - right, accuracy: played.length ? right / played.length : 0, average: played.length ? played.reduce((sum, item) => sum + item.score, 0) / played.length : 0, best: Math.max(0, ...played.map((item) => item.score)), lastSeen: Math.max(0, ...seenLocations.map((item) => item.lastSeenAt)), clues: clues.filter((clue) => clue.countryCode === code).length };
+  }), [locations, gradedAttempts, reviews, clues, ui]);
   const weakCountries = countries.filter((item) => item.played).sort((a, b) => a.average - b.average).slice(0, 5);
   const unseen = countries.filter((item) => !item.seen);
   const confusions = useMemo(() => {

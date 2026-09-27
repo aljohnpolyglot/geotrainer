@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { coverageCountryCounts, coverageCountryValues, coverageRegionValues, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, timestampRange, visibleNotebookNotes } from './trainerHubUtils';
+import { countryName, coverageCountryCounts, coverageCountryValues, coverageRegionValues, date, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, timestampRange, visibleNotebookNotes } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -10,6 +10,12 @@ test('coverage columns sort in both directions without mutating source rows', ()
   assert.deepEqual(sortCoverageCountries(source, 'name', 1).map((item) => item.name), ['Andorra', 'Brazil']);
   assert.deepEqual(sortCoverageCountries(source, 'seen', -1).map((item) => item.seen), [2, 1]);
   assert.equal(source[0].name, 'Brazil');
+});
+
+test('training-hub country names and dates follow the selected UI language', () => {
+  assert.equal(countryName('DE', 'sv'), 'Tyskland');
+  const stamp = new Date(2026, 8, 27, 12).getTime();
+  assert.equal(date(stamp, 'sv'), new Date(stamp).toLocaleDateString('sv'));
 });
 
 test('regional heatmap keeps country accuracy and excludes unresolved locations', () => {

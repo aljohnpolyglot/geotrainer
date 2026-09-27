@@ -47,7 +47,7 @@ export function CoverageStudyModal({ location, onClose }: { location: TrainerLoc
   const saveCoach = async (note: Omit<CoachHistoryNote, 'id' | 'panoId' | 'countryCode'>) => {
     await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...note }); await ensureReviewSource(); setRefreshKey((key) => key + 1);
   };
-  const noteSaved = async () => { await ensureReviewSource(); setRefreshKey((key) => key + 1); };
+  const noteSaved = async (scheduleReview?: boolean) => { if (scheduleReview) await ensureReviewSource(); setRefreshKey((key) => key + 1); };
 
   return <div className="coverage-study-backdrop" role="dialog" aria-modal="true" aria-labelledby="coverage-study-title">
     <section className="coverage-study-panel">

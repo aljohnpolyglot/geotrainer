@@ -66,7 +66,7 @@ Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 
 
 ## Ripasso e programmazione
 
-La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
+La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. I turni completati di Gioco e Ripasso sbloccano movimento, rotazione e zoom durante questa ispezione, anche se il turno originale li limitava. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.
 
 ### Personalizzare il ripasso
 
@@ -115,6 +115,8 @@ Paesi, città e ambienti guidano la generazione senza garantire copertura comple
 
 ## Progressi e statistiche
 
+Statistiche e Copertura formattano nomi dei paesi, date e numeri nella lingua dell’interfaccia selezionata anziché nelle impostazioni locali predefinite del browser.
+
 I luoghi salvati in Studio sono fonti non valutate: contano come attività di Studio e nuove schede, non come tentativi «Nessuna risposta» o punteggi zero. Il ricaricamento riprende la visita corrente senza aggiungere un’altra riga.
 
 Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in primo piano durante Studio, Gioco attivo e Ripasso attivo, inclusi gli spostamenti nei panorami e l’uso degli aiuti didattici. Prestazioni, Geografia, Progressi e Confusioni combinano i tentativi di Gioco e Ripasso; la casella IA riguarda solo il Gioco. Il tempo nascosto o chiuso non aumenta le nuove durate di risposta. Il tempo viene salvato cambiando sezione o tornando alla pagina iniziale; le sessioni senza visite né tentativi sono nascoste. Su uno schermo tattile, tieni premuta una barra di **Prossime scadenze** per vedere data e quantità. Indizi conosciuti somma voci personali, IA e Meta senza contare due volte l’immagine di una nota. Le partite assistite dall’IA sono incluse per impostazione predefinita e possono essere escluse. Il riepilogo separa media precedente e odierna. Luoghi nello stesso paese entro 50 metri condividono una scheda.
@@ -159,6 +161,8 @@ Combina segnaletica orizzontale, lato di guida, alfabeti, pali, rilievo, archite
 - [Learnable Meta](https://learnablemeta.com/) — mappe didattiche per GeoGuessr, documentazione e risorse per creare mappe.
 
 ## Impara, Meta e Taccuino
+
+Il salvataggio esplicito di una voce del Taccuino crea o riutilizza una nuova scheda di Ripasso anche dopo un turno di Gioco con punteggio alto e paese corretto. Un indizio salvato può insegnare una regione, una città, una strada o un altro dettaglio oltre al paese.
 
 Le immagini incollate, caricate o acquisite nel Taccuino possono essere ritagliate prima dell’analisi o del salvataggio. Usa il controllo di modifica in basso a destra nell’anteprima, trascina l’area o gli angoli e applica il ritaglio.
 
