@@ -28,7 +28,10 @@ export function languageLabel(code: SupportedLanguage): string {
 }
 
 export function countryDisplayName(code: string, language: SupportedLanguage) {
-  try { return new Intl.DisplayNames(language, { type: 'region' }).of(code) || code; } catch { return code; }
+  try {
+    const name = new Intl.DisplayNames(language, { type: 'region' }).of(code) || code;
+    return language === 'sv' ? name.replace(/^S:t\s/u, 'Saint ') : name;
+  } catch { return code; }
 }
 
 const SHELL: Record<SupportedLanguage, Record<string, string>> = {

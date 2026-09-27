@@ -170,7 +170,7 @@ Movable games reject isolated panoramas that cannot support the chosen rule. Thi
 
 ### Making a guess
 
-Place the marker on the map and submit it. On phones, the Precision place control floats above the bottom of the visible screen; tap it to open the guess map without scrolling. The round result shows the actual location, distance, score, and answer context. A timer reaching zero submits according to the active game flow.
+Place the marker on the map and submit it. On phones, the Precision place control floats above the bottom of the visible screen; tap it to open the guess map without scrolling. The round result shows the actual country, available city, region, road, full formatted address, exact coordinates, distance, and score. A timer reaching zero submits according to the active game flow.
 
 Submitting a Play answer saves the current Street View image with that location for later coverage and history previews. This does not create a clue unless you explicitly save one.
 

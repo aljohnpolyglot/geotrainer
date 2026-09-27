@@ -60,7 +60,7 @@ Os nomes das regiões e cidades seguem o idioma da interface quando há um nome 
 
 Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do mapa enviado usam seus locais e podem repeti-los se houver menos locais que rodadas.
 
-Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
+Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Depois do palpite, o resultado mostra o país real, cidade, região e via disponíveis, o endereço completo, as coordenadas exatas, a distância e a pontuação. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
 
 ## Revisão e agendamento
 

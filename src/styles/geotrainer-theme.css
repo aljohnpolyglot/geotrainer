@@ -202,11 +202,6 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
 :is(#round-result-modal, #game-summary-modal) > div > div:first-child {
   color: var(--carbon) !important; background: var(--paper) !important; border-color: var(--rule) !important;
 }
-:is(#round-result-modal, #game-summary-modal) > div > div:first-child::before {
-  content: "OBSERVATION RESULT"; align-self: stretch; display: grid; place-items: center; padding: 0 12px;
-  color: #fff; background: var(--blue); font: 800 9px/1 ui-monospace, Consolas, monospace; letter-spacing: .1em;
-}
-#game-summary-modal > div > div:first-child::before { content: "SESSION COMPLETE"; }
 :is(#round-result-modal, #game-summary-modal) [class*="text-amber"] { color: var(--blue) !important; }
 :is(#round-result-modal, #game-summary-modal) [class*="bg-stone-100"] { color: #fff !important; background: var(--blue) !important; }
 :is(#round-result-modal, #game-summary-modal) button { border-radius: 3px !important; box-shadow: none !important; }

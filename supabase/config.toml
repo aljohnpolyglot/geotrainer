@@ -6,3 +6,6 @@ additional_redirect_urls = ["https://aljohnpolyglot.github.io/geotrainer/", "htt
 
 [functions.coach]
 verify_jwt = false
+
+[functions.pool]
+verify_jwt = false

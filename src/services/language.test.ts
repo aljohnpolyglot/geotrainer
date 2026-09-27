@@ -18,6 +18,7 @@ test('country names follow the selected language', () => {
   assert.equal(countryDisplayName('DE', 'ru'), 'Германия');
   assert.equal(countryDisplayName('IT', 'sv'), 'Italien');
   assert.equal(countryDisplayName('FR', 'sv'), 'Frankrike');
+  assert.equal(countryDisplayName('BL', 'sv'), 'Saint Barthélemy');
   assert.equal(countryDisplayName('', 'sv'), '');
   const france = { en: 'France', es: 'Francia', pt: 'França', fr: 'France', de: 'Frankreich', it: 'Francia', ru: 'Франция', sv: 'Frankrike' } as const;
   for (const { code } of LANGUAGE_OPTIONS) assert.equal(countryDisplayName('FR', code), france[code]);

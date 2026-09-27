@@ -154,7 +154,7 @@ Bewegliche Spiele lehnen isolierte Panoramen ab. Dadurch kann die Suche länger 
 
 ### Tipp und Ergebnis
 
-Setze die Markierung auf der Karte und sende sie ab. Das Ergebnis zeigt tatsächlichen Ort, Entfernung, Punktzahl und Kontext. Jede Runde bleibt als eigener Versuch im Verlauf.
+Setze die Markierung auf der Karte und sende sie ab. Das Ergebnis zeigt das tatsächliche Land, verfügbare Stadt-, Regions- und Straßenangaben, die vollständige formatierte Adresse, genaue Koordinaten, Entfernung und Punktzahl. Jede Runde bleibt als eigener Versuch im Verlauf.
 
 Beim Absenden speichert GeoTrainer die aktuelle Street-View-Ansicht für spätere Abdeckungs- und Verlaufs-Vorschauen.
 

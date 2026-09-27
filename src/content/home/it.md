@@ -60,7 +60,7 @@ I nomi delle regioni e delle città seguono la lingua dell’interfaccia quando 
 
 Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano luoghi unici del file e il loro numero viene limitato ai luoghi disponibili.
 
-Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
+Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Dopo la risposta, il risultato mostra il paese reale, città, regione e strada disponibili, l’indirizzo completo, le coordinate esatte, la distanza e il punteggio. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
 
 ## Ripasso e programmazione
 

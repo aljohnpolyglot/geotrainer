@@ -60,7 +60,7 @@ Los nombres de las regiones y ciudades siguen el idioma de la interfaz cuando ha
 
 En la configuración de Juego, elige Lugares generados o Mapa subido. Los turnos del mapa subido usan sus lugares y pueden repetirlos si hay menos lugares que turnos.
 
-Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 rondas. Cada respuesta crea un intento nuevo y guarda la vista actual para las previsualizaciones.
+Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 rondas. Tras responder, el resultado muestra el país real, la ciudad, región y vía disponibles, la dirección completa, las coordenadas exactas, la distancia y la puntuación. Cada respuesta crea un intento nuevo y guarda la vista actual para las previsualizaciones.
 
 ## Repaso y programación
 

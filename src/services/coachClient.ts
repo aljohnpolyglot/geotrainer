@@ -26,13 +26,25 @@ export async function postPool(value: Record<string, unknown>, signal?: AbortSig
   const body = JSON.stringify(value);
   const configured = import.meta.env.VITE_COACH_ENDPOINT as string | undefined;
   const endpoint = configured?.replace(/\/coach\/?$/, '/pool');
-  if (import.meta.env.DEV || endpoint) return send(endpoint || '/api/pool', body, signal);
+  if (import.meta.env.DEV) return send(endpoint || '/api/pool', body, signal);
+  if (endpoint) {
+    try {
+      const response = await send(endpoint, body, signal);
+      if (isCoachResponse(response)) return response;
+    } catch (error) { if (signal?.aborted) throw error; }
+  }
   if (poolSameOriginAvailable !== false) {
     try {
       const response = await send('/api/pool', body, signal);
       if (isCoachResponse(response)) { poolSameOriginAvailable = true; return response; }
       poolSameOriginAvailable = false;
     } catch (error) { if (signal?.aborted) throw error; poolSameOriginAvailable = false; }
+  }
+  const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+  if (url && publishableKey) {
+    try { return await send(`${url}/functions/v1/pool`, body, signal, { apikey: publishableKey }); }
+    catch (error) { if (signal?.aborted) throw error; }
   }
   return new Response(JSON.stringify({ error: 'AI Map Maker is unavailable.' }), { status: 503, headers: { 'content-type': 'application/json' } });
 }

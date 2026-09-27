@@ -60,7 +60,7 @@ Les noms des régions et des villes suivent la langue de l’interface lorsqu’
 
 Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les manches de la carte utilisent ses lieux et peuvent les répéter si les manches sont plus nombreuses.
 
-Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus.
+Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Après la réponse, le résultat affiche le pays réel, les ville, région et voie disponibles, l’adresse complète, les coordonnées exactes, la distance et le score. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus.
 
 ## Révision et planification
 

@@ -2,6 +2,8 @@
 
 ## 2026-09-27
 
+- Restored AI Map Maker pool generation on static deployments through its dedicated Supabase endpoint and retained the configured server as the first choice.
+- Expanded Play answer reveals with the full resolved address and coordinates, removed the blue result-header labels, and spelled out Swedish `Saint` country names.
 - Kept failed Review cards at the end of the active session across reloads and advanced their schedule after a later passing answer.
 - Paginated forgotten-country and forgotten-place Statistics lists at 10 entries per page.
 - Separated text-only AI Map Maker requests from AI Coach capture so pool generation never requires an active Street View orientation.

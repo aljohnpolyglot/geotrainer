@@ -60,7 +60,7 @@ Namnen på regioner och städer följer gränssnittets språk när ett lokaliser
 
 I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omgångarna använder platser från filen och kan upprepa dem om det finns fler omgångar än platser.
 
-Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
+Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Efter svaret visar resultatet rätt land, tillgänglig stad, region och väg, fullständig adress, exakta koordinater, avstånd och poäng. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
 
 ## Repetition och schemaläggning
 

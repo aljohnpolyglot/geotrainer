@@ -8,7 +8,7 @@ import { GameRound } from "../types";
 import { formatDistance } from "../services/gameLogic";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
 import { COUNTRIES } from "../data/countries";
-import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock, Eye, Minus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock, Eye, Minus, Compass } from "lucide-react";
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
@@ -27,6 +27,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   const [viewIndex, setViewIndex] = useState(rounds.length - 1);
   const viewedRound = rounds[viewIndex] || round;
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(true);
   const [minimized, setMinimized] = useState(false);
 
   const country = COUNTRIES[viewedRound.location.countryCode];
@@ -36,10 +37,13 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
 
   // Reverse geocode true location
   useEffect(() => {
+    let active = true;
     setGeocodeData(null);
-    reverseGeocodeLocation(viewedRound.location.lat, viewedRound.location.lng).then((res) => {
-      if (res) setGeocodeData(res);
-    });
+    setIsGeocoding(true);
+    reverseGeocodeLocation(viewedRound.location.lat, viewedRound.location.lng)
+      .then((res) => { if (active) { setGeocodeData(res); setIsGeocoding(false); } })
+      .catch(() => { if (active) setIsGeocoding(false); });
+    return () => { active = false; };
   }, [viewedRound.location.lat, viewedRound.location.lng]);
 
   useEffect(() => setViewIndex(rounds.length - 1), [round.roundNumber, rounds.length]);
@@ -59,6 +63,8 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   }, [minimized, onNextRound]);
 
   const placeHeadline = [geocodeData?.locality, geocodeData?.adminArea].filter(Boolean).join(", ");
+  const lat = `${Math.abs(viewedRound.location.lat).toFixed(5)}° ${viewedRound.location.lat >= 0 ? 'N' : 'S'}`;
+  const lng = `${Math.abs(viewedRound.location.lng).toFixed(5)}° ${viewedRound.location.lng >= 0 ? 'E' : 'W'}`;
 
   if (minimized) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
 
@@ -74,19 +80,14 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
                 <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{countryName}</h2>
                 <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-300">{viewedRound.location.countryCode}</span>
               </div>
-              {placeHeadline ? (
-                <div className="flex items-center space-x-1.5 text-xs text-stone-300 mt-0.5">
-                  <Building className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-                  <span>{placeHeadline}</span>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-1 text-xs text-stone-400 font-mono mt-0.5">
-                  <MapPin className="w-3 h-3 text-stone-500" />
-                  <span>
-                    {viewedRound.location.lat.toFixed(4)}°, {viewedRound.location.lng.toFixed(4)}°
-                  </span>
-                </div>
-              )}
+              <div className="review-location-details" aria-live="polite">
+                {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
+                  {placeHeadline && <strong><Building size={13} />{placeHeadline}</strong>}
+                  {geocodeData?.route && <span><MapPin size={13} />{geocodeData.route}</span>}
+                  <small>{geocodeData?.formattedAddress || t('addressUnavailable')}</small>
+                </>}
+              </div>
+              <p className="review-coordinates">{lat}, {lng} · Pano: {viewedRound.location.panoId.slice(0, 10)}...</p>
             </div>
           </div>
 
