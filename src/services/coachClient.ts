@@ -1,4 +1,5 @@
 let sameOriginAvailable: boolean | undefined;
+let poolSameOriginAvailable: boolean | undefined;
 const send = (url: string, body: string, signal?: AbortSignal, headers: Record<string, string> = {}) => fetch(url, { method: 'POST', signal, headers: { 'content-type': 'application/json', ...headers }, body });
 export const isCoachResponse = (response: Response) => response.status !== 404 && response.headers.get('content-type')?.includes('application/json') === true;
 
@@ -19,4 +20,19 @@ export async function postCoach(value: Record<string, unknown>, signal?: AbortSi
     return send(`${url}/functions/v1/coach`, body, signal, { apikey: publishableKey });
   }
   return new Response(JSON.stringify({ error: 'AI Coach is unavailable.' }), { status: 503, headers: { 'content-type': 'application/json' } });
+}
+
+export async function postPool(value: Record<string, unknown>, signal?: AbortSignal): Promise<Response> {
+  const body = JSON.stringify(value);
+  const configured = import.meta.env.VITE_COACH_ENDPOINT as string | undefined;
+  const endpoint = configured?.replace(/\/coach\/?$/, '/pool');
+  if (import.meta.env.DEV || endpoint) return send(endpoint || '/api/pool', body, signal);
+  if (poolSameOriginAvailable !== false) {
+    try {
+      const response = await send('/api/pool', body, signal);
+      if (isCoachResponse(response)) { poolSameOriginAvailable = true; return response; }
+      poolSameOriginAvailable = false;
+    } catch (error) { if (signal?.aborted) throw error; poolSameOriginAvailable = false; }
+  }
+  return new Response(JSON.stringify({ error: 'AI Map Maker is unavailable.' }), { status: 503, headers: { 'content-type': 'application/json' } });
 }

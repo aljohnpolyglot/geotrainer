@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import {defineConfig, loadEnv, Plugin} from 'vite';
-import {createAiCoachMiddleware, loadGeminiKeys} from './server/aiCoach';
+import {createAiCoachMiddleware, createPoolMiddleware, loadGeminiKeys} from './server/aiCoach';
 
 // LINT.IfChange(aistudio_media_plugin)
 function aistudioMediaPlugin(): Plugin {
@@ -65,7 +65,7 @@ function aistudioMediaPlugin(): Plugin {
 }
 
 function aiCoachPlugin(googleKey: string): Plugin {
-  const install = (server: { middlewares: { use: (middleware: ReturnType<typeof createAiCoachMiddleware>) => void } }) => { server.middlewares.use(createAiCoachMiddleware(loadGeminiKeys(), googleKey)); };
+  const install = (server: { middlewares: { use: (middleware: ReturnType<typeof createAiCoachMiddleware>) => void } }) => { const keys = loadGeminiKeys(); server.middlewares.use(createPoolMiddleware(keys)); server.middlewares.use(createAiCoachMiddleware(keys, googleKey)); };
   return {
     name: 'local-ai-coach',
     configureServer: install,

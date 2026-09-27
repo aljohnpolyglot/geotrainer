@@ -2,6 +2,10 @@
 
 ## 2026-09-27
 
+- Kept failed Review cards at the end of the active session across reloads and advanced their schedule after a later passing answer.
+- Paginated forgotten-country and forgotten-place Statistics lists at 10 entries per page.
+- Separated text-only AI Map Maker requests from AI Coach capture so pool generation never requires an active Street View orientation.
+- Moved geographic-pool downloads beside the Learn and Play start actions and replaced Play's source dropdown with the shared source-tile selector.
 - Added AI-described pools to both Learn and Play, with editable environment, urban level, sampling, priority where applicable, imagery-source, and indoor-coverage settings; a token-efficient second AI pass selects only local region or city IDs, with no arbitrary region-result ceiling.
 
 ## 2026-09-26

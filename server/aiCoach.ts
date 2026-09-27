@@ -173,6 +173,8 @@ const depthInstructions: Record<ExplanationDepth, string> = {
   deep: 'DEPTH DEEP: Add relevant causal or geographic context, multiple confusers, and strong-versus-weak evidence, but no wall of text.',
 };
 const validStyles = new Set(Object.keys(styleInstructions)); const validDepths = new Set(Object.keys(depthInstructions));
+const coachModes = new Set<CoachMode>(['hints', 'analyze', 'analyze360', 'explain', 'cards', 'clue', 'clue-safe']);
+export const isCoachMode = (value: unknown): value is CoachMode => coachModes.has(value as CoachMode);
 
 export function buildCoachPrompt(mode: CoachMode, context?: Record<string, unknown>, knowledge: GeoKnowledgeHint[] = [], metaKnowledge: GeoKnowledgeHint[] = [], language = 'en', style: CoachStyle = 'quick', depth: ExplanationDepth = 'normal') {
   const languageInstruction = `MANDATORY OUTPUT LANGUAGE: ${aiLanguageNames[language] || 'English'}. Write every natural-language JSON string value in fluent, idiomatic ${aiLanguageNames[language] || 'English'}, even when signs or reference facts use another language. Every major candidate rationale must include positive evidence, negative or missing evidence, why it ranks above or below its nearest candidate, its main confuser, and the highest-information decider. The top candidate must also give its strongest clues. If candidates are close, explain exactly why #1 is ahead or call them effectively tied. Relative likelihood is an AI confidence estimate, not a measured probability. Return regionalRead when a subregion is supported; otherwise omit it and explain the missing regional evidence in contradictions. Never translate JSON property names, ISO country codes, or card category identifiers. Never echo prompt instructions, field names, style recipes, evidence-category scaffolds, or sequences such as WHAT → FUNCTION → CAUSE; write only polished learner-facing content inside each field. ${styleInstructions[style]} ${depthInstructions[depth]}`;
@@ -369,21 +371,7 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
         if (body.length > 12_000_000) throw new Error('Screenshot is too large.');
       }
       const value = JSON.parse(body) as Record<string, unknown>;
-      const mode = value.mode as CoachMode | 'capture' | 'pool' | 'pool-places';
-      if (mode === 'pool') {
-        const description = typeof value.description === 'string' ? value.description.trim().slice(0, 500) : '';
-        if (description.length < 3) throw new Error('Describe what you want to learn.');
-        const pool = await callGeminiPool(carousel, description);
-        res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ pool })); return;
-      }
-      if (mode === 'pool-places') {
-        const description = typeof value.description === 'string' ? value.description.trim().slice(0, 500) : '';
-        const selection = ['all', 'representative', 'league', 'capital'].includes(String(value.selection)) ? String(value.selection) : 'all';
-        const candidates: PoolPlaceCandidate[] = Array.isArray(value.candidates) ? value.candidates.flatMap((candidate) => { const item = candidate && typeof candidate === 'object' ? candidate as Record<string, unknown> : {}; const kind: 'region' | 'city' | undefined = item.kind === 'region' || item.kind === 'city' ? item.kind : undefined; const key = String(item.key || ''); const countryCode = String(item.countryCode || '').toUpperCase(); const name = String(item.name || ''); return kind && key && name && countryCode in countryCatalog ? [{ key, countryCode, name, kind }] : []; }) : [];
-        if (description.length < 3) throw new Error('Describe what you want to learn.');
-        const places = await callGeminiPoolPlaces(carousel, description, selection, candidates);
-        res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ places })); return;
-      }
+      const mode = value.mode as CoachMode | 'capture';
       if (mode === 'capture') {
         const frame = await fetchStreetViewFrame(value.view, googleKey);
         res.statusCode = 200;
@@ -391,11 +379,12 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
         res.end(JSON.stringify({ imageDataUrl: `data:${frame.mimeType};base64,${frame.imageData}` }));
         return;
       }
+      if (!isCoachMode(mode)) throw new Error('Invalid Coach request.');
       const suppliedMime = String(value.mimeType || '');
       const suppliedData = String(value.imageData || '');
       const supplied = ['image/jpeg', 'image/png', 'image/webp'].includes(suppliedMime) && /^[A-Za-z0-9+/=]+$/.test(suppliedData);
       const frames = supplied ? [{ mimeType: suppliedMime, imageData: suppliedData }] : mode === 'analyze360' ? await fetchStreetViewFrames(value.view, googleKey) : [await fetchStreetViewFrame(value.view, googleKey)];
-      if (!['hints', 'analyze', 'analyze360', 'explain', 'cards', 'clue', 'clue-safe'].includes(mode) || frames.some((frame) => !['image/jpeg', 'image/png', 'image/webp'].includes(frame.mimeType) || !/^[A-Za-z0-9+/=]+$/.test(frame.imageData))) throw new Error('Invalid Coach request.');
+      if (frames.some((frame) => !['image/jpeg', 'image/png', 'image/webp'].includes(frame.mimeType) || !/^[A-Za-z0-9+/=]+$/.test(frame.imageData))) throw new Error('Invalid Coach request.');
       const language = typeof value.language === 'string' && Object.prototype.hasOwnProperty.call(aiLanguageNames, value.language) ? value.language : 'en';
       const style = validStyles.has(String(value.style)) ? value.style as CoachStyle : 'quick'; const depth = validDepths.has(String(value.depth)) ? value.depth as ExplanationDepth : 'normal';
       const result = await callGeminiCoach(carousel, { mode, ...frames[0], frames, language, style, depth, context: sanitizeCoachContext(value.context) });
@@ -405,6 +394,38 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
       res.statusCode = /timed out/i.test(message) ? 504 : /quota|cooling down/i.test(message) ? 429 : 503;
       res.setHeader('content-type', 'application/json');
       res.end(JSON.stringify({ error: message }));
+    }
+  };
+}
+
+export function createPoolMiddleware(keys = loadGeminiKeys()) {
+  const carousel = new GeminiKeyCarousel(keys);
+  return async (req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse, next: () => void) => {
+    if (req.url !== '/api/pool' || req.method !== 'POST') return next();
+    try {
+      let body = '';
+      for await (const chunk of req) {
+        body += chunk;
+        if (body.length > 2_000_000) throw new Error('Pool request is too large.');
+      }
+      const value = JSON.parse(body) as Record<string, unknown>;
+      const description = typeof value.description === 'string' ? value.description.trim().slice(0, 500) : '';
+      if (description.length < 3) throw new Error('Describe what you want to learn.');
+      if (value.mode === 'pool') {
+        const pool = await callGeminiPool(carousel, description);
+        res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ pool })); return;
+      }
+      if (value.mode === 'pool-places') {
+        const selection = ['all', 'representative', 'league', 'capital'].includes(String(value.selection)) ? String(value.selection) : 'all';
+        const candidates: PoolPlaceCandidate[] = Array.isArray(value.candidates) ? value.candidates.flatMap((candidate) => { const item = candidate && typeof candidate === 'object' ? candidate as Record<string, unknown> : {}; const kind: 'region' | 'city' | undefined = item.kind === 'region' || item.kind === 'city' ? item.kind : undefined; const key = String(item.key || ''); const countryCode = String(item.countryCode || '').toUpperCase(); const name = String(item.name || ''); return kind && key && name && countryCode in countryCatalog ? [{ key, countryCode, name, kind }] : []; }) : [];
+        const places = await callGeminiPoolPlaces(carousel, description, selection, candidates);
+        res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ places })); return;
+      }
+      throw new Error('Invalid pool request.');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'AI Map Maker is unavailable.';
+      res.statusCode = /timed out/i.test(message) ? 504 : /quota|cooling/i.test(message) ? 429 : 503;
+      res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ error: message }));
     }
   };
 }

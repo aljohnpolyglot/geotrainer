@@ -174,7 +174,7 @@ Chaque entrée de Notes disponibles possède une corbeille discrète. Les entré
 
 Chaque enregistrement du Carnet reste une entrée indépendante, même dans le même panorama. Si une photo envoyée ne peut pas être chargée, la note reste visible et est signalée pour récupération.
 
-Un résultat faible revient automatiquement à la fin de la session de révision jusqu’à sa réussite. Chaque essai reste un enregistrement distinct.
+Un résultat faible revient automatiquement à la fin de la session de révision jusqu’à sa réussite, même après le rechargement de la session active. Chaque essai reste distinct et la réussite suivante avance la carte au lieu de la laisser immédiatement due.
 
 L’étude Méta contient 359 leçons hébergées localement, normalisées depuis la capture OpenGuessr appariée et des exemples GeoMetas supplémentaires disposant de coordonnées Street View utilisables. Les explications Méta suivent la langue de l’interface dans les huit langues prises en charge. Utiliser Coach IA ou enregistrer une entrée du Carnet crée ou réutilise automatiquement la carte de révision ; sinon, la fiche du lieu révélé conserve Enregistrer pour révision. **Notes disponibles** contient l’historique personnel et assisté par IA du panorama et des nœuds Street View du même pays situés à moins de 50 mètres, avec l’analyse complète, l’heure exacte et la capture soumise lorsqu’elle existe ; Méta reste sous son ampoule. Coach attend la préférence linguistique enregistrée et demande toutes les valeurs en langage naturel dans la langue IA choisie. Le texte personnel et IA finalisé conserve sa langue de création. Réviser une carte déjà due avance son calendrier même depuis la pratique personnalisée et persiste après rechargement.
 

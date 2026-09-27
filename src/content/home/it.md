@@ -174,7 +174,7 @@ Ogni voce di Note disponibili ha un cestino discreto. Le voci con lo stesso test
 
 Ogni salvataggio del Taccuino resta una voce indipendente, anche nello stesso panorama. Se una foto inviata non può essere caricata, la nota rimane visibile e viene contrassegnata per il recupero.
 
-Un risultato basso torna automaticamente in fondo alla sessione di ripasso finché non viene superato. Ogni tentativo rimane separato.
+Un risultato basso torna automaticamente in fondo alla sessione di ripasso finché non viene superato, anche dopo aver ricaricato la sessione attiva. Ogni tentativo rimane separato e il successivo superamento fa avanzare la scheda invece di lasciarla subito in scadenza.
 
 Lo studio Meta contiene 359 lezioni ospitate localmente, normalizzate dalla cattura abbinata di OpenGuessr e da ulteriori esempi GeoMetas con coordinate Street View utilizzabili. Le spiegazioni Meta seguono la lingua dell’interfaccia nelle otto lingue supportate. Usare Coach IA o salvare una voce del Taccuino crea o riutilizza automaticamente la scheda di Ripasso; altrimenti la scheda del luogo rivelato mantiene Salva per il ripasso. **Note disponibili** contiene la cronologia personale e assistita dall’IA del panorama e dei nodi Street View dello stesso paese entro 50 metri, con analisi completa, ora esatta e schermata inviata quando presente; Meta resta sotto la propria lampadina. Coach attende la preferenza linguistica salvata e richiede ogni valore in linguaggio naturale nella lingua IA selezionata. Il testo personale e IA finalizzato conserva la lingua di creazione. Ripassare una scheda già in scadenza ne avanza la pianificazione anche dalla pratica personalizzata e persiste dopo il ricaricamento.
 

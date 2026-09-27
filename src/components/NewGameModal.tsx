@@ -19,6 +19,8 @@ import {
   Layers,
   Sparkles,
   Download,
+  FileJson,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { translate } from '../services/language';
@@ -166,7 +168,11 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
         {/* Settings Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
-          <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded' | 'ai')}><option value="generated">{t('Generated locations')}</option><option value="ai">{t('Describe a pool')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
+          <div className="learn-source-picker play-source-picker" aria-label={t('Location source')}>{([
+            ['generated', SlidersHorizontal, 'Custom', 'Choose countries and surroundings.'],
+            ['uploaded', FileJson, 'Upload JSON', 'Open a Map Maker map or geographic pool file.'],
+            ['ai', Sparkles, 'Describe a pool', 'Let AI choose editable countries, regions, and cities.'],
+          ] as const).map(([source, Icon, title, description]) => <button key={source} type="button" className={locationSource === source ? 'selected' : ''} aria-pressed={locationSource === source} onClick={() => setLocationSource(source)}><Icon size={18} /><span><strong>{t(title)}</strong><small>{t(description)}</small></span></button>)}</div>
           {locationSource === 'uploaded' && <ImportedMapUpload source="upload" map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
           {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
           {locationSource === 'generated' && <>
@@ -189,7 +195,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             <label>{t('Country mix')}</label>
             <CountryMixPicker value={countryCodes} availableCodes={selectedCollection?.countryCodes || []} onChange={(codes) => { setCountryCodes(codes); setLocationTargets((targets) => targets.filter((target) => codes.includes(target.countryCode))); }} />
           </div>
-          {!!countryCodes.length && <div className="game-country-choice"><label>{t('Location pools')}</label>{loadedPoolName && <small className="imported-map-current"><strong>{loadedPoolName}</strong> · {t('Geographic pool')}</small>}<LocationPoolPicker countryCodes={countryCodes} value={locationTargets} onChange={setLocationTargets} /><button type="button" className="button secondary save-location-pool" onClick={() => downloadGeographicPool(countryCodes, locationTargets)}><Download size={15} />{t('Save geographic pool')}</button></div>}
+          {!!countryCodes.length && <div className="game-country-choice"><label>{t('Location pools')}</label>{loadedPoolName && <small className="imported-map-current"><strong>{loadedPoolName}</strong> · {t('Geographic pool')}</small>}<LocationPoolPicker countryCodes={countryCodes} value={locationTargets} onChange={setLocationTargets} /></div>}
 
           <div className="environment-game-settings">
             <label>{t('Environment')}
@@ -391,15 +397,18 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             <span>{t('Past Games')} ({pastGamesCount})</span>
           </button>
 
-          <button
-            type="button"
-            onClick={handleStart}
-            disabled={(locationSource === 'uploaded' && !importedMap) || locationSource === 'ai'}
-            className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
-          >
-            <Play className="w-4 h-4 fill-white text-white" />
-            <span>{t('START GAME')}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {locationSource === 'generated' && !!countryCodes.length && <button type="button" onClick={() => downloadGeographicPool(countryCodes, locationTargets)} className="inline-flex min-h-10 items-center gap-1.5 px-2 text-xs font-semibold text-stone-400 hover:text-stone-100 transition-colors cursor-pointer"><Download className="w-3.5 h-3.5" /><span>{t('Save geographic pool')}</span></button>}
+            <button
+              type="button"
+              onClick={handleStart}
+              disabled={(locationSource === 'uploaded' && !importedMap) || locationSource === 'ai'}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
+            >
+              <Play className="w-4 h-4 fill-white text-white" />
+              <span>{t('START GAME')}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

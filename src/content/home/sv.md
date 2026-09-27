@@ -180,7 +180,7 @@ Varje post i Tillgängliga anteckningar har en diskret papperskorg. Poster med s
 
 Varje sparning i Anteckningsboken förblir en egen post, även i samma panorama. Om ett inskickat foto inte kan läsas in ligger anteckningen kvar och markeras för återställning.
 
-Ett svagt repetitionsresultat flyttas automatiskt till slutet av den aktuella sessionen tills du klarar det. Varje försök sparas separat.
+Ett svagt repetitionsresultat flyttas automatiskt till slutet av den aktuella sessionen tills du klarar det, även efter att den aktiva sessionen laddats om. Varje försök sparas separat, och ett senare godkänt svar flyttar kortet framåt i stället för att lämna det omedelbart redo igen.
 
 Meta-studier innehåller 359 lokalt lagrade lektioner, normaliserade från den parade OpenGuessr-insamlingen och ytterligare GeoMetas-exempel med användbara Street View-koordinater. Meta-förklaringar följer gränssnittsspråket på alla åtta språk som stöds. När du använder AI Coach eller sparar en post i Anteckningsboken skapas eller återanvänds repetitionskortet automatiskt; annars finns Spara för repetition kvar på det avslöjade platskortet. **Tillgängliga anteckningar** innehåller personlig och AI-assisterad historik för panoramat och Street View-noder i samma land inom 50 meter, med fullständig analys, exakt tid och den inskickade skärmbilden när den finns; Meta ligger kvar under sin egen glödlampa. Coach väntar på den sparade språkinställningen och begär alla naturliga textvärden på det valda AI-språket. Slutlig personlig och AI-text behåller språket den skapades på. Repetition av ett redan förfallet kort flyttar schemat framåt även från anpassad träning och sparas efter omladdning.
 

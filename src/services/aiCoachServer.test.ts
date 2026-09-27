@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 import { isAllowedCoachOrigin } from '../../api/coach';
 
@@ -17,6 +17,12 @@ test('hosted Coach accepts only configured app origins', () => {
   assert.equal(isAllowedCoachOrigin('https://preview.example', 'https://preview.example', ''), true);
   assert.equal(isAllowedCoachOrigin('https://untrusted.example', '', ''), false);
   assert.equal(isAllowedCoachOrigin(undefined, '', ''), false);
+});
+
+test('AI Map Maker modes cannot enter the image Coach route', () => {
+  assert.equal(isCoachMode('analyze'), true);
+  assert.equal(isCoachMode('pool'), false);
+  assert.equal(isCoachMode('pool-places'), false);
 });
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {

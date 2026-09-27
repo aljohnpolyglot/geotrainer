@@ -7,13 +7,14 @@ import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleRevi
 import { planReviewVariation } from '../data/reviewVariation';
 import { isLatestRequest } from '../services/requestIntegrity';
 
-type ReviewStat = { previous: number; current: number; grade: ReviewGrade };
+type ReviewStat = { previous: number; current: number; grade: ReviewGrade; attemptId?: string };
 type SavedReviewSession = { attemptIds: string[]; source: string; kind?: ReviewSessionKind; initialTotal: number; compass?: boolean; stats?: ReviewStat[] };
 export const restoredReviewProgress = (saved: Pick<SavedReviewSession, 'initialTotal' | 'stats'>, remaining: number) => {
   const stats = Array.isArray(saved.stats) ? saved.stats : [];
   return { stats, initialTotal: Math.max(saved.initialTotal || 0, stats.length + remaining) };
 };
 export const queueAfterReview = (queue: Attempt[], current: Attempt, grade: ReviewGrade) => grade === 'again' ? [...queue.slice(1), current] : queue.slice(1);
+export const failedEarlierInSession = (stats: ReviewStat[], attemptId: string) => stats.some((item) => item.attemptId === attemptId && item.grade === 'again');
 
 export function useReviewMode(ctx: any) {
   const { dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
@@ -96,11 +97,11 @@ export function useReviewMode(ctx: any) {
       const scheduler = await trainerDb.schedulerPreferences();
       const correctCountry = attempt.guessedCountryCode === attempt.countryCode;
       const grade = reviewKind === 'correction' ? reviewGradeForCorrection(score, attempt.countryCode, attempt.guessedCountryCode, scheduler.strictness) : reviewGradeForPerformance(score, timeSpentSeconds, correctCountry, scheduler.maximumAnswerSeconds, scheduler.strictness);
-      const previous = await trainerDb.reviewState(reviewAttempt.panoId); const scheduled = shouldScheduleReview(reviewKind, previous, Date.now(), scheduler);
+      const previous = await trainerDb.reviewState(reviewAttempt.panoId); const scheduled = failedEarlierInSession(reviewStats, reviewAttempt.id) || shouldScheduleReview(reviewKind, previous, Date.now(), scheduler);
       const schedule = scheduled ? await trainerDb.gradeReview(reviewAttempt.panoId, grade, reviewKind === 'correction' && grade !== 'again' ? 1 : undefined, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) : await trainerDb.updateReviewGeneralization(reviewAttempt.panoId, grade, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) || previous;
       const savedAttempt = { ...attempt, grade, reviewedAt: Date.now(), previousDueAt: previous?.dueAt, nextDueAt: schedule?.dueAt, intervalDays: schedule?.intervalDays };
       await trainerDb.saveAttempt(savedAttempt);
-      const stats = [...reviewStats, { previous: reviewAttempt.score, current: score, grade }];
+      const stats = [...reviewStats, { previous: reviewAttempt.score, current: score, grade, attemptId: reviewAttempt.id }];
       const remaining = queueAfterReview(reviewQueue, reviewAttempt, grade);
       await trainerDb.setSetting('review.active', remaining.length ? { attemptIds: remaining.map((item) => item.id), source: reviewSource, kind: reviewKind, initialTotal: reviewInitialTotal, compass: ctx.reviewCompass, stats } satisfies SavedReviewSession : null);
       setReviewAttemptRecord(savedAttempt); setReviewResult(round); setReviewStats(stats); setReviewQueue(remaining); setTrainerRefreshKey((key: number) => key + 1);

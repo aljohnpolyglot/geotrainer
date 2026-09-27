@@ -174,7 +174,7 @@ Cada entrada de Notas disponibles tiene una papelera discreta. Las entradas con 
 
 Cada guardado del Cuaderno sigue siendo una entrada independiente, incluso en el mismo panorama. Si una foto enviada no se puede cargar, la nota permanece visible y se marca para recuperación.
 
-Un resultado bajo vuelve automáticamente al final de la sesión de repaso actual hasta que lo superes. Cada intento se guarda por separado.
+Un resultado bajo vuelve automáticamente al final de la sesión de repaso actual hasta que lo superes, incluso si recargas la sesión activa. Cada intento se guarda por separado y el aprobado posterior avanza la tarjeta en vez de dejarla pendiente de inmediato.
 
 El estudio Meta incluye 359 lecciones alojadas localmente, normalizadas de la captura emparejada de OpenGuessr y de ejemplos adicionales de GeoMetas con coordenadas de Street View utilizables. Las explicaciones Meta siguen el idioma de la interfaz en los ocho idiomas compatibles. Usar el entrenador de IA o guardar una entrada del Cuaderno crea o reutiliza automáticamente la tarjeta de Repaso; si no, la tarjeta de ubicación revelada conserva Guardar para repasar. **Notas disponibles** contiene el historial personal y asistido por IA del panorama y de nodos del mismo país situados a menos de 50 metros, con análisis completo, hora exacta y la captura enviada cuando existe; Meta permanece en su bombilla. Coach espera la preferencia de idioma guardada y solicita todos los valores de texto natural en el idioma de IA elegido. El texto personal y de IA finalizado conserva el idioma en que se creó. Repasar una tarjeta ya pendiente avanza su programación incluso desde la práctica personalizada y persiste tras recargar.
 

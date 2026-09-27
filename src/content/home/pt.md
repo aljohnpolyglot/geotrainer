@@ -174,7 +174,7 @@ Cada entrada de Notas disponíveis tem uma lixeira discreta. Entradas com o mesm
 
 Cada salvamento do Caderno permanece uma entrada independente, mesmo no mesmo panorama. Se uma foto enviada não puder ser carregada, a nota continua visível e é marcada para recuperação.
 
-Um resultado baixo volta automaticamente ao fim da sessão de revisão atual até você acertar. Cada tentativa permanece registrada separadamente.
+Um resultado baixo volta automaticamente ao fim da sessão de revisão atual até você acertar, mesmo após recarregar a sessão ativa. Cada tentativa permanece registrada separadamente, e o acerto posterior avança o cartão em vez de deixá-lo imediatamente pendente.
 
 O estudo Meta contém 359 lições hospedadas localmente, normalizadas da captura pareada do OpenGuessr e de exemplos adicionais do GeoMetas com coordenadas utilizáveis do Street View. As explicações Meta seguem o idioma da interface nos oito idiomas suportados. Usar o Coach de IA ou salvar uma entrada do Caderno cria ou reutiliza automaticamente o cartão de Revisão; caso contrário, o cartão de localização revelado mantém Salvar para revisão. **Notas disponíveis** contém o histórico Pessoal e assistido por IA do panorama e de nós do Street View no mesmo país a até 50 metros, com análise completa, horário exato e a captura enviada quando existir; Meta permanece na própria lâmpada. O Coach aguarda a preferência de idioma salva e solicita todos os valores em linguagem natural no idioma de IA escolhido. Texto pessoal e de IA finalizado mantém o idioma de criação. Revisar um cartão já pendente avança seu agendamento mesmo pela prática personalizada e persiste após recarregar.
 
