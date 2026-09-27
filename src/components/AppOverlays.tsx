@@ -46,7 +46,7 @@ interface AppOverlaysProps {
   onToggleCompass: () => void;
 }
 export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | undefined, hasResult: boolean) => appMode !== 'play' || enabled !== false || hasResult;
-export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean) => appMode === 'play' ? hasPlayResult : hasReviewResult || hasSummaryRound;
+export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean) => appMode === 'play' ? hasPlayResult : hasReviewAttempt ? hasReviewResult : hasSummaryRound;
 
 export function AppOverlays(props: AppOverlaysProps) {
   const { ui } = useLanguagePreferences();
@@ -59,9 +59,9 @@ export function AppOverlays(props: AppOverlaysProps) {
   const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   const playAnalysisAvailable = learningAnalysisAvailable(appMode, gameSettings?.aiCoachEnabled, !!activeRoundResult);
-  const revealedResult = appMode === 'play' ? activeRoundResult : reviewResult || summaryRound;
-  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound);
-  const coachGuess = appMode === 'play' ? activeRoundResult?.guessedCountryCode : summaryRound?.guessedCountryCode || reviewAttemptRecord?.guessedCountryCode;
+  const revealedResult = appMode === 'play' ? activeRoundResult : reviewAttempt ? reviewResult : summaryRound;
+  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound, !!reviewAttempt);
+  const coachGuess = appMode === 'play' ? activeRoundResult?.guessedCountryCode : reviewAttempt ? reviewAttemptRecord?.guessedCountryCode : summaryRound?.guessedCountryCode;
   return <>
     {!showHome && currentLocation && <div className={`panorama-tools${appMode === 'review' && reviewResult ? ' review-result-tools' : ''}`} aria-label={t('Learning aids')}>
     {appMode !== 'play' && <button className={`map-training-toggle${activeCompass ? ' enabled' : ''}`} type="button" role="switch" aria-checked={activeCompass} onClick={props.onToggleCompass} title={`${t('compass')} ${activeCompass ? t('on') : t('off')}`}><Compass size={17} /></button>}

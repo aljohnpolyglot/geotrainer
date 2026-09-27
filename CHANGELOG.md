@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-28
+
+- Kept AI Coach on Analyze during an unanswered Review card, even when a saved Play summary is still open; Explain now follows the current card's revealed result.
+
 ## 2026-09-27
 
 - Clarified Coverage counts as unique locations versus combined Play and Review attempts, and named AI-described pool downloads from their description.

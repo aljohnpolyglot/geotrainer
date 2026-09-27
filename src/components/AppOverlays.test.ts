@@ -10,6 +10,8 @@ test('disabled Play analysis stays hidden until the round has a result', () => {
 });
 
 test('Coach explains finished Play rounds opened from game history', () => {
-  assert.equal(coachIsRevealed('review', false, false, true), true);
-  assert.equal(coachIsRevealed('review', false, false, false), false);
+  assert.equal(coachIsRevealed('review', false, false, true, false), true);
+  assert.equal(coachIsRevealed('review', false, false, false, false), false);
+  assert.equal(coachIsRevealed('review', false, false, true, true), false);
+  assert.equal(coachIsRevealed('review', false, true, true, true), true);
 });
