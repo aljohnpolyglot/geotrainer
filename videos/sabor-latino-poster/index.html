@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-composition-variables='[{"id":"ctaMode","type":"enum","label":"Comment question","default":"food","options":[{"value":"food","label":"Food to try"},{"value":"similar","label":"Filipino and Latino similarities"}]}]'>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>Sabor Latino 2026 — interview end card</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --plum: #260929;
+        --berry: #65104f;
+        --teal: #20d7b1;
+        --pink: #ef4ca2;
+        --yellow: #ffd11a;
+        --cream: #fff6dc;
+        --ink: #3c1238;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; margin: 0; overflow: hidden; background: #000; }
+      body { font-family: Arial, Helvetica, sans-serif; color: var(--cream); }
+      #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; isolation: isolate; background: #000; }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+
+      .backdrop {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(214, 28, 125, .82), transparent 34%),
+          radial-gradient(circle at 88% 14%, rgba(222, 75, 28, .62), transparent 31%),
+          radial-gradient(circle at 50% 78%, rgba(50, 5, 85, .95), transparent 54%),
+          linear-gradient(160deg, #71105c 0%, #3d0b4b 58%, #210724 100%);
+      }
+      .texture { position: absolute; inset: 0; opacity: .12; background-image: radial-gradient(rgba(255, 246, 220, .85) .8px, transparent .9px); background-size: 11px 11px; mix-blend-mode: screen; }
+      .frame { position: absolute; inset: 38px; border: 3px solid rgba(255, 246, 220, .18); border-radius: 34px; }
+      .corner { position: absolute; width: 150px; height: 150px; border: 5px solid var(--teal); border-radius: 50%; opacity: .38; }
+      .corner.a { left: -72px; top: 170px; }
+      .corner.b { right: -72px; top: 110px; border-color: var(--yellow); }
+      .corner.c { right: -88px; bottom: 250px; border-color: var(--pink); }
+      .scene { position: absolute; inset: 0; opacity: 0; overflow: hidden; }
+
+      .kicker { position: absolute; left: 100px; right: 100px; text-align: center; color: var(--yellow); font-size: 27px; line-height: 1; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+      .lcs-logo { position: absolute; top: 96px; left: 415px; width: 250px; height: auto; object-fit: contain; }
+      #scene-title .kicker { top: 315px; }
+      .festival-art { position: absolute; top: 392px; left: 130px; width: 820px; height: auto; object-fit: contain; filter: drop-shadow(0 18px 12px rgba(22, 2, 26, .42)); }
+      .festival-copy { position: absolute; top: 1110px; left: 120px; right: 120px; display: grid; gap: 10px; text-align: center; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+      .festival-copy span:first-child { font-size: 31px; }
+      .festival-copy span:last-child { color: var(--teal); font-size: 25px; }
+
+      .food-strip { position: absolute; left: 55px; bottom: 38px; width: 970px; height: auto; object-fit: contain; filter: drop-shadow(0 24px 20px rgba(15, 0, 19, .5)); z-index: 1; }
+
+      #scene-details .kicker { top: 150px; }
+      .date-lockup { position: absolute; top: 260px; left: 90px; right: 90px; text-align: center; }
+      .month { color: var(--yellow); font-size: 78px; line-height: .92; font-weight: 1000; letter-spacing: -.055em; text-transform: uppercase; }
+      .days { color: var(--cream); font-size: 196px; line-height: .82; font-weight: 1000; letter-spacing: -.09em; text-shadow: 9px 11px 0 rgba(145, 18, 99, .72); }
+      .year { margin-top: 20px; color: var(--cream); font-size: 58px; font-weight: 1000; letter-spacing: .2em; }
+      .time-card { position: absolute; top: 705px; left: 170px; right: 170px; padding: 26px 40px 29px; border-radius: 999px; background: var(--cream); color: var(--ink); text-align: center; font-size: 49px; font-weight: 1000; letter-spacing: -.035em; box-shadow: 0 14px 0 rgba(17, 1, 21, .22); }
+      .time-card strong { color: var(--pink); }
+      .location-card { position: absolute; top: 875px; left: 100px; right: 100px; padding: 42px 48px; border: 3px solid rgba(255, 246, 220, .28); border-radius: 34px; background: rgba(34, 5, 43, .47); text-align: center; }
+      .location-card strong { display: block; color: var(--teal); font-size: 45px; line-height: 1.02; font-weight: 1000; text-transform: uppercase; }
+      .location-card span { display: block; margin-top: 14px; color: var(--cream); font-size: 27px; line-height: 1.25; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+      .chips { position: absolute; top: 1195px; left: 76px; right: 76px; display: grid; gap: 18px; }
+      .chip { min-height: 94px; padding: 25px 46px; border-radius: 22px; background: var(--yellow); color: var(--ink); font-size: 43px; line-height: 1; font-weight: 1000; text-align: center; text-transform: uppercase; box-shadow: 9px 10px 0 rgba(27, 3, 31, .28); }
+      .chip:nth-child(2) { background: var(--pink); }
+      .chip:nth-child(3) { background: var(--teal); }
+
+      .mini-title { position: absolute; top: 110px; left: 365px; width: 350px; height: auto; object-fit: contain; }
+      .question { position: absolute; top: 690px; left: 82px; right: 82px; text-align: center; font-size: 102px; line-height: .92; font-weight: 1000; letter-spacing: -.065em; text-transform: uppercase; }
+      .question > span { display: block; }
+      .question .food-word { display: inline; color: var(--yellow); }
+      .question .try-word { color: var(--teal); }
+      .question.long { top: 700px; font-size: 78px; line-height: .98; letter-spacing: -.055em; }
+      .question.long .people-word { color: var(--yellow); }
+      .comment-cta { position: absolute; top: 1120px; left: 170px; right: 170px; padding: 27px 34px 30px; border-radius: 999px; background: var(--pink); color: var(--cream); text-align: center; font-size: 45px; line-height: 1; font-weight: 1000; letter-spacing: .02em; text-transform: uppercase; box-shadow: 0 14px 0 rgba(24, 2, 29, .3); }
+      .scroll-cue { position: absolute; top: 1268px; left: 0; right: 0; color: var(--yellow); font-size: 80px; line-height: 1; text-align: center; font-weight: 1000; }
+      .partner-row { position: absolute; left: 210px; right: 210px; bottom: 290px; display: flex; align-items: center; justify-content: center; gap: 48px; z-index: 3; }
+      .partner-row .lcs-small { width: 165px; height: auto; }
+      .partner-row .divider { width: 2px; height: 86px; background: rgba(255, 246, 220, .42); }
+      .partner-row .makati { width: 225px; height: auto; filter: brightness(2.1) saturate(1.1); }
+      #scene-cta .food-strip { left: 120px; bottom: -32px; width: 840px; }
+      .confetti { position: absolute; left: 50%; width: 0; height: 0; z-index: 2; pointer-events: none; }
+      .confetti.title { top: 760px; }
+      .confetti.cta { top: 980px; }
+      .confetti i { position: absolute; width: 16px; height: 34px; border-radius: 5px; opacity: 0; }
+      .lcs-logo, .kicker, .festival-art, .festival-copy, .mini-title, .question, .comment-cta, .scroll-cue { z-index: 3; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-tjjd" id="stage" data-composition-id="sabor-latino-poster" data-start="0" data-duration="10" data-fps="30" data-width="1080" data-height="1920">
+      <section data-hf-id="hf-s8qt" class="clip" id="poster" data-start="0" data-duration="10" data-track-index="0" data-layout-allow-overflow="true">
+        <div data-hf-id="hf-nn1e" class="backdrop" id="backdrop"></div>
+        <div data-hf-id="hf-nl5o" class="texture" data-layout-ignore="true"></div>
+        <div data-hf-id="hf-ra2q" class="frame" data-layout-ignore="true"></div>
+        <div data-hf-id="hf-lb2j" class="corner a" data-layout-ignore="true"></div>
+        <div data-hf-id="hf-cqhs" class="corner b" data-layout-ignore="true"></div>
+        <div data-hf-id="hf-4frl" class="corner c" data-layout-ignore="true"></div>
+
+        <section data-hf-id="hf-ftpk" class="scene" id="scene-title" data-layout-allow-overflow="true">
+          <img data-hf-id="hf-pbzh" class="lcs-logo" id="title-lcs" src="assets/lcs-manila-photoshop.png" alt="LCS Manila">
+          <div data-hf-id="hf-og0f" class="kicker" id="title-kicker">The festival is back</div>
+          <img data-hf-id="hf-2ic0" class="festival-art" id="festival-art" src="assets/typography-photoshop.png" alt="Sabor Latino 2026">
+          <div data-hf-id="hf-k2w2" class="festival-copy" id="festival-copy">
+            <span data-hf-id="hf-bhc5">A Latin American food and culture festival</span>
+            <span data-hf-id="hf-wn3n">Makati · November 14 and 15</span>
+          </div>
+          <img data-hf-id="hf-wq4s" class="food-strip" id="title-food-strip" src="assets/food-strip-title.png" alt="Latin American dishes" data-layout-ignore="true">
+          <div class="confetti title" id="title-confetti" data-layout-ignore="true"></div>
+        </section>
+
+        <section data-hf-id="hf-uh5n" class="scene" id="scene-details">
+          <div data-hf-id="hf-yq2d" class="kicker" id="details-kicker">Save the date</div>
+          <div data-hf-id="hf-pwio" class="date-lockup" id="date-lockup">
+            <div data-hf-id="hf-ordm" class="month" data-layout-allow-overlap="true">November</div>
+            <div data-hf-id="hf-hsuw" class="days" data-layout-allow-overlap="true">14 &amp; 15</div>
+            <div data-hf-id="hf-qxy1" class="year" data-layout-allow-overlap="true">2026</div>
+          </div>
+          <div data-hf-id="hf-vfk3" class="time-card" id="time-card">10:00 AM <strong data-hf-id="hf-4oa7">TO</strong> 10:00 PM</div>
+          <div data-hf-id="hf-3x2a" class="location-card" id="location-card">
+            <strong data-hf-id="hf-73rj">Paseo de Roxas Street</strong>
+            <span data-hf-id="hf-hpb9">Beside Ayala Triangle Gardens · Makati</span>
+          </div>
+          <div data-hf-id="hf-cgzc" class="chips" id="chips">
+            <div data-hf-id="hf-yof2" class="chip">Food</div>
+            <div data-hf-id="hf-zn4x" class="chip">Performances</div>
+            <div data-hf-id="hf-mzn5" class="chip">Cultural experiences</div>
+          </div>
+        </section>
+
+        <section data-hf-id="hf-trg0" class="scene" id="scene-cta" data-layout-allow-overflow="true">
+          <img data-hf-id="hf-sfgu" class="mini-title" id="mini-title" src="assets/typography-photoshop-mini.png" alt="Sabor Latino 2026">
+          <div data-hf-id="hf-rtii" class="question" id="question">
+            <span data-hf-id="hf-ixbs" data-layout-allow-overlap="true">What <span data-hf-id="hf-w5py" class="food-word">food</span></span>
+            <span data-hf-id="hf-60bm" data-layout-allow-overlap="true">do you want</span>
+            <span data-hf-id="hf-715a" class="try-word" data-layout-allow-overlap="true">to try?</span>
+          </div>
+          <div data-hf-id="hf-bw6a" class="comment-cta" id="comment-cta">Comment below</div>
+          <div data-hf-id="hf-br6z" class="scroll-cue" id="scroll-cue">↓</div>
+          <img data-hf-id="hf-nslk" class="food-strip" id="cta-food-strip" src="assets/food-strip-cta.png" alt="Latin American dishes" data-layout-ignore="true">
+          <div class="confetti cta" id="cta-confetti" data-layout-ignore="true"></div>
+          <div data-hf-id="hf-ffi4" class="partner-row" id="partner-row">
+            <img data-hf-id="hf-t7fs" class="lcs-small" src="assets/lcs-manila-photoshop-small.png" alt="LCS Manila">
+            <div data-hf-id="hf-0b8m" class="divider" data-layout-ignore="true"></div>
+            <img data-hf-id="hf-v34h" class="makati" src="assets/make-it-makati.png" alt="Make It Makati">
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <script>
+      const { ctaMode } = window.__hyperframes.getVariables();
+      if (ctaMode === "similar") {
+        const question = document.getElementById("question");
+        const lines = question.querySelectorAll(":scope > span");
+        question.classList.add("long");
+        lines[0].textContent = "What makes";
+        lines[1].textContent = "Filipinos & Latinos";
+        lines[1].className = "people-word";
+        lines[2].textContent = "similar?";
+        lines[2].className = "try-word";
+      }
+
+      const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
+
+      tl.fromTo("#backdrop", { opacity: 0 }, { opacity: 1, duration: .4, ease: "power2.out" }, 0);
+      tl.fromTo("#scene-title", { opacity: 0 }, { opacity: 1, duration: .01 }, 0);
+      tl.fromTo("#title-lcs", { y: -55, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power4.out" }, .1);
+      tl.fromTo("#title-kicker", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, .28);
+      tl.fromTo("#festival-art", { scale: .7, y: 70, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: .85, ease: "back.out(1.45)" }, .4);
+      tl.fromTo("#festival-copy", { y: 35, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 1.02);
+      tl.fromTo("#title-food-strip", { y: 180, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: "power3.out" }, 1.15);
+      tl.to("#festival-art", { scale: 1.025, duration: 1.25, ease: "sine.inOut" }, 1.5);
+      tl.to("#scene-title", { y: -55, opacity: 0, duration: .48, ease: "power3.in" }, 2.72);
+
+      tl.fromTo("#scene-details", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 2.98);
+      tl.fromTo("#details-kicker", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power2.out" }, 3.1);
+      tl.fromTo("#date-lockup", { scale: .78, opacity: 0 }, { scale: 1, opacity: 1, duration: .62, ease: "back.out(1.35)" }, 3.18);
+      tl.fromTo("#time-card", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: .48, ease: "power4.out" }, 3.6);
+      tl.fromTo("#location-card", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: .48, ease: "power4.out" }, 3.82);
+      tl.fromTo("#chips .chip", { y: 45, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .15, ease: "power3.out" }, 4.18);
+      tl.to("#scene-details", { x: -90, opacity: 0, duration: .5, ease: "power3.in" }, 6.15);
+
+      tl.fromTo("#scene-cta", { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: .52, ease: "power3.out" }, 6.42);
+      tl.fromTo("#mini-title", { y: -55, scale: .84, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .58, ease: "back.out(1.35)" }, 6.52);
+      tl.fromTo("#question > span", { y: 52, opacity: 0 }, { y: 0, opacity: 1, duration: .48, stagger: .13, ease: "power4.out" }, 6.82);
+      tl.fromTo("#cta-food-strip", { y: 170, opacity: 0 }, { y: 0, opacity: 1, duration: .62, ease: "power3.out" }, 7.05);
+      tl.fromTo("#comment-cta", { scale: .72, opacity: 0 }, { scale: 1, opacity: 1, duration: .52, ease: "back.out(1.7)" }, 7.38);
+      tl.fromTo("#scroll-cue", { y: -18, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power2.out" }, 7.66);
+      tl.fromTo("#partner-row", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power2.out" }, 7.88);
+      tl.to("#scroll-cue", { y: 18, duration: .35, ease: "sine.inOut", yoyo: true, repeat: 2 }, 8.05);
+      tl.to("#scene-cta", { y: -60, scale: .96, opacity: 0, duration: .5, ease: "power3.in" }, 9.22);
+      tl.to([".corner", ".frame", ".texture"], { opacity: 0, duration: .25, ease: "power1.in" }, 9.48);
+      tl.to("#backdrop", { opacity: 0, duration: .38, ease: "power2.in" }, 9.58);
+
+      const confettiColors = ["#20d7b1", "#ef4ca2", "#ffd11a", "#f06b3b", "#fff6dc"];
+      const prand = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+      const addConfetti = (id, start, seed) => {
+        const field = document.getElementById(id);
+        for (let i = 0; i < 28; i++) {
+          const piece = document.createElement("i");
+          piece.style.background = confettiColors[i % confettiColors.length];
+          field.appendChild(piece);
+          const angle = -Math.PI / 2 + (prand(seed + i * 5) * 2 - 1) * 1.05;
+          const speed = 310 + prand(seed + i * 7) * 360;
+          const x = Math.cos(angle) * speed;
+          const y = Math.sin(angle) * speed;
+          const spin = (prand(seed + i * 11) * 2 - 1) * 520;
+          tl.fromTo(piece, { x: 0, y: 0, rotation: 0, opacity: 0 }, { x: x * .25, y: y * .25, rotation: spin * .2, opacity: 1, duration: .18, ease: "power2.out" }, start);
+          tl.to(piece, { x, y: y + 640, rotation: spin, opacity: 0, duration: .88, ease: "power1.in" }, start + .18);
+        }
+      };
+      addConfetti("title-confetti", .78, 17);
+      addConfetti("cta-confetti", 7.32, 43);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["sabor-latino-poster"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

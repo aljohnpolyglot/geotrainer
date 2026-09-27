@@ -18,6 +18,11 @@
 
 ## 2026-09-26
 
+- Added a portable HyperFrames Sabor Latino 2026 poster animation rebuilt from scratch as local HTML, CSS, SVG, and deterministic GSAP motion, with a rendered 10-second vertical MP4.
+- Replaced poster-only vector stand-ins with local generated PNG toucans, food, maraca/leaf decorations, plus local LCS Manila and Make It Happen Makati logo PNGs and a negative-color LCS variant.
+- Rebuilt the Sabor Latino outro as a readable three-beat, 10-second end card using the supplied transparent typography and LCS artwork, clear event details, a comment prompt, and a complete exit to black.
+- Replaced the outro's baked-background food collage with a clean transparent food strip and restored deterministic confetti bursts for the festival and comment reveals.
+- Added a selectable second outro prompt for the follow-up promo: “What makes Filipinos & Latinos similar? Comment below.”
 - Added General and Browse views inside Learn → Meta so learners can continue randomly or search and start a specific unfinished localized lesson, with All, Not yet, and Done filters that clearly separate completed lessons.
 - Restored visible themed fields for AI pool descriptions and JSON URLs in Learn setup.
 - Raised Map Maker and geographic-pool JSON imports to 20 MB, cleared stale errors when switching import methods, and added visible loading feedback for file and URL imports.

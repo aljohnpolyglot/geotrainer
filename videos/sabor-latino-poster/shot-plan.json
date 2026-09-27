@@ -1,0 +1,23 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 10,
+  "fps": 30,
+  "canvas": { "w": 1080, "h": 1920, "aspect": "9:16" },
+  "style": "screen-printed Latin festival poster, cut-paper collage, saturated plum field, playful editorial energy",
+  "palette": ["#461044", "#5c0b62", "#10c9a4", "#ee3d91", "#ffc41e", "#f06b3b", "#efb16a", "#f7efd8"],
+  "font": "Arial Black",
+  "beats": [0.4, 1.6, 2.8, 4.1, 5.4, 6.7, 8.2],
+  "export": "mp4",
+  "asset_needs": [],
+  "block": "caption-kinetic-slam",
+  "customize": { "copy": "SABOR LATINO", "accent": "turquoise / magenta", "motif": "festival cut-paper" },
+  "content": {
+    "scenes": [
+      { "id": "hook", "start": 0, "end": 1.6, "text": "WHAT AWAITS", "emphasis_words": ["AWAITS"], "emotion": "inviting", "motion": "scale punch with sunburst", "beats": [0.4] },
+      { "id": "at", "start": 1.6, "end": 2.8, "text": "YOU AT", "emphasis_words": ["YOU"], "emotion": "playful", "motion": "side snap", "beats": [1.6] },
+      { "id": "title", "start": 2.8, "end": 5.4, "text": "SABOR LATINO", "emphasis_words": ["SABOR", "LATINO"], "emotion": "celebratory", "motion": "two-line slam and confetti pop", "beats": [2.8, 3.4] },
+      { "id": "details", "start": 5.4, "end": 8.2, "text": "NOV 14 & 15 · 10AM–10PM · MAKATI", "emphasis_words": ["NOV", "14", "15"], "emotion": "clear", "motion": "paper signboards swing in", "beats": [5.4, 6.7] },
+      { "id": "finale", "start": 8.2, "end": 10, "text": "FOOD · PERFORMANCES · CULTURAL EXPERIENCE", "emphasis_words": ["FOOD", "PERFORMANCES"], "emotion": "confident", "motion": "lockup settles with warm signboard hold", "beats": [8.2] }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "duration": 10,
+  "maxStaticSec": 2.6,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#festival-art", "bySec": 1.2 },
+    { "kind": "before", "a": "#festival-art", "b": "#date-lockup" },
+    { "kind": "before", "a": "#date-lockup", "b": "#question" },
+    { "kind": "staysInFrame", "selector": "#festival-art" },
+    { "kind": "staysInFrame", "selector": "#date-lockup" },
+    { "kind": "staysInFrame", "selector": "#comment-cta" },
+    { "kind": "keepsMoving", "withinSelector": "#poster" }
+  ]
+}
