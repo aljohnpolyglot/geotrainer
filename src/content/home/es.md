@@ -54,7 +54,7 @@ Usa los desplegables separados **Regiones** y **Ciudades** y elimina selecciones
 
 Los nombres de las regiones y ciudades siguen el idioma de la interfaz cuando hay un nombre localizado disponible. **Guardar grupo geográfico** descarga las selecciones actuales de países, regiones y ciudades como JSON, sin coordenadas de Street View. **Subir JSON** y **URL JSON** aceptan ese formato editable o un JSON de coordenadas de Map Maker; un grupo geográfico vuelve a Personalizado para editarlo, mientras que las coordenadas permanecen como una fuente finita. Se muestra el nombre del archivo o de la URL. El endpoint debe permitir acceso desde el navegador (CORS).
 
-**Describir un grupo** envía una petición breve a Gemini y abre los países, regiones y ciudades sugeridos en Personalizado para que puedas revisarlos y editarlos. Puedes escribir en cualquier idioma compatible y describir lugares, paisajes o confusiones habituales. Es una sugerencia de IA, no una garantía geográfica.
+**Describir un grupo** envía una petición breve a Gemini y abre en Personalizado los países, regiones, ciudades, entorno, nivel urbano, muestreo, prioridad, fuente de imágenes y cobertura interior sugeridos para que puedas revisarlos y editarlos. Las peticiones sobre agricultura y naturaleza amplia eligen Rural; las de arquitectura y calles urbanas, Urbano; y las de suburbios, Suburbano, salvo que indiques otra cosa. Las peticiones sobre ligas deportivas usan ciudades sede únicas y descartan nombres que no se puedan validar con los datos locales. Puedes escribir en cualquier idioma compatible y describir lugares, paisajes o confusiones habituales. Es una sugerencia de IA, no una garantía geográfica.
 
 ## Modo Juego
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCoachPrompt, callGeminiCoach, callGeminiPool, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 import { isAllowedCoachOrigin } from '../../api/coach';
 
@@ -23,17 +23,20 @@ const geminiResponse = (text: string, status = 200) => new Response(status === 2
   status, headers: { 'content-type': 'application/json' },
 });
 
-test('described pools accept supported countries and discard invented places', async () => {
-  const raw = { countryCodes: ['MX', 'ZZ'], regions: [{ countryCode: 'ES', name: 'Andalusia' }, { countryCode: 'ZZ', name: 'Nowhere' }], cities: [] };
+test('described pools choose countries before selecting only valid local place keys', async () => {
+  const raw = { countryCodes: ['MX', 'ZZ'], placeMode: 'cities', placeSelection: 'representative', environment: 'urban', urbanLevel: 2, samplingMode: 'balanced', priority: 'least-exposure', panoramaSource: 'official', allowInteriors: false };
   const normalized = normalizePoolSuggestion(raw);
-  assert.deepEqual(normalized.countryCodes, ['MX', 'ES']);
-  assert.deepEqual(normalized.regions, [{ countryCode: 'ES', name: 'Andalusia' }]);
+  assert.deepEqual(normalized.countryCodes, ['MX']);
+  assert.equal(normalized.placeMode, 'cities');
+  assert.equal(normalized.environment, 'urban');
+  assert.equal(normalized.samplingMode, 'balanced');
   let requestUrl = ''; let requestBody = '';
   const result = await callGeminiPool(new GeminiKeyCarousel(['one']), 'países hispanohablantes', (async (url, init) => { requestUrl = String(url); requestBody = String(init?.body); return geminiResponse(JSON.stringify(raw)); }) as typeof fetch);
   assert.deepEqual(result, normalized);
   assert.match(requestUrl, /gemini-2\.5-flash:/);
-  assert.match(requestBody, /written in any language/);
-  assert.match(requestBody, /islands.*strict filters/);
+  assert.match(requestBody, /Choose countries and editable search settings/);
+  const places = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'coastal cities', 'representative', [{ key: 'c:0', countryCode: 'MX', name: 'Cancún', kind: 'city' }], (async () => geminiResponse(JSON.stringify({ regionKeys: ['r:invented'], cityKeys: ['c:0', 'c:invented'] }))) as typeof fetch);
+  assert.deepEqual(places, { regionKeys: [], cityKeys: ['c:0'] });
   assert.throws(() => normalizePoolSuggestion({ countryCodes: ['ZZ'] }), /no valid countries/i);
 });
 

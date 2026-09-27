@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27
+
+- Added AI-described pools to both Learn and Play, with editable environment, urban level, sampling, priority where applicable, imagery-source, and indoor-coverage settings; a token-efficient second AI pass selects only local region or city IDs, with no arbitrary region-result ceiling.
+
 ## 2026-09-26
 
 - Added General and Browse views inside Learn → Meta so learners can continue randomly or search and start a specific unfinished localized lesson, with All, Not yet, and Done filters that clearly separate completed lessons.

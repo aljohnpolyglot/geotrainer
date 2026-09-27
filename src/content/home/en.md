@@ -103,7 +103,7 @@ Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Upload
 
 Region and city names follow the interface language when a localized name is available. Use **Save geographic pool** to download the current country, region, and city choices as JSON without Street View coordinates. **Upload JSON** and **JSON URL** accept either that editable pool format or Map Maker coordinate JSON; a geographic pool returns to Custom with its choices ready to edit, while coordinate JSON stays a finite Uploaded source. The loaded filename or URL name is shown. URL endpoints must allow browser access (CORS).
 
-**Describe a pool** sends your short learning request to Gemini, then opens the generated countries, regions, and cities in Custom so you can verify and edit them before starting. You can write in any supported interface language and describe named places, landscape themes, or common confusers. It is an AI suggestion, not a geographic guarantee.
+**Describe a pool** sends your short learning request to Gemini, then opens the generated countries, regions, cities, environment, urban level, sampling, priority, imagery source, and indoor coverage in Custom so you can verify and edit them before starting. Farming and broad nature requests select Rural, architecture and city-street requests select Urban, and suburbs select Suburban unless your wording says otherwise. A second pass chooses only entries from the selected countries’ local region or city list, without an arbitrary region limit. Sports-league requests use unique home cities. You can write in any supported interface language and describe named places, landscape themes, or common confusers. It is an AI suggestion, not a geographic guarantee.
 
 ### Choosing a learning priority
 

@@ -54,7 +54,7 @@ Använd de separata listorna **Regioner** och **Städer** och ta bort val med de
 
 Namnen på regioner och städer följer gränssnittets språk när ett lokaliserat namn är tillgängligt. **Spara geografisk pool** hämtar de valda länderna, regionerna och städerna som JSON utan Street View-koordinater. **Ladda upp JSON** och **JSON-URL** tar emot detta redigerbara format eller koordinat-JSON från Map Maker; en geografisk pool återgår till Anpassat för redigering, medan koordinater förblir en ändlig källa. Fil- eller URL-namnet visas. Endpointen måste tillåta webbläsaråtkomst med CORS.
 
-**Beskriv en pool** skickar en kort lärandebeskrivning till Gemini och öppnar de föreslagna länderna, regionerna och städerna i Anpassat så att du kan kontrollera och redigera dem. Du kan skriva på valfritt språk som stöds och beskriva platser, landskap eller vanliga förväxlingar. Det är ett AI-förslag, inte en geografisk garanti.
+**Beskriv en pool** skickar en kort lärandebeskrivning till Gemini och öppnar de föreslagna länderna, regionerna, städerna, miljön, stadsnivån, urvalet, prioriteten, bildkällan och inomhustäckningen i Anpassat så att du kan kontrollera och redigera dem. Förfrågningar om jordbruk och stora naturområden väljer Landsbygd, arkitektur och stadsgator väljer Stad och förorter väljer Förort, om du inte anger något annat. Förfrågningar om sportligor använder unika hemstäder och tar bort namn som inte kan verifieras mot lokala stadsdata. Du kan skriva på valfritt språk som stöds och beskriva platser, landskap eller vanliga förväxlingar. Det är ett AI-förslag, inte en geografisk garanti.
 
 ## Spelläge
 

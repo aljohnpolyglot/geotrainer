@@ -107,7 +107,7 @@ Verwende die getrennten Auswahllisten **Regionen** und **Städte** und entferne 
 
 Regions- und Städtenamen folgen der Sprache der Benutzeroberfläche, sofern ein lokalisierter Name verfügbar ist. **Geografischen Pool speichern** lädt die aktuellen Länder-, Regionen- und Städteauswahlen als JSON ohne Street-View-Koordinaten herunter. **JSON hochladen** und **JSON-URL** akzeptieren dieses bearbeitbare Format oder Map-Maker-Koordinaten; ein geografischer Pool kehrt zum bearbeitbaren Modus Benutzerdefiniert zurück, Koordinaten bleiben eine endliche Quelle. Der Datei- oder URL-Name wird angezeigt. Der Endpoint muss Browserzugriff per CORS erlauben.
 
-**Pool beschreiben** sendet eine kurze Lernanfrage an Gemini und öffnet die vorgeschlagenen Länder, Regionen und Städte unter Benutzerdefiniert zur Prüfung und Bearbeitung. Du kannst in jeder unterstützten Sprache Orte, Landschaftsthemen oder häufige Verwechslungen beschreiben. Das Ergebnis ist ein KI-Vorschlag, keine geografische Garantie.
+**Pool beschreiben** sendet eine kurze Lernanfrage an Gemini und öffnet die vorgeschlagenen Länder, Regionen, Städte, Umgebung, Stadtstufe, Auswahl, Priorität, Bildquelle und Innenraumabdeckung unter Benutzerdefiniert zur Prüfung und Bearbeitung. Anfragen zu Landwirtschaft und weiträumiger Natur wählen Ländlich, Architektur und Stadtstraßen wählen Städtisch und Vororte wählen Vorstädtisch, sofern du nichts anderes angibst. Anfragen zu Sportligen verwenden eindeutige Heimatstädte und verwerfen Namen, die nicht mit den lokalen Stadtdaten bestätigt werden können. Du kannst in jeder unterstützten Sprache Orte, Landschaftsthemen oder häufige Verwechslungen beschreiben. Das Ergebnis ist ein KI-Vorschlag, keine geografische Garantie.
 
 ### Ein Panorama untersuchen
 

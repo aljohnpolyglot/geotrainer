@@ -54,7 +54,7 @@ Usa i menu separati **Regioni** e **Città** e rimuovi le selezioni dalle rispet
 
 I nomi delle regioni e delle città seguono la lingua dell’interfaccia quando è disponibile un nome localizzato. **Salva insieme geografico** scarica le scelte correnti di paesi, regioni e città come JSON senza coordinate Street View. **Carica JSON** e **URL JSON** accettano questo formato modificabile o un JSON di coordinate Map Maker; un insieme geografico torna a Personalizzato per la modifica, mentre le coordinate restano una fonte finita. Viene mostrato il nome del file o dell’URL. L’endpoint deve consentire l’accesso dal browser (CORS).
 
-**Descrivi un insieme** invia una breve richiesta a Gemini e apre i paesi, le regioni e le città proposti in Personalizzato, dove puoi verificarli e modificarli. Puoi scrivere in qualsiasi lingua supportata e descrivere luoghi, paesaggi o confusioni comuni. È un suggerimento dell’IA, non una garanzia geografica.
+**Descrivi un insieme** invia una breve richiesta a Gemini e apre in Personalizzato i paesi, le regioni, le città, l’ambiente, il livello urbano, il campionamento, la priorità, la fonte delle immagini e la copertura interna proposti, dove puoi verificarli e modificarli. Le richieste su agricoltura e ampi ambienti naturali scelgono Rurale, quelle su architettura e strade cittadine scelgono Urbano e quelle sui sobborghi scelgono Suburbano, salvo indicazioni diverse. Le richieste sulle leghe sportive usano città di casa uniche e scartano i nomi che non possono essere convalidati con i dati locali. Puoi scrivere in qualsiasi lingua supportata e descrivere luoghi, paesaggi o confusioni comuni. È un suggerimento dell’IA, non una garanzia geografica.
 
 ## Modalità Gioco
 

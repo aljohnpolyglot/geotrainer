@@ -70,19 +70,25 @@ const responseSchema = {
 };
 const poolResponseSchema = { type: 'OBJECT', properties: {
   countryCodes: { type: 'ARRAY', items: { type: 'STRING' } },
-  regions: { type: 'ARRAY', items: { type: 'OBJECT', properties: { countryCode: { type: 'STRING' }, name: { type: 'STRING' } }, required: ['countryCode', 'name'] } },
-  cities: { type: 'ARRAY', items: { type: 'OBJECT', properties: { countryCode: { type: 'STRING' }, name: { type: 'STRING' } }, required: ['countryCode', 'name'] } },
-}, required: ['countryCodes', 'regions', 'cities'] };
-const poolCountries = `${Object.entries(countryCatalog).map(([code, item]) => `${code}=${item.name}`).join(', ')}. Use real first-level administrative region names, never aggregate labels such as "Southern Italy" or "Adriatic Croatia". For a Southern Italy and Adriatic Croatia comparison, use IT regions Abruzzo, Apulia, Basilicata, Calabria, Campania, Molise, Sardinia, and Sicily, and HR regions Istria, Dubrovnik-Neretva, Primorje-Gorski Kotar, Šibenik-Knin, Split-Dalmatia, and Zadar.`;
+  placeMode: { type: 'STRING', enum: ['none', 'regions', 'cities'] },
+  placeSelection: { type: 'STRING', enum: ['all', 'representative', 'league', 'capital'] },
+  environment: { type: 'STRING', enum: ['mixed', 'urban', 'suburban', 'rural'] },
+  urbanLevel: { type: 'STRING', enum: ['1', '2', '3'] },
+  samplingMode: { type: 'STRING', enum: ['natural', 'balanced'] },
+  priority: { type: 'STRING', enum: ['random', 'familiar', 'least-exposure'] },
+  panoramaSource: { type: 'STRING', enum: ['official', 'mixed', 'contributor'] },
+  allowInteriors: { type: 'BOOLEAN' },
+}, required: ['countryCodes', 'placeMode', 'placeSelection', 'environment', 'urbanLevel', 'samplingMode', 'priority', 'panoramaSource', 'allowInteriors'] };
+const poolPlacesSchema = { type: 'OBJECT', properties: { regionKeys: { type: 'ARRAY', items: { type: 'STRING' } }, cityKeys: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['regionKeys', 'cityKeys'] };
+const poolCountries = Object.entries(countryCatalog).map(([code, item]) => `${code}=${item.name}`).join(', ');
 
 export function normalizePoolSuggestion(value: unknown) {
   if (!value || typeof value !== 'object') throw new Error('Gemini returned malformed JSON.');
   const source = value as Record<string, unknown>;
-  const places = (key: 'regions' | 'cities') => Array.isArray(source[key]) ? source[key].flatMap((value) => { const item = value && typeof value === 'object' ? value as Record<string, unknown> : {}; const countryCode = String(item.countryCode || '').toUpperCase(); const name = String(item.name || '').trim().slice(0, 120); return countryCode in countryCatalog && name ? [{ countryCode, name }] : []; }).slice(0, 80) : [];
-  const regions = places('regions'), cities = places('cities');
-  const countryCodes = [...new Set([...(Array.isArray(source.countryCodes) ? source.countryCodes.map(String).map((code) => code.toUpperCase()).filter((code) => code in countryCatalog) : []), ...regions.map((place) => place.countryCode), ...cities.map((place) => place.countryCode)])].slice(0, 40);
+  const countryCodes = [...new Set(Array.isArray(source.countryCodes) ? source.countryCodes.map(String).map((code) => code.toUpperCase()).filter((code) => code in countryCatalog) : [])].slice(0, 40);
   if (!countryCodes.length) throw new Error('Gemini returned no valid countries.');
-  return { countryCodes, regions, cities };
+  const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T) => allowed.includes(value as T) ? value as T : fallback;
+  return { countryCodes, placeMode: pick(source.placeMode, ['none', 'regions', 'cities'], 'none'), placeSelection: pick(source.placeSelection, ['all', 'representative', 'league', 'capital'], 'all'), environment: pick(source.environment, ['mixed', 'urban', 'suburban', 'rural'], 'mixed'), urbanLevel: [1, 2, 3].includes(Number(source.urbanLevel)) ? Number(source.urbanLevel) as 1 | 2 | 3 : 3, samplingMode: pick(source.samplingMode, ['natural', 'balanced'], 'natural'), priority: pick(source.priority, ['random', 'familiar', 'least-exposure'], 'random'), panoramaSource: pick(source.panoramaSource, ['official', 'mixed', 'contributor'], 'official'), allowInteriors: source.allowInteriors === true };
 }
 
 export async function callGeminiPool(carousel: GeminiKeyCarousel, description: string, fetcher: typeof fetch = fetch) {
@@ -91,7 +97,7 @@ export async function callGeminiPool(carousel: GeminiKeyCarousel, description: s
   for (const model of models) for (let attempt = 0; attempt < Math.max(1, carousel.size); attempt++) {
     const state = carousel.next(); if (!state) throw new Error('All Gemini keys are cooling down.');
     try {
-      const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Turn this learning request, written in any language, into a precise GeoTrainer pool: ${JSON.stringify(description)}. Preserve every explicitly named place unless excluded. Understand contextual abbreviations (for example, SA means South Africa in an Australia–SA–Argentina desert comparison). A request for lookalikes, common confusers, or a shared landscape is a comparison set, not a request to choose just one place. Include only countries or territories satisfying every geographic, language, island or coastal, inclusion, and exclusion constraint. Geography overrides a shared language: Equatorial Guinea is not Latin America. Treat words such as only, excluding, islands, countries, coast, and language as strict filters. Do not add a parent country for a territory that has its own allowed code. Do not broaden to nearby, culturally related, or same-language places unless the learner explicitly asks for suggested confusers. When a landscape or coastal theme applies only to part of a country, return matching regions so the whole country is not sampled; use cities only for an explicitly urban request. Examples: "Spanish-speaking Caribbean islands" means CU, DO, and PR, not Spain, the US, or mainland Latin America; "Mediterranean island countries" means CY and MT, not countries that merely contain islands; "deutschsprachige Alpenländer, aber nicht Deutschland" excludes DE; "Australia, SA, Argentina deserts" preserves AU, ZA, and AR and narrows each to dry regions. Otherwise leave region and city arrays empty. Do not invent places. Use this allowed ISO list: ${poolCountries}` }] }], generationConfig: { temperature: 0, maxOutputTokens: 1800, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: poolResponseSchema } }) });
+      const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Choose countries and editable search settings for this GeoTrainer request in any language: ${JSON.stringify(description)}. Preserve explicit inclusions and exclusions. Comparisons and shared themes include every matching country. Geography overrides shared language; do not add related places unless requested. Set placeMode=cities for cities, capitals, architecture focused on named municipalities, or sports-team home cities; regions for coasts, landscapes, farms, deserts, or subnational themes; otherwise none. Set placeSelection=league for a named sports league, capital for capitals, representative for a broad city theme, and all for explicit named places or region themes. Architecture and city streets are urban; suburbs suburban; farms, countryside, wilderness, and broad nature rural; otherwise mixed. Use urbanLevel 1 for capitals/major cities, 2 for regional cities, 3 otherwise. Balanced, priority, contributor imagery, mixed imagery, and interiors require explicit intent; default to natural, random, official, and outdoors. Allowed countries: ${poolCountries}` }] }], generationConfig: { temperature: 0, maxOutputTokens: 900, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: poolResponseSchema } }) });
       if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
       if (!response.ok) { lastError = new Error(response.status >= 500 ? 'Gemini service error.' : `Gemini request was rejected (${response.status}).`); continue; }
       const raw = await response.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> }; const text = raw.candidates?.[0]?.content?.parts?.find((part) => part.text)?.text;
@@ -99,6 +105,25 @@ export async function callGeminiPool(carousel: GeminiKeyCarousel, description: s
       return normalizePoolSuggestion(JSON.parse(text));
     } catch (error) { lastError = error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError') ? new Error('Gemini request timed out.') : error as Error; }
   }
+  throw lastError;
+}
+
+type PoolPlaceCandidate = { key: string; countryCode: string; name: string; kind: 'region' | 'city' };
+export async function callGeminiPoolPlaces(carousel: GeminiKeyCarousel, description: string, selection: string, candidates: PoolPlaceCandidate[], fetcher: typeof fetch = fetch) {
+  if (!carousel.size) throw new Error('No Gemini keys are configured.');
+  const clean = candidates.filter((item) => item && /^[rc]:[A-Za-z0-9.:-]+$/.test(item.key) && item.countryCode in countryCatalog && item.name.trim()).map((item) => ({ ...item, name: item.name.trim().slice(0, 120) }));
+  const allowed = new Set(clean.map((item) => item.key));
+  const rulebook = clean.map((item) => `${item.key}=${item.countryCode}:${item.name}`).join('\n');
+  const models = (process.env.GEMINI_POOL_MODELS || 'gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean); let lastError = new Error('Gemini Coach is unavailable.');
+  for (const model of models) for (let attempt = 0; attempt < Math.max(1, carousel.size); attempt++) { const state = carousel.next(); if (!state) throw new Error('All Gemini keys are cooling down.'); try {
+    const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Selection mode is ${selection}. Select local rulebook entries that directly satisfy ${JSON.stringify(description)}. Return keys only and never invent one. League mode gets exactly the unique home municipalities of current teams. Capital mode gets one current capital per country. Representative mode has a hard maximum of three strongest cities per country. Region requests get every matching region with no selection ceiling.\n${rulebook}` }] }], generationConfig: { temperature: 0, maxOutputTokens: 6000, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: poolPlacesSchema } }) });
+    if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; } if (!response.ok) { lastError = new Error(response.status >= 500 ? 'Gemini service error.' : `Gemini request was rejected (${response.status}).`); continue; }
+    const raw = await response.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> }; const text = raw.candidates?.[0]?.content?.parts?.find((part) => part.text)?.text; if (!text) throw new Error('Gemini returned an empty response.'); const value = JSON.parse(text) as { regionKeys?: unknown; cityKeys?: unknown };
+    const keys = (input: unknown, prefix: string) => [...new Set(Array.isArray(input) ? input.map(String).filter((key) => key.startsWith(prefix) && allowed.has(key)) : [])];
+    const regionKeys = keys(value.regionKeys, 'r:'); const cityKeys = keys(value.cityKeys, 'c:');
+    if (selection !== 'representative') return { regionKeys, cityKeys };
+    const counts = new Map<string, number>(); return { regionKeys, cityKeys: cityKeys.filter((key) => { const countryCode = clean.find((item) => item.key === key)?.countryCode || ''; const count = counts.get(countryCode) || 0; counts.set(countryCode, count + 1); return count < 3; }) };
+  } catch (error) { lastError = error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError') ? new Error('Gemini request timed out.') : error as Error; } }
   throw lastError;
 }
 
@@ -344,12 +369,20 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
         if (body.length > 12_000_000) throw new Error('Screenshot is too large.');
       }
       const value = JSON.parse(body) as Record<string, unknown>;
-      const mode = value.mode as CoachMode | 'capture' | 'pool';
+      const mode = value.mode as CoachMode | 'capture' | 'pool' | 'pool-places';
       if (mode === 'pool') {
         const description = typeof value.description === 'string' ? value.description.trim().slice(0, 500) : '';
         if (description.length < 3) throw new Error('Describe what you want to learn.');
         const pool = await callGeminiPool(carousel, description);
         res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ pool })); return;
+      }
+      if (mode === 'pool-places') {
+        const description = typeof value.description === 'string' ? value.description.trim().slice(0, 500) : '';
+        const selection = ['all', 'representative', 'league', 'capital'].includes(String(value.selection)) ? String(value.selection) : 'all';
+        const candidates: PoolPlaceCandidate[] = Array.isArray(value.candidates) ? value.candidates.flatMap((candidate) => { const item = candidate && typeof candidate === 'object' ? candidate as Record<string, unknown> : {}; const kind: 'region' | 'city' | undefined = item.kind === 'region' || item.kind === 'city' ? item.kind : undefined; const key = String(item.key || ''); const countryCode = String(item.countryCode || '').toUpperCase(); const name = String(item.name || ''); return kind && key && name && countryCode in countryCatalog ? [{ key, countryCode, name, kind }] : []; }) : [];
+        if (description.length < 3) throw new Error('Describe what you want to learn.');
+        const places = await callGeminiPoolPlaces(carousel, description, selection, candidates);
+        res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ places })); return;
       }
       if (mode === 'capture') {
         const frame = await fetchStreetViewFrame(value.view, googleKey);

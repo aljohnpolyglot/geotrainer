@@ -27,6 +27,7 @@ import { CollectionOptions } from './CollectionOptions';
 import { ImportedMapUpload } from './ImportedMapUpload';
 import { downloadGeographicPool, getImportedMap, importedMapPointCount, type ImportedMap } from '../services/importedMap';
 import { LocationPoolPicker } from './LocationPoolPicker';
+import { DescribePool } from './DescribePool';
 
 interface NewGameModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
   const [allowInteriors, setAllowInteriors] = useState(false);
-  const [locationSource, setLocationSource] = useState<'generated' | 'uploaded'>('generated');
+  const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'ai'>('generated');
   const [importedMap, setImportedMap] = useState<ImportedMap>();
   const [loadedPoolName, setLoadedPoolName] = useState('');
 
@@ -165,8 +166,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
         {/* Settings Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
-          <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded')}><option value="generated">{t('Generated locations')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
+          <label className="game-country-choice">{t('Location source')}<select value={locationSource} onChange={(event) => setLocationSource(event.target.value as 'generated' | 'uploaded' | 'ai')}><option value="generated">{t('Generated locations')}</option><option value="ai">{t('Describe a pool')}</option><option value="uploaded">{t('Uploaded map')}</option></select></label>
           {locationSource === 'uploaded' && <ImportedMapUpload source="upload" map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
           <div className="space-y-1.5">
@@ -392,7 +394,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           <button
             type="button"
             onClick={handleStart}
-            disabled={locationSource === 'uploaded' && !importedMap}
+            disabled={(locationSource === 'uploaded' && !importedMap) || locationSource === 'ai'}
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
           >
             <Play className="w-4 h-4 fill-white text-white" />

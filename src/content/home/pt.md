@@ -54,7 +54,7 @@ Use os menus separados **Regiões** e **Cidades** e remova seleções pelas píl
 
 Os nomes das regiões e cidades seguem o idioma da interface quando há um nome localizado disponível. **Salvar conjunto geográfico** baixa as escolhas atuais de países, regiões e cidades como JSON, sem coordenadas do Street View. **Enviar JSON** e **URL JSON** aceitam esse formato editável ou um JSON de coordenadas do Map Maker; um conjunto geográfico volta para Personalizado para edição, enquanto as coordenadas permanecem como uma fonte finita. O nome do arquivo ou da URL é exibido. O endpoint precisa permitir acesso pelo navegador (CORS).
 
-**Descrever um conjunto** envia um pedido curto ao Gemini e abre os países, regiões e cidades sugeridos em Personalizado para você revisar e editar. Você pode escrever em qualquer idioma compatível e descrever lugares, paisagens ou confusões comuns. É uma sugestão de IA, não uma garantia geográfica.
+**Descrever um conjunto** envia um pedido curto ao Gemini e abre em Personalizado os países, regiões, cidades, ambiente, nível urbano, amostragem, prioridade, fonte das imagens e cobertura interna sugeridos para você revisar e editar. Pedidos sobre agricultura e natureza ampla escolhem Rural; arquitetura e ruas urbanas escolhem Urbano; e subúrbios escolhem Suburbano, salvo indicação contrária. Pedidos sobre ligas esportivas usam cidades-sede únicas e descartam nomes que não possam ser validados com os dados locais. Você pode escrever em qualquer idioma compatível e descrever lugares, paisagens ou confusões comuns. É uma sugestão de IA, não uma garantia geográfica.
 
 ## Modo Jogo
 
