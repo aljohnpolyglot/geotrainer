@@ -2,6 +2,7 @@
 
 ## 2026-09-27
 
+- Added animated, localized country, region, and city progress plus model-only two-pass interpretation for complex AI-described pools.
 - Restored AI Map Maker pool generation on static deployments through its dedicated Supabase endpoint and retained the configured server as the first choice.
 - Expanded Play answer reveals with the full resolved address and coordinates, removed the blue result-header labels, and spelled out Swedish `Saint` country names.
 - Kept failed Review cards at the end of the active session across reloads and advanced their schedule after a later passing answer.

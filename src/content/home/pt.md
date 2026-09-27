@@ -56,6 +56,8 @@ Os nomes das regiões e cidades seguem o idioma da interface quando há um nome 
 
 **Descrever um conjunto** envia um pedido curto ao Gemini e abre em Personalizado os países, regiões, cidades, ambiente, nível urbano, amostragem, prioridade, fonte das imagens e cobertura interna sugeridos para você revisar e editar. Pedidos sobre agricultura e natureza ampla escolhem Rural; arquitetura e ruas urbanas escolhem Urbano; e subúrbios escolhem Suburbano, salvo indicação contrária. Pedidos sobre ligas esportivas usam cidades-sede únicas e descartam nomes que não possam ser validados com os dados locais. Você pode escrever em qualquer idioma compatível e descrever lugares, paisagens ou confusões comuns. É uma sugestão de IA, não uma garantia geográfica.
 
+Durante a criação, o botão mostra a etapa atual de países, regiões ou cidades.
+
 ## Modo Jogo
 
 Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do mapa enviado usam seus locais e podem repeti-los se houver menos locais que rodadas.

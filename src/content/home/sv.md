@@ -56,6 +56,8 @@ Namnen på regioner och städer följer gränssnittets språk när ett lokaliser
 
 **Beskriv en pool** skickar en kort lärandebeskrivning till Gemini och öppnar de föreslagna länderna, regionerna, städerna, miljön, stadsnivån, urvalet, prioriteten, bildkällan och inomhustäckningen i Anpassat så att du kan kontrollera och redigera dem. Förfrågningar om jordbruk och stora naturområden väljer Landsbygd, arkitektur och stadsgator väljer Stad och förorter väljer Förort, om du inte anger något annat. Förfrågningar om sportligor använder unika hemstäder och tar bort namn som inte kan verifieras mot lokala stadsdata. Du kan skriva på valfritt språk som stöds och beskriva platser, landskap eller vanliga förväxlingar. Det är ett AI-förslag, inte en geografisk garanti.
 
+Under skapandet visar knappen den aktuella fasen för länder, regioner eller städer.
+
 ## Spelläge
 
 I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omgångarna använder platser från filen och kan upprepa dem om det finns fler omgångar än platser.

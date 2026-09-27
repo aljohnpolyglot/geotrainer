@@ -43,6 +43,13 @@ test('described pools choose countries before selecting only valid local place k
   assert.match(requestBody, /Choose countries and editable search settings/);
   const places = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'coastal cities', 'representative', [{ key: 'c:0', countryCode: 'MX', name: 'Cancún', kind: 'city' }], (async () => geminiResponse(JSON.stringify({ regionKeys: ['r:invented'], cityKeys: ['c:0', 'c:invented'] }))) as typeof fetch);
   assert.deepEqual(places, { regionKeys: [], cityKeys: ['c:0'] });
+  const complexRequestBodies: string[] = [];
+  const league = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'La Liga teams', 'league', [{ key: 'c:0', countryCode: 'ES', name: 'Madrid', kind: 'city' }, { key: 'c:1', countryCode: 'ES', name: 'Lepe', kind: 'city' }], (async (_url, init) => { complexRequestBodies.push(String(init?.body)); return geminiResponse(complexRequestBodies.length === 1 ? 'Madrid hosts current La Liga clubs.' : JSON.stringify({ regionKeys: [], cityKeys: ['c:0', 'c:invented'] })); }) as typeof fetch);
+  assert.deepEqual(league, { regionKeys: [], cityKeys: ['c:0'] });
+  assert.doesNotMatch(complexRequestBodies[0], /googleSearch/);
+  assert.match(complexRequestBodies[0], /Using only your built-in knowledge/);
+  assert.match(complexRequestBodies[1], /Model analysis/);
+  assert.match(complexRequestBodies[1], /"thinkingBudget":1024/);
   assert.throws(() => normalizePoolSuggestion({ countryCodes: ['ZZ'] }), /no valid countries/i);
 });
 

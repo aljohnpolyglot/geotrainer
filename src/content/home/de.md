@@ -109,6 +109,8 @@ Regions- und Städtenamen folgen der Sprache der Benutzeroberfläche, sofern ein
 
 **Pool beschreiben** sendet eine kurze Lernanfrage an Gemini und öffnet die vorgeschlagenen Länder, Regionen, Städte, Umgebung, Stadtstufe, Auswahl, Priorität, Bildquelle und Innenraumabdeckung unter Benutzerdefiniert zur Prüfung und Bearbeitung. Anfragen zu Landwirtschaft und weiträumiger Natur wählen Ländlich, Architektur und Stadtstraßen wählen Städtisch und Vororte wählen Vorstädtisch, sofern du nichts anderes angibst. Anfragen zu Sportligen verwenden eindeutige Heimatstädte und verwerfen Namen, die nicht mit den lokalen Stadtdaten bestätigt werden können. Du kannst in jeder unterstützten Sprache Orte, Landschaftsthemen oder häufige Verwechslungen beschreiben. Das Ergebnis ist ein KI-Vorschlag, keine geografische Garantie.
 
+Während der Erstellung zeigt die Schaltfläche die aktuelle Länder-, Regionen- oder Städtephase.
+
 ### Ein Panorama untersuchen
 
 1. Betrachte zuerst die ganze Szene.

@@ -56,6 +56,8 @@ Les noms des régions et des villes suivent la langue de l’interface lorsqu’
 
 **Décrire un groupe** envoie une courte demande à Gemini, puis ouvre dans Personnalisé les pays, régions, villes, l’environnement, le niveau urbain, l’échantillonnage, la priorité, la source des images et la couverture intérieure proposés afin de les vérifier et de les modifier. Les demandes sur l’agriculture et les grands espaces choisissent Rural, celles sur l’architecture et les rues choisissent Urbain, et celles sur les banlieues choisissent Périurbain, sauf indication contraire. Les demandes sur des ligues sportives utilisent des villes d’accueil uniques et ignorent les noms non validés par les données locales. Vous pouvez écrire dans toute langue prise en charge et décrire des lieux, des paysages ou des confusions fréquentes. Il s’agit d’une suggestion de l’IA, pas d’une garantie géographique.
 
+Pendant la création, le bouton indique l’étape en cours pour les pays, régions ou villes.
+
 ## Mode Jeu
 
 Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les manches de la carte utilisent ses lieux et peuvent les répéter si les manches sont plus nombreuses.

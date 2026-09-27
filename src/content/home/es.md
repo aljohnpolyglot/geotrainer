@@ -56,6 +56,8 @@ Los nombres de las regiones y ciudades siguen el idioma de la interfaz cuando ha
 
 **Describir un grupo** envía una petición breve a Gemini y abre en Personalizado los países, regiones, ciudades, entorno, nivel urbano, muestreo, prioridad, fuente de imágenes y cobertura interior sugeridos para que puedas revisarlos y editarlos. Las peticiones sobre agricultura y naturaleza amplia eligen Rural; las de arquitectura y calles urbanas, Urbano; y las de suburbios, Suburbano, salvo que indiques otra cosa. Las peticiones sobre ligas deportivas usan ciudades sede únicas y descartan nombres que no se puedan validar con los datos locales. Puedes escribir en cualquier idioma compatible y describir lugares, paisajes o confusiones habituales. Es una sugerencia de IA, no una garantía geográfica.
 
+Durante la creación, el botón indica la fase actual de países, regiones o ciudades.
+
 ## Modo Juego
 
 En la configuración de Juego, elige Lugares generados o Mapa subido. Los turnos del mapa subido usan sus lugares y pueden repetirlos si hay menos lugares que turnos.

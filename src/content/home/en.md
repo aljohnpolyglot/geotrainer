@@ -105,6 +105,8 @@ Region and city names follow the interface language when a localized name is ava
 
 **Describe a pool** sends your short learning request to Gemini, then opens the generated countries, regions, cities, environment, urban level, sampling, priority, imagery source, and indoor coverage in Custom so you can verify and edit them before starting. Farming and broad nature requests select Rural, architecture and city-street requests select Urban, and suburbs select Suburban unless your wording says otherwise. A second pass chooses only entries from the selected countries’ local region or city list, without an arbitrary region limit. Sports-league requests use unique home cities. You can write in any supported interface language and describe named places, landscape themes, or common confusers. It is an AI suggestion, not a geographic guarantee.
 
+While it works, the button reports the live country, region, and city stage.
+
 ### Choosing a learning priority
 
 Uploaded-map Learn labels source progress (for example, **Source: 1/50**). Each uploaded source entry is marked done when checked, so **Next** cannot draw it again even if nearby variation resolves to another panorama; broken entries are also skipped once. **Next** disappears when the source is complete, leaving **Previous**. Uploaded Play likewise avoids repeating source entries and limits the round count to the map’s location count. In Explore Map, search for a city, region, or country and choose a suggestion from GeoTrainer’s built-in catalog to zoom there. Suggestions only move the coverage map; click blue coverage to open Street View. Personal Notebook text is limited to 1,000 characters per save; the counter beneath the editor shows the remaining capacity.
