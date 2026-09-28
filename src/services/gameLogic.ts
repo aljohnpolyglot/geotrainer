@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export const formatScorePercentage = (score: number, maximum: number, locale: string) => maximum > 0 ? (score / maximum).toLocaleString(locale, { style: 'percent', maximumFractionDigits: 1 }) : '—';
+
 /**
  * Calculates distance between two coordinates in kilometers using Haversine formula
  */

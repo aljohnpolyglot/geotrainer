@@ -2,6 +2,9 @@
 
 ## 2026-09-28
 
+- Added maximum possible scores and localized score percentages to Play game history, including compact mobile rows.
+- Stopped plain Notebook image saves from marking unfinished Play rounds AI-assisted; actual AI clue analysis still counts.
+- Added a quiet Save for Review icon beside Continue in Play results, only for locations without an existing Review card, including correct answers and earlier rounds.
 - Kept Play Coach on Analyze while the completed round's result is minimized; Explain follows the visible result.
 - Kept the Play result minimize control in the top-right corner and let keyboard activation of its buttons work without advancing the round.
 - Kept AI Coach on Analyze during an unanswered Review card, even when a saved Play summary is still open; Explain now follows the current card's revealed result.

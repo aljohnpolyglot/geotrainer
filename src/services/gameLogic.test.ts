@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateDistanceKm, calculateRoundScore, compassDirection, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt } from './gameLogic';
+import { calculateDistanceKm, calculateRoundScore, compassDirection, formatScorePercentage, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt } from './gameLogic';
+
+test('game percentages use the saved maximum and interface locale without dividing by zero', () => {
+  assert.equal(formatScorePercentage(43121, 75000, 'en'), '57.5%');
+  assert.equal(formatScorePercentage(43121, 75000, 'sv'), '57,5 %');
+  assert.equal(formatScorePercentage(75000, 75000, 'en'), '100%');
+  assert.equal(formatScorePercentage(0, 15000, 'en'), '0%');
+  assert.equal(formatScorePercentage(0, 0, 'en'), '—');
+});
 
 test('distance and score remain bounded at gameplay edges', () => {
   assert.equal(calculateDistanceKm(10, 20, 10, 20), 0);

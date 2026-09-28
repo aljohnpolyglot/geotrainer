@@ -1,9 +1,10 @@
 import { trainerDb } from '../data/trainerDb';
-import type { CoachHistoryNote, NotebookNote } from '../types';
+import type { AppMode, CoachHistoryNote, NotebookNote } from '../types';
 
 let writes = Promise.resolve();
 let notebookWrites = Promise.resolve();
 export const NOTEBOOK_NOTE_MAX_LENGTH = 1000;
+export const clueMarksPlayAssisted = (mode: AppMode, hasResult: boolean, model: string) => mode === 'play' && !hasResult && model !== 'Notebook';
 
 export function saveCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
   const next = writes.then(async () => {

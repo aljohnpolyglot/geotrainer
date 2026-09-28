@@ -36,7 +36,7 @@ import {
 } from './data/collections';
 import { COUNTRIES } from './data/countries';
 import { hasStudyReviewSource } from './data/reviewIdentity';
-import { saveCoachHistoryNote } from './services/coachHistory';
+import { clueMarksPlayAssisted, saveCoachHistoryNote } from './services/coachHistory';
 import { CLOUD_IMPORT_EVENT } from './services/cloudSyncEvent';
 import {
   getBookmarks,
@@ -404,7 +404,7 @@ export default function App() {
     if (!location) return;
     const id = `clue-${crypto.randomUUID()}`;
     await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: savedClue.generatedAt, ...savedClue });
-    if (appMode === 'play' && !activeRoundResult) playAiAssistedRef.current = true;
+    if (clueMarksPlayAssisted(appMode, !!activeRoundResult, savedClue.model)) playAiAssistedRef.current = true;
     if (appMode === 'study') await handleSaveStudyForReview();
     setTrainerRefreshKey((key) => key + 1);
     return id;

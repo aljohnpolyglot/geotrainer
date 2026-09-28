@@ -64,6 +64,8 @@ Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round us
 
 Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Dopo la risposta, il risultato mostra il paese reale, città, regione e strada disponibili, l’indirizzo completo, le coordinate esatte, la distanza e il punteggio. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
 
+L’icona **Salva questo luogo per il ripasso**, accanto a **Continua partita**, permette di conservare anche risposte corrette. Compare solo se il luogo visualizzato non ha già una scheda di ripasso, inclusi luoghi dello stesso paese entro 50 metri. Funziona anche per i turni precedenti. Dopo il salvataggio l’icona scompare e il risultato resta aperto, senza cambiare punteggio o scadenze esistenti. Il salvataggio resta dopo il ricaricamento e la sincronizzazione rimane manuale. In caso di errore, riprova.
+
 ## Ripasso e programmazione
 
 La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo. I turni completati di Gioco e Ripasso sbloccano movimento, rotazione e zoom durante questa ispezione, anche se il turno originale li limitava. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.

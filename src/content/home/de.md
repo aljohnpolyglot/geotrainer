@@ -164,6 +164,8 @@ Beim Absenden speichert GeoTrainer die aktuelle Street-View-Ansicht für später
 
 Beendete und unterbrochene Spiele erscheinen unter Frühere Spiele. Zusammenfassungen erhalten Reihenfolge, Regeln, Zeiten, Orte und Punkte. Fehlertraining erstellt neue Korrekturversuche, ohne das Spiel umzuschreiben.
 
+Das Symbol **Diesen Ort zur Wiederholung speichern** neben **Spiel fortsetzen** speichert auch richtig beantwortete Orte. Es erscheint nur, wenn für den angezeigten Ort noch keine Wiederholungskarte besteht; Orte im selben Land innerhalb von 50 Metern zählen zusammen. Auch frühere Runden lassen sich so speichern. Danach verschwindet das Symbol und das Ergebnis bleibt offen. Punktzahl und bestehende Termine bleiben erhalten, auch nach dem Neuladen. Die Synchronisierung bleibt manuell. Bei einem Fehler kannst du es erneut versuchen.
+
 ## Wiederholungsmodus
 
 ### Vor der Antwort

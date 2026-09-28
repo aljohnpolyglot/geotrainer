@@ -1,6 +1,7 @@
 import type { LanguagePreferences, SupportedLanguage } from '../types';
 import { LOCATION_SETUP_COPY } from './locationSetupCopy';
 import { CLOUD_SYNC_COPY } from './cloudSyncCopy';
+import { LOCATION_CARD_COPY } from './locationCardCopy';
 
 export const LANGUAGE_OPTIONS: Array<{ code: SupportedLanguage; label: string; nativeLabel: string; flagCode: string }> = [
   { code: 'en', label: 'English', nativeLabel: 'English', flagCode: 'gb' },
@@ -244,12 +245,6 @@ const REMAINING_UI: Record<string, Partial<Record<SupportedLanguage, string>>> =
   clearVisible: { en: 'Clear visible', es: 'Borrar visibles', pt: 'Limpar visíveis', fr: 'Effacer les visibles', de: 'Sichtbare abwählen', it: 'Deseleziona visibili', ru: 'Снять видимые', sv: 'Rensa synliga' },
   filterCountries: { en: 'Filter countries...', es: 'Filtrar países...', pt: 'Filtrar países...', fr: 'Filtrer les pays…', de: 'Länder filtern …', it: 'Filtra paesi...', ru: 'Фильтр стран…', sv: 'Filtrera länder…' },
   saveCollection: { en: 'Save Collection', es: 'Guardar colección', pt: 'Salvar coleção', fr: 'Enregistrer la collection', de: 'Sammlung speichern', it: 'Salva raccolta', ru: 'Сохранить коллекцию', sv: 'Spara samling' },
-  resolvingLocation: { en: 'Resolving exact location...', es: 'Resolviendo la ubicación exacta...', pt: 'Resolvendo a localização exata...', fr: 'Localisation exacte en cours…', de: 'Genauer Ort wird ermittelt …', it: 'Ricerca della posizione esatta...', ru: 'Определение точного места…', sv: 'Bestämmer exakt plats…' },
-  addressUnavailable: { en: 'Exact address details not available for this rural road point.', es: 'No hay detalles exactos de dirección para este punto rural.', pt: 'Detalhes exatos do endereço não estão disponíveis para este ponto rural.', fr: 'Les détails exacts ne sont pas disponibles pour ce point rural.', de: 'Für diesen ländlichen Punkt sind keine genauen Adressdaten verfügbar.', it: 'Dettagli esatti non disponibili per questo punto rurale.', ru: 'Точные данные адреса для этой сельской точки недоступны.', sv: 'Exakta adressuppgifter saknas för denna landsbygdspunkt.' },
-  saveForReview: { en: 'Save this location for Review', es: 'Guardar este lugar para repasar', pt: 'Salvar este local para revisão', fr: 'Enregistrer ce lieu pour révision', de: 'Diesen Ort zur Wiederholung speichern', it: 'Salva questo luogo per il ripasso', ru: 'Сохранить место для повторения', sv: 'Spara platsen för repetition' },
-  savedForReview: { en: 'Saved for Review ✓', es: 'Guardado para repasar ✓', pt: 'Salvo para revisão ✓', fr: 'Enregistré pour révision ✓', de: 'Zur Wiederholung gespeichert ✓', it: 'Salvato per il ripasso ✓', ru: 'Сохранено для повторения ✓', sv: 'Sparad för repetition ✓' },
-  copyCoords: { en: 'Copy coords', es: 'Copiar coordenadas', pt: 'Copiar coordenadas', fr: 'Copier les coordonnées', de: 'Koordinaten kopieren', it: 'Copia coordinate', ru: 'Копировать координаты', sv: 'Kopiera koordinater' },
-  copied: { en: 'Copied', es: 'Copiado', pt: 'Copiado', fr: 'Copié', de: 'Kopiert', it: 'Copiato', ru: 'Скопировано', sv: 'Kopierat' },
   Navigation: { en: 'Navigation', es: 'Navegación', pt: 'Navegação', fr: 'Navigation', de: 'Navigation', it: 'Navigazione', ru: 'Навигация', sv: 'Navigering' },
   Appearance: { en: 'Appearance', es: 'Apariencia', pt: 'Aparência', fr: 'Apparence', de: 'Darstellung', it: 'Aspetto', ru: 'Оформление', sv: 'Utseende' },
   'Color palette': { en: 'Color palette', es: 'Paleta de colores', pt: 'Paleta de cores', fr: 'Palette de couleurs', de: 'Farbpalette', it: 'Tavolozza colori', ru: 'Цветовая палитра', sv: 'Färgpalett' },
@@ -498,7 +493,7 @@ const COPY_OVERRIDES: Record<string, Partial<Record<SupportedLanguage, string>>>
 };
 
 export function translate(code: SupportedLanguage, key: string): string {
-  return LOCATION_SETUP_COPY[key]?.[code] || CLOUD_SYNC_COPY[key]?.[code] || COPY_OVERRIDES[key]?.[code] || HUB_TRANSLATIONS[code]?.[key] || SHELL[code]?.[key] || UI_TRANSLATIONS[code]?.[key] || EXTRA_UI[key]?.[code] || REMAINING_UI[key]?.[code] || STATISTICS_TRANSLATIONS[key]?.[code] || HUB_TRANSLATIONS.en[key] || SHELL.en[key] || UI_TRANSLATIONS.en[key] || REMAINING_UI[key]?.en || key;
+  return LOCATION_CARD_COPY[key]?.[code] || LOCATION_SETUP_COPY[key]?.[code] || CLOUD_SYNC_COPY[key]?.[code] || COPY_OVERRIDES[key]?.[code] || HUB_TRANSLATIONS[code]?.[key] || SHELL[code]?.[key] || UI_TRANSLATIONS[code]?.[key] || EXTRA_UI[key]?.[code] || REMAINING_UI[key]?.[code] || STATISTICS_TRANSLATIONS[key]?.[code] || HUB_TRANSLATIONS.en[key] || SHELL.en[key] || UI_TRANSLATIONS.en[key] || REMAINING_UI[key]?.en || key;
 }
 export const reviewSourceDisplayName = (code: SupportedLanguage, source: string) => translate(code, ({ 'Due Today': 'dueToday', 'Review Queue': 'tabReview', History: 'tabHistory', 'Game mistakes': 'recentMistakes' } as Record<string, string>)[source] || source);
 

@@ -64,6 +64,8 @@ Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les m
 
 Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Après la réponse, le résultat affiche le pays réel, les ville, région et voie disponibles, l’adresse complète, les coordonnées exactes, la distance et le score. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus.
 
+L’icône **Enregistrer ce lieu pour révision**, à côté de **Continuer la partie**, permet aussi de conserver une réponse correcte. Elle apparaît uniquement si le lieu affiché n’a pas de carte de révision, y compris les lieux du même pays à moins de 50 mètres. Elle fonctionne aussi pour les manches précédentes. L’enregistrement retire l’icône et garde le résultat ouvert, sans modifier le score ni une planification existante. Il reste enregistré après rechargement et la synchronisation reste manuelle. En cas d’échec, réessayez.
+
 ## Révision et planification
 
 ### Personnaliser la révision

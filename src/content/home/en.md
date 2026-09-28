@@ -180,9 +180,13 @@ Submitting a Play answer saves the current Street View image with that location 
 
 Pinpoint score falls as distance grows. Country correctness is also considered when GeoTrainer decides whether an attempt is weak enough to schedule. Strictness changes the threshold, so the same result can be acceptable for a beginner and weak for a pro.
 
+To keep a correctly answered or otherwise unscheduled location for practice, use the **Save this location for Review** icon beside **Continue Game** in the round result. It appears only when that location has no Review card, including same-country locations within 50 metres. You can also browse earlier rounds and save the round currently displayed. Saving quietly adds a new card, removes the save icon, and keeps the result open; it does not change the score, create another attempt, or reset an existing schedule. The saved state survives reloads. If saving fails, the icon stays available with a retry message. Cloud sync remains manual.
+
 ### Game summaries
 
 Completed and interrupted games remain in Past Games. A summary preserves round order, scores, times, rules, and locations. Mistake practice can start a correction session from weak rounds without rewriting the game.
+
+The Games history list shows each total as **earned score / maximum possible score**, followed by a separate percentage column. The percentage is the share of available points, not country accuracy; a 43,121-point game out of 75,000 is 57.5%. Numbers and percentages follow your interface language, and both remain visible on phones.
 
 ## Review mode
 
@@ -265,6 +269,8 @@ AI Coach looks for visible geographic evidence in the current panorama. Guest us
 Before reveal, a high-confidence analysis can add a “Most likely in” region, city, quarter, landmark, or exact-place estimate after the country ranking, but only when multiple strong visible clues support that narrower location. Generic scenes keep the estimate hidden.
 
 Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup. If Coach is disabled, Notebook image analysis stays hidden until the answer is submitted. The result can then be minimized to inspect the panorama with Coach and Analyze clue without marking the completed attempt as AI-assisted.
+
+Writing a personal Notebook note, pasting or capturing an image, and saving it without AI analysis do not mark a round AI-assisted. Running Coach or Analyze clue before submitting the guess does. Saving a correctly answered location for Review also leaves its assistance status unchanged.
 
 Coach waits for the saved AI language before analysis, localizes candidate country names, rejects substantially mixed-language results, and retries vague country reasoning that merely says the scene is “consistent with,” “similar to,” “common in,” or “typical of” a country without a concrete distinguishing feature.
 

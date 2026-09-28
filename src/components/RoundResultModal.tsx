@@ -12,6 +12,7 @@ import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock, Eye, Minus, Com
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
+import { RoundReviewSave } from './RoundReviewSave';
 
 interface RoundResultModalProps {
   round: GameRound;
@@ -20,9 +21,11 @@ interface RoundResultModalProps {
   isLastRound: boolean;
   rounds: GameRound[];
   onVisibilityChange?: (visible: boolean) => void;
+  trainerRefreshKey: number;
+  onReviewSaved: () => void;
 }
 
-export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, totalRounds, onNextRound, isLastRound, rounds, onVisibilityChange }) => {
+export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, totalRounds, onNextRound, isLastRound, rounds, onVisibilityChange, trainerRefreshKey, onReviewSaved }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [viewIndex, setViewIndex] = useState(rounds.length - 1);
@@ -140,10 +143,13 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
             </button>
           </div>
 
+          <div className="round-result-actions">
+          <RoundReviewSave key={viewedRound.location.panoId} location={viewedRound.location} refreshKey={trainerRefreshKey} onSaved={onReviewSaved} />
           <button onClick={onNextRound} className="round-result-continue inline-flex items-center gap-2 px-6 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98">
             <span>{isLastRound ? t('viewGameSummary') : t('continueGame')}</span>
             <ArrowRight className="w-4 h-4 text-stone-900" />
           </button>
+          </div>
         </div>
       </div>
     </div>

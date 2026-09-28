@@ -107,6 +107,18 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal(notebookPlay.intervalDays, 0);
   assert.equal(notebookPlay.reviewCount, 0);
 
+  const correctRound = { ...baseAttempt, id: 'attempt-manual-correct', panoId: 'pano-manual-correct', actualLat: 59.33, actualLng: 18.06, countryCode: 'SE', score: 5000, guessedCountryCode: 'SE' };
+  await trainerDb.saveAttempt(correctRound);
+  assert.equal(await trainerDb.reviewState(correctRound.panoId), undefined);
+  const manualReview = await trainerDb.queueForReview(correctRound.panoId, false, { lat: 59.33, lng: 18.06, countryCode: 'SE' });
+  assert.equal(manualReview.intervalDays, 0);
+  assert.equal(manualReview.reviewCount, 0);
+  assert.deepEqual((await trainerDb.attempts()).find((item) => item.id === correctRound.id), correctRound);
+  assert.deepEqual(await trainerDb.queueForReview(correctRound.panoId), manualReview);
+  await trainerDb.saveAttempt({ ...correctRound, id: 'attempt-manual-nearby', panoId: 'pano-manual-nearby', actualLat: 59.3301 });
+  assert.deepEqual(await trainerDb.reviewState('pano-manual-nearby'), manualReview);
+  assert.deepEqual(await trainerDb.queueForReview('pano-manual-nearby', false, { lat: 59.3301, lng: 18.06, countryCode: 'SE' }), manualReview);
+
   const firstPlay = await trainerDb.scheduleFirstPlay('pano-first-play', 'easy');
   assert.equal(firstPlay.intervalDays, 21);
   assert.equal((await trainerDb.scheduleFirstPlay('pano-first-play', 'again')).intervalDays, 21);

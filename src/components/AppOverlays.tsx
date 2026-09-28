@@ -75,7 +75,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     {coveragePreview && <CoverageStudyModal location={coveragePreview} onClose={props.onCloseCoverage} />}
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}
-    {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} onVisibilityChange={setPlayResultVisible} />}
+    {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} onVisibilityChange={setPlayResultVisible} trainerRefreshKey={trainerRefreshKey} onReviewSaved={() => { void props.onNoteSaved(); }} />}
     {summaryGameRecord && !summaryRound && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={props.onPracticeMistakes} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onOpenRound={props.onOpenRound} />}
     <NewGameModal isOpen={isNewGameModalOpen} onClose={props.onCloseNewGame} collections={allCollections} onStartGame={props.onStartGame} onOpenHistory={props.onOpenHistory} pastGamesCount={pastGames.length} defaultShowCompass={compassPreference} />
     <StudySetupModal open={isStudySetupOpen} onClose={props.onCloseStudySetup} collections={allCollections} initial={studySetup} onStart={props.onStartStudy} />

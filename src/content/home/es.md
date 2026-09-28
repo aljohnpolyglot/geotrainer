@@ -64,6 +64,8 @@ En la configuración de Juego, elige Lugares generados o Mapa subido. Los turnos
 
 Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 rondas. Tras responder, el resultado muestra el país real, la ciudad, región y vía disponibles, la dirección completa, las coordenadas exactas, la distancia y la puntuación. Cada respuesta crea un intento nuevo y guarda la vista actual para las previsualizaciones.
 
+El icono **Guardar este lugar para repasar**, junto a **Continuar partida**, permite guardar también respuestas correctas. Solo aparece si el lugar mostrado no tiene una tarjeta de repaso, incluidos lugares del mismo país a menos de 50 metros. Funciona al consultar rondas anteriores. Al guardar, el icono desaparece y el resultado sigue abierto; la puntuación y los calendarios existentes se conservan. El guardado persiste tras recargar y la sincronización sigue siendo manual. Si falla, puedes volver a intentarlo.
+
 ## Repaso y programación
 
 Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo. Las rondas completadas de Juego y Repaso permiten moverse, girar y hacer zoom durante esta inspección, aunque la ronda original los restringiera. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.

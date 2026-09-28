@@ -5,6 +5,15 @@ import type { CoachAnalysis } from '../types';
 
 Object.assign(globalThis, { indexedDB, IDBKeyRange });
 
+test('manual Notebook images do not mark Play as assisted, but actual analysis does', async () => {
+  const { clueMarksPlayAssisted } = await import('./coachHistory');
+  assert.equal(clueMarksPlayAssisted('play', false, 'Notebook'), false);
+  assert.equal(clueMarksPlayAssisted('play', false, 'Gemini'), true);
+  assert.equal(clueMarksPlayAssisted('play', true, 'Gemini'), false);
+  assert.equal(clueMarksPlayAssisted('study', false, 'Gemini'), false);
+  assert.equal(clueMarksPlayAssisted('review', false, 'Gemini'), false);
+});
+
 test('concurrent Coach completions are both retained', async () => {
   const { saveCoachHistoryNote } = await import('./coachHistory');
   const { trainerDb } = await import('../data/trainerDb');
