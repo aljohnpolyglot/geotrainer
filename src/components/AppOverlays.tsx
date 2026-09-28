@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppMode, Attempt, CoachAnalysis, CompassStyle, GameRecord, GameRound, LanguagePreferences, LearnSource, LocationResult, MetaLesson, PanoramaSource, ReviewGrade, TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { AiCoach } from './AiCoach';
@@ -46,9 +46,10 @@ interface AppOverlaysProps {
   onToggleCompass: () => void;
 }
 export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | undefined, hasResult: boolean) => appMode !== 'play' || enabled !== false || hasResult;
-export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean) => appMode === 'play' ? hasPlayResult : hasReviewAttempt ? hasReviewResult : hasSummaryRound;
+export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean, playResultVisible = true) => appMode === 'play' ? hasPlayResult && playResultVisible : hasReviewAttempt ? hasReviewResult : hasSummaryRound;
 
 export function AppOverlays(props: AppOverlaysProps) {
+  const [playResultVisible, setPlayResultVisible] = useState(true);
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const { appMode, showHome, currentLocation, isRevealed, reviewResult, reviewAttempt, reviewAttemptRecord, reviewHistory,
@@ -60,7 +61,7 @@ export function AppOverlays(props: AppOverlaysProps) {
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   const playAnalysisAvailable = learningAnalysisAvailable(appMode, gameSettings?.aiCoachEnabled, !!activeRoundResult);
   const revealedResult = appMode === 'play' ? activeRoundResult : reviewAttempt ? reviewResult : summaryRound;
-  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound, !!reviewAttempt);
+  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound, !!reviewAttempt, playResultVisible);
   const coachGuess = appMode === 'play' ? activeRoundResult?.guessedCountryCode : reviewAttempt ? reviewAttemptRecord?.guessedCountryCode : summaryRound?.guessedCountryCode;
   return <>
     {!showHome && currentLocation && <div className={`panorama-tools${appMode === 'review' && reviewResult ? ' review-result-tools' : ''}`} aria-label={t('Learning aids')}>
@@ -74,7 +75,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     {coveragePreview && <CoverageStudyModal location={coveragePreview} onClose={props.onCloseCoverage} />}
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}
-    {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} />}
+    {activeRoundResult && gameSettings && <RoundResultModal round={activeRoundResult} totalRounds={gameSettings.roundCount} onNextRound={props.onNextRound} isLastRound={currentRoundIndex + 1 >= gameSettings.roundCount} rounds={gameRounds} onVisibilityChange={setPlayResultVisible} />}
     {summaryGameRecord && !summaryRound && <GameSummaryModal game={summaryGameRecord} onPracticeMistakes={props.onPracticeMistakes} onPlayAgain={props.onPlayAgain} onViewHistory={props.onViewHistory} onClose={props.onCloseSummary} onOpenRound={props.onOpenRound} />}
     <NewGameModal isOpen={isNewGameModalOpen} onClose={props.onCloseNewGame} collections={allCollections} onStartGame={props.onStartGame} onOpenHistory={props.onOpenHistory} pastGamesCount={pastGames.length} defaultShowCompass={compassPreference} />
     <StudySetupModal open={isStudySetupOpen} onClose={props.onCloseStudySetup} collections={allCollections} initial={studySetup} onStart={props.onStartStudy} />

@@ -19,9 +19,10 @@ interface RoundResultModalProps {
   onNextRound: () => void;
   isLastRound: boolean;
   rounds: GameRound[];
+  onVisibilityChange?: (visible: boolean) => void;
 }
 
-export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, totalRounds, onNextRound, isLastRound, rounds }) => {
+export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, totalRounds, onNextRound, isLastRound, rounds, onVisibilityChange }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [viewIndex, setViewIndex] = useState(rounds.length - 1);
@@ -47,7 +48,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   }, [viewedRound.location.lat, viewedRound.location.lng]);
 
   useEffect(() => setViewIndex(rounds.length - 1), [round.roundNumber, rounds.length]);
-  useEffect(() => setMinimized(false), [round.roundNumber]);
+  useEffect(() => { setMinimized(false); onVisibilityChange?.(true); }, [round.roundNumber, onVisibilityChange]);
 
   // Keyboard shortcut: Space or Enter to continue
   useEffect(() => {
@@ -66,7 +67,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   const lat = `${Math.abs(viewedRound.location.lat).toFixed(5)}° ${viewedRound.location.lat >= 0 ? 'N' : 'S'}`;
   const lng = `${Math.abs(viewedRound.location.lng).toFixed(5)}° ${viewedRound.location.lng >= 0 ? 'E' : 'W'}`;
 
-  if (minimized) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
+  if (minimized) return <button type="button" className="review-result-resume" onClick={() => { setMinimized(false); onVisibilityChange?.(true); }} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
 
   return (
     <div id="round-result-modal" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200">
@@ -115,7 +116,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               </span>
             </div>
           </div>
-          <button type="button" className="round-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
+          <button type="button" className="round-result-minimize" onClick={() => { setMinimized(true); onVisibilityChange?.(false); }} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         </div>
 
         {/* Interactive Map Visualizer */}

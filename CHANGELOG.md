@@ -2,6 +2,7 @@
 
 ## 2026-09-28
 
+- Kept Play Coach on Analyze while the completed round's result is minimized; Explain follows the visible result.
 - Kept the Play result minimize control in the top-right corner and let keyboard activation of its buttons work without advancing the round.
 - Kept AI Coach on Analyze during an unanswered Review card, even when a saved Play summary is still open; Explain now follows the current card's revealed result.
 

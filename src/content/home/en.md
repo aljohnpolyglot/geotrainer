@@ -293,7 +293,7 @@ Notebook preserves pasted headings, bold emphasis, and bullet lists. External an
 
 ### Before and after reveal
 
-Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or submitted guess, **Analyze** becomes **Explain**: Coach compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
+Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or Review guess, **Analyze** becomes **Explain**. In Play, **Explain** appears while the result is visible; minimizing the result returns Coach to **Analyze** until you show it again. Explain compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
 
 ### Reliability
 
