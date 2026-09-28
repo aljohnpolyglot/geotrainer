@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle } from 'lucide-react';
-import { importedMapPointCount, importedMapSizeAllowed, parseImportedMap, saveImportedMap, type ImportedMap } from '../services/importedMap';
+import { importedMapUrl, importedMapPointCount, importedMapSizeAllowed, parseImportedMap, saveImportedMap, type ImportedMap } from '../services/importedMap';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 
@@ -15,7 +15,7 @@ export function ImportedMapUpload({ source, map, onChange }: { source: 'upload' 
   const loadUrl = async () => {
     const current = ++operation.current;
     try {
-      setLoading(true); const endpoint = new URL(url); if (!['http:', 'https:'].includes(endpoint.protocol)) throw new Error(t('Enter an HTTP or HTTPS URL.'));
+      setLoading(true); const endpoint = importedMapUrl(url); if (!['http:', 'https:'].includes(endpoint.protocol)) throw new Error(t('Enter an HTTP or HTTPS URL.'));
       const response = await fetch(endpoint); if (!response.ok) throw new Error(`${t('Could not load URL.')} (${response.status})`);
       const contentLength = Number(response.headers.get('content-length')); if (contentLength && !importedMapSizeAllowed(contentLength)) throw new Error(t('Choose a JSON file under 20 MB.'));
       const json = await response.text(); if (!importedMapSizeAllowed(new Blob([json]).size)) throw new Error(t('Choose a JSON file under 20 MB.'));

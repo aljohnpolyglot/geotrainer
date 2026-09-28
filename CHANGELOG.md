@@ -2,6 +2,8 @@
 
 ## 2026-09-28
 
+- Made Learn and Play JSON URL imports automatically load raw JSON when a GitHub file-page link is pasted.
+
 - Added localized hover help to the automatic Review Wrong country checkbox, clarifying that it saves wrong-country rounds above the score threshold without accepting them as correct.
 
 - Froze Play assistance at answer submission so later mistake analysis and delayed saves cannot mark the scored attempt assisted; restoring an old clue analysis no longer counts as new live analysis.

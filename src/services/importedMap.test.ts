@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapSizeAllowed, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapSizeAllowed, importedMapUrl, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -78,4 +78,11 @@ test('uploaded variation keeps zero exact and bounds nearby positions', () => {
 test('completed uploaded source entries cannot be selected again', () => {
   const points = [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }];
   assert.deepEqual(remainingImportedPoints(points, new Set([0, 2])), [{ point: points[1], index: 1 }]);
+});
+
+test('JSON URLs convert GitHub file pages while preserving raw and other endpoints', () => {
+  assert.equal(importedMapUrl(' https://github.com/itsjustduc/geoguessr-stuff/blob/main/brazilphonecodes.json ').href, 'https://raw.githubusercontent.com/itsjustduc/geoguessr-stuff/main/brazilphonecodes.json');
+  assert.equal(importedMapUrl('https://github.com/user/maps/blob/feature/maps/folder/map%20one.json?plain=1#L4').href, 'https://raw.githubusercontent.com/user/maps/feature/maps/folder/map%20one.json');
+  for (const endpoint of ['https://raw.githubusercontent.com/user/maps/main/map.json', 'https://example.com/map.json?key=value', 'https://github.com/user/maps/tree/main', 'https://github.com.example.com/user/maps/blob/main/map.json']) assert.equal(importedMapUrl(endpoint).href, endpoint);
+  assert.throws(() => importedMapUrl('not a URL'), TypeError);
 });

@@ -19,6 +19,16 @@ export const moveImportedHistory = (history: ImportedMapHistory, direction: 'pre
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
 export const importedMapPointCount = (map: ImportedMap) => map.kind === 'pool' ? undefined : map.points.length;
 
+export function importedMapUrl(value: string): URL {
+  const url = new URL(value.trim());
+  const [, owner, repo, kind, ...file] = url.pathname.split('/');
+  if (['github.com', 'www.github.com'].includes(url.hostname) && owner && repo && kind === 'blob' && file.length >= 2 && file.every(Boolean) && ['http:', 'https:'].includes(url.protocol)) {
+    url.protocol = 'https:'; url.host = 'raw.githubusercontent.com';
+    url.pathname = '/' + [owner, repo, ...file].join('/'); url.search = ''; url.hash = '';
+  }
+  return url;
+}
+
 const mapName = (name: string) => name.replace(/\.json$/i, '').slice(0, 100) || 'Imported map';
 
 export function parseImportedMap(json: string, name: string): ImportedMap {
