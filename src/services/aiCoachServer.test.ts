@@ -1,4 +1,4 @@
-import { leagueRosterPlaces } from '../../supabase/functions/_shared/poolLeague.ts';
+import { leagueRosterPlaces } from '../../server/poolLeague';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';

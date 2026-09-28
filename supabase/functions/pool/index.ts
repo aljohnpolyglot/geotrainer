@@ -1,4 +1,4 @@
-import { leagueRosterSchema, leagueRosterPrompt, leagueRosterExtractionPrompt, leagueRosterPlaces } from '../_shared/poolLeague.ts';
+import { leagueRosterSchema, leagueRosterPrompt, leagueRosterExtractionPrompt, leagueRosterPlaces } from '../../../server/poolLeague.ts';
 import countryCatalog from '../../../src/data/countryCatalog.json' with { type: 'json' };
 
 type KeyState = { key: string; cooldownUntil: number };

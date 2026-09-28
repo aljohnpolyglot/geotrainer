@@ -1,4 +1,4 @@
-import { leagueRosterSchema, leagueRosterPrompt, leagueRosterExtractionPrompt, leagueRosterPlaces } from '../supabase/functions/_shared/poolLeague.ts';
+import { leagueRosterSchema, leagueRosterPrompt, leagueRosterExtractionPrompt, leagueRosterPlaces } from './poolLeague.js';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
