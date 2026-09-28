@@ -88,6 +88,8 @@ Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem 
 
 ## Coach de IA e pistas
 
+Jogo fixa o uso de IA quando você envia a resposta. Analisar um erro depois, mesmo com o resultado minimizado ou enquanto a resposta ainda é salva, não altera essa tentativa. Restaurar uma análise antiga não conta como novo uso de IA durante a rodada.
+
 As marcações antigas de Jogo são corrigidas automaticamente quando uma imagem pessoal do Caderno foi guardada durante a rodada e não há análise de IA registrada. As análises de pistas e de 360° mantêm a marcação de assistência. Registros antigos ambíguos ficam inalterados; pontuações, respostas, notas e agendamentos de Revisão são preservados.
 
 Jogo usa a mesma barra de aprendizagem de Estudo: Caderno, contagem de notas disponíveis próximas e Coach de IA quando ativado na configuração da partida.

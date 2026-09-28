@@ -88,6 +88,8 @@ La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant 
 
 ## Coach IA et indices
 
+Jeu fixe l’assistance IA lorsque vous envoyez la réponse. Analyser une erreur ensuite, même avec le résultat réduit ou pendant l’enregistrement de la réponse, ne change pas cette tentative. Restaurer une ancienne analyse ne compte pas comme une nouvelle utilisation de l’IA pendant la manche.
+
 Les anciennes mentions du mode Jeu sont corrigées automatiquement lorsqu’une image personnelle du Carnet a été enregistrée pendant la manche sans analyse IA enregistrée. Les analyses d’indices et à 360° gardent leur mention d’assistance. Les anciens enregistrements ambigus restent inchangés ; scores, réponses, notes et calendriers de Révision sont conservés.
 
 Jeu utilise la même barre d’apprentissage qu’Étude : Carnet, compteur des notes disponibles à proximité et Coach IA lorsqu’il est activé dans la configuration de la partie.

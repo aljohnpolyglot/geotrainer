@@ -249,6 +249,8 @@ Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache R
 
 ## KI-Coach
 
+Spiel legt die KI-Unterstützung beim Absenden der Antwort fest. Eine spätere Fehleranalyse, auch bei minimiertem Ergebnis oder während des Speicherns, ändert diesen Versuch nicht. Eine alte gespeicherte Analyse wiederherzustellen zählt nicht als neue KI-Nutzung in der laufenden Runde.
+
 Ältere Spielmarkierungen werden automatisch korrigiert, wenn während der Runde ein persönliches Notizbuchbild ohne aufgezeichnete KI-Analyse gespeichert wurde. KI-Analysen von Hinweisen und 360°-Ansichten behalten ihre Markierung. Unklare ältere Einträge bleiben unverändert; Punkte, Antworten, Notizen und Wiederholungspläne bleiben erhalten.
 
 Der KI-Coach untersucht sichtbare geografische Hinweise. Er funktioniert auch für Gäste ohne Konto.

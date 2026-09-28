@@ -268,6 +268,8 @@ After a game, Practice mistakes opens Review and repeats weak rounds until they 
 
 ## AI Coach
 
+Play fixes its AI-assisted status when you submit the answer. Analyzing a mistake afterward, including with the result minimized or while the answer is still saving, does not change that attempt. Restoring an old saved analysis does not count as new live-round AI use.
+
 Older Play labels are corrected automatically when a plain Notebook image was saved during the round and no AI analysis is recorded. Saved AI clue and 360° analyses keep their assisted label. Ambiguous older records remain unchanged; scores, answers, notes, and Review schedules are preserved.
 
 AI Coach looks for visible geographic evidence in the current panorama. Guest users can use it without creating an account.

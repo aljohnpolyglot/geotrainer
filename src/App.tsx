@@ -384,8 +384,9 @@ export default function App() {
   const canZoom = appMode === 'review' && reviewAttempt ? reviewAttempt.canZoom : appMode === 'play' && isGameActive && gameSettings ? gameSettings.canZoom : true;
 
   const handleSaveCoach = useCallback(async (note: { mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis; clueId?: string; location?: LocationResult }) => {
-    const { location: sourceLocation, ...savedNote } = note; setCoachNote(savedNote);
+    const { location: sourceLocation, ...savedNote } = note;
     const location = sourceLocation || currentLocationRef.current;
+    if (location?.panoId === currentLocationRef.current?.panoId && (appMode !== 'play' || !roundSubmittedRef.current)) setCoachNote(savedNote);
     if (location) { await saveCoachHistoryNote({ id: `coach-note-${crypto.randomUUID()}`, panoId: location.panoId, countryCode: location.countryCode, ...savedNote }); setTrainerRefreshKey((key) => key + 1); }
     if (appMode === 'study' && currentVisitRef.current && currentVisitRef.current.panoId === currentLocationRef.current?.panoId) {
       Object.assign(currentVisitRef.current, { coachUsed: true, coachMode: note.mode, coachModel: note.model, coachGeneratedAt: note.generatedAt, coachAnalysis: note.analysis });
@@ -400,8 +401,8 @@ export default function App() {
     const { location: sourceLocation, ...savedClue } = clue; const location = sourceLocation || currentLocationRef.current;
     if (!location) return;
     const id = `clue-${crypto.randomUUID()}`;
+    if (location.panoId === currentLocationRef.current?.panoId && clueMarksPlayAssisted(appMode, !!activeRoundResult, savedClue.model, roundSubmittedRef.current)) playAiAssistedRef.current = true;
     await trainerDb.saveClue({ id, countryCode: location.countryCode, panoId: location.panoId, lat: location.lat, lng: location.lng, createdAt: savedClue.generatedAt, ...savedClue });
-    if (clueMarksPlayAssisted(appMode, !!activeRoundResult, savedClue.model)) playAiAssistedRef.current = true;
     if (appMode === 'study') await handleSaveStudyForReview();
     setTrainerRefreshKey((key) => key + 1);
     return id;
@@ -473,7 +474,7 @@ export default function App() {
         preferencesOpen={preferencesOpen} trainerRefreshKey={trainerRefreshKey} reviewGrading={reviewGradingRef.current} learnSource={learnSource} activeMetaLesson={activeMetaLesson} mapPickerOpen={mapPickerOpen} metaAdviceOpen={metaAdviceOpen} mapsReady={mapsReady} explorePanoramaSource={studyPanoramaSource} exploreAllowInteriors={studyAllowInteriors}
         onSaveCoach={handleSaveCoach} onSaveClue={handleSaveClue}
         onToggleCompass={toggleCompass}
-        onClueAnalyzed={() => { if (appMode === 'play' && !activeRoundResult) playAiAssistedRef.current = true; }}
+        onClueAnalyzed={() => { if (currentLocation?.panoId === currentLocationRef.current?.panoId && clueMarksPlayAssisted(appMode, !!activeRoundResult, 'Gemini', roundSubmittedRef.current)) playAiAssistedRef.current = true; }}
         onNextReview={() => void handleReviewNext()} onCloseCoverage={() => setCoveragePreview(null)}
         onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}

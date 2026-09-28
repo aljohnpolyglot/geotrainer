@@ -88,6 +88,8 @@ Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afecta
 
 ## Entrenador de IA y pistas
 
+Juego fija la asistencia de IA al enviar la respuesta. Analizar un error después, incluso con el resultado minimizado o mientras se guarda la respuesta, no cambia ese intento. Restaurar un análisis guardado no cuenta como uso nuevo de IA durante la ronda.
+
 Las etiquetas antiguas de Juego se corrigen automáticamente si se guardó una imagen personal del Cuaderno durante la ronda y no consta ningún análisis de IA. Los análisis de pistas y de 360° conservan su etiqueta de asistencia. Los registros antiguos ambiguos no cambian; se conservan puntuaciones, respuestas, notas y calendarios de Repaso.
 
 Juego usa la misma barra de aprendizaje que Estudio: Cuaderno, el contador de notas cercanas disponibles y el entrenador de IA cuando está activado en la configuración de la partida.

@@ -4,7 +4,7 @@ import type { AppMode, CoachHistoryNote, NotebookNote } from '../types';
 let writes = Promise.resolve();
 let notebookWrites = Promise.resolve();
 export const NOTEBOOK_NOTE_MAX_LENGTH = 1000;
-export const clueMarksPlayAssisted = (mode: AppMode, hasResult: boolean, model: string) => mode === 'play' && !hasResult && model !== 'Notebook';
+export const clueMarksPlayAssisted = (mode: AppMode, hasResult: boolean, model: string, submitted = false) => mode === 'play' && !hasResult && !submitted && model !== 'Notebook';
 
 export function saveCoachHistoryNote(note: CoachHistoryNote): Promise<void> {
   const next = writes.then(async () => {

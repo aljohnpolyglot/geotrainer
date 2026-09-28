@@ -10,6 +10,8 @@ test('manual Notebook images do not mark Play as assisted, but actual analysis d
   assert.equal(clueMarksPlayAssisted('play', false, 'Notebook'), false);
   assert.equal(clueMarksPlayAssisted('play', false, 'Gemini'), true);
   assert.equal(clueMarksPlayAssisted('play', true, 'Gemini'), false);
+  assert.equal(clueMarksPlayAssisted('play', false, 'Gemini', true), false); // Submission is final before the result finishes saving.
+  assert.equal(clueMarksPlayAssisted('play', true, 'Gemini', true), false); // Includes a minimized completed result.
   assert.equal(clueMarksPlayAssisted('study', false, 'Gemini'), false);
   assert.equal(clueMarksPlayAssisted('review', false, 'Gemini'), false);
 });

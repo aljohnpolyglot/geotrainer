@@ -45,7 +45,7 @@ export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange
     controller.current?.abort(); requestId.current += 1; setImage(''); setAnalysis(undefined); setStatus(''); setSaved(false); setSavedToast(false); setBusy(false); setChoosingStyle(false); setCropping(false); onBusyChange?.(false); onImageChange?.(''); onSaved?.(undefined);
     let active = true;
     void readWorkspaceDraft<ClueDraft>('clue', panoId).then((draft) => {
-      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); if (draft.saved && draft.analysis) onAnalyze?.(); }
+      if (active && draft?.panoId === panoId) { setImage(draft.imageDataUrl); onImageChange?.(draft.imageDataUrl); setAnalysis(draft.analysis); setSaved(draft.saved); if (draft.clueId) onSaved?.(draft.clueId); }
     });
     return () => { active = false; };
   }, [panoId]);

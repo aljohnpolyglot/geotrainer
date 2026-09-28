@@ -88,6 +88,8 @@ Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazi
 
 ## Coach IA e indizi
 
+Gioco fissa l’assistenza IA quando invii la risposta. Analizzare un errore dopo, anche con il risultato ridotto o durante il salvataggio della risposta, non cambia quel tentativo. Ripristinare un’analisi precedente non conta come nuovo uso di IA durante il turno.
+
 Le vecchie etichette di Gioco vengono corrette automaticamente se durante il turno è stata salvata un’immagine personale del Taccuino senza un’analisi IA registrata. Le analisi degli indizi e a 360° mantengono l’etichetta di assistenza. I vecchi dati ambigui restano invariati; punteggi, risposte, note e programmi di Ripasso sono conservati.
 
 Gioco usa la stessa barra di apprendimento di Studio: Taccuino, conteggio delle note disponibili nelle vicinanze e Coach IA quando è attivato nella configurazione della partita.

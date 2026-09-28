@@ -2,6 +2,7 @@
 
 ## 2026-09-28
 
+- Froze Play assistance at answer submission so later mistake analysis and delayed saves cannot mark the scored attempt assisted; restoring an old clue analysis no longer counts as new live analysis.
 - Added localized Preferences → Country score targets with editable default and country overrides; applied stricter targets to Play auto-review, Practice mistakes, and Review grading while preserving untargeted-country rules and original points.
 - Applied Outdoors only alongside Official imagery for generated Learn and Play locations, using the same combined filters as Explore Map.
 - Added the JSON URL source to Play setup with the existing map loader and a balanced four-tile source layout.
