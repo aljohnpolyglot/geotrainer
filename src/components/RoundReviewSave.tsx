@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BookmarkPlus, LoaderCircle } from 'lucide-react';
+import { BookmarkPlus, Check, LoaderCircle } from 'lucide-react';
 import type { LocationResult } from '../types';
 import { trainerDb } from '../data/trainerDb';
 import { translate } from '../services/language';
@@ -11,6 +11,13 @@ export const RoundReviewSave: React.FC<{ location: LocationResult; refreshKey: n
   const [scheduled, setScheduled] = useState<boolean | null>(null);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
+
+  useEffect(() => {
+    if (!savedToast) return;
+    const timer = window.setTimeout(() => setSavedToast(false), 3000);
+    return () => window.clearTimeout(timer);
+  }, [savedToast]);
 
   useEffect(() => {
     let active = true;
@@ -25,13 +32,13 @@ export const RoundReviewSave: React.FC<{ location: LocationResult; refreshKey: n
     setSaving(true); setFailed(false);
     try {
       await trainerDb.queueForReview(location.panoId, false, location);
-      setScheduled(true);
+      setScheduled(true); setSavedToast(true);
       onSaved();
     } catch { setFailed(true); }
     finally { setSaving(false); }
   };
 
-  if (scheduled !== false) return null;
+  if (scheduled !== false) return savedToast ? <div className="settings-saved-toast" role="status" aria-live="polite"><Check size={19} />{t('savedForReview')}</div> : null;
   return <div className="round-review-save">
     <button type="button" className="icon-button" disabled={saving} onClick={() => void save()} aria-label={t(saving ? 'saving' : 'saveForReview')} title={t(saving ? 'saving' : 'saveForReview')}>
       {saving ? <LoaderCircle size={18} className="spin" /> : <BookmarkPlus size={18} />}

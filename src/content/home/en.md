@@ -180,7 +180,7 @@ Submitting a Play answer saves the current Street View image with that location 
 
 Pinpoint score falls as distance grows. Country correctness is also considered when GeoTrainer decides whether an attempt is weak enough to schedule. Strictness changes the threshold, so the same result can be acceptable for a beginner and weak for a pro.
 
-To keep a correctly answered or otherwise unscheduled location for practice, use the **Save this location for Review** icon beside **Continue Game** in the round result. It appears only when that location has no Review card, including same-country locations within 50 metres. You can also browse earlier rounds and save the round currently displayed. Saving quietly adds a new card, removes the save icon, and keeps the result open; it does not change the score, create another attempt, or reset an existing schedule. The saved state survives reloads. If saving fails, the icon stays available with a retry message. Cloud sync remains manual.
+To keep a correctly answered or otherwise unscheduled location for practice, use the **Save this location for Review** icon beside **Continue Game** in the round result. It appears only when that location has no Review card, including same-country locations within 50 metres. You can also browse earlier rounds and save the round currently displayed. Saving quietly adds a new card, removes the save icon, and keeps the result open; it does not change the score, create another attempt, or reset an existing schedule. The saved state survives reloads. If saving fails, the icon stays available with a retry message. Cloud sync remains manual. A brief confirmation toast confirms the Review save.
 
 ### Game summaries
 

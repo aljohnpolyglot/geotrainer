@@ -64,7 +64,7 @@ Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do
 
 Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Depois do palpite, o resultado mostra o país real, cidade, região e via disponíveis, o endereço completo, as coordenadas exatas, a distância e a pontuação. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
 
-O ícone **Salvar este local para revisão**, ao lado de **Continuar jogo**, permite guardar também respostas corretas. Ele só aparece se o local exibido ainda não tiver um cartão de revisão, incluindo locais do mesmo país a até 50 metros. Também funciona nas rodadas anteriores. Ao salvar, o ícone desaparece e o resultado continua aberto, sem alterar a pontuação ou agendamentos existentes. O estado salvo permanece após recarregar e a sincronização continua manual. Se falhar, tente novamente.
+O ícone **Salvar este local para revisão**, ao lado de **Continuar jogo**, permite guardar também respostas corretas. Ele só aparece se o local exibido ainda não tiver um cartão de revisão, incluindo locais do mesmo país a até 50 metros. Também funciona nas rodadas anteriores. Ao salvar, o ícone desaparece e o resultado continua aberto, sem alterar a pontuação ou agendamentos existentes. O estado salvo permanece após recarregar e a sincronização continua manual. Se falhar, tente novamente. Uma breve notificação confirma o salvamento para revisão.
 
 ## Revisão e agendamento
 

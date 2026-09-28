@@ -64,7 +64,7 @@ Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round us
 
 Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Dopo la risposta, il risultato mostra il paese reale, città, regione e strada disponibili, l’indirizzo completo, le coordinate esatte, la distanza e il punteggio. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
 
-L’icona **Salva questo luogo per il ripasso**, accanto a **Continua partita**, permette di conservare anche risposte corrette. Compare solo se il luogo visualizzato non ha già una scheda di ripasso, inclusi luoghi dello stesso paese entro 50 metri. Funziona anche per i turni precedenti. Dopo il salvataggio l’icona scompare e il risultato resta aperto, senza cambiare punteggio o scadenze esistenti. Il salvataggio resta dopo il ricaricamento e la sincronizzazione rimane manuale. In caso di errore, riprova.
+L’icona **Salva questo luogo per il ripasso**, accanto a **Continua partita**, permette di conservare anche risposte corrette. Compare solo se il luogo visualizzato non ha già una scheda di ripasso, inclusi luoghi dello stesso paese entro 50 metri. Funziona anche per i turni precedenti. Dopo il salvataggio l’icona scompare e il risultato resta aperto, senza cambiare punteggio o scadenze esistenti. Il salvataggio resta dopo il ricaricamento e la sincronizzazione rimane manuale. In caso di errore, riprova. Una breve notifica conferma il salvataggio per il ripasso.
 
 ## Ripasso e programmazione
 

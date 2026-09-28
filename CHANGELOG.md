@@ -2,6 +2,7 @@
 
 ## 2026-09-28
 
+- Reused the existing confirmation toast after manually saving an unscheduled Play result for Review.
 - Repaired stale AI-assisted Play labels backed by plain Notebook saves on startup, import, and manual sync; preserved genuine clue/360° analysis and ambiguous records.
 - Added maximum possible scores and localized score percentages to Play game history, including compact mobile rows.
 - Stopped plain Notebook image saves from marking unfinished Play rounds AI-assisted; actual AI clue analysis still counts.

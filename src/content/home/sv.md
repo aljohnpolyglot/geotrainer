@@ -64,7 +64,7 @@ I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omg�
 
 Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Efter svaret visar resultatet rätt land, tillgänglig stad, region och väg, fullständig adress, exakta koordinater, avstånd och poäng. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
 
-Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig även spara rätt besvarade platser. Den visas bara när den visade platsen saknar repetitionskort, inklusive platser i samma land inom 50 meter. Du kan också bläddra till och spara tidigare rundor. Ikonen försvinner efter sparandet och resultatet förblir öppet. Poäng och befintliga scheman ändras inte. Sparandet finns kvar efter omladdning och molnsynkronisering är fortfarande manuell. Om sparandet misslyckas kan du försöka igen.
+Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig även spara rätt besvarade platser. Den visas bara när den visade platsen saknar repetitionskort, inklusive platser i samma land inom 50 meter. Du kan också bläddra till och spara tidigare rundor. Ikonen försvinner efter sparandet och resultatet förblir öppet. Poäng och befintliga scheman ändras inte. Sparandet finns kvar efter omladdning och molnsynkronisering är fortfarande manuell. Om sparandet misslyckas kan du försöka igen. En kort bekräftelse visar att platsen har sparats för repetition.
 
 ## Repetition och schemaläggning
 
