@@ -84,6 +84,8 @@ La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant 
 
 ## Coach IA et indices
 
+Les anciennes mentions du mode Jeu sont corrigées automatiquement lorsqu’une image personnelle du Carnet a été enregistrée pendant la manche sans analyse IA enregistrée. Les analyses d’indices et à 360° gardent leur mention d’assistance. Les anciens enregistrements ambigus restent inchangés ; scores, réponses, notes et calendriers de Révision sont conservés.
+
 Jeu utilise la même barre d’apprentissage qu’Étude : Carnet, compteur des notes disponibles à proximité et Coach IA lorsqu’il est activé dans la configuration de la partie.
 
 Coach attend la langue IA enregistrée avant l’analyse, rejette les résultats nettement multilingues et explique les indices visibles derrière chaque nouveau pays candidat.

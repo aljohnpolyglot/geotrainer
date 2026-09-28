@@ -11,9 +11,10 @@ import {
 } from '../data/trainerDb';
 import { supabase } from './supabase';
 import { cacheClueImages, hostedCluePaths, resolveStoredClueImages, uploadClueImage } from './clueImages';
-import type { ClueRecord, CoachAnalysis, NotebookNote, ReviewRecord } from '../types';
+import type { Attempt, ClueRecord, CoachAnalysis, CoachHistoryNote, NotebookNote, ReviewRecord } from '../types';
 import { announceCloudImport } from './cloudSyncEvent';
 import { IMPORTED_MAP_PREFIX } from './importedMap';
+import { repairNotebookAssistance } from '../data/assistanceRepair';
 import { splitDuplicateClues } from '../data/clueDedup';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'ready' | 'syncing' | 'synced' | 'error';
@@ -111,6 +112,7 @@ export function mergeBackups(cloud: TrainerBackup, local: TrainerBackup): Traine
   const notes = (settings.find((item) => item.key === 'notebook.notes')?.value || []) as NotebookNote[];
   const deleted = new Set(((settings.find((item) => item.key === 'clues.deleted')?.value || []) as Array<{ id: string }>).map((item) => item.id));
   data.clues = splitDuplicateClues((data.clues as ClueRecord[]).filter((clue) => !deleted.has(clue.id)), notes).unique;
+  data.attempts = repairNotebookAssistance(data.attempts as Attempt[], [...(cloud.data.clues || []), ...(local.data.clues || [])] as ClueRecord[], (settings.find((item) => item.key === 'coach.notes')?.value || []) as CoachHistoryNote[]);
 
   return {
     format: 'street-view-trainer',

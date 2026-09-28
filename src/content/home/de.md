@@ -236,6 +236,8 @@ Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache R
 
 ## KI-Coach
 
+Ältere Spielmarkierungen werden automatisch korrigiert, wenn während der Runde ein persönliches Notizbuchbild ohne aufgezeichnete KI-Analyse gespeichert wurde. KI-Analysen von Hinweisen und 360°-Ansichten behalten ihre Markierung. Unklare ältere Einträge bleiben unverändert; Punkte, Antworten, Notizen und Wiederholungspläne bleiben erhalten.
+
 Der KI-Coach untersucht sichtbare geografische Hinweise. Er funktioniert auch für Gäste ohne Konto.
 
 Vor dem Aufdecken kann eine Analyse mit hoher Sicherheit nach der Länderrangliste eine Region, Stadt, ein Viertel, eine Sehenswürdigkeit oder einen genauen Ort unter „Am wahrscheinlichsten in“ nennen, aber nur wenn mehrere starke sichtbare Hinweise diesen genaueren Ort stützen. Bei allgemeinen Szenen bleibt diese Schätzung verborgen.

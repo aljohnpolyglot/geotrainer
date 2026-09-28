@@ -19,6 +19,7 @@ import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleIn
 import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor, reviewGradeForPerformance } from './reviewGrading';
 import { clueImageFingerprint } from './clueDedup';
+import { repairSavedNotebookAssistance } from './assistanceRepair';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore, shouldAutoSchedulePlayReview } from './reviewGrading';
@@ -239,13 +240,12 @@ async function reconcileSavedReviews() {
   const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
   await complete(tx); notifyChange({ operation: 'reconcile:reviews' });
 }
-
 export async function initTrainerDb(): Promise<void> {
   await openDatabase();
   await migrateLocalStorageV1();
   await reconcileSavedReviews();
+  await repairSavedNotebookAssistance(trainerDb);
 }
-
 export const trainerDb = {
   locations: () => all<TrainerLocation>('locations'),
   attempts: () => all<Attempt>('attempts'),
@@ -486,6 +486,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
     for (const item of value.data[name] || []) tx.objectStore(name).put(item);
   }
   await complete(tx);
+  await repairSavedNotebookAssistance(trainerDb);
   notifyChange({ operation: `backup:${mode}`, allowsSavedContentDecrease: mode === 'replace' });
   await reconcileSavedReviews();
 }

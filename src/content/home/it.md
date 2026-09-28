@@ -84,6 +84,8 @@ Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazi
 
 ## Coach IA e indizi
 
+Le vecchie etichette di Gioco vengono corrette automaticamente se durante il turno è stata salvata un’immagine personale del Taccuino senza un’analisi IA registrata. Le analisi degli indizi e a 360° mantengono l’etichetta di assistenza. I vecchi dati ambigui restano invariati; punteggi, risposte, note e programmi di Ripasso sono conservati.
+
 Gioco usa la stessa barra di apprendimento di Studio: Taccuino, conteggio delle note disponibili nelle vicinanze e Coach IA quando è attivato nella configurazione della partita.
 
 Coach attende la lingua IA salvata prima dell’analisi, rifiuta i risultati chiaramente multilingue e spiega gli indizi visibili dietro ogni nuovo paese candidato.

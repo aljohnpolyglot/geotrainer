@@ -45,7 +45,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
 - Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.
 - Include AI-assisted Play in Statistics by default while retaining the visible exclusion checkbox.
-- Personal Notebook text and image saves alone never mark Play AI-assisted; only actual AI analysis before submission does.
+- Personal Notebook text and image saves alone never mark Play AI-assisted; only actual AI analysis before submission does. Repair older labels only with matching plain-save evidence and no recorded AI analysis; preserve genuine clue/360° analysis and ambiguous records through imports and manual sync.
 - Keep completed-game summaries factual; do not assign variable score ranks or performance titles.
 - In Play results, offer a quiet Save for Review icon beside Continue only when the displayed round has no existing 50-metre Review card; manual saves preserve the scored attempt and any existing schedule.
 - Include canonical Play and Review attempts in performance, geography, progress, and confusion statistics; the AI-assisted checkbox affects only Play, and hidden-tab time must not increase Play or Review answer duration.

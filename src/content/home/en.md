@@ -264,6 +264,8 @@ After a game, Practice mistakes opens Review and repeats weak rounds until they 
 
 ## AI Coach
 
+Older Play labels are corrected automatically when a plain Notebook image was saved during the round and no AI analysis is recorded. Saved AI clue and 360° analyses keep their assisted label. Ambiguous older records remain unchanged; scores, answers, notes, and Review schedules are preserved.
+
 AI Coach looks for visible geographic evidence in the current panorama. Guest users can use it without creating an account.
 
 Before reveal, a high-confidence analysis can add a “Most likely in” region, city, quarter, landmark, or exact-place estimate after the country ranking, but only when multiple strong visible clues support that narrower location. Generic scenes keep the estimate hidden.

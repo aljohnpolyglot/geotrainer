@@ -90,6 +90,8 @@ I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. K
 
 ## AI-coach och ledtrådar
 
+Äldre Spela-markeringar rättas automatiskt när en vanlig anteckningsbild sparades under rundan utan registrerad AI-analys. Sparade AI-analyser av ledtrådar och 360° behåller sin AI-markering. Osäkra äldre poster ändras inte; poäng, svar, anteckningar och repetitionsscheman bevaras.
+
 Spel använder samma lärverktygsrad som Studier: Anteckningsbok, antalet tillgängliga anteckningar i närheten och AI-coach när den är aktiverad i spelinställningen.
 
 Coach väntar före analysen på det sparade AI-språket, avvisar tydligt flerspråkiga resultat och förklarar de synliga skälen för varje nytt kandidatland.
