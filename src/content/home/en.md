@@ -224,7 +224,7 @@ Review continues through the active queue until no selected cards remain. Same-d
 
 Strictness affects future grading; it does not rewrite old attempts.
 
-**Add Play rounds to Review** is separate from grading: a future Play round creates a card when its score is below the chosen threshold or its country is wrong. Either enabled condition is enough; fresh profiles start at the active Hard/Again boundary (3,000 for Balanced).
+**Add Play rounds to Review** is separate from grading: a future Play round creates a card when its score is below the chosen threshold or its country is wrong. Either enabled condition is enough; fresh profiles start at the active Hard/Again boundary (3,000 for Balanced). When checked, wrong-country rounds are saved for Review even above the score threshold. They still count as wrong answers.
 
 ### Daily limits
 
