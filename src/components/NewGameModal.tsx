@@ -20,6 +20,7 @@ import {
   Sparkles,
   Download,
   FileJson,
+  Link,
   SlidersHorizontal,
 } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -68,7 +69,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
   const [allowInteriors, setAllowInteriors] = useState(false);
-  const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'ai'>('generated');
+  const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'url' | 'ai'>('generated');
   const [importedMap, setImportedMap] = useState<ImportedMap>();
   const [loadedPoolName, setLoadedPoolName] = useState('');
 
@@ -90,6 +91,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
   if (!isOpen) return null;
 
+  const importedSource = locationSource === 'uploaded' || locationSource === 'url';
+
   // Presets
   const applyPreset = (preset: 'standard' | 'no-move' | 'nmpz') => {
     if (preset === 'standard') {
@@ -109,9 +112,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
 
   const handleStart = () => {
     const settings = {
-      roundCount: locationSource === 'uploaded' && importedMap && importedMapPointCount(importedMap) ? Math.min(roundCount, importedMapPointCount(importedMap)!) : roundCount,
+      roundCount: importedSource && importedMap && importedMapPointCount(importedMap) ? Math.min(roundCount, importedMapPointCount(importedMap)!) : roundCount,
       collectionId: selectedCollectionId,
-      ...(locationSource === 'uploaded' && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
+      ...(importedSource && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
       ...(countryCodes.length ? { countryCodes } : {}),
       ...(locationTargets.length ? { locationTargets } : {}),
       canMove,
@@ -127,7 +130,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       allowInteriors,
       timeLimitSeconds,
     };
-    if (locationSource === 'uploaded' && !importedMap) return;
+    if (importedSource && !importedMap) return;
     void trainerDb.setSetting('gamePreferences', settings);
     onStartGame(settings);
   };
@@ -171,9 +174,10 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           <div className="learn-source-picker play-source-picker" aria-label={t('Location source')}>{([
             ['generated', SlidersHorizontal, 'Custom', 'Choose countries and surroundings.'],
             ['uploaded', FileJson, 'Upload JSON', 'Open a Map Maker map or geographic pool file.'],
+            ['url', Link, 'JSON URL', 'Load a map or geographic pool from a URL.'],
             ['ai', Sparkles, 'Describe a pool', 'Let AI choose editable countries, regions, and cities.'],
           ] as const).map(([source, Icon, title, description]) => <button key={source} type="button" className={locationSource === source ? 'selected' : ''} aria-pressed={locationSource === source} onClick={() => setLocationSource(source)}><Icon size={18} /><span><strong>{t(title)}</strong><small>{t(description)}</small></span></button>)}</div>
-          {locationSource === 'uploaded' && <ImportedMapUpload source="upload" map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {importedSource && <ImportedMapUpload source={locationSource === 'url' ? 'url' : 'upload'} map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
           {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
@@ -402,7 +406,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             <button
               type="button"
               onClick={handleStart}
-              disabled={(locationSource === 'uploaded' && !importedMap) || locationSource === 'ai'}
+              disabled={(importedSource && !importedMap) || locationSource === 'ai'}
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98 text-xs sm:text-sm"
             >
               <Play className="w-4 h-4 fill-white text-white" />

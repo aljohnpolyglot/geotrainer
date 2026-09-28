@@ -2,6 +2,9 @@
 
 ## 2026-09-28
 
+- Applied Outdoors only alongside Official imagery for generated Learn and Play locations, using the same combined filters as Explore Map.
+- Added the JSON URL source to Play setup with the existing map loader and a balanced four-tile source layout.
+- Compacted Play result navigation, continuation, Save for Review, and minimize controls with consistent spacing and mobile touch targets.
 - Reused the existing confirmation toast after manually saving an unscheduled Play result for Review.
 - Repaired stale AI-assisted Play labels backed by plain Notebook saves on startup, import, and manual sync; preserved genuine clue/360° analysis and ambiguous records.
 - Added maximum possible scores and localized score percentages to Play game history, including compact mobile rows.

@@ -27,6 +27,13 @@ const classesForLevel = (level: UrbanLevel) => level === 1 ? ['major'] : level =
 const mixedWeights = { urban: 35, suburban: 20, rural: 45 } as const;
 export const isOfficialGooglePanorama = (data: Pick<google.maps.StreetViewPanoramaData, 'copyright'>) => /\bGoogle\b/i.test(data.copyright || '');
 export const acceptsPanoramaSource = (official: boolean, source: EnvironmentSettings['panoramaSource'], allowContributors?: boolean) => { const mode = source || (allowContributors === true ? 'mixed' : 'official'); return mode === 'mixed' || (mode === 'official' ? official : !official); };
+export const streetViewSearchSources = (options: Pick<EnvironmentSettings, 'panoramaSource' | 'allowContributors' | 'allowInteriors'>) => {
+  const mode = options.panoramaSource || (options.allowContributors === true ? 'mixed' : 'official');
+  const sources: google.maps.StreetViewSource[] = [];
+  if (mode === 'official') sources.push(google.maps.StreetViewSource.GOOGLE);
+  if (!options.allowInteriors) sources.push(google.maps.StreetViewSource.OUTDOOR);
+  return sources.length ? sources : [google.maps.StreetViewSource.DEFAULT];
+};
 const usesTightSeedSearch = (countryCode: string) => { const points = COUNTRIES[countryCode]?.samplePoints || []; return !!points.length && points.length <= 2 && points.every((a) => points.every((b) => calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= 2)); };
 export const worldSampleWeight = (countryCode: string) => {
   const country = COUNTRIES[countryCode]; if (!country) return 1;
@@ -221,9 +228,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
               location: new google.maps.LatLng(candidate.lat, candidate.lng),
               radius,
               preference: google.maps.StreetViewPreference.NEAREST,
-              ...((options.panoramaSource || (options.allowContributors === true ? 'mixed' : 'official')) === 'official'
-                ? { source: google.maps.StreetViewSource.GOOGLE }
-                : options.allowInteriors ? {} : { source: google.maps.StreetViewSource.OUTDOOR }),
+              sources: streetViewSearchSources(options),
             },
             (panoData, status) => {
               if (status === google.maps.StreetViewStatus.OK && panoData) {

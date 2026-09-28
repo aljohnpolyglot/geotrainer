@@ -126,26 +126,26 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         <ResultMap actual={viewedRound.location} guess={viewedRound.guess} className="flex-1 w-full h-full relative bg-stone-950" />
 
         {/* Footer Action Bar */}
-        <div className="round-result-footer p-4 bg-stone-950 border-t border-stone-800">
+        <div className="round-result-footer bg-stone-950 border-t border-stone-800">
           <div className="round-result-progress text-xs text-stone-400">
             {t('round')} <strong className="text-white">{viewedRound.roundNumber}</strong> {t('of')} <strong className="text-white">{totalRounds}</strong>
           </div>
 
           <div className="round-history-nav" aria-label={t('completedRoundHistory')}>
-            <button disabled={viewIndex === 0} onClick={() => setViewIndex((value) => value - 1)}>
-              <ArrowLeft size={15} /> {t('previous')}
+            <button disabled={viewIndex === 0} onClick={() => setViewIndex((value) => value - 1)} aria-label={t('previous')} title={t('previous')}>
+              <ArrowLeft size={15} /><span className="round-history-label">{t('previous')}</span>
             </button>
             <span>
               {viewIndex + 1} / {rounds.length} {t('played')}
             </span>
-            <button disabled={viewIndex === rounds.length - 1} onClick={() => setViewIndex((value) => value + 1)}>
-              {t('Next')} <ArrowRight size={15} />
+            <button disabled={viewIndex === rounds.length - 1} onClick={() => setViewIndex((value) => value + 1)} aria-label={t('Next')} title={t('Next')}>
+              <span className="round-history-label">{t('Next')}</span><ArrowRight size={15} />
             </button>
           </div>
 
           <div className="round-result-actions">
           <RoundReviewSave key={viewedRound.location.panoId} location={viewedRound.location} refreshKey={trainerRefreshKey} onSaved={onReviewSaved} />
-          <button onClick={onNextRound} className="round-result-continue inline-flex items-center gap-2 px-6 py-2.5 bg-stone-100 hover:bg-white text-stone-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer active:scale-98">
+          <button onClick={onNextRound} className="round-result-continue inline-flex items-center gap-2 bg-stone-100 hover:bg-white text-stone-950 font-bold rounded-xl transition-all cursor-pointer active:scale-98">
             <span>{isLastRound ? t('viewGameSummary') : t('continueGame')}</span>
             <ArrowRight className="w-4 h-4 text-stone-900" />
           </button>

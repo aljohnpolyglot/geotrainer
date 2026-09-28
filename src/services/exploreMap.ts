@@ -1,14 +1,9 @@
 import type { EnvironmentSettings, LocationResult } from '../types';
-import { acceptsPanoramaSource, isOfficialGooglePanorama } from './locationGenerator';
+import { acceptsPanoramaSource, isOfficialGooglePanorama, streetViewSearchSources } from './locationGenerator';
 
 type ExploreSettings = Pick<EnvironmentSettings, 'panoramaSource' | 'allowInteriors'>;
 
-export const exploreStreetViewSources = ({ panoramaSource = 'official', allowInteriors = false }: ExploreSettings) => {
-  const sources: google.maps.StreetViewSource[] = [];
-  if (panoramaSource === 'official') sources.push(google.maps.StreetViewSource.GOOGLE);
-  if (!allowInteriors) sources.push(google.maps.StreetViewSource.OUTDOOR);
-  return sources.length ? sources : [google.maps.StreetViewSource.DEFAULT];
-};
+export const exploreStreetViewSources = streetViewSearchSources;
 
 export async function findExplorePanorama(point: { lat: number; lng: number } | google.maps.LatLng, settings: ExploreSettings): Promise<Omit<LocationResult, 'countryCode'>> {
   const { data } = await new google.maps.StreetViewService().getPanorama({

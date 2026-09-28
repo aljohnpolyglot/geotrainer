@@ -4,7 +4,7 @@ import test from 'node:test';
 type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
-let panoramaRequests: Array<{ source?: string; location?: LatLng; radius?: number }> = [];
+let panoramaRequests: Array<{ source?: string; sources?: string[]; location?: LatLng; radius?: number }> = [];
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
 
 class LatLng {
@@ -16,7 +16,7 @@ class LatLng {
 class StreetViewService {
   getPanorama(request: unknown, callback: (data: unknown, status: string) => void) {
     panoramaCalls++;
-    panoramaRequests.push(request as { source?: string; location?: LatLng; radius?: number });
+    panoramaRequests.push(request as { source?: string; sources?: string[]; location?: LatLng; radius?: number });
     const result = results.shift()!;
     setTimeout(() => callback(result.status ? null : { location: { pano: result.pano, latLng: new LatLng(result.lat, result.lng) }, links: result.links, copyright: result.copyright ?? '© Google' }, result.status || 'OK'), result.delay || 0);
   }
@@ -35,7 +35,7 @@ Object.assign(globalThis, {
     StreetViewService, Geocoder, LatLng,
     StreetViewStatus: { OK: 'OK' },
     StreetViewPreference: { NEAREST: 'NEAREST' },
-    StreetViewSource: { GOOGLE: 'GOOGLE', OUTDOOR: 'OUTDOOR' },
+    StreetViewSource: { DEFAULT: 'DEFAULT', GOOGLE: 'GOOGLE', OUTDOOR: 'OUTDOOR' },
   } },
 });
 
@@ -127,18 +127,23 @@ test('contributor-only generation rejects official panoramas', async () => {
   assert.equal(found.panoId, 'contributor');
 });
 
-test('official generation uses the native Google source filter', async () => {
+test('generation combines official and outdoor filters without admitting interiors by default', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
   const generator = new StreetViewLocationGenerator();
   currentResults = [{ lat: 7.7, lng: 7, pano: 'outdoor', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, rural);
-  assert.equal(panoramaRequests[0].source, 'GOOGLE');
+  assert.deepEqual(panoramaRequests[0].sources, ['GOOGLE', 'OUTDOOR']);
+  assert.equal(panoramaRequests[0].source, undefined);
   currentResults = [{ lat: 7.8, lng: 7, pano: 'indoor-eligible', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, allowInteriors: true });
-  assert.equal(panoramaRequests[0].source, 'GOOGLE');
+  assert.deepEqual(panoramaRequests[0].sources, ['GOOGLE']);
   currentResults = [{ lat: 7.9, lng: 7, pano: 'mixed-outdoor', countryCode: 'IT' }]; results = [...currentResults]; panoramaRequests = [];
   await generator.findRandomLocation(['IT'], undefined, undefined, { ...rural, panoramaSource: 'mixed' });
-  assert.equal(panoramaRequests[0].source, 'OUTDOOR');
+  assert.deepEqual(panoramaRequests[0].sources, ['OUTDOOR']);
+  const { streetViewSearchSources } = await import('./locationGenerator');
+  assert.deepEqual(streetViewSearchSources({ panoramaSource: 'contributor' }), ['OUTDOOR']);
+  assert.deepEqual(streetViewSearchSources({ panoramaSource: 'mixed', allowInteriors: true }), ['DEFAULT']);
+  assert.deepEqual(streetViewSearchSources({ allowContributors: true }), ['OUTDOOR']);
 });
 
 test('least-exposure searches the target before jitter and Mixed retries recover around coverage seeds', async () => {
