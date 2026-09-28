@@ -1,3 +1,4 @@
+import { leagueRosterPlaces } from '../../supabase/functions/_shared/poolLeague.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
@@ -44,11 +45,12 @@ test('described pools choose countries before selecting only valid local place k
   const places = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'coastal cities', 'representative', [{ key: 'c:0', countryCode: 'MX', name: 'Cancún', kind: 'city' }], (async () => geminiResponse(JSON.stringify({ regionKeys: ['r:invented'], cityKeys: ['c:0', 'c:invented'] }))) as typeof fetch);
   assert.deepEqual(places, { regionKeys: [], cityKeys: ['c:0'] });
   const complexRequestBodies: string[] = [];
-  const league = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'La Liga teams', 'league', [{ key: 'c:0', countryCode: 'ES', name: 'Madrid', kind: 'city' }, { key: 'c:1', countryCode: 'ES', name: 'Lepe', kind: 'city' }], (async (_url, init) => { complexRequestBodies.push(String(init?.body)); return geminiResponse(complexRequestBodies.length === 1 ? 'Madrid hosts current La Liga clubs.' : JSON.stringify({ regionKeys: [], cityKeys: ['c:0', 'c:invented'] })); }) as typeof fetch);
+  const league = await callGeminiPoolPlaces(new GeminiKeyCarousel(['one']), 'La Liga teams', 'league', [{ key: 'c:0', countryCode: 'ES', name: 'Madrid', kind: 'city' }, { key: 'c:1', countryCode: 'ES', name: 'Lepe', kind: 'city' }], (async (_url, init) => { complexRequestBodies.push(String(init?.body)); return geminiResponse(complexRequestBodies.length === 1 ? 'Madrid hosts current La Liga clubs.' : JSON.stringify({ members: [{ team: 'Example club', city: 'Madrid', countryCode: 'ES' }], cityKeys: ['c:0', 'c:1', 'c:invented'] })); }) as typeof fetch);
   assert.deepEqual(league, { regionKeys: [], cityKeys: ['c:0'] });
-  assert.doesNotMatch(complexRequestBodies[0], /googleSearch/);
-  assert.match(complexRequestBodies[0], /Using only your built-in knowledge/);
-  assert.match(complexRequestBodies[1], /Model analysis/);
+  assert.match(complexRequestBodies[0], /googleSearch/);
+  assert.match(complexRequestBodies[0], /requested season and division/);
+  assert.match(complexRequestBodies[1], /Roster analysis/);
+  assert.doesNotMatch(complexRequestBodies[1], /Local rulebook|Lepe/);
   assert.match(complexRequestBodies[1], /"thinkingBudget":1024/);
   assert.throws(() => normalizePoolSuggestion({ countryCodes: ['ZZ'] }), /no valid countries/i);
 });
@@ -315,4 +317,21 @@ test('the same image gets genuinely different coaching instructions while sharin
   for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /positive evidence.*negative or missing evidence.*main confuser.*highest-information decider/i);
   for (const prompt of [quick, meta, elimination, geography, memory, analyst]) assert.match(prompt, /Never echo prompt instructions.*style recipes.*learner-facing content/i);
   assert.doesNotMatch(`${quick}${meta}${elimination}${geography}${memory}${analyst}`, /ADAPTIVE/i);
+});
+
+test('league pools select only roster municipalities, never every city or club-name lookalikes', () => {
+  const candidates = [
+    { key: 'c:0', countryCode: 'BR', kind: 'city' as const, name: 'São Paulo' },
+    { key: 'c:1', countryCode: 'BR', kind: 'city' as const, name: 'Belo Horizonte' },
+    { key: 'c:2', countryCode: 'BR', kind: 'city' as const, name: 'Cruzeiro' },
+    { key: 'c:3', countryCode: 'BR', kind: 'city' as const, name: 'Botafogo' },
+    { key: 'c:4', countryCode: 'BR', kind: 'city' as const, name: 'São Paulo de Olivença' },
+    { key: 'c:5', countryCode: 'PT', kind: 'city' as const, name: 'São Paulo' },
+    { key: 'r:0', countryCode: 'BR', kind: 'region' as const, name: 'São Paulo' },
+  ];
+  const roster = { members: [{ team: 'Palmeiras', city: 'Sao Paulo', countryCode: 'BR' }, { team: 'São Paulo FC', city: 'São Paulo', countryCode: 'BR' }, { team: 'Cruzeiro', city: 'Belo Horizonte', countryCode: 'BR' }], cityKeys: candidates.map((item) => item.key) };
+  assert.deepEqual(leagueRosterPlaces(roster, candidates), { regionKeys: [], cityKeys: ['c:0', 'c:1'] });
+  assert.throws(() => leagueRosterPlaces({ members: [] }, candidates), /Could not create/);
+  assert.throws(() => leagueRosterPlaces({ members: [{ team: 'Club', city: 'Missing municipality', countryCode: 'BR' }] }, candidates), /Could not create/);
+  assert.throws(() => leagueRosterPlaces({ members: [{ city: 'São Paulo', countryCode: 'BR' }] }, candidates), /Could not create/);
 });

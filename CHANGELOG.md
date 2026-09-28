@@ -2,6 +2,8 @@
 
 ## 2026-09-28
 
+- Fixed sports-league AI pools expanding to unrelated cities by verifying the requested season/division roster and matching only participating clubs’ home municipalities; failed selections no longer fall back to country-wide generation.
+
 - Made Learn and Play JSON URL imports automatically load raw JSON when a GitHub file-page link is pasted.
 
 - Added localized hover help to the automatic Review Wrong country checkbox, clarifying that it saves wrong-country rounds above the score threshold without accepting them as correct.
