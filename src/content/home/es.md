@@ -121,6 +121,15 @@ En Configuración → Pantalla → Mapas, **Paleta de colores del mapa** permite
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.
 
+### Objetivos de puntuación por país
+
+Abre Ajustes → Preferencias → Objetivos de puntuación por país. Mantén el mínimo predeterminado para conservar la exigencia actual del Repaso. Elige un país en el desplegable, introduce un mínimo sobre 5.000, pulsa Añadir objetivo y luego Guardar. El lápiz permite editar y × elimina la regla. Los nombres y números siguen el idioma de la interfaz.
+
+Un país incorrecto siempre es un error de entrenamiento. Con el país correcto, una puntuación inferior al mínimo también falla; igualarlo cumple el objetivo. La regla del país sustituye el objetivo predeterminado, pero siguen aplicándose las reglas más estrictas de evaluación y repaso automático. Sin regla propia, se conserva el mínimo predeterminado y las reglas existentes. Cambiar el valor predeterminado afecta a los países sin reglas; restablécelo para volver a la exigencia actual del Repaso.
+
+Juego añade automáticamente al Repaso las rondas por debajo del objetivo. Practicar errores usa los objetivos guardados también en partidas antiguas. Repaso y corrección de errores requieren otro intento si no se alcanza el mínimo. Guardar objetivos no modifica puntos, respuestas, estadísticas de reconocimiento del país, intentos originales ni calendarios existentes; las respuestas nuevas usan los objetivos actualizados. No se comprueban límites de ciudades o regiones.
+
+
 ## Progreso y estadísticas
 
 Estadísticas y Cobertura muestran los nombres de países, las fechas y los números con el idioma de interfaz seleccionado, no con la configuración regional predeterminada del navegador. La tabla de países separa las ubicaciones panorámicas únicas de los intentos puntuados; intentos, aciertos, errores, precisión y puntuaciones combinan Juego y Repaso.

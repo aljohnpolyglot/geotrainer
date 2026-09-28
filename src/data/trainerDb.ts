@@ -17,7 +17,7 @@ import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTim
 import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 import { nextGeneralizationLevel } from './reviewVariation';
-import { intervalsFor, reviewGradeForPerformance } from './reviewGrading';
+import { configuredCountryScoreFloor, intervalsFor, reviewGradeForPerformance } from './reviewGrading';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
@@ -72,7 +72,7 @@ export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewReco
 export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, preferences: SchedulerPreferences): ReviewRecord {
   const at = attempt.reviewedAt || attempt.createdAt;
   if (attempt.source !== 'review' || (review.lastReviewedAt || 0) > at) return review;
-  const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness);
+  const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness, configuredCountryScoreFloor(attempt.countryCode, preferences));
   const intervalDays = attempt.intervalDays ?? Math.min(preferences.maximumIntervalDays, intervalsFor(review.intervalDays, preferences)[grade]);
   if (review.lastReviewedAt === at) return attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
   return { ...review, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };

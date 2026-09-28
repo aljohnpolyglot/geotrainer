@@ -105,6 +105,8 @@ export interface SchedulerPreferences {
   reviewOrder: 'due' | 'random';
   autoReviewScore: number;
   autoReviewWrongCountry: boolean;
+  defaultCountryScoreFloor?: number;
+  countryScoreFloors?: Record<string, number>;
   /** Optional migration-safe daily boundary settings. */
   reviewDayResetMinutes?: number;
   reviewTimeZone?: string;

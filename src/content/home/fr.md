@@ -121,6 +121,15 @@ Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** 
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 
+### Objectifs de score par pays
+
+Ouvrez Réglages → Préférences → Objectifs de score par pays. Gardez le minimum par défaut pour conserver la rigueur actuelle de Révision. Choisissez un pays, saisissez un minimum sur 5 000, sélectionnez Ajouter un objectif puis Enregistrer. Le crayon modifie et × supprime l’objectif. Les noms et nombres suivent la langue de l’interface.
+
+Un mauvais pays est toujours une erreur d’entraînement. Avec le bon pays, un score inférieur au seuil échoue aussi ; atteindre exactement le seuil remplit l’objectif. L’objectif du pays remplace celui par défaut, mais les règles plus strictes de notation et de révision automatique restent actives. Sans objectif particulier, le pays conserve le seuil par défaut et les règles existantes. Changer le défaut affecte les pays sans objectif ; réinitialisez-le pour retrouver la rigueur actuelle de Révision.
+
+Jeu ajoute automatiquement à Révision les manches sous le seuil. Pratiquer les erreurs utilise les objectifs enregistrés, même pour une ancienne partie. Révision et correction des erreurs demandent un nouvel essai sous le seuil. Enregistrer les objectifs ne change ni points, ni réponses, ni statistiques de reconnaissance des pays, ni tentatives originales, ni calendriers existants ; les nouvelles réponses utilisent les objectifs actualisés. Aucune frontière de ville ou de région n’est vérifiée.
+
+
 ## Progression et statistiques
 
 Statistiques et Couverture affichent les noms de pays, les dates et les nombres selon la langue d’interface choisie plutôt que selon les paramètres régionaux du navigateur. Le tableau des pays sépare les panoramas uniques des tentatives notées ; tentatives, réussites, erreurs, précision et scores combinent Jeu et Révision.

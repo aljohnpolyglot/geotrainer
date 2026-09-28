@@ -1,7 +1,9 @@
+import { COUNTRIES } from './countries';
 import type { SchedulerPreferences } from '../types';
 import { detectedTimeZone } from './reviewTiming';
 import { clampReviewViewVariationDifficulty } from './reviewVariation';
 
+export const passingScoreFor = (strictness: SchedulerPreferences['strictness']) => ({ beginner: 1500, balanced: 3000, pro: 4800 })[strictness];
 export const hardOrAgainScoreForStrictness = (strictness: SchedulerPreferences['strictness']) => ({ beginner: 2500, balanced: 3000, pro: 4900 })[strictness];
 
 export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = {
@@ -28,8 +30,13 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
   try { new Intl.DateTimeFormat('en', { timeZone: auto ? detectedTimeZone() : timeZone }).format(); } catch { timeZone = detectedTimeZone(); }
   const strictness = source.strictness === 'beginner' || source.strictness === 'pro' ? source.strictness : 'balanced';
   const autoReviewScore = Number(source.autoReviewScore);
+  const floor = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.min(5000, Math.max(passingScoreFor(strictness), Math.round(value))) : undefined;
+  const defaultFloor = floor(source.defaultCountryScoreFloor);
+  const countryFloors = Object.fromEntries(Object.entries(source.countryScoreFloors && typeof source.countryScoreFloors === 'object' ? source.countryScoreFloors : {}).flatMap(([code, value]) => { const score = floor(value); return Object.hasOwn(COUNTRIES, code) && score !== undefined ? [[code, score]] : []; }));
   return {
     strictness,
+    ...(defaultFloor !== undefined ? { defaultCountryScoreFloor: defaultFloor } : {}),
+    ...(Object.keys(countryFloors).length ? { countryScoreFloors: countryFloors } : {}),
     newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000),
     firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440),
     easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500),

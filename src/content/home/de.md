@@ -226,6 +226,15 @@ Erste Wiederholung bestimmt die anfängliche Verzögerung. Erneutes Lernen legt 
 
 Maximale Antwortsekunden unterscheiden flüssiges Erinnern von langem Suchen. Älteste fällige priorisiert lange wartende Karten; Zufällig mischt die Auswahl. Rücksetzzeit und die per Auswahlfeld oder automatisch erkannte Zeitzone definieren den Beginn eines neuen Wiederholungstags. Die Einstellungen zeigen die tatsächlich nächste geplante Wiederholung mit Ortszeit und verbleibender Dauer.
 
+### Punkteziele pro Land
+
+Öffne Einstellungen → Präferenzen → Punkteziele pro Land. Behalte den Standardwert, um die aktuelle Wiederholungsstrenge zu erhalten. Wähle ein Land, gib die Mindestpunktzahl von höchstens 5.000 ein, wähle Ziel hinzufügen und anschließend Speichern. Der Stift bearbeitet, × entfernt das Ziel. Namen und Zahlen folgen der Oberflächensprache.
+
+Ein falsches Land ist immer ein Trainingsfehler. Beim richtigen Land zählt auch ein Wert unter der Mindestpunktzahl als Fehler; genau der Grenzwert erfüllt das Ziel. Ein Länderziel ersetzt das Standardziel, strengere Bewertungs- und automatische Wiederholungsregeln gelten weiterhin. Ohne eigenes Ziel bleiben Standard und bisherige Regeln erhalten. Ein geänderter Standard betrifft Länder ohne eigenes Ziel; Zurücksetzen stellt die aktuelle Wiederholungsstrenge wieder her.
+
+Spiel fügt Runden unter dem Ziel automatisch zur Wiederholung hinzu. Fehler üben nutzt die gespeicherten Ziele auch für ältere Spiele. Wiederholung und Fehlerkorrektur verlangen unter dem Ziel einen weiteren Versuch. Gespeicherte Ziele ändern keine Punkte, Antworten, Ländererkennungsstatistiken, ursprünglichen Versuche oder bestehenden Termine; neue Antworten verwenden die aktualisierten Ziele. Stadt- oder Regionsgrenzen werden nicht geprüft.
+
+
 ## Benutzerdefinierte Übung
 
 Zusätzliche Übung kann nach schwachen Ländern, letzten Fehlern, ungesehenen Orten, Punktbereichen oder Fälligkeit gefiltert werden.

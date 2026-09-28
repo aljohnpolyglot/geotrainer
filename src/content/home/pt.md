@@ -121,6 +121,15 @@ Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 
+### Metas de pontuação por país
+
+Abra Configurações → Preferências → Metas de pontuação por país. Mantenha o mínimo padrão para preservar a exigência atual da Revisão. Escolha um país no menu, informe um mínimo de até 5.000, selecione Adicionar meta e depois Salvar. O lápis edita e × remove a meta. Nomes e números seguem o idioma da interface.
+
+Errar o país sempre conta como erro de treino. Com o país correto, pontuar abaixo do mínimo também falha; igualar o mínimo cumpre a meta. A meta do país substitui a meta padrão, mas regras mais exigentes de avaliação e revisão automática continuam valendo. Sem uma meta própria, os países mantêm o padrão e as regras existentes. Mudar o padrão afeta os países sem metas próprias; restaure-o para voltar à exigência atual da Revisão.
+
+Jogo adiciona automaticamente à Revisão as rodadas abaixo da meta. Praticar erros usa as metas salvas também em jogos antigos. Revisão e correção de erros exigem outra tentativa abaixo do mínimo. Salvar metas não altera pontos, respostas, estatísticas de reconhecimento de países, tentativas originais ou agendamentos existentes; respostas novas usam as metas atualizadas. Não há verificação de limites de cidades ou regiões.
+
+
 ## Progresso e estatísticas
 
 Estatísticas e Cobertura formatam nomes de países, datas e números no idioma de interface selecionado, em vez da localidade padrão do navegador. A tabela de países separa locais panorâmicos únicos de tentativas pontuadas; tentativas, acertos, erros, precisão e pontuações combinam Jogo e Revisão.

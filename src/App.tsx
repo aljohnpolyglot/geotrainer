@@ -22,7 +22,6 @@ import {
   CoachAnalysis,
   CoachHistoryNote,
   CoachMode,
-  SchedulerPreferences,
   CompassStyle,
   StreetViewState,
   LearnSource,
@@ -99,7 +98,6 @@ export default function App() {
   const [editingCollection, setEditingCollection] = useState<Collection | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
-  const [schedulerStrictness, setSchedulerStrictness] = useState<SchedulerPreferences['strictness']>('balanced');
   const [summaryMistakes, setSummaryMistakes] = useState<{ gameId: string; attempts: Attempt[] } | null>(null);
 
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
@@ -265,8 +263,8 @@ export default function App() {
     }
     void initTrainerDb()
       .then(async () => {
-        const [dbCollections, dbBookmarks, dbGames, dbSelected, scheduler, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPriority, savedPanoramaSource, savedContributors, savedInteriors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay] = await Promise.all([
-          trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'), trainerDb.schedulerPreferences(),
+        const [dbCollections, dbBookmarks, dbGames, dbSelected, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPriority, savedPanoramaSource, savedContributors, savedInteriors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay] = await Promise.all([
+          trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'),
           trainerDb.setting<boolean>('preference.compass'),
           trainerDb.setting<Environment>('preference.environment'), trainerDb.setting<UrbanLevel>('preference.urbanLevel'), trainerDb.setting<SamplingMode>('preference.sampling'), trainerDb.setting<LearnPriority>('preference.learnPriority'),
           trainerDb.setting<PanoramaSource>('preference.panoramaSource'), trainerDb.setting<boolean>('preference.allowContributors'), trainerDb.setting<boolean>('preference.allowInteriors'),
@@ -276,7 +274,6 @@ export default function App() {
         setCustomCollections(dbCollections);
         setBookmarks(dbBookmarks);
         setPastGames(dbGames);
-        setSchedulerStrictness(scheduler.strictness);
         if (typeof savedCompass === 'boolean') setCompassPreference(savedCompass);
         if (savedEnvironment === 'mixed' || savedEnvironment === 'urban' || savedEnvironment === 'suburban' || savedEnvironment === 'rural') setStudyEnvironment(savedEnvironment);
         if (savedUrbanLevel === 1 || savedUrbanLevel === 2 || savedUrbanLevel === 3) setStudyUrbanLevel(savedUrbanLevel);
@@ -327,7 +324,7 @@ export default function App() {
     setPausedWorkspaces((saved) => ({ ...saved, play: undefined }));
     void trainerDb.setSetting('workspace.paused.play', null);
   }, [summaryGameRecord]);
-  useEffect(() => { let active = true; setSummaryMistakes(null); if (summaryGameRecord) void trainerDb.attempts().then((attempts) => { if (active) setSummaryMistakes({ gameId: summaryGameRecord.id, attempts: gameMistakes(attempts, summaryGameRecord.id, schedulerStrictness) }); }); return () => { active = false; }; }, [schedulerStrictness, summaryGameRecord, trainerRefreshKey]);
+  useEffect(() => { let active = true; setSummaryMistakes(null); if (summaryGameRecord) void Promise.all([trainerDb.attempts(), trainerDb.schedulerPreferences()]).then(([attempts, preferences]) => { if (active) setSummaryMistakes({ gameId: summaryGameRecord.id, attempts: gameMistakes(attempts, summaryGameRecord.id, preferences) }); }); return () => { active = false; }; }, [summaryGameRecord, trainerRefreshKey]);
 
   useEffect(() => {
     if (!dbReady || !workspaceRestoreAttemptedRef.current) return;
@@ -478,7 +475,7 @@ export default function App() {
         onToggleCompass={toggleCompass}
         onClueAnalyzed={() => { if (appMode === 'play' && !activeRoundResult) playAiAssistedRef.current = true; }}
         onNextReview={() => void handleReviewNext()} onCloseCoverage={() => setCoveragePreview(null)}
-        onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); void trainerDb.schedulerPreferences().then((scheduler) => setSchedulerStrictness(scheduler.strictness)); setTrainerRefreshKey((key) => key + 1); }}
+        onClosePreferences={() => setPreferencesOpen(false)} onLanguageChange={(_, style, dark) => { setCompassStyle(style); setDarkMode(dark); setTrainerRefreshKey((key) => key + 1); }}
         onCloseReviewComplete={() => { clearReviewSession(); setCurrentLocation(null); setTrainerStartTab('review'); }}
         onNextRound={handleNextRound}
         onPracticeMistakes={summaryMistakes?.attempts.length && summaryMistakes.gameId === summaryGameRecord?.id ? () => { setSummaryGameRecord(null); void handleStartReview(summaryMistakes.attempts[0], summaryMistakes.attempts, 'Game mistakes', 'correction'); } : undefined}

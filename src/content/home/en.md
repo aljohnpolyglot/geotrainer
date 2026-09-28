@@ -358,6 +358,14 @@ Review preferences include strictness, daily limits, first-review delay, relearn
 
 Start with Balanced defaults. Change one group at a time and observe the queue for several sessions before making another large adjustment.
 
+### Country score targets
+
+Open Settings → Preferences → Country score targets. Keep the default minimum unchanged to retain your current Review strictness. Choose a country from the same searchable native dropdown, enter a minimum score out of 5,000, choose Add target, then Save. Use the pencil to edit a target or × to remove it. Country names and scores follow the interface language.
+
+A wrong-country guess is always a training mistake. For the correct country, a score below its floor also fails; a score equal to the floor meets the target. Country overrides replace the default target, while existing stricter grading and automatic Review rules still apply. Without an override, countries retain the default and their existing distance-sensitive score rules. Changing the default affects all countries without overrides; reset it to return to the current Review strictness.
+
+Play automatically adds below-target rounds to Review and Practice mistakes uses the saved targets, including when opening an older game. Both ordinary Review and mistake correction grade below-target answers as needing another try. Saving targets does not change earned points, guesses, country-recognition statistics, original attempts, or existing Review schedules; new answers use the updated targets. There are no city or region boundary checks.
+
 ### Display
 
 Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.

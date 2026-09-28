@@ -41,6 +41,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review attempts are new records; never mutate the original Play attempt.
 - Before a guess, Review must not receive the current card's persisted answer metadata, but every learner-opened tool may render its full saved or newly generated content, including Meta explanations, note text, country candidates, and probabilities.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
+- Country score targets in Settings → Preferences tighten existing training rules in both Play and Review: wrong-country guesses always fail, below-floor same-country guesses count as mistakes, and an equal score meets the floor. Keep untargeted countries on existing strictness and auto-review rules; specialization never lowers those rules, rewrites original points or country recognition, or retroactively resets schedules.
 - Treat same-country locations within 50 metres as one Review card across Play, Study, Notebook, and Coach sources.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
 - Default fresh profiles to 50 new cards and 500 total reviews per day; persisted user overrides win.

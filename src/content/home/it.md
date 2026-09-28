@@ -121,6 +121,15 @@ In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Auto
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 
+### Obiettivi di punteggio per paese
+
+Apri Impostazioni → Preferenze → Obiettivi di punteggio per paese. Mantieni il minimo predefinito per conservare il rigore attuale del Ripasso. Scegli un paese, inserisci un minimo su 5.000, seleziona Aggiungi obiettivo e poi Salva. La matita modifica e × rimuove l’obiettivo. Nomi e numeri seguono la lingua dell’interfaccia.
+
+Un paese sbagliato è sempre un errore di allenamento. Con il paese corretto, anche un punteggio inferiore al minimo fallisce; raggiungere esattamente il minimo soddisfa l’obiettivo. L’obiettivo del paese sostituisce quello predefinito, ma le regole più rigorose di valutazione e ripasso automatico restano attive. Senza un obiettivo specifico restano il minimo predefinito e le regole esistenti. Cambiare il valore predefinito riguarda i paesi senza obiettivi; ripristinalo per tornare al rigore attuale del Ripasso.
+
+Gioco aggiunge automaticamente al Ripasso i turni sotto l’obiettivo. Pratica errori usa gli obiettivi salvati anche per partite precedenti. Ripasso e correzione degli errori richiedono un altro tentativo sotto il minimo. Salvare obiettivi non cambia punti, risposte, statistiche di riconoscimento del paese, tentativi originali o scadenze esistenti; le nuove risposte usano gli obiettivi aggiornati. Non vengono verificati confini di città o regioni.
+
+
 ## Progressi e statistiche
 
 Statistiche e Copertura formattano nomi dei paesi, date e numeri nella lingua dell’interfaccia selezionata anziché nelle impostazioni locali predefinite del browser. La tabella dei paesi separa i panorami unici dai tentativi con punteggio; tentativi, risposte corrette ed errate, precisione e punteggi combinano Gioco e Ripasso.

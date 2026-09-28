@@ -11,12 +11,14 @@ import type { CoachPreferences } from '../types';
 import { clampReviewViewVariationDifficulty, reviewVariationCheckpoint } from '../data/reviewVariation';
 import { announceMapPreferences, DEFAULT_MAP_PREFERENCES, normalizeMapPreferences } from '../services/mapPreferences';
 import { MapBorderPreview } from './MapBorderPreview';
+import { CountryTargetSettings } from './CountryTargetSettings';
+import { COUNTRY_TARGET_COPY } from '../services/countryTargetCopy';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
 const timeValue = (minutes = 0) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 const relativeDuration = (milliseconds: number, locale: string) => { const minutes = Math.max(0, Math.round(milliseconds / 60000)); const hours = Math.floor(minutes / 60); const remainder = minutes % 60; const format = (value: number, unit: 'hour' | 'minute') => new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short' }).format(value); return [hours && format(hours, 'hour'), remainder && format(remainder, 'minute')].filter(Boolean).join(' '); };
-type SettingsTab = 'language' | 'coach' | 'review' | 'display';
+type SettingsTab = 'language' | 'coach' | 'review' | 'display' | 'targets';
 const NOTE_LANGUAGE_COPY: Record<SupportedLanguage, string> = {
   en: 'Saved Personal and AI-assisted notes keep the language in which they were created; changing languages does not translate them.',
   es: 'Las notas personales y asistidas por IA conservan el idioma en que se crearon; cambiar el idioma no las traduce.',
@@ -63,7 +65,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       setReviews(savedReviews);
       setCoach(normalizeCoachPreferences(savedCoach));
       setMapPreferences(normalizeMapPreferences(savedMapPreferences));
-      if (savedTab === 'language' || savedTab === 'coach' || savedTab === 'review' || savedTab === 'display') setTab(savedTab);
+      if (savedTab === 'language' || savedTab === 'coach' || savedTab === 'review' || savedTab === 'display' || savedTab === 'targets') setTab(savedTab);
     });
   }, [open]);
 
@@ -95,7 +97,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
   return <div className="language-settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="language-settings preferences-modal" role="dialog" aria-modal="true" aria-labelledby="preferences-title">
       <header><h2 id="preferences-title">{translate(languages.ui, 'preferences')}</h2><button type="button" onClick={onClose} aria-label={translate(languages.ui, 'close')}><X size={17} /></button></header>
-      <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'coach', 'review', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{translate(languages.ui, item === 'coach' ? 'AI Coach' : item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
+      <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'coach', 'review', 'targets', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{item === 'targets' ? COUNTRY_TARGET_COPY[languages.ui].tab : translate(languages.ui, item === 'coach' ? 'AI Coach' : item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
       {tab === 'language' && <fieldset><legend>{translate(languages.ui, 'settings')}</legend><p>{translate(languages.ui, 'description')}</p>
         {(['ui', 'game', 'ai'] as const).map((key) => <label key={key}>{translate(languages.ui, key)}
           <span className="language-choice"><img src={`https://flagcdn.com/w40/${LANGUAGE_OPTIONS.find((option) => option.code === languages[key])!.flagCode}.png`} alt="" width="24" height="18" referrerPolicy="no-referrer" /><select value={languages[key]} onChange={(event) => language(key, event.target.value as SupportedLanguage)}>
@@ -104,6 +106,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
         </label>)}
         <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
       </fieldset>}
+      {tab === 'targets' && <CountryTargetSettings scheduler={scheduler} language={languages.ui} onChange={setScheduler} />}
       {tab === 'coach' && <fieldset className="coach-settings"><legend>{translate(languages.ui, 'AI Coach')}</legend><p>{guide.intro}</p>
         <label>{translate(languages.ui, 'AI Coach Style')}<select value={coach.askEveryTime ? 'ask' : coach.style} onChange={(event) => { const value = event.target.value; setCoach(value === 'ask' ? { ...coach, askEveryTime: true } : { ...coach, style: value as CoachPreferences['style'], askEveryTime: false }); }}><option value="ask">{translate(languages.ui, 'Always ask before analysis')}</option>{COACH_STYLES.map((style) => <option key={style} value={style}>{coachStyleLabel(style)}</option>)}</select></label><p className="coach-setting-summary">{coach.askEveryTime ? translate(languages.ui, 'Choose a Coach style for every analysis.') : guide.styles[coach.style].purpose}</p>
         <label>{translate(languages.ui, 'Explanation Depth')}<select value={coach.depth} onChange={(event) => setCoach({ ...coach, depth: event.target.value as CoachPreferences['depth'] })}>{EXPLANATION_DEPTHS.map((depth) => <option key={depth} value={depth}>{translate(languages.ui, depth[0].toUpperCase() + depth.slice(1))}</option>)}</select></label><p>{guide.depth}</p>

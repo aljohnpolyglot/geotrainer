@@ -127,6 +127,15 @@ Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett*
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
+### Poängmål per land
+
+Öppna Inställningar → Preferenser → Poängmål per land. Behåll standardgränsen för att behålla repetitionens nuvarande svårighetsnivå. Välj ett land i menyn, ange lägsta poäng av 5 000, välj Lägg till mål och sedan Spara. Pennan redigerar och × tar bort målet. Namn och tal följer gränssnittsspråket.
+
+Fel land räknas alltid som ett träningsmisstag. Med rätt land misslyckas även poäng under gränsen; exakt gränsen uppfyller målet. Landets mål ersätter standardmålet, men striktare regler för bedömning och automatisk repetition gäller fortfarande. Utan eget mål behåller landet standarden och befintliga regler. Ändrad standard påverkar länder utan egna mål; återställ den för att återgå till repetitionens nuvarande svårighetsnivå.
+
+Spel lägger automatiskt rundor under målet till Repetition. Öva misstag använder sparade mål även för äldre spel. Repetition och korrigering av misstag kräver ett nytt försök under gränsen. Sparade mål ändrar inte poäng, svar, statistik över igenkända länder, ursprungliga försök eller befintliga scheman; nya svar använder de uppdaterade målen. Stads- eller regiongränser kontrolleras inte.
+
+
 ## Framsteg och statistik
 
 Statistik och Täckning formaterar landsnamn, datum och tal med det valda gränssnittsspråket i stället för webbläsarens standardlokal. Landstabellen skiljer unika sparade panoramaplatser från poängsatta försök; försök, rätt, fel, noggrannhet och poäng kombinerar Spel och Repetition.
