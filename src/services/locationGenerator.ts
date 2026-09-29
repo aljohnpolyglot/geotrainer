@@ -330,7 +330,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       return { lat: anchor.lat + Math.cos(angle) * distance * latitudeScale, lng: anchor.lng + Math.sin(angle) * distance * latitudeScale / Math.max(.2, Math.cos(anchor.lat * radians)) };
     });
     const radius = Math.max(40, Math.min(300, plan.maxDistanceM * .2));
-    const lookups = Promise.all(targets.map((target) => new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => sv.getPanorama({ location: target, radius, preference: google.maps.StreetViewPreference.NEAREST, source: google.maps.StreetViewSource.OUTDOOR }, (data, status) => resolve(status === google.maps.StreetViewStatus.OK && data?.location?.pano && data.location.latLng ? data : null)))));
+    const lookups = Promise.all(targets.map((target) => new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => sv.getPanorama({ location: target, radius, preference: google.maps.StreetViewPreference.NEAREST, sources: streetViewSearchSources({ panoramaSource: 'official', allowInteriors: false }) }, (data, status) => resolve(status === google.maps.StreetViewStatus.OK && data?.location?.pano && data.location.latLng && isOfficialGooglePanorama(data) ? data : null)))));
     const found = await Promise.race([lookups, new Promise<Array<google.maps.StreetViewPanoramaData | null>>((resolve) => setTimeout(() => resolve([]), 3000))]);
     const resolving = Promise.all(found.filter((item): item is google.maps.StreetViewPanoramaData => !!item).map(async (item) => {
       const lat = item.location!.latLng!.lat(); const lng = item.location!.latLng!.lng(); const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;

@@ -248,7 +248,7 @@ Maximum answer seconds helps distinguish fluent recall from a correct answer rea
 
 ### Review view variation
 
-Vary review view keeps one canonical card and schedule but may change its heading or use a nearby panorama as the location becomes well learned. Variation difficulty controls how aggressively mature cards vary; 0 always uses the original view. New, weak, or recently failed cards stay close to the anchor. A failed varied view makes later variation more conservative, and lookup failure falls back to the saved view without creating a duplicate card.
+Vary review view keeps one canonical card and schedule but may change its heading or use a nearby panorama as the location becomes well learned. Nearby variations use only official Google outdoor imagery. If no matching nearby panorama is available, Review keeps the saved view; the original panorama and heading-only changes retain their saved imagery. Variation difficulty controls how aggressively mature cards vary; 0 always uses the original view. New, weak, or recently failed cards stay close to the anchor. A failed varied view makes later variation more conservative, and lookup failure falls back to the saved view without creating a duplicate card.
 
 ### Due order and day boundary
 
@@ -309,7 +309,7 @@ Notebook preserves pasted headings, bold emphasis, and bullet lists. External an
 
 ### Before and after reveal
 
-Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal or Review guess, **Analyze** becomes **Explain**. In Play, **Explain** appears while the result is visible; minimizing the result returns Coach to **Analyze** until you show it again. Explain compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
+Before a guess, Coach does not receive the current card’s persisted answer metadata, but its full visible-evidence analysis and country candidates remain available. A region, city, landmark, or exact-place estimate appears only when multiple strong visible clues support it. After a Study reveal, **Analyze** becomes **Explain**. In Play and Review, **Explain** appears while the result is visible; minimizing the result returns Coach to **Analyze** until you show it again. Analyze uses the visible panorama without the saved answer context, even after you have guessed. Explain compares the image with the answer, uses only that country’s reference hints, and says plainly when the image was not sufficient to identify it.
 
 ### Reliability
 

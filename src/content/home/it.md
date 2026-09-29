@@ -84,7 +84,7 @@ La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a
 - **Primo ripasso**, **passaggio di riapprendimento**, **primo intervallo eccellente** e **intervallo massimo** regolano prima scadenza, ritorno dopo un errore, attesa dopo un primo risultato eccellente e tetto delle schede mature.
 - **Tempo massimo di risposta** influenza la fluidità della valutazione senza creare necessariamente un conto alla rovescia. **Ordine** sceglie le più vecchie prima o una coda casuale.
 - **Ora di ripristino** e **fuso orario** definiscono il nuovo giorno e il rinnovo dei limiti. Il rilevamento automatico segue il dispositivo; disattivalo per scegliere il fuso. L’anteprima mostra il prossimo ripasso reale.
-- **Varia vista di ripasso** conserva la stessa scheda e pianificazione, ma può cambiare direzione o usare un panorama vicino per schede mature. Zero conserva la vista originale; gli errori riducono la variazione e una ricerca fallita torna all’ancora senza duplicati.
+- **Varia vista di ripasso** conserva la stessa scheda e pianificazione, ma può cambiare direzione o usare un panorama vicino per schede mature. Zero conserva la vista originale; gli errori riducono la variazione e una ricerca fallita torna all’ancora senza duplicati. Le varianti vicine usano solo immagini ufficiali Google all’aperto; senza un risultato adatto rimane la vista salvata. La vista originale e i soli cambi di direzione conservano le immagini salvate.
 
 Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
 
@@ -98,7 +98,7 @@ Gioco usa la stessa barra di apprendimento di Studio: Taccuino, conteggio delle 
 
 Coach attende la lingua IA salvata prima dell’analisi, rifiuta i risultati chiaramente multilingue e spiega gli indizi visibili dietro ogni nuovo paese candidato.
 
-Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps; il filtro mostra il totale per paese, ordina dal maggiore al minore e × lo cancella.
+Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps; il filtro mostra il totale per paese, ordina dal maggiore al minore e × lo cancella. In Gioca e Ripasso, ridurre il risultato mostra **Analizza** senza il contesto della risposta salvata; riaprire il risultato ripristina **Spiega**.
 
 ### Catturare, incollare e analizzare un indizio
 

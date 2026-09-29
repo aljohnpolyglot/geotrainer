@@ -16,7 +16,7 @@ export const reviewLocationDetails = (value: ReverseGeocodeResult | null, unavai
 });
 export const reviewGuessHistory = (history: Attempt[]) => history.flatMap((attempt) => attempt.guessedLat === null || attempt.guessedLng === null ? [] : [{ lat: attempt.guessedLat, lng: attempt.guessedLng }]);
 
-export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, grade, advancing, onNext }: {
+export function ReviewResultPanel({ round, sourceAttempt, history, position, total, sourceLabel, grade, advancing, onNext, onVisibilityChange }: {
   round: GameRound;
   sourceAttempt: Attempt;
   history: Attempt[];
@@ -26,6 +26,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   grade?: ReviewGrade;
   advancing: boolean;
   onNext: () => void;
+  onVisibilityChange?: (visible: boolean) => void;
 }) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -35,6 +36,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
   const [minimized, setMinimized] = useState(false);
+  useEffect(() => { onVisibilityChange?.(!minimized); }, [minimized, sourceAttempt.id, onVisibilityChange]);
   useEffect(() => {
     let active = true;
     setGeocodeData(null); setIsGeocoding(true); setMinimized(false);

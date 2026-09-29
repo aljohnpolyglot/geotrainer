@@ -82,7 +82,7 @@ L’icône **Enregistrer ce lieu pour révision**, à côté de **Continuer la p
 - **Première révision**, **étape de réapprentissage**, **premier intervalle excellent** et **intervalle maximum** règlent la première échéance, le retour après un échec, l’attente après un excellent premier résultat et le plafond des cartes maîtrisées.
 - **Temps de réponse maximum** influence la fluidité de la notation sans créer forcément un compte à rebours. **Ordre** choisit les plus anciennes d’abord ou une file aléatoire.
 - **Heure de réinitialisation** et **fuseau horaire** définissent le début d’une nouvelle journée et le renouvellement des limites. La détection automatique suit l’appareil ; désactivez-la pour choisir le fuseau. L’aperçu montre la prochaine révision réelle.
-- **Varier la vue de révision** conserve la même carte et le même planning, mais peut changer l’orientation ou utiliser un panorama proche pour une carte maîtrisée. Zéro garde la vue d’origine ; un échec réduit la variation et une recherche infructueuse revient à l’ancre sans créer de doublon.
+- **Varier la vue de révision** conserve la même carte et le même planning, mais peut changer l’orientation ou utiliser un panorama proche pour une carte maîtrisée. Zéro garde la vue d’origine ; un échec réduit la variation et une recherche infructueuse revient à l’ancre sans créer de doublon. Les variantes proches utilisent uniquement des images officielles Google en extérieur ; sans résultat adapté, la vue enregistrée est conservée. La vue d’origine et les simples changements d’orientation conservent leurs images enregistrées.
 
 Choisissez **Enregistrer** pour appliquer les changements. Exigence et intervalles modifient la planification future sans réécrire les tentatives ; limites et ordre s’appliquent au prochain calcul de la file.
 
@@ -98,7 +98,7 @@ Jeu utilise la même barre d’apprentissage qu’Étude : Carnet, compteur des 
 
 Coach attend la langue IA enregistrée avant l’analyse, rejette les résultats nettement multilingues et explique les indices visibles derrière chaque nouveau pays candidat.
 
-Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Une estimation de région, ville ou lieu exact n’apparaît que si plusieurs indices visuels forts la soutiennent. Après la révélation, **Analyser** devient **Expliquer** : le Coach utilise uniquement les références du bon pays et reconnaît si l’image ne suffisait pas à l’identifier. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps ; le filtre affiche le total par pays, les classe du plus fourni au moins fourni et × l’efface.
+Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Une estimation de région, ville ou lieu exact n’apparaît que si plusieurs indices visuels forts la soutiennent. Après la révélation, **Analyser** devient **Expliquer** : le Coach utilise uniquement les références du bon pays et reconnaît si l’image ne suffisait pas à l’identifier. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps ; le filtre affiche le total par pays, les classe du plus fourni au moins fourni et × l’efface. Dans Jeu et Révision, réduire le résultat affiche **Analyser** sans le contexte de la réponse enregistrée ; afficher de nouveau le résultat rétablit **Expliquer**.
 
 ### Capturer, coller et analyser un indice
 

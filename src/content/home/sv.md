@@ -84,7 +84,7 @@ På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att 
 - **Första repetition av nytt kort** anger väntetiden före ett nytt kort blir förfallet. **Återinlärningssteg** anger hur snart ett misslyckat kort kan återkomma samma dag. **Första utmärkta intervall** ger ett mycket starkt första svar längre väntetid. **Maximalt intervall** sätter taket för mogna kort.
 - **Maximal svarstid** påverkar bedömningen av hur flytande minnet var; det är inte automatiskt en synlig nedräkning. **Ordning** väljer äldst förfallna först eller slumpmässig kö.
 - **Återställningstid** och **tidszon** bestämmer när en ny repetitionsdag och nya dagsgränser börjar. Automatisk tidszon följer enheten; stäng av den för att välja zon själv. Förhandsvisningen visar nästa verkliga repetitionstid.
-- **Variera repetitionsvy** behåller samma kort och schema men kan ändra riktning eller välja ett närliggande panorama för väl inlärda platser. Svårighet 0 använder originalet. Svaga eller misslyckade kort hålls närmare originalet, och en misslyckad sökning faller tillbaka utan att skapa dubletter.
+- **Variera repetitionsvy** behåller samma kort och schema men kan ändra riktning eller välja ett närliggande panorama för väl inlärda platser. Svårighet 0 använder originalet. Svaga eller misslyckade kort hålls närmare originalet, och en misslyckad sökning faller tillbaka utan att skapa dubletter. Närliggande varianter använder bara officiella Google-bilder utomhus; om ingen passande vy finns behålls den sparade vyn. Originalet och ändringar av enbart riktning behåller sina sparade bilder.
 
 Välj **Spara** för att använda ändringarna. Bedömning och intervall påverkar framtida schemaläggning och skriver inte om gamla försök; gränser och köordning används vid nästa köberäkning.
 
@@ -104,7 +104,7 @@ Spel använder samma lärverktygsrad som Studier: Anteckningsbok, antalet tillg�
 
 Coach väntar före analysen på det sparade AI-språket, avvisar tydligt flerspråkiga resultat och förklarar de synliga skälen för varje nytt kandidatland.
 
-Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. En uppskattning av region, stad eller exakt plats visas bara när flera starka synliga ledtrådar stöder den. Efter visat facit blir **Analysera** **Förklara**: coachen använder bara referenser för rätt land och säger öppet när bilden inte räckte för att identifiera det. I Spela visar coachen **Analysera** när resultatet är minimerat och **Förklara** när du visar resultatet igen. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar; filtret visar antal per land, sorterar flest först och × rensar det.
+Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. En uppskattning av region, stad eller exakt plats visas bara när flera starka synliga ledtrådar stöder den. Efter visat facit blir **Analysera** **Förklara**: coachen använder bara referenser för rätt land och säger öppet när bilden inte räckte för att identifiera det. I Spela och Repetition visar coachen **Analysera** utan det sparade svaret som sammanhang när resultatet är minimerat och **Förklara** när du visar resultatet igen. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar; filtret visar antal per land, sorterar flest först och × rensar det.
 
 ### Ta skärmbild, klistra in och analysera
 

@@ -291,3 +291,17 @@ test('100 accepted Study locations contain no consecutive panorama duplicate', a
   assert.equal(visible.length, 100);
   assert.equal(visible.some((panoId, index) => index > 0 && panoId === visible[index - 1]), false);
 });
+
+test('nearby Review variation requires Google outdoor searches, rejects contributors, and falls back to the anchor', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const anchor = { lat: 46.061, lng: 14.511, pano: 'saved-anchor', countryCode: 'SI', copyright: '© Contributor' };
+  const plan = { kind: 'spatial', generalizationLevel: 1, maxDistanceM: 100, seed: 1 } as const;
+  for (const hasOfficial of [true, false]) {
+    currentResults = [anchor, ...Array.from({ length: 4 }, (_, i) => ({ lat: anchor.lat + .0002 * (i + 1), lng: anchor.lng, pano: `nearby-${i}`, countryCode: 'SI', copyright: hasOfficial && i === 1 ? '© Google' : '© Contributor' }))];
+    results = [...currentResults]; panoramaRequests = [];
+    const found = await new StreetViewLocationGenerator().resolveReviewLocation({ panoId: anchor.pano, lat: anchor.lat, lng: anchor.lng, countryCode: anchor.countryCode }, plan);
+    assert.equal(found.panoId, hasOfficial ? 'nearby-1' : anchor.pano);
+    assert.equal(panoramaRequests.length, 5);
+    for (const request of panoramaRequests.slice(1)) assert.deepEqual(request.sources, ['GOOGLE', 'OUTDOOR']);
+  }
+});

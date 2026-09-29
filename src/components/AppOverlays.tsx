@@ -46,10 +46,11 @@ interface AppOverlaysProps {
   onToggleCompass: () => void;
 }
 export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | undefined, hasResult: boolean) => appMode !== 'play' || enabled !== false || hasResult;
-export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean, playResultVisible = true) => appMode === 'play' ? hasPlayResult && playResultVisible : hasReviewAttempt ? hasReviewResult : hasSummaryRound;
+export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean, playResultVisible = true, reviewResultVisible = true) => appMode === 'play' ? hasPlayResult && playResultVisible : hasReviewAttempt ? hasReviewResult && reviewResultVisible : hasSummaryRound;
 
 export function AppOverlays(props: AppOverlaysProps) {
   const [playResultVisible, setPlayResultVisible] = useState(true);
+  const [reviewResultVisible, setReviewResultVisible] = useState(true);
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const { appMode, showHome, currentLocation, isRevealed, reviewResult, reviewAttempt, reviewAttemptRecord, reviewHistory,
@@ -61,7 +62,7 @@ export function AppOverlays(props: AppOverlaysProps) {
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   const playAnalysisAvailable = learningAnalysisAvailable(appMode, gameSettings?.aiCoachEnabled, !!activeRoundResult);
   const revealedResult = appMode === 'play' ? activeRoundResult : reviewAttempt ? reviewResult : summaryRound;
-  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound, !!reviewAttempt, playResultVisible);
+  const coachRevealed = appMode === 'study' ? isRevealed : coachIsRevealed(appMode, !!activeRoundResult, !!reviewResult, !!summaryRound, !!reviewAttempt, playResultVisible, reviewResultVisible);
   const coachGuess = appMode === 'play' ? activeRoundResult?.guessedCountryCode : reviewAttempt ? reviewAttemptRecord?.guessedCountryCode : summaryRound?.guessedCountryCode;
   return <>
     {!showHome && currentLocation && <div className={`panorama-tools${appMode === 'review' && reviewResult ? ' review-result-tools' : ''}`} aria-label={t('Learning aids')}>
@@ -71,7 +72,7 @@ export function AppOverlays(props: AppOverlaysProps) {
       panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
     </div>}
     <StreetViewExplorer open={mapPickerOpen} mapsReady={mapsReady} panoramaSource={props.explorePanoramaSource} allowInteriors={props.exploreAllowInteriors} onSettingsChange={props.onExploreSettingsChange} onClose={props.onCloseMapPicker} onSelect={props.onOpenMapLocation} />
-    {reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} grade={reviewAttemptRecord?.grade} advancing={reviewGrading} onNext={props.onNextReview} />}
+    {reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} grade={reviewAttemptRecord?.grade} advancing={reviewGrading} onNext={props.onNextReview} onVisibilityChange={setReviewResultVisible} />}
     {coveragePreview && <CoverageStudyModal location={coveragePreview} onClose={props.onCloseCoverage} />}
     <LanguageSettings open={preferencesOpen} onClose={props.onClosePreferences} onChange={props.onLanguageChange} />
     {reviewComplete && <ReviewCompleteOverlay stats={reviewStats} onClose={props.onCloseReviewComplete} />}

@@ -84,7 +84,7 @@ A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais 
 - **Primeira revisão**, **etapa de reaprendizado**, **primeiro intervalo excelente** e **intervalo máximo** controlam o primeiro vencimento, o retorno após erro, a espera após um primeiro resultado excelente e o teto de cartões maduros.
 - **Tempo máximo de resposta** influencia a fluência da avaliação, sem necessariamente criar contagem regressiva. **Ordem** escolhe mais antigos primeiro ou fila aleatória.
 - **Hora de redefinição** e **fuso horário** definem o início do novo dia e a renovação dos limites. A detecção automática segue o dispositivo; desligue-a para escolher o fuso. A prévia mostra a próxima revisão real.
-- **Variar vista de revisão** mantém o mesmo cartão e agenda, mas pode mudar a direção ou usar um panorama próximo em cartões maduros. Zero mantém a vista original; erros reduzem a variação e falhas de busca retornam à âncora sem duplicar cartões.
+- **Variar vista de revisão** mantém o mesmo cartão e agenda, mas pode mudar a direção ou usar um panorama próximo em cartões maduros. Zero mantém a vista original; erros reduzem a variação e falhas de busca retornam à âncora sem duplicar cartões. As variações próximas usam apenas imagens oficiais do Google ao ar livre; sem um resultado adequado, a vista salva é mantida. A vista original e mudanças apenas de direção conservam as imagens salvas.
 
 Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
 
@@ -98,7 +98,7 @@ Jogo usa a mesma barra de aprendizagem de Estudo: Caderno, contagem de notas dis
 
 O Coach aguarda o idioma de IA salvo antes da análise, rejeita resultados claramente multilíngues e explica as pistas visíveis por trás de cada novo país candidato.
 
-Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. Só mostra uma estimativa de região, cidade ou local exato quando várias pistas visuais fortes a sustentam. Após revelar a resposta, **Analisar** vira **Explicar**: usa apenas referências do país correto e admite quando a imagem não bastava para identificá-lo. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps; o filtro mostra o total por país, ordena do maior para o menor e × o limpa.
+Analisar reúne automaticamente várias direções e usa a vista atual como alternativa. Só mostra uma estimativa de região, cidade ou local exato quando várias pistas visuais fortes a sustentam. Após revelar a resposta, **Analisar** vira **Explicar**: usa apenas referências do país correto e admite quando a imagem não bastava para identificá-lo. Pistas abre uma biblioteca com detalhes completos, Street View e links do Google Maps; o filtro mostra o total por país, ordena do maior para o menor e × o limpa. Em Jogar e Revisar, minimizar o resultado mostra **Analisar** sem o contexto da resposta salva; mostrar o resultado novamente restaura **Explicar**.
 
 ### Capturar, colar e analisar uma pista
 

@@ -63,6 +63,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Treat ungraded Learn review sources as new cards, never as no-guess or wrong-country attempts.
 - Exclude ungraded Study source cards from scored attempt history and performance totals; restored Study workspaces resume the latest matching visit instead of inserting a reload visit.
 - Derive every next-review label from the actual persisted queue using the same effective due-time calculation; never present a hypothetical new-card time as the next scheduled review.
+- Nearby Review view variations must request official Google outdoor imagery together and reject contributor results; if no matching variation exists, retain the saved anchor view. Original and heading-only saved views remain valid regardless of imagery source.
 - Keep review-view variation anchored to one canonical card: alternate headings or nearby panoramas may record shown-view metadata and independent generalization progress, but must never create encounters, cards, discoveries, or mastery duplicates; failures contract variation and lookup failures fall back to the anchor view.
 - Reject a Review panorama ID when Google resolves it more than 10 kilometres from the saved answer coordinates, and ignore late Review lookups after the learner changes or leaves the card.
 - Study may offer one ungraded “Save for Review” action; it creates one reusable source card, never invents a score, must remain recognized as saved after reload, and keeps the current panorama open until the learner explicitly moves on.

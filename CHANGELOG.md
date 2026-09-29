@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29
+
+- Limited nearby Review view variations to official Google outdoor imagery, with fallback to the saved view when no matching panorama is available.
+
+- Fixed Review AI Coach staying on Explain after minimizing the answer result; minimizing now returns to Analyze, and restoring the result returns to Explain.
+
 ## 2026-09-28
 
 - Fixed sports-league AI pools expanding to unrelated cities by verifying the requested season/division roster and matching only participating clubs’ home municipalities; failed selections no longer fall back to country-wide generation.

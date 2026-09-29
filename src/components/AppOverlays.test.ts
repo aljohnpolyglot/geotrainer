@@ -18,3 +18,9 @@ test('Coach explains finished Play rounds opened from game history', () => {
   assert.equal(coachIsRevealed('review', false, false, true, true), false);
   assert.equal(coachIsRevealed('review', false, true, true, true), true);
 });
+
+test('Review Coach analyzes minimized answers and explains restored results', () => {
+  assert.equal(coachIsRevealed('review', false, false, true, true, true, false), false);
+  assert.equal(coachIsRevealed('review', false, true, true, true, true, false), false);
+  assert.equal(coachIsRevealed('review', false, true, true, true, true, true), true);
+});

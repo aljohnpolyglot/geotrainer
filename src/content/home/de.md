@@ -202,7 +202,7 @@ GeoTrainer zeigt die ausgewählten fälligen Karten, bis die Sitzung leer ist. K
 - **Erste Wiederholung**, **Wiederlernschritt**, **erstes Exzellent-Intervall** und **maximales Intervall** steuern erste Fälligkeit, Rückkehr nach einem Fehler, Wartezeit nach einem ausgezeichneten ersten Ergebnis und die Obergrenze reifer Karten.
 - **Maximale Antwortzeit** beeinflusst die Bewertung der Abrufflüssigkeit, ohne zwingend einen Countdown zu erzeugen. **Reihenfolge** wählt älteste Fälligkeit zuerst oder eine zufällige Warteschlange.
 - **Rücksetzzeit** und **Zeitzone** bestimmen den Beginn des neuen Wiederholungstags und die Erneuerung der Grenzen. Automatische Erkennung folgt dem Gerät; schalte sie aus, um die Zone selbst zu wählen. Die Vorschau zeigt die tatsächliche nächste Wiederholung.
-- **Wiederholungsansicht variieren** behält dieselbe Karte und Planung, kann bei reifen Karten aber Blickrichtung oder nahes Panorama ändern. Null nutzt die Originalansicht; Fehler verringern die Variation und eine fehlgeschlagene Suche fällt ohne Dublette auf den Anker zurück.
+- **Wiederholungsansicht variieren** behält dieselbe Karte und Planung, kann bei reifen Karten aber Blickrichtung oder nahes Panorama ändern. Null nutzt die Originalansicht; Fehler verringern die Variation und eine fehlgeschlagene Suche fällt ohne Dublette auf den Anker zurück. Nahe Varianten verwenden nur offizielle Google-Außenaufnahmen; ohne passenden Treffer bleibt die gespeicherte Ansicht erhalten. Das Original und reine Richtungsänderungen behalten ihre gespeicherten Aufnahmen.
 
 Wähle **Speichern**, um Änderungen anzuwenden. Strenge und Intervalle beeinflussen künftige Planung, ohne gespeicherte Versuche umzuschreiben; Grenzen und Reihenfolge gelten bei der nächsten Berechnung der Warteschlange.
 
@@ -290,7 +290,7 @@ Das Notizbuch bewahrt eingefügte Überschriften, Fettdruck und Aufzählungen. E
 
 ### Schutz vor Lösungen
 
-Vor einem Tipp erhält der Coach keine Antwortmetadaten. Eine Regions-, Stadt- oder genaue Ortsschätzung erscheint nur bei mehreren starken sichtbaren Hinweisen. Nach Aufdecken oder Abgabe wird **Analysieren** zu **Erklären**; der Coach nutzt nur Hinweise zum richtigen Land und sagt offen, wenn das Bild allein nicht ausreichte.
+Vor einem Tipp erhält der Coach keine Antwortmetadaten. Eine Regions-, Stadt- oder genaue Ortsschätzung erscheint nur bei mehreren starken sichtbaren Hinweisen. Nach Aufdecken oder Abgabe wird **Analysieren** zu **Erklären**; der Coach nutzt nur Hinweise zum richtigen Land und sagt offen, wenn das Bild allein nicht ausreichte. In Spielen und Wiederholen zeigt der Coach bei minimiertem Ergebnis **Analysieren** ohne den gespeicherten Antwortkontext; beim erneuten Anzeigen des Ergebnisses erscheint **Erklären**.
 
 ### Zuverlässigkeit
 
