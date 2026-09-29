@@ -278,6 +278,8 @@ AI Coach looks for visible geographic evidence in the current panorama. Guest us
 
 Before reveal, a high-confidence analysis can add a “Most likely in” region, city, quarter, landmark, or exact-place estimate after the country ranking, but only when multiple strong visible clues support that narrower location. Generic scenes keep the estimate hidden.
 
+**Return to start** is the flag at the lower left in Play and Review when movement is allowed. It returns to the round’s starting panorama while keeping your viewing direction. For a varied Review, it returns to the view shown at the start of that card. On mobile, the button sits above the guessing controls with a larger tap target. No Move rounds hide it before the answer; after answering, movement and Return to start are available for inspection. The arrow points toward your start relative to your viewing direction, and the number shows straight-line distance in metres, not road distance.
+
 Play uses the same learning toolbar as Study: Notebook, the nearby Available notes count, and AI Coach when enabled in the game setup. If Coach is disabled, Notebook image analysis stays hidden until the answer is submitted. The result can then be minimized to inspect the panorama with Coach and Analyze clue without marking the completed attempt as AI-assisted.
 
 Writing a personal Notebook note, pasting or capturing an image, and saving it without AI analysis do not mark a round AI-assisted. Running Coach or Analyze clue before submitting the guess does. Saving a correctly answered location for Review also leaves its assistance status unchanged.

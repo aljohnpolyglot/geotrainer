@@ -2,6 +2,8 @@
 
 ## 2026-09-29
 
+- Added a localized Return to start flag at the lower left in moving Play and Review views, with a direction arrow, live straight-line distance in metres, and a larger mobile tap target above the guessing controls; varied Review views return to their shown spawn.
+
 - Limited nearby Review view variations to official Google outdoor imagery, with fallback to the saved view when no matching panorama is available.
 
 - Fixed Review AI Coach staying on Explain after minimizing the answer result; minimizing now returns to Analyze, and restoring the result returns to Explain.

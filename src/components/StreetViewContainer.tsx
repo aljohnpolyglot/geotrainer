@@ -9,6 +9,8 @@ import { CompassStyle, LocationResult, StreetViewState } from '../types';
 import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucide-react';
 import { compassDirection } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
+import { ReturnToStartControl } from './ReturnToStartControl';
+import { returnToStart } from '../services/returnToStart';
 import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -22,6 +24,7 @@ interface StreetViewContainerProps {
   errorMessage?: string | null;
   onMapsLoaded?: () => void;
   canMove?: boolean;
+  showReturnToStart?: boolean;
   canPan?: boolean;
   canZoom?: boolean;
   onPanoramaChanged?: (location: LocationResult) => void;
@@ -41,6 +44,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   errorMessage,
   onMapsLoaded,
   canMove = true,
+  showReturnToStart = false,
   canPan = true,
   canZoom = true,
   onPanoramaChanged,
@@ -72,6 +76,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const [loadError, setLoadError] = useState<string | null>(null);
   const [tileRateLimited, setTileRateLimited] = useState(false);
   const [heading, setHeading] = useState(0);
+  const [startTracking, setStartTracking] = useState<{ panoId: string; start: { lat: number; lng: number }; position: { lat: number; lng: number } } | null>(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
@@ -226,6 +231,12 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           countryCode: origin.countryCode,
         });
       });
+      panorama.addListener('position_changed', () => {
+        const origin = currentLocationRef.current; const point = panorama.getPosition();
+        if (!origin || !point || (pendingPanoRef.current && panorama.getPano() !== pendingPanoRef.current)) return;
+        const position = { lat: point.lat(), lng: point.lng() }; const atStart = panorama.getPano() === origin.panoId;
+        setStartTracking((previous) => ({ panoId: origin.panoId, position, start: atStart ? position : previous?.panoId === origin.panoId ? previous.start : origin }));
+      });
       panorama.addListener('zoom_changed', queueViewSave);
 
       panoInstanceRef.current = panorama;
@@ -343,6 +354,8 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         className="w-full h-full absolute inset-0"
         style={{ width: '100%', height: '100%' }}
       />
+
+      {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={startTracking?.panoId === currentLocation.panoId ? startTracking.start : currentLocation} position={startTracking?.panoId === currentLocation.panoId ? startTracking.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
 
       {/* Loading Overlay */}
       {isLoading && (

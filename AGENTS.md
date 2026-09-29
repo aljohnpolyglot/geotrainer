@@ -134,6 +134,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Keep the revealed location card draggable by its header, use a minimize affordance for hiding it, and expose the embedded result map's fullscreen control.
 - Keep the Review result minimizable from its top-right corner so the panorama remains available for study, with a compact restore action until the learner continues.
 - After a Play or Review answer is complete, unlock panorama movement, panning, and zoom for inspection while preserving the attempt's recorded restrictions.
+- Return to start in Play and Review must use the current round’s shown spawn panorama, including Review variations, and respect effective movement restrictions; never jump to a hidden canonical answer instead.
 - Keep the same mobile pinpointer available in Play and Review, and anchor panorama controls to the dynamic visible viewport so browser chrome cannot cover them.
 - Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
