@@ -5,6 +5,14 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path -LiteralPath $TargetRoot).Path
 $zip = (Resolve-Path -LiteralPath $ZipPath).Path
+if (Test-Path -LiteralPath $zip -PathType Container) {
+  $archives = @(Get-ChildItem -LiteralPath $zip -Filter 'plonkit-images-*.zip' -File | Sort-Object Name)
+  if (-not $archives.Count) { throw 'No Plonkit image ZIPs found in the folder.' }
+  foreach ($archive in $archives) {
+    & $PSCommandPath -ZipPath $archive.FullName -TargetRoot $root
+  }
+  return
+}
 $tempRoot = Join-Path ([IO.Path]::GetTempPath()) ("plonkit-import-" + [guid]::NewGuid().ToString('N'))
 $imageDir = Join-Path $root 'public/meta-courses/images'
 $reportPath = Join-Path $root 'scripts/meta-course-image-report.json'

@@ -72,7 +72,15 @@ try {
   $report = Get-Content -LiteralPath (Join-Path $malformedRoot 'scripts/meta-course-image-report.json') -Raw | ConvertFrom-Json
   if ($report.missingImages.Count -ne 1) { throw 'Malformed import unexpectedly changed the report.' }
 
-  Write-Output 'PASS: matching, unmatched, and malformed image ZIP imports.'
+  $folderRoot = New-Fixture 'folder' $imageUrl
+  $zipFolder = Join-Path $tempBase 'batch-zips'
+  $null = New-Item -ItemType Directory -Path $zipFolder -Force
+  Copy-Item -LiteralPath $matchingZip -Destination (Join-Path $zipFolder 'plonkit-images-0001-0001.zip')
+  & $scriptPath -ZipPath $zipFolder -TargetRoot $folderRoot | Out-Null
+  $folderReport = Get-Content -LiteralPath (Join-Path $folderRoot 'scripts/meta-course-image-report.json') -Raw | ConvertFrom-Json
+  if ($folderReport.hostedImages -ne 1) { throw 'ZIP folder import did not update the course.' }
+
+  Write-Output 'PASS: matching, unmatched, malformed, and folder image ZIP imports.'
 } finally {
   $resolvedTemp = [IO.Path]::GetFullPath($tempBase)
   $expectedParent = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar)

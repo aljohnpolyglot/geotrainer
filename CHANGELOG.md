@@ -2,6 +2,7 @@
 
 ## 2026-10-01
 
+- Made the Plonk It image Snippet continue across ZIP batches and rate-limit cooldowns after one start, keep earlier exports, filter to 4,542 country tips, and import a folder of ZIPs in one command.
 - Changed the Plonk It image ZIP Snippet to run once per batch from the main site using the existing map-tip JSON, with saved progress and a stop on access limits; country pages no longer need to be opened individually.
 - Added country-by-country Meta lessons from 4,542 map-linked tips, a searchable course selector with seen percentages, Previous and Next navigation, a visible lesson counter and lightbulb badge, and independent optional Review saves. Resolved exact heading and pitch for 4,530 tips; the other 12 retain their clue text and Google Maps link.
 - Kept country-course example images on this site, with a browser ZIP capture and local importer for images that Plonk It did not allow the scraper to fetch. Incomplete translations fall back to English lesson text while the eight-language interface remains localized.
