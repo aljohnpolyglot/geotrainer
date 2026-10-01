@@ -1,6 +1,6 @@
-// Usage: node scripts/capture-plonkit-headless.mjs <plonkit-map-tips.json> [output-folder] [--limit N]
-// Opens one country at a time in headless Chrome, scrolls through native HTML, and saves loaded tip images.
-// Re-run to resume. Stops on access denial; HTTP 429 waits and retries the same country.
+// Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N]
+// Opens a visible Chrome window, waits for any browser challenge to be completed, then scrolls and saves loaded tip images.
+// Re-run to resume with the same browser profile. Stops on access denial; HTTP 429 waits and retries the same country.
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -39,11 +39,12 @@ function chromePath() {
   return found;
 }
 
-export async function openChrome(executable = chromePath()) {
-  const profile = await mkdtemp(join(tmpdir(), 'plonkit-headless-'));
-  const child = spawn(executable, ['--headless=new', '--remote-debugging-port=0',
+export async function openChrome(executable = chromePath(), { headless = false, profile: profilePath } = {}) {
+  const profile = profilePath ? resolve(profilePath) : await mkdtemp(join(tmpdir(), 'plonkit-browser-'));
+  if (profilePath) await mkdir(profile, { recursive: true });
+  const child = spawn(executable, [...(headless ? ['--headless=new'] : ['--new-window']), '--remote-debugging-port=0',
     `--user-data-dir=${profile}`, '--window-size=1600,900', '--no-first-run',
-    '--no-default-browser-check', 'about:blank'], { stdio: 'ignore' });
+    '--no-default-browser-check', 'about:blank'], { stdio: 'ignore', windowsHide: headless });
   let socket;
   try {
     const portFile = join(profile, 'DevToolsActivePort');
@@ -97,7 +98,7 @@ export async function openChrome(executable = chromePath()) {
         for (let i = 0; i < 10 && child.exitCode === null; i++) await sleep(200);
         if (child.exitCode === null) child.kill();
         const parent = resolve(tmpdir()), target = resolve(profile);
-        if (dirname(target) === parent && basename(target).startsWith('plonkit-headless-')) {
+        if (!profilePath && dirname(target) === parent && basename(target).startsWith('plonkit-browser-')) {
           for (let i = 0; i < 5; i++) {
             try { await rm(target, { recursive: true, force: true }); break; }
             catch { await sleep(500); }
@@ -108,30 +109,48 @@ export async function openChrome(executable = chromePath()) {
   } catch (error) {
     socket?.close(); child.kill();
     const parent = resolve(tmpdir()), target = resolve(profile);
-    if (dirname(target) === parent && basename(target).startsWith('plonkit-headless-')) {
+    if (!profilePath && dirname(target) === parent && basename(target).startsWith('plonkit-browser-')) {
       try { await rm(target, { recursive: true, force: true }); } catch { /* Chrome may still be closing. */ }
     }
     throw error;
   }
 }
 
-async function waitForPage(browser, slug) {
-  for (let i = 0; i < 45; i++) {
+export async function waitForPage(browser, country, statuses = [], pollMs = 1000) {
+  let lastChallengeAt = Date.now(), challengeReported = false;
+  for (;;) {
     try {
-      const state = await browser.evaluate(`({ ready: document.readyState, path: location.pathname,
-        payload: document.querySelector('script#__PRELOADED_DATA__')?.textContent || null })`);
-      if (state?.ready === 'complete' && state.path === `/${slug}`) {
-        if (!state.payload) throw new Error(`Country page ${slug} has no guide data; access may be blocked.`);
-        const page = JSON.parse(state.payload)?.data?.public;
-        if (page?.slug !== slug || !Array.isArray(page.steps)) throw new Error(`Country page ${slug} has mismatched guide data.`);
-        return;
+      const state = await browser.evaluate(`(() => {
+        let guide = false;
+        try {
+          const data = document.querySelector('script#__PRELOADED_DATA__')?.textContent;
+          const page = data && JSON.parse(data)?.data?.public;
+          guide = page?.slug === ${JSON.stringify(country.slug)} && Array.isArray(page.steps);
+        } catch { /* The rendered guide may still be available. */ }
+        guide ||= !!document.getElementById(${JSON.stringify(country.tips[0].id)}) ||
+          [...document.querySelectorAll('a[href]')].some(a => a.href === ${JSON.stringify(country.tips[0].mapUrl || '')});
+        return { ready: document.readyState !== 'loading', path: location.pathname, guide,
+          challenge: /just a moment|attention required|verify you are human/i.test(document.title) ||
+            !!document.querySelector('#challenge-form, #cf-challenge-running, .cf-browser-verification, iframe[src*="challenges.cloudflare.com"]') };
+      })()`);
+      if (state?.ready && state.path === `/${country.slug}` && state.guide) return;
+      if (state?.challenge) {
+        lastChallengeAt = Date.now();
+        if (!challengeReported) {
+          console.log('  Complete the browser challenge in the open Chrome window; capture will continue automatically.');
+          challengeReported = true;
+        }
+      } else if (statuses.includes(429)) {
+        throw new Error('HTTP 429');
+      } else if (statuses.includes(403)) {
+        throw new Error('HTTP 403: access denied.');
       }
     } catch (error) {
-      if (/has no guide data|mismatched guide data/.test(error.message)) throw error;
+      if (/HTTP 429|HTTP 403/.test(error.message)) throw error;
     }
-    await sleep(1000);
+    if (Date.now() - lastChallengeAt > 45_000) throw new Error(`Country page ${country.slug} did not load within 45 seconds.`);
+    await sleep(pollMs);
   }
-  throw new Error(`Country page ${slug} did not load within 45 seconds.`);
 }
 
 export async function scrollPage(browser, delayMs = 1200) {
@@ -180,7 +199,7 @@ async function captureCountry(browser, country, output) {
   });
   try {
     await browser.call('Page.navigate', { url: country.url });
-    await waitForPage(browser, country.slug);
+    await waitForPage(browser, country, statuses);
     await scrollPage(browser);
     await writeFile(join(folder, 'page.html'), '<!doctype html>\n' + await browser.evaluate('document.documentElement.outerHTML'), 'utf8');
     let captured = 0;
@@ -203,7 +222,7 @@ async function captureCountry(browser, country, output) {
 async function main() {
   const args = process.argv.slice(2);
   if (!args[0] || args.includes('--help')) {
-    console.log('Usage: node scripts/capture-plonkit-headless.mjs <plonkit-map-tips.json> [output-folder] [--limit N]');
+    console.log('Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N]');
     return;
   }
   const input = resolve(args[0]);
@@ -213,7 +232,7 @@ async function main() {
   if (!(limit > 0)) throw new Error('--limit must be a positive number.');
   const countries = countryJobs(JSON.parse(await readFile(input, 'utf8'))).slice(0, limit);
   await mkdir(output, { recursive: true });
-  const browser = await openChrome();
+  const browser = await openChrome(undefined, { profile: join(output, '.chrome-profile') });
   try {
     let strikes = 0;
     for (let index = 0; index < countries.length; index++) {
@@ -224,16 +243,17 @@ async function main() {
           const result = await captureCountry(browser, country, output);
           console.log(`  ${result.captured} new images; ${result.missing} still missing.`);
           if (result.blocked === 403) throw new Error('HTTP 403: access denied. Stopping.');
-          if (result.blocked === 429) {
+          if (result.blocked === 429) throw new Error('HTTP 429');
+          strikes = 0;
+          break;
+        } catch (error) {
+          if (/HTTP 429/.test(error.message)) {
             strikes++;
             const delay = Math.min(60 * 60_000, 10 * 60_000 * 2 ** Math.min(strikes - 1, 3));
             console.warn(`  HTTP 429: waiting ${Math.ceil(delay / 60000)} minutes, then retrying this page.`);
             await sleep(delay); continue;
           }
-          strikes = 0;
-          break;
-        } catch (error) {
-          if (/access may be blocked|did not load/.test(error.message) && strikes < 3) {
+          if (/did not load/.test(error.message) && strikes < 3) {
             strikes++;
             const delay = 10 * 60_000 * strikes;
             console.warn(`  ${error.message} Waiting ${delay / 60000} minutes before retry.`);

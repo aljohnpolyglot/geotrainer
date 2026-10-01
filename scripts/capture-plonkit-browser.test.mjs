@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
+import { createServer } from 'node:http';
 import test from 'node:test';
-import { captureTip, countryJobs, openChrome, scrollPage } from './capture-plonkit-headless.mjs';
+import { captureTip, countryJobs, openChrome, scrollPage, waitForPage } from './capture-plonkit-browser.mjs';
 
 test('country source keeps only map-linked country tips', () => {
   const source = { countries: [
@@ -12,10 +13,10 @@ test('country source keeps only map-linked country tips', () => {
   assert.equal(countryJobs(source)[0].slug, 'botswana');
 });
 
-test('headless Chrome scrolls native HTML and exports its loaded tip image', {
+test('Chrome scrolls native HTML and exports its loaded tip image', {
   skip: !existsSync(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe'),
 }, async () => {
-  const chrome = await openChrome();
+  const chrome = await openChrome(undefined, { headless: true });
   try {
     const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII=';
     const html = `<div style="height:1800px"></div><div id="a1B2"><a href="https://goo.gl/maps/test"><img loading="lazy" src="data:image/png;base64,${png}"></a></div>`;
@@ -26,4 +27,29 @@ test('headless Chrome scrolls native HTML and exports its loaded tip image', {
     assert.ok(data && Buffer.from(data, 'base64').length > 20);
     assert.match(await chrome.evaluate('document.documentElement.outerHTML'), /a1B2/);
   } finally { await chrome.close(); }
+});
+
+test('capture waits for a browser challenge to reveal the country guide', {
+  skip: !existsSync(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe'),
+}, async () => {
+  const server = createServer((_request, response) => {
+    response.setHeader('Content-Type', 'text/html');
+    response.end(`<title>Just a moment...</title><script>
+      setTimeout(() => {
+        document.title = 'Botswana';
+        document.body.innerHTML = '<div id="a1B2"><a href="https://goo.gl/maps/test"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII="></a></div>';
+      }, 250);
+    </script>`);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let chrome;
+  try {
+    chrome = await openChrome(undefined, { headless: true });
+    await chrome.call('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/botswana` });
+    await waitForPage(chrome, { slug: 'botswana', tips: [{ id: 'a1B2', mapUrl: 'https://goo.gl/maps/test' }] }, [], 50);
+    assert.equal(await chrome.evaluate('document.title'), 'Botswana');
+  } finally {
+    await chrome?.close();
+    server.close();
+  }
 });

@@ -6,7 +6,7 @@
 - Count nearby same-country panoramas as one Unique place in Coverage while keeping the original views and attempts; importing an NBA map alone does not add encounters.
 - Match AI Coach's Analyze or Explain action to the visible answer card when inspecting a completed game's round.
 - Make the Meta country search compact, add localized course sorting, return Beginner Next to the lesson browser, restore the Learn path chooser on Start new, and show an external Maps link only when the lesson view is unavailable in the app.
-- Add a resumable headless Chrome script that scrolls Plonk It country pages and captures the images the browser loads; the image importer now accepts its output folders.
+- Open Plonk It country pages in visible Chrome, wait for any user-completed browser challenge, and reuse the browser profile across resumable image captures; the image importer accepts its output folders.
 
 ## 2026-10-01
 
