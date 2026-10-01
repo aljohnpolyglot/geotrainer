@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Collection, Environment, GameSettings, LocationPoolTarget, PanoramaSource, SamplingMode, UrbanLevel } from '../types';
+import { Collection, Environment, GameSettings, LearnPriority, LocationPoolTarget, PanoramaSource, SamplingMode, UrbanLevel } from '../types';
 import { TRAINING_PRESETS } from '../data/collections';
 import { normalizeGamePreferences, trainerDb } from '../data/trainerDb';
 import {
@@ -67,6 +67,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [environment, setEnvironment] = useState<Environment>('mixed');
   const [urbanLevel, setUrbanLevel] = useState<UrbanLevel>(3);
   const [samplingMode, setSamplingMode] = useState<SamplingMode>('natural');
+  const [priority, setPriority] = useState<LearnPriority>('random');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
   const [allowInteriors, setAllowInteriors] = useState(false);
   const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'url' | 'ai'>('generated');
@@ -82,7 +83,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]); setLocationTargets([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
       setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
       void (value.importedMapId ? getImportedMap(value.importedMapId) : trainerDb.setting<string>('local.currentMapId').then((id) => id && getImportedMap(id))).then((map) => { if (active) setImportedMap(map || undefined); });
     });
@@ -125,6 +126,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       environment,
       urbanLevel,
       samplingMode,
+      priority,
       panoramaSource,
       allowContributors: panoramaSource !== 'official',
       allowInteriors,
@@ -178,7 +180,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             ['ai', Sparkles, 'Describe a pool', 'Let AI choose editable countries, regions, and cities.'],
           ] as const).map(([source, Icon, title, description]) => <button key={source} type="button" className={locationSource === source ? 'selected' : ''} aria-pressed={locationSource === source} onClick={() => setLocationSource(source)}><Icon size={18} /><span><strong>{t(title)}</strong><small>{t(description)}</small></span></button>)}</div>
           {importedSource && <ImportedMapUpload source={locationSource === 'url' ? 'url' : 'upload'} map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
-          {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
+          {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.priority) setPriority(suggested.priority); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}
           <div className="space-y-1.5">
@@ -213,6 +215,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               </select>
             </label>}
             <label>{t('Sampling')}<select value={samplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option></select></label>
+            <label>{t('Priority')}<select value={priority} onChange={(event) => setPriority(event.target.value as LearnPriority)}><option value="random">{t('Random')}</option><option value="familiar">{t('Familiar places')}</option><option value="least-exposure">{t('Least exposure')}</option></select></label>
           </div>
           <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setLocationTargets([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
           </>}

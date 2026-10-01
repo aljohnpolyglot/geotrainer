@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-01
+
+- Added country-by-country Meta lessons from 4,542 map-linked tips, a searchable course selector with seen percentages, Previous and Next navigation, a visible lesson counter and lightbulb badge, and independent optional Review saves. Resolved exact heading and pitch for 4,530 tips; the other 12 retain their clue text and Google Maps link.
+- Kept country-course example images on this site, with a browser ZIP capture and local importer for images that Plonk It did not allow the scraper to fetch. Incomplete translations fall back to English lesson text while the eight-language interface remains localized.
+- Updated the localized Game Guides for Meta’s Beginner and 131 country courses, seen progress, lesson navigation, clue-facing map and example views, and the hidden-by-default Review Meta panel; clarified that lesson text is not yet translated into every supported language.
+- Added Random, Familiar places, and Least exposure priorities to generated Play rounds, reusing Learn targeting and keeping uploaded coordinate maps unchanged.
+
+## 2026-09-30
+
+- Added Node and browser Snippet versions of a resumable Plonk It map-tip scraper that reads structured country data, exports only Google Maps-linked tips, and respects rate-limit cooldowns.
+
 ## 2026-09-29
 
 - Added a localized Return to start flag at the lower left in moving Play and Review views, with a direction arrow, live straight-line distance in metres, and a larger mobile tap target above the guessing controls; varied Review views return to their shown spawn.

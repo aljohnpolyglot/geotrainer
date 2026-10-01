@@ -55,7 +55,7 @@ const keys: Record<StoreName, string> = {
   clues: 'id',
 };
 const revision = (name: StoreName, record: Record<string, unknown>) => name === 'settings' ? Number(record.updatedAt || 0) : undefined;
-const noteSettings = new Set(['notebook.notes', 'coach.notes', 'clues.deleted']);
+const noteSettings = new Set(['notebook.notes', 'coach.notes', 'clues.deleted', 'meta.seen']);
 const mergeNotes = (left: unknown, right: unknown) => {
   const notes = new Map<string, Record<string, unknown>>();
   for (const item of [...(Array.isArray(left) ? left : []), ...(Array.isArray(right) ? right : [])] as Record<string, unknown>[]) { const key = String(item.id || `${item.panoId}:${item.updatedAt || item.generatedAt}:${item.clueId || ''}:${item.text || ''}`); const previous = notes.get(key); if (!previous || Number(item.deletedAt || item.updatedAt || item.generatedAt || 0) >= Number(previous.deletedAt || previous.updatedAt || previous.generatedAt || 0)) notes.set(key, item); }

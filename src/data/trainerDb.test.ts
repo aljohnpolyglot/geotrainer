@@ -235,8 +235,10 @@ test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: 17, environment: 'ocean' }, false), {
     roundCount: 5, collectionId: 'world', canMove: false, canPan: true, canZoom: true, showCompass: false, aiCoachEnabled: true,
-    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', panoramaSource: 'official', allowContributors: false, allowInteriors: false, timeLimitSeconds: 0,
+    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, timeLimitSeconds: 0,
   });
+  assert.equal(normalizeGamePreferences({ priority: 'least-exposure' }).priority, 'least-exposure');
+  assert.equal(normalizeGamePreferences({ priority: 'invalid' }).priority, 'random');
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');
   assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);

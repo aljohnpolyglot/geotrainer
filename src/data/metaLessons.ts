@@ -17,11 +17,11 @@ export const localizeMetaLesson = (lesson: MetaLesson, language: SupportedLangua
 export const savedMetaLessonIds = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => new Set(attempts.flatMap((attempt) => attempt.source === 'study' && attempt.metaLessonId ? [attempt.metaLessonId] : []));
 export const hasRemainingMetaLessons = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => savedMetaLessonIds(attempts).size < META_LESSONS.length;
 
-export const metaReviewAid = (id: string | undefined, answerVisible: boolean, language: SupportedLanguage = 'en') => {
+export const metaReviewAid = (id: string | undefined, _answerVisible: boolean, language: SupportedLanguage = 'en') => {
   const lesson = metaLessonById(id);
   if (!lesson) return undefined;
   const localized = localizeMetaLesson(lesson, language);
-  return answerVisible ? { id: localized.id, imageUrl: localized.imageUrl, text: localized.text, note: localized.note, temporallySensitive: localized.temporallySensitive } : { id: localized.id, imageUrl: localized.imageUrl, temporallySensitive: localized.temporallySensitive };
+  return { id: localized.id, imageUrl: localized.imageUrl, text: localized.text, note: localized.note, temporallySensitive: localized.temporallySensitive };
 };
 
 export const nextMetaLesson = (currentId?: string, random = Math.random, completed = new Set<string>()): MetaLesson | undefined => {

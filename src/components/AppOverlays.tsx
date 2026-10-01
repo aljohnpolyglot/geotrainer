@@ -17,7 +17,8 @@ import { ReviewCompleteOverlay } from './ReviewCompleteOverlay';
 import { StudySetupModal, type StudySetup } from './StudySetupModal';
 import { LearningAids } from './LearningAids';
 import { StreetViewExplorer } from './StreetViewExplorer';
-import { localizeMetaLesson, metaReviewAid } from '../data/metaLessons';
+import { localizeMetaLesson } from '../data/metaLessons';
+import { useMetaReviewAid } from '../hooks/useMetaReviewAid';
 
 interface AppOverlaysProps {
   appMode: AppMode; showHome: boolean; currentLocation: LocationResult | null; isRevealed: boolean;
@@ -30,7 +31,7 @@ interface AppOverlaysProps {
   pastGames: GameRecord[]; allCollections: any[]; coveragePreview: TrainerLocation | null;
   compassPreference: boolean; activeCompass: boolean; preferencesOpen: boolean; trainerRefreshKey: number;
   reviewGrading: boolean;
-  learnSource: LearnSource; activeMetaLesson?: MetaLesson; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
+  learnSource: LearnSource; activeMetaLesson?: MetaLesson; metaProgress?: { position: number; total: number }; mapPickerOpen: boolean; metaAdviceOpen: boolean; mapsReady: boolean;
   explorePanoramaSource: PanoramaSource; exploreAllowInteriors: boolean;
   onSaveCoach: (note: any) => Promise<void> | void; onSaveClue: (clue: any) => Promise<string | void> | string | void; onClueAnalyzed: () => void;
   onNextReview: () => void; onCloseCoverage: () => void; onClosePreferences: () => void; onLanguageChange: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void;
@@ -57,8 +58,8 @@ export function AppOverlays(props: AppOverlaysProps) {
     reviewStats, reviewInitialTotal, reviewQueueLength, reviewSource, reviewComplete, activeRoundResult, gameSettings,
     currentRoundIndex, gameRounds, summaryGameRecord, summaryRound, isNewGameModalOpen, isHistoryModalOpen, isStudySetupOpen, studySetup, isModalOpen,
     editingCollection, pastGames, allCollections, coveragePreview, compassPreference, activeCompass,
-    preferencesOpen, trainerRefreshKey, reviewGrading, learnSource, activeMetaLesson, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
-  const reviewMeta = metaReviewAid(reviewAttempt?.metaLessonId, !!reviewResult, ui);
+    preferencesOpen, trainerRefreshKey, reviewGrading, learnSource, activeMetaLesson, metaProgress, mapPickerOpen, metaAdviceOpen, mapsReady } = props;
+  const reviewMeta = useMetaReviewAid(reviewAttempt?.metaLessonId, ui);
   const studyMeta = activeMetaLesson ? localizeMetaLesson(activeMetaLesson, ui) : undefined;
   const playAnalysisAvailable = learningAnalysisAvailable(appMode, gameSettings?.aiCoachEnabled, !!activeRoundResult);
   const revealedResult = appMode === 'play' ? activeRoundResult : reviewAttempt ? reviewResult : summaryRound;
@@ -69,7 +70,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     {appMode !== 'play' && <button className={`map-training-toggle${activeCompass ? ' enabled' : ''}`} type="button" role="switch" aria-checked={activeCompass} onClick={props.onToggleCompass} title={`${t('compass')} ${activeCompass ? t('on') : t('off')}`}><Compass size={17} /></button>}
     {playAnalysisAvailable && <AiCoach panoId={currentLocation.panoId} appMode={appMode} revealed={coachRevealed} context={coachRevealed ? { actualCountry: COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode, guessedCountry: coachGuess ? COUNTRIES[coachGuess]?.name || coachGuess : undefined, score: revealedResult?.score, distanceKm: revealedResult?.distanceKm, previousAttempts: appMode === 'review' ? reviewHistory.slice(0, 5).map((item) => ({ guessedCountry: item.guessedCountryCode, score: item.score })) : undefined } : undefined} onSave={(note) => props.onSaveCoach({ ...note, location: currentLocation })} onSaveClue={(clue) => props.onSaveClue({ ...clue, origin: 'coach', location: currentLocation })} onClueAnalyzed={props.onClueAnalyzed} />}
     <LearningAids lesson={appMode === 'study' && learnSource === 'meta' ? studyMeta : reviewMeta}
-      panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
+      panoId={reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} autoOpenMeta={appMode === 'study' && learnSource === 'meta'} metaProgress={appMode === 'study' && learnSource === 'meta' ? metaProgress : undefined} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
     </div>}
     <StreetViewExplorer open={mapPickerOpen} mapsReady={mapsReady} panoramaSource={props.explorePanoramaSource} allowInteriors={props.exploreAllowInteriors} onSettingsChange={props.onExploreSettingsChange} onClose={props.onCloseMapPicker} onSelect={props.onOpenMapLocation} />
     {reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} grade={reviewAttemptRecord?.grade} advancing={reviewGrading} onNext={props.onNextReview} onVisibilityChange={setReviewResultVisible} />}

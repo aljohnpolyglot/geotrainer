@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { filterMetaLessonsByCompletion, hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
+import { filterMetaLessonsByCompletion, hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, metaReviewAid, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
 import translations from './metaLessonTranslations.json';
 
 test('Meta lessons reject malformed input and avoid the current lesson', () => {
@@ -22,6 +22,13 @@ test('every Meta lesson has localized text in all supported non-English language
 test('Meta lessons enter My Clues only after an explicit Study save', () => {
   const ids = savedMetaLessonIds([{ source: 'review', metaLessonId: 'opened-only' }, { source: 'study', metaLessonId: 'saved' }, { source: 'study' }]);
   assert.deepEqual([...ids], ['saved']);
+});
+
+test('learner-opened Review Meta shows its full explanation before a guess', () => {
+  const lesson = META_LESSONS[0];
+  const aid = metaReviewAid(lesson.id, false, 'en');
+  assert.equal(aid?.text, lesson.text);
+  assert.equal(aid?.imageUrl, lesson.imageUrl);
 });
 
 test('completed Meta lessons are excluded and the catalog reports exhaustion', () => {

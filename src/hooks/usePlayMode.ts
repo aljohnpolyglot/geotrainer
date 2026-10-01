@@ -9,6 +9,8 @@ import { reviewGradeForPerformance, shouldAutoSchedulePlayReview, trainerDb } fr
 import { COUNTRIES } from '../data/countries';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { pickImportedLocation } from '../services/importedMap';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
+import { loadCityPools } from '../services/cityPools';
 
 export function usePlayMode(ctx: any) {
   const { allCollections, currentLocation, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed,
@@ -39,9 +41,22 @@ export function usePlayMode(ctx: any) {
     const abortController = new AbortController(); abortControllerRef.current = abortController;
     setCurrentLocation(null); setIsLoading(true); setErrorMessage(null); setIsRevealed(false); ctx.setStatusMessage('Finding round location...');
     try {
+      let priorityCountryCodes = countryCodes;
+      let priorityTarget: ReturnType<typeof learningPriorityTarget> = { countryCodes: countryCodes || [] };
+      let preferredCountryCodes: string[] | undefined;
+      const priority = settings.priority ?? 'random';
+      if (!settings.importedMapId && !settings.locationTargets?.length && countryCodes?.length && priority !== 'random') {
+        const history = await trainerDb.locations();
+        const wholeWorld = col?.id === 'world' && !settings.countryCodes?.length && !settings.countryCode;
+        priorityCountryCodes = priority === 'least-exposure' && wholeWorld ? trainedWorldCountries(countryCodes) : countryCodes;
+        if (!priorityCountryCodes.length) priorityCountryCodes = countryCodes;
+        priorityTarget = learningPriorityTarget(priority, priorityCountryCodes, history);
+        if (priority === 'least-exposure' && priorityTarget.countryCodes.length === 1) priorityTarget = learningPriorityTarget(priority, priorityTarget.countryCodes, history, Math.random, await loadCityPools(priorityTarget.countryCodes[0]));
+        if (priorityTarget.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = priority === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, priorityTarget.countryCodes[0]) : [priorityTarget.countryCodes[0], ...priorityCountryCodes.filter((code) => code !== priorityTarget.countryCodes[0])];
+      }
       const result = settings.importedMapId
         ? await pickImportedLocation(settings.importedMapId, new Set(gameRounds.map((round) => round.location.panoId)), abortController.signal, settings.canMove, 0, new Set(gameRounds.flatMap((round) => round.location.importedMapPointIndex === undefined ? [] : [round.location.importedMapPointIndex])), { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true })
-        : await defaultLocationGenerator.findRandomLocation(countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, requireNavigation: settings.canMove, locationTargets: settings.locationTargets });
+        : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : priorityTarget.countryCodes, abortController.signal, (msg) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, preferredCandidate: priorityTarget.preferredCandidate, preferredCountryCodes, requireNavigation: settings.canMove, locationTargets: settings.locationTargets });
       if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationFailedRef.current = false; playAiAssistedRef.current = false; setCoachNote(null); setCurrentLocation(result); roundSubmittedRef.current = false; roundStartTimeRef.current = Date.now(); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); }
     } catch (err: unknown) { if (!isLatestRequest(requestId, latestGenerationRequestRef.current) || (err instanceof Error && err.name === 'AbortError')) return; generationFailedRef.current = true; setErrorMessage(err instanceof Error ? err.message : 'Failed to generate game location'); }
     finally { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); ctx.setStatusMessage(''); } }

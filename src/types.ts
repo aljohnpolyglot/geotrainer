@@ -38,6 +38,7 @@ export interface LocationResult {
   environmentRequested?: Environment;
   urbanLevel?: UrbanLevel;
   heading?: number;
+  pitch?: number;
   importedMapPointIndex?: number;
   importedMapProgress?: number;
   importedMapCompletedPointIndexes?: number[];
@@ -163,6 +164,7 @@ export interface GameSettings {
   environment?: Environment;
   urbanLevel?: UrbanLevel;
   samplingMode?: SamplingMode;
+  priority?: LearnPriority; // Optional for backwards-compatible saved games
   panoramaSource?: PanoramaSource; // Optional for backwards-compatible saved games
   allowContributors?: boolean; // Optional for backwards-compatible saved games
   allowInteriors?: boolean; // Optional for backwards-compatible saved games
@@ -230,6 +232,7 @@ export interface StudyVisit {
   coachAnalysis?: CoachAnalysis;
   learnSource?: LearnSource;
   metaLessonId?: string;
+  metaCourseId?: string;
 }
 
 export interface Attempt {
@@ -295,6 +298,9 @@ export interface MetaLesson {
   text: string;
   note?: string;
   imageUrl: string;
+  section?: string;
+  mapUrl?: string;
+  pitch?: number;
   temporallySensitive?: boolean;
 }
 
@@ -386,7 +392,8 @@ export interface TrainingSession {
 export type ActiveWorkspace =
   | { mode: 'home' }
   | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
-  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number }
+  | { mode: 'meta-course'; courseId: string; tipId: string }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; metaCourseId?: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number }
   | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {

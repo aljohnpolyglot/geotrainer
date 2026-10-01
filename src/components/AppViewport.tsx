@@ -9,6 +9,8 @@ import { ArrowLeft, Gamepad2, Globe2, History, Play } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { resultReviewControls } from '../services/gameLogic';
+import type { MetaCountryCourseTip } from '../data/metaCountryCourses';
+import { MetaCourseCard } from './MetaCourseCard';
 
 interface AppViewportProps {
   appMode: AppMode; showHome: boolean; currentLocation: LocationResult | null; isLoading: boolean;
@@ -16,6 +18,7 @@ interface AppViewportProps {
   restoredStreetView?: StreetViewState;
   isRevealed: boolean;
   learnSource: LearnSource;
+  activeCountryTip?: MetaCountryCourseTip; metaCourseId?: string; metaProgress?: { position: number; total: number };
   isGameActive: boolean; gameSettings: { roundCount: number } | null; activeRoundResult: GameRound | null;
   playElapsed: number; timeRemaining: number | null; isSubmittingGuess: boolean; reviewAttempt: { id: string } | null;
   reviewResult: GameRound | null; reviewElapsed: number; summaryRound: GameRound | null; summarySaveAvailable: boolean; pastGames: GameRecord[];
@@ -35,7 +38,7 @@ interface AppViewportProps {
 
 export function AppViewport({
   appMode, showHome, currentLocation, isLoading, statusMessage, errorMessage, mapsReady, activeCompass, compassStyle, restoredStreetView,
-  isRevealed, learnSource, isGameActive, gameSettings, activeRoundResult,
+  isRevealed, learnSource, activeCountryTip, metaCourseId, metaProgress, isGameActive, gameSettings, activeRoundResult,
   playElapsed, timeRemaining, isSubmittingGuess, reviewAttempt, reviewResult, reviewElapsed, summaryRound, summarySaveAvailable, pastGames,
   allCollections, trainerRefreshKey, trainerStartTab, studyReviewSaving, studyReviewSaved,
   canMove, canPan, canZoom, onNextLocation, onMapsLoaded, onPanoramaChanged,
@@ -54,8 +57,9 @@ export function AppViewport({
     });
   }, [appMode, currentLocation, isLoading, isRevealed, showHome]);
   return <main className="flex-1 w-full h-[calc(100dvh-3.5rem)] relative overflow-hidden bg-black">
-    <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} showReturnToStart={!showHome && !summaryRound && ((appMode === 'play' && isGameActive) || (appMode === 'review' && !!reviewAttempt))} {...panoramaControls} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={appMode === 'review' ? undefined : restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && (appMode === 'study' || summaryRound) ? onPanoramaChanged : undefined} />
+    <StreetViewContainer currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} showReturnToStart={!showHome && !summaryRound && ((appMode === 'play' && isGameActive) || (appMode === 'review' && !!reviewAttempt))} {...panoramaControls} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={appMode === 'review' || appMode === 'study' && learnSource === 'meta' ? undefined : restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && (appMode === 'study' || summaryRound) ? onPanoramaChanged : undefined} />
     {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
+    {!showHome && appMode === 'study' && learnSource === 'meta' && activeCountryTip && !currentLocation && !isLoading && <MetaCourseCard tip={activeCountryTip} courseId={metaCourseId || 'beginner'} position={metaProgress?.position || 1} total={metaProgress?.total || 1} />}
     {!showHome && appMode === 'review' && !reviewAttempt && !summaryRound && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}
     {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" className="explore-world-map-button" onClick={onOpenWorldMap} aria-label={t('Back to world map')} title={t('Back to world map')}><Globe2 size={20} /></button>}
     {summaryRound && <button type="button" className="explore-world-map-button" onClick={onReturnToSummary} aria-label={t('viewGameSummary')} title={t('viewGameSummary')}><ArrowLeft size={20} /></button>}

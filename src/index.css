@@ -7,3 +7,5 @@
 @import "./styles/coach-and-tools.css";
 @import "./styles/dark-mode.css";
 @import "./styles/clues-and-setup.css";
+@import "./components/MetaCourseSelector.css";
+@import "./components/MetaCourseCard.css";

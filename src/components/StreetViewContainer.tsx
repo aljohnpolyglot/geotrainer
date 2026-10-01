@@ -266,7 +266,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       google.maps.event.trigger(panorama, 'resize');
       const initialPov = {
         heading: savedView?.heading ?? currentLocation.heading ?? Math.floor(Math.random() * 360),
-        pitch: savedView?.pitch ?? 0,
+          pitch: savedView?.pitch ?? currentLocation.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;
       if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; panorama.setPov(initialPov); panorama.setZoom(savedView?.zoom ?? 1); return; }

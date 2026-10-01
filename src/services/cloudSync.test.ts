@@ -62,6 +62,14 @@ test('cloud merge unions Notebook and Coach histories instead of deleting one de
   assert.deepEqual(settings.find(({ key }) => key === 'coach.notes')?.value.map(({ id }) => id), ['local-coach', 'cloud-coach']);
 });
 
+test('Meta seen progress merges independently from optional Review saves', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  cloud.data.settings.push({ key: 'meta.seen', value: [{ id: 'BW-a', courseId: 'BW', updatedAt: 10 }], updatedAt: 10 });
+  local.data.settings.push({ key: 'meta.seen', value: [{ id: 'BW-b', courseId: 'BW', updatedAt: 20 }], updatedAt: 20 });
+  const progress = (mergeBackups(cloud, local).data.settings[0] as { value: Array<{ id: string }> }).value;
+  assert.deepEqual(progress.map(({ id }) => id), ['BW-b', 'BW-a']);
+});
+
 test('a newer Personal-note deletion marker is not resurrected by cloud merge', () => {
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   cloud.data.settings.push({ key: 'notebook.notes', value: [{ id: 'note', text: 'old', updatedAt: 10 }], updatedAt: 10 });

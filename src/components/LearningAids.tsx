@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Camera, Check, Files, Images, Lightbulb, LoaderCircle, NotebookPen, Trash2, TriangleAlert, X } from 'lucide-react';
+import { Camera, Check, ExternalLink, Files, Images, Lightbulb, LoaderCircle, NotebookPen, Trash2, TriangleAlert, X } from 'lucide-react';
 import type { ClueRecord, CoachAnalysis, CoachHistoryNote, NotebookNote } from '../types';
 import { trainerDb } from '../data/trainerDb';
 import { CountryFlag } from './CountryFlag';
@@ -18,19 +18,21 @@ import { notebookClueLinks, visibleNotebookNotes } from './trainerHubUtils';
 import { captureStreetView360 } from '../services/streetViewSnapshot';
 import { clueImageFingerprint } from '../data/clueDedup';
 
-export type MetaAid = { id: string; imageUrl: string; text?: string; note?: string; temporallySensitive?: boolean };
+export type MetaAid = { id: string; imageUrl?: string; text?: string; note?: string; section?: string; mapUrl?: string; temporallySensitive?: boolean };
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
 type NoteDraft = { panoId: string; text: string; category: string };
 type AvailableNote = { id: string; source: string; text: string; category?: string; imageUrl?: string; imageKey?: string; missingImage?: boolean; analysis?: CoachAnalysis; at: number; notebook?: NotebookNote; coach?: CoachHistoryNote; clueId?: string };
 export const cluesForPanorama = (clues: ClueRecord[], relatedPanos: Set<string>, current: { panoId: string; lat: number; lng: number; countryCode: string }) => clues.filter((item) => relatedPanos.has(item.panoId) || (typeof item.lat === 'number' && typeof item.lng === 'number' && nearbyReviewPoint(current, { panoId: item.panoId, lat: item.lat, lng: item.lng, countryCode: item.countryCode })));
 
-export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen, refreshKey, allowAnalysis = true, onAdviceClose, onSaveClue, onNoteSaved }: {
+export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen, autoOpenMeta = false, metaProgress, refreshKey, allowAnalysis = true, onAdviceClose, onSaveClue, onNoteSaved }: {
   lesson?: MetaAid;
   panoId: string;
   lat: number;
   lng: number;
   countryCode: string;
   adviceOpen: boolean;
+  autoOpenMeta?: boolean;
+  metaProgress?: { position: number; total: number };
   refreshKey: number;
   allowAnalysis?: boolean;
   onAdviceClose: (forever: boolean) => void;
@@ -51,7 +53,6 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [noteImage, setNoteImage] = useState('');
   const [noteFormKey, setNoteFormKey] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [capture360, setCapture360] = useState<'idle' | 'busy' | 'copied' | 'error'>('idle');
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
@@ -72,7 +73,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     const merged = [...new Map(currentNotes.map((item) => [item.id, item])).values()].sort((a, b) => b.at - a.at); const deduped = splitDuplicateNotes(merged); setNotes(deduped.unique);
     if (deduped.duplicates.length) void Promise.all(deduped.duplicates.map((item) => item.notebook ? deleteNotebookHistoryNote(item.notebook) : item.coach ? Promise.all([deleteCoachHistoryNote(item.coach), item.clueId ? trainerDb.deleteClue(item.clueId) : Promise.resolve()]) : item.clueId ? trainerDb.deleteClue(item.clueId) : Promise.resolve())).then(() => onNoteSaved());
   }); return () => { active = false; }; }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
-  useEffect(() => { setImageFailed(false); setImageLoaded(false); }, [lesson?.id]);
+  useEffect(() => { setImageFailed(false); setOpen(autoOpenMeta && lesson ? 'meta' : null); }, [lesson?.id, autoOpenMeta]);
   useEffect(() => {
     let active = true;
     setClues([]); setNotes([]); setClueIndex(0); setNote(''); setCategory(''); setCategoryOpen(false); setNoteSaved(false); setNoteClueId(undefined); setNoteImage(''); setNoteFormKey((value) => value + 1);
@@ -101,7 +102,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   return <>
     <div className="learning-aids" aria-label={t('Learning aids')}>
       <button type="button" disabled={capture360 === 'busy'} aria-busy={capture360 === 'busy'} onClick={() => void copy360()} title={t(capture360 === 'busy' ? 'Capturing 360° view…' : capture360 === 'copied' ? '360° view copied' : capture360 === 'error' ? 'Could not copy 360° view' : 'Copy 360° view to clipboard')}>{capture360 === 'busy' ? <LoaderCircle className="spin" size={17} /> : capture360 === 'copied' ? <Check size={17} /> : capture360 === 'error' ? <TriangleAlert size={17} /> : <Camera size={17} />}<span>{t(capture360 === 'busy' ? 'Capturing 360° view…' : capture360 === 'copied' ? '360° view copied' : capture360 === 'error' ? 'Could not copy 360° view' : 'Copy 360° view to clipboard')}</span><i aria-hidden="true">360°</i></button>
-      {lesson && <button type="button" aria-pressed={open === 'meta'} onClick={() => setOpen(open === 'meta' ? null : 'meta')} title={t('Meta')}><Lightbulb size={17} /><span>{t('Meta')}</span></button>}
+      {lesson && <button type="button" className={metaProgress ? 'meta-progress-button' : undefined} aria-pressed={open === 'meta'} onClick={() => setOpen(open === 'meta' ? null : 'meta')} title={t('Meta')}><Lightbulb size={17} /><span>{t('Meta')}</span>{metaProgress && <b className="meta-progress-ribbon">{metaProgress.position.toLocaleString(ui)}/{metaProgress.total.toLocaleString(ui)}</b>}</button>}
       <button type="button" aria-pressed={open === 'clues'} onClick={() => setOpen(open === 'clues' ? null : 'clues')} title={t('Show Clues')}><Images size={17} /><span>{t('Show Clues')}</span><b>{clues.length}</b></button>
       <button type="button" aria-pressed={open === 'notebook'} onClick={() => setOpen(open === 'notebook' ? null : 'notebook')} title={t('Notebook')}><NotebookPen size={17} /><span>{t('Notebook')}</span></button>
       {notes.length > 0 && <button type="button" aria-pressed={open === 'available'} onClick={() => setOpen(open === 'available' ? null : 'available')} title={t('Available notes')}><Files size={17} /><span>{t('Available notes')}</span><b>{notes.length}</b></button>}
@@ -111,8 +112,8 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     {adviceOpen && lesson && <aside className="meta-advice" role="status"><p>{t('Meta clues are always available from the lightbulb in the top-right.')}</p><div><button onClick={() => onAdviceClose(false)}>{t('Okay')}</button><button onClick={() => onAdviceClose(true)}>{t("Don't show again")}</button></div></aside>}
     {open === 'meta' && lesson && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Meta')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Lightbulb size={17} />{t('Meta')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
-      {imageFailed ? <p className="learning-aid-safe">{t('Reference image unavailable')}</p> : <img src={lesson.imageUrl} alt={t('Meta reference clue')} onLoad={() => setImageLoaded(true)} onError={() => setImageFailed(true)} />}
-      {(imageLoaded || imageFailed) && <div className="learning-aid-copy"><p>{lesson.text}</p>{lesson.note && <p className="meta-comparison">{lesson.note}</p>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}</div>}
+      {lesson.imageUrl && (imageFailed ? <p className="learning-aid-safe">{t('Reference image unavailable')}</p> : <img src={lesson.imageUrl} alt={t('Meta reference clue')} onError={() => setImageFailed(true)} />)}
+      <div className="learning-aid-copy">{lesson.section && <strong>{lesson.section}</strong>}{lesson.text && <CoachRichText text={lesson.text} />}{lesson.note && <div className="meta-comparison"><CoachRichText text={lesson.note} /></div>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}{lesson.mapUrl && <><a href={lesson.mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('Open clue in Google Maps')}</a><small>{t('Source')}: <a href="https://www.plonkit.net/guide" target="_blank" rel="noopener noreferrer">Plonk It</a></small></>}</div>
     </aside>}
     {open === 'clues' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Show Clues')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Images size={17} />{t('Show Clues')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
