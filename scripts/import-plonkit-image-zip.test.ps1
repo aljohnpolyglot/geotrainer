@@ -80,7 +80,16 @@ try {
   $folderReport = Get-Content -LiteralPath (Join-Path $folderRoot 'scripts/meta-course-image-report.json') -Raw | ConvertFrom-Json
   if ($folderReport.hostedImages -ne 1) { throw 'ZIP folder import did not update the course.' }
 
-  Write-Output 'PASS: matching, unmatched, malformed, and folder image ZIP imports.'
+  $captureRoot = New-Fixture 'capture' $imageUrl
+  $captureFolder = Join-Path $tempBase 'headless-captures/botswana'
+  $null = New-Item -ItemType Directory -Path (Join-Path $captureFolder 'images') -Force
+  [IO.File]::WriteAllBytes((Join-Path $captureFolder 'images/US-abc.png'), $png)
+  [IO.File]::WriteAllText((Join-Path $captureFolder 'manifest.json'), ($matchingManifest.Replace('images/001-abc.png', 'images/US-abc.png')), [Text.UTF8Encoding]::new($false))
+  & $scriptPath -ZipPath (Split-Path -Parent $captureFolder) -TargetRoot $captureRoot | Out-Null
+  $captureReport = Get-Content -LiteralPath (Join-Path $captureRoot 'scripts/meta-course-image-report.json') -Raw | ConvertFrom-Json
+  if ($captureReport.hostedImages -ne 1) { throw 'Headless capture folder import did not update the course.' }
+
+  Write-Output 'PASS: matching, unmatched, malformed, ZIP folder, and headless capture imports.'
 } finally {
   $resolvedTemp = [IO.Path]::GetFullPath($tempBase)
   $expectedParent = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar)

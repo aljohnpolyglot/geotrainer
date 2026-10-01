@@ -4,6 +4,7 @@ import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { countryDisplayName, translate } from "../services/language";
 import type { Attempt, ClueRecord, CoachHistoryNote, LearnedMeta, NotebookNote, ReviewRecord, SupportedLanguage, TrainerLocation } from "../types";
 import type { CountryStats } from "./trainerHubTypes";
+import { nearbyReviewPoint } from '../data/reviewIdentity';
 
 export const date = (value: number | undefined, locale: SupportedLanguage) => (value ? new Date(value).toLocaleDateString(locale) : "—");
 export const timestamp = (value: number, locale: string) => new Date(value).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'medium' });
@@ -47,6 +48,18 @@ export const savedClueCount = (clues: ClueRecord[], notes: NotebookNote[], metas
 };
 export const pageBounds = (total: number, page: number, size = 20) => { const pages = Math.max(1, Math.ceil(total / size)); const current = Math.min(Math.max(1, page), pages); return { current, pages, start: (current - 1) * size, end: current * size }; };
 export type CoverageOverlay = "exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery";
+
+export function coveragePlaceCounts(locations: TrainerLocation[]): Record<string, number> {
+  // ponytail: compare anchors directly; use a spatial index if large histories make Coverage slow.
+  const anchors: TrainerLocation[] = [];
+  const counts: Record<string, number> = {};
+  for (const location of [...locations].sort((a, b) => a.firstSeenAt - b.firstSeenAt || a.id.localeCompare(b.id))) {
+    if (anchors.some((anchor) => nearbyReviewPoint(anchor, location))) continue;
+    anchors.push(location);
+    counts[location.countryCode] = (counts[location.countryCode] || 0) + 1;
+  }
+  return counts;
+}
 
 export function coverageCountryCounts(locations: TrainerLocation[]): Record<string, { panoramas: number; encounters: number }> {
   return locations.reduce<Record<string, { panoramas: number; encounters: number }>>((counts, item) => {

@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { loadMetaCountryViews, viewFromGoogleMapsUrl } from './metaCountryViews';
+import { loadMetaCountryViews, needsMetaMapFallback, viewFromGoogleMapsUrl } from './metaCountryViews';
+
+test('Meta keeps the external map as a fallback only when its lesson pano is not on screen', () => {
+  assert.equal(needsMetaMapFallback('lesson-pano', 'lesson-pano'), false);
+  assert.equal(needsMetaMapFallback('lesson-pano', 'nearby-pano'), true);
+  assert.equal(needsMetaMapFallback(undefined, 'lesson-pano'), true);
+});
 
 test('parses exact Google Maps panorama and camera metadata', () => {
   assert.deepEqual(viewFromGoogleMapsUrl('https://www.google.com/maps/@-23.6472253,24.7278454,3a,89.7y,193.88h,77.11t/data=!3m6!1e1!3m4!1sWiSQDwoE9rS_VG_mIQKFfw!2e0'), {

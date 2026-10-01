@@ -9,6 +9,8 @@ export function addActiveElapsed(session: TrainingSession, startedAt: number | n
   return elapsed;
 }
 
+export const reviewWorkActive = (hasAttempt: boolean, hasResult: boolean, resultVisible: boolean) => hasAttempt && (!hasResult || !resultVisible);
+
 export function useActiveSession(active: boolean, sessionRef: { current: TrainingSession }, onSaved: () => void) {
   const startedAtRef = useRef<number | null>(null);
   const flush = useCallback((resume: boolean) => {

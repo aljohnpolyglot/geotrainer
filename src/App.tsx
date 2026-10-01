@@ -57,7 +57,7 @@ import { useReviewMode } from './hooks/useReviewMode';
 import { usePlayMode } from './hooks/usePlayMode';
 import { useStudyMode } from './hooks/useStudyMode';
 import { useLearnSources } from './hooks/useLearnSources';
-import { useActiveSession } from './hooks/useActiveSession';
+import { reviewWorkActive, useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioPreferences } from './services/audio';
 import { calculateDistanceKm, restoredRoundElapsed } from './services/gameLogic';
@@ -81,6 +81,8 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [summaryMistakes, setSummaryMistakes] = useState<{ gameId: string; attempts: Attempt[] } | null>(null);
+  const [summaryResultVisible, setSummaryResultVisible] = useState(true);
+  const [reviewResultVisible, setReviewResultVisible] = useState(true);
 
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [bookmarks, setBookmarks] = useState<BookmarkLocation[]>([]);
@@ -200,20 +202,20 @@ export default function App() {
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
   const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
-  useActiveSession(dbReady && !showHome && (appMode === 'study' ? !!currentLocation && !isLoading : appMode === 'play' ? isGameActive : appMode === 'review' ? !!reviewAttempt : false), sessionRef, refreshTrainer);
+  useActiveSession(dbReady && !showHome && (appMode === 'study' ? !!currentLocation && !isLoading : appMode === 'play' ? isGameActive : appMode === 'review' ? !summaryRound && reviewWorkActive(!!reviewAttempt, !!reviewResult, reviewResultVisible) : false), sessionRef, refreshTrainer);
   useEffect(() => { const panoId = currentLocation?.panoId; let active = true; if (!dbReady || !panoId) { setStudyReviewSaved(false); return; } void trainerDb.attempts().then((attempts) => { if (active) setStudyReviewSaved(hasStudyReviewSource(attempts, panoId)); }); return () => { active = false; }; }, [currentLocation?.panoId, dbReady, trainerRefreshKey]);
   const handleNextLearn = useCallback(() => { if (learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total) return; if (learnSource === 'meta') void nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen, uploadedProgress]);
   const requestMode = (mode: 'study' | 'play') => {
     if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation || !!activeCountryTip : isGameActive)) return; setMapPickerOpen(false);
     if (mode !== 'play' && appMode === 'play') persistPlayWorkspace();
     if (pausedWorkspaces[mode]) setResumePrompt(mode);
-    else if (mode === 'study') { setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
+    else if (mode === 'study') { startCustom(); setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
     else { setShowHome(false); setAppMode('play'); setIsNewGameModalOpen(true); }
   };
   const startFreshMode = (mode: 'study' | 'play') => {
     setResumePrompt(null); setPausedWorkspaces((saved) => ({ ...saved, [mode]: undefined })); void trainerDb.setSetting(`workspace.paused.${mode}`, null);
     abortControllerRef.current?.abort(); setMapPickerOpen(false); setCurrentLocation(null); setIsGameActive(false); setGameRounds([]); setActiveRoundResult(null); setGameSettings(null);
-    if (mode === 'study') { setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
+    if (mode === 'study') { startCustom(); setShowHome(false); setAppMode('study'); setIsStudySetupOpen(true); }
     else { setShowHome(false); setAppMode('play'); setIsNewGameModalOpen(true); }
   };
   const resumePausedMode = () => {
@@ -426,7 +428,7 @@ export default function App() {
         isRevealed={isRevealed} learnSource={learnSource} activeCountryTip={activeCountryTip} metaCourseId={metaCourseId} metaProgress={metaProgress}
         isGameActive={isGameActive} gameSettings={gameSettings} activeRoundResult={activeRoundResult}
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
-        reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
+        reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} onSummaryVisibilityChange={setSummaryResultVisible} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
         pastGames={pastGames} allCollections={allCollections}
         trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab}
         studyReviewSaving={studyReviewSaving} studyReviewSaved={studyReviewSaved}
@@ -450,11 +452,11 @@ export default function App() {
       />
       <AppOverlays
         appMode={appMode} showHome={showHome} currentLocation={currentLocation} isRevealed={isRevealed}
-        reviewResult={reviewResult} reviewAttempt={reviewAttempt} reviewAttemptRecord={reviewAttemptRecord}
+        reviewResult={reviewResult} reviewAttempt={reviewAttempt} reviewAttemptRecord={reviewAttemptRecord} reviewResultVisible={reviewResultVisible} onReviewResultVisibilityChange={setReviewResultVisible}
         reviewHistory={reviewHistory} reviewStats={reviewStats} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource} reviewComplete={reviewComplete}
         activeRoundResult={activeRoundResult} gameSettings={gameSettings} currentRoundIndex={currentRoundIndex}
-        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} summaryRound={summaryRound} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, metaCourseId, locationTargets: studyLocationTargets, importedMapVariation: studyImportedVariationRef.current, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, priority: studyPriority, panoramaSource: studyPanoramaSource, allowInteriors: studyAllowInteriors, showCompass: compassPreference }}
+        gameRounds={gameRounds} summaryGameRecord={summaryGameRecord} summaryRound={summaryRound} summaryResultVisible={summaryResultVisible} isNewGameModalOpen={isNewGameModalOpen} isStudySetupOpen={isStudySetupOpen} studySetup={{ source: learnSource, collectionId: selectedCollectionId, metaCourseId, locationTargets: studyLocationTargets, importedMapVariation: studyImportedVariationRef.current, environment: studyEnvironment, urbanLevel: studyUrbanLevel, samplingMode: studySampling, priority: studyPriority, panoramaSource: studyPanoramaSource, allowInteriors: studyAllowInteriors, showCompass: compassPreference }}
         isHistoryModalOpen={isHistoryModalOpen} isModalOpen={isModalOpen} editingCollection={editingCollection}
         pastGames={pastGames}
         allCollections={allCollections} coveragePreview={coveragePreview} compassPreference={compassPreference} activeCompass={activeCompass}
@@ -470,7 +472,7 @@ export default function App() {
         onPlayAgain={() => { if (summaryGameRecord) { setSummaryGameRecord(null); handleStartGame(summaryGameRecord.settings); } }}
         onViewHistory={() => { setSummaryGameRecord(null); setIsHistoryModalOpen(true); }}
         onCloseSummary={() => { setSummaryRound(null); setSummaryGameRecord(null); }}
-        onOpenRound={(round) => { setStudyReviewSaved(false); setSummaryRound(round); setIsGameActive(false); setCurrentLocation(round.location); setAppMode('review'); setShowHome(false); setMapPickerOpen(false); }}
+        onOpenRound={(round) => { setStudyReviewSaved(false); setSummaryResultVisible(true); setSummaryRound(round); setIsGameActive(false); setCurrentLocation(round.location); setAppMode('review'); setShowHome(false); setMapPickerOpen(false); }}
         onStartGame={(settings) => { setPausedWorkspaces((saved) => ({ ...saved, play: undefined })); void trainerDb.setSetting('workspace.paused.play', null); handleStartGame(settings); }} onCloseNewGame={() => setIsNewGameModalOpen(false)} onOpenHistory={() => { setIsNewGameModalOpen(false); setIsHistoryModalOpen(true); }} onCloseHistory={() => setIsHistoryModalOpen(false)} onStartStudy={(settings) => { if (settings.source === 'meta') void startMeta(settings.metaCourseId, settings.metaLessonId); else if (settings.source === 'map') startMap(); else { if (settings.source === 'uploaded') startUploaded(); else startCustom(); studyImportedMapIdRef.current = settings.source === 'uploaded' ? settings.importedMapId : undefined; handleStartStudy(settings); } }} onCloseStudySetup={() => { setIsStudySetupOpen(false); if (!currentLocation && !activeCountryTip) setShowHome(true); }}
         onOpenMapLocation={(location) => void openMapLocation(location)} onCloseMapPicker={() => { setMapPickerOpen(false); if (!currentLocation) setIsStudySetupOpen(true); }} onExploreSettingsChange={(source, interiors) => { setStudyPanoramaSource(source); studyPanoramaSourceRef.current = source; setStudyAllowInteriors(interiors); studyAllowInteriorsRef.current = interiors; void Promise.all([trainerDb.setSetting('preference.panoramaSource', source), trainerDb.setSetting('preference.allowContributors', source !== 'official'), trainerDb.setSetting('preference.allowInteriors', interiors)]); }} onDismissMetaAdvice={dismissMetaAdvice} onNoteSaved={async (scheduleReview) => { if (scheduleReview && appMode === 'study') return handleSaveStudyForReview(); if (scheduleReview && currentLocation) await trainerDb.queueForReview(reviewAttempt?.panoId || currentLocation.panoId, false, currentLocation); setTrainerRefreshKey((key) => key + 1); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}

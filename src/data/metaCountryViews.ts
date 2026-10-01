@@ -6,6 +6,8 @@ export interface MetaMapView {
   pitch: number;
 }
 
+export const needsMetaMapFallback = (lessonPanoId: string | undefined, displayedPanoId: string) => !lessonPanoId || lessonPanoId !== displayedPanoId;
+
 const number = '(-?\\d+(?:\\.\\d+)?)';
 const atPattern = new RegExp(`/maps/@${number},${number},[^/]*`);
 const googleHost = /(^|\.)google\.(?:com|[a-z]{2}|(?:com|co)\.[a-z]{2})$/;

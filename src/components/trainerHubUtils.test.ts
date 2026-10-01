@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { CountryStats } from './trainerHubTypes';
-import { countryName, coverageCountryCounts, coverageCountryValues, coverageRegionValues, date, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, timestampRange, visibleNotebookNotes } from './trainerHubUtils';
+import { countryName, coverageCountryCounts, coverageCountryValues, coveragePlaceCounts, coverageRegionValues, date, elapsed, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, sortCoverageCountries, timestampRange, visibleNotebookNotes } from './trainerHubUtils';
 
 const row = (name: string, seen: number): CountryStats => ({ code: name, name, seen, played: 0, reviewed: 0, correct: 0, wrong: 0, accuracy: 0, average: 0, best: 0, lastSeen: 0, clues: 0 });
 
@@ -95,6 +95,17 @@ test('country heat values normalize counts and preserve score and weakness scale
 test('coverage distinguishes unique panoramas from repeated encounters', () => {
   const locations = [{ countryCode: 'IE', encounterCount: 50 }, { countryCode: 'IE', encounterCount: 33 }, { countryCode: 'HU', encounterCount: 2 }];
   assert.deepEqual(coverageCountryCounts(locations as never), { IE: { panoramas: 2, encounters: 83 }, HU: { panoramas: 1, encounters: 2 } });
+});
+
+test('Coverage counts nearby same-country panoramas as one place without changing saved panoramas', () => {
+  const locations = [
+    { id: 'first', panoId: 'first', countryCode: 'US', lat: 40, lng: -73, firstSeenAt: 1, encounterCount: 2 },
+    { id: 'nearby', panoId: 'nearby', countryCode: 'US', lat: 40.0002, lng: -73, firstSeenAt: 2, encounterCount: 1 },
+    { id: 'far', panoId: 'far', countryCode: 'US', lat: 40.001, lng: -73, firstSeenAt: 3, encounterCount: 1 },
+    { id: 'border', panoId: 'border', countryCode: 'CA', lat: 40, lng: -73, firstSeenAt: 4, encounterCount: 1 },
+  ];
+  assert.deepEqual(coveragePlaceCounts(locations as never), { US: 2, CA: 1 });
+  assert.equal(coverageCountryCounts(locations as never).US.panoramas, 3);
 });
 
 test('same-day session ranges show the date once with a compact time span', () => {

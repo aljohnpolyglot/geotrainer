@@ -5,20 +5,24 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path -LiteralPath $TargetRoot).Path
 $zip = (Resolve-Path -LiteralPath $ZipPath).Path
-if (Test-Path -LiteralPath $zip -PathType Container) {
-  $archives = @(Get-ChildItem -LiteralPath $zip -Filter 'plonkit-images-*.zip' -File | Sort-Object Name)
-  if (-not $archives.Count) { throw 'No Plonkit image ZIPs found in the folder.' }
-  foreach ($archive in $archives) {
-    & $PSCommandPath -ZipPath $archive.FullName -TargetRoot $root
+if ((Test-Path -LiteralPath $zip -PathType Container) -and -not (Test-Path -LiteralPath (Join-Path $zip 'manifest.json'))) {
+  $items = @(
+    Get-ChildItem -LiteralPath $zip -Filter 'plonkit-images-*.zip' -File
+    Get-ChildItem -LiteralPath $zip -Directory | Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'manifest.json') }
+  ) | Sort-Object Name
+  if (-not $items.Count) { throw 'No Plonkit image ZIPs or capture folders found.' }
+  foreach ($item in $items) {
+    & $PSCommandPath -ZipPath $item.FullName -TargetRoot $root
   }
   return
 }
-$tempRoot = Join-Path ([IO.Path]::GetTempPath()) ("plonkit-import-" + [guid]::NewGuid().ToString('N'))
+$isCaptureFolder = Test-Path -LiteralPath $zip -PathType Container
+$tempRoot = if ($isCaptureFolder) { $zip } else { Join-Path ([IO.Path]::GetTempPath()) ("plonkit-import-" + [guid]::NewGuid().ToString('N')) }
 $imageDir = Join-Path $root 'public/meta-courses/images'
 $reportPath = Join-Path $root 'scripts/meta-course-image-report.json'
 $manifestPath = Join-Path $tempRoot 'manifest.json'
 try {
-  Expand-Archive -LiteralPath $zip -DestinationPath $tempRoot
+  if (-not $isCaptureFolder) { Expand-Archive -LiteralPath $zip -DestinationPath $tempRoot }
   $archive = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
   if ($archive.pageUrl -notmatch '^https://([a-z0-9-]+\.)*plonkit\.net/') { throw 'ZIP is not from a Plonkit page.' }
   if ($archive.entries -isnot [array]) { throw 'ZIP manifest has no entries.' }
@@ -77,7 +81,7 @@ try {
   $resolvedTemp = [IO.Path]::GetFullPath($tempRoot)
   $expectedPrefix = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
   $resolvedParent = [IO.Path]::GetDirectoryName($resolvedTemp)
-  if ($resolvedParent.Equals($expectedPrefix.TrimEnd([IO.Path]::DirectorySeparatorChar), [StringComparison]::OrdinalIgnoreCase) -and [IO.Path]::GetFileName($resolvedTemp) -match '^plonkit-import-[a-f0-9]{32}$') {
+  if (-not $isCaptureFolder -and $resolvedParent.Equals($expectedPrefix.TrimEnd([IO.Path]::DirectorySeparatorChar), [StringComparison]::OrdinalIgnoreCase) -and [IO.Path]::GetFileName($resolvedTemp) -match '^plonkit-import-[a-f0-9]{32}$') {
     Remove-Item -LiteralPath $resolvedTemp -Recurse -Force -ErrorAction SilentlyContinue
   }
 }

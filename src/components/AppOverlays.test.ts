@@ -15,12 +15,17 @@ test('Coach explains finished Play rounds opened from game history', () => {
   assert.equal(coachIsRevealed('play', false, false, true, false, true), false);
   assert.equal(coachIsRevealed('review', false, false, true, false), true);
   assert.equal(coachIsRevealed('review', false, false, false, false), false);
-  assert.equal(coachIsRevealed('review', false, false, true, true), false);
+  assert.equal(coachIsRevealed('review', false, false, true, true, true, true, false), false);
   assert.equal(coachIsRevealed('review', false, true, true, true), true);
 });
 
 test('Review Coach analyzes minimized answers and explains restored results', () => {
-  assert.equal(coachIsRevealed('review', false, false, true, true, true, false), false);
-  assert.equal(coachIsRevealed('review', false, true, true, true, true, false), false);
-  assert.equal(coachIsRevealed('review', false, true, true, true, true, true), true);
+  assert.equal(coachIsRevealed('review', false, false, false, true, true, false), false);
+  assert.equal(coachIsRevealed('review', false, true, false, true, true, false), false);
+  assert.equal(coachIsRevealed('review', false, true, false, true, true, true), true);
+});
+
+test('Coach analyzes a finished game round while its location result is minimized', () => {
+  assert.equal(coachIsRevealed('review', false, false, true, false, true, true, false), false);
+  assert.equal(coachIsRevealed('review', false, false, true, false, true, true, true), true);
 });

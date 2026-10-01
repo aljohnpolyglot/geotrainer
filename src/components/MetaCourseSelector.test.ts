@@ -12,6 +12,8 @@ test('Meta course setup shows selected country progress and a lesson without a h
   assert.match(chooser, /Botswana/);
   assert.match(chooser, /16 \/ 32 lessons/);
   assert.match(chooser, /50%/);
+  assert.match(chooser, /Most lessons/);
+  assert.match(chooser, /Most complete/);
   const lesson = renderToStaticMarkup(createElement(MetaCourseCard, {
     tip: { id: 'BW-test', section: 'Regional clues', mapUrl: 'https://goo.gl/maps/example', text: 'Look for **white sand**.', note: 'Compare the nearby hills.' },
     courseId: 'BW', position: 2, total: 32,

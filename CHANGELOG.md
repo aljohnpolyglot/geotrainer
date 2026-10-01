@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-02
+
+- Paused Review foreground-time tracking while its result modal is open, resuming it when minimized or on the next card.
+- Count nearby same-country panoramas as one Unique place in Coverage while keeping the original views and attempts; importing an NBA map alone does not add encounters.
+- Match AI Coach's Analyze or Explain action to the visible answer card when inspecting a completed game's round.
+- Make the Meta country search compact, add localized course sorting, return Beginner Next to the lesson browser, restore the Learn path chooser on Start new, and show an external Maps link only when the lesson view is unavailable in the app.
+- Add a resumable headless Chrome script that scrolls Plonk It country pages and captures the images the browser loads; the image importer now accepts its output folders.
+
 ## 2026-10-01
 
 - Made the Plonk It image Snippet continue across ZIP batches and rate-limit cooldowns after one start, keep earlier exports, filter to 4,542 country tips, and import a folder of ZIPs in one command.

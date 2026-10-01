@@ -54,6 +54,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Apply My Clues filters before pagination, show 20 matching entries per page, and return to the first page when filters change.
 - Show Review improvement, Sessions, and every History tab 10 entries per page; reset History to page one when its tab or filters change.
 - Count foreground time across Study, active Play, and active Review work, including panorama movement and learning-aid use; persist it when switching surfaces or returning home. Exclude session records without a Study visit, Play attempt, or Review attempt from every visible session count and active-time total.
+- Pause Review foreground-time accumulation while its answer result modal is open; resume when the modal is minimized or the learner continues.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
 - Commit Study, Learn, Play, and Review progress to IndexedDB immediately and keep cloud sync manual; signing in, saving, focusing, reconnecting, backgrounding, and opening the app must not pull or upload progress.
 - Every manual sync must fetch the latest remote backup before deciding that nothing changed, merge Review grading history and unique records across devices, apply the merged data locally, and upload the same merged backup.
@@ -76,6 +77,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Country and city datasets are local data files, not UI-component constants.
 - Keep the World Least exposure coverage-training list local and regenerate it with `scripts/train-street-view-coverage.ps1`; it may filter World only, never focused country pools.
 - Keep Coverage country and regional SVG maps local and load regional files only after a country is opened; regional intensity uses the active Coverage layer and unresolved locations remain valid.
+- Coverage's Unique places counts same-country panoramas within 50 metres as one place. Preserve each original panorama, encounter, and attempt in history; uploading a map alone never marks its locations seen.
 - Configure the Google Maps JavaScript loader through one shared promise so development remounts cannot call `setOptions` twice. Keep already-opened map surfaces mounted while their tab or panel is hidden, and resize the retained instance when it becomes visible again; rely on Google's browser cache rather than persisting map imagery locally.
 - Keep Vite lifecycle diagnostics development-only and exclude secrets, account data, locations, and saved content from their console payloads.
 - Show a FlagCDN flag beside country names whenever a known ISO country code is available in visible UI; keep text names for accessibility and clarity.

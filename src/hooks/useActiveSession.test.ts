@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { TrainingSession } from '../types';
-import { addActiveElapsed } from './useActiveSession';
+import { addActiveElapsed, reviewWorkActive } from './useActiveSession';
 
 test('active session timing counts visible work without counting pauses or a backward clock', () => {
   const session: TrainingSession = { id: 'session', startedAt: 1_000, activeTimeSeconds: 4 };
@@ -9,4 +9,11 @@ test('active session timing counts visible work without counting pauses or a bac
   assert.equal(addActiveElapsed(session, null, 12_000), 0);
   assert.equal(addActiveElapsed(session, 15_000, 14_000), 0);
   assert.equal(session.activeTimeSeconds, 9);
+});
+
+test('Review active time pauses for an open result and resumes when it is minimized', () => {
+  assert.equal(reviewWorkActive(true, false, true), true);
+  assert.equal(reviewWorkActive(true, true, true), false);
+  assert.equal(reviewWorkActive(true, true, false), true);
+  assert.equal(reviewWorkActive(false, true, false), false);
 });

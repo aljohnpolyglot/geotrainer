@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AppMode, LearnSource, LocationResult, MetaLesson } from '../types';
-import { META_LESSONS, metaLessonById, nextMetaLesson, selectMetaLesson } from '../data/metaLessons';
+import { META_LESSONS, metaLessonById, selectMetaLesson } from '../data/metaLessons';
 import { loadMetaCountryCourse, type MetaCountryCourseTip } from '../data/metaCountryCourses';
 import { loadMetaCountryViews, viewFromGoogleMapsUrl } from '../data/metaCountryViews';
 import { markMetaSeen, readMetaSeen } from '../data/metaProgress';
@@ -118,13 +118,10 @@ export function useLearnSources(ctx: LearnSourceContext) {
         else { setActiveCountryTip(undefined); setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true); }
         return;
       }
-      const historyId = beginnerHistory[metaIndex + 1];
-      const lesson = historyId ? metaLessonById(historyId) : nextMetaLesson(id, Math.random, seen);
-      if (lesson) { if (!historyId) setBeginnerHistory([...beginnerHistory.slice(0, metaIndex + 1), lesson.id]); setMetaIndex(metaIndex + 1); await openMetaLesson(lesson); }
-      else { setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true); }
+      setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true);
     } catch { if (request === requestRef.current) setErrorMessage(t('Could not save Meta progress.')); }
     finally { if (request === requestRef.current) setIsLoading(false); nextPendingRef.current = false; }
-  }, [activeCountryTip?.id, activeMetaLesson?.id, beginnerHistory, countryTips, metaCourseId, metaIndex, metaSeen, openCountryTip, openMetaLesson, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
+  }, [activeCountryTip?.id, activeMetaLesson?.id, countryTips, metaCourseId, metaIndex, metaSeen, openCountryTip, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
 
   const previousMeta = useCallback(async () => {
     if (metaIndex <= 0) return;

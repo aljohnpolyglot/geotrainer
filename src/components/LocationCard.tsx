@@ -19,6 +19,7 @@ interface LocationCardProps {
   location: LocationResult;
   hidden?: boolean;
   onHide?: () => void;
+  onVisibilityChange?: (visible: boolean) => void;
   onMetadata?: (details: { panoId: string; country?: string; countryCode?: string; exactAddress?: string; locality?: string; adminArea?: string }) => void;
   onSaveForReview?: () => void;
   reviewSaving?: boolean;
@@ -26,7 +27,7 @@ interface LocationCardProps {
   onMapSelect?: (point: { lat: number; lng: number }) => void;
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false, onMapSelect }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onVisibilityChange, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false, onMapSelect }) => {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
@@ -40,6 +41,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
   const interaction = useRef<CardInteraction>();
   useEffect(() => { setMinimized(false); }, [location.panoId]);
   useEffect(() => { if (hidden) { setIsExpanded(false); setMinimized(false); } }, [hidden]);
+  useEffect(() => { onVisibilityChange?.(!hidden && !minimized); }, [hidden, minimized, onVisibilityChange]);
 
   const limits = () => ({ left: 12, top: 64, right: window.innerWidth - 12, bottom: window.innerHeight - 12 });
   const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: CardInteraction['direction']) => {
