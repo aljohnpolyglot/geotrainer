@@ -40,7 +40,7 @@ function New-Zip($Name, $ManifestText, $IncludeImage) {
 try {
   $matchingRoot = New-Fixture 'matching' $imageUrl
   $matchingManifest = ConvertTo-Json -InputObject @{
-    pageUrl = 'https://www.plonkit.net/botswana'
+    pageUrl = 'https://www.plonkit.net/guide'
     entries = @(@{ id = 'abc'; url = $imageUrl; file = 'images/001-abc.png'; mimeType = 'image/png' })
   } -Depth 10
   $matchingZip = New-Zip 'matching' $matchingManifest $true
