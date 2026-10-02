@@ -1,3 +1,4 @@
+import { acquireMap } from '../services/mapResources';
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -51,7 +52,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
     if (!mapContainerRef.current) return;
     if (typeof google === 'undefined' || !google.maps || !google.maps.Map) return;
 
-    const map = new google.maps.Map(mapContainerRef.current, {
+    const resource = acquireMap('summary', mapContainerRef.current, {
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
@@ -60,7 +61,9 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
       // Solution attribution per skill guidelines
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
+    const map = resource.map;
 
+    const overlays: Array<google.maps.Marker | google.maps.Polyline> = [];
     const bounds = new google.maps.LatLngBounds();
 
     game.rounds.forEach((round) => {
@@ -90,6 +93,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
         },
       });
 
+      overlays.push(actualMarker);
       if (onOpenRound) {
         actualMarker.addListener('click', () => {
           onOpenRound(round);
@@ -101,7 +105,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
         const guessPos = { lat: round.guess.lat, lng: round.guess.lng };
         bounds.extend(guessPos);
 
-        new google.maps.Marker({
+        overlays.push(new google.maps.Marker({
           position: guessPos,
           map,
           title: `Round ${round.roundNumber} Guess`,
@@ -119,21 +123,25 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
             strokeColor: '#ffffff',
             strokeWeight: 2,
           },
-        });
+        }));
 
         // Connecting Line
-        new google.maps.Polyline({
+        overlays.push(new google.maps.Polyline({
           path: [guessPos, actualPos],
           geodesic: true,
           strokeColor: '#f59e0b',
           strokeOpacity: 0.8,
           strokeWeight: 2,
           map,
-        });
+        }));
       }
     });
 
     map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
+    return () => {
+      overlays.forEach((overlay) => { google.maps.event.clearInstanceListeners(overlay); overlay.setMap(null); });
+      resource.release();
+    };
   }, [game, onOpenRound, mapPreferences]);
 
   return (

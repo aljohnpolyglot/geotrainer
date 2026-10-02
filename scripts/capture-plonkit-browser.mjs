@@ -1,4 +1,4 @@
-// Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N]
+// Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N] [--country slug]
 // Opens a visible Chrome window, waits for any browser challenge to be completed, then scrolls and saves loaded tip images.
 // Re-run to resume with the same browser profile. Stops on access denial; HTTP 429 waits and retries the same country.
 import { spawn } from 'node:child_process';
@@ -42,12 +42,20 @@ function chromePath() {
 export async function openChrome(executable = chromePath(), { headless = false, profile: profilePath } = {}) {
   const profile = profilePath ? resolve(profilePath) : await mkdtemp(join(tmpdir(), 'plonkit-browser-'));
   if (profilePath) await mkdir(profile, { recursive: true });
+  const portFile = join(profile, 'DevToolsActivePort');
+  if (profilePath && existsSync(portFile)) {
+    const previousPort = Number((await readFile(portFile, 'utf8')).split(/\r?\n/)[0]);
+    let profileOpen = false;
+    try { profileOpen = (await fetch(`http://127.0.0.1:${previousPort}/json/version`, { signal: AbortSignal.timeout(1500) })).ok; }
+    catch { /* Chrome left a stale debugging-port file. */ }
+    if (profileOpen) throw new Error('The Plonkit capture browser is already open. Close it before starting another capture.');
+    await rm(portFile, { force: true });
+  }
   const child = spawn(executable, [...(headless ? ['--headless=new'] : ['--new-window']), '--remote-debugging-port=0',
     `--user-data-dir=${profile}`, '--window-size=1600,900', '--no-first-run',
     '--no-default-browser-check', 'about:blank'], { stdio: 'ignore', windowsHide: headless });
   let socket;
   try {
-    const portFile = join(profile, 'DevToolsActivePort');
     let port;
     for (let i = 0; i < 150; i++) {
       if (existsSync(portFile)) { port = Number((await readFile(portFile, 'utf8')).split(/\r?\n/)[0]); break; }
@@ -166,12 +174,27 @@ export async function scrollPage(browser, delayMs = 1200) {
   }
 }
 
-export async function captureTip(browser, id, mapUrl) {
-  return browser.evaluate(`(() => {
+export async function captureTip(browser, id, mapUrl, directUrl) {
+  return browser.evaluate(`(async () => {
     const root = document.getElementById(${JSON.stringify(id)});
     const anchor = [...document.querySelectorAll('a[href]')].find(a => a.href === ${JSON.stringify(mapUrl || '')});
     const img = root?.querySelector('a[href] img') || anchor?.querySelector('img');
-    if (!img?.complete || !img.naturalWidth) return null;
+    if (!img) return null;
+    const waitForImage = () => new Promise(done => {
+      if (img.complete) return done();
+      const timeout = setTimeout(done, 8000);
+      img.addEventListener('load', () => { clearTimeout(timeout); done(); }, { once: true });
+      img.addEventListener('error', () => { clearTimeout(timeout); done(); }, { once: true });
+    });
+    img.scrollIntoView({ block: 'center' });
+    img.loading = 'eager';
+    await waitForImage();
+    if (!img.naturalWidth && ${JSON.stringify(directUrl || '')}) {
+      img.removeAttribute('srcset');
+      img.src = ${JSON.stringify(directUrl || '')};
+      await waitForImage();
+    }
+    if (!img.naturalWidth) return null;
     try {
       const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
       const canvas = document.createElement('canvas');
@@ -204,7 +227,7 @@ async function captureCountry(browser, country, output) {
     await writeFile(join(folder, 'page.html'), '<!doctype html>\n' + await browser.evaluate('document.documentElement.outerHTML'), 'utf8');
     let captured = 0;
     for (const tip of pending) {
-      const data = await captureTip(browser, tip.id, tip.mapUrl);
+      const data = await captureTip(browser, tip.id, tip.mapUrl, tip.image);
       if (!data) continue;
       const file = `images/${country.code}-${tip.id}.webp`;
       await writeFile(join(folder, file), Buffer.from(data, 'base64'));
@@ -222,7 +245,7 @@ async function captureCountry(browser, country, output) {
 async function main() {
   const args = process.argv.slice(2);
   if (!args[0] || args.includes('--help')) {
-    console.log('Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N]');
+    console.log('Usage: node scripts/capture-plonkit-browser.mjs <plonkit-map-tips.json> [output-folder] [--limit N] [--country slug]');
     return;
   }
   const input = resolve(args[0]);
@@ -230,7 +253,12 @@ async function main() {
   const limitAt = args.indexOf('--limit');
   const limit = limitAt >= 0 ? Number(args[limitAt + 1]) : Infinity;
   if (!(limit > 0)) throw new Error('--limit must be a positive number.');
-  const countries = countryJobs(JSON.parse(await readFile(input, 'utf8'))).slice(0, limit);
+  const countryAt = args.indexOf('--country');
+  const countrySlug = countryAt >= 0 ? args[countryAt + 1] : null;
+  if (countryAt >= 0 && !/^[a-z0-9-]+$/.test(countrySlug || '')) throw new Error('--country needs a country-page slug.');
+  const countries = countryJobs(JSON.parse(await readFile(input, 'utf8')))
+    .filter(country => !countrySlug || country.slug === countrySlug).slice(0, limit);
+  if (countrySlug && !countries.length) throw new Error(`No map-linked country named ${countrySlug}.`);
   await mkdir(output, { recursive: true });
   const browser = await openChrome(undefined, { profile: join(output, '.chrome-profile') });
   try {

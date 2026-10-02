@@ -89,6 +89,11 @@ try {
   $captureReport = Get-Content -LiteralPath (Join-Path $captureRoot 'scripts/meta-course-image-report.json') -Raw | ConvertFrom-Json
   if ($captureReport.hostedImages -ne 1) { throw 'Browser capture folder import did not update the course.' }
 
+  $emptyFolder = Join-Path $tempBase 'empty'
+  $null = New-Item -ItemType Directory -Path $emptyFolder
+  try { & $scriptPath -ZipPath $emptyFolder | Out-Null; throw 'Empty folder was accepted.' }
+  catch { if ($_.Exception.Message -notmatch 'No Plonkit image ZIPs or capture folders found') { throw } }
+
   Write-Output 'PASS: matching, unmatched, malformed, ZIP folder, and browser capture imports.'
 } finally {
   $resolvedTemp = [IO.Path]::GetFullPath($tempBase)

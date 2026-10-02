@@ -1,3 +1,4 @@
+import { acquireMap } from '../services/mapResources';
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink, X } from "lucide-react";
 import type { Attempt, ReviewRecord, TrainerLocation } from "../types";
@@ -28,8 +29,13 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
   const [overlay, setOverlay] = useState<CoverageOverlay>("exposure");
 
   useEffect(() => {
-    if (!element.current || typeof google === "undefined") return;
-    map.current ||= new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains("dark")) });
+    if (!element.current || typeof google === 'undefined') return;
+    const resource = acquireMap('coverage', element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains("dark")) });
+    map.current = resource.map;
+    return () => { resource.release(); map.current = undefined; };
+  }, []);
+  useEffect(() => {
+    if (!map.current) return;
     map.current.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains("dark")));
     preview.current ||= new google.maps.InfoWindow({ disableAutoPan: true });
     const render = () => {
@@ -86,6 +92,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
     render();
     const listener = map.current.addListener("idle", render);
     return () => {
+      preview.current?.close();
       google.maps.event.removeListener(listener);
       markers.current.forEach((marker) => { google.maps.event.clearInstanceListeners(marker); marker.setMap(null); });
       markers.current = [];

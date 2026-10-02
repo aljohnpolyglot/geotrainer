@@ -1,3 +1,4 @@
+import { acquireMap } from '../services/mapResources';
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -43,7 +44,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     if (!mapsReady || !mapContainerRef.current || mapInstanceRef.current) return;
     if (typeof google === 'undefined' || !google.maps || !google.maps.Map) return;
 
-    const map = new google.maps.Map(mapContainerRef.current, {
+    const resource = acquireMap('guess', mapContainerRef.current, {
       center: { lat: 20, lng: 0 },
       zoom: 1.5,
       minZoom: 1,
@@ -59,6 +60,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       // Solution attribution per skill guidelines
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
+    const map = resource.map;
 
     // Click handler to drop or move the guess pin
     map.addListener('click', (e: google.maps.MapMouseEvent) => {
@@ -103,7 +105,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
         google.maps.event.clearInstanceListeners(markerRef.current);
         markerRef.current.setMap(null);
       }
-      google.maps.event.clearInstanceListeners(map);
+      resource.release();
       markerRef.current = null;
       mapInstanceRef.current = null;
     };
@@ -120,20 +122,6 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     observer.observe(container);
     return () => observer.disconnect();
   }, []);
-
-  // Resize listener when expanding/collapsing map
-  useEffect(() => {
-    if (mapInstanceRef.current) {
-      setTimeout(() => {
-        if (mapInstanceRef.current) {
-          google.maps.event.trigger(mapInstanceRef.current, 'resize');
-          if (currentGuess) {
-            mapInstanceRef.current.panTo(currentGuess);
-          }
-        }
-      }, 200);
-    }
-  }, [isExpanded, currentGuess]);
 
   // Handle manual submit
   const handleSubmit = () => {

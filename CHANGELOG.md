@@ -7,11 +7,14 @@
 - Match AI Coach's Analyze or Explain action to the visible answer card when inspecting a completed game's round.
 - Make the Meta country search compact, add localized course sorting, return Beginner Next to the lesson browser, restore the Learn path chooser on Start new, and show an external Maps link only when the lesson view is unavailable in the app.
 - Open Plonk It country pages in visible Chrome, wait for any user-completed browser challenge, and reuse the browser profile across resumable image captures; the image importer accepts its output folders.
+- Imported all 4,542 Meta reference images into local course assets, including the eight Qatar images recovered on a targeted browser pass; bulk import now updates each course once and keeps the captured WebP quality.
 
 ## 2026-10-01
 
 - Made the Plonk It image Snippet continue across ZIP batches and rate-limit cooldowns after one start, keep earlier exports, filter to 4,542 country tips, and import a folder of ZIPs in one command.
 - Changed the Plonk It image ZIP Snippet to run once per batch from the main site using the existing map-tip JSON, with saved progress and a stop on access limits; country pages no longer need to be opened individually.
+- Reuse live guess, result, Explore, Coverage, summary, and preview maps across modes within a page session; clear old overlays between uses and stop shifting the camera after each guess-pin placement. Fresh page loads continue to use normal browser caching.
+
 - Added country-by-country Meta lessons from 4,542 map-linked tips, a searchable course selector with seen percentages, Previous and Next navigation, a visible lesson counter and lightbulb badge, and independent optional Review saves. Resolved exact heading and pitch for 4,530 tips; the other 12 retain their clue text and Google Maps link.
 - Kept country-course example images on this site, with a browser ZIP capture and local importer for images that Plonk It did not allow the scraper to fetch. Incomplete translations fall back to English lesson text while the eight-language interface remains localized.
 - Updated the localized Game Guides for Meta’s Beginner and 131 country courses, seen progress, lesson navigation, clue-facing map and example views, and the hidden-by-default Review Meta panel; clarified that lesson text is not yet translated into every supported language.

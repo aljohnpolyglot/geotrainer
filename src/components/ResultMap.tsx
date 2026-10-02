@@ -1,3 +1,4 @@
+import { acquireMap } from '../services/mapResources';
 import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -31,15 +32,16 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
 
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
-    const map = new google.maps.Map(element.current, {
+    const resource = acquireMap('result', element.current, {
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
       ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
+    const map = resource.map;
     positionedRef.current = false;
     mapRef.current = map;
     return () => {
-      google.maps.event.clearInstanceListeners(map);
+      resource.release();
       if (mapRef.current === map) mapRef.current = null;
       pointsRef.current = [];
     };

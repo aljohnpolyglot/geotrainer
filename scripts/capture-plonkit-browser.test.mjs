@@ -26,6 +26,10 @@ test('Chrome scrolls native HTML and exports its loaded tip image', {
     const data = await captureTip(chrome, 'a1B2');
     assert.ok(data && Buffer.from(data, 'base64').length > 20);
     assert.match(await chrome.evaluate('document.documentElement.outerHTML'), /a1B2/);
+    await chrome.call('Page.navigate', { url: 'data:text/html,<div id="a1B2"><a href="https://goo.gl/maps/test"><img></a></div>' });
+    for (let i = 0; i < 20 && !(await chrome.evaluate('document.getElementById("a1B2")')); i++) await new Promise(resolve => setTimeout(resolve, 100));
+    const recovered = await captureTip(chrome, 'a1B2', undefined, `data:image/png;base64,${png}`);
+    assert.ok(recovered && Buffer.from(recovered, 'base64').length > 20);
   } finally { await chrome.close(); }
 });
 

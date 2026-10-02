@@ -1,3 +1,4 @@
+import { acquireMap } from '../services/mapResources';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { LoaderCircle, MapPinned, Search, SlidersHorizontal, X } from 'lucide-react';
 import type { LocationResult, PanoramaSource } from '../types';
@@ -38,7 +39,8 @@ export function StreetViewExplorer({ open, mapsReady, panoramaSource, allowInter
 
   useEffect(() => {
     if (!initialized || !mapsReady || !element.current || typeof google === 'undefined') return;
-    map.current = new google.maps.Map(element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')) });
+    const resource = acquireMap('explore', element.current, { center: { lat: 18, lng: 5 }, zoom: 2, minZoom: 1, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')) });
+    map.current = resource.map;
     const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map.current);
     const listener = map.current.addListener('click', async (event: google.maps.MapMouseEvent) => {
       if (!event.latLng) return;
@@ -49,7 +51,7 @@ export function StreetViewExplorer({ open, mapsReady, panoramaSource, allowInter
       } catch { setError(translate(uiRef.current, settings.panoramaSource === 'official' ? 'No official Street View found nearby. Choose Official + contributor below or click another blue road.' : 'No Street View found near that point. Click another blue road.')); }
       finally { setLoading(false); }
     });
-    return () => { listener.remove(); coverage.setMap(null); if (map.current) google.maps.event.clearInstanceListeners(map.current); map.current = null; };
+    return () => { listener.remove(); coverage.setMap(null); resource.release(); map.current = null; };
   }, [initialized, mapsReady]);
 
   useEffect(() => { map.current?.setOptions(mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences]);
