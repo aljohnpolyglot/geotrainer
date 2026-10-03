@@ -172,7 +172,9 @@ export default function App() {
   playWorkspaceRef.current = isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
   const persistPlayWorkspace = useCallback(() => { const value = playWorkspaceRef.current; if (!value) return; setPausedWorkspaces((saved) => ({ ...saved, play: value })); void trainerDb.setSetting('workspace.paused.play', value); }, []);
   useEffect(() => { const save = () => { if (document.visibilityState === 'hidden') persistPlayWorkspace(); }; document.addEventListener('visibilitychange', save); window.addEventListener('pagehide', persistPlayWorkspace); return () => { document.removeEventListener('visibilitychange', save); window.removeEventListener('pagehide', persistPlayWorkspace); }; }, [persistPlayWorkspace]);
+  const [reviewDisplayedPanoId, setReviewDisplayedPanoId] = useState<string | null>(null);
   const review = useReviewMode({
+    reviewDisplayedPanoId,
     dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
     setErrorMessage, compassPreference, setTrainerRefreshKey, roundStartTimeRef, setIsSubmittingGuess,
     isSubmittingGuess, coachNote, reviewCompass, setReviewCompass, setCoachNote, setAppMode, setShowHome,
@@ -428,7 +430,7 @@ export default function App() {
         isRevealed={isRevealed} learnSource={learnSource} activeCountryTip={activeCountryTip} metaCourseId={metaCourseId} metaProgress={metaProgress}
         isGameActive={isGameActive} gameSettings={gameSettings} activeRoundResult={activeRoundResult}
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
-        reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} onSummaryVisibilityChange={setSummaryResultVisible} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
+        reviewDisplayedPanoId={reviewDisplayedPanoId} onReviewPanoramaReady={setReviewDisplayedPanoId} reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} onSummaryVisibilityChange={setSummaryResultVisible} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
         pastGames={pastGames} allCollections={allCollections}
         trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab}
         studyReviewSaving={studyReviewSaving} studyReviewSaved={studyReviewSaved}

@@ -204,6 +204,8 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
+Review waits until the panorama viewer has loaded the selected card before enabling the pinpoint map and starting the answer timer. If the view does not load, use the reload icon to retry the same card. A previous card’s scene is hidden during loading.
+
 The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. Completed Play and Review rounds unlock movement, panning, and zoom for this inspection even when the original round restricted them. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
 The result map keeps the answer centered in green, then zooms out enough to show today’s guess in red and every saved prior guess with coordinates in blue. The selected result-map zoom remains the closest allowed scale. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
@@ -388,7 +390,8 @@ Learn saves are ungraded sources, so they appear as Study activity and new Revie
 
 ### Progress
 
-Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and foreground training time across Study, active Play, and active Review—including time spent moving through panoramas and using learning aids. Active time is saved when you switch sections or return Home; sessions with no Study visit, Play attempt, or Review attempt remain excluded. On a touch screen, tap a **Future due** bar to see its date and number of reviews. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. It is a workload and habit view, not a single mastery score. The Review active-time total pauses while the answer result is open and resumes when you minimize it or continue. Coach offers Analyze while the result is hidden and Explain when you show it.
+Progress summarizes today and all-time activity, due reviews, countries encountered, attempts, and foreground training time across Study, active Play, and active Review—including time spent moving through panoramas and using learning aids. Active time is saved when you switch sections or return Home; sessions with no Study visit, Play attempt, or Review attempt remain excluded. On a touch screen, tap a **Future due** bar to see its date and number of reviews. The homepage Known clues counter matches My Clues by totaling Personal, AI-assisted, and explicitly saved Meta entries without counting a Notebook image twice. It is a workload and habit view, not a single mastery score.
+ The Review active-time total pauses while the answer result is open and resumes when you minimize it or continue. Coach offers Analyze while the result is hidden and Explain when you show it.
 
 ### Performance
 

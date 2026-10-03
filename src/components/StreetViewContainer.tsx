@@ -15,6 +15,7 @@ import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useMapPreferences } from '../services/mapPreferences';
+import { observePanoramaArrival } from '../services/panoramaArrival';
 
 interface StreetViewContainerProps {
   currentLocation: LocationResult | null;
@@ -32,6 +33,8 @@ interface StreetViewContainerProps {
   compassStyle?: CompassStyle;
   restoredView?: StreetViewState;
   onViewChanged?: (view: StreetViewState) => void;
+  onPanoramaReady?: (panoId: string | null) => void;
+  onRetryPanorama?: () => void;
 }
 
 const mapsLoaderState = globalThis as typeof globalThis & { __geotrainerMapsLoad?: Promise<unknown[]> };
@@ -52,6 +55,8 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   compassStyle = 'bar',
   restoredView,
   onViewChanged,
+  onPanoramaReady,
+  onRetryPanorama,
 }) => {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
@@ -76,6 +81,8 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const [loadError, setLoadError] = useState<string | null>(null);
   const [tileRateLimited, setTileRateLimited] = useState(false);
   const [heading, setHeading] = useState(0);
+  const [arrivedPano, setArrivedPano] = useState<string | null>(null);
+  const awaitingPanorama = !!onPanoramaReady && !!currentLocation && arrivedPano !== currentLocation.panoId;
   const [startTracking, setStartTracking] = useState<{ panoId: string; start: { lat: number; lng: number }; position: { lat: number; lng: number } } | null>(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
@@ -279,6 +286,18 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView, mapPreferences.showRoadLabels, mapPreferences.showImageryDate, mapPreferences.motionTracking, mapPreferences.movementStyle]);
 
   useEffect(() => {
+    if (!onPanoramaReady) return;
+    onPanoramaReady(null);
+    setArrivedPano(null);
+    const panorama = panoInstanceRef.current;
+    const stop = panorama && currentLocation ? observePanoramaArrival(panorama, currentLocation, () => {
+      setArrivedPano(currentLocation.panoId);
+      onPanoramaReady(currentLocation.panoId);
+    }) : undefined;
+    return () => { stop?.(); onPanoramaReady(null); };
+  }, [mapsLoaded, currentLocation?.panoId, currentLocation?.lat, currentLocation?.lng, onPanoramaReady]);
+
+  useEffect(() => {
     const container = containerRef.current;
     if (!mapsLoaded || !container || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(() => {
@@ -352,19 +371,20 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       <div
         ref={containerRef}
         className="w-full h-full absolute inset-0"
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', visibility: awaitingPanorama ? 'hidden' : 'visible' }}
       />
 
       {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={startTracking?.panoId === currentLocation.panoId ? startTracking.start : currentLocation} position={startTracking?.panoId === currentLocation.panoId ? startTracking.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
 
       {/* Loading Overlay */}
-      {isLoading && (
+      {(isLoading || awaitingPanorama) && (
         <div className="absolute inset-0 bg-stone-950/75 backdrop-blur-xs flex flex-col items-center justify-center z-20 pointer-events-none transition-opacity duration-200">
           <div className="flex flex-col items-center space-y-3 bg-stone-900/90 border border-stone-800 px-6 py-4 rounded-xl shadow-xl">
             <RefreshCw className="w-7 h-7 text-stone-200 animate-spin" />
             <span className="text-sm font-medium text-stone-200">
               {statusMessage || 'Loading Street View panorama...'}
             </span>
+            {awaitingPanorama && onRetryPanorama && <button type="button" className="pointer-events-auto icon-button" onClick={onRetryPanorama} aria-label={t('Retry Next Location')} title={t('Retry Next Location')}><RotateCcw size={18} /></button>}
           </div>
         </div>
       )}

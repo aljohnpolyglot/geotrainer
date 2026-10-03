@@ -20,7 +20,7 @@ export const failedEarlierInSession = (stats: ReviewStat[], attemptId: string) =
 export function useReviewMode(ctx: any) {
   const { dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
     setErrorMessage, compassPreference, setTrainerRefreshKey, roundStartTimeRef, setIsSubmittingGuess,
-    isSubmittingGuess, coachNote, reviewCompass, setCoachNote } = ctx;
+    isSubmittingGuess, coachNote, reviewCompass, setCoachNote, reviewDisplayedPanoId } = ctx;
   const [reviewResult, setReviewResult] = useState<GameRound | null>(null);
   const [reviewAttemptRecord, setReviewAttemptRecord] = useState<Attempt | null>(null);
   const [reviewQueue, setReviewQueue] = useState<Attempt[]>([]);
@@ -54,6 +54,7 @@ export function useReviewMode(ctx: any) {
       reviewVariationRef.current = { kind, level: kind === 'spatial' ? plan.generalizationLevel : 0, distanceM: kind === 'spatial' ? calculateDistanceKm(attempt.actualLat, attempt.actualLng, reopened.lat, reopened.lng) * 1000 : 0, shownPanoId: reopened.panoId, shownHeading: reopened.heading };
       setCurrentLocation(reopened); roundStartTimeRef.current = Date.now();
       const intervals = await trainerDb.reviewIntervals(attempt.panoId);
+      if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
       setReviewHistory(attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt)); setReviewIntervals(intervals);
     } catch (error) { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) { setErrorMessage(error instanceof Error ? error.message : 'Review location is unavailable.'); setReviewAttempt(null); } } finally { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) setIsLoading(false); }
   }, [setCoachNote, setCurrentLocation, setErrorMessage, setIsLoading, setReviewAttempt, roundStartTimeRef]);
@@ -81,11 +82,15 @@ export function useReviewMode(ctx: any) {
     })();
   }, [compassPreference, dbReady, mapsReady, openReviewAttempt, reviewAttempt, ctx]);
 
-  useEffect(() => { if (!reviewAttempt || reviewResult) return; const timer = window.setInterval(() => setReviewElapsed(Math.max(0, Math.round((Date.now() - roundStartTimeRef.current) / 1000))), 1000); return () => window.clearInterval(timer); }, [reviewAttempt, reviewResult, roundStartTimeRef]);
+  useEffect(() => {
+    if (!currentLocation || reviewDisplayedPanoId !== currentLocation.panoId || reviewResult) return;
+    roundStartTimeRef.current = Date.now();
+  }, [reviewDisplayedPanoId, currentLocation?.panoId, roundStartTimeRef]);
+  useEffect(() => { if (!reviewAttempt || reviewResult || !currentLocation || reviewDisplayedPanoId !== currentLocation.panoId) return; const timer = window.setInterval(() => setReviewElapsed(Math.max(0, Math.round((Date.now() - roundStartTimeRef.current) / 1000))), 1000); return () => window.clearInterval(timer); }, [reviewAttempt, reviewResult, reviewDisplayedPanoId, currentLocation?.panoId, roundStartTimeRef]);
   useEffect(() => { if (!reviewAttempt || reviewResult || !currentLocation) { roundPausedAtRef.current = null; return; } const visibility = () => { if (document.visibilityState === 'hidden') roundPausedAtRef.current ??= Date.now(); else { roundStartTimeRef.current = resumeRoundStartedAt(roundStartTimeRef.current, roundPausedAtRef.current, Date.now()); roundPausedAtRef.current = null; } }; visibility(); document.addEventListener('visibilitychange', visibility); return () => document.removeEventListener('visibilitychange', visibility); }, [currentLocation, reviewAttempt, reviewResult, roundStartTimeRef]);
 
   const handleReviewGuess = useCallback(async (guess: { lat: number; lng: number } | null) => {
-    if (!reviewAttempt || !currentLocation || reviewResult || reviewGradingRef.current) return;
+    if (!reviewAttempt || !currentLocation || reviewDisplayedPanoId !== currentLocation.panoId || reviewResult || reviewGradingRef.current) return;
     setIsSubmittingGuess(true); reviewGradingRef.current = true;
     try {
       const distanceKm = guess ? calculateDistanceKm(guess.lat, guess.lng, reviewAttempt.actualLat, reviewAttempt.actualLng) : null;
@@ -108,7 +113,7 @@ export function useReviewMode(ctx: any) {
       setReviewAttemptRecord(savedAttempt); setReviewResult(round); setReviewStats(stats); setReviewQueue(remaining); setTrainerRefreshKey((key: number) => key + 1);
     } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Could not save this review.'); }
     finally { reviewGradingRef.current = false; setIsSubmittingGuess(false); }
-  }, [coachNote, currentLocation, reviewAttempt, reviewInitialTotal, reviewKind, reviewQueue, reviewResult, reviewSource, reviewStats, roundStartTimeRef, setErrorMessage, setIsSubmittingGuess, setTrainerRefreshKey, ctx.reviewCompass]);
+  }, [reviewDisplayedPanoId, coachNote, currentLocation, reviewAttempt, reviewInitialTotal, reviewKind, reviewQueue, reviewResult, reviewSource, reviewStats, roundStartTimeRef, setErrorMessage, setIsSubmittingGuess, setTrainerRefreshKey, ctx.reviewCompass]);
 
   const handleReviewNext = useCallback(async () => {
     if (!reviewAttempt || !reviewResult || !reviewAttemptRecord || reviewGradingRef.current) return;

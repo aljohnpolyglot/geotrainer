@@ -2,6 +2,7 @@
 
 ## 2026-10-03
 
+- Give each Review card a fresh panorama viewer and require its rendered panorama ID, coordinates, and successful load status to match before enabling guesses or starting the answer timer. Hide mismatched imagery while loading and offer a reload control.
 - Reverted live map reuse after it carried stale camera positions into new pinpoint rounds and revealed answer maps in Play, Review, and Study. New pinpoint maps start at the world view, and revealed maps open on the current answer.
 
 ## 2026-10-02
