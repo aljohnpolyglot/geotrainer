@@ -9,6 +9,8 @@ export function acquireMap(surface: MapSurface, host: HTMLElement, options: goog
   if (map) {
     host.append(map.getDiv());
     map.setOptions(options);
+    if (options.center) map.setCenter(options.center);
+    if (options.zoom !== undefined) map.setZoom(options.zoom);
   } else {
     const canvas = document.createElement('div');
     canvas.style.width = '100%';

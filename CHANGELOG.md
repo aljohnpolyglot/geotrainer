@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-03
+
+- Reset the pinpoint map to the world view each round and center reused revealed result maps on the current answer before they appear.
+
 ## 2026-10-02
 
 - Paused Review foreground-time tracking while its result modal is open, resuming it when minimized or on the next card.

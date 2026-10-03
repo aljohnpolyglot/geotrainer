@@ -15,9 +15,13 @@ test('maps reuse their canvas across modes, isolate active panels, and cancel st
   const cleared: unknown[] = [];
   const resized: unknown[] = [];
   class FakeMap {
+    center: unknown;
+    zoom: number | undefined;
     constructor(public canvas: Element, public options: google.maps.MapOptions) { created++; }
     getDiv() { return this.canvas; }
     setOptions(options: google.maps.MapOptions) { this.options = options; }
+    setCenter(center: unknown) { this.center = center; }
+    setZoom(zoom: number) { this.zoom = zoom; }
   }
   const globals = ['requestAnimationFrame', 'cancelAnimationFrame', 'document', 'google'];
   const descriptors = globals.map((key) => Object.getOwnPropertyDescriptor(globalThis, key));
@@ -42,16 +46,25 @@ test('maps reuse their canvas across modes, isolate active panels, and cancel st
   assert.equal(cleared.length, 1);
   assert.equal(frames.size, 1);
   const nextHost = host();
-  const next = acquireMap('result', nextHost, { fullscreenControl: false });
+  const next = acquireMap('result', nextHost, { fullscreenControl: false, center: { lat: 40, lng: -73 }, zoom: 5 });
   assert.equal(next.map, first.map);
   assert.equal(created, 2);
   assert.equal((next.map as unknown as FakeMap).canvas.parent, nextHost);
   assert.equal((next.map as unknown as FakeMap).options.fullscreenControl, false);
+  assert.deepEqual((next.map as unknown as FakeMap).center, { lat: 40, lng: -73 });
+  assert.equal((next.map as unknown as FakeMap).zoom, 5);
   for (const callback of frames.values()) callback(0);
   assert.deepEqual(resized, [simultaneous.map, next.map]);
   simultaneous.release();
   next.release();
   const guess = acquireMap('guess', host(), { center: { lat: 20, lng: 0 }, zoom: 1.5 });
   assert.notEqual(guess.map, next.map);
+  (guess.map as unknown as FakeMap).setCenter({ lat: 51, lng: 0 });
+  (guess.map as unknown as FakeMap).setZoom(12);
   guess.release();
+  const nextGuess = acquireMap('guess', host(), { center: { lat: 20, lng: 0 }, zoom: 1.5 });
+  assert.equal(nextGuess.map, guess.map);
+  assert.deepEqual((nextGuess.map as unknown as FakeMap).center, { lat: 20, lng: 0 });
+  assert.equal((nextGuess.map as unknown as FakeMap).zoom, 1.5);
+  nextGuess.release();
 });

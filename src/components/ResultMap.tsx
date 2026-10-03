@@ -33,6 +33,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
     const resource = acquireMap('result', element.current, {
+      center: actual, zoom: resultMapZoomLimit(mapPreferences.resultMapZoom),
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
       ...mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
