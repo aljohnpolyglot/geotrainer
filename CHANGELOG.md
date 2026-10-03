@@ -2,7 +2,7 @@
 
 ## 2026-10-03
 
-- Reset the pinpoint map to the world view each round and center reused revealed result maps on the current answer before they appear.
+- Reverted live map reuse after it carried stale camera positions into new pinpoint rounds and revealed answer maps in Play, Review, and Study. New pinpoint maps start at the world view, and revealed maps open on the current answer.
 
 ## 2026-10-02
 

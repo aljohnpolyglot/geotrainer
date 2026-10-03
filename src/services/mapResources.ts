@@ -1,36 +1,24 @@
 type MapSurface = 'guess' | 'result' | 'explore' | 'coverage' | 'summary' | 'preview';
-const idleMaps = new Map<MapSurface, google.maps.Map>();
 
-// Retain at most one idle map per surface, shared by every mode. Tiles stay
-// under Google's browser cache; this only retains the live map and its DOM.
-export function acquireMap(surface: MapSurface, host: HTMLElement, options: google.maps.MapOptions) {
-  let map = idleMaps.get(surface);
-  idleMaps.delete(surface);
-  if (map) {
-    host.append(map.getDiv());
-    map.setOptions(options);
-    if (options.center) map.setCenter(options.center);
-    if (options.zoom !== undefined) map.setZoom(options.zoom);
-  } else {
-    const canvas = document.createElement('div');
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    host.append(canvas);
-    map = new google.maps.Map(canvas, options);
-  }
-  const current = map;
-  const frame = requestAnimationFrame(() => google.maps.event.trigger(current, 'resize'));
+// Start each surface with its own camera. Google's browser tile cache remains
+// available without carrying a previous round's live viewport into this one.
+export function acquireMap(_surface: MapSurface, host: HTMLElement, options: google.maps.MapOptions) {
+  const canvas = document.createElement('div');
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  host.append(canvas);
+  const map = new google.maps.Map(canvas, options);
+  const frame = requestAnimationFrame(() => google.maps.event.trigger(map, 'resize'));
   let released = false;
   return {
-    map: current,
+    map,
     // Callers detach their own markers, lines, and coverage layers first.
     release() {
       if (released) return;
       released = true;
       cancelAnimationFrame(frame);
-      google.maps.event.clearInstanceListeners(current);
-      current.getDiv().remove();
-      idleMaps.set(surface, current);
+      google.maps.event.clearInstanceListeners(map);
+      canvas.remove();
     },
   };
 }

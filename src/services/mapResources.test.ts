@@ -2,26 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { acquireMap } from './mapResources';
 
-test('maps reuse their canvas across modes, isolate active panels, and cancel stale resize work', (t) => {
+test('new map surfaces start with their requested camera and release their own canvas', (t) => {
   class Element {
     style = {};
     parent: Element | null = null;
     append(child: Element) { child.parent = this; }
     remove() { this.parent = null; }
   }
-  let created = 0;
   let nextFrame = 0;
   const frames = new Map<number, FrameRequestCallback>();
   const cleared: unknown[] = [];
   const resized: unknown[] = [];
   class FakeMap {
-    center: unknown;
-    zoom: number | undefined;
-    constructor(public canvas: Element, public options: google.maps.MapOptions) { created++; }
-    getDiv() { return this.canvas; }
-    setOptions(options: google.maps.MapOptions) { this.options = options; }
-    setCenter(center: unknown) { this.center = center; }
-    setZoom(zoom: number) { this.zoom = zoom; }
+    constructor(public canvas: Element, public options: google.maps.MapOptions) {}
   }
   const globals = ['requestAnimationFrame', 'cancelAnimationFrame', 'document', 'google'];
   const descriptors = globals.map((key) => Object.getOwnPropertyDescriptor(globalThis, key));
@@ -38,33 +31,31 @@ test('maps reuse their canvas across modes, isolate active panels, and cancel st
     trigger: (map: unknown) => resized.push(map),
   } } } });
   const host = () => new Element() as unknown as HTMLElement;
-  const first = acquireMap('result', host(), { fullscreenControl: true });
-  const simultaneous = acquireMap('result', host(), {});
-  assert.notEqual(first.map, simultaneous.map);
+  const first = acquireMap('result', host(), { center: { lat: -24.96663, lng: 25.31814 }, zoom: 5 });
+  const firstCanvas = (first.map as unknown as FakeMap).canvas;
   first.release();
   first.release();
   assert.equal(cleared.length, 1);
-  assert.equal(frames.size, 1);
+  assert.equal(firstCanvas.parent, null);
+  assert.equal(frames.size, 0);
   const nextHost = host();
   const next = acquireMap('result', nextHost, { fullscreenControl: false, center: { lat: 40, lng: -73 }, zoom: 5 });
-  assert.equal(next.map, first.map);
-  assert.equal(created, 2);
+  assert.notEqual(next.map, first.map);
   assert.equal((next.map as unknown as FakeMap).canvas.parent, nextHost);
   assert.equal((next.map as unknown as FakeMap).options.fullscreenControl, false);
-  assert.deepEqual((next.map as unknown as FakeMap).center, { lat: 40, lng: -73 });
-  assert.equal((next.map as unknown as FakeMap).zoom, 5);
+  assert.deepEqual((next.map as unknown as FakeMap).options.center, { lat: 40, lng: -73 });
+  assert.equal((next.map as unknown as FakeMap).options.zoom, 5);
   for (const callback of frames.values()) callback(0);
-  assert.deepEqual(resized, [simultaneous.map, next.map]);
-  simultaneous.release();
+  assert.deepEqual(resized, [next.map]);
   next.release();
   const guess = acquireMap('guess', host(), { center: { lat: 20, lng: 0 }, zoom: 1.5 });
   assert.notEqual(guess.map, next.map);
-  (guess.map as unknown as FakeMap).setCenter({ lat: 51, lng: 0 });
-  (guess.map as unknown as FakeMap).setZoom(12);
+  assert.deepEqual((guess.map as unknown as FakeMap).options.center, { lat: 20, lng: 0 });
+  assert.equal((guess.map as unknown as FakeMap).options.zoom, 1.5);
   guess.release();
   const nextGuess = acquireMap('guess', host(), { center: { lat: 20, lng: 0 }, zoom: 1.5 });
-  assert.equal(nextGuess.map, guess.map);
-  assert.deepEqual((nextGuess.map as unknown as FakeMap).center, { lat: 20, lng: 0 });
-  assert.equal((nextGuess.map as unknown as FakeMap).zoom, 1.5);
+  assert.notEqual(nextGuess.map, guess.map);
+  assert.deepEqual((nextGuess.map as unknown as FakeMap).options.center, { lat: 20, lng: 0 });
+  assert.equal((nextGuess.map as unknown as FakeMap).options.zoom, 1.5);
   nextGuess.release();
 });
