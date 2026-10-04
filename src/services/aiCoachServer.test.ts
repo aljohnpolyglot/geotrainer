@@ -1,7 +1,7 @@
 import { leagueRosterPlaces } from '../../server/poolLeague';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
+import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, createAiCoachMiddleware, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
 import { callCoachWithProvider, compatibleChatUrl } from '../../server/coachProviders';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 import { isAllowedCoachOrigin } from '../../api/coach';
@@ -29,6 +29,28 @@ test('AI Map Maker modes cannot enter the image Coach route', () => {
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {
   status, headers: { 'content-type': 'application/json' },
+});
+
+test('a supplied Gemini key overrides the app key and a blank key retains the default', async () => {
+  const originalFetch = globalThis.fetch;
+  const usedKeys: string[] = [];
+  globalThis.fetch = (async (_url, init) => {
+    usedKeys.push((init?.headers as Record<string, string>)['x-goog-api-key']);
+    return geminiResponse(JSON.stringify(validAnalysis));
+  }) as typeof fetch;
+  try {
+    const coach = createAiCoachMiddleware(['app-key']);
+    for (const key of ['user-key', '']) {
+      const request = {
+        url: '/api/coach', method: 'POST', headers: key ? { 'x-coach-provider-key': key } : {},
+        async *[Symbol.asyncIterator]() { yield JSON.stringify({ mode: 'analyze', provider: 'gemini', mimeType: 'image/jpeg', imageData: 'ZmFrZQ==', depth: 'short' }); },
+      };
+      const response = { statusCode: 0, setHeader() {}, end() {} };
+      await coach(request as never, response as never, () => {});
+      assert.equal(response.statusCode, 200);
+    }
+    assert.deepEqual(usedKeys, ['user-key', 'app-key']);
+  } finally { globalThis.fetch = originalFetch; }
 });
 
 test('BYOK OpenAI-compatible requests use approved HTTPS hosts and keep the key out of the prompt body', async () => {
