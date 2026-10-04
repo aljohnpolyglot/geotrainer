@@ -2,6 +2,7 @@
 
 ## 2026-10-04
 
+- Translate all 131 Meta country courses, including explanations, notes, and section headings, into every supported language; keep linked references intact and make every course selectable through the lesson browser.
 - Add optional BYOK settings for Gemini, Anthropic, and approved OpenAI-compatible providers; mask user keys, keep them in memory only, and document provider billing and key handling in all supported languages.
 - Align Short, Normal, and Deep with Gemini 2.5 thinking budgets and Gemini 3 thinking levels while preserving visible explanation depth.
 - Open a searchable, filterable lesson list after choosing any Meta course, and enable starting the selected Beginner or country lesson.
