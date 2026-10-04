@@ -5,6 +5,7 @@
 - Add optional BYOK settings for Gemini, Anthropic, and approved OpenAI-compatible providers; mask user keys, keep them in memory only, and document provider billing and key handling in all supported languages.
 - Align Short, Normal, and Deep with Gemini 2.5 thinking budgets and Gemini 3 thinking levels while preserving visible explanation depth.
 - Open a searchable, filterable lesson list after choosing any Meta course, and enable starting the selected Beginner or country lesson.
+- Place Meta and other learning panels below the top tool buttons by default so they remain reachable while a panel is open.
 - Hide cloud sign-in controls when the configured service is unavailable, keep local backup transfer available, and translate missing account copy in all eight interface languages.
 - Recover expired Meta panorama IDs within 50 metres of the clue, skip unavailable lessons instead of showing an image-only fallback, and render reference links correctly without exposing overflowing Markdown URLs.
 - Validate every Beginner lesson in all eight supported languages, correct a Portuguese bollard explanation, remove copied text artifacts, and prevent silent English fallback when a selected translation is missing. Require complete language support for every new or changed feature in the contributor guide.
