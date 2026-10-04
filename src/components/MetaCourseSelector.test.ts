@@ -4,6 +4,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MetaCourseSelector } from './MetaCourseSelector';
 import { MetaCourseCard } from './MetaCourseCard';
+import { MetaLessonBrowser } from './MetaLessonBrowser';
 
 test('Meta course setup shows selected country progress and a lesson without a hosted image stays readable', () => {
   const chooser = renderToStaticMarkup(createElement(MetaCourseSelector, {
@@ -21,4 +22,17 @@ test('Meta course setup shows selected country progress and a lesson without a h
   assert.match(lesson, /white sand/);
   assert.match(lesson, /Compare the nearby hills/);
   assert.match(lesson, /https:\/\/goo.gl\/maps\/example/);
+});
+
+test('Meta lesson browser supports localized country-course lesson choices', () => {
+  const browser = renderToStaticMarkup(createElement(MetaLessonBrowser, {
+    completed: new Set<string>(),
+    selectedId: 'SE-1',
+    onSelect: () => {},
+    lessons: [{ id: 'SE-1', section: 'Road signs', text: 'Compare the sign shape.', note: 'Check the border.' }],
+  }));
+  assert.match(browser, /Road signs/);
+  assert.match(browser, /Compare the sign shape/);
+  assert.match(browser, /Check the border/);
+  assert.match(browser, /aria-selected="true"/);
 });
