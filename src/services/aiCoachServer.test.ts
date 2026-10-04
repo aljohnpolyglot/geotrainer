@@ -36,6 +36,7 @@ test('a supplied Gemini key overrides the app key and a blank key retains the de
   const usedKeys: string[] = [];
   globalThis.fetch = (async (_url, init) => {
     usedKeys.push((init?.headers as Record<string, string>)['x-goog-api-key']);
+    assert.equal(init?.redirect, 'error');
     return geminiResponse(JSON.stringify(validAnalysis));
   }) as typeof fetch;
   try {
