@@ -305,7 +305,7 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
         const depthConfig = coachGenerationDepth[request.depth || 'normal'];
         const thinkingConfig = /^gemini-3(?:[.-]|$)/iu.test(model) ? { thinkingLevel: ({ short: 'low', normal: 'medium', deep: 'high' } as const)[request.depth || 'normal'] } : { thinkingBudget: depthConfig.thinkingBudget };
         const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-          method: 'POST', signal: controller.signal,
+          method: 'POST', signal: controller.signal, redirect: 'error',
           headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
