@@ -150,6 +150,8 @@ Consulta luoghi, tentativi, coda, prestazioni, cronologia e tempo attivo in prim
 
 ## Sincronizzazione cloud
 
+Se l’accesso al cloud non è disponibile, la finestra dell’account nasconde i controlli di accesso. L’allenamento locale e gli strumenti per esportare e importare backup restano disponibili.
+
 L’account è facoltativo e l’allenamento locale funziona senza accesso. I progressi vengono salvati prima in questo browser e la sincronizzazione è manuale. Premi **Sincronizza ora** sul dispositivo con nuovi dati per scaricare, unire e caricare schede, tentativi e cronologia di Ripasso; poi fallo sugli altri dispositivi. Prevale la programmazione valutata più di recente e i record unici di ogni dispositivo vengono conservati. Accesso, salvataggio, ritorno all’app e uscita non trasferiscono dati automaticamente. Senza accesso, localhost e il sito pubblicato restano separati.
 
 Le immagini private mancanti vengono memorizzate in questo browser durante la sincronizzazione manuale. Aprire Indizi, Note disponibili, Copertura o la cronologia usa la copia locale senza interrogare l’archivio cloud.

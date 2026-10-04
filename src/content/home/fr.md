@@ -150,6 +150,8 @@ Consultez lieux, tentatives, file, performances, historique et temps actif au pr
 
 ## Synchronisation cloud
 
+Si la connexion au cloud est indisponible, la fenêtre du compte masque les commandes de connexion. L’entraînement local et les outils d’exportation et d’importation restent disponibles.
+
 Le compte est facultatif et l’entraînement local fonctionne sans connexion. La progression est d’abord enregistrée dans ce navigateur et la synchronisation est manuelle. Appuyez sur **Synchroniser maintenant** sur l’appareil contenant le nouveau travail pour télécharger, fusionner et envoyer les cartes, tentatives et l’historique de Révision, puis faites-le sur les autres appareils. La planification notée le plus récemment l’emporte et les enregistrements uniques de chaque appareil sont conservés. Se connecter, enregistrer, revenir dans l’application ou la quitter ne transfère rien automatiquement. Sans connexion, localhost et le site publié restent séparés.
 
 Les images privées manquantes sont mises en cache dans ce navigateur pendant la synchronisation manuelle. Ouvrir Indices, Notes disponibles, Couverture ou l’historique utilise cette copie locale sans interroger le stockage cloud.

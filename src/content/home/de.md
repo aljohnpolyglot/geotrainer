@@ -385,6 +385,8 @@ Der Verlauf filtert Besuche, Spielversuche, Wiederholungsversuche und gespeicher
 
 ## Cloud-Synchronisierung
 
+Wenn die Cloud-Anmeldung nicht verfügbar ist, blendet das Kontofenster die Anmeldefelder aus. Lokales Training sowie Export und Import von Sicherungen bleiben verfügbar.
+
 Ein Konto ist optional. Lokales Training funktioniert ohne Anmeldung.
 
 ### Anmeldung

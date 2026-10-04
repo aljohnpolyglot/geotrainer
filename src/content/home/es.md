@@ -150,6 +150,8 @@ Consulta lugares, intentos, cola pendiente, rendimiento, historial y tiempo acti
 
 ## Sincronización en la nube
 
+Si el inicio de sesión en la nube no está disponible, la ventana de cuenta oculta los controles de acceso. El entrenamiento local y las herramientas para exportar e importar copias siguen disponibles.
+
 La cuenta es opcional y el entrenamiento local funciona sin iniciar sesión. El progreso se guarda primero en este navegador y la sincronización es manual. Pulsa **Sincronizar ahora** en el dispositivo con trabajo nuevo para descargar, combinar y subir tarjetas, intentos e historial de Repaso; después hazlo en los demás dispositivos. La programación calificada más recientemente prevalece y se conservan los registros únicos de cada dispositivo. Iniciar sesión, guardar, volver a la app o salir no transfiere datos automáticamente. Sin iniciar sesión, localhost y el sitio publicado permanecen separados.
 
 Las imágenes privadas que falten se guardan en este navegador durante la sincronización manual. Abrir Pistas, Notas disponibles, Cobertura o el historial usa esa copia local y no consulta el almacenamiento en la nube.

@@ -435,6 +435,8 @@ If an original panorama is unavailable, GeoTrainer can attempt a coordinate fall
 
 ## Cloud sync and accounts
 
+If cloud sign-in is unavailable, the account window hides sign-in controls. Local training and the Export and Import backup tools remain available.
+
 An account is optional. Local training works without signing in.
 
 ### Signing in
