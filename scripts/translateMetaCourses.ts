@@ -265,7 +265,13 @@ for (const [locale, language] of selectedLanguages) {
 const missing: string[] = [];
 for (const [locale] of selectedLanguages) for (const country of countries) {
   const assetPath = path.join(outputDir, `${country.code.toLowerCase()}.${locale}.json`);
-  const asset = JSON.parse(await fs.readFile(assetPath, 'utf8')) as Asset;
+  let asset: Asset;
+  try {
+    asset = JSON.parse(await fs.readFile(assetPath, 'utf8')) as Asset;
+  } catch {
+    missing.push(`${country.code}:${locale}:missing-file`);
+    continue;
+  }
   const byId = new Map<string, Translation>(asset.tips.map((tip) => [tip.id, tip]));
   for (const tip of country.tips) {
     const saved = byId.get(`${country.code}-${tip.id}`);
