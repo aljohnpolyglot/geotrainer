@@ -109,6 +109,7 @@ async function translateBatch(language: string, countryCode: string, batch: Sour
     try {
       response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
         method: 'POST',
+        redirect: 'error',
         headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
         signal: AbortSignal.timeout(45_000),
         body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: {
