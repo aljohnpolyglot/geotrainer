@@ -28,6 +28,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Reject and retry substantially mixed-language Coach output before displaying it; render candidate country names in the selected AI language and require each ranked country to explain a concrete visible feature that distinguishes it rather than merely claiming the scene is consistent, similar, common, or typical.
 - Shuffle the starting Gemini key and exhaust all available non-cooling keys on retryable Coach failures before surfacing an error.
 - Never place secrets in `src`, browser storage, IndexedDB, logs, reports, or committed examples.
+- User-supplied AI Coach provider keys remain only in page memory, are sent transiently through the Coach endpoint, and must never be persisted or logged; provider selection and model preferences may persist without the key.
 - The browser may call only the local coach endpoint; it must never call Gemini with a private key.
 - AI Map Maker is text-only and must use its dedicated pool endpoint; never route pool generation through AI Coach capture or require a panorama, image, or Street View orientation.
 - Production Coach requests prefer the same-origin `/api/coach` endpoint when available, may use an explicitly configured server endpoint, and fall back to the Supabase Edge Function only on static hosts.

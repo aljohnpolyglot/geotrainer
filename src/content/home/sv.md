@@ -98,6 +98,10 @@ I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. K
 
 ## AI-coach och ledtrådar
 
+Under **Inställningar → AI-coach** kan du välja Gemini, Anthropic eller en OpenAI-kompatibel leverantör, ange modell och klistra in din egen API-nyckel. Nyckeln är maskerad, finns bara i sidans minne och skickas via Coach-endpointen för varje analys; GeoTrainer sparar den inte. Välj **Glöm nyckeln** eller läs in sidan igen för att rensa den. Leverantören ansvarar för sina egna användningsgränser och avgifter. OpenAI-kompatibla webbadresser begränsas till offentliga leverantörer som stöds.
+
+Kort, Normal och Djup anpassar också Gemini 2.5:s tankebudget och den synliga förklaringsnivån; Gemini 3-modeller använder motsvarande tankenivåer.
+
 Spel låser AI-markeringen när du skickar svaret. Att analysera ett misstag efteråt, även med minimerat resultat eller medan svaret sparas, ändrar inte försöket. En återställd gammal analys räknas inte som ny AI-användning under den aktuella rundan.
 
 Äldre Spela-markeringar rättas automatiskt när en vanlig anteckningsbild sparades under rundan utan registrerad AI-analys. Sparade AI-analyser av ledtrådar och 360° behåller sin AI-markering. Osäkra äldre poster ändras inte; poäng, svar, anteckningar och repetitionsscheman bevaras.

@@ -92,6 +92,10 @@ Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem 
 
 ## Coach de IA e pistas
 
+Em **Configurações → Coach de IA**, você pode escolher Gemini, Anthropic ou um provedor compatível com OpenAI, definir o modelo e colar sua própria chave de API. A chave fica oculta, permanece apenas na memória da página e é enviada pelo serviço do Coach em cada análise; o GeoTrainer não a salva. Use **Esquecer chave** ou recarregue a página para apagá-la. O provedor aplica os próprios limites de uso e cobranças. URLs compatíveis com OpenAI são limitadas a provedores públicos aceitos.
+
+Curta, Normal e Profunda também ajustam o orçamento de raciocínio do Gemini 2.5 e o nível de detalhe visível; os modelos Gemini 3 usam os níveis de raciocínio correspondentes.
+
 Jogo fixa o uso de IA quando você envia a resposta. Analisar um erro depois, mesmo com o resultado minimizado ou enquanto a resposta ainda é salva, não altera essa tentativa. Restaurar uma análise antiga não conta como novo uso de IA durante a rodada.
 
 As marcações antigas de Jogo são corrigidas automaticamente quando uma imagem pessoal do Caderno foi guardada durante a rodada e não há análise de IA registrada. As análises de pistas e de 360° mantêm a marcação de assistência. Registros antigos ambíguos ficam inalterados; pontuações, respostas, notas e agendamentos de Revisão são preservados.

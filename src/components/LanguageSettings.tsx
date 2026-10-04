@@ -13,6 +13,7 @@ import { announceMapPreferences, DEFAULT_MAP_PREFERENCES, normalizeMapPreference
 import { MapBorderPreview } from './MapBorderPreview';
 import { CountryTargetSettings } from './CountryTargetSettings';
 import { COUNTRY_TARGET_COPY } from '../services/countryTargetCopy';
+import { CoachProviderSettingsPanel } from './CoachProviderSettings';
 
 const COMMON_TIME_ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Africa/Cairo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
 const NATIVE_TIME_ZONES = (Intl as typeof Intl & { supportedValuesOf?: (key: 'timeZone') => string[] }).supportedValuesOf?.('timeZone') || COMMON_TIME_ZONES;
@@ -110,6 +111,7 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       {tab === 'coach' && <fieldset className="coach-settings"><legend>{translate(languages.ui, 'AI Coach')}</legend><p>{guide.intro}</p>
         <label>{translate(languages.ui, 'AI Coach Style')}<select value={coach.askEveryTime ? 'ask' : coach.style} onChange={(event) => { const value = event.target.value; setCoach(value === 'ask' ? { ...coach, askEveryTime: true } : { ...coach, style: value as CoachPreferences['style'], askEveryTime: false }); }}><option value="ask">{translate(languages.ui, 'Always ask before analysis')}</option>{COACH_STYLES.map((style) => <option key={style} value={style}>{coachStyleLabel(style)}</option>)}</select></label><p className="coach-setting-summary">{coach.askEveryTime ? translate(languages.ui, 'Choose a Coach style for every analysis.') : guide.styles[coach.style].purpose}</p>
         <label>{translate(languages.ui, 'Explanation Depth')}<select value={coach.depth} onChange={(event) => setCoach({ ...coach, depth: event.target.value as CoachPreferences['depth'] })}>{EXPLANATION_DEPTHS.map((depth) => <option key={depth} value={depth}>{translate(languages.ui, depth[0].toUpperCase() + depth.slice(1))}</option>)}</select></label><p>{guide.depth}</p>
+        <CoachProviderSettingsPanel language={languages.ui} />
       </fieldset>}
       {tab === 'display' && <><fieldset><legend>{translate(languages.ui, 'Appearance')}</legend>
         <label>{translate(languages.ui, 'Color palette')}<select value={darkMode ? 'dark' : 'light'} onChange={(event) => setDarkMode(event.target.value === 'dark')}><option value="light">{translate(languages.ui, 'Light')}</option><option value="dark">{translate(languages.ui, 'Dark')}</option></select></label>

@@ -9,7 +9,8 @@ type KeyState = { key: string; cooldownUntil: number };
 const modes = new Set<Mode>(['hints', 'analyze', 'analyze360', 'explain', 'cards', 'clue', 'clue-safe']);
 const languages: Record<string, string> = { en: 'English', es: 'Spanish', pt: 'Portuguese', fr: 'French', de: 'German', it: 'Italian', ru: 'Russian', sv: 'Swedish' };
 const styles: Record<Style, string> = { quick: 'QUICK GUESS: put a short conclusion in description and 2–5 strongest visible clues in strongClues; concise rankings and no long lesson.', meta: 'META COACH: put the verdict in description; formatted tier, role, and reliability in strongClues; limits in weakClues; confusers in confusions; next meta in nextThingsToInspect.', elimination: 'ELIMINATION COACH: put the candidate pool in description, keeping evidence in strongClues, calibrated eliminations in contradictions, survivors in confusions, and best separator in nextThingsToInspect.', 'deep-geography': 'DEEP GEOGRAPHY: explain a grounded causal story in natural learner-facing prose: the visible feature, its function, its supported physical or human cause, the resulting landscape, and its comparison value. Never print that recipe as a label sequence. If a generic object has no defensible geographic cause, say so plainly; do not substitute generic rankings.', memory: 'MEMORY COACH: put a truthful anchor in description, cause/effect in strongClues, exceptions in weakClues, contrasts in confusions, and recall questions in nextThingsToInspect.', 'pro-analyst': 'PRO ANALYST: put calibrated verdict in description, weighted positives in strongClues, low-value evidence in weakClues, conflicts in contradictions, ambiguity in confusions, and information gain in nextThingsToInspect.' };
-const depths: Record<Depth, string> = { short: 'DEPTH SHORT: 2–5 major clues, quickly readable.', normal: 'DEPTH NORMAL: major clues, confusers, short explanation, one takeaway.', deep: 'DEPTH DEEP: relevant context and multiple confusers without a wall of text.' };
+const depths: Record<Depth, string> = { short: 'DEPTH SHORT: 2–5 major clues, quickly readable.', normal: 'DEPTH NORMAL: major clues, confusers, short explanation, one takeaway.', deep: 'DEPTH DEEP: teach the reasoning step by step in polished prose. Connect each important visible clue to its function and likely physical or human cause, then explain the geographic inference. Compare the strongest alternatives, including evidence for and against them, and finish with the most useful clue that would confirm or overturn the conclusion. Keep the explanation focused on evidence in the scene.' };
+const generationDepth: Record<Depth, { maxOutputTokens: number; thinkingBudget: number }> = { short: { maxOutputTokens: 2048, thinkingBudget: 0 }, normal: { maxOutputTokens: 4096, thinkingBudget: 1024 }, deep: { maxOutputTokens: 8192, thinkingBudget: 4096 } };
 const allowedOrigins = (Deno.env.get('COACH_ALLOWED_ORIGINS') || 'http://localhost:3000,https://aljohnpolyglot.github.io').split(',');
 const keyStates: KeyState[] = [...new Set((Deno.env.get('GEMINI_API_KEYS') || Deno.env.get('GEMINI_API_KEY') || '').split(',').map((key) => key.trim()).filter(Boolean))].map((key) => ({ key, cooldownUntil: 0 }));
 let keyCursor = keyStates.length ? Math.floor(Math.random() * keyStates.length) : 0;
@@ -31,9 +32,9 @@ const groundedRules = `${rules} Build one shared evidence pass: OBSERVED visible
 
 function cors(origin: string | null) {
   const allowed = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
-  return { 'access-control-allow-origin': allowed, 'access-control-allow-headers': 'authorization, apikey, content-type', 'access-control-allow-methods': 'POST, OPTIONS', vary: 'Origin' };
+  return { 'access-control-allow-origin': allowed, 'access-control-allow-headers': 'authorization, apikey, content-type, x-coach-provider-key', 'access-control-allow-methods': 'POST, OPTIONS', vary: 'Origin' };
 }
-function json(body: unknown, status: number, origin: string | null) { return new Response(JSON.stringify(body), { status, headers: { ...cors(origin), 'content-type': 'application/json' } }); }
+function json(body: unknown, status: number, origin: string | null) { return new Response(JSON.stringify(body), { status, headers: { ...cors(origin), 'content-type': 'application/json', 'cache-control': 'no-store' } }); }
 const decodeText = (value: string) => value
   .replace(/\\u([0-9a-f]{4})/gi, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)))
   .replace(/(\p{L})(?:u)?(00[89a-f][0-9a-f])(?=$|[^\p{L}\p{N}])/giu, (_, lead: string, hex: string) => lead + String.fromCharCode(Number.parseInt(hex, 16)));
@@ -93,13 +94,14 @@ async function streetView(view: unknown, headingOffset = 0): Promise<Frame> {
   const key = Deno.env.get('GOOGLE_MAPS_API_KEY') || ''; if (!key) throw new Error('Street View server key is not configured.'); if (!view || typeof view !== 'object') throw new Error('Current Street View orientation is unavailable.'); const item = view as Record<string, unknown>; const pano = String(item.panoId || ''); const heading = Number(item.heading); const pitch = Number(item.pitch); const zoom = Number(item.zoom); if (!pano || ![heading, pitch, zoom].every(Number.isFinite)) throw new Error('Current Street View orientation is invalid.');
   const query = new URLSearchParams({ size: '640x480', pano, heading: String((heading + headingOffset + 360) % 360), pitch: String(Math.max(-90, Math.min(90, pitch))), fov: String(Math.max(25, Math.min(100, 180 / 2 ** zoom))), key }); const response = await fetch(`https://maps.googleapis.com/maps/api/streetview?${query}`, { signal: AbortSignal.timeout(8_000) }); if (!response.ok) throw new Error(`Street View capture failed (${response.status}).`); const mimeType = response.headers.get('content-type')?.split(';')[0] || ''; if (!mimeType.startsWith('image/')) throw new Error('Street View capture returned no image.'); return { mimeType, imageData: base64(await response.arrayBuffer()) };
 }
-async function gemini(mode: Mode, frames: Frame[], known: Record<string, unknown> | undefined, language: string, style: Style, depth: Depth) {
-  if (!keyStates.length) throw new Error('Gemini keys are not configured.');
-  const models = (Deno.env.get('GEMINI_COACH_MODELS') || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(','); let last = new Error('Gemini Coach is unavailable.'); let groundedFallback: { analysis: ReturnType<typeof normalize>; model: string; generatedAt: number } | undefined;
-  for (const model of models) for (let attempt = 0; attempt < keyStates.length; attempt++) {
-    const state = keyStates[keyCursor++ % keyStates.length]; if (state.cooldownUntil > Date.now()) continue;
+async function gemini(mode: Mode, frames: Frame[], known: Record<string, unknown> | undefined, language: string, style: Style, depth: Depth, overrideKey?: string, overrideModel?: string) {
+  const availableKeys = overrideKey ? [{ key: overrideKey, cooldownUntil: 0 }] : keyStates; if (!availableKeys.length) throw new Error('Gemini keys are not configured.');
+  const models = overrideModel ? [overrideModel] : (Deno.env.get('GEMINI_COACH_MODELS') || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(','); let localCursor = 0; let last = new Error('Gemini Coach is unavailable.'); let groundedFallback: { analysis: ReturnType<typeof normalize>; model: string; generatedAt: number } | undefined;
+  for (const model of models) for (let attempt = 0; attempt < availableKeys.length; attempt++) {
+    const state = availableKeys[overrideKey ? localCursor++ % availableKeys.length : keyCursor++ % availableKeys.length]; if (state.cooldownUntil > Date.now()) continue;
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model.trim())}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(mode === 'analyze360' ? 35_000 : 25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ systemInstruction: { parts: [{ text: groundedRules }] }, contents: [{ role: 'user', parts: [{ text: instruction(mode, language, known, style, depth) }, ...frames.map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }], generationConfig: { temperature: .25, maxOutputTokens: depth === 'deep' ? 3400 : depth === 'short' ? 1600 : 2400, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema: schema } }) });
+      const gemini3 = /^gemini-3(?:[.-]|$)/iu.test(model.trim()); const thinkingConfig = gemini3 ? { thinkingLevel: ({ short: 'low', normal: 'medium', deep: 'high' } as const)[depth] } : { thinkingBudget: generationDepth[depth].thinkingBudget };
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model.trim())}:generateContent`, { method: 'POST', signal: AbortSignal.timeout(depth === 'deep' ? 45_000 : mode === 'analyze360' ? 35_000 : 25_000), headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key }, body: JSON.stringify({ systemInstruction: { parts: [{ text: groundedRules }] }, contents: [{ role: 'user', parts: [{ text: instruction(mode, language, known, style, depth) }, ...frames.map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }], generationConfig: { ...(gemini3 ? {} : { temperature: .25 }), maxOutputTokens: generationDepth[depth].maxOutputTokens, thinkingConfig, responseMimeType: 'application/json', responseSchema: schema } }) });
       if (response.status === 429) { state.cooldownUntil = Date.now() + 60_000; last = new Error('Gemini quota exceeded.'); continue; }
       if (!response.ok) { const failure = await response.clone().json().catch(() => undefined) as { error?: { status?: string; message?: string; details?: Array<{ reason?: string }> } } | undefined; const leaked = /reported as leaked/i.test(failure?.error?.message || ''); const reason = failure?.error?.details?.find((detail) => detail.reason)?.reason || failure?.error?.status; last = new Error(response.status >= 500 ? 'Gemini service error.' : leaked ? 'Gemini API key was disabled by Google. Update the server key and try again.' : `Gemini request was rejected (${response.status}${reason ? `: ${reason}` : ''}).`); continue; }
       const raw = await response.json(); const text = raw.candidates?.[0]?.content?.parts?.find((part: { text?: string }) => part.text)?.text; if (!text) throw new Error('Gemini returned an empty response.');
@@ -109,6 +111,43 @@ async function gemini(mode: Mode, frames: Frame[], known: Record<string, unknown
   }
   if (groundedFallback) return groundedFallback;
   throw last;
+}
+function openAiUrl(value: unknown) {
+  let url: URL; try { url = new URL(String(value || 'https://api.openai.com/v1')); } catch { throw new Error('Enter a valid OpenAI-compatible API URL.'); }
+  const host = url.hostname.toLowerCase(); const hosts = ['api.openai.com', 'openrouter.ai', 'api.groq.com', 'api.together.xyz', 'api.mistral.ai', 'api.deepseek.com', 'api.fireworks.ai', 'api.x.ai'];
+  const allowedPath = host === 'openrouter.ai' ? /^\/api\/v1\/?$/u : host === 'api.fireworks.ai' ? /^\/inference\/v1\/?$/u : /^\/(?:v1)?\/?$/u;
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash || !hosts.includes(host) || !allowedPath.test(url.pathname)) throw new Error('This OpenAI-compatible API URL is not supported.');
+  return `${url.origin}${url.pathname.replace(/\/$/u, '')}/chat/completions`;
+}
+async function byok(mode: Mode, frames: Frame[], known: Record<string, unknown> | undefined, language: string, style: Style, depth: Depth, provider: string, apiKey: string, model: unknown, endpoint: unknown) {
+  if (!apiKey || apiKey.length > 500) throw new Error('Add a valid provider API key in Settings.');
+  const modelName = String(model || (provider === 'anthropic' ? 'claude-sonnet-4-5' : provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-4.1-mini')).trim().slice(0, 100);
+  if (provider === 'gemini') {
+    try { return await gemini(mode, frames, known, language, style, depth, apiKey, modelName); }
+    catch (error) { const message = error instanceof Error ? error.message : ''; if (/quota/i.test(message)) throw new Error('Provider quota exceeded. Check your provider account.'); if (/timed out/i.test(message)) throw new Error('Coach request timed out.'); if (/rejected/i.test(message)) throw new Error('Provider rejected the request. Check the key, model, and provider settings.'); if (/mixed-language/i.test(message)) throw new Error('The AI provider returned mixed-language output. Try again.'); if (/vague/i.test(message)) throw new Error('The AI provider returned incomplete country reasoning. Try again.'); throw new Error('The AI provider could not complete this analysis.'); }
+  }
+  if (provider !== 'openai' && provider !== 'anthropic') throw new Error('Select a supported AI provider.');
+  const system = `${groundedRules}\n${instruction(mode, language, known, style, depth)}\nReturn only a valid JSON object with the Coach response fields.`;
+  const url = provider === 'anthropic' ? 'https://api.anthropic.com/v1/messages' : openAiUrl(endpoint);
+  const headers = provider === 'anthropic' ? { 'content-type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' } : { 'content-type': 'application/json', authorization: `Bearer ${apiKey}` };
+  const images = frames.map((frame) => ({ type: 'image', source: { type: 'base64', media_type: frame.mimeType, data: frame.imageData } }));
+  const body = provider === 'anthropic'
+    ? { model: modelName, max_tokens: generationDepth[depth].maxOutputTokens, system, messages: [{ role: 'user', content: [{ type: 'text', text: 'Analyze the supplied Street View image(s).' }, ...images] }] }
+    : { model: modelName, messages: [{ role: 'system', content: system }, { role: 'user', content: [{ type: 'text', text: 'Analyze the supplied Street View image(s).' }, ...frames.map((frame) => ({ type: 'image_url', image_url: { url: `data:${frame.mimeType};base64,${frame.imageData}` } }))] }], response_format: { type: 'json_object' }, max_tokens: generationDepth[depth].maxOutputTokens };
+  let response: Response;
+  try { response = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), signal: AbortSignal.timeout(60_000), redirect: 'error' }); }
+  catch (error) { if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) throw new Error('Coach request timed out.'); throw new Error('Could not reach the selected AI provider.'); }
+  if (!response.ok) throw new Error(response.status === 429 ? 'Provider quota exceeded. Check your provider account.' : response.status >= 500 ? 'AI provider service error.' : 'Provider rejected the request. Check the key, model, and provider settings.');
+  let raw: { choices?: Array<{ message?: { content?: string } }>; content?: Array<{ type?: string; text?: string }> };
+  try { raw = await response.json(); } catch { throw new Error('The AI provider returned an unreadable response. Try again.'); }
+  const text = provider === 'anthropic' ? raw.content?.find((item) => item.type === 'text')?.text : raw.choices?.[0]?.message?.content;
+  if (!text) throw new Error('The AI provider returned an empty response.');
+  let analysis: ReturnType<typeof normalize>;
+  try { analysis = normalize(JSON.parse(text.trim().replace(/^```(?:json)?\s*/iu, '').replace(/\s*```$/u, '')), mode, String(known?.actualCountry || '')); }
+  catch { throw new Error('The AI provider returned an invalid Coach response. Try again.'); }
+  if (!languageMatches(analysis, language)) throw new Error('The AI provider returned mixed-language output. Try again.');
+  if (['analyze', 'analyze360', 'clue'].includes(mode) && !rationalesAreSpecific(analysis)) throw new Error('The AI provider returned incomplete country reasoning. Try again.');
+  return { analysis, model: modelName, generatedAt: Date.now() };
 }
 function normalizePool(value: unknown) {
   if (!value || typeof value !== 'object') throw new Error('Gemini returned malformed JSON.'); const source = value as Record<string, unknown>;
@@ -146,6 +185,7 @@ Deno.serve(async (request) => {
     const supplied = ['image/jpeg', 'image/png', 'image/webp'].includes(String(value.mimeType)) && /^[A-Za-z0-9+/=]+$/.test(String(value.imageData || ''));
     const frames = supplied ? [{ mimeType: String(value.mimeType), imageData: String(value.imageData) }] : mode === 'analyze360' ? await Promise.all([0, 90, 180, 270].map((offset) => streetView(value.view, offset))) : [await streetView(value.view)];
     const language = Object.hasOwn(languages, String(value.language)) ? String(value.language) : 'en'; const style = Object.hasOwn(styles, String(value.style)) ? value.style as Style : 'quick'; const depth = Object.hasOwn(depths, String(value.depth)) ? value.depth as Depth : 'normal';
-    const known = ['hints', 'analyze', 'clue', 'clue-safe'].includes(mode) ? undefined : context(value.context); return json(await gemini(mode, frames, known, language, style, depth), 200, origin);
+    const known = ['hints', 'analyze', 'clue', 'clue-safe'].includes(mode) ? undefined : context(value.context); const provider = ['gemini', 'openai', 'anthropic'].includes(String(value.provider)) ? String(value.provider) : 'gemini'; const providerKey = request.headers.get('x-coach-provider-key') || '';
+    const result = providerKey || provider !== 'gemini' ? await byok(mode, frames, known, language, style, depth, provider, providerKey, value.model, value.endpoint) : await gemini(mode, frames, known, language, style, depth); return json(result, 200, origin);
   } catch (error) { const message = error instanceof Error ? error.message : 'Coach unavailable.'; return json({ error: message }, /timed out/i.test(message) ? 504 : /quota|cooling/i.test(message) ? 429 : 503, origin); }
 });

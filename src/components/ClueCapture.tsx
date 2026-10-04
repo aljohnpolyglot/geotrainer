@@ -56,7 +56,7 @@ export function ClueCapture({ panoId, disabled, showAnalyze = true, onBusyChange
     const currentRequest = ++requestId.current;
     setBusy(true); onBusyChange?.(true);
     try { await task(active.signal, () => currentRequest === requestId.current && !active.signal.aborted); }
-    catch (error) { if (currentRequest === requestId.current && !(error instanceof Error && error.name === 'AbortError')) setStatus(error instanceof Error ? error.message : t('clueActionFailed')); }
+    catch (error) { if (currentRequest === requestId.current && !(error instanceof Error && error.name === 'AbortError')) setStatus(error instanceof Error ? t(error.message) : t('clueActionFailed')); }
     finally { if (currentRequest === requestId.current) { setBusy(false); onBusyChange?.(false); } }
   };
 

@@ -92,6 +92,10 @@ La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant 
 
 ## Coach IA et indices
 
+Dans **Paramètres → Coach IA**, vous pouvez choisir Gemini, Anthropic ou un fournisseur compatible avec OpenAI, indiquer le modèle et coller votre propre clé API. La clé est masquée, reste uniquement en mémoire dans la page et passe par le point de terminaison Coach pour chaque analyse ; GeoTrainer ne l’enregistre pas. Utilisez **Effacer la clé** ou rechargez la page pour la supprimer. Le fournisseur applique ses propres limites et frais. Les URL compatibles avec OpenAI sont limitées aux fournisseurs publics pris en charge.
+
+Les niveaux Court, Normal et Approfondi ajustent aussi le budget de raisonnement de Gemini 2.5 et le détail visible ; les modèles Gemini 3 utilisent leurs niveaux de raisonnement correspondants.
+
 Jeu fixe l’assistance IA lorsque vous envoyez la réponse. Analyser une erreur ensuite, même avec le résultat réduit ou pendant l’enregistrement de la réponse, ne change pas cette tentative. Restaurer une ancienne analyse ne compte pas comme une nouvelle utilisation de l’IA pendant la manche.
 
 Les anciennes mentions du mode Jeu sont corrigées automatiquement lorsqu’une image personnelle du Carnet a été enregistrée pendant la manche sans analyse IA enregistrée. Les analyses d’indices et à 360° gardent leur mention d’assistance. Les anciens enregistrements ambigus restent inchangés ; scores, réponses, notes et calendriers de Révision sont conservés.

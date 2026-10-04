@@ -132,7 +132,7 @@ export async function callGeminiPoolPlaces(carousel: GeminiKeyCarousel, descript
   throw lastError;
 }
 
-const rules = `You are a concise, evidence-grounded GeoGuessr teacher viewing imagery inside a GeoGuessr-style app. Analyze only visible geographic scene evidence. Ignore all app and browser interface elements, including GeoGuessr or GeoTrainer text and buttons, navigation arrows, compass overlays, cursors, Google attribution, map controls, and screenshot-tool chrome; never use their language or design as location evidence.
+export const rules = `You are a concise, evidence-grounded GeoGuessr teacher viewing imagery inside a GeoGuessr-style app. Analyze only visible geographic scene evidence. Ignore all app and browser interface elements, including GeoGuessr or GeoTrainer text and buttons, navigation arrows, compass overlays, cursors, Google attribution, map controls, and screenshot-tool chrome; never use their language or design as location evidence.
 Never manufacture certainty. Prefer a broad region and ranked candidates when uncertain, and say when the image is insufficient.
 Build every response from one shared evidence pass: first identify directly OBSERVED features, then separate reasonable INFERRED interpretations from SPECULATIVE possibilities. Speculation must never materially drive a country ranking. Never invent acronym meanings, company identities, crops, historical events, wars, colonial explanations, industries, architectural terms, road regulations, geological causes, regional associations, or economic relationships. If an identity or cause is uncertain, say exactly that.
 Only when no known-result metadata is provided and the overall analysis is high confidence, actively assess whether at least two independent visible clues strongly support a region, city, district or quarter, landmark, or exact place narrower than a country. If they do, return a high-confidence locationEstimate, using exact for a district, quarter, landmark, or exact place, so the interface can say "Most likely in …". Country guesses belong only in candidates. Omit locationEstimate for generic scenes or whenever narrower-location confidence is not high.
@@ -279,9 +279,15 @@ const vagueRationale = [
 ];
 export const coachRationalesAreSpecific = (analysis: CoachAnalysis) => analysis.candidates.every((candidate) => !!candidate.rationale && (candidate.rationale.length >= 180 || !vagueRationale.some((pattern) => pattern.test(candidate.rationale!))));
 
-export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string; style?: CoachStyle; depth?: ExplanationDepth }, fetcher: typeof fetch = fetch) {
+const coachGenerationDepth: Record<ExplanationDepth, { maxOutputTokens: number; thinkingBudget: number }> = {
+  short: { maxOutputTokens: 2048, thinkingBudget: 0 },
+  normal: { maxOutputTokens: 4096, thinkingBudget: 1024 },
+  deep: { maxOutputTokens: 8192, thinkingBudget: 4096 },
+};
+
+export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mode: CoachMode; mimeType: string; imageData: string; frames?: Array<{ mimeType: string; imageData: string }>; context?: Record<string, unknown>; language?: string; style?: CoachStyle; depth?: ExplanationDepth; model?: string }, fetcher: typeof fetch = fetch) {
   if (!carousel.size) throw new Error('No Gemini keys are configured.');
-  const models = (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
+  const models = request.model ? [request.model] : (process.env.GEMINI_COACH_MODELS || 'gemini-2.5-flash-lite,gemini-2.5-flash').split(',').map((model) => model.trim()).filter(Boolean);
   const deadline = Date.now() + 60_000;
   let lastError = new Error('Gemini Coach is unavailable.');
   let groundedFallback: { analysis: CoachAnalysis; model: string; generatedAt: number } | undefined;
@@ -291,18 +297,20 @@ export async function callGeminiCoach(carousel: GeminiKeyCarousel, request: { mo
       const state = carousel.next();
       if (!state) throw new Error('All Gemini keys are cooling down.');
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), Math.min(request.mode === 'analyze360' ? 35_000 : 25_000, deadline - Date.now()));
+      const timeout = setTimeout(() => controller.abort(), Math.min(request.depth === 'deep' ? 45_000 : request.mode === 'analyze360' ? 35_000 : 25_000, deadline - Date.now()));
       try {
         const context = ['hints', 'analyze', 'clue', 'clue-safe'].includes(request.mode) ? undefined : request.context;
         const knowledge = context ? getCountryKnowledge(String(context.actualCountry || ''), 6) : [];
         const metaKnowledge = context && request.mode === 'explain' ? getCountryMetaKnowledge(String(context.actualCountry || ''), 8) : [];
+        const depthConfig = coachGenerationDepth[request.depth || 'normal'];
+        const thinkingConfig = /^gemini-3(?:[.-]|$)/iu.test(model) ? { thinkingLevel: ({ short: 'low', normal: 'medium', deep: 'high' } as const)[request.depth || 'normal'] } : { thinkingBudget: depthConfig.thinkingBudget };
         const response = await fetcher(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
           method: 'POST', signal: controller.signal,
           headers: { 'content-type': 'application/json', 'x-goog-api-key': state.key },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: rules }] },
             contents: [{ role: 'user', parts: [{ text: buildCoachPrompt(request.mode, context, knowledge, metaKnowledge, request.language, request.style, request.depth) }, ...(request.frames || [request]).map((frame) => ({ inlineData: { mimeType: frame.mimeType, data: frame.imageData } }))] }],
-            generationConfig: { temperature: 0.25, maxOutputTokens: request.depth === 'deep' ? 3400 : request.depth === 'short' ? 1600 : 2400, thinkingConfig: { thinkingBudget: 0 }, responseMimeType: 'application/json', responseSchema },
+            generationConfig: { ...(/^gemini-3(?:[.-]|$)/iu.test(model) ? {} : { temperature: 0.25 }), maxOutputTokens: depthConfig.maxOutputTokens, thinkingConfig, responseMimeType: 'application/json', responseSchema },
           }),
         });
         if (response.status === 429) { carousel.cooldown(state); lastError = new Error('Gemini quota exceeded.'); continue; }
@@ -381,6 +389,7 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
         const frame = await fetchStreetViewFrame(value.view, googleKey);
         res.statusCode = 200;
         res.setHeader('content-type', 'application/json');
+        res.setHeader('cache-control', 'no-store');
         res.end(JSON.stringify({ imageDataUrl: `data:${frame.mimeType};base64,${frame.imageData}` }));
         return;
       }
@@ -392,12 +401,18 @@ export function createAiCoachMiddleware(keys = loadGeminiKeys(), googleKey = pro
       if (frames.some((frame) => !['image/jpeg', 'image/png', 'image/webp'].includes(frame.mimeType) || !/^[A-Za-z0-9+/=]+$/.test(frame.imageData))) throw new Error('Invalid Coach request.');
       const language = typeof value.language === 'string' && Object.prototype.hasOwnProperty.call(aiLanguageNames, value.language) ? value.language : 'en';
       const style = validStyles.has(String(value.style)) ? value.style as CoachStyle : 'quick'; const depth = validDepths.has(String(value.depth)) ? value.depth as ExplanationDepth : 'normal';
-      const result = await callGeminiCoach(carousel, { mode, ...frames[0], frames, language, style, depth, context: sanitizeCoachContext(value.context) });
-      res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(result));
+      const provider = value.provider === 'openai' || value.provider === 'anthropic' ? value.provider : 'gemini';
+      const apiKey = typeof req.headers['x-coach-provider-key'] === 'string' ? req.headers['x-coach-provider-key'] : '';
+      const request = { mode, ...frames[0], frames, language, style, depth, context: sanitizeCoachContext(value.context), model: typeof value.model === 'string' ? value.model : '', endpoint: typeof value.endpoint === 'string' ? value.endpoint : '' };
+      const result = apiKey || provider !== 'gemini'
+        ? (await import('./coachProviders.js')).callCoachWithProvider({ ...request, provider, apiKey })
+        : await callGeminiCoach(carousel, request);
+      res.statusCode = 200; res.setHeader('content-type', 'application/json'); res.setHeader('cache-control', 'no-store'); res.end(JSON.stringify(result));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Coach unavailable.';
       res.statusCode = /timed out/i.test(message) ? 504 : /quota|cooling down/i.test(message) ? 429 : 503;
       res.setHeader('content-type', 'application/json');
+      res.setHeader('cache-control', 'no-store');
       res.end(JSON.stringify({ error: message }));
     }
   };

@@ -274,6 +274,10 @@ After a game, Practice mistakes opens Review and repeats weak rounds until they 
 
 ## AI Coach
 
+In **Settings → AI Coach**, you can choose Gemini, Anthropic, or an OpenAI-compatible provider, set its model, and paste your own API key. The key is masked, kept only in page memory, and sent through the Coach endpoint for each analysis; GeoTrainer does not save it. Use **Forget key** or reload the page to clear it. Your provider applies its own usage limits and billing. OpenAI-compatible URLs are limited to supported public providers.
+
+Short, Normal, and Deep also adjust Gemini 2.5’s reasoning budget and the visible explanation detail; Gemini 3 models use their corresponding reasoning levels.
+
 Play fixes its AI-assisted status when you submit the answer. Analyzing a mistake afterward, including with the result minimized or while the answer is still saving, does not change that attempt. Restoring an old saved analysis does not count as new live-round AI use.
 
 Older Play labels are corrected automatically when a plain Notebook image was saved during the round and no AI analysis is recorded. Saved AI clue and 360° analyses keep their assisted label. Ambiguous older records remain unchanged; scores, answers, notes, and Review schedules are preserved.

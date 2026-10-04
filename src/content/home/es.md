@@ -92,6 +92,10 @@ Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afecta
 
 ## Entrenador de IA y pistas
 
+En **Configuración → Entrenador de IA**, puedes elegir Gemini, Anthropic o un proveedor compatible con OpenAI, indicar el modelo y pegar tu propia clave de API. La clave se muestra oculta, solo permanece en la memoria de la página y se envía a través del servicio de Coach en cada análisis; GeoTrainer no la guarda. Usa **Olvidar clave** o recarga la página para borrarla. El proveedor aplica sus propios límites y cargos. Las URL compatibles con OpenAI se limitan a proveedores públicos admitidos.
+
+Breve, Normal y Profunda también ajustan el presupuesto de razonamiento de Gemini 2.5 y el nivel de detalle visible; los modelos Gemini 3 usan sus niveles de razonamiento correspondientes.
+
 Juego fija la asistencia de IA al enviar la respuesta. Analizar un error después, incluso con el resultado minimizado o mientras se guarda la respuesta, no cambia ese intento. Restaurar un análisis guardado no cuenta como uso nuevo de IA durante la ronda.
 
 Las etiquetas antiguas de Juego se corrigen automáticamente si se guardó una imagen personal del Cuaderno durante la ronda y no consta ningún análisis de IA. Los análisis de pistas y de 360° conservan su etiqueta de asistencia. Los registros antiguos ambiguos no cambian; se conservan puntuaciones, respuestas, notas y calendarios de Repaso.
