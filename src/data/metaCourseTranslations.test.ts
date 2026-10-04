@@ -19,6 +19,7 @@ test('every country lesson has complete text, notes, and headings in every app l
         for (const tip of localized) {
           const text = `${tip.section}\n${tip.text}\n${tip.note || ''}`;
           assert.doesNotMatch(text, /\\u[0-9a-f]{4}|�|Ã[\u0080-\u00bf]|Â[\u0080-\u00bf]/i, `${name}:${tip.id}: encoding`);
+          assert.doesNotMatch(text, /\[\s*\]\(https?:\/\//, `${name}:${tip.id}: empty Markdown link label`);
           assert.doesNotMatch(text, /QXZKEEP\d+ZQX/, `${name}:${tip.id}: unresolved translation token`);
           const original = source.find((item) => item.id === tip.id)!;
           assert.notEqual(tip.text.trim(), original.text.trim(), `${name}:${tip.id}: untranslated explanation`);
