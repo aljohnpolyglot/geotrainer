@@ -92,6 +92,10 @@ Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazi
 
 ## Coach IA e indizi
 
+In **Impostazioni → Coach IA** puoi scegliere Gemini, Anthropic o un provider compatibile con OpenAI, indicare il modello e incollare la tua chiave API. La chiave è nascosta, resta solo nella memoria della pagina e viene inviata tramite l’endpoint Coach per ogni analisi; GeoTrainer non la salva. Usa **Dimentica chiave** o ricarica la pagina per eliminarla. Il provider applica i propri limiti e costi. Gli URL compatibili con OpenAI sono limitati ai provider pubblici supportati.
+
+Breve, Normale e Approfondita regolano anche il budget di ragionamento di Gemini 2.5 e il livello di dettaglio visibile; i modelli Gemini 3 usano i livelli di ragionamento corrispondenti.
+
 Gioco fissa l’assistenza IA quando invii la risposta. Analizzare un errore dopo, anche con il risultato ridotto o durante il salvataggio della risposta, non cambia quel tentativo. Ripristinare un’analisi precedente non conta come nuovo uso di IA durante il turno.
 
 Le vecchie etichette di Gioco vengono corrette automaticamente se durante il turno è stata salvata un’immagine personale del Taccuino senza un’analisi IA registrata. Le analisi degli indizi e a 360° mantengono l’etichetta di assistenza. I vecchi dati ambigui restano invariati; punteggi, risposte, note e programmi di Ripasso sono conservati.

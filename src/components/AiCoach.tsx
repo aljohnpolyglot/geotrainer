@@ -82,7 +82,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
       await onSave?.({ mode, model: completedModel, generatedAt: completedAt, analysis: merged, ...(clueId ? { clueId } : {}) });
       setSaved(true);
     } catch (caught) {
-      if (currentRequest === requestId.current && caught instanceof Error && caught.name !== 'AbortError') setError(caught.message);
+      if (currentRequest === requestId.current && caught instanceof Error && caught.name !== 'AbortError') setError(t(caught.message));
     } finally {
       if (currentRequest === requestId.current) setLoading(null);
     }

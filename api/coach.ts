@@ -24,7 +24,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
   res.setHeader('access-control-allow-origin', origin!);
   res.setHeader('access-control-allow-methods', 'POST, OPTIONS');
-  res.setHeader('access-control-allow-headers', 'content-type');
+  res.setHeader('access-control-allow-headers', 'content-type, x-coach-provider-key');
   res.setHeader('access-control-max-age', '86400');
   res.setHeader('vary', 'Origin');
   if (req.method === 'OPTIONS') {

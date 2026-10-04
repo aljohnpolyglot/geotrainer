@@ -2,6 +2,7 @@ import { leagueRosterPlaces } from '../../server/poolLeague';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildCoachPrompt, callGeminiCoach, callGeminiPool, callGeminiPoolPlaces, coachLanguageMatches, coachRationalesAreSpecific, decodeCoachText, fetchStreetViewFrame, fetchStreetViewFrames, GeminiKeyCarousel, isCoachMode, loadGeminiKeys, normalizeCoachAnalysis, normalizePoolSuggestion, sanitizeCoachContext, stripCoachInstructionScaffolds } from '../../server/aiCoach';
+import { callCoachWithProvider, compatibleChatUrl } from '../../server/coachProviders';
 import { getCountryKnowledge, getCountryMetaKnowledge } from '../../server/geoguessrKnowledge';
 import { isAllowedCoachOrigin } from '../../api/coach';
 
@@ -28,6 +29,35 @@ test('AI Map Maker modes cannot enter the image Coach route', () => {
 
 const geminiResponse = (text: string, status = 200) => new Response(status === 200 ? JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) : '', {
   status, headers: { 'content-type': 'application/json' },
+});
+
+test('BYOK OpenAI-compatible requests use approved HTTPS hosts and keep the key out of the prompt body', async () => {
+  assert.equal(compatibleChatUrl('https://api.openai.com/v1'), 'https://api.openai.com/v1/chat/completions');
+  assert.equal(compatibleChatUrl('https://openrouter.ai/api/v1'), 'https://openrouter.ai/api/v1/chat/completions');
+  assert.throws(() => compatibleChatUrl('http://localhost:3000/v1'), /not supported/);
+  assert.throws(() => compatibleChatUrl('https://attacker.example/v1'), /not supported/);
+  let captured: RequestInit | undefined;
+  const result = await callCoachWithProvider({ provider: 'openai', apiKey: 'private-test-key', model: 'vision-model', endpoint: 'https://api.openai.com/v1', mode: 'analyze', mimeType: 'image/jpeg', imageData: 'ZmFrZQ==', language: 'en' }, (async (_url, init) => {
+    captured = init;
+    return new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify(validAnalysis) } }] }), { headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch);
+  assert.equal(result.model, 'vision-model');
+  assert.equal((captured?.headers as Record<string, string>).authorization, 'Bearer private-test-key');
+  assert.equal(captured?.redirect, 'error');
+  assert.equal(String(captured?.body).includes('private-test-key'), false);
+  assert.match(String(captured?.body), /data:image\/jpeg;base64/);
+});
+
+test('BYOK Gemini models receive the matching thinking parameter family', async () => {
+  for (const [model, expected] of [['gemini-2.5-flash', '"thinkingBudget":1024'], ['gemini-3.7-flash', '"thinkingLevel":"medium"']]) {
+    let requestBody = '';
+    await callCoachWithProvider({ provider: 'gemini', apiKey: 'private-test-key', model, mode: 'analyze', mimeType: 'image/jpeg', imageData: 'ZmFrZQ==', language: 'en', depth: 'normal' }, (async (_url, init) => {
+      requestBody = String(init?.body);
+      return geminiResponse(JSON.stringify(validAnalysis));
+    }) as typeof fetch);
+    assert.match(requestBody, new RegExp(expected));
+    assert.equal(requestBody.includes('"temperature":0.25'), model.startsWith('gemini-2.5'));
+  }
 });
 
 test('described pools choose countries before selecting only valid local place keys', async () => {
@@ -266,9 +296,24 @@ test('360 Coach sends all views in one low-latency Gemini request', async () => 
   let body: Record<string, any> = {};
   const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => { body = JSON.parse(String(init?.body)); return geminiResponse(JSON.stringify(validAnalysis)); }) as typeof fetch;
   const frames = [1, 2, 3, 4].map((value) => ({ mimeType: 'image/jpeg', imageData: String(value) }));
-  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze360', ...frames[0], frames }, fetcher);
+  await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'analyze360', ...frames[0], frames, depth: 'short' }, fetcher);
   assert.equal(body.contents[0].parts.filter((part: Record<string, unknown>) => part.inlineData).length, 4);
   assert.equal(body.generationConfig.thinkingConfig.thinkingBudget, 0);
+});
+
+test('Coach explanation depth controls Gemini thinking effort and leaves room for the final answer', async () => {
+  const settings: Array<{ depth: 'short' | 'normal' | 'deep'; budget: number; output: number }> = [
+    { depth: 'short', budget: 0, output: 2048 },
+    { depth: 'normal', budget: 1024, output: 4096 },
+    { depth: 'deep', budget: 4096, output: 8192 },
+  ];
+  for (const expected of settings) {
+    let body: Record<string, any> = {};
+    const fetcher = (async (_url: string | URL | Request, init?: RequestInit) => { body = JSON.parse(String(init?.body)); return geminiResponse(JSON.stringify(validAnalysis)); }) as typeof fetch;
+    await callGeminiCoach(new GeminiKeyCarousel(['one']), { mode: 'explain', mimeType: 'image/jpeg', imageData: 'YWJj', depth: expected.depth }, fetcher);
+    assert.equal(body.generationConfig.thinkingConfig.thinkingBudget, expected.budget);
+    assert.equal(body.generationConfig.maxOutputTokens, expected.output);
+  }
 });
 
 test('revealed Coach retrieves a bounded country knowledge pack without leaking it before reveal', async () => {

@@ -255,6 +255,10 @@ Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache R
 
 ## KI-Coach
 
+Unter **Einstellungen → KI-Coach** kannst du Gemini, Anthropic oder einen OpenAI-kompatiblen Anbieter wählen, das Modell angeben und deinen eigenen API-Schlüssel einfügen. Der Schlüssel wird maskiert, bleibt nur im Arbeitsspeicher der Seite und wird für jede Analyse über den Coach-Endpunkt gesendet; GeoTrainer speichert ihn nicht. Mit **Schlüssel vergessen** oder durch Neuladen der Seite wird er gelöscht. Für Nutzungslimits und Gebühren ist dein Anbieter zuständig. OpenAI-kompatible URLs sind auf unterstützte öffentliche Anbieter beschränkt.
+
+Kurz, Normal und Tief passen außerdem das Denkbudget von Gemini 2.5 und den sichtbaren Erklärungsumfang an; Gemini-3-Modelle verwenden die entsprechenden Denkstufen.
+
 Spiel legt die KI-Unterstützung beim Absenden der Antwort fest. Eine spätere Fehleranalyse, auch bei minimiertem Ergebnis oder während des Speicherns, ändert diesen Versuch nicht. Eine alte gespeicherte Analyse wiederherzustellen zählt nicht als neue KI-Nutzung in der laufenden Runde.
 
 Ältere Spielmarkierungen werden automatisch korrigiert, wenn während der Runde ein persönliches Notizbuchbild ohne aufgezeichnete KI-Analyse gespeichert wurde. KI-Analysen von Hinweisen und 360°-Ansichten behalten ihre Markierung. Unklare ältere Einträge bleiben unverändert; Punkte, Antworten, Notizen und Wiederholungspläne bleiben erhalten.
