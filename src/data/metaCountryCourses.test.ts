@@ -15,15 +15,17 @@ test('country course catalog excludes non-countries and rejects malformed or dup
   assert.throws(() => localizeMetaCountryCourse('US', 'es', [valid], { code: 'US', language: 'es', tips: [] }), /Incomplete/);
 });
 
-test('country course remains usable when its selected-language asset is missing', async () => {
+test('missing country translation rejects without caching an English fallback and can retry', async () => {
   const course = META_COUNTRY_COURSES[0];
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input) => String(input).endsWith(`/${course.code}.json`)
     ? new Response(JSON.stringify({ code: course.code, tips: Array.from({ length: course.lessonCount }, (_, index) => ({ id: `${course.code}-${index}`, section: 'Roads', mapUrl: 'https://maps.google.com/maps', text: `Clue ${index}` })) }))
     : new Response('', { status: 404 });
   try {
+    await assert.rejects(loadMetaCountryCourse(course.code, 'fr'), /Could not load.*translation/);
+    globalThis.fetch = async () => new Response(JSON.stringify({ code: course.code, language: 'fr', tips: Array.from({ length: course.lessonCount }, (_, index) => ({ id: `${course.code}-${index}`, section: 'Routes', text: `Indice ${index}` })) }));
     const tips = await loadMetaCountryCourse(course.code, 'fr');
     assert.equal(tips.length, course.lessonCount);
-    assert.equal(tips[0].text, 'Clue 0');
+    assert.equal(tips[0].text, 'Indice 0');
   } finally { globalThis.fetch = originalFetch; }
 });

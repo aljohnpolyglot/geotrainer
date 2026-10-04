@@ -1,0 +1,23 @@
+{
+  "code": "PR",
+  "language": "sv",
+  "tips": [
+    { "id": "PR-TIjg", "section": "Att känna igen Puerto Rico", "text": "Nästan all täckning fotograferades med smallcam, en variant av generation 4. Här känns den igen på den **breda oskärpan** och den ofta synliga **antennen**. Kameran sitter lägre och oskärpan framtill är rundare än på [pickupbilar](https://maps.app.goo.gl/Z8fwYWxNaCrZpv5n8)." },
+    { "id": "PR-Npkn", "section": "Att känna igen Puerto Rico", "text": "Street View-bilen från generation 3 på Puerto Rico har en **antenn** framtill på höger sida. Längst ut på antennen sitter en liten vit prick.", "note": "Googles bilar på Guam och Nordmarianerna har också en antenn framtill på höger sida. Leta efter fler ledtrådar innan du gissar." },
+    { "id": "PR-zV2D", "section": "Att känna igen Puerto Rico", "text": "Hela Puerto Rico använder riktnumret **787**. Det skrivs framför telefonnumret i det här formatet:\n\n**(787) XXX-XXXX**", "note": "Mer sällan kan du också stöta på riktnumret [939](https://maps.app.goo.gl/E8TGnnwM3JUComFm6)." },
+    { "id": "PR-avsT", "section": "Att känna igen Puerto Rico", "text": "På skyltar runt om i Puerto Rico syns ofta **spanska** i stället för engelska." },
+    { "id": "PR-FSsp", "section": "Att känna igen Puerto Rico", "text": "**Amerikanska butikskedjor**, som Walmart, är vanliga på Puerto Rico. Det hjälper dig att skilja ön från andra närliggande latinamerikanska länder och territorier, där amerikanska butiker är ovanliga." },
+    { "id": "PR-x00D", "section": "Att känna igen Puerto Rico", "text": "Främre registreringsskyltar är **inte obligatoriska** på Puerto Rico. Därför är bilar med sådan skylt ovanliga. Det hjälper dig att skilja ön från Guam och Nordmarianerna." },
+    { "id": "PR-eA8V", "section": "Att känna igen Puerto Rico", "text": "En stor del av täckningen på landsbygden på Puerto Rico är fotograferad längs stora **separerade motorvägar**." },
+    { "id": "PR-8rin", "section": "Att känna igen Puerto Rico", "text": "Så här ser **vägnummermärkena** på Puerto Rico ut. Från övre vänster till nedre höger visas märken för huvudvägar, större stadsvägar, sekundära vägar och tertiära vägar. De här märkena finns inte i någon annan amerikansk delstat eller något annat territorium." },
+    { "id": "PR-nXMf", "section": "Att känna igen Puerto Rico", "text": "Hastighetsskyltarna på Puerto Rico har samma form och storlek som på det amerikanska fastlandet. Den stora skillnaden är att texten alltid är **på spanska**, inte engelska." },
+    { "id": "PR-MALI", "section": "Att känna igen Puerto Rico", "text": "På stoppskyltar på Puerto Rico står det ”**PARE**” i stället för ”STOP”.", "note": "”PARE” används också i hela Sydamerika och i Dominikanska republiken." },
+    { "id": "PR-sbGW", "section": "Att känna igen Puerto Rico", "text": "Kilometermarkeringarna på Puerto Rico är höga och gröna. Högst upp står ”**km**”, följt av ett stort nummer skrivet lodrätt." },
+    { "id": "PR-m45n", "section": "Att känna igen Puerto Rico", "text": "De flesta hus på Puerto Rico är byggda av **betong** och har **platta tak**. Metallgrindar framför husen är också vanliga, särskilt i städerna.", "note": "Hus i andra delar av Latinamerika kan se liknande ut." },
+    { "id": "PR-1NMP", "section": "Regionala ledtrådar", "text": "Södra Puerto Rico ser ofta tydligt **torrare** ut än resten av ön." },
+    { "id": "PR-2LXU", "section": "Regionala ledtrådar", "text": "Puerto Ricos norra och södra kuster har vanligtvis flacka **kustslätter** eller **böljande kullar**." },
+    { "id": "PR-CcDj", "section": "Regionala ledtrådar", "text": "De flesta **bergiga områdena** på Puerto Rico ligger i öns mitt. En stor del av täckningen där finns längs vägar med separerade körbanor." },
+    { "id": "PR-nsPb", "section": "Platsledtrådar", "text": "I den sydliga staden Ponce finns många byggnader i **Ponce-kreolsk stil**, en blandning av viktoriansk stil och spansk nyrenässans. Byggnaderna är vanligtvis uppförda i trä och murverk." },
+    { "id": "PR-hatM", "section": "Platsledtrådar", "text": "Gamla San Juan ligger längst ut på den nordvästra spetsen av staden San Juan. Området har **mycket smala gator, färgstarka byggnader** och en blandning av gotisk, renässans- och barockarkitektur. En del gator är också belagda med tegel." }
+  ]
+}

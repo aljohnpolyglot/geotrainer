@@ -1,0 +1,24 @@
+{
+  "code": "ME",
+  "language": "it",
+  "tips": [
+    { "id": "ME-ioMs", "section": "Identificare il Montenegro", "text": "Tutta la copertura di Generazione 4 in Montenegro è stata acquisita con una fotocamera «smallcam», montata più in basso rispetto alle normali fotocamere di Generazione 4 e caratterizzata da una sfocatura circolare piuttosto ampia, con una piccola sporgenza sul davanti. La sfocatura può anche essere completamente trasparente, quindi è più difficile da notare.", "note": "La smallcam è comune nella maggior parte dei Balcani e dell’Europa meridionale." },
+    { "id": "ME-9laJ", "section": "Identificare il Montenegro", "text": "Il Montenegro è un paese piccolo e **montuoso**. Le montagne dell’entroterra sono verdeggianti, mentre la maggior parte di quelle costiere presenta rocce chiare ben visibili. Anche la maggior parte delle strade ha solo una o due corsie." },
+    { "id": "ME-MYa5", "section": "Identificare il Montenegro", "text": "Il delineatore più comune è bianco, con un catarifrangente rosso sul davanti e uno bianco sul retro. Ha anche la parte superiore nera.", "note": "Questi delineatori si trovano anche in Slovenia." },
+    { "id": "ME-ESKL", "section": "Identificare il Montenegro", "text": "In Montenegro i chevron sono **neri su fondo bianco** oppure **rossi su fondo giallo**.", "note": "In Albania i chevron sono bianchi su fondo nero." },
+    { "id": "ME-31mF", "section": "Identificare il Montenegro", "text": "I guardrail in Montenegro sono spesso **arrugginiti**." },
+    { "id": "ME-RPvd", "section": "Identificare il Montenegro", "text": "Il Montenegro è l’unico paese balcanico in cui è comune vedere sia guardrail di tipo [A](https://goo.gl/maps/fZCnn3jPH4By45ph7) sia di tipo [B](https://goo.gl/maps/w9hnQsjxxJS2TbT1A).", "note": "Per una buona panoramica dei guardrail europei, consulta [questa infografica](/images/montenegro/europeguardrail.png)." },
+    { "id": "ME-gPE6", "section": "Identificare il Montenegro", "text": "In Montenegro si usano semplici pali **rotondi in cemento** o pali di legno." },
+    { "id": "ME-gh0p", "section": "Identificare il Montenegro", "text": "Nella copertura montenegrina di Generazione 3 si possono vedere occasionalmente delle **fessure**, dovute a errori nell’unione delle immagini.", "note": "Le fessure sono comuni anche in Albania e possono comparire, più raramente, in vari altri paesi." },
+    { "id": "ME-vHGt", "section": "Indizi regionali e specifici dei comuni", "text": "Le **valli agricole** verdi, con pendii disboscati per fare spazio ai terreni coltivati, si trovano soprattutto nel nord." },
+    { "id": "ME-arxV", "section": "Indizi regionali e specifici dei comuni", "text": "La baia di Cattaro ha un’atmosfera **turistica e popolata**, con molte persone in costume da bagno. Si vede anche una caratteristica [cresta ripida e rocciosa](https://goo.gl/maps/Sj5ENoJMcprLyLzWA)." },
+    { "id": "ME-YLJY", "section": "Indizi regionali e specifici dei comuni", "text": "Nei dintorni di Podgorica e a sud della città si vedono **montagne aride** con pochi alberi. In questa regione sono comuni anche i vigneti." },
+    { "id": "ME-59VX", "section": "Indizi regionali e specifici dei comuni", "text": "Si trovano **pinete** nel nord e in una piccola zona a nord di Nikšić, ma sono più diffuse a **est**." },
+    { "id": "ME-BFX1", "section": "Indizi regionali e specifici dei comuni", "text": "Il Parco nazionale del Durmitor si riconosce dal paesaggio caratteristico di **montagne erbose e prive di alberi**, dall’aspetto d’alta quota.\n\nLa cittadina di [Žabljak](https://goo.gl/maps/ityFp93bD3WQweCq5) si trova nel parco e si riconosce sia dal paesaggio sia dalla [sua architettura particolare](https://goo.gl/maps/1dyUEW1YaCgDS1SU9) [degli edifici](https://goo.gl/maps/wQFbfwF88LLTbie77)." },
+    { "id": "ME-cJhu", "section": "In evidenza", "text": "Podgorica è la capitale e la **città più grande** del Montenegro. Gli edifici moderni, le strade ampie e le infrastrutture contemporanee aiutano a riconoscerla." },
+    { "id": "ME-9667", "section": "In evidenza", "text": "Questi caratteristici versanti montuosi a **gradoni** si trovano nella valle del fiume Cemi." },
+    { "id": "ME-Ifx0", "section": "In evidenza", "text": "Nel **lago Slansko** si possono vedere molte piccole isole." },
+    { "id": "ME-VuAe", "section": "In evidenza", "text": "La miniera di carbone di Pljevlja si riconosce dall’ampia **barriera artificiale di ghiaia**. Spesso la miniera è visibile anche [da lontano](https://goo.gl/maps/45CwG7nnsD9NjzXE6)." },
+    { "id": "ME-CFIQ", "section": "In evidenza", "text": "Il ponte sul lago di Scutari si riconosce dalla **ferrovia** e dai dissuasori in pietra accanto alla strada." }
+  ]
+}

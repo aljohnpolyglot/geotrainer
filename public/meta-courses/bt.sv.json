@@ -1,0 +1,24 @@
+{
+  "code": "BT",
+  "language": "sv",
+  "tips": [
+    { "id": "BT-y1Qr", "section": "Att känna igen Bhutan", "text": "Täckningen i Bhutan fotograferades med en **grå** Google-bil utan antenn.", "note": "Bhutan är det enda landet med vänstertrafik där Googles bil är grå. Blanda inte ihop den med en vit Google-bil, eftersom de kan likna varandra." },
+    { "id": "BT-uFJO", "section": "Att känna igen Bhutan", "text": "På Bhutans slingrande landsvägar används ofta **stenblock** som vägräcken. De är mycket vanliga och ofta en av de bästa ledtrådarna i rundor på landsbygden.\n\nRäcken av metall är däremot ovanliga." },
+    { "id": "BT-uyf1", "section": "Att känna igen Bhutan", "text": "Bhutans traditionella arkitektur är mycket särpräglad. De flesta hus har **plåttak** och **målade träinramningar**, vilket ger dem ett unikt utseende." },
+    { "id": "BT-b3oU", "section": "Att känna igen Bhutan", "text": "Bhutan är ett **bergigt** land, och det mesta av täckningen finns längs de viktigaste bergsvägarna.", "note": "I söder finns flacka områden där inga berg syns." },
+    { "id": "BT-6ZzJ", "section": "Att känna igen Bhutan", "text": "**Böneflaggor** längs vägarna är typiska för Bhutan." },
+    { "id": "BT-M7LD", "section": "Att känna igen Bhutan", "text": "Ibland förekommer **tunna metallstolpar** i Bhutan. De är ofta svartmålade längst ner." },
+    { "id": "BT-fJM0", "section": "Att känna igen Bhutan", "text": "Det här är Bhutans vägmarkörer. Lägg märke till den **gula** toppen och den vita nederdelen.\n\nPå riksvägar står vägnumret högst upp på markören, men numret är inte utsatt på kartan. Du kan ändå använda det för att identifiera vägen med hjälp av [den här tabellen](https://sites.google.com/site/roadnumberingsystems/home/countries/bhutan).", "note": "Om du är på en landsväg och vill ta reda på var du är kan de här markörerna hjälpa dig att ringa in den exakta platsen." },
+    { "id": "BT-3qFe", "section": "Att känna igen Bhutan", "text": "Sådana skyltar är vanliga i Bhutans städer och är ofta **röda** eller **blå**.", "note": "Som här brukar de visa namnet på orten du befinner dig i." },
+    { "id": "BT-LdOA", "section": "Att känna igen Bhutan", "text": "Taxibilar i Bhutan har **gula** registreringsskyltar och **gula** tak." },
+    { "id": "BT-tkrk", "section": "Att känna igen Bhutan", "text": "Vägvisare i Bhutan har ofta svartvita **ränder**.", "note": "I Asien finns sådana stolpar också i Sri Lanka, Indien, Nepal, Malaysia och Bangladesh. Kontrollera gärna andra ledtrådar innan du gissar." },
+    { "id": "BT-yGLe", "section": "Regionala ledtrådar och provinsledtrådar", "text": "Två **heldragna vita kantlinjer** förekommer bara i västra Bhutan, söder om och nära huvudstaden Thimphu." },
+    { "id": "BT-6TGY", "section": "Regionala ledtrådar och provinsledtrådar", "text": "Flacka landskap som det här finns bara **i södra Bhutan**.", "note": "Täckningen i söder är **begränsad** till de fyra områden som visas på kartan." },
+    { "id": "BT-FHkm", "section": "Regionala ledtrådar och provinsledtrådar", "text": "Phobjikha-dalen söder om Nubding är en bred och relativt flack jordbruksdal. Det är med god marginal den största öppna dalen i Street View där ingen större flod syns." },
+    { "id": "BT-s895", "section": "Platsledtrådar", "text": "En **krok** syns baktill på bilen i Haa-distriktet, främst i orten Ha.", "note": "På grund av biloskärpan kan kroken ibland vara [knappt synlig](https://maps.app.goo.gl/sjuWHQTbSpkjC6wAA)." },
+    { "id": "BT-RG1f", "section": "Platsledtrådar", "text": "Täckning fotograferad sent på kvällen finns på två platser i landet: på en liten landsväg öster om Mongar-distriktet och i ett betydligt mer [tätbebyggt område](https://maps.app.goo.gl/wvheeJxLJYZwuHhi7) kring orten Paro i väster." },
+    { "id": "BT-QdQ2", "section": "Platsledtrådar", "text": "Gelephu flygplats är den enda flygplatsen i Bhutans **flacka södra** del och känns därför lätt igen." },
+    { "id": "BT-W6QG", "section": "Platsledtrådar", "text": "Paros internationella flygplats ligger i en **torr** dal i nordväst och är en av landets två nordliga flygplatser." },
+    { "id": "BT-TQCb", "section": "Platsledtrådar", "text": "Paros internationella flygplats ligger i en **torr** dal i nordväst, medan den inhemska flygplatsen i Bumthang ligger i en **fuktig** dal i norr." }
+  ]
+}

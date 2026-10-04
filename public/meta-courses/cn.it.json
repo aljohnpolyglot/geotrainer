@@ -1,0 +1,72 @@
+{
+  "code": "CN",
+  "language": "it",
+  "tips": [
+    {
+      "id": "CN-0D6J",
+      "section": "Riconoscere la Cina",
+      "text": "Tutte le immagini ufficiali della Cina continentale sono state riprese con un **treppiede**. Gli oggetti presentano spesso sfocatura di movimento e i colori sono leggermente saturi.\n\n_È disponibile [qui](https://www.plonkit.net/hong-kong) una guida Plonk It separata per Hong Kong. La guida di Macao si trova [qui](https://www.plonkit.net/macau)._",
+      "note": "Hong Kong e Macao hanno una copertura completa con auto Google."
+    },
+    {
+      "id": "CN-y76w",
+      "section": "Indizi regionali",
+      "text": "Una parte consistente delle immagini è stata ripresa **all’interno di musei** in molte città. Tuttavia, la maggior parte dei musei coperti si trova a Pechino e Shanghai o nei dintorni."
+    },
+    {
+      "id": "CN-dosV",
+      "section": "Indizi regionali",
+      "text": "Lungo la costa orientale si trovano **città antiche** coperte: a [Zhoucun](https://goo.gl/maps/HtrBBDFAqr4kmpsi7), a nord-est di [Xuzhou](https://goo.gl/maps/ZBQ6DJwNq9GaX48v5), a [Yangzhou](https://goo.gl/maps/Jv38RED54kjAMofy9), a ovest di [Jiaxing](https://goo.gl/maps/9ShXFknmEMANdcw67) e a ovest di [Zhangzhou](https://goo.gl/maps/obaDwScAwCNoynGs5)."
+    },
+    {
+      "id": "CN-bsTm",
+      "section": "Indizi regionali",
+      "text": "Immagini esterne di moderne **aree urbane** si trovano a [Pechino](https://goo.gl/maps/6LT8nsRuT7ZzY3t57), [Yangzhou](https://goo.gl/maps/Dka3nyFnF2jdkMAh8), [Shanghai](https://goo.gl/maps/Q3GDwGHXSckc6M7z7), [Shenzhen](https://goo.gl/maps/M6rYq1LDtTUvphnMA) e [Chengdu](https://goo.gl/maps/u334vZ7Q9KAFmYvW9)."
+    },
+    {
+      "id": "CN-pTop",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il Museo del Palazzo (comunemente chiamato [Città Proibita](https://en.wikipedia.org/wiki/Forbidden_City)) è un **enorme palazzo** nel centro di Pechino."
+    },
+    {
+      "id": "CN-2kV6",
+      "section": "Copertura individuabile con precisione",
+      "text": "Vicino al Today Art Museum di Pechino si trova questa moderna strada urbana, con diversi caffè e bar. Davanti al museo si trova anche questa [statua insolita](https://goo.gl/maps/GE62dTna3EgiyzWv5)."
+    },
+    {
+      "id": "CN-9s1q",
+      "section": "Copertura individuabile con precisione",
+      "text": "L’**area di parcheggio** davanti al museo del Sichuan a Chengdu è ricca di **vegetazione**."
+    },
+    {
+      "id": "CN-TjfT",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il museo dell’Hubei a Wuhan si riconosce dall’architettura **simile a un palazzo** e dai **tetti grigi**."
+    },
+    {
+      "id": "CN-ZSAE",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il museo della seta di Hangzhou si riconosce dalla **facciata curva in vetro** e dalla **fontana** davanti all’ingresso."
+    },
+    {
+      "id": "CN-Fgo6",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il Long Museum di Shanghai si riconosce dall’**edificio principale cubico in cemento**."
+    },
+    {
+      "id": "CN-V4ba",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il museo di Suzhou si riconosce dall’architettura angolare **simmetrica**, bianca e grigia."
+    },
+    {
+      "id": "CN-d3En",
+      "section": "Copertura individuabile con precisione",
+      "text": "Il museo di Yangzhou si riconosce dall’**edificio arrotondato in pietra beige**."
+    },
+    {
+      "id": "CN-CodW",
+      "section": "Copertura individuabile con precisione",
+      "text": "Zhoucun è l’unica città antica della Cina individuabile con precisione e si riconosce dalla strada che procede dritta da nord a sud."
+    }
+  ]
+}

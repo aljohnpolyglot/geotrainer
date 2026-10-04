@@ -1,0 +1,13 @@
+{
+  "code": "SM", "language": "fr", "tips": [
+    { "id": "SM-nbvK", "section": "Identifier Saint-Marin", "text": "Le **mont Titano**, haut de 739 m, domine le paysage alentour et est visible depuis presque tous les points de la République.", "note": "Repérez les **trois tours** pour l’identifier avec certitude." },
+    { "id": "SM-Fpf0", "section": "Identifier Saint-Marin", "text": "Le paysage de Saint-Marin est principalement composé de douces **collines agricoles** et de nombreuses petites routes sinueuses. La végétation est nettement **méditerranéenne** et généralement assez luxuriante." },
+    { "id": "SM-9e8C", "section": "Identifier Saint-Marin", "text": "Les panneaux routiers et les bornes sont **généralement identiques** à ceux d’Italie.", "note": "De nombreux panneaux indiquent la direction de la ville italienne voisine de **Rimini**." },
+    { "id": "SM-8OjL", "section": "Identifier Saint-Marin", "text": "Comme en Italie, la plupart des poteaux de réseaux à Saint-Marin sont **ronds** et en **béton**. On y trouve aussi des poteaux en bois." },
+    { "id": "SM-XqN5", "section": "Identifier Saint-Marin", "text": "Saint-Marin est le seul pays au monde à utiliser des chevrons **jaunes** avec des flèches **rouge bordeaux**." },
+    { "id": "SM-RCBb", "section": "Identifier Saint-Marin", "text": "Ces **passages piétons élaborés**, avec des bandes bleues peintes et des panneaux suspendus, sont propres à Saint-Marin." },
+    { "id": "SM-HAjS", "section": "Identifier Saint-Marin", "text": "Les poubelles **vert citron** sont particulièrement courantes à Saint-Marin. Dans les images de génération 4, certaines ont été remplacées par des poubelles **noires**." },
+    { "id": "SM-7HE9", "section": "Indices régionaux", "text": "La Superstrada di San Marino relie le village frontalier de Dogana à la ville de Saint-Marin. C’est la **seule route à chaussées séparées** du pays, avec une **barrière métallique** entre les voies." },
+    { "id": "SM-nInM", "section": "À la une", "text": "Le **centre historique** a été couvert par une caméra Trekker de génération 3." }
+  ]
+}

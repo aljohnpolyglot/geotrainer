@@ -1,0 +1,95 @@
+{
+  "code": "PR",
+  "language": "pt",
+  "tips": [
+    {
+      "id": "PR-TIjg",
+      "section": "Identificando Porto Rico",
+      "text": "Quase toda a cobertura foi capturada com “smallcam”, uma variante da geração 4 que aqui se reconhece pelo desfoque largo e pela antena frequentemente visível. A câmara fica mais baixa e o desfoque dianteiro é mais redondo do que nos [desfoques de carrinhas](https://maps.app.goo.gl/Z8fwYWxNaCrZpv5n8)."
+    },
+    {
+      "id": "PR-Npkn",
+      "section": "Identificando Porto Rico",
+      "text": "O carro do Street View da geração 3 usado em Porto Rico tem uma antena na dianteira, do lado direito. Na ponta da antena há um pequeno ponto branco.",
+      "note": "Os carros do Google em Guam e nas Marianas do Norte também têm uma antena na dianteira, do lado direito. Antes de adivinhar, procure outras pistas."
+    },
+    {
+      "id": "PR-zV2D",
+      "section": "Identificando Porto Rico",
+      "text": "Em todo o território de Porto Rico, o indicativo telefónico regional é (787). Pode aparecer antes dos números neste formato:\n\n(787) XXX-XXXX",
+      "note": "Embora seja muito menos comum, também poderá encontrar o indicativo [939](https://maps.app.goo.gl/E8TGnnwM3JUComFm6)."
+    },
+    {
+      "id": "PR-avsT",
+      "section": "Identificando Porto Rico",
+      "text": "Em Porto Rico, é comum ver espanhol nos sinais em vez de inglês."
+    },
+    {
+      "id": "PR-FSsp",
+      "section": "Identificando Porto Rico",
+      "text": "As cadeias comerciais americanas, como a Wal-Mart, são muito comuns em Porto Rico. Isto ajuda a distingui-lo de outros países e territórios latino-americanos próximos, onde as lojas americanas não são comuns."
+    },
+    {
+      "id": "PR-x00D",
+      "section": "Identificando Porto Rico",
+      "text": "As matrículas dianteiras não são obrigatórias em Porto Rico. Por isso, é raro ver carros com matrícula à frente, o que ajuda a distingui-lo de Guam e das Ilhas Marianas do Norte."
+    },
+    {
+      "id": "PR-eA8V",
+      "section": "Identificando Porto Rico",
+      "text": "Uma parte significativa da cobertura rural de Porto Rico foi capturada em grandes autoestradas divididas."
+    },
+    {
+      "id": "PR-8rin",
+      "section": "Identificando Porto Rico",
+      "text": "Este é um exemplo do aspeto dos escudos das autoestradas de Porto Rico. Da parte superior esquerda para a inferior direita, são: escudos de autoestradas principais, de autoestradas urbanas principais, secundárias e terciárias. Não aparecem em nenhum outro estado ou território dos EUA."
+    },
+    {
+      "id": "PR-nXMf",
+      "section": "Identificando Porto Rico",
+      "text": "Os sinais de limite de velocidade de Porto Rico têm a mesma forma e dimensão dos sinais do território continental dos EUA. A principal diferença é que estão sempre escritos em espanhol, não em inglês."
+    },
+    {
+      "id": "PR-MALI",
+      "section": "Identificando Porto Rico",
+      "text": "Os sinais de paragem em Porto Rico dizem “PARE” em vez de “STOP”.",
+      "note": "“PARE” também é usado em toda a América do Sul e na República Dominicana."
+    },
+    {
+      "id": "PR-sbGW",
+      "section": "Identificando Porto Rico",
+      "text": "Os marcos quilométricos porto-riquenhos são altos e verdes, com “km” no topo e um número escrito na vertical, em letras grandes."
+    },
+    {
+      "id": "PR-m45n",
+      "section": "Identificando Porto Rico",
+      "text": "A maioria das casas de Porto Rico é de betão e tem telhados planos. Também são comuns os portões metálicos à frente das casas, sobretudo nas zonas urbanas.",
+      "note": "As casas de outras regiões da América Latina podem ter um aspeto semelhante."
+    },
+    {
+      "id": "PR-1NMP",
+      "section": "Pistas regionais",
+      "text": "O sul de Porto Rico parece muitas vezes nitidamente mais seco do que o resto da ilha."
+    },
+    {
+      "id": "PR-2LXU",
+      "section": "Pistas regionais",
+      "text": "As costas norte e sul de Porto Rico têm normalmente planícies costeiras ou colinas onduladas."
+    },
+    {
+      "id": "PR-CcDj",
+      "section": "Pistas regionais",
+      "text": "A maioria das zonas montanhosas de Porto Rico situa-se na região central. Grande parte da cobertura destas zonas limita-se a autoestradas divididas."
+    },
+    {
+      "id": "PR-nsPb",
+      "section": "Em destaque",
+      "text": "A cidade de Ponce, no sul, tem muitos edifícios no estilo da arquitetura crioula de Ponce, que combina o estilo vitoriano com o revivalismo espanhol. Os edifícios são normalmente feitos de madeira e alvenaria."
+    },
+    {
+      "id": "PR-hatM",
+      "section": "Em destaque",
+      "text": "A Cidade Velha de San Juan fica na extremidade noroeste da cidade de San Juan. Tem ruas muito estreitas, edifícios coloridos e uma mistura de arquitetura gótica, renascentista e barroca. Algumas ruas desta zona também são pavimentadas com tijolos."
+    }
+  ]
+}

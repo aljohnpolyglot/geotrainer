@@ -1,0 +1,86 @@
+{
+  "code": "RS",
+  "language": "de",
+  "tips": [
+    {
+      "id": "RS-qGEx",
+      "section": "Serbien erkennen",
+      "text": "In Serbien gibt es mehrere Leitpfostentypen, doch die meisten haben einen **seitlich versetzten Reflektor**. Die Pfosten sind gewöhnlich flach und nicht räumlich geformt."
+    },
+    {
+      "id": "RS-VSVy",
+      "section": "Serbien erkennen",
+      "text": "Serbien verwendet ausschließlich Leitplanken mit **B-Profil**.",
+      "note": "Nordmazedonien verwendet keine Leitplanken mit B-Profil. Einen guten Überblick über europäische Leitplanken bietet [diese Infografik](/images/serbia/europeguardrail.png)."
+    },
+    {
+      "id": "RS-WqwF",
+      "section": "Serbien erkennen",
+      "text": "In Serbien stehen auf den Leitwinkeln **schwarze Pfeile** auf **weißem** Hintergrund.",
+      "note": "In Europa gibt es diese Leitwinkel auch in Slowenien, Montenegro und Nordmazedonien."
+    },
+    {
+      "id": "RS-SDu4",
+      "section": "Serbien erkennen",
+      "text": "In Serbien gibt es **vier verschiedene Lkw-Farben**, die in unterschiedlichen Gebieten verwendet wurden."
+    },
+    {
+      "id": "RS-V8kh",
+      "section": "Serbien erkennen",
+      "text": "Serbien hat auch Aufnahmen der Generation 4 mit „Smallcam“. Die Kamera sitzt niedriger als bei normalen Fahrzeugen der Generation 4 und erzeugt eine relativ große runde Unschärfe mit einem kleinen Vorsprung vorn. Die Unschärfe kann auch völlig transparent sein und ist dann schwerer zu erkennen. Hinten kann eine kurze Antenne oder ein schwarzer Fleck zu sehen sein.",
+      "note": "Auch in den meisten Balkanstaaten gibt es Smallcam-Aufnahmen."
+    },
+    {
+      "id": "RS-LpbY",
+      "section": "Serbien erkennen",
+      "text": "Die meisten Aufnahmen der Generation 3 in Serbien wurden mit einem Google-Auto **ohne Antenne** gemacht.",
+      "note": "Mit Ausnahme Nordmazedoniens haben fast alle Länder Mittel- und Osteuropas bei Generation 3 eine Antenne."
+    },
+    {
+      "id": "RS-un4M",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Die Vojvodina, eine nördliche Region zwischen der ungarischen Grenze und Belgrad, ist an der **flachen**, **landwirtschaftlich geprägten Landschaft** zu erkennen. Das Gelände ist völlig eben und hat **überhaupt keine Hügel**."
+    },
+    {
+      "id": "RS-kehq",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Dieser leichte **Höhenzug** inmitten einer ansonsten flachen Landschaft liegt im Nationalpark Fruška Gora, südwestlich von Novi Sad."
+    },
+    {
+      "id": "RS-enVL",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Zentralnordserbien erkennt man an den **sanft geschwungenen Hügeln**."
+    },
+    {
+      "id": "RS-QMqw",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Eine ähnlich hügelige Landschaft gibt es im Becken der südlichen Morava, dort sind jedoch **größere Hügel und Berge** zu sehen."
+    },
+    {
+      "id": "RS-RnNO",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Im Süden und Südosten entlang der Grenzen zu Bulgarien und Kosovo zeigt sich eine **üppige**, **grüne** und **gebirgige** Landschaft."
+    },
+    {
+      "id": "RS-WCh2",
+      "section": "Regionale und bezirksspezifische Hinweise",
+      "text": "Aufnahmen der Generation 3 mit **Herbstlaub** gibt es in dieser Region südlich von Čačak sowie in einem kleinen Gebiet um Valjevo."
+    },
+    {
+      "id": "RS-8vGG",
+      "section": "Im Fokus",
+      "text": "Ein weißes Google-Auto mit **kurzer Antenne** ist in Novi Sad, in Kovilj, in und um Belgrad, in Niš sowie auf der Verbindungsstraße E75 zu sehen.",
+      "note": "Das weiße Auto ist nicht immer sichtbar."
+    },
+    {
+      "id": "RS-yQCt",
+      "section": "Im Fokus",
+      "text": "Die markanten **Vršac-Berge** liegen östlich von Vršac nahe der rumänischen Grenze. Sie ragen aus einer flachen Landschaft heraus; südlich davon sind häufig [Weinberge](https://goo.gl/maps/e2hLdz6HJw4kWN778) zu sehen. Auch die [Festung Vršac](https://goo.gl/maps/WzaCRBL14QdDEdre7) steht auf dem Berg."
+    },
+    {
+      "id": "RS-ajNO",
+      "section": "Im Fokus",
+      "text": "Im mehrheitlich ungarischsprachigen Norden der Vojvodina gibt es **zweisprachige Schilder** mit serbischem und ungarischem Text."
+    }
+  ]
+}

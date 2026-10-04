@@ -1,0 +1,91 @@
+{
+  "code": "SG",
+  "language": "it",
+  "tips": [
+    {
+      "id": "SG-dONA",
+      "section": "Identificare Singapore",
+      "text": "Singapore è una città-stato molto sviluppata, caratterizzata da pulizia e ordine.\n\nLe strade principali sono spesso a carreggiate separate, con cordoli bianchi e neri e doppie linee gialle esterne. Nelle vicinanze si vedono spesso alti condomini.",
+      "note": "In molti casi basta questo “aspetto generale” per riconoscere facilmente Singapore. Qui sotto sono comunque elencati alcuni indizi più specifici."
+    },
+    {
+      "id": "SG-oACN",
+      "section": "Identificare Singapore",
+      "text": "Tutti i cartelli con i nomi delle strade di Singapore seguono questo formato particolare: sono verdi, hanno gli angoli arrotondati e un carattere bianco ben riconoscibile."
+    },
+    {
+      "id": "SG-9Mue",
+      "section": "Identificare Singapore",
+      "text": "Anche i cartelli direzionali sono verdi, con lettere bianche e testo in inglese.",
+      "note": "Ogni superstrada ha un codice di tre lettere (per esempio TPE), facile da individuare sui cartelli."
+    },
+    {
+      "id": "SG-gJnM",
+      "section": "Identificare Singapore",
+      "text": "I segnali stradali di Singapore sono particolari perché sono sempre montati su uno sfondo bianco quadrato.",
+      "note": "Nella quasi totalità degli altri paesi i segnali stradali non hanno questo sfondo quadrato."
+    },
+    {
+      "id": "SG-U9vA",
+      "section": "Identificare Singapore",
+      "text": "Gli alberi della pioggia si trovano in tutta Singapore e sono spesso piantati lungo le strade principali."
+    },
+    {
+      "id": "SG-hevr",
+      "section": "Identificare Singapore",
+      "text": "Gli avvisi sono spesso scritti in grandi lettere direttamente sulla strada, come il famoso “HUMP AHEAD” (“dosso avanti”)."
+    },
+    {
+      "id": "SG-NOTm",
+      "section": "Identificare Singapore",
+      "text": "La maggior parte degli autobus di Singapore è verde lime, perciò è facile riconoscerli. Si vedono anche altre livree, per esempio le varianti [bianche e viola di SBS Transit](https://goo.gl/maps/SXeRNoTSsTqTmy5BA)."
+    },
+    {
+      "id": "SG-RNhX",
+      "section": "Identificare Singapore",
+      "text": "Inoltre, tutte le fermate degli autobus sono protette da dissuasori di cemento con caratteristiche bande di avvertimento nere e gialle.",
+      "note": "In alcune città della Malaysia si trovano modelli simili, ma non identici."
+    },
+    {
+      "id": "SG-su01",
+      "section": "Identificare Singapore",
+      "text": "Oltre ai dissuasori di cemento presso le fermate, a Singapore si trova talvolta una particolare zona gialla sulla strada che indica l’uscita dell’autobus, con una freccia."
+    },
+    {
+      "id": "SG-hHxa",
+      "section": "Identificare Singapore",
+      "text": "Quasi tutti i semafori di Singapore seguono questo modello e sono sostenuti da una lamiera curva con vari fori."
+    },
+    {
+      "id": "SG-sB3c",
+      "section": "Indizi regionali",
+      "text": "Molte strade prendono il nome dal quartiere in cui si trovano, soprattutto nelle periferie.",
+      "note": "I nomi dei quartieri compaiono molto presto sulla mappa, quindi possono far risparmiare parecchio tempo quando si cerca un punto preciso. Per esempio, il cartello nell’immagine indica la Street 31 nel quartiere di Ang Mo Kio."
+    },
+    {
+      "id": "SG-nZF6",
+      "section": "Indizi regionali",
+      "text": "L’area di pianificazione di Tuas è una zona industriale riconoscibile per le strade dritte, i complessi industriali, le gru e i container marittimi."
+    },
+    {
+      "id": "SG-KPH6",
+      "section": "Indizi regionali",
+      "text": "L’isola di Sentosa si riconosce facilmente dai cartelli verdi, dalle strade tortuose e dall’atmosfera generale da località turistica. A volte si vede anche una corsia verde come [questa](https://goo.gl/maps/hrc9MLAc4F6GQihy5)."
+    },
+    {
+      "id": "SG-SP7M",
+      "section": "In evidenza",
+      "text": "Il veicolo di ripresa della generazione 3 a Pulau Ubin si riconosce dalla copertura forestale insolitamente rurale e dal cappello mimetico che talvolta si vede guardando in basso."
+    },
+    {
+      "id": "SG-TWrN",
+      "section": "In evidenza",
+      "text": "Le isole di St John e Lazarus si riconoscono dal veicolo di ripresa della generazione 3, dalle strade lisce in asfalto e dalla presenza quasi costante del mare nelle vicinanze."
+    },
+    {
+      "id": "SG-LCE7",
+      "section": "In evidenza",
+      "text": "La minuscola isola di Kusu si identifica facilmente dalle pietre rosse usate per pavimentare l’intero sentiero."
+    }
+  ]
+}

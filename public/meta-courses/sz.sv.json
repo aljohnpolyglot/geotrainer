@@ -1,0 +1,22 @@
+{
+  "code": "SZ",
+  "language": "sv",
+  "tips": [
+    { "id": "SZ-sSv1", "section": "Att känna igen Eswatini", "text": "Eswatinis landskap är känt för sina **gröna, skogsklädda kullar** och **höga, gyllene gräs**.", "note": "Lesothos berg är däremot oftast kala, och långt gräs är ovanligt där." },
+    { "id": "SZ-Os75", "section": "Att känna igen Eswatini", "text": "Elstolparna i Eswatini är gjorda av **mörkbrunt trä** och har en enkel utformning. Isolatorerna sitter oftast på sidan.", "note": "I södra Afrika är stolpar med tre isolatorer vanligare just i Eswatini." },
+    { "id": "SZ-P8gV", "section": "Att känna igen Eswatini", "text": "Vägar vars beteckning börjar med **MR** finns bara i Eswatini." },
+    { "id": "SZ-XXIL", "section": "Att känna igen Eswatini", "text": "I Eswatini har vägar vanligtvis **gula** kantlinjer och ibland **tredubbla vita** mittlinjer.", "note": "Liknande vägmarkeringar förekommer också i Sydafrika, Lesotho och Botswana." },
+    { "id": "SZ-PQbM", "section": "Att känna igen Eswatini", "text": "Hela Eswatini fotograferades med en **vit Google-bil** utan antenn.", "note": "I Afrika förekommer samma bil också i Sydafrika, Lesotho och Botswana." },
+    { "id": "SZ-eMUU", "section": "Att känna igen Eswatini", "text": "**Busshållplatser av betong** är vanliga längs vägarna i Eswatini." },
+    { "id": "SZ-pB4I", "section": "Regionala ledtrådar", "text": "Bergsgräsmarker med **högt, gyllene gräs** och bergig terräng är typiska för västra Eswatini.", "note": "Långt gräs finns i nästan hela Eswatini. Här syftar ledtråden särskilt på den klara gyllene färgen, som oftast syns i de västra högländerna." },
+    { "id": "SZ-NeZB", "section": "Regionala ledtrådar", "text": "**Tallplantager** finns i vissa områden i västra delen av landet.", "note": "Liknande plantager finns också i Sydafrika." },
+    { "id": "SZ-pnyI", "section": "Regionala ledtrådar", "text": "Det här särpräglade området i landets södra mitt, främst längs MR9, känns igen på sin mörka, täta **grönska** och sina **höga, skogsklädda berg**.", "note": "Om skillnaden är svår att se kan du jämföra med andra delar av landet, där landskapet oftare går i ljusare gyllene toner." },
+    { "id": "SZ-Yn7m", "section": "Regionala ledtrådar", "text": "Området i landets östra del känns igen på den **ovanligt flacka terrängen** och bergen som ofta syns i fjärran." },
+    { "id": "SZ-PD9f", "section": "Regionala ledtrådar", "text": "**Sockerrör** odlas på flera platser längs den östra gränsen." },
+    { "id": "SZ-f8Wu", "section": "Platsledtrådar", "text": "MR3 söder om Ngomane känns igen på den flacka terrängen, det långa torra gräset och **smutsen på kameran**." },
+    { "id": "SZ-Ak5Y", "section": "Platsledtrådar", "text": "MR3 från Manzini till gränsen mot Sydafrika är **delad** av räcken i metall och sten, vilket gör den lätt att känna igen.", "note": "Det här är den enda uppdelade motorvägen i Eswatini." },
+    { "id": "SZ-oFsa", "section": "Platsledtrådar", "text": "MR8 i sydöstra Eswatini, längs gränsen mot Sydafrika, känns igen på den **särpräglade bergsryggen i öster**." },
+    { "id": "SZ-wTEf", "section": "Platsledtrådar", "text": "Mlawula naturreservat känns igen på sina smala grusvägar, höga gräs och typiska savannlandskap." },
+    { "id": "SZ-e0dy", "section": "Platsledtrådar", "text": "Om du ser text på **portugisiska** i Eswatini befinner du dig troligen i den lilla orten Lomahasha.", "note": "Det beror på närheten till Moçambique, där portugisiska talas." }
+  ]
+}

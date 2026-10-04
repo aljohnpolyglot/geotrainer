@@ -1,0 +1,24 @@
+{
+  "code": "IM",
+  "language": "it",
+  "tips": [
+    { "id": "IM-hu7c", "section": "Identificare l’Isola di Man", "text": "La copertura dell’Isola di Man è limitata alla **Generazione 2**.\n\nQuesta generazione si riconosce dalla qualità inferiore delle immagini e dalla sfocatura circolare sopra e sotto la visuale. Anche i colori appaiono leggermente alterati." },
+    { "id": "IM-ZZ1O", "section": "Identificare l’Isola di Man", "text": "Il paesaggio dell’Isola di Man è composto soprattutto da **terreni agricoli collinari**, attraversati da strade strette." },
+    { "id": "IM-4nRh", "section": "Identificare l’Isola di Man", "text": "Sono comuni le case con **pareti imbiancate a calce** e **muretti all’ingresso**, come in Irlanda." },
+    { "id": "IM-2MfZ", "section": "Identificare l’Isola di Man", "text": "Lungo le strade principali si possono talvolta vedere **cordoli dipinti a strisce**." },
+    { "id": "IM-fUGu", "section": "Identificare l’Isola di Man", "text": "Questi **dissuasori blu** sono comuni nelle aree urbane." },
+    { "id": "IM-pQGf", "section": "Identificare l’Isola di Man", "text": "L’[ulex](https://en.wikipedia.org/wiki/Ulex) (o ginestra), riconoscibile dai suoi **fiori giallo vivo**, è molto comune sull’Isola di Man.", "note": "La ginestra si trova anche in altre zone impervie del Regno Unito e dell’Irlanda, come le Highlands scozzesi." },
+    { "id": "IM-btUp", "section": "Indizi regionali", "text": "Il nord dell’Isola di Man è **molto pianeggiante** rispetto al resto dell’isola. Di solito si vedono montagne a sud." },
+    { "id": "IM-abTT", "section": "Indizi regionali", "text": "Nel sud dell’Isola di Man, sul lato sinistro della lente della fotocamera si può notare una **“macchia a forma di rametto”**." },
+    { "id": "IM-jTc8", "section": "Indizi regionali", "text": "Douglas, la capitale e **città più grande** dell’Isola di Man, si riconosce dalle file di **case a schiera** e dalla maggiore densità abitativa." },
+    { "id": "IM-Sk9u", "section": "Indizi regionali", "text": "Laxey è una cittadina situata in una **valle orientata da nord-ovest a sud-est**." },
+    { "id": "IM-kUjb", "section": "Indizi regionali", "text": "Questo modello diffuso di lampione, con **base blu** e un **piccolo adesivo blu**, si trova in gran parte dell’isola, tranne che nei dintorni di Douglas e in alcune zone nord-orientali e meridionali. Inoltre, le due lettere in cima permettono di individuare una delle 21 [parrocchie](https://en.wikipedia.org/wiki/Local_government_in_the_Isle_of_Man#/media/File:IsleOfMan_LocAuths_and_Sheadings2020.svg)." },
+    { "id": "IM-VIUx", "section": "Indizi regionali", "text": "I **lampioni interamente verdi** sono comuni a Ramsey e Castletown e si trovano più raramente nelle parrocchie di Malew, Santon e Garff." },
+    { "id": "IM-Q2No", "section": "Indizi regionali", "text": "A Douglas, sui lampioni è presente un **piccolo adesivo bianco con due numeri verdi**." },
+    { "id": "IM-ONfY", "section": "Indizi regionali", "text": "Nella zona meridionale di Onchan, i lampioni hanno un **piccolo adesivo giallo**. Le due lettere sono le iniziali del nome della strada; per esempio, “SD” sta per Sunningdale Drive." },
+    { "id": "IM-smmi", "section": "Indizi regionali", "text": "Molti cartelli stradali di Ramsey riportano lo **stemma ovale** della città." },
+    { "id": "IM-lysj", "section": "Indizi regionali", "text": "Su molti cartelli di Port Erin, lo **stemma** è collocato **sopra il testo**." },
+    { "id": "IM-Arok", "section": "In evidenza", "text": "L’**aeroporto di Ronaldsway** si riconosce dal grande campo pianeggiante e aperto, delimitato da una recinzione." },
+    { "id": "IM-DCeX", "section": "In evidenza", "text": "Il **castello di Peel**, situato su un’isola, si può vedere nella città di Peel." }
+  ]
+}

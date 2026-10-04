@@ -90,11 +90,9 @@ export function loadMetaCountryCourse(code: string, language: SupportedLanguage 
       sourceLoads.set(code, source);
     }
     loaded = (language === 'en' ? source : source.then(async (tips) => {
-      try {
-        const response = await fetch(`${base}meta-courses/${encodeURIComponent(code.toLowerCase())}.${language}.json`);
-        if (!response.ok) return tips;
-        return localizeMetaCountryCourse(code, language, tips, await response.json());
-      } catch { return tips; }
+      const response = await fetch(`${base}meta-courses/${encodeURIComponent(code.toLowerCase())}.${language}.json`);
+      if (!response.ok) throw new Error(`Could not load Meta country course translation: ${code}/${language}`);
+      return localizeMetaCountryCourse(code, language, tips, await response.json());
     }))
       .catch((error) => {
         courseLoads.delete(cacheKey);

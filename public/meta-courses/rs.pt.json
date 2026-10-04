@@ -1,0 +1,86 @@
+{
+  "code": "RS",
+  "language": "pt",
+  "tips": [
+    {
+      "id": "RS-qGEx",
+      "section": "Identificando a Sérvia",
+      "text": "A Sérvia tem alguns modelos de balizadores, mas a maioria apresenta o refletor deslocado do centro. Os balizadores costumam ser planos, sem relevo."
+    },
+    {
+      "id": "RS-VSVy",
+      "section": "Identificando a Sérvia",
+      "text": "A Sérvia usa exclusivamente guardas de proteção do perfil B.",
+      "note": "A Macedónia do Norte não usa guardas de proteção do perfil B. Para uma boa visão geral das guardas de proteção europeias, consulte [este infográfico](/images/serbia/europeguardrail.png)."
+    },
+    {
+      "id": "RS-WqwF",
+      "section": "Identificando a Sérvia",
+      "text": "A Sérvia usa painéis direcionais com uma seta preta sobre fundo branco.",
+      "note": "Na Europa, estes painéis também podem ser encontrados na Eslovénia, no Montenegro e na Macedónia do Norte."
+    },
+    {
+      "id": "RS-SDu4",
+      "section": "Identificando a Sérvia",
+      "text": "Foram usados 4 camiões de cores diferentes em várias zonas da Sérvia."
+    },
+    {
+      "id": "RS-V8kh",
+      "section": "Identificando a Sérvia",
+      "text": "A Sérvia também tem cobertura da geração 4 com “smallcam”, instalada mais abaixo do que a geração 4 normal e com um desfoque circular relativamente grande, que apresenta uma pequena saliência à frente. O desfoque também pode ser totalmente transparente, tornando-se mais difícil de detetar. Na parte de trás, pode ver-se uma antena curta ou um desfoque preto.",
+      "note": "Grande parte dos Balcãs também tem “smallcam”."
+    },
+    {
+      "id": "RS-LpbY",
+      "section": "Identificando a Sérvia",
+      "text": "A maior parte da cobertura da geração 3 na Sérvia foi capturada por um carro do Google sem antena.",
+      "note": "Com exceção da Macedónia do Norte, quase toda a Europa Central e Oriental tem cobertura da geração 3 com antena."
+    },
+    {
+      "id": "RS-un4M",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "A Voivodina, região do norte entre a fronteira húngara e Belgrado, é reconhecível pela paisagem plana e agrícola. O terreno é completamente plano, sem colinas."
+    },
+    {
+      "id": "RS-kehq",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "Esta ligeira elevação, numa paisagem que de resto é plana, pode ser vista no Parque Nacional da Fruška Gora, a sudoeste de Novi Sad."
+    },
+    {
+      "id": "RS-enVL",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "O centro-norte da Sérvia é reconhecível pelas suas colinas suaves."
+    },
+    {
+      "id": "RS-QMqw",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "Uma paisagem de colinas suaves semelhante pode ser vista na bacia do rio Morava do Sul, mas aqui também há colinas e montanhas maiores."
+    },
+    {
+      "id": "RS-RnNO",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "No sul e sudeste, ao longo das fronteiras com a Bulgária e o Kosovo, observa-se uma paisagem verdejante, verde e montanhosa."
+    },
+    {
+      "id": "RS-WCh2",
+      "section": "Pistas regionais e específicas dos distritos",
+      "text": "Nesta região a sul de Čačak e numa pequena área em redor de Valjevo, há cobertura de outono da geração 3."
+    },
+    {
+      "id": "RS-8vGG",
+      "section": "Em destaque",
+      "text": "Um carro branco do Google com antena curta pode ser visto em Novi Sad, Kovilj, em Belgrado e arredores, em Niš e ao longo da E75 que liga estas cidades.",
+      "note": "O carro branco nem sempre é visível."
+    },
+    {
+      "id": "RS-yQCt",
+      "section": "Em destaque",
+      "text": "As distintas montanhas de Vršac podem ser vistas a leste de Vršac, perto da fronteira romena. As montanhas destacam-se de uma paisagem plana e, a sul, há frequentemente [vinhas](https://goo.gl/maps/e2hLdz6HJw4kWN778). Também é possível ver o [castelo de Vršac](https://goo.gl/maps/WzaCRBL14QdDEdre7) no alto da montanha."
+    },
+    {
+      "id": "RS-ajNO",
+      "section": "Em destaque",
+      "text": "Na Voivodina do norte, onde a população húngara é maioritária, podem encontrar-se placas bilingues em sérvio e húngaro."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "code": "RS",
+  "language": "fr",
+  "tips": [
+    {
+      "id": "RS-qGEx",
+      "section": "Identifier la Serbie",
+      "text": "La Serbie possède plusieurs modèles de bornes, mais la plupart ont un réflecteur **décentré**. Elles sont généralement plates, sans relief."
+    },
+    {
+      "id": "RS-VSVy",
+      "section": "Identifier la Serbie",
+      "text": "La Serbie utilise exclusivement des glissières de sécurité de **profil B**.",
+      "note": "La Macédoine du Nord n’utilise pas de glissières de profil B. Pour un aperçu des glissières européennes, consultez [cette infographie](/images/serbia/europeguardrail.png)."
+    },
+    {
+      "id": "RS-WqwF",
+      "section": "Identifier la Serbie",
+      "text": "La Serbie utilise des chevrons avec une **flèche noire** sur fond **blanc**.",
+      "note": "En Europe, on trouve aussi ces chevrons en Slovénie, au Monténégro et en Macédoine du Nord."
+    },
+    {
+      "id": "RS-SDu4",
+      "section": "Identifier la Serbie",
+      "text": "La Serbie compte **quatre couleurs de camion** différentes, utilisées dans différentes régions."
+    },
+    {
+      "id": "RS-V8kh",
+      "section": "Identifier la Serbie",
+      "text": "La Serbie possède également une couverture de génération 4 « smallcam », prise depuis une voiture plus basse que les véhicules classiques de génération 4. Elle présente un flou circulaire relativement grand, avec une petite protubérance à l’avant. Ce flou peut aussi être entièrement transparent et donc plus difficile à repérer. Une antenne courte ou un flou noir peut apparaître à l’arrière.",
+      "note": "La plupart des Balkans ont également des petites caméras."
+    },
+    {
+      "id": "RS-LpbY",
+      "section": "Identifier la Serbie",
+      "text": "La plupart des prises de vue de génération 3 en Serbie ont été réalisées par une voiture Google **sans antenne**.",
+      "note": "À l’exception de la Macédoine du Nord, presque toute l’Europe centrale et orientale a une antenne pour la génération 3."
+    },
+    {
+      "id": "RS-un4M",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "La Voïvodine, région du nord située entre la frontière hongroise et Belgrade, se reconnaît à son **paysage plat** et **agricole**. Le terrain est totalement plat, **sans aucune colline**."
+    },
+    {
+      "id": "RS-kehq",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "Cette légère **crête**, au milieu d’un paysage autrement plat, se trouve dans le parc national de Fruška Gora, au sud-ouest de Novi Sad."
+    },
+    {
+      "id": "RS-enVL",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "Le centre-nord de la Serbie se reconnaît à ses **collines légèrement ondulées**."
+    },
+    {
+      "id": "RS-QMqw",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "On trouve un relief tout aussi ondulé dans le bassin du sud de la Morava, mais avec des **collines et montagnes plus élevées**."
+    },
+    {
+      "id": "RS-RnNO",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "Un paysage **luxuriant**, **verdoyant** et **montagneux** apparaît dans le sud et le sud-est, le long des frontières bulgare et kosovare."
+    },
+    {
+      "id": "RS-WCh2",
+      "section": "Indices régionaux et propres aux districts",
+      "text": "On trouve des prises de vue d’automne de **génération 3** dans cette région au sud de Čačak, ainsi que dans une petite zone autour de Valjevo."
+    },
+    {
+      "id": "RS-8vGG",
+      "section": "À la une",
+      "text": "Une voiture Google blanche avec une **antenne courte** est visible à Novi Sad, à Kovilj, dans Belgrade et ses environs, à Niš, ainsi que sur l’E75 qui relie ces lieux.",
+      "note": "La voiture blanche n’est pas toujours visible."
+    },
+    {
+      "id": "RS-yQCt",
+      "section": "À la une",
+      "text": "Les **monts de Vršac**, caractéristiques, se dressent à l’est de Vršac, près de la frontière roumaine. Ils émergent d’un paysage plat ; on voit souvent des [vignobles](https://goo.gl/maps/e2hLdz6HJw4kWN778) au sud du massif. Le [château de Vršac](https://goo.gl/maps/WzaCRBL14QdDEdre7) domine également le sommet."
+    },
+    {
+      "id": "RS-ajNO",
+      "section": "À la une",
+      "text": "Dans le nord de la Voïvodine, où la population est majoritairement hongroise, on trouve des **panneaux bilingues** en serbe et en hongrois."
+    }
+  ]
+}

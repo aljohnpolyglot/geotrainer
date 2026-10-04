@@ -1,0 +1,145 @@
+{
+  "code": "LI",
+  "language": "pt",
+  "tips": [
+    {
+      "id": "LI-SrOE",
+      "section": "Identificar o Liechtenstein",
+      "text": "A maior parte da cobertura do Liechtenstein fica num vale fluvial relativamente plano, mas há montanhas altas em quase todas as direções. No vale, quase sempre se veem as montanhas próximas elevando-se a leste. A maior parte da cobertura montanhosa fica nas encostas; há poucas imagens propriamente nas montanhas.\n\nPor causa do vale plano do Reno, o Liechtenstein tem muitos pastos e outras terras agrícolas."
+    },
+    {
+      "id": "LI-X4GL",
+      "section": "Identificar o Liechtenstein",
+      "text": "Toda a cobertura do Liechtenstein é **low-cam**. Isso significa que a câmara do carro do Google está intencionalmente instalada mais baixa do que na maioria dos países. É possível reconhecer isso de duas formas:\n\n- O desfoque do carro é consideravelmente maior.\n\n- As estradas parecem mais largas e os objetos ao redor são vistos de um ângulo mais baixo.\n\nEm geral, o desfoque maior do carro é a forma mais consistente de reconhecer o low-cam.",
+      "note": "Os únicos outros países que sempre usam low-cam são a [Suíça](https://maps.app.goo.gl/mq5nCexiy7KfsV8E8) e o [Japão](https://www.google.com/maps/@35.8415638,139.9145236,3a,75y,305.11h,83.84t/data=!3m7!1e1!3m5!1sLyYnyrI7fgLeL5Ev09XeJg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fpanoid%3DLyYnyrI7fgLeL5Ev09XeJg%26cb_client%3Dmaps_sv.tactile.gps%26w%3D203%26h%3D100%26yaw%3D33.088177%26pitch%3D0%26thumbfov%3D100!7i16384!8i8192)."
+    },
+    {
+      "id": "LI-p90S",
+      "section": "Identificar o Liechtenstein",
+      "text": "O Liechtenstein usa balizadores cilíndricos **pretos e brancos**, com refletor branco ou cinzento e topo arredondado. Muitas vezes têm uma peça azul na lateral.\n\nQuando são fixados a guardrails, usam o [modelo em cunha](https://maps.app.goo.gl/zDoFQvaitWHeGPhk9) em vez disso.",
+      "note": "A Suíça pode usar balizadores quase idênticos."
+    },
+    {
+      "id": "LI-ci1R",
+      "section": "Identificar o Liechtenstein",
+      "text": "As paragens de autocarro no Liechtenstein têm um modelo **verde e branco**, com uma moldura metálica preta em volta da placa. A palavra LIEMOBIL aparece no topo.",
+      "note": "A moldura metálica nem sempre é preta."
+    },
+    {
+      "id": "LI-qb5C",
+      "section": "Identificar o Liechtenstein",
+      "text": "Tal como na Suíça, as placas direcionais no Liechtenstein são geralmente brancas (em estradas menores) ou azuis (em estradas maiores) e têm uma ponta de seta de cor contrastante."
+    },
+    {
+      "id": "LI-Ctc1",
+      "section": "Identificar o Liechtenstein",
+      "text": "As placas para peões do Liechtenstein têm **sete faixas**. Também têm um formato retangular invulgarmente alto.",
+      "note": "A Suíça usa placas idênticas."
+    },
+    {
+      "id": "LI-DhYM",
+      "section": "Identificar o Liechtenstein",
+      "text": "É possível encontrar estes separadores de estrada **às riscas amarelas e pretas**, com **topo arredondado** e uma **saliência semelhante a uma peça de Lego** no topo. Têm três faixas de cada cor, com amarelo na parte inferior.",
+      "note": "A Suíça também usa vários tipos de separadores de estrada, alguns dos quais são idênticos aos do Liechtenstein."
+    },
+    {
+      "id": "LI-ndYF",
+      "section": "Identificar o Liechtenstein",
+      "text": "As placas rodoviárias no Liechtenstein costumam ter uma **moldura metálica** redonda e cinzenta.",
+      "note": "As placas suíças e alemãs também podem ter molduras metálicas semelhantes."
+    },
+    {
+      "id": "LI-UNBX",
+      "section": "Identificar o Liechtenstein",
+      "text": "A arquitetura do Liechtenstein combina estilos alpinos tradicionais com edifícios mais modernos, sobretudo nas cidades maiores."
+    },
+    {
+      "id": "LI-wjF4",
+      "section": "Pistas regionais",
+      "text": "Triesenberg e arredores são uma zona relativamente povoada na encosta das montanhas, a leste do vale do Reno. Muitas vezes é possível ver o vale abaixo, a oeste."
+    },
+    {
+      "id": "LI-5YU7",
+      "section": "Pistas regionais",
+      "text": "Nas imagens a leste da crista montanhosa que atravessa o Liechtenstein, veem-se montanhas por todo o lado."
+    },
+    {
+      "id": "LI-fK9u",
+      "section": "Pistas regionais",
+      "text": "Perto de Ruggell há uma pequena crista arborizada a sul. É um grande contraste com as montanhas imponentes que se veem noutras zonas."
+    },
+    {
+      "id": "LI-25UF",
+      "section": "Pistas regionais",
+      "text": "Perto de Mauren, a crista mencionada acima pode ser vista a norte, mas este lado das colinas é muito mais desenvolvido e urbano. A sul e sudeste, veem-se as montanhas bem maiores que normalmente ficam a leste."
+    },
+    {
+      "id": "LI-uDcT",
+      "section": "Pistas regionais",
+      "text": "Há um conjunto de **colinas onduladas** que se estende de Bendern para nordeste, até à fronteira austríaca. O resto do Liechtenstein é muito plano ou montanhoso."
+    },
+    {
+      "id": "LI-Hu33",
+      "section": "Pistas regionais",
+      "text": "Na zona plana a oeste de Balzers, onde as estradas em grelha seguem para nordeste, muitas vezes se veem a norte/noroeste [dois picos rochosos](https://maps.app.goo.gl/8ZpQjESH7z189v4g9) do lado suíço."
+    },
+    {
+      "id": "LI-gG0N",
+      "section": "Pistas regionais",
+      "text": "Ao contrário do resto do Liechtenstein, Vaduz por vezes usa **placas vermelhas nas paragens de autocarro**.",
+      "note": "As paragens de autocarro comuns também existem."
+    },
+    {
+      "id": "LI-BTob",
+      "section": "Pistas regionais",
+      "text": "Ao contrário do resto do Liechtenstein, Balzers por vezes usa **placas pretas nas paragens de autocarro**.",
+      "note": "As paragens de autocarro comuns também existem."
+    },
+    {
+      "id": "LI-iJBv",
+      "section": "Pistas regionais",
+      "text": "As placas de rua azuis com uma borda branca fina indicam que está no sul do Liechtenstein ou no norte, perto de Bandern."
+    },
+    {
+      "id": "LI-t5Ye",
+      "section": "Pistas regionais",
+      "text": "As placas de rua azuis sem contorno encontram-se em Eschen."
+    },
+    {
+      "id": "LI-PSiM",
+      "section": "Pistas regionais",
+      "text": "As placas totalmente pretas encontram-se no leste do Liechtenstein."
+    },
+    {
+      "id": "LI-mKMX",
+      "section": "Pistas regionais",
+      "text": "Em Schaan encontram-se placas pretas com borda branca e letras em relevo."
+    },
+    {
+      "id": "LI-UTf6",
+      "section": "Pistas regionais",
+      "text": "Estas placas de rua castanhas, com uma fonte que lembra **tipos tradicionais alemães** e uma borda branca, encontram-se em Vaduz e nas cidades do norte."
+    },
+    {
+      "id": "LI-9VvC",
+      "section": "Pistas regionais",
+      "text": "As placas de rua castanhas com **seta** são exclusivas de Ruggell.",
+      "note": "Em Ruggell também existem as placas castanhas comuns."
+    },
+    {
+      "id": "LI-Q2Ay",
+      "section": "Pistas regionais",
+      "text": "As placas castanhas com uma fonte mais «genérica» indicam Planken."
+    },
+    {
+      "id": "LI-NSbp",
+      "section": "Em destaque",
+      "text": "Este penhasco rochoso íngreme, com árvores na base e no topo, pode ser visto em Mäls e arredores."
+    },
+    {
+      "id": "LI-c1EG",
+      "section": "Em destaque",
+      "text": "Os únicos lagos do Liechtenstein ficam imediatamente a sul de Steg, perto do centro das montanhas."
+    }
+  ]
+}

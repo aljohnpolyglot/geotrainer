@@ -1,0 +1,103 @@
+{
+  "code": "BT",
+  "language": "it",
+  "tips": [
+    {
+      "id": "BT-y1Qr",
+      "section": "Identificare il Bhutan",
+      "text": "La copertura del Bhutan è stata ripresa da un’auto grigia di Google senza antenna.",
+      "note": "Il Bhutan è l’unico paese con guida a sinistra in cui l’auto di Google è grigia. Non confonderla con un’auto bianca, perché possono sembrare simili."
+    },
+    {
+      "id": "BT-uFJO",
+      "section": "Identificare il Bhutan",
+      "text": "In Bhutan si usano spesso questi blocchi di pietra come barriere di sicurezza sulle tortuose strade rurali. Sono molto comuni e spesso uno dei modi migliori per riconoscere i luoghi rurali del Bhutan.\n\nI guardrail, invece, sono rari."
+    },
+    {
+      "id": "BT-uyf1",
+      "section": "Identificare il Bhutan",
+      "text": "L’architettura tradizionale bhutanese è molto caratteristica. La maggior parte delle case ha tetti di lamiera e intelaiature di legno dipinte, che conferiscono un aspetto unico."
+    },
+    {
+      "id": "BT-b3oU",
+      "section": "Identificare il Bhutan",
+      "text": "Il Bhutan è un paese montuoso e la maggior parte della copertura si trova sulle sue principali strade di montagna.",
+      "note": "A sud ci sono zone pianeggianti dove non si vede alcuna montagna."
+    },
+    {
+      "id": "BT-6ZzJ",
+      "section": "Identificare il Bhutan",
+      "text": "In Bhutan si vedono spesso bandiere di preghiera lungo la strada."
+    },
+    {
+      "id": "BT-M7LD",
+      "section": "Identificare il Bhutan",
+      "text": "In Bhutan si trovano talvolta pali metallici sottili. Spesso sono dipinti di nero nella parte inferiore."
+    },
+    {
+      "id": "BT-fJM0",
+      "section": "Identificare il Bhutan",
+      "text": "Questi sono i cippi stradali bhutanesi: nota la parte superiore gialla e quella inferiore bianca.\n\nSulle strade nazionali, il numero della strada è riportato sulla sommità del cippo, ma non è indicato sulla mappa. Può comunque aiutare a identificare la strada usando [questa tabella](https://sites.google.com/site/roadnumberingsystems/home/countries/bhutan).",
+      "note": "Se ti trovi su una strada rurale e vuoi capire dove sei, questi cippi sono l’indizio migliore per restringere la ricerca fino alla posizione esatta."
+    },
+    {
+      "id": "BT-3qFe",
+      "section": "Identificare il Bhutan",
+      "text": "Questi cartelli si trovano spesso nelle città del Bhutan e sono di frequente rossi o blu.",
+      "note": "Come si vede qui, di solito riportano il nome della città in cui ti trovi."
+    },
+    {
+      "id": "BT-LdOA",
+      "section": "Identificare il Bhutan",
+      "text": "I taxi del Bhutan hanno targhe gialle e tetti gialli."
+    },
+    {
+      "id": "BT-tkrk",
+      "section": "Identificare il Bhutan",
+      "text": "I pali della segnaletica in Bhutan hanno spesso strisce bianche e nere.",
+      "note": "In Asia si trovano pali simili anche in Sri Lanka, India, Nepal, Malaysia e Bangladesh. Prima di indovinare, verifica gli altri indizi."
+    },
+    {
+      "id": "BT-yGLe",
+      "section": "Indizi regionali e specifici delle province",
+      "text": "Due linee esterne bianche continue si vedono solo nel Bhutan occidentale, a sud e vicino alla capitale Thimphu."
+    },
+    {
+      "id": "BT-6TGY",
+      "section": "Indizi regionali e specifici delle province",
+      "text": "In Bhutan paesaggi pianeggianti come questo si trovano solo a sud.",
+      "note": "La copertura del sud è limitata alle quattro regioni indicate sulla mappa."
+    },
+    {
+      "id": "BT-FHkm",
+      "section": "Indizi regionali e specifici delle province",
+      "text": "La valle di Phobjikha, a sud di Nubding, è un’ampia valle agricola relativamente pianeggiante. È di gran lunga la più grande valle aperta senza un fiume importante visibile su Street View."
+    },
+    {
+      "id": "BT-s895",
+      "section": "In evidenza",
+      "text": "Nel distretto di Haa, soprattutto nella città di Ha, si può vedere un gancio sul retro dell’auto.",
+      "note": "A causa della sfocatura dell’auto, il gancio a volte è [appena visibile](https://maps.app.goo.gl/sjuWHQTbSpkjC6wAA)."
+    },
+    {
+      "id": "BT-RG1f",
+      "section": "In evidenza",
+      "text": "Nel paese si trovano immagini riprese al tramonto in due punti: su una piccola strada rurale secondaria a est del distretto di Mongar e in una zona molto più [urbana](https://maps.app.goo.gl/wvheeJxLJYZwuHhi7) intorno alla città di Paro, a ovest."
+    },
+    {
+      "id": "BT-QdQ2",
+      "section": "In evidenza",
+      "text": "L’aeroporto di Gelephu è l’unico situato nella pianeggiante zona meridionale del Bhutan, perciò è riconoscibile."
+    },
+    {
+      "id": "BT-W6QG",
+      "section": "In evidenza",
+      "text": "L’aeroporto internazionale di Paro si trova in una valle arida nel nord-ovest ed è uno dei due aeroporti settentrionali."
+    },
+    {
+      "id": "BT-TQCb",
+      "section": "In evidenza",
+      "text": "Mentre l’aeroporto internazionale di Paro si trova in una valle arida nel nord-ovest, l’aeroporto domestico di Bumthang è situato in una valle umida settentrionale."
+    }
+  ]
+}

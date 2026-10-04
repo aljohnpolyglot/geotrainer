@@ -1,0 +1,24 @@
+{
+  "code": "ME",
+  "language": "pt",
+  "tips": [
+    { "id": "ME-ioMs", "section": "Identificando Montenegro", "text": "Toda a cobertura da Geração 4 em Montenegro foi captada com uma câmara «smallcam», montada mais abaixo do que as câmaras normais da Geração 4 e com um desfoque circular relativamente grande, que tem uma pequena saliência na parte dianteira. O desfoque também pode ser totalmente transparente, o que o torna mais difícil de detetar.", "note": "A smallcam é comum na maior parte dos Balcãs e do sul da Europa." },
+    { "id": "ME-9laJ", "section": "Identificando Montenegro", "text": "Montenegro é um país pequeno e **montanhoso**. As montanhas do interior são verdejantes, enquanto a maioria das montanhas costeiras tem rochas claras expostas bem visíveis. A maioria das estradas também tem apenas uma ou duas faixas." },
+    { "id": "ME-MYa5", "section": "Identificando Montenegro", "text": "O balizador mais comum é branco, com um refletor vermelho na frente e um branco atrás. Também tem a parte superior preta.", "note": "Estes balizadores também se encontram na Eslovénia." },
+    { "id": "ME-ESKL", "section": "Identificando Montenegro", "text": "Em Montenegro, os chevrons são **pretos sobre fundo branco** ou **vermelhos sobre fundo amarelo**.", "note": "Na Albânia, os chevrons são brancos sobre fundo preto." },
+    { "id": "ME-31mF", "section": "Identificando Montenegro", "text": "Os guard rails de Montenegro estão muitas vezes **enferrujados**." },
+    { "id": "ME-RPvd", "section": "Identificando Montenegro", "text": "Montenegro é o único país dos Balcãs onde é comum encontrar guard rails dos tipos [A](https://goo.gl/maps/fZCnn3jPH4By45ph7) e [B](https://goo.gl/maps/w9hnQsjxxJS2TbT1A).", "note": "Para uma boa visão geral dos guard rails europeus, consulte [este infográfico](/images/montenegro/europeguardrail.png)." },
+    { "id": "ME-gPE6", "section": "Identificando Montenegro", "text": "Em Montenegro usam-se postes simples de **betão redondos** ou de madeira." },
+    { "id": "ME-gh0p", "section": "Identificando Montenegro", "text": "Na cobertura da Geração 3 em Montenegro, podem surgir **fendas** ocasionalmente devido a falhas na junção das imagens.", "note": "As fendas também são comuns na Albânia e podem aparecer, embora raramente, em vários outros países." },
+    { "id": "ME-vHGt", "section": "Pistas regionais e específicas dos municípios", "text": "Os **vales agrícolas** verdejantes, com encostas desflorestadas para dar lugar a terrenos agrícolas, encontram-se sobretudo no norte." },
+    { "id": "ME-arxV", "section": "Pistas regionais e específicas dos municípios", "text": "A baía de Kotor tem um ambiente **turístico e movimentado**, com muitas pessoas vestidas com roupa de banho. Também se vê uma [crista íngreme e rochosa](https://goo.gl/maps/Sj5ENoJMcprLyLzWA) bem característica." },
+    { "id": "ME-YLJY", "section": "Pistas regionais e específicas dos municípios", "text": "À volta de Podgorica e a sul da cidade, há **montanhas secas** com poucas árvores. Também é comum encontrar vinhas nesta região." },
+    { "id": "ME-59VX", "section": "Pistas regionais e específicas dos municípios", "text": "Há **florestas de pinheiros** no norte e numa pequena zona a norte de Nikšić, mas são mais comuns no **leste**." },
+    { "id": "ME-BFX1", "section": "Pistas regionais e específicas dos municípios", "text": "O Parque Nacional Durmitor reconhece-se pela paisagem característica de **montanhas relvadas e sem árvores**, com aspeto de grande altitude.\n\nA cidade de [Žabljak](https://goo.gl/maps/ityFp93bD3WQweCq5) fica dentro do parque e reconhece-se tanto pela paisagem como pela [arquitetura singular](https://goo.gl/maps/1dyUEW1YaCgDS1SU9) [dos edifícios](https://goo.gl/maps/wQFbfwF88LLTbie77)." },
+    { "id": "ME-cJhu", "section": "Em destaque", "text": "Podgorica é a capital e a **maior cidade** de Montenegro. Os edifícios modernos, as estradas largas e as infraestruturas contemporâneas ajudam a reconhecê-la." },
+    { "id": "ME-9667", "section": "Em destaque", "text": "Estas encostas montanhosas distintas, com aspeto de **degraus**, encontram-se no vale do rio Cemi." },
+    { "id": "ME-Ifx0", "section": "Em destaque", "text": "É possível ver muitas ilhas pequenas no **lago Slansko**." },
+    { "id": "ME-VuAe", "section": "Em destaque", "text": "A mina de carvão de Pljevlja reconhece-se pela ampla **parede artificial de cascalho**. Muitas vezes, a mina também pode ser vista [ao longe](https://goo.gl/maps/45CwG7nnsD9NjzXE6)." },
+    { "id": "ME-CFIQ", "section": "Em destaque", "text": "A ponte sobre o lago Skadar reconhece-se pela **linha ferroviária** e pelos balizadores de pedra junto à estrada." }
+  ]
+}

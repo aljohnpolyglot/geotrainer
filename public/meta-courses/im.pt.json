@@ -1,0 +1,24 @@
+{
+  "code": "IM",
+  "language": "pt",
+  "tips": [
+    { "id": "IM-hu7c", "section": "Identificando a Ilha de Man", "text": "A cobertura da Ilha de Man limita-se à **Geração 2**.\n\nÉ possível reconhecer esta geração pela qualidade inferior das imagens e pelo desfoque circular acima e abaixo da imagem. As cores também parecem ligeiramente alteradas." },
+    { "id": "IM-ZZ1O", "section": "Identificando a Ilha de Man", "text": "A paisagem da Ilha de Man é composta sobretudo por **terras agrícolas montanhosas**, atravessadas por estradas estreitas." },
+    { "id": "IM-4nRh", "section": "Identificando a Ilha de Man", "text": "É comum encontrar casas com **paredes caiadas de branco** e **muros à entrada**, como na Irlanda." },
+    { "id": "IM-2MfZ", "section": "Identificando a Ilha de Man", "text": "Por vezes, veem-se **lancis pintados às riscas** ao longo das estradas principais." },
+    { "id": "IM-fUGu", "section": "Identificando a Ilha de Man", "text": "Estes **balizadores azuis** são comuns nas zonas urbanas." },
+    { "id": "IM-pQGf", "section": "Identificando a Ilha de Man", "text": "As [giestas](https://en.wikipedia.org/wiki/Ulex) (ou *Ulex*), reconhecíveis pelas suas **flores amarelas vivas**, são muito comuns na Ilha de Man.", "note": "Também se encontram giestas noutras zonas acidentadas do Reino Unido e da Irlanda, como nas Terras Altas da Escócia." },
+    { "id": "IM-btUp", "section": "Pistas regionais", "text": "O norte da Ilha de Man é **muito plano** em comparação com o resto da ilha. Normalmente, veem-se montanhas a sul." },
+    { "id": "IM-abTT", "section": "Pistas regionais", "text": "No sul da Ilha de Man, pode ver-se uma **“mancha de galho”** no lado esquerdo da lente da câmara." },
+    { "id": "IM-jTc8", "section": "Pistas regionais", "text": "Douglas, a capital e **maior cidade** da Ilha de Man, distingue-se pelas fileiras de **casas geminadas** e pela maior densidade populacional." },
+    { "id": "IM-Sk9u", "section": "Pistas regionais", "text": "Laxey é uma cidade situada num **vale orientado de noroeste a sudeste**." },
+    { "id": "IM-kUjb", "section": "Pistas regionais", "text": "Este modelo comum de candeeiro, com **base azul** e um **pequeno autocolante azul**, encontra-se na maior parte da ilha, exceto na zona de Douglas e em algumas áreas do nordeste e do sul. Além disso, as duas letras no topo permitem identificar uma das 21 [paróquias](https://en.wikipedia.org/wiki/Local_government_in_the_Isle_of_Man#/media/File:IsleOfMan_LocAuths_and_Sheadings2020.svg)." },
+    { "id": "IM-VIUx", "section": "Pistas regionais", "text": "Os **candeeiros totalmente verdes** são comuns em Ramsey e Castletown e aparecem, com menos frequência, nas paróquias de Malew, Santon e Garff." },
+    { "id": "IM-Q2No", "section": "Pistas regionais", "text": "Em Douglas, os candeeiros têm um **pequeno autocolante branco com dois números verdes**." },
+    { "id": "IM-ONfY", "section": "Pistas regionais", "text": "Na zona sul de Onchan, os candeeiros têm um **pequeno autocolante amarelo**. As duas letras são as iniciais do nome da estrada; por exemplo, “SD” corresponde a Sunningdale Drive." },
+    { "id": "IM-smmi", "section": "Pistas regionais", "text": "Muitos sinais de rua em Ramsey exibem o **brasão oval** da cidade." },
+    { "id": "IM-lysj", "section": "Pistas regionais", "text": "Em muitos sinais de Port Erin, o **brasão** aparece **acima do texto**." },
+    { "id": "IM-Arok", "section": "Em destaque", "text": "O **Aeroporto de Ronaldsway** reconhece-se pelo grande campo plano e aberto, rodeado por uma vedação." },
+    { "id": "IM-DCeX", "section": "Em destaque", "text": "O **castelo de Peel**, situado numa ilha, pode ser visto na cidade de Peel." }
+  ]
+}

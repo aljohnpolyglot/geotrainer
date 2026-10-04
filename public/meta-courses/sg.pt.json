@@ -1,0 +1,91 @@
+{
+  "code": "SG",
+  "language": "pt",
+  "tips": [
+    {
+      "id": "SG-dONA",
+      "section": "Identificando Singapura",
+      "text": "Singapura é uma cidade-estado muito desenvolvida, caracterizada por limpeza e organização.\n\nAs estradas principais costumam ter faixas separadas e lancis pretos e brancos, além de linhas amarelas duplas junto ao exterior. Nas proximidades, é frequente ver blocos de apartamentos altos.",
+      "note": "Em muitos casos, este “aspeto geral” basta para identificar Singapura com facilidade. Ainda assim, listamos abaixo algumas pistas mais específicas."
+    },
+    {
+      "id": "SG-oACN",
+      "section": "Identificando Singapura",
+      "text": "Todos os sinais com nomes de ruas em Singapura seguem este formato singular. São verdes, têm cantos arredondados e uma fonte branca característica."
+    },
+    {
+      "id": "SG-9Mue",
+      "section": "Identificando Singapura",
+      "text": "Os sinais direcionais também são verdes, com letras brancas e texto em inglês.",
+      "note": "Cada via expressa tem um código de três letras (por exemplo, TPE), o que facilita identificá-la nos sinais."
+    },
+    {
+      "id": "SG-gJnM",
+      "section": "Identificando Singapura",
+      "text": "Os sinais rodoviários de Singapura são singulares porque estão sempre colocados sobre um fundo branco quadrado.",
+      "note": "Na maioria dos outros países, os sinais rodoviários não têm este fundo quadrado."
+    },
+    {
+      "id": "SG-U9vA",
+      "section": "Identificando Singapura",
+      "text": "As árvores-da-chuva encontram-se por toda Singapura e são frequentemente plantadas ao longo das estradas principais."
+    },
+    {
+      "id": "SG-hevr",
+      "section": "Identificando Singapura",
+      "text": "Os avisos são muitas vezes escritos diretamente na estrada, em letras grandes, como o famoso “HUMP AHEAD” (“lombada à frente”)."
+    },
+    {
+      "id": "SG-NOTm",
+      "section": "Identificando Singapura",
+      "text": "A maioria dos autocarros de Singapura é verde-lima, o que os torna fáceis de reconhecer. Também existem outros modelos, como as variantes [brancas e roxas da SBS Transit](https://goo.gl/maps/SXeRNoTSsTqTmy5BA)."
+    },
+    {
+      "id": "SG-RNhX",
+      "section": "Identificando Singapura",
+      "text": "Além disso, todas as paragens de autocarro estão protegidas por balizadores de betão com faixas de aviso pretas e amarelas características.",
+      "note": "Algumas cidades malaias têm modelos semelhantes, mas não exatamente iguais."
+    },
+    {
+      "id": "SG-su01",
+      "section": "Identificando Singapura",
+      "text": "Para além dos balizadores de betão nas paragens, por vezes Singapura tem uma marcação amarela singular na estrada que indica a saída do autocarro, com uma seta."
+    },
+    {
+      "id": "SG-hHxa",
+      "section": "Identificando Singapura",
+      "text": "Quase todos os semáforos de Singapura seguem este desenho e são sustentados por uma chapa metálica curva com vários orifícios."
+    },
+    {
+      "id": "SG-sB3c",
+      "section": "Pistas regionais",
+      "text": "Muitas ruas têm o nome do bairro onde se situam, sobretudo nos subúrbios.",
+      "note": "Os nomes dos bairros aparecem muito depressa no mapa, por isso pode poupar tempo à procura de um palpite perfeito. Por exemplo, o sinal na imagem indica a Rua 31 no bairro de Ang Mo Kio."
+    },
+    {
+      "id": "SG-nZF6",
+      "section": "Pistas regionais",
+      "text": "A zona de planeamento de Tuas é uma área industrial caracterizada por estradas retas, complexos industriais, gruas e contentores marítimos, o que a torna reconhecível."
+    },
+    {
+      "id": "SG-KPH6",
+      "section": "Pistas regionais",
+      "text": "A ilha de Sentosa é fácil de reconhecer pelos postes verdes, pelas estradas sinuosas e pelo ambiente geral de estância turística. Ocasionalmente, também poderá ver uma faixa verde como [esta](https://goo.gl/maps/hrc9MLAc4F6GQihy5)."
+    },
+    {
+      "id": "SG-SP7M",
+      "section": "Em destaque",
+      "text": "O veículo de captura da geração 3 na ilha de Pulau Ubin distingue-se pela cobertura florestal invulgarmente rural e pelo chapéu de camuflagem que por vezes se vê ao olhar para baixo."
+    },
+    {
+      "id": "SG-TWrN",
+      "section": "Em destaque",
+      "text": "As ilhas de São João e Lazarus podem ser reconhecidas pelo veículo de captura da geração 3, pelas estradas de asfalto liso e pela presença quase constante do mar nas proximidades."
+    },
+    {
+      "id": "SG-LCE7",
+      "section": "Em destaque",
+      "text": "A minúscula ilha de Kusu é fácil de identificar pelas pedras de pavimentação vermelhas usadas em todo o caminho."
+    }
+  ]
+}

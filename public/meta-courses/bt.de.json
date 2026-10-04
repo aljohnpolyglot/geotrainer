@@ -1,0 +1,103 @@
+{
+  "code": "BT",
+  "language": "de",
+  "tips": [
+    {
+      "id": "BT-y1Qr",
+      "section": "Bhutan erkennen",
+      "text": "Die Aufnahmen in Bhutan wurden mit einem **grauen** Google-Auto ohne Antenne gemacht.",
+      "note": "Bhutan ist das einzige Land mit Linksverkehr, in dem das Google-Auto grau ist. Verwechseln Sie es nicht mit einem weißen Auto, das ähnlich aussehen kann."
+    },
+    {
+      "id": "BT-uFJO",
+      "section": "Bhutan erkennen",
+      "text": "In Bhutan dienen diese **Steinblöcke** häufig als Sicherheitsbarrieren an kurvigen Landstraßen. Sie sind weit verbreitet und oft einer der besten Hinweise, um ländliche Straßen in Bhutan zu erkennen.\n\nLeitplanken sind dagegen selten."
+    },
+    {
+      "id": "BT-uyf1",
+      "section": "Bhutan erkennen",
+      "text": "Die traditionelle bhutanische Architektur ist sehr charakteristisch. Die meisten Häuser haben **Blechdächer** und **bemalte Holzrahmen**, die ihnen ein unverwechselbares Aussehen verleihen."
+    },
+    {
+      "id": "BT-b3oU",
+      "section": "Bhutan erkennen",
+      "text": "Bhutan ist ein **gebirgiges** Land, und die meisten Aufnahmen stammen von den wichtigsten Bergstraßen.",
+      "note": "Im Süden gibt es flache Gebiete, in denen keine Berge zu sehen sind."
+    },
+    {
+      "id": "BT-6ZzJ",
+      "section": "Bhutan erkennen",
+      "text": "**Gebetsfahnen** am Straßenrand sieht man in Bhutan häufig."
+    },
+    {
+      "id": "BT-M7LD",
+      "section": "Bhutan erkennen",
+      "text": "In Bhutan gibt es gelegentlich **dünne Metallmasten**. Unten sind sie oft schwarz gestrichen."
+    },
+    {
+      "id": "BT-fJM0",
+      "section": "Bhutan erkennen",
+      "text": "Das sind bhutanische Straßenmarkierungen: Achten Sie auf die **gelbe** Oberseite und den weißen unteren Teil.\n\nAuf Nationalstraßen steht die Straßennummer oben auf der Markierung, ist aber nicht auf der Karte eingetragen. Mit [dieser Tabelle](https://sites.google.com/site/roadnumberingsystems/home/countries/bhutan) können Sie die Straße trotzdem bestimmen.",
+      "note": "Wenn Sie auf einer Landstraße unterwegs sind und Ihren Standort herausfinden möchten, sind diese Markierungen der beste Hinweis, um ihn einzugrenzen."
+    },
+    {
+      "id": "BT-3qFe",
+      "section": "Bhutan erkennen",
+      "text": "Diese Schilder sind in den Städten Bhutans häufig zu sehen und meist **rot** oder **blau**.",
+      "note": "Wie hier zu sehen, steht darauf normalerweise der Name des jeweiligen Ortes."
+    },
+    {
+      "id": "BT-LdOA",
+      "section": "Bhutan erkennen",
+      "text": "Taxis in Bhutan haben **gelbe** Kennzeichen und ein **gelbes Dach**."
+    },
+    {
+      "id": "BT-tkrk",
+      "section": "Bhutan erkennen",
+      "text": "Wegweiser in Bhutan haben häufig schwarz-weiße **Streifen**.",
+      "note": "In Asien gibt es solche Pfosten auch in Sri Lanka, Indien, Nepal, Malaysia und Bangladesch. Achten Sie vor dem Raten auf weitere Hinweise."
+    },
+    {
+      "id": "BT-yGLe",
+      "section": "Regionale und provinzspezifische Hinweise",
+      "text": "Zwei **durchgezogene weiße Außenlinien** gibt es nur im Westen Bhutans, südlich der Hauptstadt **Thimphu** und in ihrer Nähe."
+    },
+    {
+      "id": "BT-6TGY",
+      "section": "Regionale und provinzspezifische Hinweise",
+      "text": "Flache Landschaften wie diese gibt es in Bhutan nur im **Süden**.",
+      "note": "Die Aufnahmen im Süden beschränken sich auf die vier auf der Karte markierten Regionen."
+    },
+    {
+      "id": "BT-FHkm",
+      "section": "Regionale und provinzspezifische Hinweise",
+      "text": "Das Phobjikha-Tal südlich von Nubding ist ein breites, relativ flaches Agrartal. Es ist mit Abstand das größte offene Tal, in dem auf Street View kein größerer Fluss zu sehen ist."
+    },
+    {
+      "id": "BT-s895",
+      "section": "Besondere Orte",
+      "text": "Im Distrikt Haa, vor allem in der Stadt Ha, ist hinten am Auto ein **Haken** zu sehen.",
+      "note": "Wegen der Unschärfe des Autos ist der Haken manchmal [kaum erkennbar](https://maps.app.goo.gl/sjuWHQTbSpkjC6wAA)."
+    },
+    {
+      "id": "BT-RG1f",
+      "section": "Besondere Orte",
+      "text": "Aufnahmen mit **spätem Sonnenuntergang** gibt es an zwei Orten im Land: auf einer kleinen Landstraße im Osten des Distrikts Mongar und in einem deutlich stärker [bebauten Gebiet](https://maps.app.goo.gl/wvheeJxLJYZwuHhi7) um die Stadt Paro im Westen."
+    },
+    {
+      "id": "BT-QdQ2",
+      "section": "Besondere Orte",
+      "text": "Der Flughafen Gelephu ist der einzige Flughafen im **flachen Süden** Bhutans und daher gut zu erkennen."
+    },
+    {
+      "id": "BT-W6QG",
+      "section": "Besondere Orte",
+      "text": "Der internationale Flughafen Paro liegt in einem **trockenen** Tal im Nordwesten und ist einer der beiden nördlichen Flughäfen."
+    },
+    {
+      "id": "BT-TQCb",
+      "section": "Besondere Orte",
+      "text": "Der internationale Flughafen Paro liegt in einem **trockenen** Tal im Nordwesten, während sich der Inlandsflughafen Bumthang in einem **feuchten** nördlichen Tal befindet."
+    }
+  ]
+}
