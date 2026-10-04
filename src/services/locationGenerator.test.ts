@@ -247,6 +247,27 @@ test('review reopen tries pano id before marking a coordinate fallback', async (
   assert.equal(found.isFallbackPanorama, true);
 });
 
+test('Meta recovers expired panorama IDs only within 50 metres and preserves the clue camera', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const saved = { panoId: 'old-sign', lat: 38.9832469, lng: -119.1833559, countryCode: 'US', heading: 249.95, pitch: -3.32 };
+  for (const nearby of [true, false]) {
+    results = [
+      { lat: 0, lng: 0, pano: 'missing', countryCode: 'US', status: 'ZERO_RESULTS' },
+      { lat: nearby ? 38.98328397 : 39.1, lng: -119.1833559, pano: 'replacement', countryCode: 'US' },
+    ];
+    panoramaRequests = [];
+    const reopening = new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05 });
+    if (nearby) {
+      const result = await reopening;
+      assert.equal(result.panoId, 'replacement');
+      assert.equal(result.heading, saved.heading);
+      assert.equal(result.pitch, saved.pitch);
+      assert.equal(result.originalPanoId, saved.panoId);
+    } else await assert.rejects(reopening, /unavailable/);
+    assert.equal(panoramaRequests[1].radius, 50);
+  }
+});
+
 test('review rejects a stale panorama id that resolves far from its saved answer', async () => {
   results = [
     { lat: 12.6, lng: -8, pano: 'wrong-mali', countryCode: 'ML' },

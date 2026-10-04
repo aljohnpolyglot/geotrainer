@@ -11,12 +11,43 @@ test('Meta lessons reject malformed input and avoid the current lesson', () => {
   assert.notEqual(next.id, META_LESSONS[0].id);
 });
 
-test('every Meta lesson has localized text in all supported non-English languages', () => {
-  for (const lesson of META_LESSONS) for (const language of ['es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'] as const) {
+test('every Beginner lesson has a real text translation in all eight supported languages', () => {
+  const languages = ['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'] as const;
+  const catalog = translations as Record<string, Record<string, string>>;
+  const knownIds = new Set(META_LESSONS.map(({ id }) => id));
+  assert.equal(META_LESSONS.length, 359);
+  assert.deepEqual(Object.keys(catalog).sort(), [...knownIds].sort());
+  for (const lesson of META_LESSONS) for (const language of languages) {
     const localized = localizeMetaLesson(lesson, language);
-    assert.ok(localized.text.trim());
-    assert.ok((translations as Record<string, Record<string, string>>)[lesson.id]?.[language], `${lesson.id}:${language}`);
+    const translation = language === 'en' ? lesson.text : catalog[lesson.id]?.[language];
+    assert.ok(translation?.trim(), `${lesson.id}:${language} is empty`);
+    assert.equal(localized.text, translation, `${lesson.id}:${language} must render its stored translation`);
+    assert.doesNotMatch(localized.text, /\b(?:copy|copie|copier|copia|cópia|kopiera)\b\.?\s*$/i, `${lesson.id}:${language} has a leaked copy artifact`);
+    assert.doesNotMatch(localized.text, /\\u[0-9a-f]{4}|\\x[0-9a-f]{2}|Ã[\u0080-\u00ff]|Â[\u0080-\u00ff]|\uFFFD/i, `${lesson.id}:${language} has escaped or corrupted text`);
+    const sourceUrls = [...lesson.text.matchAll(/https?:\/\/[^\s)]+/g)].map(([url]) => url);
+    const translatedUrls = [...localized.text.matchAll(/https?:\/\/[^\s)]+/g)].map(([url]) => url);
+    assert.deepEqual(translatedUrls, sourceUrls, `${lesson.id}:${language} must preserve URLs`);
+    const sourceNumbers = [...lesson.text.matchAll(/\b\d+(?:[.,]\d+)?\b/g)].map(([number]) => number);
+    const translatedNumbers = [...localized.text.matchAll(/\b\d+(?:[.,]\d+)?\b/g)].map(([number]) => number);
+    assert.deepEqual(translatedNumbers, sourceNumbers, `${lesson.id}:${language} must preserve numeric details`);
   }
+});
+
+test('Beginner localization fails visibly instead of silently showing English', () => {
+  const catalog = translations as Record<string, Record<string, string>>;
+  const lesson = META_LESSONS[0];
+  const spanish = catalog[lesson.id].es;
+  delete catalog[lesson.id].es;
+  try {
+    assert.throws(() => localizeMetaLesson(lesson, 'es'), /Missing es translation for Beginner lesson/);
+  } finally {
+    catalog[lesson.id].es = spanish;
+  }
+});
+
+test('already-localized country-course lessons pass through unchanged', () => {
+  const countryLesson = { ...META_LESSONS[0], id: 'US-course-tip-1', text: 'Conseil déjà traduit.' };
+  assert.equal(localizeMetaLesson(countryLesson, 'fr'), countryLesson);
 });
 
 test('Meta lessons enter My Clues only after an explicit Study save', () => {

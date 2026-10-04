@@ -12,7 +12,15 @@ export const normalizeMetaLessons = (value: unknown): MetaLesson[] => Array.isAr
 export const META_LESSONS = normalizeMetaLessons(rawLessons);
 
 export const metaLessonById = (id?: string) => id ? META_LESSONS.find((lesson) => lesson.id === id) : undefined;
-export const localizeMetaLesson = (lesson: MetaLesson, language: SupportedLanguage): MetaLesson => ({ ...lesson, text: (rawTranslations as Record<string, Partial<Record<SupportedLanguage, string>>>)[lesson.id]?.[language] || lesson.text });
+export const localizeMetaLesson = (lesson: MetaLesson, language: SupportedLanguage): MetaLesson => {
+  const bundledLesson = metaLessonById(lesson.id);
+  // Country-course tips arrive pre-localized from their own course data and
+  // share this shape. Only apply the Beginner translation catalog to its IDs.
+  if (!bundledLesson || language === 'en') return lesson;
+  const text = (rawTranslations as Record<string, Partial<Record<SupportedLanguage, string>>>)[bundledLesson.id]?.[language];
+  if (!text?.trim()) throw new Error(`Missing ${language} translation for Beginner lesson ${bundledLesson.id}`);
+  return { ...lesson, text };
+};
 
 export const savedMetaLessonIds = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => new Set(attempts.flatMap((attempt) => attempt.source === 'study' && attempt.metaLessonId ? [attempt.metaLessonId] : []));
 export const hasRemainingMetaLessons = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => savedMetaLessonIds(attempts).size < META_LESSONS.length;

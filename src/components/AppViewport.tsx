@@ -10,7 +10,6 @@ import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { resultReviewControls } from '../services/gameLogic';
 import type { MetaCountryCourseTip } from '../data/metaCountryCourses';
-import { MetaCourseCard } from './MetaCourseCard';
 
 interface AppViewportProps {
   appMode: AppMode; showHome: boolean; currentLocation: LocationResult | null; isLoading: boolean;
@@ -63,7 +62,6 @@ export function AppViewport({
   return <main className="flex-1 w-full h-[calc(100dvh-3.5rem)] relative overflow-hidden bg-black">
     <StreetViewContainer key={verifyingReview ? `review:${reviewAttempt.id}:${currentLocation?.panoId || "loading"}:${panoramaRetry}` : "workspace"} onPanoramaReady={verifyingReview ? onReviewPanoramaReady : undefined} onRetryPanorama={verifyingReview ? () => setPanoramaRetry((value) => value + 1) : undefined} currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} showReturnToStart={!showHome && !summaryRound && ((appMode === 'play' && isGameActive) || (appMode === 'review' && !!reviewAttempt))} {...panoramaControls} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={appMode === 'review' || appMode === 'study' && learnSource === 'meta' ? undefined : restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && (appMode === 'study' || summaryRound) ? onPanoramaChanged : undefined} />
     {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
-    {!showHome && appMode === 'study' && learnSource === 'meta' && activeCountryTip && !currentLocation && !isLoading && <MetaCourseCard tip={activeCountryTip} courseId={metaCourseId || 'beginner'} position={metaProgress?.position || 1} total={metaProgress?.total || 1} />}
     {!showHome && appMode === 'review' && !reviewAttempt && !summaryRound && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}
     {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" className="explore-world-map-button" onClick={onOpenWorldMap} aria-label={t('Back to world map')} title={t('Back to world map')}><Globe2 size={20} /></button>}
     {summaryRound && <button type="button" className="explore-world-map-button" onClick={onReturnToSummary} aria-label={t('viewGameSummary')} title={t('viewGameSummary')}><ArrowLeft size={20} /></button>}

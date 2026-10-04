@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-04
+
+- Recover expired Meta panorama IDs within 50 metres of the clue, skip unavailable lessons instead of showing an image-only fallback, and render reference links correctly without exposing overflowing Markdown URLs.
+- Validate every Beginner lesson in all eight supported languages, correct a Portuguese bollard explanation, remove copied text artifacts, and prevent silent English fallback when a selected translation is missing. Require complete language support for every new or changed feature in the contributor guide.
+
 ## 2026-10-03
 
 - Give each Review card a fresh panorama viewer and require its rendered panorama ID, coordinates, and successful load status to match before enabling guesses or starting the answer timer. Hide mismatched imagery while loading and offer a reload control.

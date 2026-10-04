@@ -12,6 +12,7 @@ import type { PanoramaSource } from '../types';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { CLOUD_IMPORT_EVENT } from '../services/cloudSyncEvent';
 import { translate } from '../services/language';
+import { openAvailableMetaTip } from '../services/metaNavigation';
 
 type LearnSourceContext = {
   appMode: AppMode;
@@ -49,18 +50,22 @@ export function useLearnSources(ctx: LearnSourceContext) {
     setCurrentLocation(null); setErrorMessage(null); setIsRevealed(false);
   }, [setAppMode, setCurrentLocation, setErrorMessage, setIsRevealed, setShowHome, setStudySetupOpen]);
 
-  const openMetaLesson = useCallback(async (lesson: MetaLesson, countryCode?: string) => {
-    const request = ++requestRef.current;
+  const openMetaLesson = useCallback(async (lesson: MetaLesson, countryCode?: string, requestId?: number) => {
+    const request = requestId ?? ++requestRef.current;
     prepare('meta'); setMapPickerOpen(false); setActiveMetaLesson(lesson); setIsLoading(true);
     try {
       await (globalThis as typeof globalThis & { __geotrainerMapsLoad?: Promise<unknown[]> }).__geotrainerMapsLoad;
       const code = countryCode || (await reverseGeocodeLocation(lesson.lat, lesson.lng))?.countryCode;
       if (!code) throw new Error(t('Could not open this Meta lesson.'));
-      const location = await defaultLocationGenerator.reopenLocation({ countryCode: code, lat: lesson.lat, lng: lesson.lng, panoId: lesson.panoId, heading: lesson.heading, pitch: lesson.pitch ?? 0 });
-      if (location.isFallback) throw new Error(t('Clue panorama unavailable'));
-      if (request === requestRef.current) setCurrentLocation({ ...location, heading: lesson.heading, pitch: lesson.pitch ?? 0 });
+      const location = await defaultLocationGenerator.reopenLocation({ countryCode: code, lat: lesson.lat, lng: lesson.lng, panoId: lesson.panoId, heading: lesson.heading, pitch: lesson.pitch ?? 0 }, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05 });
+      if (request !== requestRef.current) return;
+      setActiveMetaLesson({ ...lesson, panoId: location.panoId, lat: location.lat, lng: location.lng });
+      setCurrentLocation({ ...location, heading: lesson.heading, pitch: lesson.pitch ?? 0 });
+      return true;
     } catch (error) {
-      if (request === requestRef.current) setErrorMessage(error instanceof Error && error.message === t('Clue panorama unavailable') ? error.message : t('Could not open this Meta lesson.'));
+      if (request !== requestRef.current) return;
+      setErrorMessage(error instanceof Error && error.message === t('Clue panorama unavailable') ? error.message : t('Could not open this Meta lesson.'));
+      return false;
     } finally { if (request === requestRef.current) setIsLoading(false); }
   }, [prepare, setCurrentLocation, setErrorMessage, setIsLoading, t]);
 
@@ -70,10 +75,19 @@ export function useLearnSources(ctx: LearnSourceContext) {
     try {
       const view = viewFromGoogleMapsUrl(tip.mapUrl) || (await loadMetaCountryViews(code)).get(tip.id);
       if (request !== requestRef.current) return;
-      if (view) await openMetaLesson({ id: tip.id, panoId: view.panoId, lat: view.lat, lng: view.lng, heading: view.heading, pitch: view.pitch, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl }, code);
-      else setIsLoading(false);
-    } catch { if (request === requestRef.current) { setErrorMessage(t('Could not open this Meta lesson.')); setIsLoading(false); } }
+      if (view) return await openMetaLesson({ id: tip.id, panoId: view.panoId, lat: view.lat, lng: view.lng, heading: view.heading, pitch: view.pitch, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl }, code, request);
+      setIsLoading(false);
+      return false;
+    } catch { if (request === requestRef.current) { setErrorMessage(t('Could not open this Meta lesson.')); setIsLoading(false); return false; } }
   }, [openMetaLesson, prepare, setErrorMessage, setIsLoading, t]);
+
+  const openAvailableCountryTip = useCallback(async (tips: MetaCountryCourseTip[], start: number, code: string, direction = 1) => {
+    const index = await openAvailableMetaTip(tips, start, (tip) => openCountryTip(tip, code), direction);
+    if (index === undefined) return;
+    if (index !== null) { setMetaIndex(index); return; }
+    setActiveCountryTip(undefined); setActiveMetaLesson(undefined); setCurrentLocation(null);
+    setIsLoading(false); setErrorMessage(t('No lessons are available for this course.')); setStudySetupOpen(true);
+  }, [openCountryTip, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
 
   const startMeta = useCallback(async (courseId = 'beginner', lessonId?: string) => {
     const request = ++requestRef.current;
@@ -84,10 +98,17 @@ export function useLearnSources(ctx: LearnSourceContext) {
       setMetaSeen(seen); setMetaCourseId(courseId);
       void trainerDb.setting<boolean>('preference.metaAdviceDismissed').then((dismissed) => setMetaAdviceOpen(dismissed !== true));
       if (courseId === 'beginner') {
-        const lesson = selectMetaLesson(lessonId, seen);
-        if (!lesson) { setStudySetupOpen(true); return; }
-        setCountryTips([]); setActiveCountryTip(undefined); setBeginnerHistory([lesson.id]); setMetaIndex(0);
-        await openMetaLesson(lesson);
+        const excluded = new Set(seen);
+        let lesson = selectMetaLesson(lessonId, excluded);
+        setCountryTips([]); setActiveCountryTip(undefined); setMetaIndex(0);
+        while (lesson) {
+          const opened = await openMetaLesson(lesson);
+          if (opened === undefined) return;
+          if (opened) { setBeginnerHistory([lesson.id]); return; }
+          excluded.add(lesson.id);
+          lesson = selectMetaLesson(undefined, excluded);
+        }
+        setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true);
       } else {
         const tips = await loadMetaCountryCourse(courseId, ui);
         if (request !== requestRef.current) return;
@@ -95,11 +116,11 @@ export function useLearnSources(ctx: LearnSourceContext) {
         const index = lessonId ? tips.findIndex((tip) => tip.id === lessonId) : tips.findIndex((tip) => !seen.has(tip.id));
         const position = Math.max(0, index);
         setCountryTips(tips); setBeginnerHistory([]); setMetaIndex(position);
-        await openCountryTip(tips[position], courseId);
+        await openAvailableCountryTip(tips, position, courseId);
       }
     } catch { if (request === requestRef.current) { setErrorMessage(t('Could not load Meta course.')); setStudySetupOpen(true); } }
     finally { if (request === requestRef.current) setIsLoading(false); }
-  }, [openCountryTip, openMetaLesson, setErrorMessage, setIsLoading, setStudySetupOpen, t, ui]);
+  }, [openAvailableCountryTip, openMetaLesson, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t, ui]);
 
   const nextMeta = useCallback(async () => {
     if (nextPendingRef.current) return;
@@ -114,21 +135,21 @@ export function useLearnSources(ctx: LearnSourceContext) {
       const seen = new Set<string>(metaSeen).add(id); setMetaSeen(seen);
       if (metaCourseId !== 'beginner') {
         const next = metaIndex + 1;
-        if (next < countryTips.length) { setMetaIndex(next); await openCountryTip(countryTips[next], metaCourseId); }
+        if (next < countryTips.length) { await openAvailableCountryTip(countryTips, next, metaCourseId); }
         else { setActiveCountryTip(undefined); setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true); }
         return;
       }
       setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true);
     } catch { if (request === requestRef.current) setErrorMessage(t('Could not save Meta progress.')); }
     finally { if (request === requestRef.current) setIsLoading(false); nextPendingRef.current = false; }
-  }, [activeCountryTip?.id, activeMetaLesson?.id, countryTips, metaCourseId, metaIndex, metaSeen, openCountryTip, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
+  }, [activeCountryTip?.id, activeMetaLesson?.id, countryTips, metaCourseId, metaIndex, metaSeen, openAvailableCountryTip, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
 
   const previousMeta = useCallback(async () => {
     if (metaIndex <= 0) return;
     const previous = metaIndex - 1; setMetaIndex(previous);
     if (metaCourseId === 'beginner') { const lesson = metaLessonById(beginnerHistory[previous]); if (lesson) await openMetaLesson(lesson); }
-    else await openCountryTip(countryTips[previous], metaCourseId);
-  }, [beginnerHistory, countryTips, metaCourseId, metaIndex, openCountryTip, openMetaLesson]);
+    else await openAvailableCountryTip(countryTips, previous, metaCourseId, -1);
+  }, [beginnerHistory, countryTips, metaCourseId, metaIndex, openAvailableCountryTip, openMetaLesson]);
 
   useEffect(() => {
     if (metaCourseId === 'beginner' || !activeCountryTip) return;

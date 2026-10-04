@@ -285,7 +285,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     throw new Error('Could not find a valid Street View panorama. Please click "Next Location" to try again.');
   }
 
-  async reopenLocation(location: LocationResult): Promise<LocationResult> {
+  async reopenLocation(location: LocationResult, options: { fallbackRadiusM?: number; maxOriginalDistanceKm?: number } = {}): Promise<LocationResult> {
     const sv = this.getService();
     const lookup = (request: google.maps.StreetViewLocationRequest | google.maps.StreetViewPanoRequest) =>
       new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => {
@@ -294,7 +294,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         ));
       });
     const original = await lookup({ pano: location.panoId });
-    if (original?.location?.pano && original.location.latLng && calculateDistanceKm(location.lat, location.lng, original.location.latLng.lat(), original.location.latLng.lng()) <= 10) {
+    if (original?.location?.pano && original.location.latLng && calculateDistanceKm(location.lat, location.lng, original.location.latLng.lat(), original.location.latLng.lng()) <= (options.maxOriginalDistanceKm ?? 10)) {
       return {
         ...location,
         panoId: original.location.pano,
@@ -302,12 +302,13 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         lng: original.location.latLng.lng(),
       };
     }
+    const fallbackRadiusM = options.fallbackRadiusM ?? 50000;
     const fallback = await lookup({
-      location: { lat: location.lat, lng: location.lng }, radius: 50000,
+      location: { lat: location.lat, lng: location.lng }, radius: fallbackRadiusM,
       preference: google.maps.StreetViewPreference.NEAREST,
       source: google.maps.StreetViewSource.OUTDOOR,
     });
-    if (!fallback?.location?.pano || !fallback.location.latLng) throw new Error('This panorama and nearby Street View coverage are unavailable.');
+    if (!fallback?.location?.pano || !fallback.location.latLng || calculateDistanceKm(location.lat, location.lng, fallback.location.latLng.lat(), fallback.location.latLng.lng()) * 1000 > fallbackRadiusM) throw new Error('This panorama and nearby Street View coverage are unavailable.');
     return {
       ...location,
       panoId: fallback.location.pano,
