@@ -62,7 +62,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       setPassword('');
     } catch (error) {
       if (isCloudUnavailableError(error)) setCloudAvailability('unavailable');
-      else setMessage(error instanceof Error ? error.message : t('Authentication failed. Please try again.'));
+      else setMessage(t(error instanceof Error && ['Invalid login credentials', 'Email not confirmed', 'User already registered'].includes(error.message) ? error.message : 'Authentication failed. Please try again.'));
     } finally {
       setBusy(false);
     }
@@ -104,7 +104,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       await action();
     } catch (error) {
       if (isCloudUnavailableError(error)) setCloudAvailability('unavailable');
-      else setMessage(error instanceof Error ? error.message : t('The account action failed.'));
+      else setMessage(t('The account action failed.'));
     } finally {
       setBusy(false);
     }
