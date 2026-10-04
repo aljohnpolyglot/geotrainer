@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Check, Cloud, Download, LogOut, MapPinned, RefreshCw, Upload, X } from 'lucide-react';
 import { cloudSync } from '../services/cloudSync';
+import { checkCloudAvailability, isCloudUnavailableError } from '../services/cloudAvailability';
 import { applyPortableBackup, currentPortableOwner, downloadPortableBackup, portableOwnerMismatch, readPortableBackup, type PortableExportReceipt, type PortableImportReceipt } from '../services/portableBackup';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -22,6 +23,7 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [cloudAvailability, setCloudAvailability] = useState<'checking' | 'available' | 'unavailable'>('checking');
   const [showSyncToast, setShowSyncToast] = useState(false);
   const [exportReceipt, setExportReceipt] = useState<PortableExportReceipt>();
   const [importReceipt, setImportReceipt] = useState<PortableImportReceipt>();
@@ -31,6 +33,15 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
     if (!dialog) return;
     if (open && !dialog.open) dialog.showModal();
     if (!open && dialog.open) dialog.close();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const controller = new AbortController();
+    setCloudAvailability('checking');
+    void checkCloudAvailability(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, controller.signal)
+      .then((availability) => { if (!controller.signal.aborted) setCloudAvailability(availability); });
+    return () => controller.abort();
   }, [open]);
 
   useEffect(() => {
@@ -50,7 +61,8 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
       setMessage(needsConfirmation ? t('Check your inbox to confirm your GeoTrainer account.') : t('Signed in. Press Sync now to merge this device.'));
       setPassword('');
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : t('Authentication failed. Please try again.'));
+      if (isCloudUnavailableError(error)) setCloudAvailability('unavailable');
+      else setMessage(error instanceof Error ? error.message : t('Authentication failed. Please try again.'));
     } finally {
       setBusy(false);
     }
@@ -91,7 +103,8 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
     try {
       await action();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : t('The account action failed.'));
+      if (isCloudUnavailableError(error)) setCloudAvailability('unavailable');
+      else setMessage(error instanceof Error ? error.message : t('The account action failed.'));
     } finally {
       setBusy(false);
     }
@@ -113,7 +126,12 @@ export function CloudAccountDialog({ open, onClose }: CloudAccountDialogProps) {
         <button type="button" role="tab" aria-selected={section === 'import'} onClick={() => { setSection('import'); setMessage(''); }}><Upload size={16} />{t('Import')}</button>
       </div>
 
-      {section === 'cloud' && (sync.email ? (
+      {section === 'cloud' && (cloudAvailability !== 'available' ? (
+        <div className="account-auth" role="status" aria-live="polite">
+          <h2>{t(cloudAvailability === 'checking' ? 'Checking cloud sign-in…' : 'Cloud sign-in is unavailable.')}</h2>
+          {cloudAvailability === 'unavailable' && <p>{t('Your progress stays on this device. You can export or import a backup here.')}</p>}
+        </div>
+      ) : sync.email ? (
         <div className="account-signed-in">
           <span className="account-success-mark"><Check size={24} /></span>
           <h2>{t('Ready for manual sync.')}</h2>

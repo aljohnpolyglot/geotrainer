@@ -150,6 +150,8 @@ Veja lugares, tentativas, fila, desempenho, histórico e o tempo ativo em primei
 
 ## Sincronização na nuvem
 
+Se o acesso à nuvem estiver indisponível, a janela da conta oculta os controles de login. O treino local e as ferramentas de exportar e importar backups continuam disponíveis.
+
 A conta é opcional e o treino local funciona sem login. O progresso é salvo primeiro neste navegador e a sincronização é manual. Pressione **Sincronizar agora** no dispositivo com trabalho novo para baixar, combinar e enviar cartões, tentativas e histórico de Revisão; depois faça o mesmo nos outros dispositivos. Vence o agendamento avaliado mais recentemente, e os registros exclusivos de cada dispositivo são preservados. Entrar, salvar, voltar ao app ou sair não transfere dados automaticamente. Sem login, localhost e o site publicado ficam separados.
 
 As imagens privadas ausentes são armazenadas neste navegador durante a sincronização manual. Abrir Pistas, Notas disponíveis, Cobertura ou o histórico usa essa cópia local e não consulta o armazenamento na nuvem.
