@@ -1,0 +1,26 @@
+{
+  "code": "AQ",
+  "language": "it",
+  "tips": [
+    { "id": "AQ-sUvL", "section": "Identificare l’Antartide", "text": "La maggior parte dell’Antartide è coperta di **neve e ghiaccio**." },
+    { "id": "AQ-cZIY", "section": "Identificare l’Antartide", "text": "Il terreno è sempre **scuro**." },
+    { "id": "AQ-MJ6N", "section": "Identificare l’Antartide", "text": "In alcune zone coperte si possono trovare **pinguini**.", "note": "Questo indizio è utile soprattutto per escludere località artiche." },
+    { "id": "AQ-M09G", "section": "Indizi regionali", "text": "Le immagini di Half Moon Island sono state acquisite con un **treppiede**. Il luogo si riconosce anche dalle numerose altre persone con giacche rosse." },
+    { "id": "AQ-5eul", "section": "Indizi regionali", "text": "La baia di Deception Island si riconosce dalla nave blu e bianca nella baia e dalle attrezzature abbandonate sulla spiaggia." },
+    { "id": "AQ-LHa5", "section": "Indizi regionali", "text": "Su Deception Island si vede l’utente del treppiede **camminare in fila**." },
+    { "id": "AQ-H2qs", "section": "Indizi regionali", "text": "Su Deception Island si può vedere una spiaggia di **sabbia nera** con molti pinguini." },
+    { "id": "AQ-z5y4", "section": "Indizi regionali", "text": "Cuverville Island si riconosce dal cielo nuvoloso e dalla costa a **nord-ovest**. Si vede anche un buon numero di pinguini, soprattutto [verso est](https://goo.gl/maps/EVEBMqPQCrBaeptV6)." },
+    { "id": "AQ-Xp1t", "section": "Indizi regionali", "text": "Danco Island si riconosce dalle **splendide immagini al tramonto** su un fiordo innevato." },
+    { "id": "AQ-DonF", "section": "Indizi regionali", "text": "Petermann Island si riconosce dallo strato di neve con **rocce affioranti** e dalle immagini sovraesposte della fotocamera." },
+    { "id": "AQ-267M", "section": "Indizi regionali", "text": "La copertura all’estremità occidentale dell’isola di Ross si riconosce in genere dal **terreno roccioso** molto scuro e perlopiù spoglio." },
+    { "id": "AQ-xy6q", "section": "Indizi regionali", "text": "A sud della punta orientale dell’isola di Ross, un treppiede mostra l’esterno e l’[interno](https://goo.gl/maps/s9oJFd4Q8Vuretn89) di una piccola capanna di legno con il **tetto in metallo grigio**." },
+    { "id": "AQ-H9Ii", "section": "Indizi regionali", "text": "La stazione McMurdo è la più grande stazione di ricerca dell’Antartide. Si riconosce dal **terreno marrone scuro**, dai **numerosi edifici**, dalle infrastrutture statunitensi e dalle immagini al tramonto.", "note": "In gran parte della copertura intorno alla stazione McMurdo, il sole tramonta a sud. Questo non deve indurti a scegliere l’emisfero nord." },
+    { "id": "AQ-zOhv", "section": "Indizi regionali", "text": "Alla stazione McMurdo si trovano anche immagini riprese con il treppiede all’interno di [diversi](https://goo.gl/maps/Pa8CQWgr7CmcTBvt7) [edifici](https://goo.gl/maps/JLbjTgt5ibVGp7SF8)." },
+    { "id": "AQ-WeDn", "section": "Indizi regionali", "text": "Sul lato orientale della stazione McMurdo c’è una piccola capanna di legno, ripresa con un treppiede che [mostra anche l’interno](https://goo.gl/maps/LfHyR3gHdYmXM7TBA)." },
+    { "id": "AQ-6UVj", "section": "Indizi regionali", "text": "A sud-est della stazione McMurdo, si vede l’utente del treppiede camminare sul ghiaccio intorno a **diversi macchinari**." },
+    { "id": "AQ-ppwM", "section": "Indizi regionali", "text": "Nell’Antartide continentale, a ovest dell’isola di Ross, l’utente del treppiede attraversa un paesaggio quasi surreale, composto da molte **valli desolate**." },
+    { "id": "AQ-Vkbp", "section": "Indizi regionali", "text": "A sud della stazione McMurdo si estende un **vasto paesaggio innevato**, con colline sparse." },
+    { "id": "AQ-gvxD", "section": "Indizi regionali", "text": "Il treppiede al **Polo Sud** si riconosce dalle bandiere di numerosi paesi disposte intorno e da un cartello con la scritta «Geographic South Pole».\n\nQuesta località compare spesso nelle mappe del mondo create dalla community per consentire punteggi più alti." },
+    { "id": "AQ-J7ki", "section": "Indizi regionali", "text": "Le immagini riprese con il treppiede mostrano sia l’esterno sia l’interno dell’Osservatorio del Polo Sud." }
+  ]
+}

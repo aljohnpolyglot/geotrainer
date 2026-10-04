@@ -1,0 +1,26 @@
+{
+  "code": "AQ",
+  "language": "pt",
+  "tips": [
+    { "id": "AQ-sUvL", "section": "Identificando a Antártida", "text": "A maior parte da Antártida está coberta de **neve e gelo**." },
+    { "id": "AQ-cZIY", "section": "Identificando a Antártida", "text": "O solo é sempre **escuro**." },
+    { "id": "AQ-MJ6N", "section": "Identificando a Antártida", "text": "É possível encontrar **pinguins** em algumas zonas cobertas.", "note": "Esta pista é sobretudo útil para excluir locais no Ártico." },
+    { "id": "AQ-M09G", "section": "Pistas regionais", "text": "As imagens de Half Moon Island foram captadas com um **tripé**. O local também se reconhece pelas muitas outras pessoas com casacos vermelhos." },
+    { "id": "AQ-5eul", "section": "Pistas regionais", "text": "A baía da ilha Deception reconhece-se pelo navio azul e branco na baía e pelo equipamento abandonado na praia." },
+    { "id": "AQ-LHa5", "section": "Pistas regionais", "text": "Na ilha Deception, vê-se o utilizador do tripé a **caminhar em fila**." },
+    { "id": "AQ-H2qs", "section": "Pistas regionais", "text": "Na ilha Deception, é possível ver uma praia de **areia preta** com muitos pinguins." },
+    { "id": "AQ-z5y4", "section": "Pistas regionais", "text": "Cuverville Island reconhece-se pelo céu nublado e pela costa a **noroeste**. Também se vê um número razoável de pinguins, sobretudo [mais a leste](https://goo.gl/maps/EVEBMqPQCrBaeptV6)." },
+    { "id": "AQ-Xp1t", "section": "Pistas regionais", "text": "Danco Island reconhece-se pelas **belas imagens do pôr do sol** sobre um fiorde coberto de neve." },
+    { "id": "AQ-DonF", "section": "Pistas regionais", "text": "Petermann Island reconhece-se pela camada de neve com **rochas expostas** e pela imagem sobre-exposta da câmara." },
+    { "id": "AQ-267M", "section": "Pistas regionais", "text": "A cobertura na extremidade oeste da ilha de Ross reconhece-se normalmente pelo **solo rochoso** muito escuro e quase sem vegetação." },
+    { "id": "AQ-xy6q", "section": "Pistas regionais", "text": "A sul da extremidade oriental da ilha de Ross, há imagens captadas com um tripé do exterior e do [interior](https://goo.gl/maps/s9oJFd4Q8Vuretn89) de uma pequena cabana de madeira com **telhado de metal cinzento**." },
+    { "id": "AQ-H9Ii", "section": "Pistas regionais", "text": "A estação McMurdo é a maior estação de investigação da Antártida. Reconhece-se pelo **solo castanho-escuro**, pelos **muitos edifícios**, pelas infraestruturas norte-americanas e pelas imagens ao pôr do sol.", "note": "Em grande parte da cobertura junto à estação McMurdo, o sol põe-se a sul. Isso não deve levar a um palpite no hemisfério norte." },
+    { "id": "AQ-zOhv", "section": "Pistas regionais", "text": "Também há imagens captadas com tripé no interior de [vários](https://goo.gl/maps/Pa8CQWgr7CmcTBvt7) [edifícios](https://goo.gl/maps/JLbjTgt5ibVGp7SF8) da estação McMurdo." },
+    { "id": "AQ-WeDn", "section": "Pistas regionais", "text": "A leste da estação McMurdo, há uma pequena cabana de madeira com uma imagem de [tripé no interior](https://goo.gl/maps/LfHyR3gHdYmXM7TBA)." },
+    { "id": "AQ-6UVj", "section": "Pistas regionais", "text": "A sudeste da estação McMurdo, vê-se o utilizador do tripé a caminhar sobre uma camada de gelo em redor de **várias máquinas**." },
+    { "id": "AQ-ppwM", "section": "Pistas regionais", "text": "Na Antártida continental, a oeste da ilha de Ross, o utilizador do tripé atravessa uma paisagem quase irreal, com muitos **vales desolados**." },
+    { "id": "AQ-Vkbp", "section": "Pistas regionais", "text": "A sul da estação McMurdo, encontra-se uma **vasta paisagem coberta de neve**, com colinas dispersas." },
+    { "id": "AQ-gvxD", "section": "Pistas regionais", "text": "O tripé no **Polo Sul** reconhece-se pelas bandeiras de vários países à sua volta e por um sinal com a inscrição «Geographic South Pole».\n\nEste local aparece frequentemente em mapas-múndi criados pela comunidade para permitir pontuações mais altas." },
+    { "id": "AQ-J7ki", "section": "Pistas regionais", "text": "As imagens captadas com tripé abrangem o exterior e o interior do Observatório do Polo Sul." }
+  ]
+}
