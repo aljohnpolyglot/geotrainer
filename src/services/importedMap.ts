@@ -6,7 +6,7 @@ import { calculateDistanceKm } from './gameLogic';
 import { defaultLocationGenerator } from './locationGenerator';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
-export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[] } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
+export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
 export type ImportedMapHistory = { locations: LocationResult[]; index: number };
 export const MAX_IMPORTED_MAP_BYTES = 20_000_000;
 export const importedMapSizeAllowed = (bytes: number) => Number.isFinite(bytes) && bytes <= MAX_IMPORTED_MAP_BYTES;
@@ -18,6 +18,19 @@ export const moveImportedHistory = (history: ImportedMapHistory, direction: 'pre
 };
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
 export const importedMapPointCount = (map: ImportedMap) => map.kind === 'pool' ? undefined : map.points.length;
+export const importedMapIdForSource = async (source: string) => `source:${Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)))).map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
+const pointKey = (point: MapPoint) => JSON.stringify([point.lat, point.lng, point.panoId || '']);
+export function resumeImportedMap(previous: ImportedMap, next: ImportedMap): ImportedMap {
+  if (previous.kind === 'pool' || next.kind === 'pool') return next;
+  const completed = new Map<string, number>();
+  for (const index of previous.completedPointIndexes || previous.lastLocation?.importedMapCompletedPointIndexes || []) {
+    const point = previous.points[index]; if (point) { const key = pointKey(point); completed.set(key, (completed.get(key) || 0) + 1); }
+  }
+  const completedPointIndexes = next.points.flatMap((point, index) => { const key = pointKey(point); const count = completed.get(key) || 0; if (!count) return []; completed.set(key, count - 1); return [index]; });
+  const oldPoint = previous.lastLocation?.importedMapPointIndex === undefined ? undefined : previous.points[previous.lastLocation.importedMapPointIndex];
+  const lastIndex = oldPoint ? next.points.findIndex((point) => pointKey(point) === pointKey(oldPoint)) : -1;
+  return { ...next, completedPointIndexes, ...(lastIndex >= 0 && previous.lastLocation ? { lastLocation: { ...previous.lastLocation, importedMapPointIndex: lastIndex, importedMapProgress: completedPointIndexes.length, importedMapCompletedPointIndexes: completedPointIndexes } } : {}) };
+}
 
 export function importedMapUrl(value: string): URL {
   const url = new URL(value.trim());
@@ -64,6 +77,10 @@ export function downloadGeographicPool(countryCodes: string[], locationTargets: 
 
 export const saveImportedMap = (map: ImportedMap) => trainerDb.setSetting(`${IMPORTED_MAP_PREFIX}${map.id}`, map);
 export const getImportedMap = (id: string) => trainerDb.setting<ImportedMap>(`${IMPORTED_MAP_PREFIX}${id}`);
+export async function saveImportedMapProgress(id: string, completed: Set<number>, lastLocation?: LocationResult) {
+  const map = await getImportedMap(id);
+  if (map && map.kind !== 'pool') await saveImportedMap({ ...map, completedPointIndexes: [...completed], ...(lastLocation ? { lastLocation } : {}) });
+}
 export const remainingImportedPoints = (points: MapPoint[], completed: Set<number>) => points.map((point, index) => ({ point, index })).filter(({ index }) => !completed.has(index));
 
 export function varyImportedPoint(point: MapPoint, variation: number, random = Math.random): MapPoint {

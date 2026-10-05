@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05
+
+- Reusing a JSON URL or uploading a file with the same name now offers Resume or Start new with saved Learn source progress. Resume retains matching completed locations when the JSON changes and reopens the last saved view when available.
+
 ## 2026-10-04
 
 - Translate all 131 Meta country courses, including explanations, notes, and section headings, into every supported language; keep linked references intact and make every course selectable through the lesson browser.

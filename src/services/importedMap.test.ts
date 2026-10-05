@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapSizeAllowed, importedMapUrl, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, resumeImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -78,6 +78,21 @@ test('uploaded variation keeps zero exact and bounds nearby positions', () => {
 test('completed uploaded source entries cannot be selected again', () => {
   const points = [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }];
   assert.deepEqual(remainingImportedPoints(points, new Set([0, 2])), [{ point: points[1], index: 1 }]);
+});
+
+test('reusing an updated JSON source keeps matching Learn progress and leaves new points available', async () => {
+  assert.equal(await importedMapIdForSource('file:map.json'), await importedMapIdForSource('file:map.json'));
+  assert.notEqual(await importedMapIdForSource('file:map.json'), await importedMapIdForSource('url:https://example.com/map.json'));
+  const previous = parseImportedMap(JSON.stringify([{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }]), 'map.json');
+  const next = parseImportedMap(JSON.stringify([{ lat: 3, lng: 3 }, { lat: 2, lng: 2 }, { lat: 1, lng: 1 }]), 'map.json');
+  if (previous.kind === 'pool' || next.kind === 'pool') return;
+  previous.completedPointIndexes = [1];
+  previous.lastLocation = { lat: 2, lng: 2, panoId: 'saved', countryCode: 'SG', importedMapPointIndex: 1 };
+  const resumed = resumeImportedMap(previous, next);
+  if (resumed.kind === 'pool') return;
+  assert.deepEqual(resumed.completedPointIndexes, [1]);
+  assert.equal(resumed.lastLocation?.importedMapPointIndex, 1);
+  assert.deepEqual(remainingImportedPoints(resumed.points, new Set(resumed.completedPointIndexes)), [{ point: next.points[0], index: 0 }, { point: next.points[2], index: 2 }]);
 });
 
 test('JSON URLs convert GitHub file pages while preserving raw and other endpoints', () => {

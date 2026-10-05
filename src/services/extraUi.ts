@@ -1,6 +1,10 @@
 import type { SupportedLanguage } from '../types';
 
 export const EXTRA_UI: Record<string, Partial<Record<SupportedLanguage, string>>> = {
+  'Continue saved map?': { en:'Continue saved map?', es:'¿Continuar el mapa guardado?', pt:'Continuar o mapa salvo?', fr:'Continuer la carte enregistrée ?', de:'Gespeicherte Karte fortsetzen?', it:'Continuare la mappa salvata?', ru:'Продолжить сохранённую карту?', sv:'Fortsätt med sparad karta?' },
+  'This JSON source was loaded before.': { en:'This JSON source was loaded before.', es:'Esta fuente JSON ya se cargó antes.', pt:'Esta fonte JSON já foi carregada.', fr:'Cette source JSON a déjà été chargée.', de:'Diese JSON-Quelle wurde bereits geladen.', it:'Questa fonte JSON è già stata caricata.', ru:'Этот источник JSON уже загружался.', sv:'Den här JSON-källan har lästs in tidigare.' },
+  'Source progress': { en:'Source progress', es:'Progreso de la fuente', pt:'Progresso da fonte', fr:'Progression de la source', de:'Quellenfortschritt', it:'Avanzamento della fonte', ru:'Прогресс по источнику', sv:'Källförlopp' },
+  'Choose whether to resume or start over.': { en:'Choose whether to resume or start over.', es:'Elige entre continuar o empezar de nuevo.', pt:'Escolha entre continuar ou recomeçar.', fr:'Choisissez de reprendre ou de recommencer.', de:'Wähle, ob du fortfahren oder neu beginnen möchtest.', it:'Scegli se riprendere o ricominciare.', ru:'Выберите: продолжить или начать заново.', sv:'Välj om du vill fortsätta eller börja om.' },
   'AI provider': { en:'AI provider', es:'Proveedor de IA', pt:'Provedor de IA', fr:'Fournisseur d’IA', de:'KI-Anbieter', it:'Fornitore IA', ru:'Поставщик ИИ', sv:'AI-leverantör' },
   Provider: { en:'Provider', es:'Proveedor', pt:'Provedor', fr:'Fournisseur', de:'Anbieter', it:'Fornitore', ru:'Поставщик', sv:'Leverantör' },
   'OpenAI compatible': { en:'OpenAI compatible', es:'Compatible con OpenAI', pt:'Compatível com OpenAI', fr:'Compatible avec OpenAI', de:'OpenAI-kompatibel', it:'Compatibile con OpenAI', ru:'Совместимый с OpenAI', sv:'OpenAI-kompatibel' },
