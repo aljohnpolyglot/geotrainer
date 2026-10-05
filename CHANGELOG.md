@@ -2,6 +2,9 @@
 
 ## 2026-10-05
 
+- Selecting a Meta country now leaves Start learning available; it opens an unfinished lesson using saved progress. Browse Meta lessons remains available for a specific or completed clue.
+- Let learners reopen completed Meta lessons from the lesson browser without clearing completion or creating a Review card.
+- Add Shuffle and Source order for JSON Play maps, plus a default-on switch that skips previously seen or saved places within the same-country 50-metre identity.
 - Reusing a JSON URL or uploading a file with the same name now offers Resume or Start new with saved Learn source progress. Resume retains matching completed locations when the JSON changes and reopens the last saved view when available.
 
 ## 2026-10-04

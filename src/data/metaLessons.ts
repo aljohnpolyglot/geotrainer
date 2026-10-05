@@ -40,7 +40,7 @@ export const nextMetaLesson = (currentId?: string, random = Math.random, complet
 
 export const selectMetaLesson = (requestedId?: string, completed = new Set<string>(), random = Math.random): MetaLesson | undefined => {
   const requested = metaLessonById(requestedId);
-  return requested && !completed.has(requested.id) ? requested : nextMetaLesson(undefined, random, completed);
+  return requested || nextMetaLesson(undefined, random, completed);
 };
 
 export type MetaCompletionFilter = 'all' | 'unfinished' | 'completed';

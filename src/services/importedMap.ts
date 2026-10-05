@@ -4,6 +4,7 @@ import { COUNTRIES } from '../data/countries';
 import { reverseGeocodeLocation } from './geocoding';
 import { calculateDistanceKm } from './gameLogic';
 import { defaultLocationGenerator } from './locationGenerator';
+import { nearbyReviewPoint } from '../data/reviewIdentity';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
 export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
@@ -82,6 +83,8 @@ export async function saveImportedMapProgress(id: string, completed: Set<number>
   if (map && map.kind !== 'pool') await saveImportedMap({ ...map, completedPointIndexes: [...completed], ...(lastLocation ? { lastLocation } : {}) });
 }
 export const remainingImportedPoints = (points: MapPoint[], completed: Set<number>) => points.map((point, index) => ({ point, index })).filter(({ index }) => !completed.has(index));
+export const importedPointCandidates = (points: MapPoint[], completed: Set<number>, order: 'shuffle' | 'source') => order === 'source' ? remainingImportedPoints(points, completed) : shuffleInPlace(remainingImportedPoints(points, completed));
+export const isKnownImportedLocation = (location: Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>, known: ReadonlyArray<Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>>) => known.some((item) => item.panoId === location.panoId || nearbyReviewPoint(item, location));
 
 export function varyImportedPoint(point: MapPoint, variation: number, random = Math.random): MapPoint {
   const metres = Number.isFinite(variation) ? Math.min(100, Math.max(0, variation)) * 10 : 0;
@@ -93,17 +96,18 @@ export function varyImportedPoint(point: MapPoint, variation: number, random = M
   return { lat, lng, heading: point.heading };
 }
 
-export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false, variation = 0, completed = new Set<number>(), settings: EnvironmentSettings = { environment: 'mixed', urbanLevel: 3 }): Promise<LocationResult> {
+export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false, variation = 0, completed = new Set<number>(), settings: EnvironmentSettings = { environment: 'mixed', urbanLevel: 3 }, order: 'shuffle' | 'source' = 'shuffle', known: ReadonlyArray<Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>> = []): Promise<LocationResult> {
   const map = await getImportedMap(mapId);
   if (!map) throw new Error('Upload this map again on this device to continue.');
   if (map.kind === 'pool') return defaultLocationGenerator.findRandomLocation(map.countryCodes, signal, undefined, settings, { excludedPanoIds: excluded, requireNavigation, locationTargets: map.locationTargets });
   if (!map.points.length) throw new Error('Upload this map again on this device to continue.');
   variation = Number.isFinite(variation) ? Math.min(100, Math.max(0, variation)) : 0;
   const service = new google.maps.StreetViewService();
-  const shuffled = shuffleInPlace(remainingImportedPoints(map.points, completed));
-  for (const { point, index } of shuffled) {
+  const knownPanos = new Set(known.map((item) => item.panoId));
+  for (const { point, index } of importedPointCandidates(map.points, completed, order)) {
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     if (!variation) completed.add(index);
+    if (point.panoId && knownPanos.has(point.panoId)) { completed.add(index); continue; }
     if (point.panoId && excluded.has(point.panoId)) continue;
     const target = varyImportedPoint(point, variation);
     const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => service.getPanorama(target.panoId ? { pano: target.panoId } : { location: target, radius: 100 }, (result, status) => resolve(status === google.maps.StreetViewStatus.OK ? result : null)));
@@ -112,8 +116,8 @@ export async function pickImportedLocation(mapId: string, excluded = new Set<str
     if (calculateDistanceKm(lat, lng, point.lat, point.lng) > (variation ? Math.max(.1, variation / 100) : .25)) continue;
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;
-    if (countryCode) { completed.add(index); return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading, importedMapPointIndex: index, importedMapProgress: completed.size, importedMapCompletedPointIndexes: [...completed] }; }
+    if (countryCode) { completed.add(index); if (isKnownImportedLocation({ lat, lng, panoId: data.location.pano, countryCode }, known)) continue; return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading, importedMapPointIndex: index, importedMapProgress: completed.size, importedMapCompletedPointIndexes: [...completed] }; }
   }
-  if (variation) return pickImportedLocation(mapId, excluded, signal, requireNavigation, 0, completed);
+  if (variation) return pickImportedLocation(mapId, excluded, signal, requireNavigation, 0, completed, settings, order, known);
   throw new Error('No available Street View locations remain in this map.');
 }

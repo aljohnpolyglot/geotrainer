@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, resumeImportedMap, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, resumeImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -78,6 +78,15 @@ test('uploaded variation keeps zero exact and bounds nearby positions', () => {
 test('completed uploaded source entries cannot be selected again', () => {
   const points = [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }];
   assert.deepEqual(remainingImportedPoints(points, new Set([0, 2])), [{ point: points[1], index: 1 }]);
+});
+
+test('source order skips completed entries and seen places use the same-country 50 metre identity', () => {
+  const points = [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }];
+  assert.deepEqual(importedPointCandidates(points, new Set([1]), 'source').map(({ index }) => index), [0, 2]);
+  const known = [{ panoId: 'seen', lat: 1, lng: 1, countryCode: 'SG' }];
+  assert.equal(isKnownImportedLocation({ panoId: 'new-node', lat: 1.0002, lng: 1, countryCode: 'SG' }, known), true);
+  assert.equal(isKnownImportedLocation({ panoId: 'new-node', lat: 1.001, lng: 1, countryCode: 'SG' }, known), false);
+  assert.equal(isKnownImportedLocation({ panoId: 'new-node', lat: 1, lng: 1, countryCode: 'MY' }, known), false);
 });
 
 test('reusing an updated JSON source keeps matching Learn progress and leaves new points available', async () => {

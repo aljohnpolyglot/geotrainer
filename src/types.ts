@@ -153,6 +153,8 @@ export interface GameSettings {
   collectionId: string;
   importedMapId?: string;
   importedMapName?: string;
+  importedMapOrder?: 'shuffle' | 'source';
+  skipSeenImported?: boolean;
   countryCode?: string; // Optional single-country pool; omitted for saved-game compatibility
   countryCodes?: string[]; // Optional focused comparison pool; omitted for saved-game compatibility
   locationTargets?: LocationPoolTarget[]; // Optional regional/city pools; omitted for saved-game compatibility

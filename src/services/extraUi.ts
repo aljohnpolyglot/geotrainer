@@ -1,6 +1,10 @@
 import type { SupportedLanguage } from '../types';
 
 export const EXTRA_UI: Record<string, Partial<Record<SupportedLanguage, string>>> = {
+  'Location order': { en:'Location order', es:'Orden de lugares', pt:'Ordem dos locais', fr:'Ordre des lieux', de:'Reihenfolge der Orte', it:'Ordine dei luoghi', ru:'Порядок мест', sv:'Platsordning' },
+  Shuffle: { en:'Shuffle', es:'Aleatorio', pt:'Aleatório', fr:'Aléatoire', de:'Zufällig', it:'Casuale', ru:'Случайный порядок', sv:'Blanda' },
+  'Source order': { en:'Source order', es:'Orden del archivo', pt:'Ordem do arquivo', fr:'Ordre du fichier', de:'Reihenfolge der Quelle', it:'Ordine del file', ru:'Порядок в файле', sv:'Källans ordning' },
+  'Skip seen places': { en:'Skip seen places', es:'Omitir lugares ya vistos', pt:'Ignorar locais já vistos', fr:'Ignorer les lieux déjà vus', de:'Bereits gesehene Orte überspringen', it:'Salta i luoghi già visti', ru:'Пропускать просмотренные места', sv:'Hoppa över sedda platser' },
   'Continue saved map?': { en:'Continue saved map?', es:'¿Continuar el mapa guardado?', pt:'Continuar o mapa salvo?', fr:'Continuer la carte enregistrée ?', de:'Gespeicherte Karte fortsetzen?', it:'Continuare la mappa salvata?', ru:'Продолжить сохранённую карту?', sv:'Fortsätt med sparad karta?' },
   'This JSON source was loaded before.': { en:'This JSON source was loaded before.', es:'Esta fuente JSON ya se cargó antes.', pt:'Esta fonte JSON já foi carregada.', fr:'Cette source JSON a déjà été chargée.', de:'Diese JSON-Quelle wurde bereits geladen.', it:'Questa fonte JSON è già stata caricata.', ru:'Этот источник JSON уже загружался.', sv:'Den här JSON-källan har lästs in tidigare.' },
   'Source progress': { en:'Source progress', es:'Progreso de la fuente', pt:'Progresso da fonte', fr:'Progression de la source', de:'Quellenfortschritt', it:'Avanzamento della fonte', ru:'Прогресс по источнику', sv:'Källförlopp' },

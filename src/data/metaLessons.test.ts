@@ -68,10 +68,11 @@ test('completed Meta lessons are excluded and the catalog reports exhaustion', (
   assert.equal(hasRemainingMetaLessons(META_LESSONS.map((lesson) => ({ source: 'study' as const, metaLessonId: lesson.id }))), false);
 });
 
-test('a browsed unfinished Meta lesson starts exactly while a stale selection falls back', () => {
+test('a browsed Meta lesson can reopen when completed while a stale selection falls back', () => {
   const requested = META_LESSONS[2];
   assert.equal(selectMetaLesson(requested.id)?.id, requested.id);
-  assert.notEqual(selectMetaLesson(requested.id, new Set([requested.id]), () => 0)?.id, requested.id);
+  assert.equal(selectMetaLesson(requested.id, new Set([requested.id]), () => 0)?.id, requested.id);
+  assert.notEqual(selectMetaLesson('missing-lesson', new Set([requested.id]), () => 0)?.id, requested.id);
 });
 
 test('Meta browse filters all, unfinished, and completed lessons', () => {

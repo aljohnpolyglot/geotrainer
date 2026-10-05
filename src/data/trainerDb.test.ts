@@ -235,7 +235,7 @@ test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: 17, environment: 'ocean' }, false), {
     roundCount: 5, collectionId: 'world', canMove: false, canPan: true, canZoom: true, showCompass: false, aiCoachEnabled: true,
-    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, timeLimitSeconds: 0,
+    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, importedMapOrder: 'shuffle', skipSeenImported: true, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ priority: 'least-exposure' }).priority, 'least-exposure');
   assert.equal(normalizeGamePreferences({ priority: 'invalid' }).priority, 'random');
@@ -245,6 +245,8 @@ test('saved game preferences are normalized before reuse', async () => {
   assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);
   assert.equal(normalizeGamePreferences({ locationTargets: [{ kind: 'region', countryCode: 'PH', regionId: 'PH.NCR', regionName: 'National Capital Region' }, { kind: 'city', countryCode: 'ZZ' }] }).locationTargets?.length, 1);
   assert.equal(normalizeGamePreferences({ allowInteriors: true }).allowInteriors, true);
+  assert.equal(normalizeGamePreferences({ importedMapOrder: 'source', skipSeenImported: false }).importedMapOrder, 'source');
+  assert.equal(normalizeGamePreferences({ importedMapOrder: 'invalid' as 'source' }).importedMapOrder, 'shuffle');
 });
 
 test('fresh review settings randomize with a deterministic Fisher-Yates shuffle', async () => {

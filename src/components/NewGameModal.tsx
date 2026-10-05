@@ -72,6 +72,8 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [allowInteriors, setAllowInteriors] = useState(false);
   const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'url' | 'ai'>('generated');
   const [importedMap, setImportedMap] = useState<ImportedMap>();
+  const [importedMapOrder, setImportedMapOrder] = useState<'shuffle' | 'source'>('shuffle');
+  const [skipSeenImported, setSkipSeenImported] = useState(true);
   const [loadedPoolName, setLoadedPoolName] = useState('');
 
   useEffect(() => {
@@ -84,6 +86,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setCountryCodes([]); setLocationTargets([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
       setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
+      setImportedMapOrder(value.importedMapOrder ?? 'shuffle'); setSkipSeenImported(value.skipSeenImported !== false);
       setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
       void (value.importedMapId ? getImportedMap(value.importedMapId) : trainerDb.setting<string>('local.currentMapId').then((id) => id && getImportedMap(id))).then((map) => { if (active) setImportedMap(map || undefined); });
     });
@@ -115,7 +118,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
     const settings = {
       roundCount: importedSource && importedMap && importedMapPointCount(importedMap) ? Math.min(roundCount, importedMapPointCount(importedMap)!) : roundCount,
       collectionId: selectedCollectionId,
-      ...(importedSource && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name } : {}),
+      ...(importedSource && importedMap ? { importedMapId: importedMap.id, importedMapName: importedMap.name, importedMapOrder, skipSeenImported } : {}),
       ...(countryCodes.length ? { countryCodes } : {}),
       ...(locationTargets.length ? { locationTargets } : {}),
       canMove,
@@ -180,6 +183,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
             ['ai', Sparkles, 'Describe a pool', 'Let AI choose editable countries, regions, and cities.'],
           ] as const).map(([source, Icon, title, description]) => <button key={source} type="button" className={locationSource === source ? 'selected' : ''} aria-pressed={locationSource === source} onClick={() => setLocationSource(source)}><Icon size={18} /><span><strong>{t(title)}</strong><small>{t(description)}</small></span></button>)}</div>
           {importedSource && <ImportedMapUpload source={locationSource === 'url' ? 'url' : 'upload'} map={importedMap} onChange={(map) => { if (map.kind === 'pool') { setLoadedPoolName(map.name); setLocationSource('generated'); setSelectedCollectionId('world'); setCountryCodes(map.countryCodes); setLocationTargets(map.locationTargets); return; } setImportedMap(map); const points = importedMapPointCount(map); if (points) setRoundCount((count) => Math.min(count, points)); void trainerDb.setSetting('local.currentMapId', map.id); }} />}
+          {importedSource && <div className="imported-play-options"><label>{t('Location order')}<select value={importedMapOrder} onChange={(event) => setImportedMapOrder(event.target.value as 'shuffle' | 'source')}><option value="shuffle">{t('Shuffle')}</option><option value="source">{t('Source order')}</option></select></label><button type="button" role="switch" aria-checked={skipSeenImported} className="imported-map-skip" onClick={() => setSkipSeenImported((value) => !value)}><span>{t('Skip seen places')}</span><span className="imported-map-switch" aria-hidden="true" /></button></div>}
           {locationSource === 'ai' && <DescribePool onChange={(name, codes, targets, suggested) => { setLoadedPoolName(name); setSelectedCollectionId('world'); setCountryCodes(codes); setLocationTargets(targets); if (suggested.environment) setEnvironment(suggested.environment); if (suggested.urbanLevel) setUrbanLevel(suggested.urbanLevel); if (suggested.samplingMode) setSamplingMode(suggested.samplingMode); if (suggested.priority) setPriority(suggested.priority); if (suggested.panoramaSource) setPanoramaSource(suggested.panoramaSource); if (suggested.allowInteriors !== undefined) setAllowInteriors(suggested.allowInteriors); setLocationSource('generated'); }} />}
           {locationSource === 'generated' && <>
           {/* 1. Collection Selector */}

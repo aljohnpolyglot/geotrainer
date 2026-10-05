@@ -35,4 +35,7 @@ test('Meta lesson browser supports localized country-course lesson choices', () 
   assert.match(browser, /Compare the sign shape/);
   assert.match(browser, /Check the border/);
   assert.match(browser, /aria-selected="true"/);
+  const completed = renderToStaticMarkup(createElement(MetaLessonBrowser, { completed: new Set(['SE-1']), selectedId: 'SE-1', onSelect: () => {}, lessons: [{ id: 'SE-1', text: 'Seen clue' }] }));
+  assert.match(completed, /aria-selected="true"/);
+  assert.doesNotMatch(completed, /aria-disabled/);
 });

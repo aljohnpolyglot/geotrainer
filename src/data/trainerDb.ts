@@ -50,6 +50,8 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     collectionId: typeof source.collectionId === 'string' ? source.collectionId : 'world',
     ...(typeof source.importedMapId === 'string' ? { importedMapId: source.importedMapId } : {}),
     ...(typeof source.importedMapName === 'string' ? { importedMapName: source.importedMapName } : {}),
+    importedMapOrder: source.importedMapOrder === 'source' ? 'source' : 'shuffle',
+    skipSeenImported: source.skipSeenImported !== false,
     ...(typeof source.countryCode === 'string' && source.countryCode in COUNTRIES ? { countryCode: source.countryCode } : {}),
     ...(countryCodes.length ? { countryCodes } : {}),
     ...(locationTargets.length ? { locationTargets } : {}),
