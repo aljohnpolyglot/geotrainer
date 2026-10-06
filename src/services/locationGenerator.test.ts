@@ -4,6 +4,7 @@ import test from 'node:test';
 type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
+let geocodeCalls = 0;
 let panoramaRequests: Array<{ source?: string; sources?: string[]; location?: LatLng; radius?: number }> = [];
 const rural = { environment: 'rural', urbanLevel: 3 } as const;
 
@@ -24,6 +25,7 @@ class StreetViewService {
 
 class Geocoder {
   async geocode({ location }: { location: { lat: number } }) {
+    geocodeCalls++;
     const result = currentResults.find((item) => item.lat === location.lat)!;
     return { results: [{ formatted_address: 'Test', address_components: [{ long_name: result.countryCode, short_name: result.countryCode, types: ['country'] }] }] };
   }
@@ -279,6 +281,22 @@ test('review rejects a stale panorama id that resolves far from its saved answer
   assert.equal(found.panoId, 'near-cocos');
   assert.equal(found.isFallbackPanorama, true);
   assert.equal(panoramaCalls, 2);
+});
+
+test('Review skips country lookup for an unchanged panorama but checks a moved replacement', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const generator = new StreetViewLocationGenerator();
+  const plan = { kind: 'original', generalizationLevel: 0, maxDistanceM: 0, seed: 1 } as const;
+  const saved = { panoId: 'same-meta-view', lat: 41.123456, lng: 12.123456, countryCode: 'IT' };
+  results = [{ lat: saved.lat, lng: saved.lng, pano: saved.panoId, countryCode: 'IT' }];
+  geocodeCalls = 0;
+  assert.equal((await generator.resolveReviewLocation(saved, plan)).panoId, saved.panoId);
+  assert.equal(geocodeCalls, 0);
+
+  currentResults = [{ lat: 41.234567, lng: 12.234567, pano: 'moved-view', countryCode: 'FR' }];
+  results = [{ lat: 0, lng: 0, pano: 'missing', countryCode: 'IT', status: 'ZERO_RESULTS' }, currentResults[0]];
+  await assert.rejects(generator.resolveReviewLocation(saved, plan), /no longer matches/);
+  assert.equal(geocodeCalls, 1);
 });
 
 test('latest-request and reveal guards reject stale async completions', async () => {

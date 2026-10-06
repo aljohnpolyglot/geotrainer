@@ -276,7 +276,12 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           pitch: savedView?.pitch ?? currentLocation.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;
-      if (panorama.getPano() === targetPano) { pendingPanoRef.current = ''; panorama.setPov(initialPov); panorama.setZoom(savedView?.zoom ?? 1); return; }
+      if (panorama.getPano() === targetPano) {
+        pendingPanoRef.current = '';
+        // Walking already moved the live viewer here; keep its camera direction.
+        if (currentLocation.heading !== undefined || savedView) { panorama.setPov(initialPov); panorama.setZoom(savedView?.zoom ?? 1); }
+        return;
+      }
       pendingPanoRef.current = targetPano;
       panorama.setPano(targetPano);
       panorama.setPov(initialPov);

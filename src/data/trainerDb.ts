@@ -353,8 +353,8 @@ export const trainerDb = {
         ? (reviewByPano.get(a.panoId)?.dueAt || 0) - (reviewByPano.get(b.panoId)?.dueAt || 0)
         : a.score - b.score || b.createdAt - a.createdAt)
       .filter((attempt, index, values) => values.findIndex((other) => (reviewByPano.get(other.panoId)?.panoId || other.panoId) === (reviewByPano.get(attempt.panoId)?.panoId || attempt.panoId)) === index);
-    if (!filters.due) return queue;
     if (preferences.reviewOrder === 'random') shuffleInPlace(queue);
+    if (!filters.due) return queue;
     const today = reviewDayStart(now, preferences); const nowForLimits = now;
     const reviewsToday = reviews.reduce((total, review) => total + (review.gradingHistory?.filter(({ at }) => at >= today && at <= nowForLimits).length || (review.lastReviewedAt && review.lastReviewedAt >= today && review.lastReviewedAt <= nowForLimits ? 1 : 0)), 0);
     const newCardsToday = reviews.filter((review) => {

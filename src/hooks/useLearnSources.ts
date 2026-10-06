@@ -139,10 +139,24 @@ export function useLearnSources(ctx: LearnSourceContext) {
         else { setActiveCountryTip(undefined); setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true); }
         return;
       }
+      const historyNext = beginnerHistory[metaIndex + 1];
+      if (historyNext) {
+        const lesson = metaLessonById(historyNext);
+        if (lesson && await openMetaLesson(lesson)) { setMetaIndex(metaIndex + 1); return; }
+      }
+      const excluded = new Set(seen);
+      let lesson = selectMetaLesson(undefined, excluded);
+      while (lesson) {
+        const opened = await openMetaLesson(lesson);
+        if (opened === undefined) return;
+        if (opened) { setBeginnerHistory([...beginnerHistory.slice(0, metaIndex + 1), lesson.id]); setMetaIndex(metaIndex + 1); return; }
+        excluded.add(lesson.id);
+        lesson = selectMetaLesson(undefined, excluded);
+      }
       setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true);
     } catch { if (request === requestRef.current) setErrorMessage(t('Could not save Meta progress.')); }
     finally { if (request === requestRef.current) setIsLoading(false); nextPendingRef.current = false; }
-  }, [activeCountryTip?.id, activeMetaLesson?.id, countryTips, metaCourseId, metaIndex, metaSeen, openAvailableCountryTip, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
+  }, [activeCountryTip?.id, activeMetaLesson?.id, beginnerHistory, countryTips, metaCourseId, metaIndex, metaSeen, openAvailableCountryTip, openMetaLesson, setCurrentLocation, setErrorMessage, setIsLoading, setStudySetupOpen, t]);
 
   const previousMeta = useCallback(async () => {
     if (metaIndex <= 0) return;

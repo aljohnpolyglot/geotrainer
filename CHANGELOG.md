@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-06
+
+- Keep the camera direction while walking through Learn panoramas, and apply Random card order to the whole selected Review deck, including custom practice queues. Clarify the card-order setting in all eight languages.
+- Advance directly through unfinished Beginner Meta lessons and enable Previous for lessons visited in the current session.
+- Open unchanged saved Review panoramas without a redundant country lookup, while retaining country checks for moved or fallback imagery.
+
 ## 2026-10-05
 
 - Selecting a Meta country now leaves Start learning available; it opens an unfinished lesson using saved progress. Browse Meta lessons remains available for a specific or completed clue.

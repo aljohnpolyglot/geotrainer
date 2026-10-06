@@ -322,7 +322,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
 
   async resolveReviewLocation(location: LocationResult, plan: ReviewVariationPlan, recentlyShown = new Set<string>()): Promise<LocationResult> {
     const anchor = await this.reopenLocation(location);
-    const resolvedAnchorCountry = (await reverseGeocodeLocation(anchor.lat, anchor.lng))?.countryCode;
+    const unchangedAnchor = !anchor.isFallback && anchor.panoId === location.panoId && calculateDistanceKm(anchor.lat, anchor.lng, location.lat, location.lng) <= .05;
+    const resolvedAnchorCountry = unchangedAnchor ? location.countryCode : (await reverseGeocodeLocation(anchor.lat, anchor.lng))?.countryCode;
     if (resolvedAnchorCountry && resolvedAnchorCountry !== location.countryCode) throw new Error('The saved panorama no longer matches this Review location.');
     if (anchor.isFallback || plan.kind !== 'spatial' || !plan.maxDistanceM) return { ...anchor, heading: plan.kind === 'spatial' ? anchor.heading : plan.heading ?? anchor.heading };
     const sv = this.getService(); const radians = Math.PI / 180; const latitudeScale = 1 / 111_320;

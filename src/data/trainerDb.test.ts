@@ -258,3 +258,25 @@ test('fresh review settings randomize with a deterministic Fisher-Yates shuffle'
   assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationDifficulty, 50);
   assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 140 }).reviewViewVariationDifficulty, 100);
 });
+
+test('Random order shuffles saved Meta cards in custom Review queues', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  await initTrainerDb(); await clearTrainerDbForTesting();
+  const preferences = await trainerDb.schedulerPreferences();
+  for (let index = 0; index < 3; index++) await trainerDb.saveAttempt({
+    id: `meta-${index}`, gameId: 'study', roundNumber: 1, panoId: `meta-${index}`,
+    actualLat: index, actualLng: 0, countryCode: 'DE', guessedLat: null, guessedLng: null,
+    distanceKm: null, score: 0, timeSpentSeconds: 0, collectionId: 'world',
+    canMove: true, canPan: true, canZoom: true, createdAt: 1000 + index,
+    source: 'study', learnSource: 'meta',
+  });
+  const originalRandom = Math.random;
+  Math.random = () => 0;
+  try {
+    assert.deepEqual((await trainerDb.reviewQueue({})).map((item) => item.id), ['meta-1', 'meta-0', 'meta-2']);
+    for (let index = 0; index < 3; index++) await trainerDb.queueForReview(`meta-${index}`, true);
+    assert.deepEqual((await trainerDb.reviewQueue({ due: true })).map((item) => item.id), ['meta-1', 'meta-2', 'meta-0']);
+    await trainerDb.setSetting('schedulerPreferences', { ...preferences, reviewOrder: 'due' });
+    assert.deepEqual((await trainerDb.reviewQueue({})).map((item) => item.id), ['meta-2', 'meta-1', 'meta-0']);
+  } finally { Math.random = originalRandom; }
+});
