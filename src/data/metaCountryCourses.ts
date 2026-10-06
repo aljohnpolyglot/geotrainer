@@ -1,5 +1,6 @@
 import manifest from './metaCountryCoursesManifest.json';
-import type { SupportedLanguage } from '../types';
+import type { MetaLesson, SupportedLanguage } from '../types';
+import { loadMetaCountryViews, viewFromGoogleMapsUrl, type MetaMapView } from './metaCountryViews';
 
 export interface MetaCountryCourseSummary {
   code: string;
@@ -101,4 +102,14 @@ export function loadMetaCountryCourse(code: string, language: SupportedLanguage 
     courseLoads.set(cacheKey, loaded);
   }
   return loaded;
+}
+
+export function savedMetaCountryLesson(tip: MetaCountryCourseTip, fallback?: MetaMapView): MetaLesson {
+  const view = viewFromGoogleMapsUrl(tip.mapUrl) || fallback;
+  return { id: tip.id, panoId: view?.panoId || '', lat: view?.lat || 0, lng: view?.lng || 0, heading: view?.heading || 0, pitch: view?.pitch || 0, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl };
+}
+
+export async function loadSavedMetaCountryLessons(code: string, language: SupportedLanguage): Promise<MetaLesson[]> {
+  const [tips, views] = await Promise.all([loadMetaCountryCourse(code, language), loadMetaCountryViews(code)]);
+  return tips.map((tip) => savedMetaCountryLesson(tip, views.get(tip.id)));
 }

@@ -108,6 +108,8 @@ Analizar reúne automáticamente varias direcciones y vuelve a la vista actual s
 
 En **Pistas → Países**, pulsa un encabezado para ordenar por país, pistas guardadas, confianza media del Coach o actividad más reciente. Púlsalo de nuevo para invertir el orden. Al principio se muestran los países con más pistas.
 
+Las lecciones Meta guardadas expresamente, tanto del curso para principiantes como de los cursos por país, aparecen en Mis pistas con su texto, imagen de referencia si existe y hora exacta de guardado.
+
 ### Capturar, pegar y analizar una pista
 
 1. Encuadra la pista y pulsa **Impr Pant** o **Windows + Mayús + S** para copiar una captura.

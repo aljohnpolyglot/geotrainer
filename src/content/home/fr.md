@@ -108,6 +108,8 @@ Analyser rassemble automatiquement plusieurs directions et revient à la vue act
 
 Dans **Indices → Pays**, sélectionnez un en-tête pour trier par pays, indices enregistrés, confiance moyenne du Coach ou activité récente. Sélectionnez-le de nouveau pour inverser l’ordre. Les pays ayant le plus d’indices apparaissent d’abord.
 
+Les leçons Méta enregistrées explicitement, dans le cours débutant ou les cours par pays, apparaissent dans Mes indices avec leur texte, leur image de référence si elle existe et l’heure exacte d’enregistrement.
+
 ### Capturer, coller et analyser un indice
 
 1. Cadrez l’indice puis appuyez sur **Impr. écran** ou **Windows + Maj + S** pour copier une capture.

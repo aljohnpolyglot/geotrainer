@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-07
+
+- Show explicitly saved Meta country-course lessons in My Clues with their localized text, reference image, section, and save time; retain entries when course data cannot load.
+
 ## 2026-10-06
 
 - Let learners sort the Clues country table by country, saved clues, average confidence, or latest activity, with localized country names and dates.

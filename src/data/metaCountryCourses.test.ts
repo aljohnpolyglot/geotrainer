@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { loadMetaCountryCourse, localizeMetaCountryCourse, META_COUNTRY_COURSES, normalizeMetaCountryCourse } from './metaCountryCourses';
+import { loadMetaCountryCourse, localizeMetaCountryCourse, META_COUNTRY_COURSES, normalizeMetaCountryCourse, savedMetaCountryLesson } from './metaCountryCourses';
+
+test('saved country Meta tips retain their text and resolve a Street View link', () => {
+  const tip = { id: 'PL-clue', section: 'Roads', mapUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&pano=original&viewpoint=52.1,21.2&heading=90', image: '/meta-courses/images/clue.webp', text: 'Polish road clue', note: 'Compare with Czechia.' };
+  const saved = savedMetaCountryLesson(tip);
+  assert.equal(saved.panoId, 'original');
+  assert.equal(saved.text, tip.text);
+  assert.equal(saved.note, tip.note);
+  assert.equal(saved.imageUrl, tip.image);
+  const fallback = savedMetaCountryLesson({ ...tip, mapUrl: 'https://www.google.com/maps/' }, { panoId: 'saved', lat: 50, lng: 19, heading: 120, pitch: 3 });
+  assert.equal(fallback.panoId, 'saved');
+  assert.equal(fallback.text, tip.text);
+});
 
 test('country course catalog excludes non-countries and rejects malformed or duplicate tips', () => {
   assert.equal(META_COUNTRY_COURSES.length, 131);

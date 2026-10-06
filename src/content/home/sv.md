@@ -114,6 +114,8 @@ Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som
 
 Under **Ledtrådar → Länder** kan du välja en kolumnrubrik för att sortera efter land, sparade ledtrådar, coachens genomsnittliga säkerhet eller senaste aktivitet. Välj rubriken igen för att vända ordningen. Länder med flest ledtrådar visas först.
 
+Meta-lektioner som uttryckligen sparats från både nybörjarkursen och landskurserna visas under Mina ledtrådar med text, referensbild när den finns och exakt tid för sparandet.
+
 ### Ta skärmbild, klistra in och analysera
 
 1. Rama in ledtråden och tryck **Print Screen** eller **Windows + Skift + S** för att kopiera en skärmbild.

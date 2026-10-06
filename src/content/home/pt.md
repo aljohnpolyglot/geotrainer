@@ -108,6 +108,8 @@ Analisar reúne automaticamente várias direções e usa a vista atual como alte
 
 Em **Pistas → Países**, selecione um cabeçalho para ordenar por país, pistas salvas, confiança média do Coach ou atividade mais recente. Selecione novamente para inverter a ordem. Inicialmente, os países com mais pistas aparecem primeiro.
 
+As lições Meta salvas explicitamente, tanto do curso inicial como dos cursos por país, aparecem em Minhas pistas com texto, imagem de referência quando disponível e horário exato do salvamento.
+
 ### Capturar, colar e analisar uma pista
 
 1. Enquadre a pista e pressione **Print Screen** ou **Windows + Shift + S** para copiar uma captura.

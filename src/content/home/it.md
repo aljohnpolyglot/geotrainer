@@ -108,6 +108,8 @@ Analizza raccoglie automaticamente più direzioni e usa la vista corrente come a
 
 In **Indizi → Paesi**, seleziona un’intestazione per ordinare per paese, indizi salvati, affidabilità media del Coach o attività più recente. Selezionala di nuovo per invertire l’ordine. All’inizio compaiono i paesi con più indizi.
 
+Le lezioni Meta salvate esplicitamente, sia del corso per principianti sia dei corsi per paese, compaiono in I miei indizi con testo, immagine di riferimento se disponibile e ora esatta del salvataggio.
+
 ### Catturare, incollare e analizzare un indizio
 
 1. Inquadra l’indizio e premi **Stamp** o **Windows + Maiusc + S** per copiare uno screenshot.

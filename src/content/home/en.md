@@ -329,6 +329,8 @@ Treat Coach output as a hypothesis. Prefer multiple independent clues, notice co
 
 In **Clues → Countries**, select a column heading to sort by country, saved clues, average Coach confidence, or latest activity. Select it again to reverse the order. Saved clues starts highest first.
 
+Explicitly saved Beginner and country-course Meta lessons appear in My Clues with their text, reference image when available, and exact save time.
+
 Every completed Coach analysis is saved after its write finishes and appears in Available notes and My Clues with the current analyzed frame. Additional 360° views remain transient. Older text-only records remain valid. Rapid Coach completions are serialized so one cannot overwrite another. Saved clues help build a personal reference for countries and clue families. Open Clues from the main navigation to search the library, filter by country, inspect confidence summaries, open full clue details, or start country practice. Country options show clue totals and are ordered from most clues to least; × clears the filter. Back from a detail returns directly to the library.
 
 ### Good clue notes

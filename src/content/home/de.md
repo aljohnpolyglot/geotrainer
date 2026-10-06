@@ -308,6 +308,8 @@ Behandle jede Aussage als Hypothese. Mehrere unabhängige Hinweise sind stärker
 
 Unter **Hinweise → Länder** kannst du durch Auswahl einer Spaltenüberschrift nach Land, gespeicherten Hinweisen, durchschnittlicher Coach-Sicherheit oder letzter Aktivität sortieren. Erneutes Auswählen kehrt die Reihenfolge um. Anfangs stehen die Länder mit den meisten Hinweisen oben.
 
+Ausdrücklich gespeicherte Meta-Lektionen aus dem Anfänger- und den Länderkursen erscheinen unter Meine Hinweise mit ihrem Text, einem vorhandenen Referenzbild und dem genauen Speicherzeitpunkt.
+
 ### Gute Notizen
 
 - Sichtbares Merkmal genau beschreiben.
