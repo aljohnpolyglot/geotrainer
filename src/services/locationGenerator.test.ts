@@ -293,7 +293,7 @@ test('Review skips country lookup for an unchanged panorama but checks a moved r
   assert.equal((await generator.resolveReviewLocation(saved, plan)).panoId, saved.panoId);
   assert.equal(geocodeCalls, 0);
 
-  currentResults = [{ lat: 41.234567, lng: 12.234567, pano: 'moved-view', countryCode: 'FR' }];
+  currentResults = [{ lat: 41.1235, lng: 12.12345, pano: 'moved-view', countryCode: 'FR' }];
   results = [{ lat: 0, lng: 0, pano: 'missing', countryCode: 'IT', status: 'ZERO_RESULTS' }, currentResults[0]];
   await assert.rejects(generator.resolveReviewLocation(saved, plan), /no longer matches/);
   assert.equal(geocodeCalls, 1);
@@ -333,7 +333,7 @@ test('100 accepted Study locations contain no consecutive panorama duplicate', a
 
 test('nearby Review variation requires Google outdoor searches, rejects contributors, and falls back to the anchor', async () => {
   const { StreetViewLocationGenerator } = await import('./locationGenerator');
-  const anchor = { lat: 46.061, lng: 14.511, pano: 'saved-anchor', countryCode: 'SI', copyright: '© Contributor' };
+  const anchor = { lat: 46.061, lng: 14.511, pano: 'saved-anchor', countryCode: 'SI', copyright: '© Google' };
   const plan = { kind: 'spatial', generalizationLevel: 1, maxDistanceM: 100, seed: 1 } as const;
   for (const hasOfficial of [true, false]) {
     currentResults = [anchor, ...Array.from({ length: 4 }, (_, i) => ({ lat: anchor.lat + .0002 * (i + 1), lng: anchor.lng, pano: `nearby-${i}`, countryCode: 'SI', copyright: hasOfficial && i === 1 ? '© Google' : '© Contributor' }))];
@@ -342,5 +342,34 @@ test('nearby Review variation requires Google outdoor searches, rejects contribu
     assert.equal(found.panoId, hasOfficial ? 'nearby-1' : anchor.pano);
     assert.equal(panoramaRequests.length, 5);
     for (const request of panoramaRequests.slice(1)) assert.deepEqual(request.sources, ['GOOGLE', 'OUTDOOR']);
+  }
+});
+
+test('Review keeps available contributor originals and recovers expired views only with nearby official imagery', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const generator = new StreetViewLocationGenerator();
+  const saved = { panoId: 'saved-view', lat: 6.25, lng: -75.57, countryCode: 'CO', heading: 42 };
+  const plan = { kind: 'spatial', generalizationLevel: 2, maxDistanceM: 300, seed: 1, heading: 200 } as const;
+  results = [{ lat: saved.lat, lng: saved.lng, pano: saved.panoId, countryCode: 'CO', copyright: '© Contributor' }];
+  panoramaRequests = [];
+  const original = await generator.resolveReviewLocation(saved, plan);
+  assert.equal(original.panoId, saved.panoId);
+  assert.equal(original.heading, saved.heading);
+  assert.equal(panoramaRequests.length, 1);
+
+  for (const copyright of ['© Contributor', '© Google']) {
+    results = [
+      { lat: 0, lng: 0, pano: 'missing', countryCode: 'CO', status: 'ZERO_RESULTS' },
+      { lat: saved.lat + .0001, lng: saved.lng, pano: 'replacement', countryCode: 'CO', copyright },
+    ];
+    currentResults = [results[1]]; panoramaRequests = [];
+    if (copyright.includes('Google')) {
+      const found = await generator.resolveReviewLocation(saved, plan);
+      assert.equal(found.panoId, 'replacement');
+      assert.equal(found.isFallbackPanorama, true);
+      assert.equal(found.heading, saved.heading);
+    } else await assert.rejects(generator.resolveReviewLocation(saved, plan), /unavailable/);
+    assert.equal(panoramaRequests[1].radius, 50);
+    assert.deepEqual(panoramaRequests[1].sources, ['GOOGLE', 'OUTDOOR']);
   }
 });

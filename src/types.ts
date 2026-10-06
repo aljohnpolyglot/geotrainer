@@ -33,6 +33,7 @@ export interface LocationResult {
   adminArea?: string;
   isFallback?: boolean;
   isFallbackPanorama?: boolean;
+  isOfficialPanorama?: boolean;
   originalPanoId?: string;
   environment?: Environment;
   environmentRequested?: Environment;

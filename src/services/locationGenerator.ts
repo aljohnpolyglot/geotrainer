@@ -285,7 +285,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     throw new Error('Could not find a valid Street View panorama. Please click "Next Location" to try again.');
   }
 
-  async reopenLocation(location: LocationResult, options: { fallbackRadiusM?: number; maxOriginalDistanceKm?: number } = {}): Promise<LocationResult> {
+  async reopenLocation(location: LocationResult, options: { fallbackRadiusM?: number; maxOriginalDistanceKm?: number; officialFallback?: boolean } = {}): Promise<LocationResult> {
     const sv = this.getService();
     const lookup = (request: google.maps.StreetViewLocationRequest | google.maps.StreetViewPanoRequest) =>
       new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => {
@@ -300,15 +300,16 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         panoId: original.location.pano,
         lat: original.location.latLng.lat(),
         lng: original.location.latLng.lng(),
+        isOfficialPanorama: isOfficialGooglePanorama(original),
       };
     }
     const fallbackRadiusM = options.fallbackRadiusM ?? 50000;
     const fallback = await lookup({
       location: { lat: location.lat, lng: location.lng }, radius: fallbackRadiusM,
       preference: google.maps.StreetViewPreference.NEAREST,
-      source: google.maps.StreetViewSource.OUTDOOR,
+      ...(options.officialFallback ? { sources: streetViewSearchSources({ panoramaSource: 'official', allowInteriors: false }) } : { source: google.maps.StreetViewSource.OUTDOOR }),
     });
-    if (!fallback?.location?.pano || !fallback.location.latLng || calculateDistanceKm(location.lat, location.lng, fallback.location.latLng.lat(), fallback.location.latLng.lng()) * 1000 > fallbackRadiusM) throw new Error('This panorama and nearby Street View coverage are unavailable.');
+    if (!fallback?.location?.pano || !fallback.location.latLng || (options.officialFallback && !isOfficialGooglePanorama(fallback)) || calculateDistanceKm(location.lat, location.lng, fallback.location.latLng.lat(), fallback.location.latLng.lng()) * 1000 > fallbackRadiusM) throw new Error('This panorama and nearby Street View coverage are unavailable.');
     return {
       ...location,
       panoId: fallback.location.pano,
@@ -316,16 +317,18 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       lng: fallback.location.latLng.lng(),
       isFallback: true,
       isFallbackPanorama: true,
+      isOfficialPanorama: isOfficialGooglePanorama(fallback),
       originalPanoId: location.panoId,
     };
   }
 
   async resolveReviewLocation(location: LocationResult, plan: ReviewVariationPlan, recentlyShown = new Set<string>()): Promise<LocationResult> {
-    const anchor = await this.reopenLocation(location);
+    const anchor = await this.reopenLocation(location, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true });
     const unchangedAnchor = !anchor.isFallback && anchor.panoId === location.panoId && calculateDistanceKm(anchor.lat, anchor.lng, location.lat, location.lng) <= .05;
     const resolvedAnchorCountry = unchangedAnchor ? location.countryCode : (await reverseGeocodeLocation(anchor.lat, anchor.lng))?.countryCode;
     if (resolvedAnchorCountry && resolvedAnchorCountry !== location.countryCode) throw new Error('The saved panorama no longer matches this Review location.');
-    if (anchor.isFallback || plan.kind !== 'spatial' || !plan.maxDistanceM) return { ...anchor, heading: plan.kind === 'spatial' ? anchor.heading : plan.heading ?? anchor.heading };
+    if (anchor.isFallback || anchor.isOfficialPanorama === false) return anchor;
+    if (plan.kind !== 'spatial' || !plan.maxDistanceM) return { ...anchor, heading: plan.heading ?? anchor.heading };
     const sv = this.getService(); const radians = Math.PI / 180; const latitudeScale = 1 / 111_320;
     const targets = [.9, .7, .5, .3].map((scale, index) => {
       const angle = ((plan.seed % 360) + index * 137.508) * radians; const distance = plan.maxDistanceM * scale;

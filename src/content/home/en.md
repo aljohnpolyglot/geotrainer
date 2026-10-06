@@ -254,6 +254,8 @@ Maximum answer seconds helps distinguish fluent recall from a correct answer rea
 
 Vary review view keeps one canonical card and schedule but may change its heading or use a nearby panorama as the location becomes well learned. Nearby variations use only official Google outdoor imagery. If no matching nearby panorama is available, Review keeps the saved view; the original panorama and heading-only changes retain their saved imagery. Variation difficulty controls how aggressively mature cards vary; 0 always uses the original view. New, weak, or recently failed cards stay close to the anchor. A failed varied view makes later variation more conservative, and lookup failure falls back to the saved view without creating a duplicate card.
 
+An available saved contributor panorama always opens as originally learned, without view variation. If a saved panorama is unavailable, Review tries official outdoor imagery within 50 metres of its saved location. If none is available, the card cannot open until you retry; Review does not substitute an unrelated scene.
+
 ### Due order and day boundary
 
 Oldest due prioritizes the longest-waiting cards. Random mixes the full selected Review queue, including custom practice. The review reset time and timezone define when a new study day begins, which prevents midnight sessions from splitting unexpectedly. Choose the timezone from the dropdown or use automatic detection. Preferences shows the actual next scheduled review as both a local date and the remaining hours and minutes.

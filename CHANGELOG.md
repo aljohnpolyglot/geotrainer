@@ -2,6 +2,7 @@
 
 ## 2026-10-07
 
+- Keep available contributor panoramas unchanged in Review, and limit recovery of expired saved views to official outdoor imagery within 50 metres so unrelated aerial views cannot replace learned scenes.
 - Show explicitly saved Meta country-course lessons in My Clues with their localized text, reference image, section, and save time; retain entries when course data cannot load.
 
 ## 2026-10-06

@@ -88,6 +88,8 @@ A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais 
 
 - **Variar vista de revisão** mantém o mesmo cartão e agenda, mas pode mudar a direção ou usar um panorama próximo em cartões maduros. Zero mantém a vista original; erros reduzem a variação e falhas de busca retornam à âncora sem duplicar cartões. As variações próximas usam apenas imagens oficiais do Google ao ar livre; sem um resultado adequado, a vista salva é mantida. A vista original e mudanças apenas de direção conservam as imagens salvas.
 
+Um panorama salvo de um colaborador que ainda esteja disponível abre exatamente como foi aprendido, sem variar a vista. Se deixar de estar disponível, a Revisão procura imagens oficiais do Google ao ar livre num raio de 50 metros do local salvo. Sem resultado, o cartão fica à espera de nova tentativa em vez de mostrar outra cena.
+
 Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
 
 ## Coach de IA e pistas

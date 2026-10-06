@@ -88,6 +88,8 @@ La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a
 
 - **Varia vista di ripasso** conserva la stessa scheda e pianificazione, ma può cambiare direzione o usare un panorama vicino per schede mature. Zero conserva la vista originale; gli errori riducono la variazione e una ricerca fallita torna all’ancora senza duplicati. Le varianti vicine usano solo immagini ufficiali Google all’aperto; senza un risultato adatto rimane la vista salvata. La vista originale e i soli cambi di direzione conservano le immagini salvate.
 
+Un panorama salvato da un contributore ancora disponibile si apre esattamente come è stato appreso, senza variazioni. Se non è più disponibile, Ripasso cerca immagini ufficiali Google all’aperto entro 50 metri dal luogo salvato. Senza risultati, la scheda resta in attesa di un nuovo tentativo invece di mostrare un’altra scena.
+
 Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
 
 ## Coach IA e indizi

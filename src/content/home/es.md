@@ -88,6 +88,8 @@ Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre 
 
 - **Variar vista de repaso** conserva la misma tarjeta y planificación, pero puede cambiar el rumbo o usar un panorama cercano en tarjetas maduras. Cero conserva la vista original; los fallos reducen la variación y cualquier búsqueda fallida vuelve al ancla sin duplicar tarjetas. Las variantes cercanas usan solo imágenes oficiales de Google en exteriores; si no hay ninguna adecuada, se mantiene la vista guardada. La vista original y los cambios de rumbo conservan sus imágenes guardadas.
 
+Un panorama guardado de un colaborador que sigue disponible se abre tal como se aprendió, sin variar la vista. Si ya no está disponible, Repaso busca imágenes oficiales de Google en exteriores a menos de 50 metros del lugar guardado. Si no encuentra ninguna, la tarjeta queda pendiente para reintentar en vez de mostrar otra escena.
+
 Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afectan la programación futura sin reescribir intentos guardados; los límites y el orden se aplican al recalcular la cola.
 
 ## Entrenador de IA y pistas
