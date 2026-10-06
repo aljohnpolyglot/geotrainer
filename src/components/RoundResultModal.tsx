@@ -77,9 +77,9 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
       <div className="relative w-full max-w-4xl h-[90vh] max-h-[720px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
         {/* Top Header Card */}
         <div className="relative p-4 pr-16 sm:p-5 sm:pr-16 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
+          <div className="flex min-w-0 flex-[1_1_300px] items-center space-x-3">
             {flag1x && <img src={flag1x} srcSet={`${flag1x} 1x, ${flag2x} 2x`} alt={`${countryName} ${t('flag')}`} width="36" height="24" className="w-9 h-6 rounded-xs object-cover border border-stone-700 shadow-sm" referrerPolicy="no-referrer" />}
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{countryName}</h2>
                 <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-300">{viewedRound.location.countryCode}</span>

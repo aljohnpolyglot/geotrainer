@@ -2,6 +2,7 @@
 
 ## 2026-10-06
 
+- Keep long revealed Play location details inside the result header without crowding the score or map.
 - Keep the camera direction while walking through Learn panoramas, and apply Random card order to the whole selected Review deck, including custom practice queues. Clarify the card-order setting in all eight languages.
 - Advance directly through unfinished Beginner Meta lessons and enable Previous for lessons visited in the current session.
 - Open unchanged saved Review panoramas without a redundant country lookup, while retaining country checks for moved or fallback imagery.
