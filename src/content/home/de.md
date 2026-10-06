@@ -306,6 +306,8 @@ Behandle jede Aussage als Hypothese. Mehrere unabhängige Hinweise sind stärker
 
 ## Gespeicherte Hinweise
 
+Unter **Hinweise → Länder** kannst du durch Auswahl einer Spaltenüberschrift nach Land, gespeicherten Hinweisen, durchschnittlicher Coach-Sicherheit oder letzter Aktivität sortieren. Erneutes Auswählen kehrt die Reihenfolge um. Anfangs stehen die Länder mit den meisten Hinweisen oben.
+
 ### Gute Notizen
 
 - Sichtbares Merkmal genau beschreiben.

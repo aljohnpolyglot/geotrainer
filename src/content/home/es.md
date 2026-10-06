@@ -106,6 +106,8 @@ Coach espera el idioma de IA guardado antes del análisis, rechaza resultados cl
 
 Analizar reúne automáticamente varias direcciones y vuelve a la vista actual si hace falta. Solo muestra una estimación de región, ciudad o lugar exacto cuando varias pistas visuales sólidas la respaldan. Tras revelar la respuesta, **Analizar** se convierte en **Explicar**: usa solo referencias del país correcto y admite si la imagen no bastaba para identificarlo. Pistas abre una biblioteca con detalle completo, Street View y enlaces a Google Maps; el filtro muestra el total por país, se ordena de mayor a menor y × lo borra. En Jugar y Repasar, minimizar el resultado muestra **Analizar** sin el contexto de la respuesta guardada; al mostrar de nuevo el resultado, aparece **Explicar**.
 
+En **Pistas → Países**, pulsa un encabezado para ordenar por país, pistas guardadas, confianza media del Coach o actividad más reciente. Púlsalo de nuevo para invertir el orden. Al principio se muestran los países con más pistas.
+
 ### Capturar, pegar y analizar una pista
 
 1. Encuadra la pista y pulsa **Impr Pant** o **Windows + Mayús + S** para copiar una captura.

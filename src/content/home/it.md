@@ -106,6 +106,8 @@ Coach attende la lingua IA salvata prima dell’analisi, rifiuta i risultati chi
 
 Analizza raccoglie automaticamente più direzioni e usa la vista corrente come alternativa. Mostra una stima di regione, città o luogo esatto solo quando più indizi visivi forti la sostengono. Dopo la rivelazione, **Analizza** diventa **Spiega**: usa solo i riferimenti del paese corretto e ammette quando l’immagine non bastava a identificarlo. Indizi apre una libreria con dettaglio completo, Street View e link Google Maps; il filtro mostra il totale per paese, ordina dal maggiore al minore e × lo cancella. In Gioca e Ripasso, ridurre il risultato mostra **Analizza** senza il contesto della risposta salvata; riaprire il risultato ripristina **Spiega**.
 
+In **Indizi → Paesi**, seleziona un’intestazione per ordinare per paese, indizi salvati, affidabilità media del Coach o attività più recente. Selezionala di nuovo per invertire l’ordine. All’inizio compaiono i paesi con più indizi.
+
 ### Catturare, incollare e analizzare un indizio
 
 1. Inquadra l’indizio e premi **Stamp** o **Windows + Maiusc + S** per copiare uno screenshot.

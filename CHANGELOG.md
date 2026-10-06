@@ -2,6 +2,7 @@
 
 ## 2026-10-06
 
+- Let learners sort the Clues country table by country, saved clues, average confidence, or latest activity, with localized country names and dates.
 - Keep long revealed Play location details inside the result header without crowding the score or map.
 - Keep the camera direction while walking through Learn panoramas, and apply Random card order to the whole selected Review deck, including custom practice queues. Clarify the card-order setting in all eight languages.
 - Advance directly through unfinished Beginner Meta lessons and enable Previous for lessons visited in the current session.

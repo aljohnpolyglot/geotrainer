@@ -112,6 +112,8 @@ Coach väntar före analysen på det sparade AI-språket, avvisar tydligt flersp
 
 Analysera samlar automatiskt flera riktningar och använder den aktuella vyn som reserv. En uppskattning av region, stad eller exakt plats visas bara när flera starka synliga ledtrådar stöder den. Efter visat facit blir **Analysera** **Förklara**: coachen använder bara referenser för rätt land och säger öppet när bilden inte räckte för att identifiera det. I Spela och Repetition visar coachen **Analysera** utan det sparade svaret som sammanhang när resultatet är minimerat och **Förklara** när du visar resultatet igen. Ledtrådar öppnar ett bibliotek med fullständig detaljvy, Street View och Google Maps-länkar; filtret visar antal per land, sorterar flest först och × rensar det.
 
+Under **Ledtrådar → Länder** kan du välja en kolumnrubrik för att sortera efter land, sparade ledtrådar, coachens genomsnittliga säkerhet eller senaste aktivitet. Välj rubriken igen för att vända ordningen. Länder med flest ledtrådar visas först.
+
 ### Ta skärmbild, klistra in och analysera
 
 1. Rama in ledtråden och tryck **Print Screen** eller **Windows + Skift + S** för att kopiera en skärmbild.

@@ -10,11 +10,14 @@ import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal'
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
+import { sortRows, type SortDirection } from '../analytics/tableSorting';
 
 type ClueView = 'library' | 'countries' | 'insights';
+type CountrySortKey = 'country' | 'count' | 'confidence' | 'latest';
 
 export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, locations, onDelete, onDeleteNote, onSaveNote, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onDeleteNote: (note: NotebookNote) => void; onSaveNote: (note: NotebookNote) => Promise<void>; onTrainCountries: (codes: string[], name: string) => void }) {
   const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null); const [failedImages, setFailedImages] = useState(() => new Set<string>());
+  const [countrySort, setCountrySort] = useState<{ key: CountrySortKey; direction: SortDirection }>({ key: 'count', direction: 'desc' });
   const noteLinks = useMemo(() => notebookClueLinks(clues, notebookNotes), [clues, notebookNotes]);
   const displayNotes = useMemo(() => visibleNotebookNotes(notebookNotes, noteLinks), [notebookNotes, noteLinks]);
   const activeNotes = useMemo(() => notebookNotes.filter((note) => !note.deletedAt), [notebookNotes]);
@@ -28,6 +31,8 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const timeline = useMemo(() => [...filtered.map((value) => ({ kind: 'clue' as const, value, at: value.createdAt })), ...filteredCoach.map((value) => ({ kind: 'coach' as const, value, at: value.generatedAt })), ...filteredNotes.map((value) => ({ kind: 'note' as const, value, at: value.updatedAt })), ...filteredMetas.map((value) => ({ kind: 'meta' as const, value, at: value.learned.learnedAt }))].sort((a, b) => b.at - a.at), [filtered, filteredCoach, filteredMetas, filteredNotes]);
   const totalFiltered = timeline.length; const paging = pageBounds(totalFiltered, page); const pageRows = timeline.slice(paging.start, paging.end);
   const groups = useMemo(() => [...new Set([...clues.map((clue) => clue.countryCode), ...learnedMetas.map((meta) => meta.countryCode), ...activeNotes.map((note) => note.countryCode), ...coachNotes.map((note) => note.countryCode)])].map((code) => { const rows = clues.filter((clue) => clue.countryCode === code); const metas = learnedMetas.filter((meta) => meta.countryCode === code); const notes = notebookNotes.filter((note) => note.countryCode === code); const visibleNotes = activeNotes.filter((note) => note.countryCode === code); const coaches = coachNotes.filter((note) => note.countryCode === code); const analyzed = [...rows.map((row) => row.analysis), ...coaches.map((row) => row.analysis)].filter((analysis) => analysis.candidates.length); return { code, count: savedClueCount(rows, notes, metas, coaches), latest: Math.max(0, ...rows.map((row) => row.createdAt), ...metas.map((row) => row.learnedAt), ...visibleNotes.map((row) => row.updatedAt), ...coaches.map((row) => row.generatedAt)), confidence: analyzed.length ? analyzed.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed.length : 0 }; }).filter((group) => group.count > 0).sort((a, b) => b.count - a.count || countryName(a.code).localeCompare(countryName(b.code))), [activeNotes, clues, coachNotes, learnedMetas, notebookNotes]);
+  const sortedGroups = useMemo(() => sortRows(groups, (group: (typeof groups)[number]) => ({ country: countryName(group.code, ui), count: group.count, confidence: group.confidence, latest: group.latest })[countrySort.key], countrySort.direction, ui), [countrySort, groups, ui]);
+  const countryHeader = (key: CountrySortKey, label: string) => <th aria-sort={countrySort.key === key ? countrySort.direction === 'asc' ? 'ascending' : 'descending' : 'none'}><button type="button" className="sortable-heading" onClick={() => setCountrySort((current) => ({ key, direction: current.key === key ? current.direction === 'asc' ? 'desc' : 'asc' : key === 'country' ? 'asc' : 'desc' }))} aria-label={`${t('Sort by')}: ${label}`}>{label}<span aria-hidden="true">{countrySort.key === key ? countrySort.direction === 'asc' ? ' ↑' : ' ↓' : ' ↕'}</span></button></th>;
   const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (panoId: string) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(panoId)}`;
   const noteImage = (note: NotebookNote) => clues.find((clue) => clue.id === noteLinks.get(note))?.imageDataUrl;
@@ -128,21 +133,21 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <table>
 <thead>
 <tr>
-<th>{t('Country')}</th>
-<th>{t('Saved clues')}</th>
-<th>{t('Average confidence')}</th>
-<th>{t('Latest')}</th>
+{countryHeader('country', t('Country'))}
+{countryHeader('count', t('Saved clues'))}
+{countryHeader('confidence', t('Average confidence'))}
+{countryHeader('latest', t('Latest'))}
 <th />
 </tr>
 </thead>
-<tbody>{groups.map((group) => <tr key={group.code}>
+<tbody>{sortedGroups.map((group) => <tr key={group.code}>
 <td>
-<CountryFlag code={group.code} />{countryName(group.code)}</td>
-<td>{group.count}</td>
-<td>{Math.round(group.confidence * 100)}%</td>
-<td>{new Date(group.latest).toLocaleDateString()}</td>
+<CountryFlag code={group.code} />{countryName(group.code, ui)}</td>
+<td>{group.count.toLocaleString(ui)}</td>
+<td>{Math.round(group.confidence * 100).toLocaleString(ui)}%</td>
+<td>{new Date(group.latest).toLocaleDateString(ui)}</td>
 <td>
-<button className="review-location-button" onClick={() => onTrainCountries([group.code], countryName(group.code))}>{t('Practice')}</button>
+<button className="review-location-button" onClick={() => onTrainCountries([group.code], countryName(group.code, ui))}>{t('Practice')}</button>
 </td>
 </tr>)}</tbody>
 </table>

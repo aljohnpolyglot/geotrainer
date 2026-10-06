@@ -106,6 +106,8 @@ Coach attend la langue IA enregistrée avant l’analyse, rejette les résultats
 
 Analyser rassemble automatiquement plusieurs directions et revient à la vue actuelle si nécessaire. Une estimation de région, ville ou lieu exact n’apparaît que si plusieurs indices visuels forts la soutiennent. Après la révélation, **Analyser** devient **Expliquer** : le Coach utilise uniquement les références du bon pays et reconnaît si l’image ne suffisait pas à l’identifier. Indices ouvre une bibliothèque avec détail complet, Street View et liens Google Maps ; le filtre affiche le total par pays, les classe du plus fourni au moins fourni et × l’efface. Dans Jeu et Révision, réduire le résultat affiche **Analyser** sans le contexte de la réponse enregistrée ; afficher de nouveau le résultat rétablit **Expliquer**.
 
+Dans **Indices → Pays**, sélectionnez un en-tête pour trier par pays, indices enregistrés, confiance moyenne du Coach ou activité récente. Sélectionnez-le de nouveau pour inverser l’ordre. Les pays ayant le plus d’indices apparaissent d’abord.
+
 ### Capturer, coller et analyser un indice
 
 1. Cadrez l’indice puis appuyez sur **Impr. écran** ou **Windows + Maj + S** pour copier une capture.
