@@ -4,12 +4,12 @@ import { acquireMap } from '../services/mapResources';
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { Maximize2, Minimize2, MapPin, Check, RotateCcw, Clock } from 'lucide-react';
 import { formatTime } from '../services/gameLogic';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { useDraggablePanel } from '../hooks/useDraggablePanel';
+import { movePanelRect, resizePanelRect, useDraggablePanel, type PanelRect, type PanelResizeDirection } from '../hooks/useDraggablePanel';
 import { playUiSound } from '../services/audio';
 import { mapPresentationOptions, useMapPreferences } from '../services/mapPreferences';
 
@@ -20,6 +20,12 @@ interface GuessMapProps {
   timeRemaining: number | null; // null if unlimited
   elapsedTimeSeconds?: number;
 }
+
+const visibleBounds = () => {
+  const viewport = window.visualViewport;
+  const left = viewport?.offsetLeft || 0; const top = viewport?.offsetTop || 0;
+  return { left, top, right: left + (viewport?.width || window.innerWidth), bottom: top + (viewport?.height || window.innerHeight) };
+};
 
 export const GuessMap: React.FC<GuessMapProps> = ({
   onGuess,
@@ -37,7 +43,45 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [expandedRect, setExpandedRect] = useState<PanelRect>();
+  const interaction = useRef<{ pointerId: number; startX: number; startY: number; rect: PanelRect; direction: 'move' | PanelResizeDirection }>();
   const [currentGuess, setCurrentGuess] = useState<{ lat: number; lng: number } | null>(null);
+
+  const toggleExpanded = () => {
+    if (isExpanded) { setIsExpanded(false); setExpandedRect(undefined); return; }
+    const bounds = visibleBounds();
+    setExpandedRect({ left: bounds.left, top: bounds.top, width: bounds.right - bounds.left, height: bounds.bottom - bounds.top });
+    setIsExpanded(true);
+  };
+  const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: 'move' | PanelResizeDirection) => {
+    if (!isExpanded || event.button !== 0 || direction === 'move' && (event.target as HTMLElement).closest('button')) return;
+    const bounds = panelRef.current?.getBoundingClientRect(); if (!bounds) return;
+    event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId);
+    interaction.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, rect: { left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height }, direction };
+  };
+  const moveInteraction = (event: ReactPointerEvent<HTMLElement>) => {
+    const active = interaction.current; if (!active || active.pointerId !== event.pointerId) return;
+    const delta = { x: event.clientX - active.startX, y: event.clientY - active.startY };
+    const limits = visibleBounds();
+    setExpandedRect(active.direction === 'move' ? movePanelRect(active.rect, delta, limits) : resizePanelRect(active.rect, delta, active.direction, limits, { width: Math.min(320, limits.right - limits.left), height: Math.min(240, limits.bottom - limits.top) }));
+  };
+  const finishInteraction = (event: ReactPointerEvent<HTMLElement>) => {
+    if (interaction.current?.pointerId !== event.pointerId) return;
+    event.currentTarget.releasePointerCapture?.(event.pointerId); interaction.current = undefined;
+  };
+  const expandedDragProps = { onPointerDown: (event: ReactPointerEvent<HTMLElement>) => startInteraction(event, 'move'), onPointerMove: moveInteraction, onPointerUp: finishInteraction, onPointerCancel: finishInteraction };
+  const resizeProps = (direction: PanelResizeDirection) => ({ onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => startInteraction(event, direction), onPointerMove: moveInteraction, onPointerUp: finishInteraction, onPointerCancel: finishInteraction });
+  const expandedStyle: CSSProperties | undefined = expandedRect ? { left: expandedRect.left, top: expandedRect.top, right: 'auto', bottom: 'auto', width: expandedRect.width, height: expandedRect.height } : undefined;
+  useEffect(() => {
+    if (!isExpanded) return;
+    const fit = () => setExpandedRect((rect) => {
+      if (!rect) return rect;
+      const bounds = visibleBounds(); const width = Math.min(rect.width, bounds.right - bounds.left); const height = Math.min(rect.height, bounds.bottom - bounds.top);
+      return { left: Math.max(bounds.left, Math.min(rect.left, bounds.right - width)), top: Math.max(bounds.top, Math.min(rect.top, bounds.bottom - height)), width, height };
+    });
+    window.addEventListener('resize', fit); window.visualViewport?.addEventListener('resize', fit);
+    return () => { window.removeEventListener('resize', fit); window.visualViewport?.removeEventListener('resize', fit); };
+  }, [isExpanded]);
 
   // Initialize Map
   useEffect(() => {
@@ -144,7 +188,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   useEffect(() => {
     const submitWithEnter = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
-      if (event.key !== 'Enter' || event.repeat || !currentGuess || isSubmitting || target?.closest('input, select, textarea, [contenteditable="true"], [role="dialog"]')) return;
+      if (event.key !== 'Enter' || event.repeat || !currentGuess || isSubmitting || target?.closest('button, input, select, textarea, [contenteditable="true"], [role="dialog"]')) return;
       event.preventDefault();
       onGuess(currentGuess);
     };
@@ -162,15 +206,15 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     <div
       ref={panelRef}
       id="guess-map-widget"
-      style={isExpanded ? undefined : dragStyle}
-      className={`absolute bottom-5 right-5 z-20 ${isExpanded ? 'expanded' : 'collapsed'} ${dragging ? '' : 'transition-[width,height] duration-300 ease-out'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
+      style={isExpanded ? expandedStyle : dragStyle}
+      className={`absolute bottom-5 right-5 z-20 ${isExpanded ? 'expanded' : 'collapsed'} ${dragging || interaction.current ? '' : 'transition-[width,height] duration-300 ease-out'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
         isExpanded
-          ? 'w-[92vw] max-w-2xl h-[65vh] max-h-[560px]'
+          ? ''
           : 'w-72 sm:w-88 h-56 sm:h-64 opacity-90 hover:opacity-100'
       }`}
     >
       {/* Top Header bar of Guess Map */}
-      <div {...dragHandleProps} className={`flex items-center justify-between px-3.5 py-2 bg-stone-950/80 border-b border-stone-800 text-stone-200 touch-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}>
+      <div {...(isExpanded ? expandedDragProps : dragHandleProps)} className={`flex items-center justify-between px-3.5 py-2 bg-stone-950/80 border-b border-stone-800 text-stone-200 touch-none ${dragging || interaction.current ? 'cursor-grabbing' : 'cursor-grab'}`}>
         <div className="flex items-center space-x-2">
           <MapPin className="w-4 h-4 text-rose-500 flex-shrink-0" />
           <span className="text-xs font-semibold tracking-tight">{t('pinpointLocation')}</span>
@@ -190,7 +234,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
 
           {/* Expand/Collapse Toggle */}
           <button
-            onClick={() => setIsExpanded((prev) => !prev)}
+            onClick={toggleExpanded}
             aria-expanded={isExpanded}
             aria-label={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
             title={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
@@ -202,7 +246,9 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       </div>
 
       {/* Map Canvas */}
-      <div ref={mapContainerRef} className="flex-1 w-full h-full relative cursor-crosshair" />
+      <div ref={mapContainerRef} className="flex-1 min-h-0 w-full relative cursor-crosshair" />
+
+      {isExpanded && (['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] as PanelResizeDirection[]).map((direction) => <div key={direction} aria-hidden="true" className={`location-card-resize-handle ${direction}`} {...resizeProps(direction)} />)}
 
       {/* Bottom Submit Action Bar */}
       <div className="p-2.5 bg-stone-950/90 border-t border-stone-800 flex items-center justify-between gap-2">

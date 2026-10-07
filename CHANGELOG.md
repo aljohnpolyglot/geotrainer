@@ -2,6 +2,11 @@
 
 ## 2026-10-07
 
+- Make the shared Play and Review pinpointer fill the visible viewport when expanded, with header dragging and edge or corner resizing while retaining the placed pin.
+- Add a preview and confirmation for balancing future Review due dates across nearby days; preserve today's queue, short learning steps, review history, and manual-sync compatibility.
+- Restore the pictured primary clue in 43 Beginner Meta lessons while keeping country comparisons beneath it; correct two source panorama/country mismatches and translate the revised explanations across all eight languages.
+- Restore Beginner Meta's Previous navigation from saved Study visits after reload or resume, using the actual order lessons were opened.
+- Credit GeoMetas in Beginner Meta lessons and Plonk It in country courses, with a quiet source note in lesson, browser, and saved-clue views and updated Guide text in all eight languages. The OpenGuessr checkpoint supplied panorama pairings, but does not establish lesson authorship.
 - Keep available contributor panoramas unchanged in Review, and limit recovery of expired saved views to official outdoor imagery within 50 metres so unrelated aerial views cannot replace learned scenes.
 - Show explicitly saved Meta country-course lessons in My Clues with their localized text, reference image, section, and save time; retain entries when course data cannot load.
 

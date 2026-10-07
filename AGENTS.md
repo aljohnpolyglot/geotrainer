@@ -42,6 +42,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - Review attempts are new records; never mutate the original Play attempt.
 - Before a guess, Review must not receive the current card's persisted answer metadata, but every learner-opened tool may render its full saved or newly generated content, including Meta explanations, note text, country candidates, and probabilities.
 - Review scheduling is derived automatically from guess distance/score. Never show manual Again/Hard/Good/Easy controls.
+- Balancing Review due dates may move future cards only within a small part of their interval; keep today's cards and short learning steps in place, preserve grades and attempts, and carry adjusted dates through reloads and manual sync.
 - Country score targets in Settings → Preferences tighten existing training rules in both Play and Review: wrong-country guesses always fail, below-floor same-country guesses count as mistakes, and an equal score meets the floor. Keep untargeted countries on existing strictness and auto-review rules; specialization never lowers those rules, rewrites original points or country recognition, or retroactively resets schedules.
 - Treat same-country locations within 50 metres as one Review card across Play, Study, Notebook, and Coach sources.
 - Use that same 50-metre identity for panorama-scoped Available notes and its badge so nearby Street View nodes share Coach and Notebook history.
@@ -145,6 +146,7 @@ Run type-check, tests, and build before handing off user-visible changes.
 - After a Play or Review answer is complete, unlock panorama movement, panning, and zoom for inspection while preserving the attempt's recorded restrictions.
 - Return to start in Play and Review must use the current round’s shown spawn panorama, including Review variations, and respect effective movement restrictions; never jump to a hidden canonical answer instead.
 - Keep the same mobile pinpointer available in Play and Review, and anchor panorama controls to the dynamic visible viewport so browser chrome cannot cover them.
+- Let the shared Play and Review pinpointer expand to the visible viewport, move by its header, and resize from its edges without losing the current guess.
 - Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
 - Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.

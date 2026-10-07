@@ -72,22 +72,40 @@
     "sv": "Om du befinner dig på en grusväg i ett öppet fält i europeisk stil och saknar andra ledtrådar, är Estland ofta ett bra val."
   },
   "3fb53102cf3ed610": {
-    "es": "También se pueden ver matrículas de color naranja en Ecuador. De manera similar, las matrículas comerciales brasileñas son rojas, pero a veces pueden parecer similares.",
-    "pt": "Placas de cor laranja também podem ser vistas no Equador. Da mesma forma, as placas comerciais brasileiras são vermelhas, mas às vezes podem parecer semelhantes.",
-    "fr": "Des plaques de couleur orange peuvent également être vues en Équateur. De même, les plaques commerciales brésiliennes sont rouges mais peuvent parfois sembler similaires.",
-    "de": "Orangefarbene Schilder sind auch in Ecuador zu sehen. Ebenso sind brasilianische kommerzielle Schilder rot, können aber manchmal ähnlich aussehen.",
-    "it": "Si possono vedere anche targhe di colore arancione in Ecuador. Allo stesso modo, le targhe commerciali brasiliane sono rosse ma a volte possono sembrare simili.",
-    "ru": "Оранжевые номерные знаки также можно увидеть в Эквадоре. Аналогично, коммерческие номерные знаки Бразилии красные, но иногда могут выглядеть похоже.",
-    "sv": "Orangefärgade skyltar kan också ses i Ecuador. På liknande sätt är brasilianska kommersiella skyltar röda men kan ibland se likadana ut."
+    "es": "Los taxis y vehículos comerciales chilenos tienen placas de matrícula naranjas.",
+    "pt": "Táxis e veículos comerciais chilenos têm placas laranja.",
+    "fr": "Au Chili, les taxis et les véhicules commerciaux ont des plaques d’immatriculation orange.",
+    "de": "In Chile haben Taxis und Nutzfahrzeuge orangefarbene Kennzeichen.",
+    "it": "In Cile, taxi e veicoli commerciali hanno targhe arancioni.",
+    "ru": "В Чили у такси и коммерческого транспорта оранжевые номерные знаки.",
+    "sv": "I Chile har taxibilar och kommersiella fordon orange registreringsskyltar.",
+    "note": {
+      "es": "También se pueden ver matrículas de color naranja en Ecuador. De manera similar, las matrículas comerciales brasileñas son rojas, pero a veces pueden parecer similares.",
+      "pt": "Placas de cor laranja também podem ser vistas no Equador. Da mesma forma, as placas comerciais brasileiras são vermelhas, mas às vezes podem parecer semelhantes.",
+      "fr": "Des plaques de couleur orange peuvent également être vues en Équateur. De même, les plaques commerciales brésiliennes sont rouges mais peuvent parfois sembler similaires.",
+      "de": "Orangefarbene Schilder sind auch in Ecuador zu sehen. Ebenso sind brasilianische kommerzielle Schilder rot, können aber manchmal ähnlich aussehen.",
+      "it": "Si possono vedere anche targhe di colore arancione in Ecuador. Allo stesso modo, le targhe commerciali brasiliane sono rosse ma a volte possono sembrare simili.",
+      "ru": "Оранжевые номерные знаки также можно увидеть в Эквадоре. Аналогично, коммерческие номерные знаки Бразилии красные, но иногда могут выглядеть похоже.",
+      "sv": "Orangefärgade skyltar kan också ses i Ecuador. På liknande sätt är brasilianska kommersiella skyltar röda men kan ibland se likadana ut."
+    }
   },
   "a7abe313234d623d": {
-    "es": "Además, el capó del coche suele ser visible, mostrando un envoltorio del coche de Streetview que presenta un rectángulo rojo y algunos otros elementos.",
-    "pt": "Além disso, o capô do carro geralmente é visível, mostrando um envelopamento de carro Streetview que apresenta um retângulo vermelho e alguns outros elementos.",
-    "fr": "De plus, le capot de la voiture est généralement visible, montrant un habillage de voiture Streetview comportant un rectangle rouge et d'autres éléments.",
-    "de": "Außerdem ist die Motorhaube des Autos normalerweise sichtbar und zeigt eine Streetview-Auto-Verkleidung mit einem roten Rechteck und einigen anderen Elementen.",
-    "it": "Inoltre, il cofano dell'auto è solitamente visibile, mostrando un involucro dell'auto Streetview che presenta un rettangolo rosso e alcuni altri elementi.",
-    "ru": "Кроме того, капот автомобиля обычно виден, демонстрируя обертку автомобиля Streetview с красным прямоугольником и некоторыми другими элементами.",
-    "sv": "Dessutom är bilens huv oftast synlig och visar en Streetview-bilomslagning med en röd rektangel och några andra element."
+    "es": "El vehículo de Google Street View de Ghana tiene una baca visible con cinta negra en el extremo derecho de la barra delantera.",
+    "pt": "O carro do Google Street View de Gana tem um bagageiro visível, com fita preta na extremidade direita da barra dianteira.",
+    "fr": "La voiture Google Street View du Ghana a une galerie visible, avec du ruban noir à l’extrémité droite de la barre avant.",
+    "de": "Das Google-Street-View-Fahrzeug in Ghana hat einen sichtbaren Dachgepäckträger mit schwarzem Klebeband am rechten Ende der vorderen Stange.",
+    "it": "L’auto di Google Street View in Ghana ha un portapacchi visibile, con nastro nero all’estremità destra della barra anteriore.",
+    "ru": "У автомобиля Google Street View в Гане виден багажник на крыше; на правом конце передней перекладины есть чёрная лента.",
+    "sv": "Googles Street View-bil i Ghana har ett synligt takräcke med svart tejp längst till höger på den främre stången.",
+    "note": {
+      "es": "Además, el capó del coche suele ser visible, mostrando un envoltorio del coche de Streetview que presenta un rectángulo rojo y algunos otros elementos.",
+      "pt": "Além disso, o capô do carro geralmente é visível, mostrando um envelopamento de carro Streetview que apresenta um retângulo vermelho e alguns outros elementos.",
+      "fr": "De plus, le capot de la voiture est généralement visible, montrant un habillage de voiture Streetview comportant un rectangle rouge et d'autres éléments.",
+      "de": "Außerdem ist die Motorhaube des Autos normalerweise sichtbar und zeigt eine Streetview-Auto-Verkleidung mit einem roten Rechteck und einigen anderen Elementen.",
+      "it": "Inoltre, il cofano dell'auto è solitamente visibile, mostrando un involucro dell'auto Streetview che presenta un rettangolo rosso e alcuni altri elementi.",
+      "ru": "Кроме того, капот автомобиля обычно виден, демонстрируя обертку автомобиля Streetview с красным прямоугольником и некоторыми другими элементами.",
+      "sv": "Dessutom är bilens huv oftast synlig och visar en Streetview-bilomslagning med en röd rektangel och några andra element."
+    }
   },
   "d6e9fe930f95fc9b": {
     "es": "Las marcas viales en Filipinas son típicamente blancas, pero a veces pueden ser líneas amarillas simples o dobles.",
@@ -144,13 +162,22 @@
     "sv": "Den vanligaste typen av elstolpe i Filippinerna är den träkorsformade stolpen."
   },
   "3d9b1904fb1648ba": {
-    "es": "Letonia tiene un borde rojo más grueso con un contorno blanco similar. Estonia tiene un borde rojo fino similar pero sin contorno blanco.",
-    "pt": "A Letônia tem uma borda vermelha mais grossa com um contorno branco semelhante. A Estônia tem uma borda vermelha fina semelhante, mas sem contorno branco.",
-    "fr": "La Lettonie a une bordure rouge plus épaisse avec un contour blanc similaire. L'Estonie a une bordure rouge fine similaire mais sans contour blanc.",
-    "de": "Lettland hat einen dickeren roten Rand mit einem ähnlichen weißen Umriss. Estland hat einen ähnlichen dünnen roten Rand, aber keinen weißen Umriss.",
-    "it": "La Lettonia ha un bordo rosso più spesso con un simile contorno bianco. L'Estonia ha un sottile bordo rosso simile ma senza contorno bianco.",
-    "ru": "В Латвии более толстая красная граница с похожей белой обводкой. В Эстонии похожая тонкая красная граница, но без белой обводки.",
-    "sv": "Lettland har en tjockare röd kant med en liknande vit kontur. Estland har en liknande tunn röd kant men ingen vit kontur."
+    "es": "Las señales de advertencia lituanas tienen un borde rojo fino rodeado por un contorno blanco también fino.",
+    "pt": "As placas de advertência lituanas têm uma borda vermelha fina contornada por uma linha branca também fina.",
+    "fr": "Les panneaux d’avertissement lituaniens ont un fin bord rouge entouré d’un fin liseré blanc.",
+    "de": "Litauische Warnschilder haben einen dünnen roten Rand mit einer ebenfalls dünnen weißen Außenlinie.",
+    "it": "I segnali di pericolo lituani hanno un bordo rosso sottile circondato da un sottile contorno bianco.",
+    "ru": "У литовских предупреждающих знаков тонкая красная кайма с тонкой белой окантовкой.",
+    "sv": "Litauiska varningsmärken har en tunn röd kant med en tunn vit kontur runtom.",
+    "note": {
+      "es": "Letonia tiene un borde rojo más grueso con un contorno blanco similar. Estonia tiene un borde rojo fino similar pero sin contorno blanco.",
+      "pt": "A Letônia tem uma borda vermelha mais grossa com um contorno branco semelhante. A Estônia tem uma borda vermelha fina semelhante, mas sem contorno branco.",
+      "fr": "La Lettonie a une bordure rouge plus épaisse avec un contour blanc similaire. L'Estonie a une bordure rouge fine similaire mais sans contour blanc.",
+      "de": "Lettland hat einen dickeren roten Rand mit einem ähnlichen weißen Umriss. Estland hat einen ähnlichen dünnen roten Rand, aber keinen weißen Umriss.",
+      "it": "La Lettonia ha un bordo rosso più spesso con un simile contorno bianco. L'Estonia ha un sottile bordo rosso simile ma senza contorno bianco.",
+      "ru": "В Латвии более толстая красная граница с похожей белой обводкой. В Эстонии похожая тонкая красная граница, но без белой обводки.",
+      "sv": "Lettland har en tjockare röd kant med en liknande vit kontur. Estland har en liknande tunn röd kant men ingen vit kontur."
+    }
   },
   "357dff6dc12ddfb9": {
     "es": "Este es un bolardo checo. Tiene rayas naranja flúor únicas en la sección negra del bolardo. La parte trasera del bolardo tiene un rectángulo blanco en la sección negra.",
@@ -288,13 +315,22 @@
     "sv": "I Brasilien har vägar vanligtvis dubbla gula linjer i mitten och vita yttre linjer."
   },
   "ce57b632de7e6c4c": {
-    "es": "A veces se pueden encontrar en Botsuana también, pero son más comunes en Sudáfrica.",
-    "pt": "Eles às vezes podem ser encontrados em Botsuana também, mas são mais comuns na África do Sul.",
-    "fr": "On peut parfois les trouver au Botswana aussi, mais elles sont plus courantes en Afrique du Sud.",
-    "de": "Sie können manchmal auch in Botswana gefunden werden, sind aber in Südafrika häufiger.",
-    "it": "A volte si possono trovare anche in Botswana, ma sono più comuni in Sud Africa.",
-    "ru": "Их иногда можно встретить и в Ботсване, но они более распространены в Южной Африке.",
-    "sv": "De kan ibland hittas i Botswana också, men är vanligare i Sydafrika."
+    "es": "En Sudáfrica son muy comunes los estrechos marcadores de dirección rojos y blancos.",
+    "pt": "Na África do Sul, são muito comuns os estreitos marcadores direcionais em vermelho e branco.",
+    "fr": "Les balises directionnelles étroites rouges et blanches sont très courantes en Afrique du Sud.",
+    "de": "Schmale rot-weiße Richtungspfeile sind in Südafrika sehr verbreitet.",
+    "it": "In Sudafrica sono molto frequenti i marker direzionali stretti rossi e bianchi.",
+    "ru": "В Южной Африке очень часто встречаются узкие красно-белые указатели поворота.",
+    "sv": "Smala röda och vita riktningsmarkörer är mycket vanliga i Sydafrika.",
+    "note": {
+      "es": "A veces se pueden encontrar en Botsuana también, pero son más comunes en Sudáfrica.",
+      "pt": "Eles às vezes podem ser encontrados em Botsuana também, mas são mais comuns na África do Sul.",
+      "fr": "On peut parfois les trouver au Botswana aussi, mais elles sont plus courantes en Afrique du Sud.",
+      "de": "Sie können manchmal auch in Botswana gefunden werden, sind aber in Südafrika häufiger.",
+      "it": "A volte si possono trovare anche in Botswana, ma sono più comuni in Sud Africa.",
+      "ru": "Их иногда можно встретить и в Ботсване, но они более распространены в Южной Африке.",
+      "sv": "De kan ibland hittas i Botswana också, men är vanligare i Sydafrika."
+    }
   },
   "4be48ef9adf2b067": {
     "es": "El paisaje de Noruega es predominantemente ondulado, montañoso o de colinas, lo que lo diferencia de otros países nórdicos, que son generalmente llanos.",
@@ -369,13 +405,22 @@
     "sv": "I Norge slutar vägskyltar ofta med \"...vei\" / \"...veien\" eller \"...gate\" / \"...gata\"."
   },
   "3eaddd40f1bd61d9": {
-    "es": "También se pueden ver matrículas de color naranja en Chile. De manera similar, las matrículas comerciales brasileñas son rojas, pero a veces pueden parecer similares.",
-    "pt": "Placas de cor laranja também podem ser vistas no Chile. Da mesma forma, as placas comerciais brasileiras são vermelhas, mas às vezes podem parecer semelhantes.",
-    "fr": "Des plaques de couleur orange peuvent également être vues au Chili. De même, les plaques commerciales brésiliennes sont rouges mais peuvent parfois sembler similaires.",
-    "de": "Orangefarbene Schilder sind auch in Chile zu sehen. Ebenso sind brasilianische kommerzielle Schilder rot, können aber manchmal ähnlich aussehen.",
-    "it": "Si possono vedere anche targhe di colore arancione in Cile. Allo stesso modo, le targhe commerciali brasiliane sono rosse ma a volte possono sembrare simili.",
-    "ru": "Оранжевые номерные знаки также можно увидеть в Чили. Аналогично, коммерческие номерные знаки Бразилии красные, но иногда могут выглядеть похоже.",
-    "sv": "Orangefärgade skyltar kan också ses i Chile. På liknande sätt är brasilianska kommersiella skyltar röda men kan ibland se likadana ut."
+    "es": "En Ecuador, los vehículos comerciales tienen placas completamente naranjas o con una franja naranja en la parte superior.",
+    "pt": "No Equador, os veículos comerciais têm placas totalmente laranja ou com uma faixa laranja na parte superior.",
+    "fr": "En Équateur, les véhicules commerciaux ont des plaques entièrement orange ou une bande orange en haut.",
+    "de": "In Ecuador sind Kennzeichen von Nutzfahrzeugen entweder ganz orange oder oben mit einem orangefarbenen Streifen versehen.",
+    "it": "In Ecuador, i veicoli commerciali hanno targhe interamente arancioni oppure con una fascia arancione nella parte superiore.",
+    "ru": "В Эквадоре у коммерческого транспорта номерные знаки бывают полностью оранжевыми или с оранжевой полосой сверху.",
+    "sv": "I Ecuador är kommersiella fordons registreringsskyltar helt orange eller har en orange remsa upptill.",
+    "note": {
+      "es": "También se pueden ver matrículas de color naranja en Chile. De manera similar, las matrículas comerciales brasileñas son rojas, pero a veces pueden parecer similares.",
+      "pt": "Placas de cor laranja também podem ser vistas no Chile. Da mesma forma, as placas comerciais brasileiras são vermelhas, mas às vezes podem parecer semelhantes.",
+      "fr": "Des plaques de couleur orange peuvent également être vues au Chili. De même, les plaques commerciales brésiliennes sont rouges mais peuvent parfois sembler similaires.",
+      "de": "Orangefarbene Schilder sind auch in Chile zu sehen. Ebenso sind brasilianische kommerzielle Schilder rot, können aber manchmal ähnlich aussehen.",
+      "it": "Si possono vedere anche targhe di colore arancione in Cile. Allo stesso modo, le targhe commerciali brasiliane sono rosse ma a volte possono sembrare simili.",
+      "ru": "Оранжевые номерные знаки также можно увидеть в Чили. Аналогично, коммерческие номерные знаки Бразилии красные, но иногда могут выглядеть похоже.",
+      "sv": "Orangefärgade skyltar kan också ses i Chile. På liknande sätt är brasilianska kommersiella skyltar röda men kan ibland se likadana ut."
+    }
   },
   "14d130d9ab8e3f7f": {
     "es": "La mayoría de las señales de tráfico brasileñas tienen el reverso pintado de negro.",
@@ -459,13 +504,22 @@
     "sv": "I Ugandas nationalparker har Google-bilen en svart stapel på bilens front."
   },
   "f9d5dd397f868cf0": {
-    "es": "Los dos primeros dígitos en la parte inferior de estos marcadores representan el número de la carretera (por ejemplo, 90), y los dos últimos dígitos indican la sección de la carretera, aumentando de oeste a este en las autopistas de numeración par y de sur a norte en las autopistas de numeración impar.",
-    "pt": "Os dois primeiros dígitos na parte inferior desses marcadores representam o número da estrada (por exemplo, 90), e os dois últimos dígitos indicam a seção da estrada, aumentando de oeste para leste em rodovias de numeração par e de sul para norte em rodovias de numeração ímpar.",
-    "fr": "Les deux premiers chiffres en bas de ces marqueurs représentent le numéro de la route (par exemple, 90), et les deux derniers chiffres indiquent la section de la route, augmentant d'ouest en est sur les autoroutes à numéros pairs et du sud au nord sur les autoroutes à numéros impairs.",
-    "de": "Die ersten beiden Ziffern am unteren Rand dieser Markierungen stellen die Straßennummer dar (z. B. 90), und die letzten beiden Ziffern geben den Straßenabschnitt an, der auf geradzahligen Autobahnen von West nach Ost und auf ungeradzahligen Autobahnen von Süd nach Nord zunimmt.",
-    "it": "Le prime due cifre in fondo a questi marcatori rappresentano il numero della strada (ad esempio, 90) e le ultime due cifre indicano la sezione della strada, aumentando da ovest a est sulle autostrade con numero pari e da sud a nord sulle autostrade con numero dispari.",
-    "ru": "Первые две цифры в нижней части этих маркеров представляют собой номер дороги (например, 90), а последние две цифры указывают на участок дороги, увеличиваясь с запада на восток на четных автомагистралях и с юга на север на нечетных автомагистралях.",
-    "sv": "De första två siffrorna längst ner på dessa markörer representerar vägnumret (t.ex. 90), och de sista två siffrorna indikerar vägavsnittet, ökande från väst till öst på jämnt numrerade motorvägar och från syd till nord på udda numrerade motorvägar."
+    "es": "En Colombia se usan dos tipos de hitos kilométricos: uno alto y verde con «Pr» en la parte superior, y otro tradicional de piedra con letras negras. Ambos son exclusivos del país.",
+    "pt": "Na Colômbia, são usados dois tipos de marcos quilométricos: um alto e verde com “Pr” no topo e um marco tradicional de pedra com letras pretas. Ambos são exclusivos do país.",
+    "fr": "En Colombie, on utilise deux types de bornes kilométriques : une borne haute et verte avec « Pr » en haut, et une borne traditionnelle en pierre avec des lettres noires. Les deux sont propres au pays.",
+    "de": "In Kolumbien gibt es zwei Arten von Kilometermarkierungen: einen hohen grünen Pfosten mit „Pr“ oben und einen traditionellen Steinmarker mit schwarzer Beschriftung. Beide sind landestypisch.",
+    "it": "In Colombia si usano due tipi di cippi chilometrici: un alto indicatore verde con «Pr» in cima e un tradizionale cippo di pietra con scritte nere. Entrambi sono caratteristici del paese.",
+    "ru": "В Колумбии используют два типа километровых указателей: высокий зелёный указатель с надписью «Pr» вверху и традиционный каменный знак с чёрными надписями. Оба типа характерны для этой страны.",
+    "sv": "I Colombia används två typer av kilometerstolpar: en hög grön stolpe med ”Pr” högst upp och en traditionell stenmarkör med svart text. Båda är unika för landet.",
+    "note": {
+      "es": "Los dos primeros dígitos en la parte inferior de estos marcadores representan el número de la carretera (por ejemplo, 90), y los dos últimos dígitos indican la sección de la carretera, aumentando de oeste a este en las autopistas de numeración par y de sur a norte en las autopistas de numeración impar.",
+      "pt": "Os dois primeiros dígitos na parte inferior desses marcadores representam o número da estrada (por exemplo, 90), e os dois últimos dígitos indicam a seção da estrada, aumentando de oeste para leste em rodovias de numeração par e de sul para norte em rodovias de numeração ímpar.",
+      "fr": "Les deux premiers chiffres en bas de ces marqueurs représentent le numéro de la route (par exemple, 90), et les deux derniers chiffres indiquent la section de la route, augmentant d'ouest en est sur les autoroutes à numéros pairs et du sud au nord sur les autoroutes à numéros impairs.",
+      "de": "Die ersten beiden Ziffern am unteren Rand dieser Markierungen stellen die Straßennummer dar (z. B. 90), und die letzten beiden Ziffern geben den Straßenabschnitt an, der auf geradzahligen Autobahnen von West nach Ost und auf ungeradzahligen Autobahnen von Süd nach Nord zunimmt.",
+      "it": "Le prime due cifre in fondo a questi marcatori rappresentano il numero della strada (ad esempio, 90) e le ultime due cifre indicano la sezione della strada, aumentando da ovest a est sulle autostrade con numero pari e da sud a nord sulle autostrade con numero dispari.",
+      "ru": "Первые две цифры в нижней части этих маркеров представляют собой номер дороги (например, 90), а последние две цифры указывают на участок дороги, увеличиваясь с запада на восток на четных автомагистралях и с юга на север на нечетных автомагистралях.",
+      "sv": "De första två siffrorna längst ner på dessa markörer representerar vägnumret (t.ex. 90), och de sista två siffrorna indikerar vägavsnittet, ökande från väst till öst på jämnt numrerade motorvägar och från syd till nord på udda numrerade motorvägar."
+    }
   },
   "e37fe7392b89d5a4": {
     "es": "La parte delantera del coche de Street View es normalmente de este color negro fantasmal en Argentina.",
@@ -747,13 +801,22 @@
     "sv": "Kambodjas gula varningsskyltar har ofta en vit kontur."
   },
   "a70d82cc2c7a1dbb": {
-    "es": "Las señales direccionales de Suecia también utilizan texto blanco sobre fondo azul, pero las flechas son más delgadas que en las señales finlandesas.",
-    "pt": "A Suécia também usa texto branco sobre fundo azul em suas placas direcionais menores, mas as setas são mais finas do que nas placas finlandesas.",
-    "fr": "La Suède utilise également des panneaux directionnels secondaires avec un texte blanc sur fond bleu, mais les flèches sont plus fines que sur les panneaux finlandais.",
-    "de": "Schwedens kleinere Richtungsschilder verwenden ebenfalls weiße Schrift auf blauem Hintergrund, aber die Pfeile sind dünner als auf finnischen Schildern.",
-    "it": "Anche la Svezia utilizza segnali direzionali minori con testo bianco su sfondo blu, ma le frecce sono più sottili rispetto ai segnali finlandesi.",
-    "ru": "В Швеции на второстепенных указателях также используется белый текст на синем фоне, но стрелки тоньше, чем на финских знаках.",
-    "sv": "Sveriges mindre riktningsskyltar använder också vit text på blå bakgrund, men pilarna är tunnare än på finska skyltar."
+    "es": "En Finlandia, las señales direccionales menores tienen texto blanco sobre fondo azul y una flecha ancha en un lado.",
+    "pt": "Na Finlândia, as placas direcionais menores têm texto branco sobre fundo azul e uma seta larga em uma lateral.",
+    "fr": "En Finlande, les petits panneaux directionnels ont un texte blanc sur fond bleu et une grosse flèche sur le côté.",
+    "de": "In Finnland haben kleinere Wegweiser weiße Schrift auf blauem Grund und einen breiten Pfeil an der Seite.",
+    "it": "In Finlandia, i cartelli direzionali minori hanno testo bianco su sfondo blu e una freccia larga su un lato.",
+    "ru": "В Финляндии на небольших указателях белый текст на синем фоне и широкая стрелка сбоку.",
+    "sv": "I Finland har mindre vägvisare vit text på blå bakgrund och en bred pil på sidan.",
+    "note": {
+      "es": "Las señales direccionales de Suecia también utilizan texto blanco sobre fondo azul, pero las flechas son más delgadas que en las señales finlandesas.",
+      "pt": "A Suécia também usa texto branco sobre fundo azul em suas placas direcionais menores, mas as setas são mais finas do que nas placas finlandesas.",
+      "fr": "La Suède utilise également des panneaux directionnels secondaires avec un texte blanc sur fond bleu, mais les flèches sont plus fines que sur les panneaux finlandais.",
+      "de": "Schwedens kleinere Richtungsschilder verwenden ebenfalls weiße Schrift auf blauem Hintergrund, aber die Pfeile sind dünner als auf finnischen Schildern.",
+      "it": "Anche la Svezia utilizza segnali direzionali minori con testo bianco su sfondo blu, ma le frecce sono più sottili rispetto ai segnali finlandesi.",
+      "ru": "В Швеции на второстепенных указателях также используется белый текст на синем фоне, но стрелки тоньше, чем на финских знаках.",
+      "sv": "Sveriges mindre riktningsskyltar använder också vit text på blå bakgrund, men pilarna är tunnare än på finska skyltar."
+    }
   },
   "2ad03671a674a732": {
     "es": "En Colombia, los taxis a menudo tienen matrículas impresas en su lateral. Estas matrículas a veces pueden estar borrosas, pero si están claras, muestran el nombre de la ciudad o área.",
@@ -774,13 +837,22 @@
     "sv": "I Malaysia ses akronymen 'AWAS' ofta på vägvarningar, vilket indikerar deras trafiksäkerhetssystem."
   },
   "6a5c762d1eb7985a": {
-    "es": "Suecia e Islandia también tienen un borde rojo alrededor de un fondo amarillo en todas las señales de advertencia. Sin embargo, las señales de ceda el paso en Suecia e Islandia NO tienen un contorno amarillo alrededor del borde rojo. Las señales de advertencia de Dinamarca y Noruega tienen un borde rojo sobre fondo blanco.",
-    "pt": "Suécia e Islândia também têm uma borda vermelha em torno de um fundo amarelo em todas as placas de advertência. As placas de cedência de passagem na Suécia e na Islândia, no entanto, NÃO têm contorno amarelo em torno da borda vermelha. Dinamarca e Noruega têm placas de advertência com borda vermelha sobre fundo branco.",
-    "fr": "La Suède et l'Islande ont également une bordure rouge autour d'un fond jaune sur tous les panneaux de danger. Les panneaux de cédez-le-passage en Suède et en Islande, cependant, n'ont PAS de contour jaune autour de la bordure rouge. Le Danemark et la Norvège ont une bordure rouge autour d'un fond blanc sur leurs panneaux de danger.",
-    "de": "Schweden und Island haben ebenfalls einen roten Rand um einen gelben Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Schweden und Island haben jedoch KEINE gelbe Umrandung um den roten Rand. Dänemark und Norwegen haben auf ihren Warnschildern einen roten Rand um einen weißen Hintergrund.",
-    "it": "Svezia e Islanda hanno anche un bordo rosso attorno allo sfondo giallo su tutti i segnali di avvertimento. I segnali di cedimento in Svezia e Islanda, tuttavia, NON hanno un contorno giallo attorno al bordo rosso. Danimarca e Norvegia hanno segnali di avvertimento con un bordo rosso su sfondo bianco.",
-    "ru": "Швеция и Исландия также имеют красную окантовку вокруг желтого фона на всех предупреждающих знаках. Знаки уступи дорогу в Швеции и Исландии, однако, не имеют желтого контура вокруг красной окантовки. Дания и Норвегия имеют красную окантовку вокруг белого фона на предупреждающих знаках.",
-    "sv": "Sverige och Island har också en röd kant runt gul bakgrund på alla varningsskyltar. Väjningsskyltar i Sverige och Island har dock INGEN gul kontur runt den röda kanten. Danmark och Norges varningsskyltar har en röd kant runt vit bakgrund."
+    "es": "Las señales de advertencia finlandesas son triangulares, con borde rojo y fondo amarillo. Las de ceda el paso también tienen un contorno amarillo por fuera del borde rojo.",
+    "pt": "As placas de advertência finlandesas são triangulares, com borda vermelha e fundo amarelo. As de preferência também têm um contorno amarelo por fora da borda vermelha.",
+    "fr": "Les panneaux d’avertissement finlandais sont triangulaires, avec un bord rouge et un fond jaune. Les panneaux de cédez-le-passage ont aussi un contour jaune à l’extérieur du bord rouge.",
+    "de": "Finnische Warnschilder sind dreieckig und haben einen roten Rand sowie einen gelben Hintergrund. Vorfahrt-gewähren-Schilder haben zusätzlich eine gelbe Außenlinie außerhalb des roten Randes.",
+    "it": "I segnali di pericolo finlandesi sono triangolari, con bordo rosso e sfondo giallo. Quelli di dare precedenza hanno anche un contorno giallo all’esterno del bordo rosso.",
+    "ru": "Финские предупреждающие знаки треугольные, с красной каймой и жёлтым фоном. У знака «Уступите дорогу» снаружи красной каймы также есть жёлтая обводка.",
+    "sv": "Finländska varningsmärken är triangulära med röd kant och gul bakgrund. Väjningsmärken har dessutom en gul kontur utanför den röda kanten.",
+    "note": {
+      "es": "Suecia e Islandia también tienen un borde rojo alrededor de un fondo amarillo en todas las señales de advertencia. Sin embargo, las señales de ceda el paso en Suecia e Islandia NO tienen un contorno amarillo alrededor del borde rojo. Las señales de advertencia de Dinamarca y Noruega tienen un borde rojo sobre fondo blanco.",
+      "pt": "Suécia e Islândia também têm uma borda vermelha em torno de um fundo amarelo em todas as placas de advertência. As placas de cedência de passagem na Suécia e na Islândia, no entanto, NÃO têm contorno amarelo em torno da borda vermelha. Dinamarca e Noruega têm placas de advertência com borda vermelha sobre fundo branco.",
+      "fr": "La Suède et l'Islande ont également une bordure rouge autour d'un fond jaune sur tous les panneaux de danger. Les panneaux de cédez-le-passage en Suède et en Islande, cependant, n'ont PAS de contour jaune autour de la bordure rouge. Le Danemark et la Norvège ont une bordure rouge autour d'un fond blanc sur leurs panneaux de danger.",
+      "de": "Schweden und Island haben ebenfalls einen roten Rand um einen gelben Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Schweden und Island haben jedoch KEINE gelbe Umrandung um den roten Rand. Dänemark und Norwegen haben auf ihren Warnschildern einen roten Rand um einen weißen Hintergrund.",
+      "it": "Svezia e Islanda hanno anche un bordo rosso attorno allo sfondo giallo su tutti i segnali di avvertimento. I segnali di cedimento in Svezia e Islanda, tuttavia, NON hanno un contorno giallo attorno al bordo rosso. Danimarca e Norvegia hanno segnali di avvertimento con un bordo rosso su sfondo bianco.",
+      "ru": "Швеция и Исландия также имеют красную окантовку вокруг желтого фона на всех предупреждающих знаках. Знаки уступи дорогу в Швеции и Исландии, однако, не имеют желтого контура вокруг красной окантовки. Дания и Норвегия имеют красную окантовку вокруг белого фона на предупреждающих знаках.",
+      "sv": "Sverige och Island har också en röd kant runt gul bakgrund på alla varningsskyltar. Väjningsskyltar i Sverige och Island har dock INGEN gul kontur runt den röda kanten. Danmark och Norges varningsskyltar har en röd kant runt vit bakgrund."
+    }
   },
   "faa0cfecd546f215": {
     "es": "Colombia es el único país de América Latina, aparte de México y raramente Ecuador, donde se pueden encontrar postes octogonales.",
@@ -810,13 +882,22 @@
     "sv": "Italienska pollare har en unik design med en vertikal röd rektangel inuti en svart diagonal rand på framsidan, där den svarta delen sträcker sig till toppen av pollaren, en sällsynthet i pollardesigner. Baksidan av dessa pollare har en vit rektangel istället för den röda på framsidan."
   },
   "6d8529d20c6caa38": {
-    "es": "Este tipo de antena también se ve en México, Brasil y Colombia. Sin embargo, un coche negro con esta antena es exclusivo de Colombia.",
-    "pt": "Este tipo de antena também é visto no México, Brasil e Colômbia. No entanto, um carro preto com esta antena é exclusivo da Colômbia.",
-    "fr": "Ce type d'antenne est également vu au Mexique, au Brésil et en Colombie. Cependant, une voiture noire avec cette antenne est unique à la Colombie.",
-    "de": "Diese Art von Antenne ist auch in Mexiko, Brasilien und Kolumbien zu sehen. Ein schwarzes Auto mit dieser Antenne ist jedoch einzigartig für Kolumbien.",
-    "it": "Questo tipo di antenna si vede anche in Messico, Brasile e Colombia. Tuttavia, un'auto nera con questa antenna è unica della Colombia.",
-    "ru": "Этот тип антенны также встречается в Мексике, Бразилии и Колумбии. Однако черный автомобиль с этой антенной уникален для Колумбии.",
-    "sv": "Denna typ av antenn ses även i Mexiko, Brasilien och Colombia. Däremot är en svart bil med denna antenn unik för Colombia."
+    "es": "En Ecuador, el vehículo blanco de Google Street View lleva una antena corta y gruesa.",
+    "pt": "No Equador, o carro branco do Google Street View tem uma antena curta e grossa.",
+    "fr": "En Équateur, la voiture blanche de Google Street View est équipée d’une antenne courte et épaisse.",
+    "de": "In Ecuador hat das weiße Google-Street-View-Fahrzeug eine kurze, dicke Antenne.",
+    "it": "In Ecuador, l’auto bianca di Google Street View ha un’antenna corta e spessa.",
+    "ru": "В Эквадоре у белого автомобиля Google Street View короткая толстая антенна.",
+    "sv": "I Ecuador har Googles vita Street View-bil en kort och tjock antenn.",
+    "note": {
+      "es": "Este tipo de antena también se ve en México, Brasil y Colombia. Sin embargo, un coche negro con esta antena es exclusivo de Colombia.",
+      "pt": "Este tipo de antena também é visto no México, Brasil e Colômbia. No entanto, um carro preto com esta antena é exclusivo da Colômbia.",
+      "fr": "Ce type d'antenne est également vu au Mexique, au Brésil et en Colombie. Cependant, une voiture noire avec cette antenne est unique à la Colombie.",
+      "de": "Diese Art von Antenne ist auch in Mexiko, Brasilien und Kolumbien zu sehen. Ein schwarzes Auto mit dieser Antenne ist jedoch einzigartig für Kolumbien.",
+      "it": "Questo tipo di antenna si vede anche in Messico, Brasile e Colombia. Tuttavia, un'auto nera con questa antenna è unica della Colombia.",
+      "ru": "Этот тип антенны также встречается в Мексике, Бразилии и Колумбии. Однако черный автомобиль с этой антенной уникален для Колумбии.",
+      "sv": "Denna typ av antenn ses även i Mexiko, Brasilien och Colombia. Däremot är en svart bil med denna antenn unik för Colombia."
+    }
   },
   "ec95370d1e979694": {
     "es": "En Nueva Zelanda, las señales de ceda el paso tienen texto rojo.",
@@ -954,13 +1035,22 @@
     "sv": "Malaysiska pollare har ofta färgerna svart, vit, grå och röd. Här är ett exempel på en svartvit pollare."
   },
   "46147257fce3f999": {
-    "es": "Los marcadores de kilómetros letones tienen un lado, paralelo a la carretera. Los marcadores de kilómetros estonios también tienen un lado, perpendicular a la carretera.",
-    "pt": "Os marcadores de quilômetro letões têm um lado, paralelo à estrada. Os marcadores de quilômetro estonianos também têm um lado, perpendicular à estrada.",
-    "fr": "Les bornes kilométriques lettones ont un côté parallèle à la route. Les bornes kilométriques estoniennes ont également un côté perpendiculaire à la route.",
-    "de": "Lettische Kilometersteine haben eine Seite parallel zur Straße. Estnische Kilometersteine haben ebenfalls eine Seite senkrecht zur Straße.",
-    "it": "I marcatori chilometrici lettoni hanno un lato parallelo alla strada. Anche i marcatori chilometrici estoni hanno un lato perpendicolare alla strada.",
-    "ru": "Километровые столбы Латвии имеют одну сторону, параллельную дороге. Километровые столбы Эстонии также имеют одну сторону, перпендикулярную дороге.",
-    "sv": "Lettiska kilometerstolpar har en sida, parallellt med vägen. Estniska kilometerstolpar har också en sida, vinkelrätt mot vägen."
+    "es": "Los hitos kilométricos lituanos tienen dos caras colocadas en un ángulo de 45° respecto a la carretera, formando una V.",
+    "pt": "Os marcos quilométricos lituanos têm duas faces dispostas em um ângulo de 45° em relação à estrada, formando um V.",
+    "fr": "Les bornes kilométriques lituaniennes ont deux faces disposées à 45° par rapport à la route, formant un V.",
+    "de": "Litauische Kilometersteine haben zwei Seiten, die in einem Winkel von 45° zur Straße angeordnet sind und ein V bilden.",
+    "it": "I cippi chilometrici lituani hanno due lati disposti a un angolo di 45° rispetto alla strada, formando una V.",
+    "ru": "У литовских километровых указателей две стороны расположены под углом 45° к дороге и образуют букву V.",
+    "sv": "Litauiska kilometerstolpar har två sidor som står i 45° vinkel mot vägen och bildar ett V.",
+    "note": {
+      "es": "Los marcadores de kilómetros letones tienen un lado, paralelo a la carretera. Los marcadores de kilómetros estonios también tienen un lado, perpendicular a la carretera.",
+      "pt": "Os marcadores de quilômetro letões têm um lado, paralelo à estrada. Os marcadores de quilômetro estonianos também têm um lado, perpendicular à estrada.",
+      "fr": "Les bornes kilométriques lettones ont un côté parallèle à la route. Les bornes kilométriques estoniennes ont également un côté perpendiculaire à la route.",
+      "de": "Lettische Kilometersteine haben eine Seite parallel zur Straße. Estnische Kilometersteine haben ebenfalls eine Seite senkrecht zur Straße.",
+      "it": "I marcatori chilometrici lettoni hanno un lato parallelo alla strada. Anche i marcatori chilometrici estoni hanno un lato perpendicolare alla strada.",
+      "ru": "Километровые столбы Латвии имеют одну сторону, параллельную дороге. Километровые столбы Эстонии также имеют одну сторону, перпендикулярную дороге.",
+      "sv": "Lettiska kilometerstolpar har en sida, parallellt med vägen. Estniska kilometerstolpar har också en sida, vinkelrätt mot vägen."
+    }
   },
   "f5f845165d7fd8bb": {
     "es": "A menudo puedes encontrar mini iglesias a lo largo de las carreteras griegas.",
@@ -981,13 +1071,22 @@
     "sv": "Colombia använder gula registreringsskyltar."
   },
   "070ae8444302b16a": {
-    "es": "Botsuana, Lesoto y Esuatini tienen los mismos colores de señales pero diferentes letras de autopista: Botsuana y Lesoto usan A y Esuatini usa MR.",
-    "pt": "Botswana, Lesoto e Eswatini têm as mesmas cores de sinalização, mas letras de rodovia diferentes: Botswana e Lesoto usam A e Eswatini usa MR.",
-    "fr": "Le Botswana, le Lesotho et l'Eswatini ont les mêmes couleurs de panneaux mais des lettres de route différentes : le Botswana et le Lesotho utilisent A et l'Eswatini utilise MR.",
-    "de": "Botswana, Lesotho und Eswatini haben die gleichen Schilderfarben, aber unterschiedliche Autobahnkürzel: Botswana und Lesotho verwenden A und Eswatini verwendet MR.",
-    "it": "Botswana, Lesotho ed Eswatini hanno gli stessi colori di segnaletica ma lettere autostradali diverse: Botswana e Lesotho usano A ed Eswatini usa MR.",
-    "ru": "Ботсвана, Лесото и Эсватини имеют одинаковые цвета знаков, но разные буквы шоссе: Ботсвана и Лесото используют A, а Эсватини — MR.",
-    "sv": "Botswana, Lesotho och Eswatini har samma skyltfärger men olika motorvägsbokstäver: Botswana och Lesotho använder A och Eswatini använder MR."
+    "es": "Las señales de autopista sudafricanas son verdes, con letras blancas y números de ruta amarillos. Las rutas empiezan por N, R o M.",
+    "pt": "As placas de rodovias sul-africanas são verdes, com letras brancas e números de rota amarelos. As rotas começam com N, R ou M.",
+    "fr": "Les panneaux autoroutiers sud-africains sont verts, avec des inscriptions blanches et des numéros d’itinéraire jaunes. Les itinéraires commencent par N, R ou M.",
+    "de": "Südafrikanische Autobahnschilder sind grün, mit weißer Schrift und gelben Routennummern. Die Routen beginnen mit N, R oder M.",
+    "it": "I cartelli autostradali sudafricani sono verdi, con scritte bianche e numeri di percorso gialli. I percorsi iniziano con N, R o M.",
+    "ru": "В ЮАР дорожные указатели зелёные, с белыми надписями и жёлтыми номерами маршрутов. Маршруты начинаются с N, R или M.",
+    "sv": "Sydafrikanska vägskyltar är gröna med vit text och gula vägnummer. Numren börjar med N, R eller M.",
+    "note": {
+      "es": "Botsuana, Lesoto y Esuatini tienen los mismos colores de señales pero diferentes letras de autopista: Botsuana y Lesoto usan A y Esuatini usa MR.",
+      "pt": "Botswana, Lesoto e Eswatini têm as mesmas cores de sinalização, mas letras de rodovia diferentes: Botswana e Lesoto usam A e Eswatini usa MR.",
+      "fr": "Le Botswana, le Lesotho et l'Eswatini ont les mêmes couleurs de panneaux mais des lettres de route différentes : le Botswana et le Lesotho utilisent A et l'Eswatini utilise MR.",
+      "de": "Botswana, Lesotho und Eswatini haben die gleichen Schilderfarben, aber unterschiedliche Autobahnkürzel: Botswana und Lesotho verwenden A und Eswatini verwendet MR.",
+      "it": "Botswana, Lesotho ed Eswatini hanno gli stessi colori di segnaletica ma lettere autostradali diverse: Botswana e Lesotho usano A ed Eswatini usa MR.",
+      "ru": "Ботсвана, Лесото и Эсватини имеют одинаковые цвета знаков, но разные буквы шоссе: Ботсвана и Лесото используют A, а Эсватини — MR.",
+      "sv": "Botswana, Lesotho och Eswatini har samma skyltfärger men olika motorvägsbokstäver: Botswana och Lesotho använder A och Eswatini använder MR."
+    }
   },
   "cde7930669f2766a": {
     "es": "Las señales de asentamiento búlgaras a menudo presentan nombres tanto en escritura latina como cirílica, pero a veces solo muestran el nombre cirílico.",
@@ -999,13 +1098,22 @@
     "sv": "Bulgariska ortnamnsskyltar har ofta namn på både latin och kyrilliska, men ibland visas bara det kyrilliska namnet."
   },
   "f7f41bd71efd94ab": {
-    "es": "En contraste, Lituania, Letonia y muchos otros países europeos utilizan chevrones rojos sobre blanco.",
-    "pt": "Em contraste, Lituânia, Letônia e muitos outros países europeus usam chevrons vermelhos sobre brancos.",
-    "fr": "En revanche, la Lituanie, la Lettonie et de nombreux autres pays européens utilisent des chevrons rouge sur blanc.",
-    "de": "Im Gegensatz dazu verwenden Litauen, Lettland und viele andere europäische Länder rot-weiße Pfeile.",
-    "it": "Al contrario, Lituania, Lettonia e molti altri paesi europei utilizzano chevron rossi su bianco.",
-    "ru": "В отличие от этого, Литва, Латвия и многие другие европейские страны используют красно-белые шевроны.",
-    "sv": "I kontrast använder Litauen, Lettland och många andra europeiska länder röd-på-vit fiskbensmönster."
+    "es": "Los chevrones estonios tienen fondo rojo y flechas blancas.",
+    "pt": "Os chevrons estonianos têm fundo vermelho e setas brancas.",
+    "fr": "Les chevrons estoniens ont un fond rouge avec des flèches blanches.",
+    "de": "Estnische Richtungspfeile haben einen roten Hintergrund mit weißen Pfeilen.",
+    "it": "I chevron estoni hanno uno sfondo rosso con frecce bianche.",
+    "ru": "На эстонских шевронах белые стрелки на красном фоне.",
+    "sv": "Estniska chevronpilar har röd bakgrund med vita pilar.",
+    "note": {
+      "es": "En contraste, Lituania, Letonia y muchos otros países europeos utilizan chevrones rojos sobre blanco.",
+      "pt": "Em contraste, Lituânia, Letônia e muitos outros países europeus usam chevrons vermelhos sobre brancos.",
+      "fr": "En revanche, la Lituanie, la Lettonie et de nombreux autres pays européens utilisent des chevrons rouge sur blanc.",
+      "de": "Im Gegensatz dazu verwenden Litauen, Lettland und viele andere europäische Länder rot-weiße Pfeile.",
+      "it": "Al contrario, Lituania, Lettonia e molti altri paesi europei utilizzano chevron rossi su bianco.",
+      "ru": "В отличие от этого, Литва, Латвия и многие другие европейские страны используют красно-белые шевроны.",
+      "sv": "I kontrast använder Litauen, Lettland och många andra europeiska länder röd-på-vit fiskbensmönster."
+    }
   },
   "56c1d501e9c54a07": {
     "es": "Este diseño con una mancha negra es exclusivo de Argentina. Sin embargo, Argentina también utiliza placas blancas con una franja azul en la parte superior. Ese diseño también se utiliza en Brasil.",
@@ -1017,13 +1125,22 @@
     "sv": "Denna design med en svart klump är unik för Argentina. Argentina använder dock även vita skyltar med en blå rand överst. Den designen används även i Brasilien."
   },
   "8c8cb69ca629c559": {
-    "es": "Mongolia también suele tener un snorkel, pero el país generalmente se ve muy diferente.",
-    "pt": "A Mongólia também costuma ter um snorkel, mas o país geralmente parece muito diferente.",
-    "fr": "La Mongolie a aussi souvent un tuba, mais le pays a généralement un aspect très différent.",
-    "de": "Die Mongolei hat auch oft einen Schnorchel, aber das Land sieht im Allgemeinen sehr anders aus.",
-    "it": "Anche la Mongolia ha spesso uno snorkel, ma il paese generalmente ha un aspetto molto diverso.",
-    "ru": "В Монголии также часто встречается шноркель, но страна в целом выглядит очень иначе.",
-    "sv": "Mongoliet har också ofta en snorkel men landet ser generellt väldigt annorlunda ut."
+    "es": "El vehículo de Street View de Kenia tiene un tubo respirador en la parte delantera.",
+    "pt": "O carro do Street View do Quênia tem um snorkel na parte dianteira.",
+    "fr": "La voiture Street View du Kenya est équipée d’un snorkel à l’avant.",
+    "de": "Das Street-View-Fahrzeug in Kenia hat vorne einen Schnorchel.",
+    "it": "L’auto di Street View in Kenya ha uno snorkel nella parte anteriore.",
+    "ru": "У автомобиля Street View в Кении спереди установлен шноркель.",
+    "sv": "Street View-bilen i Kenya har en snorkel framtill.",
+    "note": {
+      "es": "Mongolia también suele tener un snorkel, pero el país generalmente se ve muy diferente.",
+      "pt": "A Mongólia também costuma ter um snorkel, mas o país geralmente parece muito diferente.",
+      "fr": "La Mongolie a aussi souvent un tuba, mais le pays a généralement un aspect très différent.",
+      "de": "Die Mongolei hat auch oft einen Schnorchel, aber das Land sieht im Allgemeinen sehr anders aus.",
+      "it": "Anche la Mongolia ha spesso uno snorkel, ma il paese generalmente ha un aspetto molto diverso.",
+      "ru": "В Монголии также часто встречается шноркель, но страна в целом выглядит очень иначе.",
+      "sv": "Mongoliet har också ofta en snorkel men landet ser generellt väldigt annorlunda ut."
+    }
   },
   "97c9a86c0fc637b5": {
     "es": "En la cobertura de generación 3 de Nigeria, a veces se puede ver el portaequipajes del coche de Google. A veces muestra el patrón de rack amarillo y negro, que es exclusivo de Nigeria.",
@@ -1071,13 +1188,22 @@
     "sv": "Botswana använder också dessa röd-vita fiskbensmönster, men de är mycket vanligare i Sydafrika."
   },
   "fd64fb71f6b696be": {
-    "es": "En contraste, Lesoto también es montañoso pero carece en gran medida de árboles y tiene hierba corta.",
-    "pt": "Em contraste, o Lesoto também é montanhoso, mas em grande parte carece de árvores e tem grama curta.",
-    "fr": "En revanche, le Lesotho est également vallonné mais manque largement d'arbres et a de l'herbe courte.",
-    "de": "Im Gegensatz dazu ist Lesotho ebenfalls hügelig, aber weitgehend baumlos und hat kurzes Gras.",
-    "it": "Al contrario, il Lesotho è anch'esso collinare ma in gran parte privo di alberi e ha erba bassa.",
-    "ru": "В отличие от этого, Лесото также холмистое, но в основном лишено деревьев и имеет короткую траву.",
-    "sv": "I kontrast är Lesotho också kuperat men saknar till stor del träd och har kort gräs."
+    "es": "Esta vista guardada está en Botsuana. Las colinas cubiertas de hierba y los árboles dispersos pueden parecerse a los de Esuatini, así que el paisaje por sí solo no basta para identificar ninguno de los dos países.",
+    "pt": "Esta vista salva está em Botsuana. Colinas gramadas e árvores dispersas podem se parecer com as de Essuatíni, portanto a paisagem, por si só, não basta para identificar nenhum dos dois países.",
+    "fr": "Cette vue enregistrée se trouve au Botswana. Des collines herbeuses et des arbres clairsemés peuvent ressembler à ceux de l’Eswatini ; le paysage seul ne suffit donc pas à distinguer les deux pays.",
+    "de": "Diese gespeicherte Ansicht befindet sich in Botswana. Grasbewachsene Hügel und verstreute Bäume können Eswatini ähneln, daher reicht die Landschaft allein nicht aus, um eines der beiden Länder zu bestimmen.",
+    "it": "Questa vista salvata si trova in Botswana. Le colline erbose e gli alberi sparsi possono ricordare l’Eswatini, quindi il paesaggio da solo non basta a identificare uno dei due paesi.",
+    "ru": "Этот сохранённый вид находится в Ботсване. Травянистые холмы и редкие деревья могут быть похожи на пейзаж Эсватини, поэтому одного ландшафта недостаточно, чтобы определить, в какой из двух стран вы находитесь.",
+    "sv": "Den här sparade vyn är i Botswana. Gräsbevuxna kullar och utspridda träd kan likna Eswatinis landskap, så landskapet räcker inte ensamt för att avgöra vilket av länderna det är.",
+    "note": {
+      "es": "En contraste, Lesoto también es montañoso pero carece en gran medida de árboles y tiene hierba corta.",
+      "pt": "Em contraste, o Lesoto também é montanhoso, mas em grande parte carece de árvores e tem grama curta.",
+      "fr": "En revanche, le Lesotho est également vallonné mais manque largement d'arbres et a de l'herbe courte.",
+      "de": "Im Gegensatz dazu ist Lesotho ebenfalls hügelig, aber weitgehend baumlos und hat kurzes Gras.",
+      "it": "Al contrario, il Lesotho è anch'esso collinare ma in gran parte privo di alberi e ha erba bassa.",
+      "ru": "В отличие от этого, Лесото также холмистое, но в основном лишено деревьев и имеет короткую траву.",
+      "sv": "I kontrast är Lesotho också kuperat men saknar till stor del träd och har kort gräs."
+    }
   },
   "42a07d4deafef8c0": {
     "es": "La principal gasolinera en Argentina es YPF.",
@@ -1143,13 +1269,22 @@
     "sv": "I Indonesien börjar många företagsnamn med 'PT', en förkortning som är unik för landet."
   },
   "f6620dceeaf932c3": {
-    "es": "Finlandia e Islandia también tienen un borde rojo alrededor de un fondo amarillo en todas las señales de advertencia. Las señales de ceda el paso en Finlandia, sin embargo, tienen un contorno amarillo alrededor del borde rojo. Islandia no tiene contorno, lo que la hace similar a la señal de Suecia. Las señales de advertencia de Dinamarca y Noruega tienen un borde rojo alrededor de un fondo blanco.",
-    "pt": "Finlândia e Islândia também têm uma borda vermelha em volta de um fundo amarelo em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Finlândia, no entanto, têm um contorno amarelo em volta da borda vermelha. A Islândia não tem contorno, o que a torna semelhante ao sinal da Suécia. Dinamarca e Noruega têm sinais de advertência com borda vermelha em volta de fundo branco.",
-    "fr": "La Finlande et l'Islande ont également une bordure rouge autour d'un fond jaune sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage en Finlande, cependant, ont un contour jaune autour de la bordure rouge. L'Islande n'a pas de contour, ce qui la rend similaire au panneau suédois. Les panneaux d'avertissement du Danemark et de la Norvège ont une bordure rouge autour d'un fond blanc.",
-    "de": "Finnland und Island haben ebenfalls einen roten Rand um einen gelben Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Finnland haben jedoch eine gelbe Umrandung um den roten Rand. Island hat keine Umrandung, was es dem Schild Schwedens ähnlich macht. Dänemarks und Norwegens Warnschilder haben einen roten Rand um einen weißen Hintergrund.",
-    "it": "Finlandia e Islanda hanno anche un bordo rosso attorno a uno sfondo giallo su tutti i segnali di avvertimento. I segnali di dare precedenza in Finlandia, tuttavia, hanno un contorno giallo attorno al bordo rosso. L'Islanda non ha contorni, il che la rende simile ai segnali della Svezia. I segnali di avvertimento di Danimarca e Norvegia hanno un bordo rosso attorno a uno sfondo bianco.",
-    "ru": "В Финляндии и Исландии также имеется красная окантовка вокруг желтого фона на всех предупреждающих знаках. Знаки уступи дорогу в Финляндии, однако, имеют желтую окантовку вокруг красной. Исландия не имеет окантовки, что делает ее похожей на знак Швеции. Предупреждающие знаки Дании и Норвегии имеют красную окантовку вокруг белого фона.",
-    "sv": "Finland och Island har också en röd kant runt gul bakgrund på alla varningsskyltar. Väjningsskyltar i Finland har dock en gul kontur runt den röda kanten. Island har ingen kontur, vilket gör den lik Sveriges skylt. Danmarks och Norges varningsskyltar har en röd kant runt vit bakgrund."
+    "es": "Las señales de advertencia suecas tienen un borde rojo y fondo amarillo. Las señales de ceda el paso no llevan un contorno exterior al borde rojo.",
+    "pt": "As placas de advertência suecas têm borda vermelha e fundo amarelo. As placas de cedência de passagem não têm contorno externo à borda vermelha.",
+    "fr": "Les panneaux d'avertissement suédois ont une bordure rouge sur fond jaune. Les panneaux de cédez-le-passage n'ont pas de contour extérieur à la bordure rouge.",
+    "de": "Schwedische Warnschilder haben einen roten Rand und einen gelben Hintergrund. Vorfahrt-gewähren-Schilder haben keine zusätzliche Umrandung außerhalb des roten Rands.",
+    "it": "I segnali di pericolo svedesi hanno un bordo rosso e uno sfondo giallo. I segnali di dare la precedenza non hanno un contorno esterno al bordo rosso.",
+    "ru": "У шведских предупреждающих знаков красная кайма и жёлтый фон. У знаков уступи дорогу нет дополнительного контура снаружи красной каймы.",
+    "sv": "Svenska varningsskyltar har röd kant och gul bakgrund. Väjningspliktsmärken har ingen extra kontur utanför den röda kanten.",
+    "note": {
+      "es": "Finlandia e Islandia también tienen un borde rojo alrededor de un fondo amarillo en todas las señales de advertencia. Las señales de ceda el paso en Finlandia, sin embargo, tienen un contorno amarillo alrededor del borde rojo. Islandia no tiene contorno, lo que la hace similar a la señal de Suecia. Las señales de advertencia de Dinamarca y Noruega tienen un borde rojo alrededor de un fondo blanco.",
+      "pt": "Finlândia e Islândia também têm uma borda vermelha em volta de um fundo amarelo em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Finlândia, no entanto, têm um contorno amarelo em volta da borda vermelha. A Islândia não tem contorno, o que a torna semelhante ao sinal da Suécia. Dinamarca e Noruega têm sinais de advertência com borda vermelha em volta de fundo branco.",
+      "fr": "La Finlande et l'Islande ont également une bordure rouge autour d'un fond jaune sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage en Finlande, cependant, ont un contour jaune autour de la bordure rouge. L'Islande n'a pas de contour, ce qui la rend similaire au panneau suédois. Les panneaux d'avertissement du Danemark et de la Norvège ont une bordure rouge autour d'un fond blanc.",
+      "de": "Finnland und Island haben ebenfalls einen roten Rand um einen gelben Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Finnland haben jedoch eine gelbe Umrandung um den roten Rand. Island hat keine Umrandung, was es dem Schild Schwedens ähnlich macht. Dänemarks und Norwegens Warnschilder haben einen roten Rand um einen weißen Hintergrund.",
+      "it": "Finlandia e Islanda hanno anche un bordo rosso attorno a uno sfondo giallo su tutti i segnali di avvertimento. I segnali di dare precedenza in Finlandia, tuttavia, hanno un contorno giallo attorno al bordo rosso. L'Islanda non ha contorni, il che la rende simile ai segnali della Svezia. I segnali di avvertimento di Danimarca e Norvegia hanno un bordo rosso attorno a uno sfondo bianco.",
+      "ru": "В Финляндии и Исландии также имеется красная окантовка вокруг желтого фона на всех предупреждающих знаках. Знаки уступи дорогу в Финляндии, однако, имеют желтую окантовку вокруг красной. Исландия не имеет окантовки, что делает ее похожей на знак Швеции. Предупреждающие знаки Дании и Норвегии имеют красную окантовку вокруг белого фона.",
+      "sv": "Finland och Island har också en röd kant runt gul bakgrund på alla varningsskyltar. Väjningsskyltar i Finland har dock en gul kontur runt den röda kanten. Island har ingen kontur, vilket gör den lik Sveriges skylt. Danmarks och Norges varningsskyltar har en röd kant runt vit bakgrund."
+    }
   },
   "e5bf2da0ba36401a": {
     "es": "En las ciudades uruguayas, es común ver flechas en blanco y negro adheridas a paredes y postes.",
@@ -1260,22 +1395,40 @@
     "sv": "I Indonesien visar många skyltar förkortningen 'Jl.', som står för 'Jalan', vilket betyder gata."
   },
   "14fc8de2c06a4cc8": {
-    "es": "En comparación, Botsuana tiende a ser plana y seca, con carreteras bien mantenidas; Lesoto es montañoso sin árboles y con hierba corta; y Esuatini es montañoso con árboles y hierba alta.",
-    "pt": "Em comparação, Botswana tende a ser plano, seco, com estradas bem conservadas; Lesoto é montanhoso sem árvores e com grama curta; e Eswatini é montanhoso com árvores e grama alta.",
-    "fr": "En comparaison, le Botswana est généralement plat, sec, avec des routes bien entretenues ; le Lesotho est vallonné sans arbres et avec de l'herbe courte ; et l'Eswatini est vallonné avec des arbres et de l'herbe haute.",
-    "de": "Im Vergleich dazu ist Botswana tendenziell flach und trocken mit gut ausgebauten Straßen; Lesotho ist hügelig ohne Bäume und mit kurzem Gras; und Eswatini ist hügelig mit Bäumen und hohem Gras.",
-    "it": "In confronto, il Botswana tende ad essere piatto, secco, con strade ben mantenute; il Lesotho è collinare senza alberi e con erba corta; e l'Eswatini è collinare con alberi ed erba alta.",
-    "ru": "В сравнении, Ботсвана обычно плоская, сухая, с хорошо ухоженными дорогами; Лесото холмистый, без деревьев и с короткой травой; а Эсватини холмистый, с деревьями и высокой травой.",
-    "sv": "Jämförelsevis är Botswana platt, torrt, med väl underhållna vägar; Lesotho är kuperat utan träd och kort gräs; och Eswatini kuperat med träd och högt gräs."
+    "es": "El paisaje de Sudáfrica es muy variado: abarca desde montañas rocosas y sin árboles hasta zonas secas de suelo rojizo, viñedos y plantaciones de caña de azúcar.",
+    "pt": "A paisagem da África do Sul é muito variada: vai de montanhas rochosas e sem árvores a áreas secas de solo avermelhado, vinhedos e plantações de cana-de-açúcar.",
+    "fr": "Le paysage sud-africain est très varié : il comprend des montagnes rocheuses sans arbres, des zones sèches au sol rouge, des vignobles et des plantations de canne à sucre.",
+    "de": "Die Landschaft Südafrikas ist sehr vielfältig: Sie reicht von felsigen, baumlosen Bergen und trockenen Gebieten mit rotem Boden bis zu Weinbergen und Zuckerrohrfeldern.",
+    "it": "Il paesaggio del Sudafrica è molto vario: comprende montagne rocciose e spoglie, zone aride dal suolo rossastro, vigneti e piantagioni di canna da zucchero.",
+    "ru": "Ландшафт Южной Африки очень разнообразен: здесь встречаются скалистые безлесные горы, засушливые местности с красной почвой, виноградники и плантации сахарного тростника.",
+    "sv": "Sydafrikas landskap är mycket varierat, från klippiga, trädlösa berg och torra områden med röd jord till vingårdar och sockerrörsfält.",
+    "note": {
+      "es": "En comparación, Botsuana tiende a ser plana y seca, con carreteras bien mantenidas; Lesoto es montañoso sin árboles y con hierba corta; y Esuatini es montañoso con árboles y hierba alta.",
+      "pt": "Em comparação, Botswana tende a ser plano, seco, com estradas bem conservadas; Lesoto é montanhoso sem árvores e com grama curta; e Eswatini é montanhoso com árvores e grama alta.",
+      "fr": "En comparaison, le Botswana est généralement plat, sec, avec des routes bien entretenues ; le Lesotho est vallonné sans arbres et avec de l'herbe courte ; et l'Eswatini est vallonné avec des arbres et de l'herbe haute.",
+      "de": "Im Vergleich dazu ist Botswana tendenziell flach und trocken mit gut ausgebauten Straßen; Lesotho ist hügelig ohne Bäume und mit kurzem Gras; und Eswatini ist hügelig mit Bäumen und hohem Gras.",
+      "it": "In confronto, il Botswana tende ad essere piatto, secco, con strade ben mantenute; il Lesotho è collinare senza alberi e con erba corta; e l'Eswatini è collinare con alberi ed erba alta.",
+      "ru": "В сравнении, Ботсвана обычно плоская, сухая, с хорошо ухоженными дорогами; Лесото холмистый, без деревьев и с короткой травой; а Эсватини холмистый, с деревьями и высокой травой.",
+      "sv": "Jämförelsevis är Botswana platt, torrt, med väl underhållna vägar; Lesotho är kuperat utan träd och kort gräs; och Eswatini kuperat med träd och högt gräs."
+    }
   },
   "c978d2866bc85c69": {
-    "es": "La señal de Estonia tiene 3 rayas, pero la cabeza de la persona está unida y es más detallada, por ejemplo, con zapatos visibles. La señal de Letonia tiene 4 rayas.",
-    "pt": "O sinal da Estônia tem 3 listras também, mas a cabeça da pessoa está anexada e mais detalhada, por exemplo, com sapatos visíveis. O sinal da Letônia tem 4 listras.",
-    "fr": "Le panneau de l'Estonie a 3 rayures, mais la tête de la personne est attachée et plus détaillée, par exemple avec des chaussures visibles. Le panneau de la Lettonie a 4 rayures.",
-    "de": "Estlands Schild hat auch 3 Streifen, aber der Kopf der Person ist angebracht und detaillierter, z. B. mit sichtbaren Schuhen. Lettlands Schild hat 4 Streifen.",
-    "it": "Il segnale dell'Estonia ha 3 strisce, ma la testa della persona è attaccata e più dettagliata, ad esempio con scarpe visibili. Il segnale della Lettonia ha 4 strisce.",
-    "ru": "На знаке Эстонии также 3 полосы, но голова человека прикреплена и более детализирована, например, с видимой обувью. На знаке Латвии 4 полосы.",
-    "sv": "Estlands skylt har också 3 ränder men personens huvud är fäst och mer detaljerat, t.ex. med synliga skor. Lettlands skylt har 4 ränder."
+    "es": "Las señales lituanas de paso peatonal tienen 3 franjas. La cabeza de la figura está separada del cuerpo.",
+    "pt": "As placas lituanas de travessia de pedestres têm 3 faixas. A cabeça da figura é separada do corpo.",
+    "fr": "Les panneaux lituaniens de passage piéton comportent 3 bandes. La tête du personnage est détachée du corps.",
+    "de": "Litauische Fußgängerüberwegschilder haben 3 Streifen. Der Kopf der Figur ist vom Körper getrennt.",
+    "it": "I segnali lituani di attraversamento pedonale hanno 3 strisce. La testa della figura è staccata dal corpo.",
+    "ru": "На литовских знаках пешеходного перехода изображение состоит из 3 полос. Голова человека отделена от туловища.",
+    "sv": "Litauiska övergångsställesskyltar har 3 ränder. Figurens huvud är fristående från kroppen.",
+    "note": {
+      "es": "La señal de Estonia tiene 3 rayas, pero la cabeza de la persona está unida y es más detallada, por ejemplo, con zapatos visibles. La señal de Letonia tiene 4 rayas.",
+      "pt": "O sinal da Estônia tem 3 listras também, mas a cabeça da pessoa está anexada e mais detalhada, por exemplo, com sapatos visíveis. O sinal da Letônia tem 4 listras.",
+      "fr": "Le panneau de l'Estonie a 3 rayures, mais la tête de la personne est attachée et plus détaillée, par exemple avec des chaussures visibles. Le panneau de la Lettonie a 4 rayures.",
+      "de": "Estlands Schild hat auch 3 Streifen, aber der Kopf der Person ist angebracht und detaillierter, z. B. mit sichtbaren Schuhen. Lettlands Schild hat 4 Streifen.",
+      "it": "Il segnale dell'Estonia ha 3 strisce, ma la testa della persona è attaccata e più dettagliata, ad esempio con scarpe visibili. Il segnale della Lettonia ha 4 strisce.",
+      "ru": "На знаке Эстонии также 3 полосы, но голова человека прикреплена и более детализирована, например, с видимой обувью. На знаке Латвии 4 полосы.",
+      "sv": "Estlands skylt har också 3 ränder men personens huvud är fäst och mer detaljerat, t.ex. med synliga skor. Lettlands skylt har 4 ränder."
+    }
   },
   "020e2099c84e811b": {
     "es": "Islandia se destaca como uno de los pocos países europeos donde las matrículas carecen de la franja vertical azul en el lado izquierdo. Las matrículas islandesas son alargadas y blancas.",
@@ -1296,13 +1449,22 @@
     "sv": "Peruvianska hus har dessa rektangulära elmätare med en rektangulär sektion inuti dem."
   },
   "f89d77a76f47f836": {
-    "es": "Las señales de advertencia lituanas tienen el mismo borde rojo fino pero tienen un contorno blanco adicional alrededor. Las señales de advertencia letonas tienen un borde rojo más grueso y un contorno blanco adicional.",
-    "pt": "Sinais de advertência lituanos têm a mesma borda vermelha fina, mas têm um contorno branco adicional em volta dela. Sinais de advertência letões têm uma borda vermelha mais grossa e um contorno branco adicional.",
-    "fr": "Les panneaux d'avertissement lituaniens ont la même fine bordure rouge mais avec un contour blanc supplémentaire autour. Les panneaux d'avertissement lettons ont une bordure rouge plus épaisse et un contour blanc supplémentaire.",
-    "de": "Litauische Warnschilder haben den gleichen dünnen roten Rand, aber eine zusätzliche weiße Umrandung darum. Lettische Warnschilder haben einen dickeren roten Rand und eine zusätzliche weiße Umrandung.",
-    "it": "I segnali di avvertimento lituani hanno lo stesso sottile bordo rosso ma con un ulteriore contorno bianco attorno ad esso. I segnali di avvertimento lettoni hanno un bordo rosso più spesso e un ulteriore contorno bianco.",
-    "ru": "Литовские предупреждающие знаки имеют такую же тонкую красную окантовку, но с дополнительной белой окантовкой вокруг нее. Латвийские предупреждающие знаки имеют более толстую красную окантовку и дополнительную белую окантовку.",
-    "sv": "Litauiska varningsskyltar har samma tunna röda kant men har en ytterligare vit kontur runt den. Lettiska varningsskyltar har en tjockare röd kant och en ytterligare vit kontur."
+    "es": "Las señales de advertencia de Estonia tienen un borde rojo fino sin un contorno adicional.",
+    "pt": "As placas de advertência da Estônia têm uma borda vermelha fina, sem contorno adicional.",
+    "fr": "Les panneaux d'avertissement estoniens ont une fine bordure rouge, sans contour supplémentaire.",
+    "de": "Estnische Warnschilder haben einen dünnen roten Rand ohne zusätzliche Umrandung.",
+    "it": "I segnali di pericolo estoni hanno un bordo rosso sottile, senza un ulteriore contorno.",
+    "ru": "У эстонских предупреждающих знаков тонкая красная кайма без дополнительного контура.",
+    "sv": "Estniska varningsskyltar har en tunn röd kant utan någon extra kontur.",
+    "note": {
+      "es": "Las señales de advertencia lituanas tienen el mismo borde rojo fino pero tienen un contorno blanco adicional alrededor. Las señales de advertencia letonas tienen un borde rojo más grueso y un contorno blanco adicional.",
+      "pt": "Sinais de advertência lituanos têm a mesma borda vermelha fina, mas têm um contorno branco adicional em volta dela. Sinais de advertência letões têm uma borda vermelha mais grossa e um contorno branco adicional.",
+      "fr": "Les panneaux d'avertissement lituaniens ont la même fine bordure rouge mais avec un contour blanc supplémentaire autour. Les panneaux d'avertissement lettons ont une bordure rouge plus épaisse et un contour blanc supplémentaire.",
+      "de": "Litauische Warnschilder haben den gleichen dünnen roten Rand, aber eine zusätzliche weiße Umrandung darum. Lettische Warnschilder haben einen dickeren roten Rand und eine zusätzliche weiße Umrandung.",
+      "it": "I segnali di avvertimento lituani hanno lo stesso sottile bordo rosso ma con un ulteriore contorno bianco attorno ad esso. I segnali di avvertimento lettoni hanno un bordo rosso più spesso e un ulteriore contorno bianco.",
+      "ru": "Литовские предупреждающие знаки имеют такую же тонкую красную окантовку, но с дополнительной белой окантовкой вокруг нее. Латвийские предупреждающие знаки имеют более толстую красную окантовку и дополнительную белую окантовку.",
+      "sv": "Litauiska varningsskyltar har samma tunna röda kant men har en ytterligare vit kontur runt den. Lettiska varningsskyltar har en tjockare röd kant och en ytterligare vit kontur."
+    }
   },
   "e5e4d131d9337372": {
     "es": "Las palabras en inglés son comunes en Filipinas porque el inglés es uno de los dos idiomas oficiales del país.",
@@ -1314,13 +1476,22 @@
     "sv": "Engelska ord är vanliga på Filippinerna eftersom engelska är ett av landets två officiella språk."
   },
   "6bcab0b11d12b62b": {
-    "es": "En Lituania, tienen un borde rojo fino con el mismo contorno blanco. En Estonia, no tienen contorno blanco y tienen un borde rojo fino.",
-    "pt": "Na Lituânia, eles têm uma borda vermelha fina com o mesmo contorno branco. Na Estônia, eles não têm contorno branco e têm uma borda vermelha fina.",
-    "fr": "En Lituanie, ils ont une fine bordure rouge avec le même contour blanc. En Estonie, ils n'ont pas de contour blanc et une fine bordure rouge.",
-    "de": "In Litauen haben sie einen dünnen roten Rand mit der gleichen weißen Umrandung. In Estland haben sie keine weiße Umrandung und einen dünnen roten Rand.",
-    "it": "In Lituania, hanno un sottile bordo rosso con lo stesso contorno bianco. In Estonia, non hanno contorno bianco e hanno un sottile bordo rosso.",
-    "ru": "В Литве имеется тонкая красная окантовка с такой же белой окантовкой. В Эстонии нет белой окантовки и имеется тонкая красная окантовка.",
-    "sv": "I Litauen har de en tunn röd kant med samma vita kontur. I Estland har de ingen vit kontur och en tunn röd kant."
+    "es": "Las señales de advertencia de Letonia tienen un borde rojo mucho más grueso que las de Estonia y Lituania.",
+    "pt": "As placas de advertência da Letônia têm uma borda vermelha bem mais grossa que as da Estônia e da Lituânia.",
+    "fr": "Les panneaux d'avertissement lettons ont une bordure rouge bien plus épaisse que ceux d'Estonie et de Lituanie.",
+    "de": "Lettische Warnschilder haben einen deutlich dickeren roten Rand als Schilder in Estland und Litauen.",
+    "it": "I segnali di pericolo lettoni hanno un bordo rosso molto più spesso rispetto a quelli di Estonia e Lituania.",
+    "ru": "У латвийских предупреждающих знаков красная кайма намного толще, чем у знаков в Эстонии и Литве.",
+    "sv": "Lettiska varningsskyltar har en mycket tjockare röd kant än skyltar i Estland och Litauen.",
+    "note": {
+      "es": "En Lituania, tienen un borde rojo fino con el mismo contorno blanco. En Estonia, no tienen contorno blanco y tienen un borde rojo fino.",
+      "pt": "Na Lituânia, eles têm uma borda vermelha fina com o mesmo contorno branco. Na Estônia, eles não têm contorno branco e têm uma borda vermelha fina.",
+      "fr": "En Lituanie, ils ont une fine bordure rouge avec le même contour blanc. En Estonie, ils n'ont pas de contour blanc et une fine bordure rouge.",
+      "de": "In Litauen haben sie einen dünnen roten Rand mit der gleichen weißen Umrandung. In Estland haben sie keine weiße Umrandung und einen dünnen roten Rand.",
+      "it": "In Lituania, hanno un sottile bordo rosso con lo stesso contorno bianco. In Estonia, non hanno contorno bianco e hanno un sottile bordo rosso.",
+      "ru": "В Литве имеется тонкая красная окантовка с такой же белой окантовкой. В Эстонии нет белой окантовки и имеется тонкая красная окантовка.",
+      "sv": "I Litauen har de en tunn röd kant med samma vita kontur. I Estland har de ingen vit kontur och en tunn röd kant."
+    }
   },
   "af83361b316be206": {
     "es": "La Isla de Navidad es conocida por sus cangrejos rojos. Puedes encontrar un trekker caminando entre cientos de estos cangrejos cerca de Ethel Beach, en el noreste de la isla.",
@@ -1368,13 +1539,22 @@
     "sv": "I Sydostasien är det bara Thailand som har gula registreringsskyltar på KOMMERSIELLA fordon. Laos använder gula registreringsskyltar på standardfordon."
   },
   "7e86a29a890c9f42": {
-    "es": "Las señales de calles de Australia suelen ser blancas.",
-    "pt": "Os sinais de rua da Austrália são tipicamente brancos.",
-    "fr": "Les panneaux de rue australiens sont généralement blancs.",
-    "de": "Australiens Straßenschilder sind typischerweise weiß.",
-    "it": "I segnali stradali australiani sono tipicamente bianchi.",
-    "ru": "Австралийские уличные указатели обычно белые.",
-    "sv": "Australiens gatunamnsskyltar är vanligtvis vita."
+    "es": "Las señales con nombres de calles de Nueva Zelanda son azules o verdes.",
+    "pt": "As placas com nomes de ruas da Nova Zelândia são azuis ou verdes.",
+    "fr": "En Nouvelle-Zélande, les plaques de rue sont bleues ou vertes.",
+    "de": "Straßenschilder in Neuseeland sind blau oder grün.",
+    "it": "In Nuova Zelanda, le targhe con i nomi delle strade sono blu o verdi.",
+    "ru": "В Новой Зеландии таблички с названиями улиц бывают синими или зелёными.",
+    "sv": "Gatuskyltar i Nya Zeeland är blå eller gröna.",
+    "note": {
+      "es": "Las señales de calles de Australia suelen ser blancas.",
+      "pt": "Os sinais de rua da Austrália são tipicamente brancos.",
+      "fr": "Les panneaux de rue australiens sont généralement blancs.",
+      "de": "Australiens Straßenschilder sind typischerweise weiß.",
+      "it": "I segnali stradali australiani sono tipicamente bianchi.",
+      "ru": "Австралийские уличные указатели обычно белые.",
+      "sv": "Australiens gatunamnsskyltar är vanligtvis vita."
+    }
   },
   "66d0f5b1cb5b108c": {
     "es": "Los nombres de las calles danesas tienden a tener los sufijos ‘…vej’ y ‘…gade’.",
@@ -1503,13 +1683,22 @@
     "sv": "På Madagaskar inkluderar Streetview båttäckning. Denna täckning är särskilt vanlig på Geoguessr World-kartan."
   },
   "482b9d5f95071291": {
-    "es": "Dinamarca también tiene un borde rojo alrededor de un fondo blanco en todas las señales de advertencia. Las señales de ceda el paso en Dinamarca, sin embargo, NO tienen un contorno blanco alrededor del borde rojo. Las señales de advertencia de Suecia, Islandia y Finlandia tienen un borde rojo alrededor de un fondo amarillo.",
-    "pt": "A Dinamarca também tem uma borda vermelha em volta de fundo branco em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Dinamarca, no entanto, não têm contorno branco em volta da borda vermelha. Suécia, Islândia e Finlândia têm sinais de advertência com borda vermelha em volta de fundo amarelo.",
-    "fr": "Le Danemark a également une bordure rouge autour d'un fond blanc sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage au Danemark, cependant, n'ont PAS de contour blanc autour de la bordure rouge. Les panneaux d'avertissement de la Suède, de l'Islande et de la Finlande ont une bordure rouge autour d'un fond jaune.",
-    "de": "Dänemark hat ebenfalls einen roten Rand um einen weißen Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Dänemark haben jedoch KEINE weiße Umrandung um den roten Rand. Schwedens, Islands und Finnlands Warnschilder haben einen roten Rand um einen gelben Hintergrund.",
-    "it": "La Danimarca ha anche un bordo rosso attorno a uno sfondo bianco su tutti i segnali di avvertimento. I segnali di dare precedenza in Danimarca, tuttavia, non hanno alcun contorno bianco attorno al bordo rosso. I segnali di avvertimento di Svezia, Islanda e Finlandia hanno un bordo rosso attorno a uno sfondo giallo.",
-    "ru": "В Дании также имеется красная окантовка вокруг белого фона на всех предупреждающих знаках. Знаки уступи дорогу в Дании, однако, не имеют белой окантовки вокруг красной. Предупреждающие знаки Швеции, Исландии и Финляндии имеют красную окантовку вокруг желтого фона.",
-    "sv": "Danmark har också en röd kant runt vit bakgrund på alla varningsskyltar. Väjningsskyltar i Danmark har dock INGEN vit kontur runt den röda kanten. Sveriges, Islands och Finlands varningsskyltar har en röd kant runt gul bakgrund."
+    "es": "Las señales de advertencia danesas tienen un borde rojo y fondo blanco. Las señales de ceda el paso no llevan un contorno exterior al borde rojo.",
+    "pt": "As placas de advertência dinamarquesas têm borda vermelha e fundo branco. As placas de cedência de passagem não têm contorno externo à borda vermelha.",
+    "fr": "Les panneaux d'avertissement danois ont une bordure rouge sur fond blanc. Les panneaux de cédez-le-passage n'ont pas de contour extérieur à la bordure rouge.",
+    "de": "Dänische Warnschilder haben einen roten Rand und einen weißen Hintergrund. Vorfahrt-gewähren-Schilder haben keine zusätzliche Umrandung außerhalb des roten Rands.",
+    "it": "I segnali di pericolo danesi hanno un bordo rosso e uno sfondo bianco. I segnali di dare la precedenza non hanno un contorno esterno al bordo rosso.",
+    "ru": "У датских предупреждающих знаков красная кайма и белый фон. У знаков уступи дорогу нет дополнительного контура снаружи красной каймы.",
+    "sv": "Danska varningsskyltar har röd kant och vit bakgrund. Väjningspliktsmärken har ingen extra kontur utanför den röda kanten.",
+    "note": {
+      "es": "Dinamarca también tiene un borde rojo alrededor de un fondo blanco en todas las señales de advertencia. Las señales de ceda el paso en Dinamarca, sin embargo, NO tienen un contorno blanco alrededor del borde rojo. Las señales de advertencia de Suecia, Islandia y Finlandia tienen un borde rojo alrededor de un fondo amarillo.",
+      "pt": "A Dinamarca também tem uma borda vermelha em volta de fundo branco em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Dinamarca, no entanto, não têm contorno branco em volta da borda vermelha. Suécia, Islândia e Finlândia têm sinais de advertência com borda vermelha em volta de fundo amarelo.",
+      "fr": "Le Danemark a également une bordure rouge autour d'un fond blanc sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage au Danemark, cependant, n'ont PAS de contour blanc autour de la bordure rouge. Les panneaux d'avertissement de la Suède, de l'Islande et de la Finlande ont une bordure rouge autour d'un fond jaune.",
+      "de": "Dänemark hat ebenfalls einen roten Rand um einen weißen Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Dänemark haben jedoch KEINE weiße Umrandung um den roten Rand. Schwedens, Islands und Finnlands Warnschilder haben einen roten Rand um einen gelben Hintergrund.",
+      "it": "La Danimarca ha anche un bordo rosso attorno a uno sfondo bianco su tutti i segnali di avvertimento. I segnali di dare precedenza in Danimarca, tuttavia, non hanno alcun contorno bianco attorno al bordo rosso. I segnali di avvertimento di Svezia, Islanda e Finlandia hanno un bordo rosso attorno a uno sfondo giallo.",
+      "ru": "В Дании также имеется красная окантовка вокруг белого фона на всех предупреждающих знаках. Знаки уступи дорогу в Дании, однако, не имеют белой окантовки вокруг красной. Предупреждающие знаки Швеции, Исландии и Финляндии имеют красную окантовку вокруг желтого фона.",
+      "sv": "Danmark har också en röd kant runt vit bakgrund på alla varningsskyltar. Väjningsskyltar i Danmark har dock INGEN vit kontur runt den röda kanten. Sveriges, Islands och Finlands varningsskyltar har en röd kant runt gul bakgrund."
+    }
   },
   "39cd5d664b926e9f": {
     "es": "La señal de cruce peatonal en Letonia tiene 5 rayas.",
@@ -1539,13 +1728,22 @@
     "sv": "I Senegal syns en silverfärgad eller vit lastbilshytt i Generation 4-täckningen. Detta är den silverfärgade lastbilen."
   },
   "1e9c3ec5f8e64c16": {
-    "es": "Rusia no tiene este coche rojo. En Europa, solo Bélgica puede presentar a veces este coche.",
-    "pt": "A Rússia não tem este carro vermelho. Na Europa, apenas a Bélgica pode às vezes apresentar este carro.",
-    "fr": "La Russie n'a pas cette voiture rouge. En Europe, seule la Belgique peut parfois présenter cette voiture.",
-    "de": "Russland hat dieses rote Auto nicht. In Europa kann nur Belgien manchmal dieses Auto aufweisen.",
-    "it": "La Russia non ha questa macchina rossa. In Europa, solo il Belgio può a volte presentare questa macchina.",
-    "ru": "В России нет этого красного автомобиля. В Европе только Бельгия иногда может иметь этот автомобиль.",
-    "sv": "Ryssland har inte denna röda bil. I Europa kan endast Belgien ibland ha denna bil."
+    "es": "En la mayor parte de Ucrania se ve un coche rojo de Google Street View con una antena larga.",
+    "pt": "Na maior parte da Ucrânia, é possível ver um carro vermelho do Google Street View com uma antena longa.",
+    "fr": "Dans la majeure partie de l'Ukraine, on peut voir une voiture rouge de Google Street View équipée d'une longue antenne.",
+    "de": "In den meisten Teilen der Ukraine ist ein rotes Google-Street-View-Auto mit einer langen Antenne zu sehen.",
+    "it": "Nella maggior parte dell'Ucraina si vede un'auto rossa di Google Street View con una lunga antenna.",
+    "ru": "На большей части территории Украины видна красная машина Google Street View с длинной антенной.",
+    "sv": "I större delen av Ukraina syns en röd Google Street View-bil med en lång antenn.",
+    "note": {
+      "es": "Rusia no tiene este coche rojo. En Europa, solo Bélgica puede presentar a veces este coche.",
+      "pt": "A Rússia não tem este carro vermelho. Na Europa, apenas a Bélgica pode às vezes apresentar este carro.",
+      "fr": "La Russie n'a pas cette voiture rouge. En Europe, seule la Belgique peut parfois présenter cette voiture.",
+      "de": "Russland hat dieses rote Auto nicht. In Europa kann nur Belgien manchmal dieses Auto aufweisen.",
+      "it": "La Russia non ha questa macchina rossa. In Europa, solo il Belgio può a volte presentare questa macchina.",
+      "ru": "В России нет этого красного автомобиля. В Европе только Бельгия иногда может иметь этот автомобиль.",
+      "sv": "Ryssland har inte denna röda bil. I Europa kan endast Belgien ibland ha denna bil."
+    }
   },
   "085e51c4602dfd4d": {
     "es": "Las señales de dirección de Montenegro suelen ser amarillas con letras negras.",
@@ -1584,13 +1782,22 @@
     "sv": "Malaysiska pollare har ofta färgerna svart, vit, grå och röd. Här är ett exempel på en vit och röd pollare."
   },
   "bbc4e99e14cda1a8": {
-    "es": "Noruega también tiene un borde rojo alrededor de un fondo blanco en todas las señales de advertencia. Las señales de ceda el paso en Noruega, sin embargo, tienen un contorno blanco alrededor del borde rojo. Las señales de advertencia de Suecia, Islandia y Finlandia tienen un borde rojo alrededor de un fondo amarillo.",
-    "pt": "A Noruega também tem uma borda vermelha em volta de fundo branco em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Noruega, no entanto, têm um contorno branco em volta da borda vermelha. Suécia, Islândia e Finlândia têm sinais de advertência com borda vermelha em volta de fundo amarelo.",
-    "fr": "La Norvège a également une bordure rouge autour d'un fond blanc sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage en Norvège, cependant, ont un contour blanc autour de la bordure rouge. Les panneaux d'avertissement de la Suède, de l'Islande et de la Finlande ont une bordure rouge autour d'un fond jaune.",
-    "de": "Norwegen hat ebenfalls einen roten Rand um einen weißen Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Norwegen haben jedoch eine weiße Umrandung um den roten Rand. Schwedens, Islands und Finnlands Warnschilder haben einen roten Rand um einen gelben Hintergrund.",
-    "it": "La Norvegia ha anche un bordo rosso attorno a uno sfondo bianco su tutti i segnali di avvertimento. I segnali di dare precedenza in Norvegia, tuttavia, hanno un contorno bianco attorno al bordo rosso. I segnali di avvertimento di Svezia, Islanda e Finlandia hanno un bordo rosso attorno a uno sfondo giallo.",
-    "ru": "В Норвегии также имеется красная окантовка вокруг белого фона на всех предупреждающих знаках. Знаки уступи дорогу в Норвегии, однако, имеют белую окантовку вокруг красной. Предупреждающие знаки Швеции, Исландии и Финляндии имеют красную окантовку вокруг желтого фона.",
-    "sv": "Norge har också en röd kant runt vit bakgrund på alla varningsskyltar. Väjningsskyltar i Norge har dock en vit kontur runt den röda kanten. Sveriges, Islands och Finlands varningsskyltar har en röd kant runt gul bakgrund."
+    "es": "Las señales de advertencia noruegas tienen un borde rojo y fondo blanco. Las señales de ceda el paso tienen un contorno blanco alrededor del borde rojo.",
+    "pt": "As placas de advertência norueguesas têm borda vermelha e fundo branco. As placas de cedência de passagem têm um contorno branco externo à borda vermelha.",
+    "fr": "Les panneaux d'avertissement norvégiens ont une bordure rouge sur fond blanc. Les panneaux de cédez-le-passage ont un contour blanc autour de la bordure rouge.",
+    "de": "Norwegische Warnschilder haben einen roten Rand und einen weißen Hintergrund. Vorfahrt-gewähren-Schilder haben außerhalb des roten Rands einen weißen Umriss.",
+    "it": "I segnali di pericolo norvegesi hanno un bordo rosso e uno sfondo bianco. I segnali di dare la precedenza hanno un contorno bianco esterno al bordo rosso.",
+    "ru": "У норвежских предупреждающих знаков красная кайма и белый фон. У знаков уступи дорогу есть белый контур снаружи красной каймы.",
+    "sv": "Norska varningsskyltar har röd kant och vit bakgrund. Väjningspliktsmärken har en vit kontur utanför den röda kanten.",
+    "note": {
+      "es": "Noruega también tiene un borde rojo alrededor de un fondo blanco en todas las señales de advertencia. Las señales de ceda el paso en Noruega, sin embargo, tienen un contorno blanco alrededor del borde rojo. Las señales de advertencia de Suecia, Islandia y Finlandia tienen un borde rojo alrededor de un fondo amarillo.",
+      "pt": "A Noruega também tem uma borda vermelha em volta de fundo branco em todos os sinais de advertência. Os sinais de \"dê a preferência\" na Noruega, no entanto, têm um contorno branco em volta da borda vermelha. Suécia, Islândia e Finlândia têm sinais de advertência com borda vermelha em volta de fundo amarelo.",
+      "fr": "La Norvège a également une bordure rouge autour d'un fond blanc sur tous les panneaux d'avertissement. Les panneaux de cédez-le-passage en Norvège, cependant, ont un contour blanc autour de la bordure rouge. Les panneaux d'avertissement de la Suède, de l'Islande et de la Finlande ont une bordure rouge autour d'un fond jaune.",
+      "de": "Norwegen hat ebenfalls einen roten Rand um einen weißen Hintergrund auf allen Warnschildern. Vorfahrtsschilder in Norwegen haben jedoch eine weiße Umrandung um den roten Rand. Schwedens, Islands und Finnlands Warnschilder haben einen roten Rand um einen gelben Hintergrund.",
+      "it": "La Norvegia ha anche un bordo rosso attorno a uno sfondo bianco su tutti i segnali di avvertimento. I segnali di dare precedenza in Norvegia, tuttavia, hanno un contorno bianco attorno al bordo rosso. I segnali di avvertimento di Svezia, Islanda e Finlandia hanno un bordo rosso attorno a uno sfondo giallo.",
+      "ru": "В Норвегии также имеется красная окантовка вокруг белого фона на всех предупреждающих знаках. Знаки уступи дорогу в Норвегии, однако, имеют белую окантовку вокруг красной. Предупреждающие знаки Швеции, Исландии и Финляндии имеют красную окантовку вокруг желтого фона.",
+      "sv": "Norge har också en röd kant runt vit bakgrund på alla varningsskyltar. Väjningsskyltar i Norge har dock en vit kontur runt den röda kanten. Sveriges, Islands och Finlands varningsskyltar har en röd kant runt gul bakgrund."
+    }
   },
   "b9a177740ee2d126": {
     "es": "Muchas carreteras griegas presentan una doble línea central blanca o amarilla.",
@@ -1620,13 +1827,22 @@
     "sv": "Brasilianska motorvägar är märkta \"BR-XXX\". Regionala motorvägar är märkta \"YY-XXX\" där YY är regionsförkortningen."
   },
   "2221f6d9ad788f8f": {
-    "es": "Montenegro tiene el mismo estilo de bolardos. Serbia tiene bolardos de aspecto similar pero con un rectángulo rojo a un lado. Los bolardos austriacos también son similares, sin embargo, Austria tiene un rectángulo negro o de color rojo oscuro.",
-    "pt": "Montenegro tem o mesmo estilo de postes. A Sérvia tem postes de aparência semelhante, mas com um retângulo vermelho em um dos lados. Postes austríacos também são semelhantes, porém a Áustria tem um retângulo preto ou avermelhado escuro.",
-    "fr": "Le Monténégro utilise le même style de bornes. La Serbie a des bornes d'apparence similaire mais avec un rectangle rouge sur un côté. Les bornes autrichiennes sont également similaires, mais l'Autriche a un rectangle noir ou rouge foncé.",
-    "de": "Montenegro hat den gleichen Stil von Pollern. Serbien hat ähnlich aussehende Poller, aber mit einem roten Rechteck weit an einer Seite. Österreichische Poller sind ebenfalls ähnlich, jedoch hat Österreich ein schwarzes oder dunkleres rötliches Rechteck.",
-    "it": "Il Montenegro ha lo stesso stile di dissuasori. La Serbia ha dissuasori dall'aspetto simile ma con un rettangolo rosso su un lato. Anche i dissuasori austriaci sono simili, tuttavia l'Austria ha un rettangolo nero o rosso scuro.",
-    "ru": "В Черногории такие же столбики. В Сербии похожие столбики, но с красным прямоугольником сбоку. Австрийские столбики также похожи, однако в Австрии прямоугольник черный или темно-красный.",
-    "sv": "Montenegro har samma typ av pollare. Serbien har liknande pollare men med en röd rektangel långt åt ena sidan. Österrikiska pollare är också lika, men Österrike har en svart eller mörkare rödaktig rektangel."
+    "es": "Esta es la vista frontal de un bolardo esloveno.",
+    "pt": "Esta é a vista frontal de um balizador rodoviário esloveno.",
+    "fr": "Voici la face avant d'une borne routière slovène.",
+    "de": "Dies ist die Vorderansicht eines slowenischen Leitpfostens.",
+    "it": "Questa è la vista frontale di un delineatore stradale sloveno.",
+    "ru": "Так выглядит передняя сторона словенского дорожного столбика.",
+    "sv": "Det här är framsidan av en slovensk vägmarkeringsstolpe.",
+    "note": {
+      "es": "Montenegro tiene el mismo estilo de bolardos. Serbia tiene bolardos de aspecto similar pero con un rectángulo rojo a un lado. Los bolardos austriacos también son similares, sin embargo, Austria tiene un rectángulo negro o de color rojo oscuro.",
+      "pt": "Montenegro tem o mesmo estilo de postes. A Sérvia tem postes de aparência semelhante, mas com um retângulo vermelho em um dos lados. Postes austríacos também são semelhantes, porém a Áustria tem um retângulo preto ou avermelhado escuro.",
+      "fr": "Le Monténégro utilise le même style de bornes. La Serbie a des bornes d'apparence similaire mais avec un rectangle rouge sur un côté. Les bornes autrichiennes sont également similaires, mais l'Autriche a un rectangle noir ou rouge foncé.",
+      "de": "Montenegro hat den gleichen Stil von Pollern. Serbien hat ähnlich aussehende Poller, aber mit einem roten Rechteck weit an einer Seite. Österreichische Poller sind ebenfalls ähnlich, jedoch hat Österreich ein schwarzes oder dunkleres rötliches Rechteck.",
+      "it": "Il Montenegro ha lo stesso stile di dissuasori. La Serbia ha dissuasori dall'aspetto simile ma con un rettangolo rosso su un lato. Anche i dissuasori austriaci sono simili, tuttavia l'Austria ha un rettangolo nero o rosso scuro.",
+      "ru": "В Черногории такие же столбики. В Сербии похожие столбики, но с красным прямоугольником сбоку. Австрийские столбики также похожи, однако в Австрии прямоугольник черный или темно-красный.",
+      "sv": "Montenegro har samma typ av pollare. Serbien har liknande pollare men med en röd rektangel långt åt ena sidan. Österrikiska pollare är också lika, men Österrike har en svart eller mörkare rödaktig rektangel."
+    }
   },
   "2fc5deb6414aa177": {
     "es": "Malasia a veces tiene estas líneas de carretera dobles, blancas y continuas. Estas son bastante raras en el resto del mundo.",
@@ -1647,13 +1863,22 @@
     "sv": "I Chile är heldragna vita väglinjer vanliga. Detta är en bra ledtråd för Chile när man befinner sig i Sydamerika, men det är inte unikt. Argentina har också ibland vita vägar."
   },
   "f5a79685f19b546e": {
-    "es": "En Lituania, la señal también tiene 3 rayas pero la cabeza de la persona está separada y tiene menos detalles visibles, como no tener zapatos. En Letonia, la señal tiene 5 rayas.",
-    "pt": "Na Lituânia, a placa também tem 3 listras, mas a cabeça da pessoa está destacada e tem menos detalhes visíveis, como a ausência de sapatos. Na Letônia, a placa tem 5 listras.",
-    "fr": "En Lituanie, le panneau a également 3 bandes, mais la tête de la personne est détachée et présente moins de détails visibles, comme l'absence de chaussures. En Lettonie, le panneau a 5 bandes.",
-    "de": "In Litauen hat das Schild auch 3 Streifen, aber der Kopf der Person ist abgetrennt und hat weniger sichtbare Details, wie z.B. keine Schuhe. In Lettland hat das Schild 5 Streifen.",
-    "it": "In Lituania, il segnale ha anche 3 strisce ma la testa della persona è staccata e ha meno dettagli visibili, come ad esempio non avere scarpe. In Lettonia, il segnale ha 5 strisce.",
-    "ru": "В Литве на знаке также 3 полосы, но голова человека отделена и детали менее заметны, например, нет обуви. В Латвии на знаке 5 полос.",
-    "sv": "I Litauen har skylten också 3 ränder men personens huvud är löst och har mindre synliga detaljer, som inga skor. I Lettland har skylten 5 ränder."
+    "es": "En Estonia, las señales de paso peatonal tienen 3 franjas. La cabeza de la figura está unida al cuerpo y el dibujo incluye detalles, como zapatos visibles.",
+    "pt": "Na Estônia, as placas de travessia de pedestres têm 3 faixas. A cabeça da figura está ligada ao corpo, e o desenho tem detalhes, como sapatos visíveis.",
+    "fr": "En Estonie, les panneaux de passage piéton comportent 3 bandes. La tête du personnage est rattachée au corps et la silhouette est détaillée, avec par exemple des chaussures visibles.",
+    "de": "In Estland haben Fußgängerüberwegschilder 3 Streifen. Der Kopf der Figur ist mit dem Körper verbunden, und die Darstellung zeigt Details wie erkennbare Schuhe.",
+    "it": "In Estonia, i segnali di attraversamento pedonale hanno 3 strisce. La testa della figura è attaccata al corpo e il disegno è dettagliato, per esempio con le scarpe visibili.",
+    "ru": "В Эстонии на знаках пешеходного перехода изображение человека состоит из 3 полос. Голова соединена с туловищем, а силуэт прорисован подробно, например видны ботинки.",
+    "sv": "I Estland har övergångsställen 3 ränder på skylten. Figuren har huvudet sammanfogat med kroppen och är detaljrik, till exempel syns skorna.",
+    "note": {
+      "es": "En Lituania, la señal también tiene 3 rayas pero la cabeza de la persona está separada y tiene menos detalles visibles, como no tener zapatos. En Letonia, la señal tiene 5 rayas.",
+      "pt": "Na Lituânia, a placa também tem 3 listras, mas a cabeça da pessoa está destacada e tem menos detalhes visíveis, como a ausência de sapatos. Na Letônia, a placa tem 5 listras.",
+      "fr": "En Lituanie, le panneau a également 3 bandes, mais la tête de la personne est détachée et présente moins de détails visibles, comme l'absence de chaussures. En Lettonie, le panneau a 5 bandes.",
+      "de": "In Litauen hat das Schild auch 3 Streifen, aber der Kopf der Person ist abgetrennt und hat weniger sichtbare Details, wie z.B. keine Schuhe. In Lettland hat das Schild 5 Streifen.",
+      "it": "In Lituania, il segnale ha anche 3 strisce ma la testa della persona è staccata e ha meno dettagli visibili, come ad esempio non avere scarpe. In Lettonia, il segnale ha 5 strisce.",
+      "ru": "В Литве на знаке также 3 полосы, но голова человека отделена и детали менее заметны, например, нет обуви. В Латвии на знаке 5 полос.",
+      "sv": "I Litauen har skylten också 3 ränder men personens huvud är löst och har mindre synliga detaljer, som inga skor. I Lettland har skylten 5 ränder."
+    }
   },
   "d6c5b9604171819d": {
     "es": "Australia típicamente tiene señales de calle blancas.",
@@ -1935,13 +2160,22 @@
     "sv": "Malaysia är anmärkningsvärt för sina många svartvita randiga vägskyltstolpar, en egenskap som är sällsynt globalt."
   },
   "aeac96692db0258c": {
-    "es": "Los bolardos de Letonia son delgados y curvos, los de Estonia son redondos (y por lo tanto ninguno tiene forma de cuña). Además, tanto Letonia como Estonia tienen reflectores circulares redondos en la parte trasera.",
-    "pt": "Postes da Letônia são finos e curvos, os da Estônia são redondos (e, portanto, nenhum é em forma de cunha). Além disso, tanto a Letônia quanto a Estônia têm refletores circulares redondos na parte traseira.",
-    "fr": "Les bornes lettones sont fines et courbes, celles de l'Estonie sont rondes (et donc ni en coin). De plus, la Lettonie et l'Estonie ont des réflecteurs ronds sur le derrière.",
-    "de": "Lettlands Poller sind dünn und gebogen, Estlands sind rund (und daher keiner keilförmig). Außerdem haben sowohl Lettland als auch Estland runde Reflektoren auf der Rückseite.",
-    "it": "I dissuasori della Lettonia sono sottili e curvi, quelli dell'Estonia sono rotondi (e quindi nessuno dei due è a forma di cuneo). Inoltre, sia la Lettonia che l'Estonia hanno riflettori circolari rotondi sul retro.",
-    "ru": "Столбики в Латвии тонкие и изогнутые, в Эстонии — круглые (поэтому ни те, ни другие не клиновидные). Также и в Латвии, и в Эстонии на задней стороне есть круглые отражатели.",
-    "sv": "Lettlands pollare är tunna och böjda, Estlands är runda (och därmed är ingen kilformad). Dessutom har både Lettland och Estland runda cirkulära reflexer på baksidan."
+    "es": "Los bolardos lituanos tienen forma de cuña y reflectores rectangulares naranjas en la parte delantera y blancos en la trasera.",
+    "pt": "Os balizadores rodoviários da Lituânia têm formato de cunha, com refletores retangulares laranja na frente e brancos atrás.",
+    "fr": "Les bornes routières lituaniennes ont une forme de coin, avec des réflecteurs rectangulaires orange à l'avant et blancs à l'arrière.",
+    "de": "Litauische Leitpfosten sind keilförmig und haben vorne orangefarbene rechteckige Reflektoren und hinten weiße.",
+    "it": "I delineatori stradali lituani sono a forma di cuneo, con riflettori rettangolari arancioni sul davanti e bianchi sul retro.",
+    "ru": "Литовские дорожные столбики имеют клиновидную форму; спереди у них оранжевые прямоугольные отражатели, а сзади — белые.",
+    "sv": "Litauiska vägmarkeringsstolpar är kilformade, med orange rektangulära reflexer framtill och vita baktill.",
+    "note": {
+      "es": "Los bolardos de Letonia son delgados y curvos, los de Estonia son redondos (y por lo tanto ninguno tiene forma de cuña). Además, tanto Letonia como Estonia tienen reflectores circulares redondos en la parte trasera.",
+      "pt": "Postes da Letônia são finos e curvos, os da Estônia são redondos (e, portanto, nenhum é em forma de cunha). Além disso, tanto a Letônia quanto a Estônia têm refletores circulares redondos na parte traseira.",
+      "fr": "Les bornes lettones sont fines et courbes, celles de l'Estonie sont rondes (et donc ni en coin). De plus, la Lettonie et l'Estonie ont des réflecteurs ronds sur le derrière.",
+      "de": "Lettlands Poller sind dünn und gebogen, Estlands sind rund (und daher keiner keilförmig). Außerdem haben sowohl Lettland als auch Estland runde Reflektoren auf der Rückseite.",
+      "it": "I dissuasori della Lettonia sono sottili e curvi, quelli dell'Estonia sono rotondi (e quindi nessuno dei due è a forma di cuneo). Inoltre, sia la Lettonia che l'Estonia hanno riflettori circolari rotondi sul retro.",
+      "ru": "Столбики в Латвии тонкие и изогнутые, в Эстонии — круглые (поэтому ни те, ни другие не клиновидные). Также и в Латвии, и в Эстонии на задней стороне есть круглые отражатели.",
+      "sv": "Lettlands pollare är tunna och böjda, Estlands är runda (och därmed är ingen kilformad). Dessutom har både Lettland och Estland runda cirkulära reflexer på baksidan."
+    }
   },
   "27a2e122ac5b1fe5": {
     "es": "Los postes en Indonesia a veces presentan la bandera roja y blanca de Indonesia como rayas en la sección inferior.",
@@ -2043,13 +2277,22 @@
     "sv": "I Ukraina är det vanligt att se basen på trädstammar målade vita."
   },
   "69427afea0220618": {
-    "es": "En Lituania, son en forma de V de dos caras, colocados a 45 grados de la carretera. En Letonia, están paralelos a la carretera.",
-    "pt": "Na Lituânia, são em forma de V, de dois lados, colocados a 45 graus da estrada. Na Letônia, são paralelos à estrada.",
-    "fr": "En Lituanie, ils sont en forme de V, à double face, placés à 45 degrés par rapport à la route. En Lettonie, ils sont parallèles à la route.",
-    "de": "In Litauen sind sie V-förmig zweiseitig und im 45-Grad-Winkel zur Straße angebracht. In Lettland sind sie parallel zur Straße.",
-    "it": "In Lituania, sono a forma di V a due lati posizionati a 45 gradi rispetto alla strada. In Lettonia, sono paralleli alla strada.",
-    "ru": "В Литве они V-образные, двусторонние, расположенные под углом 45 градусов к дороге. В Латвии они параллельны дороге.",
-    "sv": "I Litauen är de V-formade dubbelsidiga placerade i 45 graders vinkel mot vägen. I Lettland är de parallella med vägen."
+    "es": "En Estonia, los hitos kilométricos están colocados perpendicularmente a la carretera.",
+    "pt": "Na Estônia, os marcos quilométricos ficam perpendiculares à estrada.",
+    "fr": "En Estonie, les bornes kilométriques sont perpendiculaires à la route.",
+    "de": "In Estland stehen Kilometersteine senkrecht zur Straße.",
+    "it": "In Estonia, i cippi chilometrici sono perpendicolari alla strada.",
+    "ru": "В Эстонии километровые столбики расположены перпендикулярно дороге.",
+    "sv": "I Estland står kilometerstolpar vinkelrätt mot vägen.",
+    "note": {
+      "es": "En Lituania, son en forma de V de dos caras, colocados a 45 grados de la carretera. En Letonia, están paralelos a la carretera.",
+      "pt": "Na Lituânia, são em forma de V, de dois lados, colocados a 45 graus da estrada. Na Letônia, são paralelos à estrada.",
+      "fr": "En Lituanie, ils sont en forme de V, à double face, placés à 45 degrés par rapport à la route. En Lettonie, ils sont parallèles à la route.",
+      "de": "In Litauen sind sie V-förmig zweiseitig und im 45-Grad-Winkel zur Straße angebracht. In Lettland sind sie parallel zur Straße.",
+      "it": "In Lituania, sono a forma di V a due lati posizionati a 45 gradi rispetto alla strada. In Lettonia, sono paralleli alla strada.",
+      "ru": "В Литве они V-образные, двусторонние, расположенные под углом 45 градусов к дороге. В Латвии они параллельны дороге.",
+      "sv": "I Litauen är de V-formade dubbelsidiga placerade i 45 graders vinkel mot vägen. I Lettland är de parallella med vägen."
+    }
   },
   "17d721580cc1f183": {
     "es": "En Malasia, los números de las carreteras se indican mediante distintivas formas hexagonales irregulares amarillas. El fondo de la señal puede ser verde o azul.",
@@ -2142,13 +2385,22 @@
     "sv": "Stoppskyltar i Malaysia visar ordet 'BERHENTI'."
   },
   "0386e7faf959544e": {
-    "es": "Finlandia también usa texto blanco sobre fondo azul. Dinamarca usa texto rojo o azul sobre fondo blanco. Noruega usa texto negro sobre fondo amarillo.",
-    "pt": "A Finlândia também usa texto branco sobre fundo azul. A Dinamarca usa texto vermelho ou azul sobre fundo branco. A Noruega usa texto preto sobre fundo amarelo.",
-    "fr": "La Finlande utilise également du texte blanc sur fond bleu. Le Danemark utilise du texte rouge ou bleu sur fond blanc. La Norvège utilise du texte noir sur fond jaune.",
-    "de": "Finnland verwendet ebenfalls weiße Schrift auf blauem Hintergrund. Dänemark verwendet rote oder blaue Schrift auf weißem Hintergrund. Norwegen verwendet schwarze Schrift auf gelbem Hintergrund.",
-    "it": "Anche la Finlandia utilizza testo bianco su sfondo blu. La Danimarca utilizza testo rosso o blu su sfondo bianco. La Norvegia utilizza testo nero su sfondo giallo.",
-    "ru": "Финляндия также использует белый текст на синем фоне. Дания использует красный или синий текст на белом фоне. Норвегия использует черный текст на желтом фоне.",
-    "sv": "Finland använder också vit text på blå bakgrund. Danmark använder röd eller blå text på vit bakgrund. Norge använder svart text på gul bakgrund."
+    "es": "Las señales direccionales suecas son azules con letras blancas.",
+    "pt": "As placas direcionais suecas são azuis com letras brancas.",
+    "fr": "Les panneaux directionnels suédois sont bleus avec des inscriptions blanches.",
+    "de": "Schwedische Wegweiser sind blau und tragen weiße Schrift.",
+    "it": "I cartelli direzionali svedesi sono blu con scritte bianche.",
+    "ru": "Шведские указатели направления синие с белыми надписями.",
+    "sv": "Svenska vägvisare är blå med vit text.",
+    "note": {
+      "es": "Finlandia también usa texto blanco sobre fondo azul. Dinamarca usa texto rojo o azul sobre fondo blanco. Noruega usa texto negro sobre fondo amarillo.",
+      "pt": "A Finlândia também usa texto branco sobre fundo azul. A Dinamarca usa texto vermelho ou azul sobre fundo branco. A Noruega usa texto preto sobre fundo amarelo.",
+      "fr": "La Finlande utilise également du texte blanc sur fond bleu. Le Danemark utilise du texte rouge ou bleu sur fond blanc. La Norvège utilise du texte noir sur fond jaune.",
+      "de": "Finnland verwendet ebenfalls weiße Schrift auf blauem Hintergrund. Dänemark verwendet rote oder blaue Schrift auf weißem Hintergrund. Norwegen verwendet schwarze Schrift auf gelbem Hintergrund.",
+      "it": "Anche la Finlandia utilizza testo bianco su sfondo blu. La Danimarca utilizza testo rosso o blu su sfondo bianco. La Norvegia utilizza testo nero su sfondo giallo.",
+      "ru": "Финляндия также использует белый текст на синем фоне. Дания использует красный или синий текст на белом фоне. Норвегия использует черный текст на желтом фоне.",
+      "sv": "Finland använder också vit text på blå bakgrund. Danmark använder röd eller blå text på vit bakgrund. Norge använder svart text på gul bakgrund."
+    }
   },
   "5621dd7f021d58e5": {
     "es": "En la mayor parte de Luxemburgo, el país tiene un terreno ondulado. Raramente es empinado y a menudo consiste en suaves pendientes. Es raro ver tierra plana en Luxemburgo (algo que los Países Bajos tienen mucho). Gran parte del paisaje de Luxemburgo consiste en campos de hierba verde.",
@@ -2160,22 +2412,40 @@
     "sv": "I större delen av Luxemburg har landet böljande terräng. Det är sällan brant och består ofta av mjuka sluttningar. Det är sällsynt att se platt mark i Luxemburg (något som Nederländerna har mycket av). Mycket av det luxemburgska landskapet består av gröna gräsfält."
   },
   "209c84c96cf0466f": {
-    "es": "Los Países Bajos es el único otro país de Europa Occidental con matrículas amarillas tanto delanteras como traseras. El Reino Unido tiene matrículas traseras amarillas y delanteras blancas. Francia tiene un número reducido de vehículos con matrículas traseras amarillas.",
-    "pt": "A Holanda é o único outro país da Europa Ocidental com placas de licença amarelas na frente e atrás. O Reino Unido tem placas traseiras amarelas e dianteiras brancas. A França tem um pequeno número de veículos com placas traseiras amarelas.",
-    "fr": "Les Pays-Bas sont le seul autre pays d'Europe occidentale à avoir des plaques d'immatriculation jaunes à l'avant et à l'arrière. Le Royaume-Uni a des plaques arrière jaunes et des plaques avant blanches. La France a un petit nombre de véhicules avec des plaques arrière jaunes.",
-    "de": "Die Niederlande sind das einzige andere westeuropäische Land mit vorderen und hinteren gelben Nummernschildern. Das Vereinigte Königreich hat gelbe hintere und weiße vordere Nummernschilder. Frankreich hat eine kleine Anzahl von Fahrzeugen mit gelben hinteren Nummernschildern.",
-    "it": "I Paesi Bassi sono l'unico altro paese dell'Europa occidentale con targhe gialle sia anteriori che posteriori. Il Regno Unito ha targhe posteriori gialle e anteriori bianche. La Francia ha un numero limitato di veicoli con targhe posteriori gialle.",
-    "ru": "Нидерланды — единственная другая страна Западной Европы с передними и задними желтыми номерными знаками. В Великобритании задние номерные знаки желтые, а передние — белые. Во Франции имеется небольшое количество автомобилей с желтыми задними номерными знаками.",
-    "sv": "Nederländerna är det enda andra västeuropeiska landet med både gula registreringsskyltar fram och bak. Storbritannien har gula bakre skyltar och vita främre skyltar. Frankrike har ett litet antal fordon med gula bakre skyltar."
+    "es": "Luxemburgo usa matrículas amarillas tanto delante como detrás, con la franja de la UE a la izquierda.",
+    "pt": "Luxemburgo usa placas amarelas tanto na frente quanto atrás, com a faixa da UE à esquerda.",
+    "fr": "Au Luxembourg, les plaques d’immatriculation sont jaunes à l’avant comme à l’arrière, avec la bande de l’UE à gauche.",
+    "de": "In Luxemburg sind die Kennzeichen vorne und hinten gelb; der EU-Streifen befindet sich links.",
+    "it": "In Lussemburgo le targhe sono gialle sia davanti sia dietro, con la banda UE a sinistra.",
+    "ru": "В Люксембурге жёлтые номерные знаки установлены спереди и сзади; полоса ЕС находится слева.",
+    "sv": "I Luxemburg är registreringsskyltarna gula både fram och bak, med EU-remsan till vänster.",
+    "note": {
+      "es": "Los Países Bajos es el único otro país de Europa Occidental con matrículas amarillas tanto delanteras como traseras. El Reino Unido tiene matrículas traseras amarillas y delanteras blancas. Francia tiene un número reducido de vehículos con matrículas traseras amarillas.",
+      "pt": "A Holanda é o único outro país da Europa Ocidental com placas de licença amarelas na frente e atrás. O Reino Unido tem placas traseiras amarelas e dianteiras brancas. A França tem um pequeno número de veículos com placas traseiras amarelas.",
+      "fr": "Les Pays-Bas sont le seul autre pays d'Europe occidentale à avoir des plaques d'immatriculation jaunes à l'avant et à l'arrière. Le Royaume-Uni a des plaques arrière jaunes et des plaques avant blanches. La France a un petit nombre de véhicules avec des plaques arrière jaunes.",
+      "de": "Die Niederlande sind das einzige andere westeuropäische Land mit vorderen und hinteren gelben Nummernschildern. Das Vereinigte Königreich hat gelbe hintere und weiße vordere Nummernschilder. Frankreich hat eine kleine Anzahl von Fahrzeugen mit gelben hinteren Nummernschildern.",
+      "it": "I Paesi Bassi sono l'unico altro paese dell'Europa occidentale con targhe gialle sia anteriori che posteriori. Il Regno Unito ha targhe posteriori gialle e anteriori bianche. La Francia ha un numero limitato di veicoli con targhe posteriori gialle.",
+      "ru": "Нидерланды — единственная другая страна Западной Европы с передними и задними желтыми номерными знаками. В Великобритании задние номерные знаки желтые, а передние — белые. Во Франции имеется небольшое количество автомобилей с желтыми задними номерными знаками.",
+      "sv": "Nederländerna är det enda andra västeuropeiska landet med både gula registreringsskyltar fram och bak. Storbritannien har gula bakre skyltar och vita främre skyltar. Frankrike har ett litet antal fordon med gula bakre skyltar."
+    }
   },
   "d491bc6025dc1e4f": {
-    "es": "Eslovenia tiene el mismo estilo de bolardos. Serbia tiene bolardos de aspecto similar pero con un rectángulo rojo a un lado. Los bolardos austriacos también son similares, sin embargo, Austria tiene un rectángulo negro o de color rojo oscuro.",
-    "pt": "A Eslovênia tem o mesmo estilo de postes. A Sérvia tem postes de aparência semelhante, mas com um retângulo vermelho em um dos lados. Os postes austríacos também são semelhantes, no entanto, a Áustria tem um retângulo preto ou avermelhado escuro.",
-    "fr": "La Slovénie a le même style de bornes. La Serbie a des bornes d'apparence similaire mais avec un rectangle rouge sur un côté. Les bornes autrichiennes sont également similaires, mais l'Autriche a un rectangle noir ou rouge foncé.",
-    "de": "Slowenien hat den gleichen Stil von Pollern. Serbien hat ähnlich aussehende Poller, aber mit einem roten Rechteck weit an einer Seite. Österreichische Poller sind ebenfalls ähnlich, jedoch hat Österreich ein schwarzes oder dunkelrotes Rechteck.",
-    "it": "La Slovenia ha lo stesso stile di dissuasori. La Serbia ha dissuasori dall'aspetto simile ma con un rettangolo rosso su un lato. Anche i dissuasori austriaci sono simili, tuttavia l'Austria ha un rettangolo nero o rossastro scuro.",
-    "ru": "В Словении используются такие же столбики. В Сербии похожие столбики, но с красным прямоугольником сбоку. Австрийские столбики также похожи, однако в Австрии имеется черный или темно-красный прямоугольник.",
-    "sv": "Slovenien har samma typ av pollare. Serbien har liknande pollare men med en röd rektangel långt åt ena sidan. Österrikiska pollare är också lika, men Österrike har en svart eller mörkare rödaktig rektangel."
+    "es": "Esta es la vista frontal del bolardo montenegrino.",
+    "pt": "Esta é a vista frontal do balizador rodoviário montenegrino.",
+    "fr": "Voici la vue de face de la balise routière monténégrine.",
+    "de": "Dies ist die Vorderansicht des montenegrinischen Leitpfostens.",
+    "it": "Questa è la vista frontale del delineatore stradale montenegrino.",
+    "ru": "Это вид спереди на черногорский дорожный столбик.",
+    "sv": "Det här är en framifrånvy av den montenegrinska vägkantsstolpen.",
+    "note": {
+      "es": "Eslovenia tiene el mismo estilo de bolardos. Serbia tiene bolardos de aspecto similar pero con un rectángulo rojo a un lado. Los bolardos austriacos también son similares, sin embargo, Austria tiene un rectángulo negro o de color rojo oscuro.",
+      "pt": "A Eslovênia tem o mesmo estilo de postes. A Sérvia tem postes de aparência semelhante, mas com um retângulo vermelho em um dos lados. Os postes austríacos também são semelhantes, no entanto, a Áustria tem um retângulo preto ou avermelhado escuro.",
+      "fr": "La Slovénie a le même style de bornes. La Serbie a des bornes d'apparence similaire mais avec un rectangle rouge sur un côté. Les bornes autrichiennes sont également similaires, mais l'Autriche a un rectangle noir ou rouge foncé.",
+      "de": "Slowenien hat den gleichen Stil von Pollern. Serbien hat ähnlich aussehende Poller, aber mit einem roten Rechteck weit an einer Seite. Österreichische Poller sind ebenfalls ähnlich, jedoch hat Österreich ein schwarzes oder dunkelrotes Rechteck.",
+      "it": "La Slovenia ha lo stesso stile di dissuasori. La Serbia ha dissuasori dall'aspetto simile ma con un rettangolo rosso su un lato. Anche i dissuasori austriaci sono simili, tuttavia l'Austria ha un rettangolo nero o rossastro scuro.",
+      "ru": "В Словении используются такие же столбики. В Сербии похожие столбики, но с красным прямоугольником сбоку. Австрийские столбики также похожи, однако в Австрии имеется черный или темно-красный прямоугольник.",
+      "sv": "Slovenien har samma typ av pollare. Serbien har liknande pollare men med en röd rektangel långt åt ena sidan. Österrikiska pollare är också lika, men Österrike har en svart eller mörkare rödaktig rektangel."
+    }
   },
   "677a70b85f3273ee": {
     "es": "Las señales de dirección danesas suelen ser blancas con un borde metálico alrededor.",
@@ -2196,13 +2466,22 @@
     "sv": "Trafikljus i Uruguay är ofta monterade på stolpar med svarta/vita eller svarta/gula ränder."
   },
   "2336116105ac6100": {
-    "es": "Costa Rica y Guatemala también usan \"ALTO\". La mayor parte de Sudamérica usa \"PARE\".",
-    "pt": "Costa Rica e Guatemala também usam \"ALTO\". A maior parte da América do Sul usa \"PARE\".",
-    "fr": "Le Costa Rica et le Guatemala utilisent également \"ALTO\". La plupart des pays d'Amérique du Sud utilisent \"PARE\".",
-    "de": "Costa Rica und Guatemala verwenden ebenfalls \"ALTO\". Die meisten südamerikanischen Länder verwenden \"PARE\".",
-    "it": "Anche Costa Rica e Guatemala usano \"ALTO\". La maggior parte del Sud America usa \"PARE\".",
-    "ru": "В Коста-Рике и Гватемале также используется надпись \"ALTO\". В Южной Америке в основном используется надпись \"PARE\".",
-    "sv": "Costa Rica och Guatemala använder också \"ALTO\". De flesta i Sydamerika använder \"PARE\"."
+    "es": "Las señales mexicanas de alto llevan la palabra «ALTO».",
+    "pt": "As placas de parada mexicanas trazem a palavra \"ALTO\".",
+    "fr": "Les panneaux stop mexicains portent le mot « ALTO ».",
+    "de": "Mexikanische Stoppschilder tragen das Wort „ALTO“.",
+    "it": "I segnali di stop messicani riportano la parola «ALTO».",
+    "ru": "На мексиканских знаках «Стоп» написано «ALTO».",
+    "sv": "Mexikanska stoppskyltar har ordet ”ALTO”.",
+    "note": {
+      "es": "Costa Rica y Guatemala también usan \"ALTO\". La mayor parte de Sudamérica usa \"PARE\".",
+      "pt": "Costa Rica e Guatemala também usam \"ALTO\". A maior parte da América do Sul usa \"PARE\".",
+      "fr": "Le Costa Rica et le Guatemala utilisent également \"ALTO\". La plupart des pays d'Amérique du Sud utilisent \"PARE\".",
+      "de": "Costa Rica und Guatemala verwenden ebenfalls \"ALTO\". Die meisten südamerikanischen Länder verwenden \"PARE\".",
+      "it": "Anche Costa Rica e Guatemala usano \"ALTO\". La maggior parte del Sud America usa \"PARE\".",
+      "ru": "В Коста-Рике и Гватемале также используется надпись \"ALTO\". В Южной Америке в основном используется надпись \"PARE\".",
+      "sv": "Costa Rica och Guatemala använder också \"ALTO\". De flesta i Sydamerika använder \"PARE\"."
+    }
   },
   "db116c9a03b40f6c": {
     "es": "Brasil utiliza el idioma portugués. Para distinguirlo del español, ten en cuenta que incluye los símbolos 'Ç' y 'ã', que no se dan en español. Además, muchas palabras portuguesas terminan en 'ção'.",
@@ -2232,13 +2511,22 @@
     "sv": "I Colombia, särskilt på landsbygden, är dessa rudimentära trästaket vanliga. De är gjorda av oregelbundet formade trägrenar som är åtskilda och sammanfogade med tråd."
   },
   "7fc9e83bb1b4cdf8": {
-    "es": "Suecia y Finlandia usan señales azules/blancas, Dinamarca rojas/blancas. Las señales de Islandia son similares a las de Noruega.",
-    "pt": "Suécia e Finlândia usam placas azuis/brancas, Dinamarca vermelhas/brancas. As placas da Islândia são semelhantes às da Noruega.",
-    "fr": "La Suède et la Finlande utilisent des panneaux bleus/blancs, le Danemark rouge/blanc. Les panneaux de l'Islande sont similaires à ceux de la Norvège.",
-    "de": "Schweden und Finnland verwenden blau/weiße Schilder, Dänemark rot/weiß. Islands Schilder sind Norwegen ähnlich.",
-    "it": "Svezia e Finlandia usano segnali blu/bianchi, Danimarca rosso/bianchi. I segnali dell'Islanda sono simili a quelli della Norvegia.",
-    "ru": "В Швеции и Финляндии используются сине-белые знаки, в Дании — красно-белые. Знаки Исландии похожи на норвежские.",
-    "sv": "Sverige och Finland använder blå/vita skyltar, Danmark röd/vita. Islands skyltar liknar Norges."
+    "es": "Noruega utiliza señales direccionales amarillas.",
+    "pt": "A Noruega usa placas direcionais amarelas.",
+    "fr": "La Norvège utilise des panneaux directionnels jaunes.",
+    "de": "In Norwegen sind Wegweiser gelb.",
+    "it": "La Norvegia usa cartelli direzionali gialli.",
+    "ru": "В Норвегии указатели направления жёлтые.",
+    "sv": "I Norge är vägvisningsskyltarna gula.",
+    "note": {
+      "es": "Suecia y Finlandia usan señales azules/blancas, Dinamarca rojas/blancas. Las señales de Islandia son similares a las de Noruega.",
+      "pt": "Suécia e Finlândia usam placas azuis/brancas, Dinamarca vermelhas/brancas. As placas da Islândia são semelhantes às da Noruega.",
+      "fr": "La Suède et la Finlande utilisent des panneaux bleus/blancs, le Danemark rouge/blanc. Les panneaux de l'Islande sont similaires à ceux de la Norvège.",
+      "de": "Schweden und Finnland verwenden blau/weiße Schilder, Dänemark rot/weiß. Islands Schilder sind Norwegen ähnlich.",
+      "it": "Svezia e Finlandia usano segnali blu/bianchi, Danimarca rosso/bianchi. I segnali dell'Islanda sono simili a quelli della Norvegia.",
+      "ru": "В Швеции и Финляндии используются сине-белые знаки, в Дании — красно-белые. Знаки Исландии похожи на норвежские.",
+      "sv": "Sverige och Finland använder blå/vita skyltar, Danmark röd/vita. Islands skyltar liknar Norges."
+    }
   },
   "916620f27d38723b": {
     "es": "El tipo más común de poste de servicios públicos en Uruguay presenta tres bombillas orientadas hacia arriba que hacen que el poste se asemeje a un tridente.",
@@ -2259,13 +2547,22 @@
     "sv": "I Rumänien har den vanligaste typen av stadsinfartsskylt en gul sektion som visar en hastighetsbegränsning och en stadssilhuett, med en vit skylt under som visar ortnamnet. Den övre delen av skylten kan också vara vit eller helt saknas."
   },
   "264decd747d103d8": {
-    "es": "Las flechas direccionales de las ciudades italianas se parecen relativamente a estas flechas direccionales de las ciudades checas.",
-    "pt": "As setas direcionais italianas para cidades parecem relativamente semelhantes a estas setas direcionais de cidades da República Tcheca.",
-    "fr": "Les flèches directionnelles des villes italiennes ressemblent relativement aux flèches directionnelles des villes de Tchéquie.",
-    "de": "Italienische Ortspfeile sehen diesen tschechischen Ortspfeilen relativ ähnlich.",
-    "it": "Le frecce direzionali italiane assomigliano relativamente a queste frecce direzionali ceche.",
-    "ru": "Итальянские указатели населенных пунктов выглядят относительно похоже на эти чешские указатели населенных пунктов.",
-    "sv": "Italienska riktningspilar för städer ser relativt lika ut som dessa tjeckiska riktningspilar för städer."
+    "es": "En Chequia, unas distintivas señales azules con flechas blancas indican el camino hacia las localidades cercanas.",
+    "pt": "Na Chéquia, placas azuis características com setas brancas indicam o caminho para as cidades próximas.",
+    "fr": "En Tchéquie, des panneaux bleus distinctifs avec des flèches blanches indiquent la direction des villes voisines.",
+    "de": "In Tschechien weisen markante blaue Schilder mit weißen Pfeilen den Weg zu nahe gelegenen Orten.",
+    "it": "In Cechia, caratteristici cartelli blu con frecce bianche indicano la direzione delle località vicine.",
+    "ru": "В Чехии характерные синие указатели с белыми стрелками показывают направление к ближайшим городам.",
+    "sv": "I Tjeckien visar tydliga blå skyltar med vita pilar vägen till närliggande orter.",
+    "note": {
+      "es": "Las flechas direccionales de las ciudades italianas se parecen relativamente a estas flechas direccionales de las ciudades checas.",
+      "pt": "As setas direcionais italianas para cidades parecem relativamente semelhantes a estas setas direcionais de cidades da República Tcheca.",
+      "fr": "Les flèches directionnelles des villes italiennes ressemblent relativement aux flèches directionnelles des villes de Tchéquie.",
+      "de": "Italienische Ortspfeile sehen diesen tschechischen Ortspfeilen relativ ähnlich.",
+      "it": "Le frecce direzionali italiane assomigliano relativamente a queste frecce direzionali ceche.",
+      "ru": "Итальянские указатели населенных пунктов выглядят относительно похоже на эти чешские указатели населенных пунктов.",
+      "sv": "Italienska riktningspilar för städer ser relativt lika ut som dessa tjeckiska riktningspilar för städer."
+    }
   },
   "b10f0014cefa940c": {
     "es": "En Uruguay, las carreteras a menudo presentan líneas triples, que consisten en líneas amarillas dobles con guiones blancos en medio. Este diseño no se encuentra en ningún otro lugar de América.",
@@ -2286,13 +2583,22 @@
     "sv": "Typsnittet på albanska gatuskyltar är unikt djärvt med korta, rundade hörn."
   },
   "7bc5ddb824967f15": {
-    "es": "En Lituania son naranjas. En Estonia no se utilizan.",
-    "pt": "Na Lituânia são laranjas. Na Estônia não são usados.",
-    "fr": "En Lituanie, ils sont orange. En Estonie, ils ne sont pas utilisés.",
-    "de": "In Litauen sind sie orange. In Estland werden sie nicht verwendet.",
-    "it": "In Lituania sono arancioni. In Estonia non vengono utilizzati.",
-    "ru": "В Литве они оранжевые. В Эстонии они не используются.",
-    "sv": "I Litauen är de orange. I Estland används de inte."
+    "es": "En Letonia, los reflectores de las barreras de seguridad son blancos o rojos.",
+    "pt": "Na Letônia, os refletores das defensas metálicas são brancos ou vermelhos.",
+    "fr": "En Lettonie, les réflecteurs des glissières de sécurité sont blancs ou rouges.",
+    "de": "In Lettland sind die Reflektoren an Leitplanken weiß oder rot.",
+    "it": "In Lettonia, i catarifrangenti sui guardrail sono bianchi o rossi.",
+    "ru": "В Латвии отражатели на дорожных ограждениях белые или красные.",
+    "sv": "I Lettland är reflexerna på vägräckena vita eller röda.",
+    "note": {
+      "es": "En Lituania son naranjas. En Estonia no se utilizan.",
+      "pt": "Na Lituânia são laranjas. Na Estônia não são usados.",
+      "fr": "En Lituanie, ils sont orange. En Estonie, ils ne sont pas utilisés.",
+      "de": "In Litauen sind sie orange. In Estland werden sie nicht verwendet.",
+      "it": "In Lituania sono arancioni. In Estonia non vengono utilizzati.",
+      "ru": "В Литве они оранжевые. В Эстонии они не используются.",
+      "sv": "I Litauen är de orange. I Estland används de inte."
+    }
   },
   "c65cdacaa5aa3b71": {
     "es": "Chile a veces tiene líneas de carretera completamente amarillas. En Sudamérica, esto es exclusivo de Chile.",
@@ -2430,13 +2736,22 @@
     "sv": "Google-bilen i Uganda är en kantig vit SUV med fyrkantiga sidospeglar."
   },
   "ad46c900b81d3267": {
-    "es": "Lituania tiene bolardos en forma de cuña con reflectores rectangulares en ambos lados. Letonia tiene bolardos delgados y ligeramente curvos con los mismos reflectores que Estonia.",
-    "pt": "A Lituânia tem postes em forma de cunha com refletores retangulares em ambos os lados. A Letônia tem postes finos e ligeiramente curvos com os mesmos refletores da Estônia.",
-    "fr": "La Lituanie a des bornes en forme de coin avec des réflecteurs rectangulaires des deux côtés. La Lettonie a des bornes fines et légèrement incurvées avec les mêmes réflecteurs que l'Estonie.",
-    "de": "Litauen hat keilförmige Poller mit rechteckigen Reflektoren auf beiden Seiten. Lettland hat dünne, leicht gebogene Poller mit den gleichen Reflektoren wie Estland.",
-    "it": "La Lituania ha dissuasori a forma di cuneo con riflettori rettangolari su entrambi i lati. La Lettonia ha dissuasori sottili e leggermente curvi con gli stessi riflettori dell'Estonia.",
-    "ru": "В Литве столбики клиновидные с прямоугольными отражателями с обеих сторон. В Латвии тонкие, слегка изогнутые столбики с такими же отражателями, как в Эстонии.",
-    "sv": "Litauen har kilformade pollare med rektangulära reflexer på båda sidor. Lettland har tunna, lätt böjda pollare med samma reflexer som Estland."
+    "es": "Los bolardos de Estonia son cilíndricos, con un reflector rectangular delante y dos reflectores circulares detrás.",
+    "pt": "Os balizadores rodoviários da Estônia são cilíndricos, com um refletor retangular na frente e dois refletores circulares atrás.",
+    "fr": "Les balises routières estoniennes sont cylindriques, avec un réflecteur rectangulaire à l’avant et deux réflecteurs circulaires à l’arrière.",
+    "de": "Estnische Leitpfosten sind zylindrisch und haben vorne einen rechteckigen sowie hinten zwei runde Reflektoren.",
+    "it": "I delineatori stradali estoni sono cilindrici, con un catarifrangente rettangolare davanti e due catarifrangenti circolari dietro.",
+    "ru": "Эстонские дорожные столбики цилиндрические: спереди у них прямоугольный отражатель, а сзади — два круглых.",
+    "sv": "Estniska vägkantsstolpar är cylindriska, med en rektangulär reflex framtill och två runda reflexer baktill.",
+    "note": {
+      "es": "Lituania tiene bolardos en forma de cuña con reflectores rectangulares en ambos lados. Letonia tiene bolardos delgados y ligeramente curvos con los mismos reflectores que Estonia.",
+      "pt": "A Lituânia tem postes em forma de cunha com refletores retangulares em ambos os lados. A Letônia tem postes finos e ligeiramente curvos com os mesmos refletores da Estônia.",
+      "fr": "La Lituanie a des bornes en forme de coin avec des réflecteurs rectangulaires des deux côtés. La Lettonie a des bornes fines et légèrement incurvées avec les mêmes réflecteurs que l'Estonie.",
+      "de": "Litauen hat keilförmige Poller mit rechteckigen Reflektoren auf beiden Seiten. Lettland hat dünne, leicht gebogene Poller mit den gleichen Reflektoren wie Estland.",
+      "it": "La Lituania ha dissuasori a forma di cuneo con riflettori rettangolari su entrambi i lati. La Lettonia ha dissuasori sottili e leggermente curvi con gli stessi riflettori dell'Estonia.",
+      "ru": "В Литве столбики клиновидные с прямоугольными отражателями с обеих сторон. В Латвии тонкие, слегка изогнутые столбики с такими же отражателями, как в Эстонии.",
+      "sv": "Litauen har kilformade pollare med rektangulära reflexer på båda sidor. Lettland har tunna, lätt böjda pollare med samma reflexer som Estland."
+    }
   },
   "6f79bf9f4a5c841b": {
     "es": "La señalización de las autopistas de Botsuana son verdes con texto blanco y números de autopista amarillos. Botsuana utiliza la letra A para todas sus carreteras nacionales.",
@@ -2502,22 +2817,40 @@
     "sv": "Vägskyltar i Danmark är unika med sin vita bakgrund och röda text. Detta färgschema är en tydlig indikation på att man befinner sig i Danmark."
   },
   "edb7324b52b4e2db": {
-    "es": "Ocasionalmente también se pueden encontrar en Bolivia. Argentina también tiene otro patrón con barras horizontales alternas, que es exclusivo del país.",
-    "pt": "Eles também podem ser encontrados ocasionalmente na Bolívia. A Argentina também tem outro padrão com barras horizontais alternadas, que é exclusivo do país.",
-    "fr": "Ils peuvent également être trouvés occasionnellement en Bolivie. L'Argentine a également un autre motif avec des barres horizontales alternées, qui est unique au pays.",
-    "de": "Sie können gelegentlich auch in Bolivien gefunden werden. Argentinien hat auch ein anderes Muster mit abwechselnden horizontalen Balken, das für das Land einzigartig ist.",
-    "it": "Possono anche essere occasionalmente trovati in Bolivia. L'Argentina ha anche un altro schema con barre orizzontali alternate, che è unico per il paese.",
-    "ru": "Их также иногда можно встретить в Боливии. В Аргентине также есть другой тип с чередующимися горизонтальными полосами, который уникален для страны.",
-    "sv": "De kan också ibland hittas i andra sydafrikanska länder, men är vanligast i Lesotho. Argentina har också ett annat mönster med alternerande horisontella streck, vilket är unikt för landet."
+    "es": "Estos postes dobles de electricidad pueden ser una buena pista para identificar Argentina.",
+    "pt": "Esses postes duplos de eletricidade podem ser uma boa pista para identificar a Argentina.",
+    "fr": "Ces poteaux électriques jumelés peuvent être un bon indice pour reconnaître l’Argentine.",
+    "de": "Solche paarweise angeordneten Strommasten können ein guter Hinweis auf Argentinien sein.",
+    "it": "Questi pali elettrici accoppiati possono essere un buon indizio per riconoscere l’Argentina.",
+    "ru": "Такие сдвоенные электроопоры могут быть хорошей подсказкой в пользу Аргентины.",
+    "sv": "Sådana parvisa elstolpar kan vara en bra ledtråd till Argentina.",
+    "note": {
+      "es": "Ocasionalmente también se pueden encontrar en Bolivia. Argentina también tiene otro patrón con barras horizontales alternas, que es exclusivo del país.",
+      "pt": "Eles também podem ser encontrados ocasionalmente na Bolívia. A Argentina também tem outro padrão com barras horizontais alternadas, que é exclusivo do país.",
+      "fr": "Ils peuvent également être trouvés occasionnellement en Bolivie. L'Argentine a également un autre motif avec des barres horizontales alternées, qui est unique au pays.",
+      "de": "Sie können gelegentlich auch in Bolivien gefunden werden. Argentinien hat auch ein anderes Muster mit abwechselnden horizontalen Balken, das für das Land einzigartig ist.",
+      "it": "Possono anche essere occasionalmente trovati in Bolivia. L'Argentina ha anche un altro schema con barre orizzontali alternate, che è unico per il paese.",
+      "ru": "Их также иногда можно встретить в Боливии. В Аргентине также есть другой тип с чередующимися горизонтальными полосами, который уникален для страны.",
+      "sv": "De kan också ibland hittas i andra sydafrikanska länder, men är vanligast i Lesotho. Argentina har också ett annat mönster med alternerande horisontella streck, vilket är unikt för landet."
+    }
   },
   "acc4508eb5c3e502": {
-    "es": "En Lituania, los marcadores tienen forma de V, en dos lados, en un ángulo de 45 grados con respecto a la carretera. En Estonia, son perpendiculares a la carretera.",
-    "pt": "Na Lituânia, os marcadores são em forma de V de dois lados a 45 graus da estrada. Na Estônia, eles são perpendiculares à estrada.",
-    "fr": "En Lituanie, les marqueurs sont en forme de V à deux côtés à un angle de 45 degrés par rapport à la route. En Estonie, ils sont perpendiculaires à la route.",
-    "de": "In Litauen sind die Markierungen V-förmig, beidseitig in einem 45-Grad-Winkel zur Straße. In Estland sind sie senkrecht zur Straße.",
-    "it": "In Lituania, i marcatori sono a forma di V su due lati con un angolo di 45 gradi rispetto alla strada. In Estonia, sono perpendicolari alla strada.",
-    "ru": "В Литве маркеры имеют V-образную форму с двух сторон под углом 45 градусов к дороге. В Эстонии они перпендикулярны дороге.",
-    "sv": "I Litauen är markörerna V-formade på båda sidor i 45 graders vinkel mot vägen. I Estland är de vinkelräta mot vägen."
+    "es": "Los hitos kilométricos de Letonia están paralelos a la carretera.",
+    "pt": "Os marcos quilométricos da Letônia ficam paralelos à estrada.",
+    "fr": "En Lettonie, les bornes kilométriques sont parallèles à la route.",
+    "de": "Lettische Kilometer-Markierungen stehen parallel zur Straße.",
+    "it": "In Lettonia, i cippi chilometrici sono paralleli alla strada.",
+    "ru": "В Латвии километровые указатели расположены параллельно дороге.",
+    "sv": "Lettiska kilometermarkeringar står parallellt med vägen.",
+    "note": {
+      "es": "En Lituania, los marcadores tienen forma de V, en dos lados, en un ángulo de 45 grados con respecto a la carretera. En Estonia, son perpendiculares a la carretera.",
+      "pt": "Na Lituânia, os marcadores são em forma de V de dois lados a 45 graus da estrada. Na Estônia, eles são perpendiculares à estrada.",
+      "fr": "En Lituanie, les marqueurs sont en forme de V à deux côtés à un angle de 45 degrés par rapport à la route. En Estonie, ils sont perpendiculaires à la route.",
+      "de": "In Litauen sind die Markierungen V-förmig, beidseitig in einem 45-Grad-Winkel zur Straße. In Estland sind sie senkrecht zur Straße.",
+      "it": "In Lituania, i marcatori sono a forma di V su due lati con un angolo di 45 gradi rispetto alla strada. In Estonia, sono perpendicolari alla strada.",
+      "ru": "В Литве маркеры имеют V-образную форму с двух сторон под углом 45 градусов к дороге. В Эстонии они перпендикулярны дороге.",
+      "sv": "I Litauen är markörerna V-formade på båda sidor i 45 graders vinkel mot vägen. I Estland är de vinkelräta mot vägen."
+    }
   },
   "228a8f6754026b97": {
     "es": "Los bolardos mexicanos son típicamente blancos y con forma de cigarrillo, con una sección negra cerca de la base del bolardo y una sección amarilla en la parte trasera.",
@@ -2565,13 +2898,22 @@
     "sv": "Kambodjas vägmarkörer är vita med en röd toppsektion och visar avståndet till närmaste stad."
   },
   "6563d7345dc487f8": {
-    "es": "También se pueden encontrar en otros países sudafricanos, pero son más comunes en Lesoto.",
-    "pt": "Eles também podem ser encontrados nos outros países sul-africanos, mas são mais comuns no Lesoto.",
-    "fr": "Ils peuvent également être trouvés dans d'autres pays d'Afrique australe, mais sont plus courants au Lesotho.",
-    "de": "Sie können auch in den anderen südafrikanischen Ländern gefunden werden, sind aber am häufigsten in Lesotho.",
-    "it": "Possono anche essere trovati negli altri paesi del Sud Africa, ma sono più comuni in Lesotho.",
-    "ru": "Их также можно найти в других странах Южной Африки, но чаще всего в Лесото.",
-    "sv": "De kan också hittas i de andra sydafrikanska länderna, men är vanligast i Lesotho."
+    "es": "En Lesoto suelen verse estas tradicionales chozas redondas con techo de paja.",
+    "pt": "No Lesoto, é comum ver estas tradicionais cabanas redondas com telhado de palha.",
+    "fr": "Au Lesotho, on voit souvent ces huttes rondes traditionnelles aux toits de chaume.",
+    "de": "In Lesotho sieht man häufig diese traditionellen Rundhütten mit Strohdächern.",
+    "it": "In Lesotho si vedono spesso queste tradizionali capanne rotonde con il tetto di paglia.",
+    "ru": "В Лесото часто встречаются такие традиционные круглые хижины с соломенными крышами.",
+    "sv": "I Lesotho ser man ofta de här traditionella runda hyddorna med halmtak.",
+    "note": {
+      "es": "También se pueden encontrar en otros países sudafricanos, pero son más comunes en Lesoto.",
+      "pt": "Eles também podem ser encontrados nos outros países sul-africanos, mas são mais comuns no Lesoto.",
+      "fr": "Ils peuvent également être trouvés dans d'autres pays d'Afrique australe, mais sont plus courants au Lesotho.",
+      "de": "Sie können auch in den anderen südafrikanischen Ländern gefunden werden, sind aber am häufigsten in Lesotho.",
+      "it": "Possono anche essere trovati negli altri paesi del Sud Africa, ma sono più comuni in Lesotho.",
+      "ru": "Их также можно найти в других странах Южной Африки, но чаще всего в Лесото.",
+      "sv": "De kan också hittas i de andra sydafrikanska länderna, men är vanligast i Lesotho."
+    }
   },
   "9cb529b9eabeca28": {
     "es": "Las señales de carretera checas suelen tener bordes separados del borde por una franja que coincide con el color de fondo de la señal. En contraste, las señales eslovacas presentan con más frecuencia bordes directamente en el borde de la señal.",
@@ -2718,13 +3060,22 @@
     "sv": "Kommersiella fordon i Ghana har gula registreringsskyltar och är ganska vanliga."
   },
   "9601e76ff3b3e924": {
-    "es": "La mayoría de los otros países sudamericanos usan chevrones negros sobre amarillo.",
-    "pt": "A maioria dos outros países sul-americanos usa chevrons pretos sobre amarelos.",
-    "fr": "La plupart des autres pays sud-américains utilisent des chevrons noirs sur jaune.",
-    "de": "Die meisten anderen südamerikanischen Länder verwenden schwarz-gelbe Pfeile.",
-    "it": "La maggior parte degli altri paesi sudamericani utilizza chevron neri su giallo.",
-    "ru": "Большинство других стран Южной Америки используют черно-желтые шевроны.",
-    "sv": "De flesta andra sydamerikanska länder använder svartvita chevrons."
+    "es": "Brasil utiliza chevrones amarillos sobre fondo negro.",
+    "pt": "O Brasil usa chevrones amarelos sobre fundo preto.",
+    "fr": "Le Brésil utilise des chevrons jaunes sur fond noir.",
+    "de": "Brasilien verwendet gelbe Winkel auf schwarzem Grund.",
+    "it": "Il Brasile usa chevron gialli su fondo nero.",
+    "ru": "В Бразилии используют жёлтые шевроны на чёрном фоне.",
+    "sv": "Brasilien använder gula vinkelmarkeringar på svart bakgrund.",
+    "note": {
+      "es": "La mayoría de los otros países sudamericanos usan chevrones negros sobre amarillo.",
+      "pt": "A maioria dos outros países sul-americanos usa chevrons pretos sobre amarelos.",
+      "fr": "La plupart des autres pays sud-américains utilisent des chevrons noirs sur jaune.",
+      "de": "Die meisten anderen südamerikanischen Länder verwenden schwarz-gelbe Pfeile.",
+      "it": "La maggior parte degli altri paesi sudamericani utilizza chevron neri su giallo.",
+      "ru": "Большинство других стран Южной Америки используют черно-желтые шевроны.",
+      "sv": "De flesta andra sydamerikanska länder använder svartvita chevrons."
+    }
   },
   "e2bb9ccd4c24589b": {
     "es": "Las señales de tráfico de Singapur son distintivas, con un color verde pálido, espaciadas y con fuente en negrita.",
@@ -2772,13 +3123,22 @@
     "sv": "På Färöarna ser du Google-bilen med enkla grå takräcken och sidospeglar."
   },
   "62461d3034f5dfbc": {
-    "es": "Letonia tiene reflectores rojos y blancos, mientras que Estonia no tiene reflectores en sus barreras de seguridad en absoluto.",
-    "pt": "A Letônia tem refletores vermelhos e brancos, enquanto a Estônia não tem refletores em suas guard-rails.",
-    "fr": "La Lettonie a des réflecteurs rouges et blancs, tandis que l'Estonie n'a pas de réflecteurs sur ses glissières de sécurité.",
-    "de": "Lettland hat rote und weiße Reflektoren, während Estland überhaupt keine Reflektoren an seinen Leitplanken hat.",
-    "it": "La Lettonia ha catarifrangenti rossi e bianchi, mentre l'Estonia non ha affatto catarifrangenti sulle sue barriere stradali.",
-    "ru": "В Латвии есть красно-белые отражатели, в то время как в Эстонии отражателей на ограждениях нет совсем.",
-    "sv": "Lettland har röda och vita reflexer, medan Estland inte har några reflexer på sina vägräcken alls."
+    "es": "Los reflectores de las barreras de seguridad de Lituania son naranjas, aunque no están en todas las barreras.",
+    "pt": "Os refletores das defensas metálicas da Lituânia são laranja, mas não estão presentes em todas elas.",
+    "fr": "En Lituanie, les réflecteurs des glissières de sécurité sont orange, mais toutes les glissières n’en sont pas équipées.",
+    "de": "Die Leitplankenreflektoren in Litauen sind orange, kommen aber nicht an jeder Leitplanke vor.",
+    "it": "In Lituania, i catarifrangenti sui guardrail sono arancioni, ma non sono presenti su tutti i guardrail.",
+    "ru": "В Литве отражатели на дорожных ограждениях оранжевые, но они есть не на каждом ограждении.",
+    "sv": "I Litauen är reflexerna på vägräckena orange, men de finns inte på alla vägräcken.",
+    "note": {
+      "es": "Letonia tiene reflectores rojos y blancos, mientras que Estonia no tiene reflectores en sus barreras de seguridad en absoluto.",
+      "pt": "A Letônia tem refletores vermelhos e brancos, enquanto a Estônia não tem refletores em suas guard-rails.",
+      "fr": "La Lettonie a des réflecteurs rouges et blancs, tandis que l'Estonie n'a pas de réflecteurs sur ses glissières de sécurité.",
+      "de": "Lettland hat rote und weiße Reflektoren, während Estland überhaupt keine Reflektoren an seinen Leitplanken hat.",
+      "it": "La Lettonia ha catarifrangenti rossi e bianchi, mentre l'Estonia non ha affatto catarifrangenti sulle sue barriere stradali.",
+      "ru": "В Латвии есть красно-белые отражатели, в то время как в Эстонии отражателей на ограждениях нет совсем.",
+      "sv": "Lettland har röda och vita reflexer, medan Estland inte har några reflexer på sina vägräcken alls."
+    }
   },
   "3e34f6873735d637": {
     "es": "Montenegro también tiene muchas señales marrones con letras blancas.",
@@ -2799,13 +3159,22 @@
     "sv": "Dessa färgglada minibussar är vanliga på Filippinerna."
   },
   "c8cf34e3f98cce65": {
-    "es": "Los chevrones en Australia tienen el mismo color pero no presentan el contorno negro.",
-    "pt": "Os chevrons na Austrália têm a mesma cor, mas não apresentam o contorno preto.",
-    "fr": "Les chevrons en Australie ont la même couleur mais ne présentent pas de contour noir.",
-    "de": "Pfeile in Australien haben die gleiche Farbe, aber keine schwarze Umrandung.",
-    "it": "Gli chevron in Australia hanno lo stesso colore ma non presentano il contorno nero.",
-    "ru": "Шевроны в Австралии имеют тот же цвет, но без черной обводки.",
-    "sv": "Chevrons i Australien har samma färg men saknar den svarta konturen."
+    "es": "Los chevrones de Nueva Zelanda son negros sobre fondo amarillo y llevan un contorno negro.",
+    "pt": "Os chevrones da Nova Zelândia são pretos sobre fundo amarelo e têm um contorno preto.",
+    "fr": "En Nouvelle-Zélande, les chevrons sont noirs sur fond jaune et bordés de noir.",
+    "de": "Neuseeländische Chevron-Schilder zeigen schwarze Winkel auf gelbem Grund und haben einen schwarzen Rand.",
+    "it": "In Nuova Zelanda, i chevron sono neri su fondo giallo e hanno un bordo nero.",
+    "ru": "В Новой Зеландии шевроны чёрные на жёлтом фоне и с чёрной каймой.",
+    "sv": "Nya Zeelands vinkelmarkeringar är svarta på gul bakgrund och har en svart kant.",
+    "note": {
+      "es": "Los chevrones en Australia tienen el mismo color pero no presentan el contorno negro.",
+      "pt": "Os chevrons na Austrália têm a mesma cor, mas não apresentam o contorno preto.",
+      "fr": "Les chevrons en Australie ont la même couleur mais ne présentent pas de contour noir.",
+      "de": "Pfeile in Australien haben die gleiche Farbe, aber keine schwarze Umrandung.",
+      "it": "Gli chevron in Australia hanno lo stesso colore ma non presentano il contorno nero.",
+      "ru": "Шевроны в Австралии имеют тот же цвет, но без черной обводки.",
+      "sv": "Chevrons i Australien har samma färg men saknar den svarta konturen."
+    }
   },
   "b1ffeedf2e6391ba": {
     "es": "En Lesoto, puedes encontrar mucha gente usando mantas, la tradicional \"manta Basotho\".",
@@ -2835,22 +3204,31 @@
     "sv": "Betongstolpar med stora hål som sträcker sig ner till marken finns ofta i Ungern. Geoguessr-communityt kallar dem \"holey poles\"."
   },
   "a2296a24368d1443": {
-    "es": "Los postes de servicios públicos de hormigón con grandes agujeros que se extienden hasta el suelo se encuentran a menudo en Rumania. La comunidad de Geoguessr los llama \"holey poles\".",
-    "pt": "Postes de utilidade pública de concreto com grandes buracos que se estendem até o chão são frequentemente encontrados na Romênia. A comunidade Geoguessr os chama de \"holey poles\".",
-    "fr": "Des poteaux électriques en béton avec de grands trous descendant jusqu'au sol se trouvent souvent en Roumanie. La communauté Geoguessr les appelle \"holey poles\".",
-    "de": "Betonmasten mit großen Löchern, die bis zum Boden reichen, findet man oft in Rumänien. Die Geoguessr-Community nennt sie „holey poles“.",
-    "it": "I pali in cemento con grandi fori che si estendono fino a terra si trovano spesso in Romania. La comunità di Geoguessr li chiama \"holey poles\".",
-    "ru": "Бетонные опоры ЛЭП с большими отверстиями, идущими до земли, часто встречаются в Румынии. Сообщество Geoguessr называет их «дырявыми столбами».",
-    "sv": "Betongstolpar med stora hål som sträcker sig ner till marken finns ofta i Rumänien. Geoguessr-communityt kallar dem \"holey poles\"."
+    "es": "En Hungría y Rumanía hay postes de hormigón con grandes huecos rectangulares. Este ejemplo es de Hungría; el poste por sí solo no permite distinguir entre los dos países.",
+    "pt": "Postes de concreto com grandes orifícios retangulares aparecem tanto na Hungria quanto na Romênia. Este exemplo é da Hungria; o poste, por si só, não permite distinguir os dois países.",
+    "fr": "On trouve des poteaux en béton percés de grandes ouvertures rectangulaires en Hongrie comme en Roumanie. Cet exemple se trouve en Hongrie ; le poteau seul ne permet pas de distinguer les deux pays.",
+    "de": "Betonmasten mit großen rechteckigen Öffnungen kommen sowohl in Ungarn als auch in Rumänien vor. Dieses Beispiel stammt aus Ungarn; der Mast allein unterscheidet die beiden Länder nicht.",
+    "it": "Pali di cemento con grandi fori rettangolari si trovano sia in Ungheria sia in Romania. Questo esempio è in Ungheria; il palo da solo non permette di distinguere i due paesi.",
+    "ru": "Бетонные опоры с большими прямоугольными отверстиями встречаются и в Венгрии, и в Румынии. Этот пример — из Венгрии; по одной только опоре эти две страны не различить.",
+    "sv": "Betongstolpar med stora rektangulära hål finns både i Ungern och Rumänien. Det här exemplet är från Ungern; stolpen ensam kan inte skilja länderna åt."
   },
   "ee7d948d1ad57a8d": {
-    "es": "Malasia, en contraste, nunca tiene marcas viales amarillas. Tailandia, similar a Indonesia, puede tener marcas viales blancas o amarillas.",
-    "pt": "A Malásia, em contraste, nunca tem marcações de estrada amarelas. A Tailândia, semelhante à Indonésia, pode ter marcações de estrada brancas ou amarelas.",
-    "fr": "La Malaisie, en revanche, n'a jamais de marquages routiers jaunes. La Thaïlande, similaire à l'Indonésie, peut avoir des marquages routiers blancs ou jaunes.",
-    "de": "Malaysia hat im Gegensatz dazu niemals gelbe Fahrbahnmarkierungen. Thailand kann, ähnlich wie Indonesien, weiße oder gelbe Fahrbahnmarkierungen haben.",
-    "it": "La Malesia, al contrario, non ha mai segnaletica stradale gialla. La Thailandia, simile all'Indonesia, può avere segnaletica stradale bianca o gialla.",
-    "ru": "Малайзия, в отличие от других стран, никогда не использует желтую дорожную разметку. Таиланд, как и Индонезия, может использовать белую или желтую дорожную разметку.",
-    "sv": "Malaysia har, till skillnad från, aldrig gula vägmarkeringar. Thailand, liksom Indonesien, kan ha vita eller gula vägmarkeringar."
+    "es": "En Indonesia, las líneas del borde de la calzada siempre son blancas. La línea central puede ser blanca o amarilla.",
+    "pt": "Na Indonésia, as linhas laterais da pista são sempre brancas. A linha central pode ser branca ou amarela.",
+    "fr": "En Indonésie, les lignes de rive sont toujours blanches. La ligne centrale est blanche ou jaune.",
+    "de": "In Indonesien sind die Fahrbahnrandmarkierungen immer weiß. Die Mittellinie ist weiß oder gelb.",
+    "it": "In Indonesia, le linee di margine della carreggiata sono sempre bianche. La linea centrale è bianca o gialla.",
+    "ru": "В Индонезии краевые линии дороги всегда белые. Центральная линия бывает белой или жёлтой.",
+    "sv": "I Indonesien är kantlinjerna alltid vita. Mittlinjen är vit eller gul.",
+    "note": {
+      "es": "Malasia, en contraste, nunca tiene marcas viales amarillas. Tailandia, similar a Indonesia, puede tener marcas viales blancas o amarillas.",
+      "pt": "A Malásia, em contraste, nunca tem marcações de estrada amarelas. A Tailândia, semelhante à Indonésia, pode ter marcações de estrada brancas ou amarelas.",
+      "fr": "La Malaisie, en revanche, n'a jamais de marquages routiers jaunes. La Thaïlande, similaire à l'Indonésie, peut avoir des marquages routiers blancs ou jaunes.",
+      "de": "Malaysia hat im Gegensatz dazu niemals gelbe Fahrbahnmarkierungen. Thailand kann, ähnlich wie Indonesien, weiße oder gelbe Fahrbahnmarkierungen haben.",
+      "it": "La Malesia, al contrario, non ha mai segnaletica stradale gialla. La Thailandia, simile all'Indonesia, può avere segnaletica stradale bianca o gialla.",
+      "ru": "Малайзия, в отличие от других стран, никогда не использует желтую дорожную разметку. Таиланд, как и Индонезия, может использовать белую или желтую дорожную разметку.",
+      "sv": "Malaysia har, till skillnad från, aldrig gula vägmarkeringar. Thailand, liksom Indonesien, kan ha vita eller gula vägmarkeringar."
+    }
   },
   "960c70f3f5f387d8": {
     "es": "Tailandia se caracteriza por su ambiente tropical, con palmeras, vegetación verde espesa y tierra visible común en todo el país.",
@@ -2997,13 +3375,22 @@
     "sv": "Svenska chevrons använder gula och blå färger, vilket gör dem distinkta i Norden."
   },
   "234430a76c3343d2": {
-    "es": "En Lituania y Estonia tienen 4 ventanas.",
-    "pt": "Na Lituânia e na Estônia, eles têm 4 janelas.",
-    "fr": "En Lituanie et en Estonie, ils ont 4 fenêtres.",
-    "de": "In Litauen und Estland haben sie 4 Fenster.",
-    "it": "In Lituania ed Estonia hanno 4 finestre.",
-    "ru": "В Литве и Эстонии 4 окна.",
-    "sv": "I Litauen och Estland har de 4 fönster."
+    "es": "Las señales de parada de autobús de Letonia muestran un autobús con 5 ventanas.",
+    "pt": "As placas de ponto de ônibus da Letônia mostram um ônibus com 5 janelas.",
+    "fr": "Les panneaux d’arrêt de bus lettons représentent un bus avec 5 fenêtres.",
+    "de": "Auf lettischen Bushaltestellenschildern hat der abgebildete Bus 5 Fenster.",
+    "it": "I cartelli delle fermate degli autobus in Lettonia raffigurano un autobus con 5 finestrini.",
+    "ru": "На латвийских знаках автобусной остановки изображён автобус с 5 окнами.",
+    "sv": "På lettiska busshållplatsskyltar har den avbildade bussen 5 fönster.",
+    "note": {
+      "es": "En Lituania y Estonia tienen 4 ventanas.",
+      "pt": "Na Lituânia e na Estônia, eles têm 4 janelas.",
+      "fr": "En Lituanie et en Estonie, ils ont 4 fenêtres.",
+      "de": "In Litauen und Estland haben sie 4 Fenster.",
+      "it": "In Lituania ed Estonia hanno 4 finestre.",
+      "ru": "В Литве и Эстонии 4 окна.",
+      "sv": "I Litauen och Estland har de 4 fönster."
+    }
   },
   "4b36207858977978": {
     "es": "En Perú, los postes de señales están distintivamente rayados en blanco y negro, lo que los convierte en uno de los mejores indicadores visuales para reconocer el país.",
@@ -3060,13 +3447,22 @@
     "sv": "Argentinska vägar har dessa små svartvita milstolpar på små stolpar. De visar alltid kilometern på vägen, och ibland \"RN\" (Argentinska riksvägar) eller \"RP: (Provinsväg)."
   },
   "774dd46f07d05e77": {
-    "es": "A veces los postes están pintados en otros colores como blanco y verde.",
-    "pt": "Às vezes, os postes são pintados em outras cores, como branco e verde.",
-    "fr": "Parfois, les poteaux sont peints dans d'autres couleurs comme le blanc et le vert.",
-    "de": "Manchmal sind Pfosten in anderen Farben wie weiß und grün gestrichen.",
-    "it": "A volte i pali sono dipinti in altri colori come bianco e verde.",
-    "ru": "Иногда столбы окрашены в другие цвета, например, в белый и зеленый.",
-    "sv": "Ibland är stolpar målade i andra färger som vitt och grönt."
+    "es": "Los postes de servicios públicos de Colombia suelen tener franjas amarillas y negras.",
+    "pt": "Os postes de eletricidade da Colômbia costumam ter faixas amarelas e pretas.",
+    "fr": "En Colombie, les poteaux électriques portent souvent des bandes jaunes et noires.",
+    "de": "Strommasten in Kolumbien haben häufig gelbe und schwarze Streifen.",
+    "it": "In Colombia, i pali della luce hanno spesso strisce gialle e nere.",
+    "ru": "В Колумбии на опорах линий электропередачи часто бывают жёлтые и чёрные полосы.",
+    "sv": "Elstolpar i Colombia har ofta gula och svarta ränder.",
+    "note": {
+      "es": "A veces los postes están pintados en otros colores como blanco y verde.",
+      "pt": "Às vezes, os postes são pintados em outras cores, como branco e verde.",
+      "fr": "Parfois, les poteaux sont peints dans d'autres couleurs comme le blanc et le vert.",
+      "de": "Manchmal sind Pfosten in anderen Farben wie weiß und grün gestrichen.",
+      "it": "A volte i pali sono dipinti in altri colori come bianco e verde.",
+      "ru": "Иногда столбы окрашены в другие цвета, например, в белый и зеленый.",
+      "sv": "Ibland är stolpar målade i andra färger som vitt och grönt."
+    }
   },
   "9e7df1326548d2b0": {
     "es": "Argentina usa principalmente chevrones rojos sobre blanco. Esto es único en Sudamérica.",

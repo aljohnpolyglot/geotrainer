@@ -125,6 +125,16 @@ test('cloud merge keeps the newest schedule and every grading event across devic
   assert.deepEqual(mergeBackups(cloud, local).data.reviews, [{ ...cloudReview, gradingHistory: [{ grade: 'hard', at: 10 }, { grade: 'good', at: 20 }], reviewCount: 2 }]);
 });
 
+test('manual sync keeps a later due-date balance until a newer review replaces it', () => {
+  const cloud = backup('cloud', 10); const local = backup('local', 20);
+  const base = { id: 'pano', panoId: 'pano', intervalDays: 14, lastReviewedAt: 100, gradingHistory: [{ grade: 'good', at: 100 }], reviewCount: 1, lapseCount: 0 };
+  cloud.data.reviews.push({ ...base, dueAt: 500 });
+  local.data.reviews.push({ ...base, dueAt: 600, dueAdjustedAt: 200 });
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { dueAt: number }).dueAt, 600);
+  cloud.data.reviews[0] = { ...base, dueAt: 800, lastReviewedAt: 300, gradingHistory: [...base.gradingHistory, { grade: 'good', at: 300 }] };
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { dueAt: number }).dueAt, 800);
+});
+
 test('manual device merge imports new cards and a review completed elsewhere', () => {
   const phone = backup('phone-card', 10); const pc = backup('pc-card', 20);
   phone.data.reviews.push({ id: 'shared', panoId: 'shared', dueAt: 500, intervalDays: 5, lastReviewedAt: 400, gradingHistory: [{ grade: 'good', at: 400 }], reviewCount: 2, lapseCount: 0 });

@@ -17,6 +17,7 @@ import { clearWorkspaceDraft, readWorkspaceDraft, writeWorkspaceDraft } from '..
 import { notebookClueLinks, visibleNotebookNotes } from './trainerHubUtils';
 import { captureStreetView360 } from '../services/streetViewSnapshot';
 import { clueImageFingerprint } from '../data/clueDedup';
+import { MetaAttribution } from './MetaAttribution';
 
 export type MetaAid = { id: string; panoId?: string; imageUrl?: string; text?: string; note?: string; section?: string; mapUrl?: string; temporallySensitive?: boolean };
 const NOTE_CATEGORIES = ['Architecture', 'Bollards', 'Camera generations', 'Companies', 'Countries', 'Currencies', 'Domains', 'Driving side', 'Flags', 'Follow cars', 'Google vehicles', 'House numbers', 'License plates', 'Road lines', 'Nature', 'Phone numbers', 'Post boxes', 'Rifts', 'Scenery', 'Sidewalks', 'Signs', 'Snow', 'Street suffixes', 'Traffic lights', 'Utility poles', 'Years'] as const;
@@ -114,7 +115,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     {open === 'meta' && lesson && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Meta')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Lightbulb size={17} />{t('Meta')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
       {lesson.imageUrl && (imageFailed ? <p className="learning-aid-safe">{t('Reference image unavailable')}</p> : <img src={lesson.imageUrl} alt={t('Meta reference clue')} onError={() => setImageFailed(true)} />)}
-      <div className="learning-aid-copy">{lesson.section && <strong>{lesson.section}</strong>}{lesson.text && <CoachRichText text={lesson.text} />}{lesson.note && <div className="meta-comparison"><CoachRichText text={lesson.note} /></div>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}{lesson.mapUrl && showMetaMapFallback && <><a href={lesson.mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('Open clue in Google Maps')}</a><small>{t('Source')}: <a href="https://www.plonkit.net/guide" target="_blank" rel="noopener noreferrer">Plonk It</a></small></>}</div>
+      <div className="learning-aid-copy">{lesson.section && <strong>{lesson.section}</strong>}{lesson.text && <CoachRichText text={lesson.text} />}{lesson.note && <div className="meta-comparison"><CoachRichText text={lesson.note} /></div>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}{lesson.mapUrl && showMetaMapFallback && <a href={lesson.mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('Open clue in Google Maps')}</a>}<MetaAttribution countryCourse={!!lesson.mapUrl} /></div>
     </aside>}
     {open === 'clues' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Show Clues')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Images size={17} />{t('Show Clues')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>

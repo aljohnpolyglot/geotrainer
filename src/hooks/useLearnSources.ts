@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AppMode, LearnSource, LocationResult, MetaLesson } from '../types';
-import { META_LESSONS, metaLessonById, selectMetaLesson } from '../data/metaLessons';
+import { META_LESSONS, beginnerHistoryFromVisits, metaLessonById, selectMetaLesson } from '../data/metaLessons';
 import { loadMetaCountryCourse, type MetaCountryCourseTip } from '../data/metaCountryCourses';
 import { loadMetaCountryViews, viewFromGoogleMapsUrl } from '../data/metaCountryViews';
 import { markMetaSeen, readMetaSeen } from '../data/metaProgress';
@@ -93,7 +93,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
     const request = ++requestRef.current;
     setIsLoading(true); setErrorMessage(null);
     try {
-      const seen = await readMetaSeen();
+      const [seen, visits] = await Promise.all([readMetaSeen(), trainerDb.studyVisits()]);
       if (request !== requestRef.current) return;
       setMetaSeen(seen); setMetaCourseId(courseId);
       void trainerDb.setting<boolean>('preference.metaAdviceDismissed').then((dismissed) => setMetaAdviceOpen(dismissed !== true));
@@ -104,7 +104,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
         while (lesson) {
           const opened = await openMetaLesson(lesson);
           if (opened === undefined) return;
-          if (opened) { setBeginnerHistory([lesson.id]); return; }
+          if (opened) { const history = beginnerHistoryFromVisits(visits, lesson.id); setBeginnerHistory(history); setMetaIndex(history.length - 1); return; }
           excluded.add(lesson.id);
           lesson = selectMetaLesson(undefined, excluded);
         }
@@ -160,10 +160,15 @@ export function useLearnSources(ctx: LearnSourceContext) {
 
   const previousMeta = useCallback(async () => {
     if (metaIndex <= 0) return;
-    const previous = metaIndex - 1; setMetaIndex(previous);
-    if (metaCourseId === 'beginner') { const lesson = metaLessonById(beginnerHistory[previous]); if (lesson) await openMetaLesson(lesson); }
-    else await openAvailableCountryTip(countryTips, previous, metaCourseId, -1);
-  }, [beginnerHistory, countryTips, metaCourseId, metaIndex, openAvailableCountryTip, openMetaLesson]);
+    if (metaCourseId !== 'beginner') { await openAvailableCountryTip(countryTips, metaIndex - 1, metaCourseId, -1); return; }
+    const previous = await openAvailableMetaTip<string>(beginnerHistory, metaIndex - 1, async (id) => {
+      const lesson = metaLessonById(id);
+      return lesson ? openMetaLesson(lesson) : false;
+    }, -1);
+    if (previous === undefined) return;
+    if (previous !== null) { setMetaIndex(previous); return; }
+    setActiveMetaLesson(undefined); setCurrentLocation(null); setStudySetupOpen(true);
+  }, [beginnerHistory, countryTips, metaCourseId, metaIndex, openAvailableCountryTip, openMetaLesson, setCurrentLocation, setStudySetupOpen]);
 
   useEffect(() => {
     if (metaCourseId === 'beginner' || !activeCountryTip) return;
@@ -213,8 +218,9 @@ export function useLearnSources(ctx: LearnSourceContext) {
     setLearnSource(restored); setMetaCourseId(courseId);
     setActiveMetaLesson(restored === 'meta' ? metaLessonById(metaLessonId) : undefined);
     setActiveCountryTip(undefined);
-    setBeginnerHistory(restored === 'meta' && courseId === 'beginner' && metaLessonId ? [metaLessonId] : []);
+    setBeginnerHistory([]);
     setMetaIndex(0);
+    if (restored === 'meta' && courseId === 'beginner' && metaLessonId) void trainerDb.studyVisits().then((visits) => { if (request !== requestRef.current) return; const history = beginnerHistoryFromVisits(visits, metaLessonId); setBeginnerHistory(history); setMetaIndex(history.length - 1); });
     if (restored === 'meta' && courseId !== 'beginner' && metaLessonId) void loadMetaCountryCourse(courseId, ui).then((tips) => { if (request !== requestRef.current) return; const position = tips.findIndex((tip) => tip.id === metaLessonId); if (position >= 0) { const tip = tips[position]; setCountryTips(tips); setActiveCountryTip(tip); setMetaIndex(position); if (location) setActiveMetaLesson({ id: tip.id, panoId: location.panoId, lat: location.lat, lng: location.lng, heading: location.heading ?? 0, pitch: location.pitch ?? 0, text: tip.text, note: tip.note, imageUrl: tip.image || '', section: tip.section, mapUrl: tip.mapUrl }); } }).catch(() => { if (request === requestRef.current) setErrorMessage(t('Could not load Meta course.')); });
     void readMetaSeen().then(setMetaSeen);
   }, [setErrorMessage, t, ui]);

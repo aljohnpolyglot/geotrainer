@@ -11,7 +11,7 @@ import { sortRows, type SortDirection } from '../analytics/tableSorting';
 import { trainerDb } from '../data/trainerDb';
 import type { StatisticsSection } from './trainerHubTypes';
 import { CollectionOptions } from './CollectionOptions';
-type Props = { attempts: Attempt[]; visits: StudyVisit[]; locations: TrainerLocation[]; reviews: ReviewRecord[]; readyDueCount: number; sessions: TrainingSession[]; collections: Collection[]; onTrainCountries: (codes: string[], name: string) => void; initialSection?: StatisticsSection; onSectionChange?: (section: StatisticsSection) => void; locationsPanel?: ReactNode; historyPanel?: ReactNode };
+type Props = { attempts: Attempt[]; visits: StudyVisit[]; locations: TrainerLocation[]; reviews: ReviewRecord[]; readyDueCount: number; sessions: TrainingSession[]; collections: Collection[]; onTrainCountries: (codes: string[], name: string) => void; onRebalanced: () => Promise<void>; initialSection?: StatisticsSection; onSectionChange?: (section: StatisticsSection) => void; locationsPanel?: ReactNode; historyPanel?: ReactNode };
 const percent = (value: number | null) => (value === null ? "—" : `${Math.round(value * 100)}%`);
 const number = (value: number | null, locale: SupportedLanguage, digits = 0) => (value === null ? "—" : value.toLocaleString(locale, { maximumFractionDigits: digits }));
 const duration = (seconds: number) => (seconds < 3600 ? `${Math.round(seconds / 60)}m` : `${Math.floor(seconds / 3600)}h ${Math.round((seconds % 3600) / 60)}m`);
@@ -102,7 +102,7 @@ function DataTable({ rows, kind }: { rows: ReturnType<typeof breakdown>; kind: '
     </div>
   );
 }
-export function StatisticsPanel({ attempts, visits, locations, reviews, readyDueCount, sessions, collections, onTrainCountries, initialSection = "overview", onSectionChange, locationsPanel, historyPanel }: Props) {
+export function StatisticsPanel({ attempts, visits, locations, reviews, readyDueCount, sessions, collections, onTrainCountries, onRebalanced, initialSection = "overview", onSectionChange, locationsPanel, historyPanel }: Props) {
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
   const [section, setSection] = useState<StatisticsSection>(initialSection);
@@ -273,7 +273,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
         </>
       )}
       {section === "progress" && <StatisticsProgress attempts={ranged} sessions={sessions} visits={visits} reviews={reviews} collections={collections} locations={locations} includeAssisted={includeAiAssisted} />}
-      {section === "reviews" && <><ReviewStatistics attempts={attempts} reviews={reviews} /><AnkiStatistics attempts={attempts} reviews={reviews} visits={visits} locations={locations} readyDueCount={readyDueCount} /></>}
+      {section === "reviews" && <><ReviewStatistics attempts={attempts} reviews={reviews} /><AnkiStatistics attempts={attempts} reviews={reviews} visits={visits} locations={locations} readyDueCount={readyDueCount} onRebalanced={onRebalanced} /></>}
       {section === "confusions" && <ConfusionStatistics attempts={ranged} onTrainCountries={onTrainCountries} />}
       {section === "coverage" && <CoverageStatistics locations={locations} visits={visits} attempts={attempts} includeAssisted={includeAiAssisted} />}
       {section === "sessions" && <SessionStatistics sessions={sessions} attempts={attempts} visits={visits} includeAssisted={includeAiAssisted} />}

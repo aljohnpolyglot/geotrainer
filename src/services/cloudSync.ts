@@ -64,12 +64,15 @@ const mergeNotes = (left: unknown, right: unknown) => {
 const reviewedAt = (record: ReviewRecord) => Math.max(record.lastReviewedAt || 0, ...(record.gradingHistory || []).map((item) => item.at));
 const mergeReviews = (left: ReviewRecord, right: ReviewRecord): ReviewRecord => {
   const latest = reviewedAt(right) >= reviewedAt(left) ? right : left;
+  const schedule = Math.max(right.dueAdjustedAt || 0, reviewedAt(right)) >= Math.max(left.dueAdjustedAt || 0, reviewedAt(left)) ? right : left;
   const generalization = (right.generalizationUpdatedAt || (right.generalizationLevel !== undefined ? reviewedAt(right) : 0)) >= (left.generalizationUpdatedAt || (left.generalizationLevel !== undefined ? reviewedAt(left) : 0)) ? right : left;
   const gradingHistory = [...(left.gradingHistory || []), ...(right.gradingHistory || [])]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
     .sort((a, b) => a.at - b.at);
   return {
     ...latest,
+    dueAt: schedule.dueAt,
+    ...(schedule.dueAdjustedAt ? { dueAdjustedAt: schedule.dueAdjustedAt } : {}),
     gradingHistory,
     reviewCount: Math.max(left.reviewCount || 0, right.reviewCount || 0, gradingHistory.length),
     lapseCount: Math.max(left.lapseCount || 0, right.lapseCount || 0, gradingHistory.filter((item) => item.grade === 'again').length),
@@ -88,7 +91,7 @@ export const buildSyncReceipt = (remote: TrainerBackup | undefined, local: Train
     deviceRecords: recordCount(local),
     mergedRecords: recordCount(merged),
     addedToDevice: STORE_NAMES.reduce((total, name) => total + Math.max(0, (merged.data[name]?.length || 0) - (local.data[name]?.length || 0)), 0),
-    reviewSchedulesUpdated: mergedReviews.filter((review) => !localReviews.has(review.id) || reviewedAt(review) > reviewedAt(localReviews.get(review.id)!)).length,
+    reviewSchedulesUpdated: mergedReviews.filter((review) => !localReviews.has(review.id) || reviewedAt(review) > reviewedAt(localReviews.get(review.id)!) || review.dueAt !== localReviews.get(review.id)!.dueAt).length,
     reviewEvents: mergedReviews.reduce((total, review) => total + (review.gradingHistory?.length || 0), 0),
   };
 };

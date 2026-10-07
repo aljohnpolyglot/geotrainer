@@ -1,6 +1,6 @@
 import rawLessons from './metaLessons.json';
 import rawTranslations from './metaLessonTranslations.json';
-import type { Attempt, MetaLesson, SupportedLanguage } from '../types';
+import type { Attempt, MetaLesson, StudyVisit, SupportedLanguage } from '../types';
 
 export const normalizeMetaLessons = (value: unknown): MetaLesson[] => Array.isArray(value) ? value.filter((item): item is MetaLesson => {
   if (!item || typeof item !== 'object') return false;
@@ -11,15 +11,26 @@ export const normalizeMetaLessons = (value: unknown): MetaLesson[] => Array.isAr
 
 export const META_LESSONS = normalizeMetaLessons(rawLessons);
 
+export const beginnerHistoryFromVisits = (visits: Pick<StudyVisit, 'learnSource' | 'metaLessonId' | 'openedAt'>[], currentId: string): string[] => {
+  const known = new Set(META_LESSONS.map((lesson) => lesson.id));
+  const history = visits.filter((visit) => visit.learnSource === 'meta' && visit.metaLessonId && known.has(visit.metaLessonId))
+    .sort((a, b) => a.openedAt - b.openedAt).map((visit) => visit.metaLessonId!);
+  const distinct = history.filter((id, index) => id !== history[index - 1]);
+  return distinct.at(-1) === currentId ? distinct : [...distinct, currentId];
+};
+
 export const metaLessonById = (id?: string) => id ? META_LESSONS.find((lesson) => lesson.id === id) : undefined;
 export const localizeMetaLesson = (lesson: MetaLesson, language: SupportedLanguage): MetaLesson => {
   const bundledLesson = metaLessonById(lesson.id);
   // Country-course tips arrive pre-localized from their own course data and
   // share this shape. Only apply the Beginner translation catalog to its IDs.
   if (!bundledLesson || language === 'en') return lesson;
-  const text = (rawTranslations as Record<string, Partial<Record<SupportedLanguage, string>>>)[bundledLesson.id]?.[language];
+  const translation = (rawTranslations as Record<string, Partial<Record<SupportedLanguage, string>> & { note?: Partial<Record<SupportedLanguage, string>> }>)[bundledLesson.id];
+  const text = translation?.[language];
   if (!text?.trim()) throw new Error(`Missing ${language} translation for Beginner lesson ${bundledLesson.id}`);
-  return { ...lesson, text };
+  const note = bundledLesson.note ? translation?.note?.[language] : undefined;
+  if (bundledLesson.note && !note?.trim()) throw new Error(`Missing ${language} note translation for Beginner lesson ${bundledLesson.id}`);
+  return { ...lesson, text, ...(note ? { note } : {}) };
 };
 
 export const savedMetaLessonIds = (attempts: Pick<Attempt, 'source' | 'metaLessonId'>[]) => new Set(attempts.flatMap((attempt) => attempt.source === 'study' && attempt.metaLessonId ? [attempt.metaLessonId] : []));

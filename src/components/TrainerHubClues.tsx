@@ -6,6 +6,7 @@ import { CountryFlag } from './CountryFlag';
 import { ClueGallery } from './ClueGallery';
 import { countryName, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, useHubTranslate, visibleNotebookNotes } from './trainerHubUtils';
 import { localizeMetaLesson, metaLessonById } from '../data/metaLessons';
+import { MetaAttribution } from './MetaAttribution';
 import { loadSavedMetaCountryLessons } from '../data/metaCountryCourses';
 import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -134,7 +135,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <div>
 <h3>
 <CountryFlag code={learned.countryCode} />{countryName(learned.countryCode, ui)}</h3>
-{lesson.section && <small>{lesson.section}</small>}<p>{lesson.text}</p>{lesson.note && <small>{lesson.note}</small>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}<small>{t('Meta lessons')} · {new Date(learned.learnedAt).toLocaleString(ui)}</small>
+{lesson.section && <small>{lesson.section}</small>}<p>{lesson.text}</p>{lesson.note && <small>{lesson.note}</small>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}<MetaAttribution countryCourse={!!lesson.mapUrl} compact /><small>{t('Meta lessons')} · {new Date(learned.learnedAt).toLocaleString(ui)}</small>
 </div>
 <div className="clue-row-actions"><button className="icon-button" onClick={(event) => { event.stopPropagation(); openMeta(learned, lesson); }} aria-label={t('Details')} title={t('Details')}><Eye size={16} /></button>{(lesson.mapUrl || lesson.panoId) && <a className="icon-button" href={lesson.mapUrl || streetViewUrl(lesson.panoId)} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} aria-label={t('Reopen clue location')} title={t('Reopen clue location')}><MapPin size={16} /></a>}</div>
 </article>; })())}{!totalFiltered && <p className="empty">{t('No clues match these filters.')}</p>}</div>

@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { MetaCourseSelector } from './MetaCourseSelector';
 import { MetaCourseCard } from './MetaCourseCard';
 import { MetaLessonBrowser } from './MetaLessonBrowser';
+import { MetaAttribution } from './MetaAttribution';
 
 test('Meta course setup shows selected country progress and a lesson without a hosted image stays readable', () => {
   const chooser = renderToStaticMarkup(createElement(MetaCourseSelector, {
@@ -38,4 +39,15 @@ test('Meta lesson browser supports localized country-course lesson choices', () 
   const completed = renderToStaticMarkup(createElement(MetaLessonBrowser, { completed: new Set(['SE-1']), selectedId: 'SE-1', onSelect: () => {}, lessons: [{ id: 'SE-1', text: 'Seen clue' }] }));
   assert.match(completed, /aria-selected="true"/);
   assert.doesNotMatch(completed, /aria-disabled/);
+});
+
+test('Meta attribution names the correct external guides for each course', () => {
+  const beginner = renderToStaticMarkup(createElement(MetaAttribution, { countryCourse: false }));
+  const country = renderToStaticMarkup(createElement(MetaAttribution, { countryCourse: true }));
+  assert.match(beginner, /geometas\.com/);
+  assert.doesNotMatch(beginner, /openguessr\.com/);
+  assert.doesNotMatch(beginner, /plonkit\.net/);
+  assert.match(country, /plonkit\.net/);
+  assert.doesNotMatch(country, /geometas\.com/);
+  assert.match(country, /GeoTrainer is independent/);
 });

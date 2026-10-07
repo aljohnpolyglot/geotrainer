@@ -167,6 +167,7 @@
   .street-compass-bar { top: 10px; width: min(220px, calc(100% - 110px)); }
 }
 .meta-temporal-warning { display: block; margin-top: 11px; padding-top: 9px; color: var(--muted); border-top: 1px solid var(--rule); font-size: 11px; line-height: 1.45; }
+.meta-attribution { display: block; margin-top: 10px; color: var(--muted); font-size: 10px; font-weight: 400; line-height: 1.45; }.meta-attribution a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }.meta-lesson-browser > .meta-attribution { margin: 0 0 10px; }
 
 .return-to-start { position: absolute; bottom: max(40px, env(safe-area-inset-bottom)); left: 16px; z-index: 15; display: inline-grid; min-width: 40px; height: 40px; padding: 0 12px; grid-auto-flow: column; gap: 12px; place-items: center; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer; }
 .return-to-start:hover { color: var(--blue); border-color: var(--blue); }.return-to-start:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }

@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { filterMetaLessonsByCompletion, hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, metaReviewAid, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
+import { beginnerHistoryFromVisits, filterMetaLessonsByCompletion, hasRemainingMetaLessons, localizeMetaLesson, META_LESSONS, metaReviewAid, nextMetaLesson, normalizeMetaLessons, savedMetaLessonIds, selectMetaLesson } from './metaLessons';
 import translations from './metaLessonTranslations.json';
+import type { SupportedLanguage } from '../types';
+
+type CatalogEntry = Partial<Record<SupportedLanguage, string>> & { note?: Partial<Record<SupportedLanguage, string>> };
 
 test('Meta lessons reject malformed input and avoid the current lesson', () => {
   assert.deepEqual(normalizeMetaLessons([{ id: 'broken' }, null]), []);
@@ -13,7 +16,7 @@ test('Meta lessons reject malformed input and avoid the current lesson', () => {
 
 test('every Beginner lesson has a real text translation in all eight supported languages', () => {
   const languages = ['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'] as const;
-  const catalog = translations as Record<string, Record<string, string>>;
+  const catalog = translations as Record<string, CatalogEntry>;
   const knownIds = new Set(META_LESSONS.map(({ id }) => id));
   assert.equal(META_LESSONS.length, 359);
   assert.deepEqual(Object.keys(catalog).sort(), [...knownIds].sort());
@@ -34,7 +37,7 @@ test('every Beginner lesson has a real text translation in all eight supported l
 });
 
 test('Beginner localization fails visibly instead of silently showing English', () => {
-  const catalog = translations as Record<string, Record<string, string>>;
+  const catalog = translations as Record<string, CatalogEntry>;
   const lesson = META_LESSONS[0];
   const spanish = catalog[lesson.id].es;
   delete catalog[lesson.id].es;
@@ -73,6 +76,36 @@ test('a browsed Meta lesson can reopen when completed while a stale selection fa
   assert.equal(selectMetaLesson(requested.id)?.id, requested.id);
   assert.equal(selectMetaLesson(requested.id, new Set([requested.id]), () => 0)?.id, requested.id);
   assert.notEqual(selectMetaLesson('missing-lesson', new Set([requested.id]), () => 0)?.id, requested.id);
+});
+
+test('comparison notes follow the pictured clue in every supported language', () => {
+  const catalog = translations as Record<string, CatalogEntry>;
+  const languages = ['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'] as const;
+  for (const lesson of META_LESSONS.filter((item) => item.note)) for (const language of languages) {
+    const localized = localizeMetaLesson(lesson, language);
+    assert.equal(localized.note, language === 'en' ? lesson.note : catalog[lesson.id].note?.[language], `${lesson.id}:${language} comparison must be translated`);
+    assert.ok(localized.note?.trim());
+    assert.doesNotMatch(localized.note, /\\u[0-9a-f]{4}|Ã[\u0080-\u00ff]|Â[\u0080-\u00ff]|\uFFFD/i);
+  }
+  const finnish = META_LESSONS.find((lesson) => lesson.id === 'a70d82cc2c7a1dbb')!;
+  assert.match(finnish.text, /Finland/);
+  assert.match(finnish.note!, /Sweden/);
+  assert.match(localizeMetaLesson(finnish, 'sv').text, /Finland/);
+  assert.match(localizeMetaLesson(finnish, 'sv').note!, /Sveriges/);
+  assert.match(META_LESSONS.find((lesson) => lesson.id === 'fd64fb71f6b696be')!.text, /Botswana/);
+  assert.match(META_LESSONS.find((lesson) => lesson.id === 'a2296a24368d1443')!.text, /Hungary/);
+});
+
+test('resumed Beginner Meta restores Previous from actual visited lessons', () => {
+  const [first, second, current] = META_LESSONS;
+  const visits = [
+    { learnSource: 'meta' as const, metaLessonId: second.id, openedAt: 20 },
+    { learnSource: 'meta' as const, metaLessonId: first.id, openedAt: 10 },
+    { learnSource: 'meta' as const, metaLessonId: second.id, openedAt: 21 },
+    { learnSource: 'meta' as const, metaLessonId: 'unknown', openedAt: 22 },
+  ];
+  assert.deepEqual(beginnerHistoryFromVisits(visits, current.id), [first.id, second.id, current.id]);
+  assert.deepEqual(beginnerHistoryFromVisits([...visits, { learnSource: 'meta', metaLessonId: current.id, openedAt: 30 }], current.id), [first.id, second.id, current.id]);
 });
 
 test('Meta browse filters all, unfinished, and completed lessons', () => {

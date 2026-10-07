@@ -78,8 +78,9 @@
     "lat": -33.450115,
     "lng": -70.676702,
     "heading": 111.20443351633052,
-    "text": "Orange-colored plates can also be seen in Ecuador. Similarly, Brazilian commercial plates are red but can look similar sometimes.",
-    "imageUrl": "./meta-lessons/3fb53102cf3ed610.jpg"
+    "text": "Chilean taxis and commercial vehicles have orange license plates.",
+    "imageUrl": "./meta-lessons/3fb53102cf3ed610.jpg",
+    "note": "Orange-colored plates can also be seen in Ecuador. Similarly, Brazilian commercial plates are red but can look similar sometimes."
   },
   {
     "id": "a7abe313234d623d",
@@ -87,9 +88,10 @@
     "lat": 6.46247,
     "lng": -0.63157,
     "heading": 211.2575271269029,
-    "text": "Also, the car's hood is usually visible, showing a Streetview car wrapping that features a red rectangle and some other elements.",
+    "text": "Ghana’s Google Street View car has a visible roof rack with black tape on the right end of the front bar.",
     "imageUrl": "./meta-lessons/a7abe313234d623d.jpg",
-    "temporallySensitive": true
+    "temporallySensitive": true,
+    "note": "Also, the car's hood is usually visible, showing a Streetview car wrapping that features a red rectangle and some other elements."
   },
   {
     "id": "d6e9fe930f95fc9b",
@@ -151,8 +153,9 @@
     "lat": 54.864528,
     "lng": 24.479471,
     "heading": 163.70956065920566,
-    "text": "Latvia has a thicker red border with a similar white outline. Estonia has a similar thin red border but no white outline.",
-    "imageUrl": "./meta-lessons/3d9b1904fb1648ba.jpg"
+    "text": "Lithuanian warning signs have a thin red border with a thin white outline around it.",
+    "imageUrl": "./meta-lessons/3d9b1904fb1648ba.jpg",
+    "note": "Latvia has a thicker red border with a similar white outline. Estonia has a similar thin red border but no white outline."
   },
   {
     "id": "357dff6dc12ddfb9",
@@ -296,8 +299,9 @@
     "lat": -29.731929,
     "lng": 25.965431,
     "heading": 219.8252840537694,
-    "text": "They can sometimes be found in Botswana too, but are more common in South Africa.",
-    "imageUrl": "./meta-lessons/ce57b632de7e6c4c.jpg"
+    "text": "Narrow red-and-white chevron markers are very common in South Africa.",
+    "imageUrl": "./meta-lessons/ce57b632de7e6c4c.jpg",
+    "note": "They can sometimes be found in Botswana too, but are more common in South Africa."
   },
   {
     "id": "4be48ef9adf2b067",
@@ -377,8 +381,9 @@
     "lat": -0.255907,
     "lng": -79.176577,
     "heading": 58.280286233817385,
-    "text": "Orange-colored plates can also be seen in Chile. Similarly, Brazilian commercial plates are red but can look similar sometimes.",
-    "imageUrl": "./meta-lessons/3eaddd40f1bd61d9.jpg"
+    "text": "In Ecuador, commercial vehicles have license plates that are solid orange or have an orange bar at the top.",
+    "imageUrl": "./meta-lessons/3eaddd40f1bd61d9.jpg",
+    "note": "Orange-colored plates can also be seen in Chile. Similarly, Brazilian commercial plates are red but can look similar sometimes."
   },
   {
     "id": "14d130d9ab8e3f7f",
@@ -469,8 +474,9 @@
     "lat": 11.2150006,
     "lng": -73.3319606,
     "heading": 137.16,
-    "text": "The first two digits at the bottom of these markers represent the road number (e.g., 90), and the last two digits indicate the road section, increasing from west to east on even-numbered highways and from south to north on odd-numbered highways.",
-    "imageUrl": "./meta-lessons/f9d5dd397f868cf0.jpg"
+    "text": "In Colombia, two types of kilometer markers are used: a tall green marker with “Pr” at the top and a traditional stone marker with black lettering. Both are unique to the country.",
+    "imageUrl": "./meta-lessons/f9d5dd397f868cf0.jpg",
+    "note": "The first two digits at the bottom of these markers represent the road number (e.g., 90), and the last two digits indicate the road section, increasing from west to east on even-numbered highways and from south to north on odd-numbered highways."
   },
   {
     "id": "e37fe7392b89d5a4",
@@ -759,8 +765,9 @@
     "lat": 60.88545,
     "lng": 25.69126,
     "heading": 274.8634528551475,
-    "text": "Sweden's minor directional signs also use white text on blue backgrounds, but the arrows are thinner than on Finnish signs.",
-    "imageUrl": "./meta-lessons/a70d82cc2c7a1dbb.jpg"
+    "text": "In Finland, minor directional signs have white text on a blue background and a bold arrow at the side.",
+    "imageUrl": "./meta-lessons/a70d82cc2c7a1dbb.jpg",
+    "note": "Sweden's minor directional signs also use white text on blue backgrounds, but the arrows are thinner than on Finnish signs."
   },
   {
     "id": "2ad03671a674a732",
@@ -786,8 +793,9 @@
     "lat": 60.177206,
     "lng": 24.734213,
     "heading": 30.397137316400904,
-    "text": "Sweden and Iceland also have a red border around yellow background on all warning signs. Give-way signs in Sweden and Iceland, however, have NO yellow outline around the red border. Denmark and Norway's warning signs have a red border around white background.",
-    "imageUrl": "./meta-lessons/6a5c762d1eb7985a.jpg"
+    "text": "Finnish warning signs have a triangular shape, a red border, and a yellow background. Give-way signs also have a yellow outline outside the red border.",
+    "imageUrl": "./meta-lessons/6a5c762d1eb7985a.jpg",
+    "note": "Sweden and Iceland also have a red border around yellow background on all warning signs. Give-way signs in Sweden and Iceland, however, have NO yellow outline around the red border. Denmark and Norway's warning signs have a red border around white background."
   },
   {
     "id": "faa0cfecd546f215",
@@ -822,9 +830,10 @@
     "lat": -0.255499,
     "lng": -79.176584,
     "heading": 14.409224007498773,
-    "text": "This type of antenna is also seen in Mexico, Brazil, and Colombia. However, a black car with this antenna is unique to Colombia",
+    "text": "Ecuador has a white Google Street View car equipped with a short, thick (“stubby”) antenna.",
     "imageUrl": "./meta-lessons/6d8529d20c6caa38.jpg",
-    "temporallySensitive": true
+    "temporallySensitive": true,
+    "note": "This type of antenna is also seen in Mexico, Brazil, and Colombia. However, a black car with this antenna is unique to Colombia"
   },
   {
     "id": "ec95370d1e979694",
@@ -967,8 +976,9 @@
     "lat": 55.765623,
     "lng": 24.070922,
     "heading": 4.642737129466838,
-    "text": "Latvian kilometer markers have one side, parallel to the road. Estonian kilometer markers also have one side, perpendicular to the road.",
-    "imageUrl": "./meta-lessons/46147257fce3f999.jpg"
+    "text": "Lithuanian kilometer markers have two sides arranged at a 45° angle to the road, forming a V shape.",
+    "imageUrl": "./meta-lessons/46147257fce3f999.jpg",
+    "note": "Latvian kilometer markers have one side, parallel to the road. Estonian kilometer markers also have one side, perpendicular to the road."
   },
   {
     "id": "f5f845165d7fd8bb",
@@ -994,8 +1004,9 @@
     "lat": -31.884775,
     "lng": 23.083278,
     "heading": 174.46137598577712,
-    "text": "Botswana, Lesotho, and Eswatini have the same sign colors but different highway letters: Botswana and Lesotho use A and Eswatini uses MR.",
-    "imageUrl": "./meta-lessons/070ae8444302b16a.jpg"
+    "text": "South African highway signs are green with white lettering and yellow route numbers. Routes start with N, R, or M.",
+    "imageUrl": "./meta-lessons/070ae8444302b16a.jpg",
+    "note": "Botswana, Lesotho, and Eswatini have the same sign colors but different highway letters: Botswana and Lesotho use A and Eswatini uses MR."
   },
   {
     "id": "cde7930669f2766a",
@@ -1012,8 +1023,9 @@
     "lat": 59.311438,
     "lng": 27.23594,
     "heading": 0.2462883017567412,
-    "text": "In contrast, Lithuania, Latvia, and many other European countries use red-on-white chevrons.",
-    "imageUrl": "./meta-lessons/f7f41bd71efd94ab.jpg"
+    "text": "Estonian chevrons have a red background with white arrows.",
+    "imageUrl": "./meta-lessons/f7f41bd71efd94ab.jpg",
+    "note": "In contrast, Lithuania, Latvia, and many other European countries use red-on-white chevrons."
   },
   {
     "id": "56c1d501e9c54a07",
@@ -1030,8 +1042,9 @@
     "lat": -1.896812,
     "lng": 37.00267,
     "heading": 256.928045566311,
-    "text": "Mongolia also often has a snorkel but the country generally looks very different.",
-    "imageUrl": "./meta-lessons/8c8cb69ca629c559.jpg"
+    "text": "Kenya’s Street View car has a snorkel on the front.",
+    "imageUrl": "./meta-lessons/8c8cb69ca629c559.jpg",
+    "note": "Mongolia also often has a snorkel but the country generally looks very different."
   },
   {
     "id": "97c9a86c0fc637b5",
@@ -1085,8 +1098,9 @@
     "lat": -23.196819,
     "lng": 26.7952,
     "heading": 9.821718674562545,
-    "text": "In contrast, Lesotho is also hilly but largely lacks trees and has short grass.",
-    "imageUrl": "./meta-lessons/fd64fb71f6b696be.jpg"
+    "text": "This saved view is in Botswana. Grassy hills and scattered trees can resemble Eswatini, so landscape alone is not enough to identify either country.",
+    "imageUrl": "./meta-lessons/fd64fb71f6b696be.jpg",
+    "note": "In contrast, Lesotho is also hilly but largely lacks trees and has short grass."
   },
   {
     "id": "42a07d4deafef8c0",
@@ -1158,8 +1172,9 @@
     "lat": 63.261966,
     "lng": 18.731096,
     "heading": 33.632560003600986,
-    "text": "Finland and Iceland also have a red border around yellow background on all warning signs. Give-way signs in Finland, however, have a yellow outline around the red border. Iceland has no outline, which makes it similar to Sweden's sign. Denmark and Norway's warning signs have a red border around white background.",
-    "imageUrl": "./meta-lessons/f6620dceeaf932c3.jpg"
+    "text": "Swedish warning signs have a red border and yellow background. Give-way signs have no outline outside the red border.",
+    "imageUrl": "./meta-lessons/f6620dceeaf932c3.jpg",
+    "note": "Finland and Iceland also have a red border around yellow background on all warning signs. Give-way signs in Finland, however, have a yellow outline around the red border. Iceland has no outline, which makes it similar to Sweden's sign. Denmark and Norway's warning signs have a red border around white background."
   },
   {
     "id": "e5bf2da0ba36401a",
@@ -1276,8 +1291,9 @@
     "lat": -34.287451,
     "lng": 18.825363,
     "heading": 353.53059845910326,
-    "text": "In comparison, Botswana tends to be flat, dry, with well maintained roads; Lesotho is hilly without trees and short grass; and Eswatini hilly with trees and tall grass.",
-    "imageUrl": "./meta-lessons/14fc8de2c06a4cc8.jpg"
+    "text": "South Africa's landscape is highly varied, ranging from rocky, treeless mountains and dry red-soil country to vineyards and sugarcane fields.",
+    "imageUrl": "./meta-lessons/14fc8de2c06a4cc8.jpg",
+    "note": "In comparison, Botswana tends to be flat, dry, with well maintained roads; Lesotho is hilly without trees and short grass; and Eswatini hilly with trees and tall grass."
   },
   {
     "id": "c978d2866bc85c69",
@@ -1285,8 +1301,9 @@
     "lat": 54.779977,
     "lng": 25.274647,
     "heading": 111.17958623261208,
-    "text": "Estonia's sign has 3 stripes too but the person's head is attached and more detailed, e.g. with visible shoes. Latvia's sign has 4 stripes.",
-    "imageUrl": "./meta-lessons/c978d2866bc85c69.jpg"
+    "text": "Lithuanian pedestrian crossing signs have 3 stripes. The person's head is detached from the body.",
+    "imageUrl": "./meta-lessons/c978d2866bc85c69.jpg",
+    "note": "Estonia's sign has 3 stripes too but the person's head is attached and more detailed, e.g. with visible shoes. Latvia's sign has 4 stripes."
   },
   {
     "id": "020e2099c84e811b",
@@ -1312,8 +1329,9 @@
     "lat": 59.437291,
     "lng": 24.72363,
     "heading": 355.0963935813167,
-    "text": "Lithuanian warning signs have the same thin red border but have an additional white outline around it. Latvian warning signs have a thicker red border and an additional white outline.",
-    "imageUrl": "./meta-lessons/f89d77a76f47f836.jpg"
+    "text": "Estonian warning signs have a thin red border with no additional outline.",
+    "imageUrl": "./meta-lessons/f89d77a76f47f836.jpg",
+    "note": "Lithuanian warning signs have the same thin red border but have an additional white outline around it. Latvian warning signs have a thicker red border and an additional white outline."
   },
   {
     "id": "e5e4d131d9337372",
@@ -1330,8 +1348,9 @@
     "lat": 56.935594,
     "lng": 24.241912,
     "heading": 47.83321965533287,
-    "text": "In Lithuania, they have a thin red border with the same white outline. In Estonia, they have no white outline and a thin red border.",
-    "imageUrl": "./meta-lessons/6bcab0b11d12b62b.jpg"
+    "text": "Latvian warning signs have a much thicker red border than signs in Estonia and Lithuania.",
+    "imageUrl": "./meta-lessons/6bcab0b11d12b62b.jpg",
+    "note": "In Lithuania, they have a thin red border with the same white outline. In Estonia, they have no white outline and a thin red border."
   },
   {
     "id": "af83361b316be206",
@@ -1385,8 +1404,9 @@
     "lat": -43.515723,
     "lng": 172.638139,
     "heading": 137.35859198836437,
-    "text": "Australia's street signs are typically white.",
-    "imageUrl": "./meta-lessons/7e86a29a890c9f42.jpg"
+    "text": "New Zealand street signs are blue or green.",
+    "imageUrl": "./meta-lessons/7e86a29a890c9f42.jpg",
+    "note": "Australia's street signs are typically white."
   },
   {
     "id": "66d0f5b1cb5b108c",
@@ -1522,8 +1542,9 @@
     "lat": 60.899024,
     "lng": 4.841637,
     "heading": 53.4812498807123,
-    "text": "Denmark also has a red border around white background on all warning signs. Give-way signs in Denmark, however, have NO white outline around the red border. Sweden, Iceland, and Finland's warning signs have a red border around yellow background.",
-    "imageUrl": "./meta-lessons/482b9d5f95071291.jpg"
+    "text": "Danish warning signs have a red border and white background. Give-way signs have no outline outside the red border.",
+    "imageUrl": "./meta-lessons/482b9d5f95071291.jpg",
+    "note": "Denmark also has a red border around white background on all warning signs. Give-way signs in Denmark, however, have NO white outline around the red border. Sweden, Iceland, and Finland's warning signs have a red border around yellow background."
   },
   {
     "id": "39cd5d664b926e9f",
@@ -1560,9 +1581,10 @@
     "lat": 50.593048,
     "lng": 31.657012,
     "heading": 261.7859226123163,
-    "text": "Russia does not have this red car. In Europe, only Belgium can sometimes feature this car.",
+    "text": "Most of Ukraine has a red Google Street View car with a long antenna visible.",
     "imageUrl": "./meta-lessons/1e9c3ec5f8e64c16.jpg",
-    "temporallySensitive": true
+    "temporallySensitive": true,
+    "note": "Russia does not have this red car. In Europe, only Belgium can sometimes feature this car."
   },
   {
     "id": "085e51c4602dfd4d",
@@ -1607,8 +1629,9 @@
     "lat": 55.818829,
     "lng": 8.182317,
     "heading": 85.74302609010913,
-    "text": "Norway also has a red border around white background on all warning signs. Give-way signs in Norway, however, have a white outline around the red border. Sweden, Iceland, and Finland's warning signs have a red border around yellow background.",
-    "imageUrl": "./meta-lessons/bbc4e99e14cda1a8.jpg"
+    "text": "Norwegian warning signs have a red border and white background. Give-way signs have a white outline outside the red border.",
+    "imageUrl": "./meta-lessons/bbc4e99e14cda1a8.jpg",
+    "note": "Norway also has a red border around white background on all warning signs. Give-way signs in Norway, however, have a white outline around the red border. Sweden, Iceland, and Finland's warning signs have a red border around yellow background."
   },
   {
     "id": "b9a177740ee2d126",
@@ -1644,8 +1667,9 @@
     "lat": 46.164245,
     "lng": 14.757281,
     "heading": 123.8505782632168,
-    "text": "Montenegro has the same style of bollards. Serbia has similar-looking bollards but with a red rectangle far to one side. Austrian bollards are also similar however Austria has a black or darker reddish rectangle.",
-    "imageUrl": "./meta-lessons/2221f6d9ad788f8f.jpg"
+    "text": "This is the front view of a Slovenian bollard.",
+    "imageUrl": "./meta-lessons/2221f6d9ad788f8f.jpg",
+    "note": "Montenegro has the same style of bollards. Serbia has similar-looking bollards but with a red rectangle far to one side. Austrian bollards are also similar however Austria has a black or darker reddish rectangle."
   },
   {
     "id": "2fc5deb6414aa177",
@@ -1671,8 +1695,9 @@
     "lat": 59.406181,
     "lng": 24.719803,
     "heading": 263.82440538218214,
-    "text": "In Lithuania, the sign also has 3 stripes but the person's head is detached and has less visible details, such as no shoes. In Latvia, the sign has 5 stripes.",
-    "imageUrl": "./meta-lessons/f5a79685f19b546e.jpg"
+    "text": "In Estonia, pedestrian crossing signs have 3 stripes. The person's head is attached to the body, and the figure is detailed, for example with visible shoes.",
+    "imageUrl": "./meta-lessons/f5a79685f19b546e.jpg",
+    "note": "In Lithuania, the sign also has 3 stripes but the person's head is detached and has less visible details, such as no shoes. In Latvia, the sign has 5 stripes."
   },
   {
     "id": "d6c5b9604171819d",
@@ -1962,8 +1987,9 @@
     "lat": 54.749341,
     "lng": 25.359498,
     "heading": 89.00460311454525,
-    "text": "Latvia's bollards are thin and curved, Estonia's are round (and hence neither are wedge-shaped). Also, both Latvia and Estonia have round circular reflectors on the back.",
-    "imageUrl": "./meta-lessons/aeac96692db0258c.jpg"
+    "text": "Lithuanian bollards are wedge-shaped, with orange rectangular reflectors on the front and white ones on the back.",
+    "imageUrl": "./meta-lessons/aeac96692db0258c.jpg",
+    "note": "Latvia's bollards are thin and curved, Estonia's are round (and hence neither are wedge-shaped). Also, both Latvia and Estonia have round circular reflectors on the back."
   },
   {
     "id": "27a2e122ac5b1fe5",
@@ -2070,8 +2096,9 @@
     "lat": 58.726065,
     "lng": 25.284109,
     "heading": 35.81945219648071,
-    "text": "In Lithuania, they are v-shaped two-sided placed at a 45 degree to the road. In Latvia, they are parallel to the road.",
-    "imageUrl": "./meta-lessons/69427afea0220618.jpg"
+    "text": "In Estonia, kilometer markers are perpendicular to the road.",
+    "imageUrl": "./meta-lessons/69427afea0220618.jpg",
+    "note": "In Lithuania, they are v-shaped two-sided placed at a 45 degree to the road. In Latvia, they are parallel to the road."
   },
   {
     "id": "17d721580cc1f183",
@@ -2170,8 +2197,9 @@
     "lat": 59.880073,
     "lng": 17.689434,
     "heading": 341.572115558833,
-    "text": "Finland also uses white text on blue background. Denmark uses red or blue text on white background. Norway uses black text on yellow background.",
-    "imageUrl": "./meta-lessons/0386e7faf959544e.jpg"
+    "text": "Swedish directional signs are blue with white lettering.",
+    "imageUrl": "./meta-lessons/0386e7faf959544e.jpg",
+    "note": "Finland also uses white text on blue background. Denmark uses red or blue text on white background. Norway uses black text on yellow background."
   },
   {
     "id": "5621dd7f021d58e5",
@@ -2188,8 +2216,9 @@
     "lat": 49.618029,
     "lng": 6.125556,
     "heading": 160.22230535612667,
-    "text": "The Netherlands is the only other Western European country with both front and back yellow license plates. The UK has yellow rear plates and white front plates. France has a small number of vehicles with yellow rear plates.",
-    "imageUrl": "./meta-lessons/209c84c96cf0466f.jpg"
+    "text": "Luxembourg uses yellow license plates on both the front and back, with the EU strip on the left.",
+    "imageUrl": "./meta-lessons/209c84c96cf0466f.jpg",
+    "note": "The Netherlands is the only other Western European country with both front and back yellow license plates. The UK has yellow rear plates and white front plates. France has a small number of vehicles with yellow rear plates."
   },
   {
     "id": "d491bc6025dc1e4f",
@@ -2197,8 +2226,9 @@
     "lat": 42.60959,
     "lng": 19.030164,
     "heading": 358.5120098193987,
-    "text": "Slovenia has the same style of bollards. Serbia has similar-looking bollards but with a red rectangle far to one side. Austrian bollards are also similar however Austria has a black or darker reddish rectangle.",
-    "imageUrl": "./meta-lessons/d491bc6025dc1e4f.jpg"
+    "text": "This is the front view of the Montenegrin bollard.",
+    "imageUrl": "./meta-lessons/d491bc6025dc1e4f.jpg",
+    "note": "Slovenia has the same style of bollards. Serbia has similar-looking bollards but with a red rectangle far to one side. Austrian bollards are also similar however Austria has a black or darker reddish rectangle."
   },
   {
     "id": "677a70b85f3273ee",
@@ -2224,8 +2254,9 @@
     "lat": 19.296042,
     "lng": -99.038795,
     "heading": 17.10935336592599,
-    "text": "Costa Rica and Guatemala also use \"ALTO\". Most of South America uses \"PARE\".",
-    "imageUrl": "./meta-lessons/2336116105ac6100.jpg"
+    "text": "Mexican stop signs use the word \"ALTO.\"",
+    "imageUrl": "./meta-lessons/2336116105ac6100.jpg",
+    "note": "Costa Rica and Guatemala also use \"ALTO\". Most of South America uses \"PARE\"."
   },
   {
     "id": "db116c9a03b40f6c",
@@ -2260,8 +2291,9 @@
     "lat": 59.765767,
     "lng": 10.257868,
     "heading": 308.0979198139703,
-    "text": "Sweden and Finland use blue/white signs, Denmark red/white. Iceland's signs are similar to Norway.",
-    "imageUrl": "./meta-lessons/7fc9e83bb1b4cdf8.jpg"
+    "text": "Norway uses yellow directional signs.",
+    "imageUrl": "./meta-lessons/7fc9e83bb1b4cdf8.jpg",
+    "note": "Sweden and Finland use blue/white signs, Denmark red/white. Iceland's signs are similar to Norway."
   },
   {
     "id": "916620f27d38723b",
@@ -2287,8 +2319,9 @@
     "lat": 49.555593,
     "lng": 14.31785,
     "heading": 309.512414450977,
-    "text": "Italian town directional arrows look relatively similar to these Czechia town directional arrows.",
-    "imageUrl": "./meta-lessons/264decd747d103d8.jpg"
+    "text": "In Czechia, distinctive blue signs with white arrows point toward nearby towns.",
+    "imageUrl": "./meta-lessons/264decd747d103d8.jpg",
+    "note": "Italian town directional arrows look relatively similar to these Czechia town directional arrows."
   },
   {
     "id": "b10f0014cefa940c",
@@ -2314,8 +2347,9 @@
     "lat": 57.12169,
     "lng": 24.667939,
     "heading": 303.8313973004069,
-    "text": "In Lithuania they are orange. In Estonia they are not used.",
-    "imageUrl": "./meta-lessons/7bc5ddb824967f15.jpg"
+    "text": "In Latvia, guardrail reflectors are white or red.",
+    "imageUrl": "./meta-lessons/7bc5ddb824967f15.jpg",
+    "note": "In Lithuania they are orange. In Estonia they are not used."
   },
   {
     "id": "c65cdacaa5aa3b71",
@@ -2460,8 +2494,9 @@
     "lat": 58.671468,
     "lng": 25.201492,
     "heading": 233.39676299475502,
-    "text": "Lithuania has wedge-shaped bollards with rectangular reflectors on both sides. Latvia has thin, slightly curved bollards with the same reflectors as Estonia.",
-    "imageUrl": "./meta-lessons/ad46c900b81d3267.jpg"
+    "text": "Estonian bollards are cylindrical, with a rectangular reflector on the front and two circular reflectors on the back.",
+    "imageUrl": "./meta-lessons/ad46c900b81d3267.jpg",
+    "note": "Lithuania has wedge-shaped bollards with rectangular reflectors on both sides. Latvia has thin, slightly curved bollards with the same reflectors as Estonia."
   },
   {
     "id": "6f79bf9f4a5c841b",
@@ -2532,8 +2567,9 @@
     "lat": -36.764803,
     "lng": -59.837961,
     "heading": 45.75956177360945,
-    "text": "They can occasionally also be found in Bolivia. Argentina also has another pattern with alternating horizontal bars, which is unique to the country.",
-    "imageUrl": "./meta-lessons/edb7324b52b4e2db.jpg"
+    "text": "These paired utility poles can be a good clue for Argentina.",
+    "imageUrl": "./meta-lessons/edb7324b52b4e2db.jpg",
+    "note": "They can occasionally also be found in Bolivia. Argentina also has another pattern with alternating horizontal bars, which is unique to the country."
   },
   {
     "id": "acc4508eb5c3e502",
@@ -2541,8 +2577,9 @@
     "lat": 57.018374,
     "lng": 24.334222,
     "heading": 19.992769626331185,
-    "text": "In Lithuania, the markers are v-shaped two-sides at 45 degree angle to the road. In Estonia, they are perpendicular to the road.",
-    "imageUrl": "./meta-lessons/acc4508eb5c3e502.jpg"
+    "text": "Latvian kilometer markers are parallel to the road.",
+    "imageUrl": "./meta-lessons/acc4508eb5c3e502.jpg",
+    "note": "In Lithuania, the markers are v-shaped two-sides at 45 degree angle to the road. In Estonia, they are perpendicular to the road."
   },
   {
     "id": "228a8f6754026b97",
@@ -2595,8 +2632,9 @@
     "lat": -30.27921,
     "lng": 27.861467,
     "heading": 358.0368979097927,
-    "text": "They can also be found in the other South African countries, but are most common in Lesotho.",
-    "imageUrl": "./meta-lessons/6563d7345dc487f8.jpg"
+    "text": "In Lesotho, you will often see these traditional round huts with thatched roofs.",
+    "imageUrl": "./meta-lessons/6563d7345dc487f8.jpg",
+    "note": "They can also be found in the other South African countries, but are most common in Lesotho."
   },
   {
     "id": "9cb529b9eabeca28",
@@ -2749,8 +2787,9 @@
     "lat": -13.969444,
     "lng": -46.191383,
     "heading": 201.78898236748205,
-    "text": "Most other South American countries use black-on-yellow chevrons.",
-    "imageUrl": "./meta-lessons/9601e76ff3b3e924.jpg"
+    "text": "Brazil uses yellow-on-black chevrons.",
+    "imageUrl": "./meta-lessons/9601e76ff3b3e924.jpg",
+    "note": "Most other South American countries use black-on-yellow chevrons."
   },
   {
     "id": "e2bb9ccd4c24589b",
@@ -2805,8 +2844,9 @@
     "lat": 54.719935,
     "lng": 24.970604,
     "heading": 351.35418764246947,
-    "text": "Latvia has red and white reflectors, whilst Estonia doesn’t have reflectors on its guardrails at all.",
-    "imageUrl": "./meta-lessons/62461d3034f5dfbc.jpg"
+    "text": "Lithuania's guardrail reflectors are orange, though they are not present on every guardrail.",
+    "imageUrl": "./meta-lessons/62461d3034f5dfbc.jpg",
+    "note": "Latvia has red and white reflectors, whilst Estonia doesn’t have reflectors on its guardrails at all."
   },
   {
     "id": "3e34f6873735d637",
@@ -2832,8 +2872,9 @@
     "lat": -39.265792,
     "lng": 176.875057,
     "heading": 268.0522041526454,
-    "text": "Chevrons in Australia have the same color but don't feature the black outline.",
-    "imageUrl": "./meta-lessons/c8cf34e3f98cce65.jpg"
+    "text": "New Zealand chevrons are black on yellow with a black outline.",
+    "imageUrl": "./meta-lessons/c8cf34e3f98cce65.jpg",
+    "note": "Chevrons in Australia have the same color but don't feature the black outline."
   },
   {
     "id": "b1ffeedf2e6391ba",
@@ -2868,7 +2909,7 @@
     "lat": 47.181759,
     "lng": 19.761194,
     "heading": 78.97737740380322,
-    "text": "Concrete utility poles with large holes extending down to the ground are often found in Romania. The Geoguessr community calls them \"holey poles\".",
+    "text": "Concrete utility poles with large rectangular holes occur in both Hungary and Romania. This example is in Hungary; the pole alone cannot distinguish the two countries.",
     "imageUrl": "./meta-lessons/a2296a24368d1443.jpg"
   },
   {
@@ -2877,8 +2918,9 @@
     "lat": -7.191792,
     "lng": 111.593862,
     "heading": 30.476687659164384,
-    "text": "Malaysia, in contrast, never has yellow road markings. Thailand, similar to Indonesia, can have white or yellow road markings.",
-    "imageUrl": "./meta-lessons/ee7d948d1ad57a8d.jpg"
+    "text": "In Indonesia, the outer road lines are always white. The center line is white or yellow.",
+    "imageUrl": "./meta-lessons/ee7d948d1ad57a8d.jpg",
+    "note": "Malaysia, in contrast, never has yellow road markings. Thailand, similar to Indonesia, can have white or yellow road markings."
   },
   {
     "id": "960c70f3f5f387d8",
@@ -3030,8 +3072,9 @@
     "lat": 57.079811,
     "lng": 24.334618,
     "heading": 292.5914808362856,
-    "text": "In Lithuania and Estonia they have 4 windows.",
-    "imageUrl": "./meta-lessons/234430a76c3343d2.jpg"
+    "text": "Bus stop signs in Latvia have 5 windows.",
+    "imageUrl": "./meta-lessons/234430a76c3343d2.jpg",
+    "note": "In Lithuania and Estonia they have 4 windows."
   },
   {
     "id": "4b36207858977978",
@@ -3095,8 +3138,9 @@
     "lat": 5.737426,
     "lng": -72.913984,
     "heading": 117.75217764911766,
-    "text": "Sometimes poles are painted in other colors such as white and green.",
-    "imageUrl": "./meta-lessons/774dd46f07d05e77.jpg"
+    "text": "Colombian utility poles often have yellow and black stripes.",
+    "imageUrl": "./meta-lessons/774dd46f07d05e77.jpg",
+    "note": "Sometimes poles are painted in other colors such as white and green."
   },
   {
     "id": "9e7df1326548d2b0",
