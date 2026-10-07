@@ -14,5 +14,6 @@ scripts/plonkit-map-tips.json.progress.json
 public/meta-courses/views.progress.json
 scripts/__pycache__/
 supabase/.temp/
+notes/geocoach-meta-research.md
 
 .vercel
