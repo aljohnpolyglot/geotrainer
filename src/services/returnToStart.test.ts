@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { returnToStart, startDirection } from './returnToStart';
+import { returnToStart, startDirection, viewPositionFromPano } from './returnToStart';
+
+test('movement events keep the round spawn fixed and measure the new panorama', () => {
+  const start = { panoId: 'spawn', lat: 0, lng: 0 };
+  const moved = { lat: 0.001, lng: 0 };
+  assert.equal(startDirection(start, viewPositionFromPano(start, 'spawn', moved), 0).meters, 0);
+  assert.equal(startDirection(start, viewPositionFromPano(start, 'next', moved), 0).meters, 111);
+});
 
 test('return uses the shown round start and respects movement restrictions and missing views', () => {
   const calls: string[] = [];

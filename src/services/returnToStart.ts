@@ -1,6 +1,7 @@
 import { calculateDistanceKm } from './gameLogic';
 
 type Point = { lat: number; lng: number };
+export const viewPositionFromPano = (start: Point & { panoId: string }, panoId: string, position: Point): Point => panoId === start.panoId ? start : position;
 export const startDirection = (start: Point, position: Point, heading: number) => {
   const radians = Math.PI / 180;
   const delta = (start.lng - position.lng) * radians;

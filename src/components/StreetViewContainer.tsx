@@ -10,7 +10,7 @@ import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucid
 import { compassDirection } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { ReturnToStartControl } from './ReturnToStartControl';
-import { returnToStart } from '../services/returnToStart';
+import { returnToStart, viewPositionFromPano } from '../services/returnToStart';
 import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -83,7 +83,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const [heading, setHeading] = useState(0);
   const [arrivedPano, setArrivedPano] = useState<string | null>(null);
   const awaitingPanorama = !!onPanoramaReady && !!currentLocation && arrivedPano !== currentLocation.panoId;
-  const [startTracking, setStartTracking] = useState<{ panoId: string; start: { lat: number; lng: number }; position: { lat: number; lng: number } } | null>(null);
+  const [viewPosition, setViewPosition] = useState<{ panoId: string; position: { lat: number; lng: number } } | null>(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
@@ -230,6 +230,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           if (panoId !== pendingPanoRef.current) return;
           pendingPanoRef.current = '';
         }
+        if (position) setViewPosition({ panoId: origin.panoId, position: viewPositionFromPano(origin, panoId, { lat: position.lat(), lng: position.lng() }) });
         lastReportedPanoRef.current = panoId;
         onPanoramaChangedRef.current?.({
           panoId,
@@ -241,8 +242,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       panorama.addListener('position_changed', () => {
         const origin = currentLocationRef.current; const point = panorama.getPosition();
         if (!origin || !point || (pendingPanoRef.current && panorama.getPano() !== pendingPanoRef.current)) return;
-        const position = { lat: point.lat(), lng: point.lng() }; const atStart = panorama.getPano() === origin.panoId;
-        setStartTracking((previous) => ({ panoId: origin.panoId, position, start: atStart ? position : previous?.panoId === origin.panoId ? previous.start : origin }));
+        setViewPosition({ panoId: origin.panoId, position: viewPositionFromPano(origin, panorama.getPano(), { lat: point.lat(), lng: point.lng() }) });
       });
       panorama.addListener('zoom_changed', queueViewSave);
 
@@ -379,7 +379,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         style={{ width: '100%', height: '100%', visibility: awaitingPanorama ? 'hidden' : 'visible' }}
       />
 
-      {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={startTracking?.panoId === currentLocation.panoId ? startTracking.start : currentLocation} position={startTracking?.panoId === currentLocation.panoId ? startTracking.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
+      {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={currentLocation} position={viewPosition?.panoId === currentLocation.panoId ? viewPosition.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
 
       {/* Loading Overlay */}
       {(isLoading || awaitingPanorama) && (

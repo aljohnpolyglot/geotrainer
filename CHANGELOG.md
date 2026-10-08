@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-09
+
+- Fix the Play and Review Return to start metre display so it measures from the round's starting panorama as the learner moves.
+
 ## 2026-10-08
 
 - Open new Meta Study panoramas with their lesson panel closed by default; add a saved Display preference for automatic opening.
