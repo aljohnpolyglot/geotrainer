@@ -27,6 +27,13 @@ const visibleBounds = () => {
   return { left, top, right: left + (viewport?.width || window.innerWidth), bottom: top + (viewport?.height || window.innerHeight) };
 };
 
+export const expandedGuessMapRect = (bounds: ReturnType<typeof visibleBounds>, mobile: boolean, mode: 'enlarge' | 'fullscreen'): PanelRect => {
+  if (mode === 'fullscreen') return { left: bounds.left, top: bounds.top, width: bounds.right - bounds.left, height: bounds.bottom - bounds.top };
+  const width = Math.min(672, bounds.right - bounds.left - 24);
+  const height = Math.min(mobile ? 360 : 560, (bounds.bottom - bounds.top) * (mobile ? 0.52 : 0.65));
+  return { left: bounds.right - width - 12, top: bounds.bottom - height - 12, width, height };
+};
+
 export const GuessMap: React.FC<GuessMapProps> = ({
   onGuess,
   isSubmitting,
@@ -49,8 +56,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
 
   const toggleExpanded = () => {
     if (isExpanded) { setIsExpanded(false); setExpandedRect(undefined); return; }
-    const bounds = visibleBounds();
-    setExpandedRect({ left: bounds.left, top: bounds.top, width: bounds.right - bounds.left, height: bounds.bottom - bounds.top });
+    setExpandedRect(expandedGuessMapRect(visibleBounds(), window.innerWidth <= 600, mapPreferences.pinpointerExpandMode ?? 'enlarge'));
     setIsExpanded(true);
   };
   const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: 'move' | PanelResizeDirection) => {
@@ -95,7 +101,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       maxZoom: 18,
       mapTypeControl: false,
       streetViewControl: false,
-      fullscreenControl: false,
+      fullscreenControl: true,
       zoomControl: true,
       zoomControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM,
@@ -236,8 +242,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           <button
             onClick={toggleExpanded}
             aria-expanded={isExpanded}
-            aria-label={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
-            title={isExpanded ? t('Exit Fullscreen') : t('Enter Fullscreen')}
+            aria-label={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
+            title={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
             className="p-1 rounded text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

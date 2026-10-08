@@ -179,7 +179,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
         </div>
       </div>
 
-      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} className={`study-result-map${onMapSelect ? ' selectable' : ''}`} fullscreenControl active={!hidden} resizeKey={isExpanded} onSelect={onMapSelect} />
+      <ResultMap actual={{ lat: location.lat, lng: location.lng }} guess={null} panoId={location.panoId} heading={location.heading} className={`study-result-map${onMapSelect ? ' selectable' : ''}`} fullscreenControl active={!hidden} resizeKey={isExpanded} onSelect={onMapSelect} />
 
       {onSaveForReview && !reviewSaved && (
         <div className="study-review-save">

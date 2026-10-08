@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-08
+
+- Show the Street View camera direction on the green location marker in revealed and result maps; the pointer turns with the panorama.
+- Choose in Settings → Display whether the Play and Review pinpointer button enlarges a floating map or fills the viewport; Enlarge is the default. The map retains its separate fullscreen control.
+
 ## 2026-10-07
 
 - Make the shared Play and Review pinpointer fill the visible viewport when expanded, with header dragging and edge or corner resizing while retaining the placed pin.

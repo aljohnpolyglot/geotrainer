@@ -123,7 +123,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         </div>
 
         {/* Interactive Map Visualizer */}
-        <ResultMap actual={viewedRound.location} guess={viewedRound.guess} className="flex-1 w-full h-full relative bg-stone-950" />
+        <ResultMap actual={viewedRound.location} guess={viewedRound.guess} panoId={viewedRound.location.panoId} heading={viewedRound.location.heading} className="flex-1 w-full h-full relative bg-stone-950" />
 
         {/* Footer Action Bar */}
         <div className="round-result-footer bg-stone-950 border-t border-stone-800">

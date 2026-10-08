@@ -140,6 +140,7 @@ export interface MapPreferences {
   mapType: MapTypePreference;
   mapPalette?: MapPalettePreference;
   resultMapZoom?: ResultMapZoomPreference;
+  pinpointerExpandMode?: 'enlarge' | 'fullscreen';
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   showCountryBorders?: boolean;

@@ -74,7 +74,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         </header>
 
         {round.location.isFallback && <p className="review-fallback"><AlertTriangle size={14} /> {t('fallbackReview')}</p>}
-        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} className="review-result-map" />
+        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} panoId={round.location.panoId} heading={round.location.heading ?? sourceAttempt.heading} className="review-result-map" />
 
         <div className="review-next-action">
           <span>{grade === 'again' ? t('This card will return later in this session.') : t('schedulingFromScore')}</span>

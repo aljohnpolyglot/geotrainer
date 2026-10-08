@@ -58,7 +58,7 @@
 .location-card-drag-handle > div:first-child, .location-card-drag-handle > div:first-child > div:last-child { min-width: 0; }.location-card-drag-handle h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (max-width: 600px) { .location-card-drag-handle button, .location-card-drag-handle a { min-width: 44px; min-height: 44px; } }
 #revealed-location-card.expanded { position: fixed; right: auto; bottom: 20px; left: 20px; z-index: 95; display: flex; flex-direction: column; width: min(92vw, 42rem); height: min(65vh, 560px); max-width: calc(100vw - 24px); max-height: calc(100dvh - 76px); overflow: hidden; transform: none; }
-#guess-map-widget.expanded { position: fixed; z-index: 95; max-width: none; max-height: none; border-radius: 0 !important; transform: none; }
+#guess-map-widget.expanded { position: fixed; z-index: 95; max-width: none; max-height: none; transform: none; }
 #revealed-location-card.expanded .study-result-map { flex: 1; min-height: 0; }
 #revealed-location-card.expanded .study-result-map .result-map-canvas { min-height: 0; height: 100%; }
 #revealed-location-card[hidden] { display: none; }

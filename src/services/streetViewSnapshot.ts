@@ -7,12 +7,15 @@ export type StreetViewSnapshot = {
 };
 
 const snapshots = new Map<string, StreetViewSnapshot>();
+const listeners = new Set<(snapshot: StreetViewSnapshot) => void>();
 
 export const setStreetViewSnapshot = (snapshot: StreetViewSnapshot) => {
   snapshots.set(snapshot.panoId, snapshot);
   if (snapshot.locationPanoId) snapshots.set(snapshot.locationPanoId, snapshot);
+  listeners.forEach((listener) => listener(snapshot));
 };
 export const getStreetViewSnapshot = (panoId: string) => snapshots.get(panoId) || null;
+export const subscribeStreetViewSnapshot = (listener: (snapshot: StreetViewSnapshot) => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
 
 export const panoramaCaptureHeadings = (heading: number) => [0, 90, 180, 270].map((offset) => (heading + offset + 360) % 360);
 

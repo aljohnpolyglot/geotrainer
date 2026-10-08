@@ -129,6 +129,8 @@ Während der Erstellung zeigt die Schaltfläche die aktuelle Länder-, Regionen-
 
 Aufdecken zeigt genaue Ortsdaten. Vorher bleiben Antwortinformationen verborgen. Erneutes Ausblenden verwandelt den Besuch nicht in einen bewerteten Versuch.
 
+Der grüne Punkt auf den Karten des aufgedeckten Ortes und der Ergebnisse zeigt die Blickrichtung der Street-View-Kamera. Er dreht sich mit der Ansicht; gespeicherte Ergebnisse nutzen die aufgezeichnete Richtung, sofern vorhanden.
+
 ### Für Wiederholung speichern
 
 Die Aktion erzeugt genau eine wiederverwendbare Quellkarte. Sie erfindet keinen Tipp, keine Entfernung, keine Punktzahl und keine Note. Nach einem Neuladen bleibt der Ort als gespeichert erkannt und die Aktion erscheint nicht erneut.
@@ -164,7 +166,7 @@ Bewegliche Spiele lehnen isolierte Panoramen ab. Dadurch kann die Suche länger 
 
 Setze die Markierung auf der Karte und sende sie ab. Das Ergebnis zeigt das tatsächliche Land, verfügbare Stadt-, Regions- und Straßenangaben, die vollständige formatierte Adresse, genaue Koordinaten, Entfernung und Punktzahl. Jede Runde bleibt als eigener Versuch im Verlauf.
 
-Im Spiel und in der Wiederholung füllt die vergrößerte Tippkarte den sichtbaren Bildschirm. Ziehe sie am Kopfbereich oder ändere ihre Größe an jeder Kante und Ecke; mit der Wiederherstellen-Schaltfläche kehrst du zur kompakten Karte zurück. Die Markierung bleibt erhalten.
+Im Spiel und in der Wiederholung vergrößert die Schaltfläche die Tippkarte standardmäßig als schwebendes Fenster. Unter **Einstellungen → Anzeige → Karten** kannst du die **Schaltfläche zum Vergrößern der Tippkarte** auf **Vollbild** stellen, damit das ganze Fenster einschließlich der Tippsteuerung den sichtbaren Bildschirm füllt. In beiden Modi kannst du es am Kopfbereich ziehen, an Kanten und Ecken skalieren und zur kompakten Karte zurückkehren. Für die Kartenfläche gibt es außerdem eine separate Vollbild-Schaltfläche. Die Markierung bleibt erhalten.
 
 Beim Absenden speichert GeoTrainer die aktuelle Street-View-Ansicht für spätere Abdeckungs- und Verlaufs-Vorschauen.
 

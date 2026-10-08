@@ -36,6 +36,8 @@ Endast utomhus gäller tillsammans med bildkällan: Endast officiella söker ock
 
 Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en JSON-fil från Map Maker med en lista över platser eller `customCoordinates`; varje plats behöver giltig latitud och longitud. Filen måste vara mindre än 20 MB. Föregående finns före Visa och blir tillgänglig när du har besökt två platser. Nästa går framåt genom platserna i den här lärsessionen innan en ny plats väljs. X till höger i sidhuvudet öppnar valet av lärläge igen. Kartan stannar på den här enheten; ladda upp den igen på andra enheter. Platsvariation 0 behåller den uppladdade vyn; 100 söker Street View upp till 1 km bort och faller tillbaka till en ursprunglig plats om det behövs. Minus minimerar platskortet och maximera fyller skärmen.
 
+Den gröna punkten på kartan över den visade platsen och resultatkartan visar Street View-kamerans riktning. Den vrids när du vrider vyn; sparade resultat använder den registrerade riktningen när den finns.
+
 ### Välj prioritet för lärandet
 
 Lärande med en uppladdad karta märker källans förlopp, till exempel **Källa: 1/50**. Varje post markeras som klar efter kontrollen, så **Nästa** kan inte välja den igen även om en närliggande variation öppnar ett annat panorama; trasiga poster kontrolleras också bara en gång. När källan är klar döljs **Nästa** och bara **Föregående** återstår. Spel upprepar inte heller källposter. I Utforska karta kan du söka efter en stad, region eller ett land och välja ett förslag från GeoTrainers inbyggda katalog för att zooma dit. Förslagen flyttar bara täckningskartan; klicka på blå täckning för att öppna Street View. Personlig text i Anteckningsboken är begränsad till 1000 tecken per sparning och en räknare visas under redigeraren.
@@ -70,7 +72,7 @@ I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omg�
 
 Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Efter svaret visar resultatet rätt land, tillgänglig stad, region och väg, fullständig adress, exakta koordinater, avstånd och poäng. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
 
-I Spel och Repetition kan gissningskartan utvidgas så att den fyller den synliga skärmen. Dra den i rubriken eller ändra storlek från valfri kant eller hörn; återställningsknappen ger tillbaka den kompakta kartan. Markören ligger kvar.
+I Spel och Repetition förstorar knappen gissningskartan som en flytande panel som standard. Under **Inställningar → Visning → Kartor** kan du välja **Helskärm** för **Knapp för att förstora gissningskartan** om hela panelen, inklusive gissningskontrollerna, ska fylla den synliga skärmen. I båda lägena kan du dra panelen i rubriken, ändra storlek från en kant eller ett hörn och återställa den kompakta kartan. Kartan har också en separat helskärmsknapp för själva kartytan. Markören ligger kvar.
 
 Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig även spara rätt besvarade platser. Den visas bara när den visade platsen saknar repetitionskort, inklusive platser i samma land inom 50 meter. Du kan också bläddra till och spara tidigare rundor. Ikonen försvinner efter sparandet och resultatet förblir öppet. Poäng och befintliga scheman ändras inte. Sparandet finns kvar efter omladdning och molnsynkronisering är fortfarande manuell. Om sparandet misslyckas kan du försöka igen. En kort bekräftelse visar att platsen har sparats för repetition.
 

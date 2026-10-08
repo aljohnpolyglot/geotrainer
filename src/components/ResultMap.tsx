@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { centeredResultMapZoom, mapPresentationOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
+import { getStreetViewSnapshot, subscribeStreetViewSnapshot } from '../services/streetViewSnapshot';
 
 type Point = { lat: number; lng: number };
 const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: Point, points: Point[], zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
@@ -10,10 +11,12 @@ const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: P
   map.setZoom(Math.min(resultMapZoomLimit(zoomPreference), centeredResultMapZoom(actual, points, element.clientWidth, element.clientHeight)));
 };
 
-export function ResultMap({ actual, guess, previousGuesses = [], className = '', fullscreenControl = false, active = true, resizeKey, onSelect }: {
+export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading, className = '', fullscreenControl = false, active = true, resizeKey, onSelect }: {
   actual: Point;
   guess: Point | null;
   previousGuesses?: Point[];
+  panoId?: string;
+  heading?: number;
   className?: string;
   fullscreenControl?: boolean;
   active?: boolean;
@@ -71,6 +74,15 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
         icon: { path: google.maps.SymbolPath.CIRCLE, scale, fillColor: color, fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3 },
       }));
     };
+    let direction: google.maps.Marker | undefined;
+    const updateDirection = (bearing?: number) => {
+      if (!Number.isFinite(bearing)) { direction?.setMap(null); direction = undefined; return; }
+      const icon: google.maps.Symbol = { path: 'M 0 0 L -9 -25 A 27 27 0 0 1 9 -25 Z', rotation: bearing, scale: 1, fillColor: '#22c55e', fillOpacity: .42, strokeColor: '#fff', strokeOpacity: .85, strokeWeight: 1 };
+      if (direction) direction.setIcon(icon);
+      else { direction = new google.maps.Marker({ position: actual, map, icon, clickable: false, zIndex: 1 }); markers.push(direction); }
+    };
+    updateDirection((panoId && getStreetViewSnapshot(panoId)?.heading) ?? heading);
+    const unsubscribe = panoId ? subscribeStreetViewSnapshot((snapshot) => { if (snapshot.locationPanoId === panoId || snapshot.panoId === panoId) updateDirection(snapshot.heading); }) : undefined;
     addMarker(actual, t('originalLocation'), '#22c55e', 8);
     if (guess) {
       addMarker(guess, t('currentGuess'), '#ef4444');
@@ -80,11 +92,12 @@ export function ResultMap({ actual, guess, previousGuesses = [], className = '',
     if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom);
     positionedRef.current = true;
     return () => {
+      unsubscribe?.();
       markers.forEach((marker) => marker.setMap(null));
       lines.forEach((line) => line.setMap(null));
       if (pointsRef.current === points) pointsRef.current = [];
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, selectable, ui, mapPreferences.resultMapZoom]);
+  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, panoId, heading, selectable, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
     if (!active || !mapRef.current || !element.current || !pointsRef.current.length) return;

@@ -36,6 +36,8 @@ Somente exteriores funciona junto com a fonte de imagens: Somente oficiais tamb�
 
 Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 20 MB. Anterior fica antes de Revelar e é ativado depois de visitar dois locais. Próximo avança primeiro pelos locais já vistos e depois escolhe um novo. O X à direita do cabeçalho abre a escolha do modo. O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar. A variação 0 mantém a vista enviada; 100 procura Street View até 1 km ao redor e volta a um local original quando necessário. O botão de menos minimiza a ficha do local e maximizar a expande para toda a tela.
 
+O ponto verde nos mapas do local revelado e do resultado indica a direção da câmera do Street View. Ele gira com a vista; os resultados salvos usam a direção registrada quando disponível.
+
 ### Escolher uma prioridade de aprendizagem
 
 O aprendizado com mapa enviado identifica o progresso da fonte (por exemplo, **Fonte: 1/50**). Cada entrada é marcada como concluída ao ser verificada, portanto **Próximo** não pode escolhê-la novamente mesmo que uma variação próxima abra outro panorama; entradas quebradas também são ignoradas uma única vez. Ao concluir, **Próximo** desaparece e resta **Anterior**. O Jogo também não repete entradas da fonte. Em Explorar mapa, pesquise uma cidade, região ou país e escolha uma sugestão do catálogo integrado do GeoTrainer para aproximar o mapa. As sugestões apenas movem o mapa de cobertura; clique na cobertura azul para abrir o Street View. O texto pessoal do Caderno aceita até 1000 caracteres por salvamento e mostra um contador abaixo do editor.
@@ -70,7 +72,7 @@ Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas do
 
 Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Depois do palpite, o resultado mostra o país real, cidade, região e via disponíveis, o endereço completo, as coordenadas exatas, a distância e a pontuação. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
 
-No Jogo e na Revisão, amplie o mapa de palpite para ocupar toda a área visível. Arraste-o pelo cabeçalho ou redimensione-o por qualquer borda ou canto; o botão de restaurar devolve o mapa compacto. O marcador permanece no lugar.
+No Jogo e na Revisão, o botão de ampliar abre o mapa de palpite como painel flutuante por padrão. Em **Configurações → Exibição → Mapas**, defina **Botão de ampliação do mapa de palpite** como **Tela cheia** se preferir que todo o painel, inclusive os controles de palpite, ocupe a tela visível. Em ambos os modos, arraste-o pelo cabeçalho, redimensione-o por uma borda ou canto e restaure o mapa compacto. O mapa também tem um botão de tela cheia separado para a área do mapa. O marcador permanece no lugar.
 
 O ícone **Salvar este local para revisão**, ao lado de **Continuar jogo**, permite guardar também respostas corretas. Ele só aparece se o local exibido ainda não tiver um cartão de revisão, incluindo locais do mesmo país a até 50 metros. Também funciona nas rodadas anteriores. Ao salvar, o ícone desaparece e o resultado continua aberto, sem alterar a pontuação ou agendamentos existentes. O estado salvo permanece após recarregar e a sincronização continua manual. Se falhar, tente novamente. Uma breve notificação confirma o salvamento para revisão.
 
