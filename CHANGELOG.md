@@ -2,6 +2,7 @@
 
 ## 2026-10-08
 
+- Open new Meta Study panoramas with their lesson panel closed by default; add a saved Display preference for automatic opening.
 - Show the Street View camera direction on the green location marker in revealed and result maps; the pointer turns with the panorama.
 - Choose in Settings → Display whether the Play and Review pinpointer button enlarges a floating map or fills the viewport; Enlarge is the default. The map retains its separate fullscreen control.
 

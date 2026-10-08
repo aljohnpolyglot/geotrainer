@@ -4,15 +4,18 @@ import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPres
 
 test('map preferences use safe defaults and normalize persisted choices', () => {
   assert.deepEqual(normalizeMapPreferences(undefined), {
+    autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: false, motionTracking: false, movementStyle: 'click',
     mapType: 'roadmap', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', gestureHandling: 'auto', clickableIcons: false, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   assert.deepEqual(normalizeMapPreferences({ showRoadLabels: true, motionTracking: true, movementStyle: 'arrows', mapType: 'terrain', gestureHandling: 'cooperative', clickableIcons: true, geotrainerMapStyle: false }), {
+    autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: true, motionTracking: true, movementStyle: 'arrows',
     mapType: 'terrain', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', gestureHandling: 'cooperative', clickableIcons: true, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   const preferences = normalizeMapPreferences({ mapPalette: 'dark' });
   assert.equal(normalizeMapPreferences({ pinpointerExpandMode: 'fullscreen' }).pinpointerExpandMode, 'fullscreen');
+  assert.equal(normalizeMapPreferences({ autoOpenMeta: true }).autoOpenMeta, true);
   const light = mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'light' }), true);
   assert.deepEqual(mapPresentationOptions(preferences, false).styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), true).styles);
   assert.deepEqual(light.styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), false).styles);

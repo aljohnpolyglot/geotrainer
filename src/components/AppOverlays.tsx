@@ -20,6 +20,7 @@ import { StreetViewExplorer } from './StreetViewExplorer';
 import { localizeMetaLesson } from '../data/metaLessons';
 import { useMetaReviewAid } from '../hooks/useMetaReviewAid';
 import { needsMetaMapFallback } from '../data/metaCountryViews';
+import { useMapPreferences } from '../services/mapPreferences';
 
 interface AppOverlaysProps {
   appMode: AppMode; showHome: boolean; currentLocation: LocationResult | null; isRevealed: boolean;
@@ -52,6 +53,7 @@ export const learningAnalysisAvailable = (appMode: AppMode, enabled: boolean | u
 export const coachIsRevealed = (appMode: AppMode, hasPlayResult: boolean, hasReviewResult: boolean, hasSummaryRound: boolean, hasReviewAttempt: boolean, playResultVisible = true, reviewResultVisible = true, summaryResultVisible = true) => appMode === 'play' ? hasPlayResult && playResultVisible : hasSummaryRound ? summaryResultVisible : hasReviewAttempt && hasReviewResult && reviewResultVisible;
 
 export function AppOverlays(props: AppOverlaysProps) {
+  const { autoOpenMeta } = useMapPreferences();
   const [playResultVisible, setPlayResultVisible] = useState(true);
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
@@ -72,7 +74,7 @@ export function AppOverlays(props: AppOverlaysProps) {
     {playAnalysisAvailable && <AiCoach panoId={currentLocation.panoId} appMode={appMode} revealed={coachRevealed} context={coachRevealed ? { actualCountry: COUNTRIES[currentLocation.countryCode]?.name || currentLocation.countryCode, guessedCountry: coachGuess ? COUNTRIES[coachGuess]?.name || coachGuess : undefined, score: revealedResult?.score, distanceKm: revealedResult?.distanceKm, previousAttempts: appMode === 'review' && !summaryRound ? reviewHistory.slice(0, 5).map((item) => ({ guessedCountry: item.guessedCountryCode, score: item.score })) : undefined } : undefined} onSave={(note) => props.onSaveCoach({ ...note, location: currentLocation })} onSaveClue={(clue) => props.onSaveClue({ ...clue, origin: 'coach', location: currentLocation })} onClueAnalyzed={props.onClueAnalyzed} />}
     <LearningAids lesson={appMode === 'study' && learnSource === 'meta' ? studyMeta : reviewMeta}
       showMetaMapFallback={appMode === 'study' && learnSource === 'meta' && needsMetaMapFallback(studyMeta?.panoId, currentLocation.panoId)}
-      panoId={summaryRound ? currentLocation.panoId : reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} autoOpenMeta={appMode === 'study' && learnSource === 'meta'} metaProgress={appMode === 'study' && learnSource === 'meta' ? metaProgress : undefined} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
+      panoId={summaryRound ? currentLocation.panoId : reviewAttempt?.panoId || currentLocation.panoId} lat={currentLocation.lat} lng={currentLocation.lng} countryCode={currentLocation.countryCode} adviceOpen={appMode === 'study' && learnSource === 'meta' && metaAdviceOpen} autoOpenMeta={appMode === 'study' && learnSource === 'meta' && autoOpenMeta} metaProgress={appMode === 'study' && learnSource === 'meta' ? metaProgress : undefined} refreshKey={trainerRefreshKey} allowAnalysis={playAnalysisAvailable} onAdviceClose={props.onDismissMetaAdvice} onSaveClue={props.onSaveClue} onNoteSaved={props.onNoteSaved} />
     </div>}
     <StreetViewExplorer open={mapPickerOpen} mapsReady={mapsReady} panoramaSource={props.explorePanoramaSource} allowInteriors={props.exploreAllowInteriors} onSettingsChange={props.onExploreSettingsChange} onClose={props.onCloseMapPicker} onSelect={props.onOpenMapLocation} />
     {!summaryRound && reviewResult && reviewAttempt && <ReviewResultPanel round={reviewResult} sourceAttempt={reviewAttempt} history={reviewHistory} position={Math.max(1, reviewStats.length)} total={Math.max(reviewInitialTotal, reviewStats.length + reviewQueueLength)} sourceLabel={reviewSource} grade={reviewAttemptRecord?.grade} advancing={reviewGrading} onNext={props.onNextReview} onVisibilityChange={props.onReviewResultVisibilityChange} />}

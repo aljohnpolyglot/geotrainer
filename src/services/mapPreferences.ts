@@ -3,6 +3,7 @@ import type { CountryBorderColor, CountryBorderWidth, MapPreferences, ResultMapZ
 import { trainerDb } from '../data/trainerDb';
 
 export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
+  autoOpenMeta: false,
   showImageryDate: false,
   showRoadLabels: false,
   motionTracking: false,
@@ -22,6 +23,7 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
 export const normalizeMapPreferences = (value: unknown): MapPreferences => {
   const source = value && typeof value === 'object' ? value as Partial<MapPreferences> : {};
   return {
+    autoOpenMeta: source.autoOpenMeta === true,
     showImageryDate: source.showImageryDate === true,
     showRoadLabels: source.showRoadLabels === true,
     motionTracking: source.motionTracking === true,

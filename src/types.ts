@@ -133,6 +133,7 @@ export type CountryBorderWidth = 'thin' | 'standard' | 'bold';
 export type CountryBorderColor = 'auto' | 'light' | 'dark' | 'accent';
 export type MapGesturePreference = 'auto' | 'cooperative' | 'greedy';
 export interface MapPreferences {
+  autoOpenMeta?: boolean;
   showImageryDate: boolean;
   showRoadLabels: boolean;
   motionTracking: boolean;
