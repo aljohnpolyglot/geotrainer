@@ -94,7 +94,7 @@ A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais 
 
 Um panorama salvo de um colaborador que ainda esteja disponível abre exatamente como foi aprendido, sem variar a vista. Se deixar de estar disponível, a Revisão procura imagens oficiais do Google ao ar livre num raio de 50 metros do local salvo. Sem resultado, o cartão fica à espera de nova tentativa em vez de mostrar outra cena.
 
-A Revisão espera a imagem do panorama aparecer antes de liberar o mapa de resposta e iniciar a contagem do tempo. Se a vista continuar preta, ela permanece carregando e o tempo não avança; use o ícone de recarregar para tentar o mesmo cartão novamente.
+A Revisão verifica o ID, a localização e o estado do panorama antes de liberar o mapa de resposta e iniciar a contagem do tempo. Se a imagem continuar preta, o tempo pode avançar; recarregue a página para tentar novamente.
 
 Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
 

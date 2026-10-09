@@ -15,7 +15,7 @@ import { trainerDb } from '../data/trainerDb';
 import { normalizeLanguagePreferences, translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { useMapPreferences } from '../services/mapPreferences';
-import { observePanoramaArrival, panoramaImageVisible } from '../services/panoramaArrival';
+import { observePanoramaArrival } from '../services/panoramaArrival';
 
 interface StreetViewContainerProps {
   currentLocation: LocationResult | null;
@@ -295,10 +295,10 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
     onPanoramaReady(null);
     setArrivedPano(null);
     const panorama = panoInstanceRef.current;
-    const stop = panorama && currentLocation && containerRef.current ? observePanoramaArrival(panorama, currentLocation, () => {
+    const stop = panorama && currentLocation ? observePanoramaArrival(panorama, currentLocation, () => {
       setArrivedPano(currentLocation.panoId);
       onPanoramaReady(currentLocation.panoId);
-    }, () => panoramaImageVisible(containerRef.current!)) : undefined;
+    }) : undefined;
     return () => { stop?.(); onPanoramaReady(null); };
   }, [mapsLoaded, currentLocation?.panoId, currentLocation?.lat, currentLocation?.lng, onPanoramaReady]);
 
@@ -376,14 +376,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       <div
         ref={containerRef}
         className="w-full h-full absolute inset-0"
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', visibility: awaitingPanorama ? 'hidden' : 'visible' }}
       />
 
       {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={currentLocation} position={viewPosition?.panoId === currentLocation.panoId ? viewPosition.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
 
       {/* Loading Overlay */}
       {(isLoading || awaitingPanorama) && (
-        <div className={`absolute inset-0 ${awaitingPanorama ? 'bg-stone-950' : 'bg-stone-950/75 backdrop-blur-xs'} flex flex-col items-center justify-center z-20 pointer-events-none transition-opacity duration-200`}>
+        <div className="absolute inset-0 bg-stone-950/75 backdrop-blur-xs flex flex-col items-center justify-center z-20 pointer-events-none transition-opacity duration-200">
           <div className="flex flex-col items-center space-y-3 bg-stone-900/90 border border-stone-800 px-6 py-4 rounded-xl shadow-xl">
             <RefreshCw className="w-7 h-7 text-stone-200 animate-spin" />
             <span className="text-sm font-medium text-stone-200">

@@ -210,7 +210,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-Review waits until the selected panorama shows an image before enabling the pinpoint map and starting the answer timer. A black view stays in loading and does not count answer time; use the reload icon to retry the same card. A previous card’s scene is hidden during loading.
+Review waits until the viewer verifies the selected panorama ID, location, and status before enabling the pinpoint map and starting the answer timer. If the image remains black despite that confirmation, the timer can run; reload the page to retry. A previous card’s scene is hidden during loading.
 
 The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. Completed Play and Review rounds unlock movement, panning, and zoom for this inspection even when the original round restricted them. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 

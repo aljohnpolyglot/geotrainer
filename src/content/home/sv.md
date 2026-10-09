@@ -94,7 +94,7 @@ På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att 
 
 Ett sparat panorama från en bidragsgivare som fortfarande är tillgängligt öppnas precis som det lärdes in, utan variation. Om det inte längre finns söker Repetition efter officiella Google-bilder utomhus inom 50 meter från den sparade platsen. Utan träff får kortet vänta på ett nytt försök i stället för att visa en annan vy.
 
-Repetition väntar tills panoramabilden syns innan gissningskartan öppnas och svarstiden börjar räknas. Om vyn förblir svart fortsätter laddningen utan att tiden går; använd omladdningsikonen för att försöka med samma kort igen.
+Repetition kontrollerar panoramats ID, plats och status innan gissningskartan öppnas och svarstiden börjar räknas. Om bilden förblir svart kan tiden ändå gå; ladda om sidan för att försöka igen.
 
 Välj **Spara** för att använda ändringarna. Bedömning och intervall påverkar framtida schemaläggning och skriver inte om gamla försök; gränser och köordning används vid nästa köberäkning.
 

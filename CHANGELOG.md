@@ -2,7 +2,7 @@
 
 ## 2026-10-09
 
-- Wait for visible Street View imagery before starting a Review answer timer; black views stay in loading and can be retried without counting time.
+- Let Review start after Google's verified panorama lookup without waiting for a canvas pixel check that could leave valid cards stuck loading.
 - Restore Google's original light Roadmap and Terrain colors across maps and the Settings preview instead of applying the washed-out custom palette.
 - Fix the Play and Review Return to start metre display so it measures from the round's starting panorama as the learner moves.
 

@@ -92,7 +92,7 @@ L’icône **Enregistrer ce lieu pour révision**, à côté de **Continuer la p
 
 Un panorama enregistré par un contributeur qui reste disponible s’ouvre tel qu’il a été appris, sans variation. S’il n’est plus disponible, la révision cherche une image officielle Google en extérieur à moins de 50 mètres du lieu enregistré. Sans résultat, la carte attend une nouvelle tentative au lieu d’afficher une autre scène.
 
-La Révision attend que l’image du panorama apparaisse avant d’activer la carte de réponse et de lancer le chronomètre. Si la vue reste noire, le chargement continue sans compter le temps ; utilisez l’icône de rechargement pour réessayer la même carte.
+La Révision vérifie l’identifiant, la position et l’état du panorama avant d’activer la carte de réponse et de lancer le chronomètre. Si l’image reste noire, le temps peut continuer ; rechargez la page pour réessayer.
 
 Choisissez **Enregistrer** pour appliquer les changements. Exigence et intervalles modifient la planification future sans réécrire les tentatives ; limites et ordre s’appliquent au prochain calcul de la file.
 

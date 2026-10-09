@@ -94,7 +94,7 @@ La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a
 
 Un panorama salvato da un contributore ancora disponibile si apre esattamente come è stato appreso, senza variazioni. Se non è più disponibile, Ripasso cerca immagini ufficiali Google all’aperto entro 50 metri dal luogo salvato. Senza risultati, la scheda resta in attesa di un nuovo tentativo invece di mostrare un’altra scena.
 
-Ripasso attende che l’immagine del panorama sia visibile prima di abilitare la mappa della risposta e avviare il timer. Se la vista resta nera, il caricamento continua senza contare il tempo; usa l’icona di ricarica per riprovare la stessa scheda.
+Ripasso verifica l’ID, la posizione e lo stato del panorama prima di abilitare la mappa della risposta e avviare il timer. Se l’immagine resta nera, il tempo può continuare; ricarica la pagina per riprovare.
 
 Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
 

@@ -94,7 +94,7 @@ Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre 
 
 Un panorama guardado de un colaborador que sigue disponible se abre tal como se aprendió, sin variar la vista. Si ya no está disponible, Repaso busca imágenes oficiales de Google en exteriores a menos de 50 metros del lugar guardado. Si no encuentra ninguna, la tarjeta queda pendiente para reintentar en vez de mostrar otra escena.
 
-Repaso espera a que aparezca la imagen del panorama antes de habilitar el mapa de respuesta y empezar a contar el tiempo. Si la vista sigue negra, permanece en carga y el tiempo no avanza; usa el icono de recarga para reintentar la misma tarjeta.
+Repaso verifica el identificador, la ubicación y el estado del panorama antes de habilitar el mapa de respuesta y empezar a contar el tiempo. Si la imagen sigue negra, el tiempo puede avanzar; recarga la página para reintentar.
 
 Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afectan la programación futura sin reescribir intentos guardados; los límites y el orden se aplican al recalcular la cola.
 
