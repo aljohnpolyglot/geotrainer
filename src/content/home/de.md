@@ -214,9 +214,11 @@ Karten öffnen sich innerhalb einer Sitzung in Lernen, Spielen, Wiederholen und 
 
 Ein gespeichertes Panorama eines Beitragenden wird, solange es verfügbar ist, genau wie gelernt und ohne Variation geöffnet. Ist es nicht mehr verfügbar, sucht die Wiederholung nach offiziellen Google-Außenaufnahmen innerhalb von 50 Metern um den gespeicherten Ort. Ohne Treffer bleibt die Karte für einen erneuten Versuch offen, statt eine andere Szene zu zeigen.
 
+Die Wiederholung wartet, bis das Panoramabild sichtbar ist, bevor sie die Ratekarte und den Antworttimer aktiviert. Bleibt die Ansicht schwarz, läuft die Ladeanzeige ohne Zeitmessung weiter; über das Neuladen-Symbol kannst du dieselbe Karte erneut versuchen.
+
 Wähle **Speichern**, um Änderungen anzuwenden. Strenge und Intervalle beeinflussen künftige Planung, ohne gespeicherte Versuche umzuschreiben; Grenzen und Reihenfolge gelten bei der nächsten Berechnung der Warteschlange.
 
-Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell oder Dunkel behält die gewählte Farbe für Straßen- und Geländekarten bei. Satellitenbilder behalten ihre Farben. Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
+Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell verwendet Googles ursprüngliche Farben für Straßen- und Geländekarten, während Dunkel auch bei einem anderen App-Design eine dunkle Kartenpalette beibehält. Satellitenbilder behalten ihre Farben. Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
 
 ### Strengegrad
 

@@ -94,6 +94,8 @@ På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att 
 
 Ett sparat panorama från en bidragsgivare som fortfarande är tillgängligt öppnas precis som det lärdes in, utan variation. Om det inte längre finns söker Repetition efter officiella Google-bilder utomhus inom 50 meter från den sparade platsen. Utan träff får kortet vänta på ett nytt försök i stället för att visa en annan vy.
 
+Repetition väntar tills panoramabilden syns innan gissningskartan öppnas och svarstiden börjar räknas. Om vyn förblir svart fortsätter laddningen utan att tiden går; använd omladdningsikonen för att försöka med samma kort igen.
+
 Välj **Spara** för att använda ändringarna. Bedömning och intervall påverkar framtida schemaläggning och skriver inte om gamla försök; gränser och köordning används vid nästa köberäkning.
 
 Svaret döljs tills du gissar. Om ett gammalt panorama-ID öppnar en vy mer än 10 km från det sparade svaret använder Repetition en giltig vy nära de sparade koordinaterna eller öppnar inte kortet. Efter svaret visar resultatet tillgänglig stad, region, väg, fullständig adress och exakta koordinater, precis som Visa i Studera. Minimera resultatet uppe till höger för att studera panoramat och använd Visa resultat för att öppna det igen. Slutförda Spel- och Repetitionsrundor låser upp förflyttning, panorering och zoomning under granskningen även om ursprungsrundan begränsade dem. Anpassad extraträning lämnar framtida kort oförändrade; när ett redan förfallet kort slutförs flyttas datumet fram och består efter omladdning.
@@ -145,7 +147,7 @@ Anteckningsboken bevarar inklistrade rubriker, fetstil och punktlistor. Externa 
 
 Kartor öppnas snabbare igen under samma session i Lär, Spela, Repetition och platsresultat. När du placerar eller drar en markör ligger kartan kvar där du har ställt in den. När sidan laddas om kan kartbilder behöva hämtas igen; tidigare visade områden är inte garanterat tillgängliga offline.
 
-Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust eller Mörkt behåller valet på väg- och terrängkartor. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet. Gränsernas bredd och färg kan justeras med en direkt förhandsvisning; regiongränser är avstängda som standard och kan aktiveras separat.
+Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust använder Googles ursprungliga färger för väg- och terrängkartor, medan Mörkt behåller en mörk kartpalett även om appens tema ändras. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet. Gränsernas bredd och färg kan justeras med en direkt förhandsvisning; regiongränser är avstängda som standard och kan aktiveras separat.
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 

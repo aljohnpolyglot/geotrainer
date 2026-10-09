@@ -94,6 +94,8 @@ La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a
 
 Un panorama salvato da un contributore ancora disponibile si apre esattamente come è stato appreso, senza variazioni. Se non è più disponibile, Ripasso cerca immagini ufficiali Google all’aperto entro 50 metri dal luogo salvato. Senza risultati, la scheda resta in attesa di un nuovo tentativo invece di mostrare un’altra scena.
 
+Ripasso attende che l’immagine del panorama sia visibile prima di abilitare la mappa della risposta e avviare il timer. Se la vista resta nera, il caricamento continua senza contare il tempo; usa l’icona di ricarica per riprovare la stessa scheda.
+
 Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
 
 ## Coach IA e indizi
@@ -139,7 +141,7 @@ Il Taccuino conserva titoli, grassetto ed elenchi puntati incollati. Le risposte
 
 Le mappe si riaprono più rapidamente durante una sessione in Impara, Gioca, Ripasso e nei risultati delle posizioni. Posizionare o trascinare un segnaposto non sposta la mappa. Ricaricando la pagina potrebbe essere necessario scaricare le immagini della mappa; le aree già viste non sono garantite offline.
 
-In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro o Scuro mantiene la scelta per le mappe stradali e del terreno. Le immagini satellitari conservano i propri colori. I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
+In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro usa i colori originali di Google per le mappe stradali e del terreno, mentre Scuro mantiene una palette scura anche quando cambia il tema dell’app. Le immagini satellitari conservano i propri colori. I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 

@@ -19,7 +19,8 @@ test('map preferences use safe defaults and normalize persisted choices', () => 
   const light = mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'light' }), true);
   assert.deepEqual(mapPresentationOptions(preferences, false).styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), true).styles);
   assert.deepEqual(light.styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), false).styles);
-  assert.deepEqual(light.styles?.[0], { elementType: 'geometry', stylers: [{ color: '#f3f1e8' }] });
+  assert.equal(light.styles?.length, 2);
+  assert.deepEqual(mapPresentationOptions(preferences, false).styles?.[0], { elementType: 'geometry', stylers: [{ color: '#0a2635' }] });
   assert.deepEqual(mapPresentationOptions(normalizeMapPreferences({ geotrainerMapStyle: false, mapPalette: 'light' }), true).styles, light.styles);
   assert.equal('mapId' in light, false);
   assert.deepEqual(light.styles?.at(-2), { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] });

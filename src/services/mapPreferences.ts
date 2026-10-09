@@ -69,15 +69,6 @@ export function useMapPreferences() {
   return preferences;
 }
 
-const LIGHT_STYLE: google.maps.MapTypeStyle[] = [
-  { elementType: 'geometry', stylers: [{ color: '#f3f1e8' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#253b46' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
-  { featureType: 'landscape', stylers: [{ color: '#f3f1e8' }] },
-  { featureType: 'water', stylers: [{ color: '#a9d7e5' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
-  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#dde5d5' }] },
-];
 const DARK_STYLE: google.maps.MapTypeStyle[] = [
   { elementType: 'geometry', stylers: [{ color: '#0a2635' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#b8d4dc' }] },
@@ -95,6 +86,6 @@ export function mapPresentationOptions(preferences: MapPreferences, dark: boolea
     mapTypeId: preferences.mapType,
     gestureHandling: preferences.gestureHandling,
     clickableIcons: preferences.clickableIcons,
-    styles: [...(useDark ? DARK_STYLE : LIGHT_STYLE), regionStyle, borderStyle],
+    styles: [...(useDark ? DARK_STYLE : []), regionStyle, borderStyle],
   };
 }

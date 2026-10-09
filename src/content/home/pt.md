@@ -94,6 +94,8 @@ A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais 
 
 Um panorama salvo de um colaborador que ainda esteja disponível abre exatamente como foi aprendido, sem variar a vista. Se deixar de estar disponível, a Revisão procura imagens oficiais do Google ao ar livre num raio de 50 metros do local salvo. Sem resultado, o cartão fica à espera de nova tentativa em vez de mostrar outra cena.
 
+A Revisão espera a imagem do panorama aparecer antes de liberar o mapa de resposta e iniciar a contagem do tempo. Se a vista continuar preta, ela permanece carregando e o tempo não avança; use o ícone de recarregar para tentar o mesmo cartão novamente.
+
 Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
 
 ## Coach de IA e pistas
@@ -139,7 +141,7 @@ O Caderno preserva títulos, negrito e listas com marcadores ao colar. Respostas
 
 Os mapas reabrem mais rapidamente durante uma sessão em Aprender, Jogar, Revisar e nos resultados de localização. Colocar ou arrastar um marcador mantém o mapa na posição escolhida. Ao recarregar a página, pode ser necessário baixar as imagens do mapa; áreas já vistas não têm disponibilidade garantida sem conexão.
 
-Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro ou Escuro mantêm a escolha nos mapas rodoviários e de relevo. Imagens de satélite mantêm suas cores. As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
+Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro usa as cores originais do Google nos mapas rodoviários e de relevo, enquanto Escuro mantém uma paleta escura mesmo se o tema do aplicativo mudar. Imagens de satélite mantêm suas cores. As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 

@@ -210,7 +210,7 @@ The panorama appears without the current card’s persisted answer metadata. Rev
 
 ### After the guess
 
-Review waits until the panorama viewer has loaded the selected card before enabling the pinpoint map and starting the answer timer. If the view does not load, use the reload icon to retry the same card. A previous card’s scene is hidden during loading.
+Review waits until the selected panorama shows an image before enabling the pinpoint map and starting the answer timer. A black view stays in loading and does not count answer time; use the reload icon to retry the same card. A previous card’s scene is hidden during loading.
 
 The result compares your current pinpoint with the actual location and may show previous attempts for context. It also reveals the available city, region, road, formatted address, and exact coordinates, matching the location details shown after Reveal in Learn. Minimize the result from its top-right corner to study the panorama, then use View result to reopen it. Completed Play and Review rounds unlock movement, panning, and zoom for this inspection even when the original round restricted them. On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
@@ -396,7 +396,7 @@ Play automatically adds below-target rounds to Review and Practice mistakes uses
 
 Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
 
-Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light and Dark keep that map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
+Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light uses Google's original road and terrain colors, while Dark uses a dark map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors. Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
 
 ## Progress and statistics
 
