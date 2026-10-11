@@ -46,6 +46,8 @@ L’apprendimento con una mappa caricata etichetta l’avanzamento della fonte (
 
 In Esplora mappa puoi cercare una città, regione o paese e scegliere un suggerimento dal catalogo integrato di GeoTrainer per ingrandire quella zona. I suggerimenti spostano solo la mappa di copertura; fai clic sulla copertura blu per aprire Street View. Il testo personale del Taccuino è limitato a 1000 caratteri per salvataggio e un contatore appare sotto l’editor.
 
+Puoi anche incollare un link completo a Street View di Google Maps nella ricerca per aprire quel panorama con la direzione indicata. Il panorama deve essere ancora disponibile e rispettare i filtri delle immagini e degli esterni.
+
 La priorità cambia il modo in cui vengono scelte le **nuove località di Apprendimento personalizzato e i round generati di Gioco** dopo aver applicato raccolta, combinazione di paesi, ambiente, fonte delle immagini e filtro per interni. Non modifica le mappe caricate con coordinate, Meta, Esplora mappa o Ripasso. Gli insiemi geografici importati tornano a Personalizzato, dove la priorità si applica alle località generate.
 
 - **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. In Mondo riduce il peso dei territori molto piccoli, così non dominano. Usalo per ottenere varietà o visitare ampiamente la raccolta.

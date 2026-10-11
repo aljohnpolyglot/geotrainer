@@ -46,6 +46,8 @@ O aprendizado com mapa enviado identifica o progresso da fonte (por exemplo, **F
 
 Em Explorar mapa, pesquise uma cidade, região ou país e escolha uma sugestão do catálogo integrado do GeoTrainer para aproximar o mapa. As sugestões apenas movem o mapa de cobertura; clique na cobertura azul para abrir o Street View. O texto pessoal do Caderno aceita até 1000 caracteres por salvamento e mostra um contador abaixo do editor.
 
+Você também pode colar um link completo do Street View do Google Maps na busca para abrir aquele panorama na direção do link. O panorama precisa estar disponível e corresponder aos filtros de imagens e áreas externas.
+
 A prioridade muda como os **novos locais do Aprendizado personalizado e as rodadas geradas do Jogo** são escolhidos depois da coleção, mistura de países, ambiente, fonte das imagens e filtro de interiores. Ela não altera mapas enviados com coordenadas, Meta, Explorar mapa ou Revisão. Grupos geográficos importados voltam ao Personalizado, onde a prioridade se aplica aos locais gerados.
 
 - **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. No Mundo, reduz o peso de territórios muito pequenos para que não dominem. Use para obter variedade ou percorrer amplamente a coleção.

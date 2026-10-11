@@ -46,6 +46,8 @@ El aprendizaje con mapa subido etiqueta el progreso de la fuente (por ejemplo, *
 
 En Explorar mapa puedes buscar una ciudad, región o país y elegir una sugerencia del catálogo integrado de GeoTrainer para acercar el mapa. Las sugerencias solo mueven el mapa de cobertura; pulsa la cobertura azul para abrir Street View. El texto personal del Cuaderno admite hasta 1000 caracteres por guardado y muestra un contador bajo el editor.
 
+También puedes pegar un enlace completo de Street View de Google Maps en Buscar para abrir ese panorama con la orientación del enlace. La panorámica debe seguir disponible y cumplir los filtros de imágenes y exteriores.
+
 La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje personalizado y las rondas de Juego generadas** después de aplicar la colección, la mezcla de países, el entorno, la fuente de imágenes y el filtro de interiores. No cambia los mapas subidos con coordenadas, Meta, Explorar mapa ni Repaso. Los grupos geográficos importados vuelven a Personalizado, donde se aplica la prioridad a las ubicaciones generadas.
 
 - **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. En Mundo reduce el peso de territorios diminutos para que no dominen. Úsalo para obtener variedad o recorrer ampliamente la colección.

@@ -137,6 +137,8 @@ Uploaded-map Learn labels source progress (for example, **Source: 1/50**). Each 
 
 In Explore Map, search for a city, region, or country and choose a suggestion from GeoTrainer’s built-in catalog to zoom there. Suggestions only move the coverage map; click blue coverage to open Street View. Personal Notebook text is limited to 1,000 characters per save; the counter beneath the editor shows the remaining capacity.
 
+You can also paste a full Google Maps Street View link into Search to open that panorama at its linked heading. The panorama must still be available and match your imagery and outdoor filters.
+
 Priority changes how **new Custom Learn and generated Play locations** are chosen after the collection, country mix, environment, imagery source, and indoor filters are applied. It does not change uploaded coordinate maps, Meta, Explore Map, or Review. Uploaded geographic pools return to Custom, where priority applies to generated locations.
 
 - **Random** (default) samples the eligible pool without using your history. In World, it reduces the weight of tiny territories so they do not dominate. Use it for variety or a broad tour of the selected collection.

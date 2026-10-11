@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Open pasted Google Maps Street View panorama links from Learn's Explore Map search, preserving the linked heading and current imagery filters.
 - Correct the Beginner Meta red-soil lesson to identify its Pará example and explain that soil color alone does not identify a Brazilian state, in all eight languages.
 - Keep Space free for Street View movement in Learn and use N or the Next button to advance lessons.
 - Add local generated thumbnails for Beginner and topic Meta courses, show the active course name in Learn, enlarge Meta reference images in a closable viewer, and link found place names to Wikipedia when its lookup returns results.

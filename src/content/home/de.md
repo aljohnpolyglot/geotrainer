@@ -93,6 +93,8 @@ Das Lernen mit hochgeladener Karte kennzeichnet den Quellenfortschritt (zum Beis
 
 In Karte erkunden kannst du nach Stadt, Region oder Land suchen und einen Vorschlag aus dem integrierten GeoTrainer-Katalog wählen, um dorthin zu zoomen. Vorschläge bewegen nur die Abdeckungskarte; klicke auf die blaue Abdeckung, um Street View zu öffnen. Persönlicher Notizbuchtext ist pro Speicherung auf 1.000 Zeichen begrenzt; unter dem Editor steht ein Zähler.
 
+Du kannst auch einen vollständigen Google-Maps-Street-View-Link in die Suche einfügen, um genau dieses Panorama mit der verlinkten Blickrichtung zu öffnen. Das Panorama muss verfügbar sein und zu den Bild- und Außenaufnahmefiltern passen.
+
 Die Priorität bestimmt, wie **neue Orte beim benutzerdefinierten Lernen und in generierten Spielrunden** ausgewählt werden, nachdem Sammlung, Ländermischung, Umgebung, Bildquelle und Innenraumfilter angewendet wurden. Sie verändert hochgeladene Koordinatenkarten, Meta, Karte erkunden und Wiederholung nicht. Hochgeladene geografische Pools wechseln zu Benutzerdefiniert; dort gilt die Priorität für generierte Orte.
 
 - **Zufällig** (Standard) wählt aus dem geeigneten Pool ohne deinen Verlauf. In Welt verringert es das Gewicht sehr kleiner Gebiete, damit sie nicht dominieren. Nutze es für Abwechslung oder eine breite Tour durch die Sammlung.

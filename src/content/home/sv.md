@@ -46,6 +46,8 @@ Lärande med en uppladdad karta märker källans förlopp, till exempel **Källa
 
 I Utforska karta kan du söka efter en stad, region eller ett land och välja ett förslag från GeoTrainers inbyggda katalog för att zooma dit. Förslagen flyttar bara täckningskartan; klicka på blå täckning för att öppna Street View. Personlig text i Anteckningsboken är begränsad till 1000 tecken per sparning och en räknare visas under redigeraren.
 
+Du kan också klistra in en fullständig Google Maps-länk till Street View i sökfältet för att öppna panoramat i länkens riktning. Panoramat måste fortfarande vara tillgängligt och matcha bild- och utomhusfiltren.
+
 Prioritet styr hur **nya platser i Anpassat lärande och genererade spelrundor** väljs efter samling, landsmix, miljö, bildkälla och inomhusfilter. Den påverkar inte uppladdade koordinatkartor, Meta, Utforska karta eller Repetition. Uppladdade geografiska pooler återgår till Anpassat, där prioriteten gäller för genererade platser.
 
 - **Slumpmässigt** (standard) väljer ur det möjliga urvalet utan att använda din historik. I Världen tonas mycket små territorier ned så att de inte dominerar. Använd det för variation eller en bred rundtur i samlingen.

@@ -46,6 +46,8 @@ L’apprentissage avec une carte importée identifie la progression de la source
 
 Dans Explorer la carte, recherchez une ville, une région ou un pays puis choisissez une suggestion du catalogue intégré de GeoTrainer pour y zoomer. Les suggestions déplacent seulement la carte de couverture ; cliquez sur la couverture bleue pour ouvrir Street View. Le texte personnel du Carnet est limité à 1 000 caractères par enregistrement et un compteur apparaît sous l’éditeur.
 
+Vous pouvez aussi coller un lien Street View complet de Google Maps dans la recherche pour ouvrir ce panorama selon son orientation enregistrée. Il doit rester disponible et correspondre aux filtres d’images et de vues extérieures.
+
 La priorité modifie la sélection des **nouveaux lieux de l’apprentissage personnalisé et des manches générées du Jeu** après l’application de la collection, du mélange de pays, de l’environnement, de la source d’images et du filtre intérieur. Elle ne change pas les cartes importées avec coordonnées, Méta, Explorer la carte ou Révision. Les ensembles géographiques importés reviennent au mode Personnalisé, où la priorité s’applique aux lieux générés.
 
 - **Aléatoire** (par défaut) choisit dans l’ensemble admissible sans utiliser votre historique. Dans Monde, il réduit le poids des très petits territoires pour qu’ils ne dominent pas. Utilisez-le pour varier les lieux ou parcourir largement la collection.
