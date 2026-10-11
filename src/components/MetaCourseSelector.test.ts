@@ -17,8 +17,10 @@ test('Meta course setup shows selected country progress and a lesson without a h
   assert.match(chooser, /Most lessons/);
   assert.match(chooser, /Most complete/);
   assert.match(chooser, /Topic courses/);
+  assert.match(chooser, /Search courses/);
   assert.match(chooser, /US license plates/);
   assert.match(chooser, /European pedestrian signs/);
+  assert.match(chooser, /Canada clues/);
   const lesson = renderToStaticMarkup(createElement(MetaCourseCard, {
     tip: { id: 'BW-test', section: 'Regional clues', mapUrl: 'https://goo.gl/maps/example', text: 'Look for **white sand**.', note: 'Compare the nearby hills.' },
     courseId: 'BW', position: 2, total: 32,
@@ -56,4 +58,7 @@ test('Meta attribution names the correct external guides for each course', () =>
   const topic = renderToStaticMarkup(createElement(MetaAttribution, { countryCourse: true, lessonId: 'geocoach-plates-1640' }));
   assert.match(topic, /GeoCoach · GeoFan_mhewelt9_FXTk7/);
   assert.match(topic, /geocoach\.me\/maps/);
+  const addedTopic = renderToStaticMarkup(createElement(MetaAttribution, { countryCourse: true, lessonId: 'geocoach-canada-metas-378' }));
+  assert.match(addedTopic, /GeoCoach · LPhantom/);
+  assert.match(addedTopic, /canada-metas-fbaa46a1/);
 });

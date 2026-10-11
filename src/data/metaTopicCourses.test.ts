@@ -3,16 +3,21 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { LANGUAGE_OPTIONS } from '../services/language';
-import { localizeMetaCountryCourse, META_TOPIC_COURSES, metaCourseForLesson, normalizeMetaCountryCourse } from './metaCountryCourses';
+import { localizeMetaCountryCourse, META_TOPIC_COURSES, metaCourseForLesson, metaCourseName, normalizeMetaCountryCourse } from './metaCountryCourses';
 import { viewFromGoogleMapsUrl } from './metaCountryViews';
 
 test('all GeoCoach topic lessons and their eight-language snapshots are local and playable', () => {
-  assert.equal(META_TOPIC_COURSES.length, 9);
-  assert.equal(META_TOPIC_COURSES.reduce((count, course) => count + course.lessonCount, 0), 375);
+  assert.equal(META_TOPIC_COURSES.length, 30);
+  assert.equal(META_TOPIC_COURSES.reduce((count, course) => count + course.lessonCount, 0), 959);
   for (const course of META_TOPIC_COURSES) {
     assert.match(course.sourceUrl || '', /^https:\/\/www\.geocoach\.me\/maps\//);
     assert.ok(course.creator);
     assert.ok(existsSync(`public/meta-courses/thumbnails/${course.code}.webp`));
+    for (const { code } of LANGUAGE_OPTIONS) {
+      const name = metaCourseName(course.code, code);
+      assert.notEqual(name, course.code);
+      assert.doesNotMatch(name, /�|\\u[0-9a-f]{4}/i);
+    }
     const source = normalizeMetaCountryCourse(course.code, JSON.parse(readFileSync(`public/meta-topics/${course.code}.json`, 'utf8')));
     assert.equal(source.length, course.lessonCount);
     for (const tip of source) {
@@ -28,7 +33,12 @@ test('all GeoCoach topic lessons and their eight-language snapshots are local an
       assert.deepEqual(value.tips.map((tip: { id: string }) => tip.id), source.map((tip) => tip.id));
       const localized = localizeMetaCountryCourse(course.code, code, source, value);
       assert.equal(localized.length, source.length);
-      for (const tip of localized) assert.doesNotMatch(`${tip.section} ${tip.text}`, /�|\\u[0-9a-f]{4}|<[^>]+>/i);
+      for (const [index, tip] of localized.entries()) {
+        assert.doesNotMatch(`${tip.section} ${tip.text}`, /�|\\u[0-9a-f]{4}|<[^>]+>/i);
+        for (const glyph of source[index].text.match(/[\u0400-\u052f\u0600-\u06ff\u0900-\u0dff\u10a0-\u10ff\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]+/g) || []) {
+          assert.ok(tip.text.includes(glyph), `${tip.id}/${code}: missing clue script`);
+        }
+      }
     }
   }
 });

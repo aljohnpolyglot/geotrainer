@@ -11,17 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "public" / "meta-topics"
-MAPS = (
-    ("plates", "USA License Plates", "64d22387-c4eb-4f5d-8973-6d6ad58afa70", "usa-license-plates-3159c417"),
-    ("bollards", "World Bollards", "027b9391-6ab0-406a-9271-ecf49022e0ae", "geocoach-world-bollards-0c9b8d10"),
-    ("latin-america", "Latin America: How to Identify", "efd0cdc4-ee7f-4984-b12a-23376876795e", "latin-america-how-to-identify-2b3354f1"),
-    ("pedestrian-signs", "European Pedestrian Signs", "a5352409-ded5-40c4-9390-cbacb6dbbd0c", "pedestrian-signs-europe-226dd117"),
-    ("google-cars", "World Google Cars", "fb60b46c-8ffe-4b61-af80-8f3938f5553b", "geocoach-world-google-cars-c0f60637"),
-    ("baltics", "Baltics: How to Identify", "240ac81d-883b-4114-ab30-59182776a8e1", "baltics-estonia-latvia-and-lithuania-how-to-identify-13f9767f"),
-    ("malaysia-indonesia", "Malaysia vs Indonesia", "b8b342fd-b07c-431d-8068-6ea0c7536ca6", "malaysia-vs-indonesia-how-to-identify-344bfdb7"),
-    ("south-asia-languages", "Languages of South Asia", "1bdc1fac-8645-4798-a9dc-0e9f035639f5", "languages-of-south-asia-92513184"),
-    ("usa-bollards", "USA Bollards", "5d5faada-737e-42ea-87f2-9a001f67a1a8", "usa-bollards-c603dc64"),
-)
+CATALOG = "https://www.geocoach.me/maps/index.pageContext.json?group=street-view"
 
 
 def read_json(url):
@@ -105,14 +95,18 @@ def make_tip(args):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    old_manifest = {item["code"]: item for item in json.loads((ROOT / "src" / "data" / "metaTopicCoursesManifest.json").read_text(encoding="utf-8"))}
+    old_manifest = {item["sourceUrl"].split("/")[4]: item for item in json.loads((ROOT / "src" / "data" / "metaTopicCoursesManifest.json").read_text(encoding="utf-8"))}
+    catalog = read_json(CATALOG)["data"]["listing"]
+    if not catalog["items"] or len(catalog["items"]) != catalog["total"]:
+        raise ValueError("GeoCoach catalog is incomplete")
     manifest = []
-    for slug, title, dataset_id, path in MAPS:
+    for item in catalog["items"]:
+        dataset_id, path, title = item["id"], item["slug"], item["title"]
         source_url = f"https://www.geocoach.me/maps/{dataset_id}/{path}"
-        course_id = "geocoach-" + slug
+        course_id = old_manifest[dataset_id]["code"] if dataset_id in old_manifest else "geocoach-" + re.sub(r"-[0-9a-f]{8}$", "", path)
         asset = OUTPUT / f"{course_id}.json"
-        if course_id in old_manifest and asset.exists():
-            manifest.append(old_manifest[course_id])
+        if dataset_id in old_manifest and asset.exists():
+            manifest.append(old_manifest[dataset_id])
             continue
         dataset = read_json(source_url + "/index.pageContext.json")["data"]["dataset"]
         tags = dataset.get("tags") or []
@@ -127,6 +121,10 @@ def main():
         asset.write_text(
             json.dumps({"code": course_id, "tips": tips}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(f"{title}: {len(tips)}/{len(tags)} local lessons", flush=True)
+    catalog_ids = {item["id"] for item in catalog["items"]}
+    manifest.extend(item for dataset_id, item in old_manifest.items() if dataset_id not in catalog_ids)
+    if len({item["code"] for item in manifest}) != len(manifest):
+        raise ValueError("Duplicate GeoCoach course code")
     manifest_text = json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))
     (OUTPUT / "manifest.json").write_text(manifest_text, encoding="utf-8")
     (ROOT / "src" / "data" / "metaTopicCoursesManifest.json").write_text(manifest_text, encoding="utf-8")
