@@ -1,5 +1,5 @@
 export type GuideBlock = { type: 'paragraph' | 'quote' | 'ordered' | 'unordered' | 'table'; text?: string; items?: string[]; headers?: string[]; rows?: string[][] };
-export type InlinePart = { text: string; href?: string; strong?: boolean };
+export type InlinePart = { text: string; href?: string; strong?: boolean; code?: boolean };
 export type GuideSubsection = { id: string; title: string; blocks: GuideBlock[] };
 export type GuideSection = { id: string; title: string; blocks: GuideBlock[]; subsections: GuideSubsection[] };
 export type HomeGuide = { title: string; introduction: GuideBlock[]; sections: GuideSection[] };
@@ -12,12 +12,18 @@ export function arrangeGuideSections<T extends { title: string }>(sections: T[],
   return [...ordered.filter((item) => !endings.includes(item.title)), ...endings.flatMap((title) => ordered.filter((item) => item.title === title))];
 }
 
+export function guideSectionMatches(section: GuideSection, query: string, locale: string): boolean {
+  const blockText = (blocks: GuideBlock[]) => blocks.flatMap((block) => [block.text, ...(block.items || []), ...(block.headers || []), ...(block.rows || []).flat()]);
+  const text = [section.title, ...blockText(section.blocks), ...section.subsections.flatMap((subsection) => [subsection.title, ...blockText(subsection.blocks)])];
+  return text.join(' ').toLocaleLowerCase(locale).includes(query.toLocaleLowerCase(locale));
+}
+
 const id = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export function parseInlineMarkdown(value: string): InlinePart[] {
-  return value.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|\*\*[^*]+\*\*)/g).filter(Boolean).map((part) => {
-    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
-    return link ? { text: link[1], href: link[2] } : part.startsWith('**') && part.endsWith('**') ? { text: part.slice(2, -2), strong: true } : { text: part };
+  return value.split(/(\[[^\]]+\]\((?:https?:\/\/|mailto:)[^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean).map((part) => {
+    const link = part.match(/^\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^)]+)\)$/);
+    return link ? { text: link[1], href: link[2] } : part.startsWith('**') && part.endsWith('**') ? { text: part.slice(2, -2), strong: true } : part.startsWith('`') && part.endsWith('`') ? { text: part.slice(1, -1), code: true } : { text: part };
   });
 }
 

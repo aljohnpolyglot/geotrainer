@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, MapPinned, Search } from 'lucide-react';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { arrangeGuideSections, parseHomeMarkdown, parseInlineMarkdown } from '../services/homeMarkdown';
+import { arrangeGuideSections, guideSectionMatches, parseHomeMarkdown, parseInlineMarkdown } from '../services/homeMarkdown';
 import type { GuideBlock } from '../services/homeMarkdown';
 import { translate } from '../services/language';
+import { trainerDb } from '../data/trainerDb';
 import type { SupportedLanguage } from '../types';
 import en from '../content/home/en.md?raw';
 import es from '../content/home/es.md?raw';
@@ -29,7 +30,7 @@ const endings: Record<SupportedLanguage, string[]> = {
   fr: ['Ressources d’apprentissage', 'Questions fréquentes', 'Suggestions et signalements de bugs'], it: ['Risorse di apprendimento', 'Domande frequenti', 'Suggerimenti e segnalazioni di bug'],
   ru: ['Учебные материалы', 'Частые вопросы', 'Предложения и сообщения об ошибках'], sv: ['Lärresurser', 'Vanliga frågor', 'Förslag och felrapporter'],
 };
-const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.strong ? <strong key={index}>{part.text}</strong> : part.text)}</>;
+const InlineText = ({ text = '' }: { text?: string }) => <>{parseInlineMarkdown(text).map((part, index) => part.href ? <a href={part.href} target="_blank" rel="noreferrer" key={index}>{part.text}</a> : part.strong ? <strong key={index}>{part.text}</strong> : part.code ? <code key={index}>{part.text}</code> : part.text)}</>;
 const Blocks = ({ blocks }: { blocks: GuideBlock[] }) => <>{blocks.map((block, index) => block.type === 'paragraph'
   ? <p key={index}><InlineText text={block.text} /></p>
   : block.type === 'quote' ? <blockquote key={index}><InlineText text={block.text} /></blockquote>
@@ -46,8 +47,9 @@ export function DocsPage() {
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(ui);
   const orderedSections = arrangeGuideSections(guide.sections, placements[ui], endings[ui]);
-  const visibleSections = normalizedQuery ? orderedSections.filter((section) => [section.title, ...section.subsections.map((item) => item.title)].some((value) => value.toLocaleLowerCase(ui).includes(normalizedQuery))) : orderedSections;
+  const visibleSections = normalizedQuery ? orderedSections.filter((section) => guideSectionMatches(section, normalizedQuery, ui)) : orderedSections;
   useEffect(() => { document.documentElement.lang = ui; }, [ui]);
+  useEffect(() => { void trainerDb.setting<boolean>('preference.darkMode').then((dark) => document.documentElement.classList.toggle('dark', !!dark)).catch(() => {}); }, []);
   return <main className="docs-page">
     <aside>
       <a className="docs-home" href={import.meta.env.BASE_URL}><MapPinned size={20} /><strong>GeoTrainer</strong></a>
@@ -58,7 +60,7 @@ export function DocsPage() {
     <article>
       <a className="docs-back" href={import.meta.env.BASE_URL}><ArrowLeft size={17} />GeoTrainer</a>
       <header><h1>{guide.title}</h1><Blocks blocks={guide.introduction} /></header>
-      {orderedSections.map((section) => <section id={section.id} key={section.id}><h2>{section.title}</h2><Blocks blocks={section.blocks} />{section.subsections.map((subsection) => <div className="docs-subsection" id={subsection.id} key={subsection.id}><h3>{subsection.title}</h3><Blocks blocks={subsection.blocks} /></div>)}</section>)}
+      {visibleSections.length ? visibleSections.map((section) => <section id={section.id} key={section.id}><h2>{section.title}</h2><Blocks blocks={section.blocks} />{section.subsections.map((subsection) => <div className="docs-subsection" id={subsection.id} key={subsection.id}><h3>{subsection.title}</h3><Blocks blocks={subsection.blocks} /></div>)}</section>) : <p className="docs-no-results">{t('No matching chapters')}</p>}
     </article>
   </main>;
 }
