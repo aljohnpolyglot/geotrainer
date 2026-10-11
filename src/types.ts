@@ -142,6 +142,8 @@ export interface MapPreferences {
   mapPalette?: MapPalettePreference;
   resultMapZoom?: ResultMapZoomPreference;
   pinpointerExpandMode?: 'enlarge' | 'fullscreen';
+  showPlayStreetViewCoverage?: boolean;
+  showPlayRoadLabels?: boolean;
   gestureHandling: MapGesturePreference;
   clickableIcons: boolean;
   showCountryBorders?: boolean;

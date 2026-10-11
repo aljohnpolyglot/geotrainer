@@ -7,11 +7,12 @@ import { ClueGallery } from './ClueGallery';
 import { countryName, missingNotebookPhotoNotes, notebookClueLinks, pageBounds, savedClueCount, useHubTranslate, visibleNotebookNotes } from './trainerHubUtils';
 import { localizeMetaLesson, metaLessonById } from '../data/metaLessons';
 import { MetaAttribution } from './MetaAttribution';
-import { loadSavedMetaCountryLessons } from '../data/metaCountryCourses';
+import { loadSavedMetaCountryLessons, metaCourseForLesson } from '../data/metaCountryCourses';
 import { LearningNoteModal, type LearningNoteDetail } from './LearningNoteModal';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
+import { metaReferenceContent } from './MetaReferenceText';
 import { sortRows, type SortDirection } from '../analytics/tableSorting';
 
 type ClueView = 'library' | 'countries' | 'insights';
@@ -27,7 +28,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const missingPhotos = useMemo(() => new Set(missingNotebookPhotoNotes(clues, notebookNotes, failedImages)), [clues, failedImages, notebookNotes]);
   useEffect(() => {
     let active = true;
-    const codes = [...new Set(learnedMetas.flatMap(({ id }) => /^[A-Z]{2}-/.test(id) ? [id.slice(0, 2)] : []))];
+    const codes = [...new Set(learnedMetas.flatMap(({ id }) => { const code = metaCourseForLesson(id)?.code; return code ? [code] : []; }))];
     setCountryMeta({ language: ui, lessons: new Map(), loaded: !codes.length });
     if (codes.length) void Promise.allSettled(codes.map((code) => loadSavedMetaCountryLessons(code, ui))).then((results) => {
       if (active) setCountryMeta({ language: ui, lessons: new Map(results.flatMap((result) => result.status === 'fulfilled' ? result.value.map((lesson) => [lesson.id, lesson] as const) : [])), loaded: true });
@@ -51,7 +52,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const coachImage = (note: CoachHistoryNote) => (note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined) || locations.find((location) => location.panoId === note.panoId)?.imageDataUrl;
   const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note), missingImage: missingPhotos.has(note) });
   const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: coachImage(note) });
-  const openMeta = (learned: LearnedMeta, lesson: MetaLesson) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, category: lesson.section, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId || undefined, mapUrl: lesson.mapUrl });
+  const openMeta = (learned: LearnedMeta, lesson: MetaLesson) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, category: lesson.section, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId || undefined, mapUrl: lesson.mapUrl, metaLessonId: lesson.id });
   return <section className="clues-panel">
     <div className="statistics-title">
 <div>
@@ -135,7 +136,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <div>
 <h3>
 <CountryFlag code={learned.countryCode} />{countryName(learned.countryCode, ui)}</h3>
-{lesson.section && <small>{lesson.section}</small>}<p>{lesson.text}</p>{lesson.note && <small>{lesson.note}</small>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}<MetaAttribution countryCourse={!!lesson.mapUrl} compact /><small>{t('Meta lessons')} · {new Date(learned.learnedAt).toLocaleString(ui)}</small>
+{lesson.section && <small>{lesson.section}</small>}<p>{metaReferenceContent(lesson.text).copy}</p>{lesson.note && <small>{metaReferenceContent(lesson.note).copy}</small>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}<MetaAttribution countryCourse={!!lesson.mapUrl} lessonId={lesson.id} compact /><small>{t('Meta lessons')} · {new Date(learned.learnedAt).toLocaleString(ui)}</small>
 </div>
 <div className="clue-row-actions"><button className="icon-button" onClick={(event) => { event.stopPropagation(); openMeta(learned, lesson); }} aria-label={t('Details')} title={t('Details')}><Eye size={16} /></button>{(lesson.mapUrl || lesson.panoId) && <a className="icon-button" href={lesson.mapUrl || streetViewUrl(lesson.panoId)} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} aria-label={t('Reopen clue location')} title={t('Reopen clue location')}><MapPin size={16} /></a>}</div>
 </article>; })())}{!totalFiltered && <p className="empty">{t('No clues match these filters.')}</p>}</div>

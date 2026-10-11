@@ -12,6 +12,8 @@ export const DEFAULT_MAP_PREFERENCES: MapPreferences = {
   mapPalette: 'auto',
   resultMapZoom: 'country',
   pinpointerExpandMode: 'enlarge',
+  showPlayStreetViewCoverage: false,
+  showPlayRoadLabels: false,
   gestureHandling: 'auto',
   clickableIcons: false,
   showCountryBorders: true,
@@ -32,6 +34,8 @@ export const normalizeMapPreferences = (value: unknown): MapPreferences => {
     mapPalette: source.mapPalette === 'light' || source.mapPalette === 'dark' ? source.mapPalette : 'auto',
     resultMapZoom: source.resultMapZoom === 'closest' || source.resultMapZoom === 'region' || source.resultMapZoom === 'world' ? source.resultMapZoom : 'country',
     pinpointerExpandMode: source.pinpointerExpandMode === 'fullscreen' ? 'fullscreen' : 'enlarge',
+    showPlayStreetViewCoverage: source.showPlayStreetViewCoverage === true,
+    showPlayRoadLabels: source.showPlayRoadLabels === true,
     gestureHandling: source.gestureHandling === 'cooperative' || source.gestureHandling === 'greedy' ? source.gestureHandling : 'auto',
     clickableIcons: source.clickableIcons === true,
     showCountryBorders: source.showCountryBorders !== false,
@@ -88,4 +92,9 @@ export function mapPresentationOptions(preferences: MapPreferences, dark: boolea
     clickableIcons: preferences.clickableIcons,
     styles: [...(useDark ? DARK_STYLE : []), regionStyle, borderStyle],
   };
+}
+
+export function playGuessMapOptions(preferences: MapPreferences, dark: boolean): google.maps.MapOptions {
+  const options = mapPresentationOptions(preferences, dark);
+  return preferences.showPlayRoadLabels === true ? options : { ...options, styles: [...(options.styles || []), { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }] };
 }

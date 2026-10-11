@@ -57,7 +57,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
       await (globalThis as typeof globalThis & { __geotrainerMapsLoad?: Promise<unknown[]> }).__geotrainerMapsLoad;
       const code = countryCode || (await reverseGeocodeLocation(lesson.lat, lesson.lng))?.countryCode;
       if (!code) throw new Error(t('Could not open this Meta lesson.'));
-      const location = await defaultLocationGenerator.reopenLocation({ countryCode: code, lat: lesson.lat, lng: lesson.lng, panoId: lesson.panoId, heading: lesson.heading, pitch: lesson.pitch ?? 0 }, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05 });
+      const location = await defaultLocationGenerator.reopenLocation({ countryCode: code, lat: lesson.lat, lng: lesson.lng, panoId: lesson.panoId, heading: lesson.heading, pitch: lesson.pitch ?? 0 }, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true });
       if (request !== requestRef.current) return;
       setActiveMetaLesson({ ...lesson, panoId: location.panoId, lat: location.lat, lng: location.lng });
       setCurrentLocation({ ...location, heading: lesson.heading, pitch: lesson.pitch ?? 0 });
@@ -75,7 +75,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
     try {
       const view = viewFromGoogleMapsUrl(tip.mapUrl) || (await loadMetaCountryViews(code)).get(tip.id);
       if (request !== requestRef.current) return;
-      if (view) return await openMetaLesson({ id: tip.id, panoId: view.panoId, lat: view.lat, lng: view.lng, heading: view.heading, pitch: view.pitch, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl }, code, request);
+      if (view) return await openMetaLesson({ id: tip.id, panoId: view.panoId, lat: view.lat, lng: view.lng, heading: view.heading, pitch: view.pitch, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl, temporallySensitive: tip.temporallySensitive }, code.startsWith('geocoach-') ? undefined : code, request);
       setIsLoading(false);
       return false;
     } catch { if (request === requestRef.current) { setErrorMessage(t('Could not open this Meta lesson.')); setIsLoading(false); return false; } }
@@ -221,7 +221,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
     setBeginnerHistory([]);
     setMetaIndex(0);
     if (restored === 'meta' && courseId === 'beginner' && metaLessonId) void trainerDb.studyVisits().then((visits) => { if (request !== requestRef.current) return; const history = beginnerHistoryFromVisits(visits, metaLessonId); setBeginnerHistory(history); setMetaIndex(history.length - 1); });
-    if (restored === 'meta' && courseId !== 'beginner' && metaLessonId) void loadMetaCountryCourse(courseId, ui).then((tips) => { if (request !== requestRef.current) return; const position = tips.findIndex((tip) => tip.id === metaLessonId); if (position >= 0) { const tip = tips[position]; setCountryTips(tips); setActiveCountryTip(tip); setMetaIndex(position); if (location) setActiveMetaLesson({ id: tip.id, panoId: location.panoId, lat: location.lat, lng: location.lng, heading: location.heading ?? 0, pitch: location.pitch ?? 0, text: tip.text, note: tip.note, imageUrl: tip.image || '', section: tip.section, mapUrl: tip.mapUrl }); } }).catch(() => { if (request === requestRef.current) setErrorMessage(t('Could not load Meta course.')); });
+    if (restored === 'meta' && courseId !== 'beginner' && metaLessonId) void loadMetaCountryCourse(courseId, ui).then((tips) => { if (request !== requestRef.current) return; const position = tips.findIndex((tip) => tip.id === metaLessonId); if (position >= 0) { const tip = tips[position]; setCountryTips(tips); setActiveCountryTip(tip); setMetaIndex(position); if (location) setActiveMetaLesson({ id: tip.id, panoId: location.panoId, lat: location.lat, lng: location.lng, heading: location.heading ?? 0, pitch: location.pitch ?? 0, text: tip.text, note: tip.note, imageUrl: tip.image || '', section: tip.section, mapUrl: tip.mapUrl, temporallySensitive: tip.temporallySensitive }); } }).catch(() => { if (request === requestRef.current) setErrorMessage(t('Could not load Meta course.')); });
     void readMetaSeen().then(setMetaSeen);
   }, [setErrorMessage, t, ui]);
 

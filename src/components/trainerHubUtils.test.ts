@@ -22,7 +22,7 @@ test('regional heatmap keeps country accuracy and excludes unresolved locations'
   const locations = [{ id: 'p1', panoId: 'p1', countryCode: 'SE', encounterCount: 2 }, { id: 'p2', panoId: 'p2', countryCode: 'SE', encounterCount: 1 }];
   const attempts = [{ panoId: 'p1', countryCode: 'SE', guessedCountryCode: 'SE', score: 4000 }];
   assert.deepEqual(coverageRegionValues(locations as never, attempts as never, [], 'accuracy', { p1: 'SEAB' }), { SEAB: 1 });
-  assert.deepEqual(coverageRegionValues(locations as never, attempts as never, [], 'exposure', { p1: 'SEAB' }), { SEAB: .2 });
+  assert.deepEqual(coverageRegionValues(locations as never, attempts as never, [], 'exposure', { p1: 'SEAB' }), { SEAB: Math.log1p(2) / Math.log1p(10) });
 });
 
 test('saved clue total counts personal, AI, and Meta entries without double-counting a note image', () => {
@@ -86,8 +86,10 @@ test('clue pagination uses twenty rows and clamps an emptied last page', () => {
 test('country heat values normalize counts and preserve score and weakness scales', () => {
   const locations = [{ id: 'it-1', countryCode: 'IT', encounterCount: 4 }, { id: 'se-1', countryCode: 'SE', encounterCount: 2 }];
   const attempts = [{ panoId: 'it-1', countryCode: 'IT', guessedCountryCode: 'FR', score: 1000 }, { panoId: 'se-1', countryCode: 'SE', guessedCountryCode: 'SE', score: 4000 }];
-  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure'), { IT: 1, SE: .5 });
-  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure', 0, 250), { IT: .016, SE: .008 });
+  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure'), { IT: 1, SE: Math.log1p(2) / Math.log1p(4) });
+  assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'exposure', 0, 250), { IT: Math.log1p(4) / Math.log1p(250), SE: Math.log1p(2) / Math.log1p(250) });
+  const bands = coverageCountryValues([{ id: 'low', countryCode: 'SE', encounterCount: 2 }, { id: 'medium', countryCode: 'IT', encounterCount: 10 }, { id: 'high', countryCode: 'US', encounterCount: 100 }] as never, [], [], 'exposure', 0, 250);
+  assert.ok(bands.SE! < .25 && bands.IT! >= .25 && bands.IT! < .5 && bands.US! >= .75);
   assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'weakness'), { IT: 1, SE: 0 });
   assert.deepEqual(coverageCountryValues(locations as never, attempts as never, [], 'score'), { IT: .2, SE: .8 });
 });

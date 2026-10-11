@@ -258,7 +258,7 @@ test('Meta recovers expired panorama IDs only within 50 metres and preserves the
       { lat: nearby ? 38.98328397 : 39.1, lng: -119.1833559, pano: 'replacement', countryCode: 'US' },
     ];
     panoramaRequests = [];
-    const reopening = new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05 });
+    const reopening = new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true });
     if (nearby) {
       const result = await reopening;
       assert.equal(result.panoId, 'replacement');
@@ -267,7 +267,13 @@ test('Meta recovers expired panorama IDs only within 50 metres and preserves the
       assert.equal(result.originalPanoId, saved.panoId);
     } else await assert.rejects(reopening, /unavailable/);
     assert.equal(panoramaRequests[1].radius, 50);
+    assert.deepEqual(panoramaRequests[1].sources, ['GOOGLE', 'OUTDOOR']);
   }
+  results = [
+    { lat: 0, lng: 0, pano: 'missing', countryCode: 'US', status: 'ZERO_RESULTS' },
+    { lat: saved.lat, lng: saved.lng, pano: 'contributor', countryCode: 'US', copyright: '© Photographer' },
+  ];
+  await assert.rejects(new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true }), /unavailable/);
 });
 
 test('review rejects a stale panorama id that resolves far from its saved answer', async () => {

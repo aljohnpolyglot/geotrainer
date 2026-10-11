@@ -55,11 +55,11 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !onSelect) return;
+    if (!map || (!onSelect && !mapPreferences.showPlayStreetViewCoverage)) return;
     const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map);
-    const listener = map.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); });
-    return () => { listener.remove(); coverage.setMap(null); };
-  }, [onSelect]);
+    const listener = onSelect ? map.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); }) : undefined;
+    return () => { listener?.remove(); coverage.setMap(null); };
+  }, [onSelect, mapPreferences.showPlayStreetViewCoverage]);
 
   useEffect(() => {
     const map = mapRef.current;

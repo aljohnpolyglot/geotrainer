@@ -1,4 +1,5 @@
 import manifest from './metaCountryCoursesManifest.json';
+import topicManifest from './metaTopicCoursesManifest.json';
 import type { MetaLesson, SupportedLanguage } from '../types';
 import { loadMetaCountryViews, viewFromGoogleMapsUrl, type MetaMapView } from './metaCountryViews';
 
@@ -6,6 +7,8 @@ export interface MetaCountryCourseSummary {
   code: string;
   name: string;
   lessonCount: number;
+  sourceUrl?: string;
+  creator?: string;
 }
 
 export interface MetaCountryCourseTip {
@@ -15,9 +18,21 @@ export interface MetaCountryCourseTip {
   image?: string;
   text: string;
   note?: string;
+  temporallySensitive?: boolean;
 }
 
 export const META_COUNTRY_COURSES = manifest as MetaCountryCourseSummary[];
+export const META_TOPIC_COURSES = topicManifest as MetaCountryCourseSummary[];
+export const META_ALL_COURSES = [...META_COUNTRY_COURSES, ...META_TOPIC_COURSES];
+export const metaCourseForLesson = (id: string) => META_ALL_COURSES.find((course) => id.startsWith(`${course.code}-`));
+const TOPIC_NAMES: Record<string, Record<SupportedLanguage, string>> = {
+  'geocoach-plates': { en: 'US license plates', es: 'Matrículas de EE. UU.', pt: 'Matrículas dos EUA', fr: 'Plaques des États-Unis', de: 'US-Kennzeichen', it: 'Targhe degli Stati Uniti', ru: 'Номерные знаки США', sv: 'Registreringsskyltar i USA' },
+  'geocoach-bollards': { en: 'World bollards', es: 'Bolardos del mundo', pt: 'Balizadores do mundo', fr: 'Balises du monde', de: 'Leitpfosten weltweit', it: 'Delineatori nel mondo', ru: 'Дорожные столбики мира', sv: 'Vägstolpar i världen' },
+  'geocoach-latin-america': { en: 'Identify Latin America', es: 'Identificar Latinoamérica', pt: 'Identificar a América Latina', fr: 'Reconnaître l’Amérique latine', de: 'Lateinamerika erkennen', it: 'Riconoscere l’America Latina', ru: 'Как узнать Латинскую Америку', sv: 'Känn igen Latinamerika' },
+  'geocoach-pedestrian-signs': { en: 'European pedestrian signs', es: 'Señales peatonales europeas', pt: 'Sinais de pedestres europeus', fr: 'Panneaux piétons européens', de: 'Europäische Fußgängerschilder', it: 'Segnali pedonali europei', ru: 'Пешеходные знаки Европы', sv: 'Europeiska gångskyltar' },
+};
+export const metaCourseName = (code: string, language: SupportedLanguage) => TOPIC_NAMES[code]?.[language]
+  || META_COUNTRY_COURSES.find((course) => course.code === code)?.name || code;
 
 export function normalizeMetaCountryCourse(code: string, value: unknown): MetaCountryCourseTip[] {
   if (!value || typeof value !== 'object' || (value as { code?: unknown }).code !== code || !Array.isArray((value as { tips?: unknown }).tips)) return [];
@@ -30,9 +45,10 @@ export function normalizeMetaCountryCourse(code: string, value: unknown): MetaCo
       || typeof tip.mapUrl !== 'string' || !/^https?:\/\//i.test(tip.mapUrl)
       || typeof tip.text !== 'string' || !tip.text.trim()
       || (tip.image !== undefined && (typeof tip.image !== 'string' || !/^meta-courses\/images\/[A-Za-z0-9._-]+$/.test(tip.image)))
-      || (tip.note !== undefined && typeof tip.note !== 'string')) return [];
+      || (tip.note !== undefined && typeof tip.note !== 'string')
+      || (tip.temporallySensitive !== undefined && typeof tip.temporallySensitive !== 'boolean')) return [];
     seen.add(tip.id);
-    return [{ id: tip.id, section: tip.section, mapUrl: tip.mapUrl, ...(tip.image ? { image: tip.image } : {}), text: tip.text, ...(tip.note ? { note: tip.note } : {}) }];
+    return [{ id: tip.id, section: tip.section, mapUrl: tip.mapUrl, ...(tip.image ? { image: tip.image } : {}), text: tip.text, ...(tip.note ? { note: tip.note } : {}), ...(tip.temporallySensitive ? { temporallySensitive: true } : {}) }];
   });
 }
 
@@ -64,15 +80,16 @@ const sourceLoads = new Map<string, Promise<MetaCountryCourseTip[]>>();
 const courseLoads = new Map<string, Promise<MetaCountryCourseTip[]>>();
 
 export function loadMetaCountryCourse(code: string, language: SupportedLanguage = 'en'): Promise<MetaCountryCourseTip[]> {
-  const summary = META_COUNTRY_COURSES.find((course) => course.code === code);
+  const summary = META_ALL_COURSES.find((course) => course.code === code);
   if (!summary) return Promise.reject(new Error(`Unknown Meta country course: ${code}`));
   const cacheKey = `${code}:${language}`;
   const base = import.meta.env?.BASE_URL || '/';
+  const directory = summary.sourceUrl ? 'meta-topics' : 'meta-courses';
   let loaded = courseLoads.get(cacheKey);
   if (!loaded) {
     let source = sourceLoads.get(code);
     if (!source) {
-      source = fetch(`${base}meta-courses/${encodeURIComponent(code)}.json`)
+      source = fetch(`${base}${directory}/${encodeURIComponent(code)}.json`)
         .then((response) => {
           if (!response.ok) throw new Error(`Could not load Meta country course: ${code}`);
           return response.json();
@@ -91,7 +108,8 @@ export function loadMetaCountryCourse(code: string, language: SupportedLanguage 
       sourceLoads.set(code, source);
     }
     loaded = (language === 'en' ? source : source.then(async (tips) => {
-      const response = await fetch(`${base}meta-courses/${encodeURIComponent(code.toLowerCase())}.${language}.json`);
+      const filename = summary.sourceUrl ? code : code.toLowerCase();
+      const response = await fetch(`${base}${directory}/${encodeURIComponent(filename)}.${language}.json`);
       if (!response.ok) throw new Error(`Could not load Meta country course translation: ${code}/${language}`);
       return localizeMetaCountryCourse(code, language, tips, await response.json());
     }))
@@ -106,7 +124,7 @@ export function loadMetaCountryCourse(code: string, language: SupportedLanguage 
 
 export function savedMetaCountryLesson(tip: MetaCountryCourseTip, fallback?: MetaMapView): MetaLesson {
   const view = viewFromGoogleMapsUrl(tip.mapUrl) || fallback;
-  return { id: tip.id, panoId: view?.panoId || '', lat: view?.lat || 0, lng: view?.lng || 0, heading: view?.heading || 0, pitch: view?.pitch || 0, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl };
+  return { id: tip.id, panoId: view?.panoId || '', lat: view?.lat || 0, lng: view?.lng || 0, heading: view?.heading || 0, pitch: view?.pitch || 0, imageUrl: tip.image || '', text: tip.text, note: tip.note, section: tip.section, mapUrl: tip.mapUrl, temporallySensitive: tip.temporallySensitive };
 }
 
 export async function loadSavedMetaCountryLessons(code: string, language: SupportedLanguage): Promise<MetaLesson[]> {

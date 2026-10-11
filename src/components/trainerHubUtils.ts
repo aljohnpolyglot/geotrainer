@@ -81,7 +81,7 @@ export const coverageCountryValues = (locations: TrainerLocation[], attempts: At
     return [code, overlay === "exposure" ? group.locations.reduce((sum, item) => sum + item.encounterCount, 0) : overlay === "accuracy" ? accuracy : overlay === "score" ? (group.attempts.length ? group.attempts.reduce((sum, item) => sum + item.score, 0) / group.attempts.length / 5000 : null) : overlay === "weakness" ? (accuracy === null ? null : 1 - accuracy) : overlay === "due" ? group.reviews.filter((item) => item.dueAt <= now).length : mastery] as const;
   });
   const ceiling = Math.max(countScaleFloor, ...raw.map(([, value]) => value || 0));
-  return Object.fromEntries(raw.map(([code, value]) => [code, value === null ? null : (overlay === "exposure" || overlay === "due") ? value / ceiling : value])) as Record<string, number | null>;
+  return Object.fromEntries(raw.map(([code, value]) => [code, value === null ? null : overlay === "exposure" ? Math.log1p(value) / Math.log1p(ceiling) : overlay === "due" ? value / ceiling : value])) as Record<string, number | null>;
 };
 export const coverageRegionValues = (locations: TrainerLocation[], attempts: Attempt[], reviews: ReviewRecord[], overlay: CoverageOverlay, regionByPano: Record<string, string>) =>
   coverageCountryValues(locations.flatMap((item) => regionByPano[item.panoId] ? [{ ...item, countryCode: regionByPano[item.panoId] }] : []), attempts, reviews, overlay, Date.now(), overlay === 'exposure' ? 10 : overlay === 'due' ? 5 : 1);

@@ -1,20 +1,24 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, resultMapZoomLimit, shouldRecenterResultMap } from './mapPreferences';
+import { centeredResultMapZoom, countryBorderColor, countryBorderWeight, mapPresentationOptions, normalizeMapPreferences, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap } from './mapPreferences';
 
 test('map preferences use safe defaults and normalize persisted choices', () => {
   assert.deepEqual(normalizeMapPreferences(undefined), {
     autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: false, motionTracking: false, movementStyle: 'click',
-    mapType: 'roadmap', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', gestureHandling: 'auto', clickableIcons: false, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
+    mapType: 'roadmap', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'auto', clickableIcons: false, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   assert.deepEqual(normalizeMapPreferences({ showRoadLabels: true, motionTracking: true, movementStyle: 'arrows', mapType: 'terrain', gestureHandling: 'cooperative', clickableIcons: true, geotrainerMapStyle: false }), {
     autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: true, motionTracking: true, movementStyle: 'arrows',
-    mapType: 'terrain', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', gestureHandling: 'cooperative', clickableIcons: true, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
+    mapType: 'terrain', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'cooperative', clickableIcons: true, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   const preferences = normalizeMapPreferences({ mapPalette: 'dark' });
   assert.equal(normalizeMapPreferences({ pinpointerExpandMode: 'fullscreen' }).pinpointerExpandMode, 'fullscreen');
+  assert.equal(normalizeMapPreferences({ showPlayStreetViewCoverage: true, showPlayRoadLabels: true }).showPlayStreetViewCoverage, true);
+  assert.equal(normalizeMapPreferences({ showPlayRoadLabels: true }).showPlayRoadLabels, true);
+  assert.deepEqual(playGuessMapOptions(normalizeMapPreferences(undefined), false).styles?.at(-1), { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] });
+  assert.deepEqual(playGuessMapOptions(normalizeMapPreferences({ showPlayRoadLabels: true }), false).styles, mapPresentationOptions(normalizeMapPreferences(undefined), false).styles);
   assert.equal(normalizeMapPreferences({ autoOpenMeta: true }).autoOpenMeta, true);
   const light = mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'light' }), true);
   assert.deepEqual(mapPresentationOptions(preferences, false).styles, mapPresentationOptions(normalizeMapPreferences({ mapPalette: 'auto' }), true).styles);

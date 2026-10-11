@@ -26,7 +26,7 @@ export function MetaLessonBrowser({ completed, selectedId, onSelect, lessons: le
   const visible = lessons.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
 
   return <div className="meta-lesson-browser">
-    <MetaAttribution countryCourse={lessonChoices !== META_LESSONS} />
+    <MetaAttribution countryCourse={lessonChoices !== META_LESSONS} lessonId={lessonChoices === META_LESSONS ? undefined : lessonChoices[0]?.id} />
     <label className="meta-lesson-search"><Search size={16} aria-hidden="true" /><span className="sr-only">{t('Search Meta lessons')}</span><input value={query} onChange={(event) => { setQuery(event.target.value); setPage(0); }} placeholder={t('Search Meta lessons')} /></label>
     <div className="meta-lesson-browser-bar"><small className="meta-lesson-count">{lessonChoices.filter((lesson) => !completed.has(lesson.id)).length} {t('lessons remaining')}</small><div className="meta-lesson-filters" role="group" aria-label={t('Filter Meta lessons')}>{([['all', 'All'], ['unfinished', 'Not yet'], ['completed', 'Done']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={filter === value} className={filter === value ? 'selected' : ''} onClick={() => { setFilter(value); setPage(0); }}>{t(label)}</button>)}</div></div>
     {visible.length ? <div className="meta-lesson-list" role="listbox" aria-label={t('Browse Meta lessons')}>

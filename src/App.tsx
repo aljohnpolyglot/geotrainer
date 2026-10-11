@@ -248,6 +248,7 @@ export default function App() {
         setSelectedCollectionId(savedId);
       }
     }
+    if (navigator.storage?.persist) void navigator.storage.persist().catch(() => {});
     void initTrainerDb()
       .then(async () => {
         const [dbCollections, dbBookmarks, dbGames, dbSelected, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPriority, savedPanoramaSource, savedContributors, savedInteriors, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay] = await Promise.all([

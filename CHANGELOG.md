@@ -1,7 +1,19 @@
 # Changelog
 
+## 2026-10-11
+
+- Ask the browser to retain local training progress during storage pressure when it grants persistent storage.
+- Complete all eight language versions of the four GeoCoach Meta topic courses and mark imagery-date clues that may change over time.
+
 ## 2026-10-09
 
+- Add four locally bundled GeoCoach Meta topic courses with 243 lessons, seven translated variants, stable progress IDs, saved example panoramas, and source credit across Study and Review.
+- Show a skeleton placeholder while a Meta reference image loads, keeping its failure message for unavailable images.
+- Add optional blue Street View coverage and road-name guides to the Play guess map, both off by default and toggleable from the map header or Display settings.
+- Show the blue Street View layer on revealed location maps when the saved coverage guide is enabled.
+- Bundle 41 Meta reference infographics locally and display them within their lessons and saved Meta details instead of showing image paths.
+- Restrict recovery of expired Meta panoramas to nearby official outdoor Street View, while keeping an available lesson original intact.
+- Spread Coverage Exposure heatmap colors across low encounter counts so less-visited countries and regions are easier to compare.
 - Let Review start after Google's verified panorama lookup without waiting for a canvas pixel check that could leave valid cards stuck loading.
 - Restore Google's original light Roadmap and Terrain colors across maps and the Settings preview instead of applying the washed-out custom palette.
 - Fix the Play and Review Return to start metre display so it measures from the round's starting panorama as the learner moves.
