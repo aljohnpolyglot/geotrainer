@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Correct the Beginner Meta red-soil lesson to identify its Pará example and explain that soil color alone does not identify a Brazilian state, in all eight languages.
 - Keep Space free for Street View movement in Learn and use N or the Next button to advance lessons.
 - Add local generated thumbnails for Beginner and topic Meta courses, show the active course name in Learn, enlarge Meta reference images in a closable viewer, and link found place names to Wikipedia when its lookup returns results.
 - Clarify the Beginner Meta give-way-sign clue in all eight languages: Australia uses black lettering, while New Zealand uses red.

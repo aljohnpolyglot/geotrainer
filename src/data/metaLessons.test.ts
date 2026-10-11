@@ -114,6 +114,18 @@ test('Australian give-way Meta clue contrasts its black text with New Zealand re
   }
 });
 
+test('Brazilian red-soil Meta example matches its Pará panorama in every language', () => {
+  const lesson = META_LESSONS.find(({ id }) => id === 'b17b0a99eb472500')!;
+  assert.equal(lesson.panoId, 'AVbzTOPUgNvGAdlPjsOnhA');
+  assert.equal(lesson.lat, -2.906036);
+  assert.equal(lesson.lng, -54.471103);
+  for (const language of ['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'sv'] as const) {
+    const text = localizeMetaLesson(lesson, language).text;
+    assert.match(text, /Pará|Пара/, `${language} must identify the pictured state`);
+    assert.doesNotMatch(text, /Goiás|Goias|Гояс/i, `${language} must not point to another state`);
+  }
+});
+
 test('resumed Beginner Meta restores Previous from actual visited lessons', () => {
   const [first, second, current] = META_LESSONS;
   const visits = [
