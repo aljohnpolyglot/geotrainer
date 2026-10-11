@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Add five credited GeoCoach Meta topic courses with 132 local Street View lessons: World Google Cars, the Baltics, Malaysia vs Indonesia, Languages of South Asia, and USA Bollards. Bundle eight-language lesson text and matching course thumbnails, with direct links to each source map.
 - Keep the Game Guide sidebar to one link per chapter while retaining searchable subsection content inside each chapter.
 - Open pasted Google Maps Street View panorama links from Learn's Explore Map search, preserving the linked heading and current imagery filters.
 - Correct the Beginner Meta red-soil lesson to identify its Pará example and explain that soil color alone does not identify a Brazilian state, in all eight languages.

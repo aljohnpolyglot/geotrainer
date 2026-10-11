@@ -1,4 +1,4 @@
-"""Snapshot the four GeoCoach clue maps as local Meta topic-course data."""
+"""Snapshot permitted GeoCoach clue maps as local Meta topic-course data."""
 import concurrent.futures
 import html
 import json
@@ -16,6 +16,11 @@ MAPS = (
     ("bollards", "World Bollards", "027b9391-6ab0-406a-9271-ecf49022e0ae", "geocoach-world-bollards-0c9b8d10"),
     ("latin-america", "Latin America: How to Identify", "efd0cdc4-ee7f-4984-b12a-23376876795e", "latin-america-how-to-identify-2b3354f1"),
     ("pedestrian-signs", "European Pedestrian Signs", "a5352409-ded5-40c4-9390-cbacb6dbbd0c", "pedestrian-signs-europe-226dd117"),
+    ("google-cars", "World Google Cars", "fb60b46c-8ffe-4b61-af80-8f3938f5553b", "geocoach-world-google-cars-c0f60637"),
+    ("baltics", "Baltics: How to Identify", "240ac81d-883b-4114-ab30-59182776a8e1", "baltics-estonia-latvia-and-lithuania-how-to-identify-13f9767f"),
+    ("malaysia-indonesia", "Malaysia vs Indonesia", "b8b342fd-b07c-431d-8068-6ea0c7536ca6", "malaysia-vs-indonesia-how-to-identify-344bfdb7"),
+    ("south-asia-languages", "Languages of South Asia", "1bdc1fac-8645-4798-a9dc-0e9f035639f5", "languages-of-south-asia-92513184"),
+    ("usa-bollards", "USA Bollards", "5d5faada-737e-42ea-87f2-9a001f67a1a8", "usa-bollards-c603dc64"),
 )
 
 
@@ -100,13 +105,17 @@ def make_tip(args):
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
+    old_manifest = {item["code"]: item for item in json.loads((ROOT / "src" / "data" / "metaTopicCoursesManifest.json").read_text(encoding="utf-8"))}
     manifest = []
     for slug, title, dataset_id, path in MAPS:
         source_url = f"https://www.geocoach.me/maps/{dataset_id}/{path}"
-        dataset = read_json(source_url + "/index.pageContext.json")["data"]["dataset"]
         course_id = "geocoach-" + slug
-        tags = dataset.get("tags") or []
         asset = OUTPUT / f"{course_id}.json"
+        if course_id in old_manifest and asset.exists():
+            manifest.append(old_manifest[course_id])
+            continue
+        dataset = read_json(source_url + "/index.pageContext.json")["data"]["dataset"]
+        tags = dataset.get("tags") or []
         existing = {tip["id"]: tip for tip in json.loads(asset.read_text(encoding="utf-8"))["tips"]} if asset.exists() else {}
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
             tips = list(pool.map(make_tip, ((course_id, dataset_id, tag, existing) for tag in tags)))

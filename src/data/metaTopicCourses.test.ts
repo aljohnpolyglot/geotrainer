@@ -1,15 +1,18 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { LANGUAGE_OPTIONS } from '../services/language';
 import { localizeMetaCountryCourse, META_TOPIC_COURSES, metaCourseForLesson, normalizeMetaCountryCourse } from './metaCountryCourses';
 import { viewFromGoogleMapsUrl } from './metaCountryViews';
 
 test('all GeoCoach topic lessons and their eight-language snapshots are local and playable', () => {
-  assert.equal(META_TOPIC_COURSES.length, 4);
-  assert.equal(META_TOPIC_COURSES.reduce((count, course) => count + course.lessonCount, 0), 243);
+  assert.equal(META_TOPIC_COURSES.length, 9);
+  assert.equal(META_TOPIC_COURSES.reduce((count, course) => count + course.lessonCount, 0), 375);
   for (const course of META_TOPIC_COURSES) {
+    assert.match(course.sourceUrl || '', /^https:\/\/www\.geocoach\.me\/maps\//);
+    assert.ok(course.creator);
+    assert.ok(existsSync(`public/meta-courses/thumbnails/${course.code}.webp`));
     const source = normalizeMetaCountryCourse(course.code, JSON.parse(readFileSync(`public/meta-topics/${course.code}.json`, 'utf8')));
     assert.equal(source.length, course.lessonCount);
     for (const tip of source) {
