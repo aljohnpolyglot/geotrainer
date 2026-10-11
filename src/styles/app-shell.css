@@ -18,6 +18,7 @@
 .mobile-review-context { display: none; }
 .study-mobile-context { display: none; }
 .study-live-context { color: #d5e3e5; font: 700 11px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.study-course-name { max-width: min(30vw, 260px); overflow: hidden; color: #d5e3e5; font-size: 12px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .header-actions { margin-inline-start: auto; }
 .header-actions .utility-action span { display: none; }
 .primary-route-nav {
@@ -341,6 +342,7 @@ tbody tr.never-seen { color: #74858e; }
 .grade-actions button:hover { background: var(--panel-2); }
 
 @media (max-width: 900px) {
+  .study-course-name { display: none; }
   #app-topbar.mobile-nav-open { z-index: 100; }
   #app-topbar::before { display: none; }
   .hub-header { align-items: start; flex-direction: column; padding: 18px 20px 0; gap: 14px; }
@@ -373,6 +375,7 @@ tbody tr.never-seen { color: #74858e; }
   .study-mobile-context { grid-column: 2; grid-row: 1; display: grid; min-width: 0; justify-items: center; color: #fff; font-size: 11px; line-height: 1.3; text-align: center; }
   .study-mobile-context strong { font: 700 12px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
   .study-mobile-context small { color: var(--sky); font-size: 10px; }
+  .study-mobile-context small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mobile-menu-backdrop { position: fixed; z-index: 38; inset: 0; background: rgba(1,13,20,.62); border: 0; }
   .mobile-nav-open .mobile-menu-backdrop { display: block; }
   .mobile-drawer { position: fixed; z-index: 40; inset: 0 0 0 auto; display: none; width: min(320px, 86vw); padding: 72px 14px 20px; overflow-y: auto; color: #fff; background: var(--storm); box-shadow: -18px 0 48px rgba(0,10,18,.42); }

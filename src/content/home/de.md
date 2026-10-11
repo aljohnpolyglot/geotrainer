@@ -475,7 +475,7 @@ Wiederholung und Korrektur erzeugen neue Versuche. Ein späterer Erfolg reparier
 
 In beweglichen Spiel- und Wiederholungsrunden klicke einen Street-View-Navigationspfeil an und halte dann die Leertaste gedrückt, um in diese Richtung weiterzugehen. Lass die Taste los, um anzuhalten. Der Pfeil muss den Tastaturfokus haben: Wenn die Leertaste eine andere Schaltfläche auslöst, klicke erneut auf den Pfeil. Das ist die vorhandene Tastaturbedienung des Panoramas; eine eigene Geschwindigkeitsoption gibt es nicht. No Move und NMPZ erlauben keine Fortbewegung.
 
-Die Leertaste kann auch den Lernablauf oder eine beendete Runde fortsetzen, wenn deren Schaltfläche aktiv ist. Auf Touchgeräten gelten die verfügbaren Gesten für Drehen, Bewegen, Zoomen und Kartentipps. Vollbild reduziert Ablenkung.
+Im Lernmodus geht es mit N oder der Schaltfläche Weiter voran; die Leertaste bleibt für die Bewegung in Street View frei. Sie kann eine beendete Runde fortsetzen, wenn deren Schaltfläche aktiv ist. Auf Touchgeräten gelten die verfügbaren Gesten für Drehen, Bewegen, Zoomen und Kartentipps. Vollbild reduziert Ablenkung.
 
 ### Barrierefreiheit
 
@@ -614,6 +614,9 @@ Meta bietet einen Anfängerkurs und 131 Länderkurse. Lektionen öffnen das Pano
 Das Meta-Feld in Wiederholung ist standardmäßig ausgeblendet; öffne es, um den vollständigen Inhalt zu lesen. Weiter markiert die Lektion als gesehen und aktualisiert den Fortschritt, auch ohne Für Wiederholung speichern. Zurück führt zur vorherigen Lektion; der Zähler zeigt 1/N. Meta dient zum Lernen von Hinweisen, ohne Runde mit zwei Tipps oder automatische Wiederholungskarte anhand der Entfernung.
 
 Vier Themenkurse ergänzen 243 Lektionen aus GeoCoach: US-Kennzeichen (51), Leitpfosten weltweit (58), Hinweise zum Erkennen Lateinamerikas (108) und europäische Fußgängerschilder (26). Erklärungen und Links zu den ausgewählten Panoramen liegen lokal in GeoTrainer; die Lektionen benötigen während des Lernens keine GeoCoach-API. Jede Lektion nennt ihre Karte und deren Ersteller. Nicht verfügbare Ansichten werden nach derselben Meta-Regel übersprungen. Während ein Meta-Referenzbild lädt, erscheint ein Platzhalter.
+
+Einsteiger- und Themenkurse haben lokale Vorschaubilder; der Name des aktiven Kurses steht in der Lernen-Leiste. Wähle ein Meta-Referenzbild aus, um es zu vergrößern; schließe es mit X oder Escape. Auf der aufgedeckten Ortskarte führt der Ortsname zu Wikipedia, wenn die Suche ein Ergebnis findet; andernfalls bleibt er Text und ein Hinweis erscheint.
+
 Im Anfängerkurs öffnet Weiter eine weitere offene Lektion und Zurück führt zu einer zuvor besuchten Lektion, auch nach dem Neuladen; wenn keine mehr übrig ist, kehrst du zur Kursauswahl zurück; in Länderkursen geht es innerhalb des Landes weiter. Länder lassen sich suchen und alphabetisch, nach Lektionszahl oder nach Fortschritt sortieren.
 
 Wähle im Kurswähler den Anfängerkurs oder ein Land aus. **Lernen starten** öffnet eine noch offene Lektion und berücksichtigt den gespeicherten Fortschritt. **Meta-Lektionen durchsuchen** öffnet die Liste für eine bestimmte Lektion. Suche im Lektionstext und filtere nach allen, offenen oder abgeschlossenen Lektionen. Wähle eine beliebige Lektion, auch eine abgeschlossene, und öffne sie mit **Ausgewählte Lektion starten**.

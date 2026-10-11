@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Camera, Check, ExternalLink, Files, Images, Lightbulb, LoaderCircle, NotebookPen, Trash2, TriangleAlert, X } from 'lucide-react';
 import type { ClueRecord, CoachAnalysis, CoachHistoryNote, NotebookNote } from '../types';
 import { trainerDb } from '../data/trainerDb';
@@ -57,6 +58,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [noteFormKey, setNoteFormKey] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
   const [capture360, setCapture360] = useState<'idle' | 'busy' | 'copied' | 'error'>('idle');
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
@@ -77,7 +79,8 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     const merged = [...new Map(currentNotes.map((item) => [item.id, item])).values()].sort((a, b) => b.at - a.at); const deduped = splitDuplicateNotes(merged); setNotes(deduped.unique);
     if (deduped.duplicates.length) void Promise.all(deduped.duplicates.map((item) => item.notebook ? deleteNotebookHistoryNote(item.notebook) : item.coach ? Promise.all([deleteCoachHistoryNote(item.coach), item.clueId ? trainerDb.deleteClue(item.clueId) : Promise.resolve()]) : item.clueId ? trainerDb.deleteClue(item.clueId) : Promise.resolve())).then(() => onNoteSaved());
   }); return () => { active = false; }; }, [panoId, lat, lng, countryCode, refreshKey, notesRefreshKey, ui]);
-  useEffect(() => { setImageFailed(false); setImageLoaded(false); setOpen(autoOpenMeta && lesson ? 'meta' : null); }, [lesson?.id, lesson?.imageUrl, autoOpenMeta]);
+  useEffect(() => { setImageFailed(false); setImageLoaded(false); setImageOpen(false); setOpen(autoOpenMeta && lesson ? 'meta' : null); }, [lesson?.id, lesson?.imageUrl, autoOpenMeta]);
+  useEffect(() => { if (!imageOpen) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setImageOpen(false); }; window.addEventListener('keydown', close); return () => window.removeEventListener('keydown', close); }, [imageOpen]);
   useEffect(() => {
     let active = true;
     setClues([]); setNotes([]); setClueIndex(0); setNote(''); setCategory(''); setCategoryOpen(false); setNoteSaved(false); setNoteClueId(undefined); setNoteImage(''); setNoteFormKey((value) => value + 1);
@@ -116,9 +119,10 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
     {adviceOpen && lesson && <aside className="meta-advice" role="status"><p>{t('Meta clues are always available from the lightbulb in the top-right.')}</p><div><button onClick={() => onAdviceClose(false)}>{t('Okay')}</button><button onClick={() => onAdviceClose(true)}>{t("Don't show again")}</button></div></aside>}
     {open === 'meta' && lesson && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Meta')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Lightbulb size={17} />{t('Meta')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
-      {lesson.imageUrl && (imageFailed ? <p className="learning-aid-safe">{t('Reference image unavailable')}</p> : <div className={`meta-aid-image${imageLoaded ? ' loaded' : ''}`} aria-busy={!imageLoaded}><img key={lesson.imageUrl} src={lesson.imageUrl} alt={t('Meta reference clue')} onLoad={() => setImageLoaded(true)} onError={() => setImageFailed(true)} /></div>)}
+      {lesson.imageUrl && (imageFailed ? <p className="learning-aid-safe">{t('Reference image unavailable')}</p> : <div className={`meta-aid-image${imageLoaded ? ' loaded' : ''}`} aria-busy={!imageLoaded}><button type="button" onClick={() => setImageOpen(true)} disabled={!imageLoaded} aria-label={t('Enter Fullscreen')} title={t('Enter Fullscreen')}><img key={lesson.imageUrl} src={lesson.imageUrl} alt={t('Meta reference clue')} onLoad={() => setImageLoaded(true)} onError={() => setImageFailed(true)} /></button></div>)}
       <div className="learning-aid-copy">{lesson.section && <strong>{lesson.section}</strong>}{lesson.text && <MetaReferenceText text={lesson.text} />}{lesson.note && <div className="meta-comparison"><MetaReferenceText text={lesson.note} /></div>}{lesson.temporallySensitive && <small className="meta-temporal-warning">{t('This imagery Meta may change over time. Use it as supporting evidence.')}</small>}{lesson.mapUrl && showMetaMapFallback && <a href={lesson.mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={14} />{t('Open clue in Google Maps')}</a>}<MetaAttribution countryCourse={!!lesson.mapUrl} lessonId={lesson.id} /></div>
     </aside>}
+    {imageOpen && lesson?.imageUrl && createPortal(<div className="clue-image-viewer" role="dialog" aria-modal="true" aria-label={t('Meta reference clue')} onMouseDown={(event) => { if (event.target === event.currentTarget) setImageOpen(false); }}><button type="button" autoFocus onClick={() => setImageOpen(false)} aria-label={t('close')} title={t('close')}><X size={22} /></button><img src={lesson.imageUrl} alt={t('Meta reference clue')} /></div>, document.body)}
     {open === 'clues' && <aside ref={panelRef} style={dragStyle} className="learning-aid-panel" aria-label={t('Show Clues')}>
       <header {...dragHandleProps} className={dragging ? 'dragging' : ''}><span><Images size={17} />{t('Show Clues')}</span><button onClick={() => setOpen(null)} aria-label={t('close')}><X size={16} /></button></header>
       {clue ? <><img src={clue.imageDataUrl} alt={t('savedVisualClue')} />

@@ -9,6 +9,7 @@ import { formatDistance } from "../services/gameLogic";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
 import { COUNTRIES } from "../data/countries";
 import { ArrowLeft, ArrowRight, Trophy, MapPin, Building, Clock, Eye, Minus, Compass } from "lucide-react";
+import { WikipediaPlaceLink } from './WikipediaPlaceLink';
 import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
@@ -86,7 +87,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               </div>
               <div className="review-location-details" aria-live="polite">
                 {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
-                  {placeHeadline && <strong><Building size={13} />{placeHeadline}</strong>}
+                  {placeHeadline && <strong><Building size={13} /><WikipediaPlaceLink name={placeHeadline} place={geocodeData?.locality || geocodeData?.adminArea || ''} region={geocodeData?.locality ? geocodeData.adminArea : undefined} /></strong>}
                   {geocodeData?.route && <span><MapPin size={13} />{geocodeData.route}</span>}
                   <small>{geocodeData?.formattedAddress || t('addressUnavailable')}</small>
                 </>}

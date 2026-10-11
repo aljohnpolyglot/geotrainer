@@ -86,7 +86,7 @@ Durante la creazione, il pulsante mostra la fase corrente di paesi, regioni o ci
 
 ### Muoversi con la tastiera
 
-In un round con movimento in Gioco o Ripasso, fai clic su una freccia di navigazione di Street View e tieni premuta la barra spaziatrice per proseguire in quella direzione. Rilascia il tasto per fermarti. La freccia deve avere il focus: se la barra spaziatrice attiva un altro pulsante, fai di nuovo clic sulla freccia. È il normale controllo del panorama, senza un’impostazione di velocità separata. No Move e NMPZ impediscono lo spostamento. La barra spaziatrice può anche far avanzare lo Studio o continuare un round concluso se quel pulsante ha il focus.
+In un round con movimento in Gioco o Ripasso, fai clic su una freccia di navigazione di Street View e tieni premuta la barra spaziatrice per proseguire in quella direzione. Rilascia il tasto per fermarti. La freccia deve avere il focus: se la barra spaziatrice attiva un altro pulsante, fai di nuovo clic sulla freccia. È il normale controllo del panorama, senza un’impostazione di velocità separata. No Move e NMPZ impediscono lo spostamento. In Studio, usa N o il pulsante Avanti per proseguire; la barra spaziatrice resta libera per muoverti in Street View. Può ancora continuare un round concluso se quel pulsante ha il focus.
 
 Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano luoghi unici del file e il loro numero viene limitato ai luoghi disponibili.
 
@@ -272,6 +272,9 @@ Meta offre un corso per principianti e 131 corsi per paese. Le lezioni aprono il
 Il pannello Meta nel Ripasso è nascosto per impostazione predefinita; aprilo per leggere tutti i contenuti. Avanti segna la lezione come vista e aggiorna i progressi anche senza Salva per il ripasso. Precedente torna alla lezione precedente e il contatore mostra 1/N. Meta serve a studiare gli indizi, senza ciclo di due tentativi né scheda di Ripasso automatica in base alla distanza.
 
 Quattro corsi tematici aggiungono 243 lezioni da GeoCoach: targhe degli Stati Uniti (51), delineatori nel mondo (58), indizi per riconoscere l’America Latina (108) e segnali pedonali europei (26). Le spiegazioni e i collegamenti ai panorami scelti sono inclusi in GeoTrainer, quindi le lezioni non dipendono dall’API di GeoCoach durante l’uso. Ogni lezione attribuisce la mappa e il suo creatore. Le viste non disponibili vengono saltate secondo la stessa regola Meta. Durante il caricamento di un’immagine di riferimento Meta compare un segnaposto.
+
+I corsi per principianti e tematici hanno miniature locali e il nome del corso attivo appare nella barra Impara. Seleziona un’immagine di riferimento Meta per ingrandirla; chiudila con X o Esc. Nella scheda della posizione rivelata, il nome del luogo apre Wikipedia se la ricerca trova un risultato; altrimenti resta testo e appare un avviso.
+
 Nel corso per principianti, Avanti apre un’altra lezione incompleta e Precedente torna a una lezione già visitata, anche dopo aver ricaricato; quando non ne restano, torni alla scelta del corso; nei corsi per paese prosegue nello stesso paese. Puoi cercare i paesi e ordinarli alfabeticamente, per numero di lezioni o per avanzamento.
 
 Scegli il corso per principianti o un paese nel selettore. **Inizia a imparare** apre una lezione incompleta tenendo conto dei progressi salvati. **Sfoglia le lezioni Meta** apre l’elenco se vuoi una lezione specifica. Cerca nel testo e filtra tra tutte, incomplete e completate. Scegli una lezione qualsiasi, anche completata, e aprila con **Avvia la lezione selezionata**. Riaprire una lezione completata conserva il suo stato e non programma una scheda di Ripasso.

@@ -2,8 +2,11 @@
 
 ## 2026-10-11
 
+- Keep Space free for Street View movement in Learn and use N or the Next button to advance lessons.
+- Add local generated thumbnails for Beginner and topic Meta courses, show the active course name in Learn, enlarge Meta reference images in a closable viewer, and link found place names to Wikipedia when its lookup returns results.
+- Clarify the Beginner Meta give-way-sign clue in all eight languages: Australia uses black lettering, while New Zealand uses red.
 - Make Review use a nearby Play attempt's Standard, No Move, or NMPZ rule when Study and Review attempts share the same card, and show that mode in the top bar; keep the live panorama available for free inspection after answering.
-- Show subtle blue Street View coverage and road-name buttons on Play and Review guess maps and revealed result maps. Settings keeps the saved defaults; map buttons change only the current view.
+- Show subtle blue Street View coverage and road-name buttons on Play and Review guess maps and every revealed result map, including selectable Study maps. Keep the buttons above Google map controls. Settings keeps the saved defaults; map buttons change only the current view.
 - Make the Game Guide easier to scan in all eight languages, explain the existing arrow-click plus Space movement behavior and recovery from an empty Review queue, correct uploaded-map repeat guidance, search chapter text, render inline code and email links, and honor the saved light or dark appearance.
 - Ask the browser to retain local training progress during storage pressure when it grants persistent storage.
 - Complete all eight language versions of the four GeoCoach Meta topic courses and mark imagery-date clues that may change over time.

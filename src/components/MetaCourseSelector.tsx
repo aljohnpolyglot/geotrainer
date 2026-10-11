@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Check, Lightbulb, Search } from 'lucide-react';
+import { Check, Search } from 'lucide-react';
 import { META_COUNTRY_COURSES, META_TOPIC_COURSES, metaCourseName } from '../data/metaCountryCourses';
 import { countryDisplayName } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
@@ -39,7 +39,7 @@ export function MetaCourseSelector({ selectedCourseId, onSelect, completedByCour
     const percent = total ? Math.round(completed / total * 100) : 0;
     const selected = selectedCourseId === id;
     return <button key={id} type="button" className={`meta-course${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => onSelect(id)}>
-      {code ? <img className="meta-course-flag" src={getFlagCdnUrl(code, 40)} srcSet={`${getFlagCdnUrl(code, 40)} 1x, ${getFlagCdnUrl(code, 80)} 2x`} width="24" height="16" alt="" loading="lazy" referrerPolicy="no-referrer" /> : <span className="meta-course-beginner-icon" aria-hidden="true"><Lightbulb size={15} /></span>}
+      {code ? <img className="meta-course-flag" src={getFlagCdnUrl(code, 40)} srcSet={`${getFlagCdnUrl(code, 40)} 1x, ${getFlagCdnUrl(code, 80)} 2x`} width="24" height="16" alt="" loading="lazy" referrerPolicy="no-referrer" /> : <img className="meta-course-thumbnail" src={`${import.meta.env?.BASE_URL || '/'}meta-courses/thumbnails/${id}.webp`} width="64" height="52" alt="" loading="lazy" />}
       <span className="meta-course-details"><span className="meta-course-name">{name}</span><span className="meta-course-progress"><span>{number.format(completed)} / {number.format(total)} {copy.lessons}</span><strong>{number.format(percent)}%</strong></span><span className="meta-course-meter" aria-hidden="true"><span style={{ width: `${percent}%` }} /></span></span>
       {selected && <Check size={17} aria-hidden="true" />}
     </button>;

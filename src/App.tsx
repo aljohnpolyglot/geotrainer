@@ -338,7 +338,7 @@ export default function App() {
       const target = event.target as HTMLElement;
       if (studyReviewSaving || isStudySetupOpen || isModalOpen || isNewGameModalOpen || isHistoryModalOpen || activeRoundResult || summaryGameRecord || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
       if (appMode === 'study') {
-        if (learnSource !== 'map' && (event.code === 'Space' || event.key.toLowerCase() === 'n')) { event.preventDefault(); handleNextLearn(); }
+        if (learnSource !== 'map' && event.key.toLowerCase() === 'n' && !event.repeat) { event.preventDefault(); handleNextLearn(); }
         else if (event.key.toLowerCase() === 'r') { event.preventDefault(); setIsRevealed((previous) => !previous); }
       }
     };
@@ -410,7 +410,7 @@ export default function App() {
         pastGamesCount={pastGames.length} reviewAttempt={reviewAttempt}
         reviewResultVisible={!!reviewResult} reviewStatsLength={reviewStats.length} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource}
-        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} metaProgress={metaProgress}
+        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} metaProgress={metaProgress} metaCourseId={metaCourseId}
         mapPickerOpen={mapPickerOpen}
         onHome={() => { if (isGameActive && !window.confirm('Leave the active game and return home?')) return; persistPlayWorkspace(); abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setShowHome(true); }}
         onStudy={() => { if (isGameActive && !window.confirm('Pause active game and switch to Study mode?')) return; if (isGameActive) { abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); } clearReviewSession(); requestMode('study'); }}

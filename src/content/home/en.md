@@ -535,11 +535,11 @@ Review and correction create new records. They never repair a mistake by editing
 
 ### Study shortcuts
 
-Space advances the Study flow where shown. Reveal and next-location controls remain reachable without opening extra panels. Fullscreen can reduce surrounding interface when concentrating on imagery.
+Use N or the Next button to advance Study; Space remains available for Street View movement. Reveal and next-location controls remain reachable without opening extra panels. Fullscreen can reduce surrounding interface when concentrating on imagery.
 
 ### Map and panorama controls
 
-In a moving Play or Review round, click a Street View navigation arrow, then hold Space to keep travelling in that direction. Release Space to stop. The arrow must have keyboard focus: if Space activates another button, click the arrow again. This uses the panorama's existing keyboard behavior, so there is no separate speed setting. No Move and NMPZ rounds do not allow travel. Space also advances Study or a finished round when those controls are active; check the focused control before holding it. On touch devices, use gestures for panorama rotation, movement, zoom, and guess-map placement when the active game rules permit them.
+In a moving Play or Review round, click a Street View navigation arrow, then hold Space to keep travelling in that direction. Release Space to stop. The arrow must have keyboard focus: if Space activates another button, click the arrow again. This uses the panorama's existing keyboard behavior, so there is no separate speed setting. No Move and NMPZ rounds do not allow travel. Space can continue a finished round when its control has focus; check the focused control before holding it. On touch devices, use gestures for panorama rotation, movement, zoom, and guess-map placement when the active game rules permit them.
 
 ### Accessibility
 
@@ -686,6 +686,9 @@ Meta Study offers a Beginner course and 131 country courses. Lessons open with a
 Next marks a lesson seen and updates progress even without Save for Review. In Beginner, Next opens another unfinished lesson; Previous returns to a previously visited lesson, including after reload. When none remain, you return to setup. In country courses, Next advances within that country; Previous returns to the prior lesson, and the counter shows 1/N. Meta is for clue study, with no two-guess loop or automatic distance-threshold Review card. Every country lesson now displays its reference image from this site.
 
 Four topic courses add 243 lessons from GeoCoach: US license plates (51), world bollards (58), Latin American identification clues (108), and European pedestrian signs (26). Their explanations and chosen panorama links are bundled with GeoTrainer, so lessons do not depend on the GeoCoach API while playing. Each lesson credits its original map and creator. Unavailable views are skipped by the same Meta rule. A loading placeholder appears while a Meta reference image is arriving.
+
+The Beginner and topic courses have local thumbnails, and the active course name appears in the Learn header. Select a Meta reference image to enlarge it; use X or Escape to close. On a revealed location card, a found place name links to Wikipedia when its lookup returns a result; otherwise the name stays plain and an unavailable message appears.
+
 Choose Beginner or a country in the course selector; each course shows completion percentage. Search countries or sort them alphabetically, by lesson count, or by completion. **Start learning** opens an unfinished lesson in the selected course, using saved progress when available. **Browse Meta lessons** opens the searchable list if you want a specific lesson; filter by all, unfinished, or completed, then choose any lesson and use **Start selected lesson**.
 
 Reopening a completed lesson keeps its completion and does not schedule a Review card. Start new opens the Learn path chooser; Resume keeps the saved lesson. Course lessons and explanations use the selected interface language, independently of game and AI language settings.

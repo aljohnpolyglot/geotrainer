@@ -17,6 +17,8 @@
 .meta-course:focus-visible { outline: 3px solid var(--sky); outline-offset: 1px; }
 .meta-course-flag { width: 24px; height: 16px; object-fit: cover; border: 1px solid color-mix(in srgb,var(--rule) 70%,transparent); border-radius: 2px; }
 .meta-course-beginner-icon { display: grid; width: 26px; height: 26px; place-items: center; color: var(--blue); background: color-mix(in srgb,var(--blue) 12%,var(--paper)); border-radius: 50%; font-size: 15px; }
+.meta-course-fixed .meta-course { grid-template-columns: 64px minmax(0,1fr) 18px; min-height: 74px; padding: 7px; }
+.meta-course-thumbnail { display: block; width: 64px; height: 52px; border-radius: 3px; object-fit: cover; }
 .meta-course-details { display: grid; min-width: 0; gap: 5px; }
 .meta-course-name { overflow: hidden; font-size: 12px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .meta-topic-course-list .meta-course-name { white-space: normal; }

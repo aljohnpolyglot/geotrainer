@@ -1,4 +1,5 @@
 import { AlertTriangle, Building, Compass, Eye, MapPin, Minus } from 'lucide-react';
+import { WikipediaPlaceLink } from './WikipediaPlaceLink';
 import { useEffect, useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
@@ -59,7 +60,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
             <h2 id="review-result-title"><CountryFlag code={sourceAttempt.countryCode} />{country}</h2>
             <div className="review-location-details" aria-live="polite">
               {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
-                {locationDetails.primaryArea && <strong><Building size={13} />{locationDetails.primaryArea}</strong>}
+                {locationDetails.primaryArea && <strong><Building size={13} /><WikipediaPlaceLink name={locationDetails.primaryArea} place={geocodeData?.locality || geocodeData?.adminArea || ''} region={geocodeData?.locality ? geocodeData.adminArea : undefined} /></strong>}
                 {locationDetails.route && <span><MapPin size={13} />{locationDetails.route}</span>}
                 {locationDetails.address && <small>{locationDetails.address}</small>}
               </>}

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Layers3, Type } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { centeredResultMapZoom, mapPresentationOptions, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
+import { centeredResultMapZoom, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
 import { getStreetViewSnapshot, subscribeStreetViewSnapshot } from '../services/streetViewSnapshot';
 
 type Point = { lat: number; lng: number };
@@ -28,7 +28,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   const mapPreferences = useMapPreferences();
   const [coverageOverride, setCoverageOverride] = useState<boolean>();
   const [roadNamesOverride, setRoadNamesOverride] = useState<boolean>();
-  const coverageEnabled = coverageOverride ?? mapPreferences.showPlayStreetViewCoverage === true;
+  const coverageEnabled = coverageOverride ?? (!!onSelect || mapPreferences.showPlayStreetViewCoverage === true);
   const roadNamesEnabled = roadNamesOverride ?? mapPreferences.showPlayRoadLabels === true;
   const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     const resource = acquireMap('result', element.current, {
       center: actual, zoom: resultMapZoomLimit(mapPreferences.resultMapZoom),
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
-      ...(onSelect ? mapPresentationOptions : playGuessMapOptions)({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark')),
+      ...playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
     const map = resource.map;
@@ -56,15 +56,20 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     };
   }, [fullscreenControl]);
 
-  useEffect(() => { mapRef.current?.setOptions((onSelect ? mapPresentationOptions : playGuessMapOptions)({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, onSelect, roadNamesEnabled]);
+  useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || (!onSelect && !coverageEnabled)) return;
+    if (!map || !coverageEnabled) return;
     const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map);
-    const listener = onSelect ? map.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); }) : undefined;
-    return () => { listener?.remove(); coverage.setMap(null); };
-  }, [onSelect, coverageEnabled]);
+    return () => coverage.setMap(null);
+  }, [coverageEnabled]);
+
+  useEffect(() => {
+    if (!onSelect || !mapRef.current) return;
+    const listener = mapRef.current.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); });
+    return () => listener.remove();
+  }, [onSelect]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -130,9 +135,9 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
-    {!onSelect && <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>
+    <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>
       <button type="button" aria-pressed={coverageEnabled} aria-label={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} title={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} onClick={() => setCoverageOverride(!coverageEnabled)}><Layers3 size={15} /></button>
       <button type="button" aria-pressed={roadNamesEnabled} aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} onClick={() => setRoadNamesOverride(!roadNamesEnabled)}><Type size={15} /></button>
-    </div>}
+    </div>
   </div>;
 }

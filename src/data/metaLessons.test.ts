@@ -96,6 +96,24 @@ test('comparison notes follow the pictured clue in every supported language', ()
   assert.match(META_LESSONS.find((lesson) => lesson.id === 'a2296a24368d1443')!.text, /Hungary/);
 });
 
+test('Australian give-way Meta clue contrasts its black text with New Zealand red in every language', () => {
+  const lesson = META_LESSONS.find(({ id }) => id === '99d14cd5526ef554')!;
+  const expected = {
+    en: [/Australian/i, /black/i, /New Zealand/i, /red/i],
+    es: [/australianas/i, /negro/i, /Nueva Zelanda/i, /rojas/i],
+    pt: [/australianos/i, /preto/i, /Nova Zelândia/i, /vermelhas/i],
+    fr: [/Australie/i, /noir/i, /Nouvelle-Zélande/i, /rouge/i],
+    de: [/Australische/i, /schwarzen/i, /Neuseeland/i, /rot/i],
+    it: [/Australia/i, /nero/i, /Nuova Zelanda/i, /rossa/i],
+    ru: [/австралийских/i, /чёрным/i, /Новой Зеландии/i, /красная/i],
+    sv: [/Australiska/i, /svart/i, /Nya Zeeland/i, /röd/i],
+  } as const;
+  for (const [language, clues] of Object.entries(expected) as [SupportedLanguage, readonly RegExp[]][]) {
+    const text = localizeMetaLesson(lesson, language).text;
+    for (const clue of clues) assert.match(text, clue, `${lesson.id}:${language} must explain the black-Australia/red-New Zealand contrast`);
+  }
+});
+
 test('resumed Beginner Meta restores Previous from actual visited lessons', () => {
   const [first, second, current] = META_LESSONS;
   const visits = [

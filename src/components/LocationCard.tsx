@@ -12,6 +12,7 @@ import { ResultMap } from "./ResultMap";
 import { translate } from "../services/language";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { movePanelRect, resizePanelRect, type PanelRect, type PanelResizeDirection, useDraggablePanel } from "../hooks/useDraggablePanel";
+import { WikipediaPlaceLink } from './WikipediaPlaceLink';
 
 type CardInteraction = { pointerId: number; start: { x: number; y: number }; rect: PanelRect; direction: 'move' | PanelResizeDirection };
 
@@ -153,7 +154,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
             {primaryArea && (
               <div className="flex items-start space-x-2 text-stone-200">
                 <Building className="w-3.5 h-3.5 text-amber-400 mt-0.5 flex-shrink-0" />
-                <span className="font-semibold text-stone-100">{primaryArea}</span>
+                <WikipediaPlaceLink className="font-semibold text-stone-100" name={primaryArea} place={geocodeData?.locality || geocodeData?.adminArea || ''} region={geocodeData?.locality ? geocodeData.adminArea : undefined} />
               </div>
             )}
 
