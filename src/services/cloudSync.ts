@@ -152,6 +152,18 @@ export const withoutEmbeddedHostedImages = (clues: ClueRecord[]) => clues.map((c
 export const withoutEmbeddedLocationImages = (locations: Record<string, unknown>[]) => locations.map(({ imageDataUrl: _image, ...location }) => location);
 export const withoutImportedMaps = (settings: Array<{ key: string }>) => settings.filter((item) => !item.key.startsWith(IMPORTED_MAP_PREFIX) && item.key !== 'local.currentMapId');
 export const backupSignature = (backup: TrainerBackup) => JSON.stringify(backup.data);
+export const changedBackupRecords = (merged: TrainerBackup, local: TrainerBackup): TrainerBackup => ({
+  ...merged,
+  data: Object.fromEntries(STORE_NAMES.map((name) => {
+    const key = keys[name];
+    const existing = new Map((local.data[name] || []).map((item) => [String((item as Record<string, unknown>)[key]), item]));
+    return [name, (merged.data[name] || []).filter((item) => {
+      const previous = existing.get(String((item as Record<string, unknown>)[key]));
+      return !previous || (previous !== item && JSON.stringify(previous) !== JSON.stringify(item));
+    })];
+  })) as TrainerBackup['data'],
+});
+const hasChangedRecords = (backup: TrainerBackup) => STORE_NAMES.some((name) => backup.data[name].length > 0);
 export const savedContentCounts = (backup: TrainerBackup) => ({
   clues: backup.data.clues.length,
   notes: ((backup.data.settings as Array<{ key?: string; value?: unknown }>).find((item) => item.key === 'notebook.notes')?.value as unknown[] | undefined)?.length || 0,
@@ -234,9 +246,10 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: Rem
       validateBackup(remote);
       const latestLocal = await createBackup(false);
       const merged = mergeBackups(remote as TrainerBackup, latestLocal);
-      if (JSON.stringify(merged.data) !== JSON.stringify(latestLocal.data)) {
+      const changes = changedBackupRecords(merged, latestLocal);
+      if (hasChangedRecords(changes)) {
         applyingCloud = true;
-        try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(backup, 'upload cloud merge'); } finally { applyingCloud = false; }
+        try { await importBackup(changes, 'merge'); await reportUnexpectedDecrease(backup, 'upload cloud merge'); } finally { applyingCloud = false; }
         backup = merged;
         importedCloud = true;
       }
@@ -304,9 +317,10 @@ async function syncSession(session: Session | null, announce = false): Promise<v
       validateBackup(data.backup);
       syncedBackup = backupSignature(data.backup);
       merged = mergeBackups(data.backup, local);
-      if (JSON.stringify(merged.data) !== JSON.stringify(local.data)) {
+      const changes = changedBackupRecords(merged, local);
+      if (hasChangedRecords(changes)) {
         applyingCloud = true;
-        try { await importBackup(merged, 'merge'); await reportUnexpectedDecrease(local, 'session cloud merge'); } finally { applyingCloud = false; }
+        try { await importBackup(changes, 'merge'); await reportUnexpectedDecrease(local, 'session cloud merge'); } finally { applyingCloud = false; }
         importedCloud = true;
       }
     }

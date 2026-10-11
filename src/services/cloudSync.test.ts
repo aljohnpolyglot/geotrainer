@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { backupSignature, buildSyncReceipt, mergeBackups, retryCloud, savedContentCounts, savedContentDecreased, sessionNeedsRefresh, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
+import { backupSignature, buildSyncReceipt, changedBackupRecords, mergeBackups, retryCloud, savedContentCounts, savedContentDecreased, sessionNeedsRefresh, withoutEmbeddedHostedImages, withoutEmbeddedLocationImages } from './cloudSync';
 import { announceCloudImport, CLOUD_IMPORT_EVENT } from './cloudSyncEvent';
 
 const backup = (id: string, score: number): TrainerBackup => ({
@@ -35,6 +35,21 @@ test('cloud merge includes saved clue images and persisted preferences', () => {
   const merged = mergeBackups(cloud, local);
   assert.equal(merged.data.clues.length, 2);
   assert.deepEqual(merged.data.settings, [{ key: 'schedulerPreferences', value: { strictness: 'pro' } }]);
+});
+
+test('manual sync writes new and updated records without rewriting unchanged saved photos', () => {
+  const local = backup('local', 20);
+  const photo = { id: 'saved-photo', imageDataUrl: 'data:image/jpeg;base64,AQ==' };
+  local.data.locations.push(photo);
+  local.data.reviews.push({ id: 'review', dueAt: 100, lastReviewedAt: 100 });
+  const cloud = backup('cloud', 10);
+  cloud.data.reviews.push({ id: 'review', dueAt: 200, lastReviewedAt: 200 });
+  cloud.data.bookmarks.push({ panoId: 'new-bookmark' });
+  const changes = changedBackupRecords(mergeBackups(cloud, local), local);
+  assert.deepEqual(changes.data.locations, []);
+  assert.equal((changes.data.reviews[0] as { dueAt: number }).dueAt, 200);
+  assert.deepEqual(changes.data.bookmarks, [{ panoId: 'new-bookmark' }]);
+  assert.deepEqual(changes.data.attempts, [{ id: 'cloud', score: 10 }]);
 });
 
 test('saved-content invariant counts every clue and independent Notebook save', () => {

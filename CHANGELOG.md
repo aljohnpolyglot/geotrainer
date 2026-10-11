@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Make manual cloud sync write only new or changed records to the local database, avoiding needless rewrites of saved photos during a merge.
 - Open saved panoramas directly from History place rows with the existing learning aids and a return action, while keeping Google Maps and graded Review as separate actions.
 - Let learners choose the Wikipedia edition for revealed place links in Study, Play, and Review, with English lookup when the selected edition has no matching article.
 - Complete the GeoCoach Street View topic catalog in Meta with 21 more credited courses and 584 local lessons, bringing the total to 30 courses and 959 lessons. Add seven translated versions and matching course thumbnails without changing existing lesson progress IDs.
