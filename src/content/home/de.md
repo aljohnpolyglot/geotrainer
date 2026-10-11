@@ -186,7 +186,7 @@ Setze die Markierung auf der Karte und sende sie ab. Das Ergebnis zeigt das tats
 
 Im Spiel und in der Wiederholung vergrößert die Schaltfläche die Tippkarte standardmäßig als schwebendes Fenster. Unter **Einstellungen → Anzeige → Karten** kannst du die **Schaltfläche zum Vergrößern der Tippkarte** auf **Vollbild** stellen, damit das ganze Fenster einschließlich der Tippsteuerung den sichtbaren Bildschirm füllt. In beiden Modi kannst du es am Kopfbereich ziehen, an Kanten und Ecken skalieren und zur kompakten Karte zurückkehren. Für die Kartenfläche gibt es außerdem eine separate Vollbild-Schaltfläche. Die Markierung bleibt erhalten.
 
-Im Spiel sind Street-View-Abdeckung und Straßennamen auf der Tippkarte standardmäßig ausgeschaltet. Über die Ebenen- und Text-Schaltflächen im Kartenkopf oder **Einstellungen → Anzeige → Karten** kannst du beide Hilfen einzeln einschalten; die Auswahl wird gespeichert. Die blaue Abdeckung zeigt allgemeine Verfügbarkeit, garantiert aber kein Panorama passend zu den Bild- oder Innenraumfiltern. Wenn du die blaue Abdeckung einschaltest, erscheint sie auch auf Karten aufgedeckter Orte, einschließlich der gespeicherten Ortskarte.
+Im Spiel sind Street-View-Abdeckung und Straßennamen auf der Tippkarte standardmäßig ausgeschaltet. Die Ebenen- und Text-Schaltflächen im Kartenkopf ändern die aktuelle Karte; unter **Einstellungen → Anzeige → Karten** speicherst du die Vorgaben. Die blaue Abdeckung zeigt allgemeine Verfügbarkeit, garantiert aber kein Panorama passend zu den Bild- oder Innenraumfiltern. Dieselben Bedienelemente gibt es in der Wiederholung und auf Karten aufgedeckter Orte, einschließlich der gespeicherten Ortskarte.
 
 Beim Absenden speichert GeoTrainer die aktuelle Street-View-Ansicht für spätere Abdeckungs- und Verlaufs-Vorschauen.
 
@@ -197,6 +197,10 @@ Beendete und unterbrochene Spiele erscheinen unter Frühere Spiele. Zusammenfass
 Das Symbol **Diesen Ort zur Wiederholung speichern** neben **Spiel fortsetzen** speichert auch richtig beantwortete Orte. Es erscheint nur, wenn für den angezeigten Ort noch keine Wiederholungskarte besteht; Orte im selben Land innerhalb von 50 Metern zählen zusammen. Auch frühere Runden lassen sich so speichern. Danach verschwindet das Symbol und das Ergebnis bleibt offen. Punktzahl und bestehende Termine bleiben erhalten, auch nach dem Neuladen. Die Synchronisierung bleibt manuell. Bei einem Fehler kannst du es erneut versuchen. Eine kurze Bestätigung meldet das Speichern zur Wiederholung.
 
 ## Wiederholungsmodus
+
+Wenn nahe beieinanderliegende Lern- und Spielversuche eine Karte teilen, übernimmt die Wiederholung die Bewegungsregel der Spielrunde: Standard, No Move oder NMPZ. Die obere Leiste zeigt diesen Modus. Nach der Antwort sind Bewegung, Drehen und Zoomen im Panorama möglich.
+
+Die Tippkarten in Spiel und Wiederholung haben dezente Schaltflächen für Abdeckung und Straßennamen. Sie erscheinen auch auf aufgedeckten Ergebniskarten und gespeicherten Ortskarten. Die Vorgaben sind anfangs aus und werden in Einstellungen gespeichert; die Schaltflächen ändern nur die aktuelle Ansicht. Zoome näher heran, um blau markierte Straßen zu sehen. Die Abdeckung garantiert kein Panorama passend zu Bild- oder Innenraumfiltern.
 
 ### Vor der Antwort
 

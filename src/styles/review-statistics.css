@@ -40,6 +40,12 @@
 .result-map-legend { position: absolute; z-index: 2; left: 10px; top: 10px; display: flex; gap: 9px; padding: 7px 9px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; box-shadow: 0 4px 14px rgba(8,38,58,.18); font-size: 10px; font-weight: 750; }
 .result-map-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: #22c55e; }
 .result-map-legend .current::before { background: #ef4444; }.result-map-legend .previous::before { background: #2563eb; }
+.result-map-guides { position: absolute; z-index: 2; top: 10px; right: 10px; display: flex; gap: 4px; padding: 4px; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(8,38,58,.18); opacity: .82; }
+.result-map-guides:hover, .result-map-guides:focus-within { opacity: 1; }
+.result-map-guides.with-fullscreen { right: 52px; }
+.result-map-guides button { display: grid; width: 28px; height: 28px; place-items: center; color: var(--muted); border: 0; border-radius: 3px; background: transparent; cursor: pointer; }
+.result-map-guides button:hover, .result-map-guides button[aria-pressed="true"] { color: var(--blue); background: var(--paper-2); }
+.result-map-guides button:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
 .study-result-map.selectable .result-map-canvas { cursor: crosshair; }
 .dark .result-map-canvas .gm-control-active { background-color: #071c29 !important; }
 .review-result-panel .grade-actions { padding: 12px 20px; }

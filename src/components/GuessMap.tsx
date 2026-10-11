@@ -11,8 +11,7 @@ import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { movePanelRect, resizePanelRect, useDraggablePanel, type PanelRect, type PanelResizeDirection } from '../hooks/useDraggablePanel';
 import { playUiSound } from '../services/audio';
-import { announceMapPreferences, mapPresentationOptions, playGuessMapOptions, useMapPreferences } from '../services/mapPreferences';
-import { trainerDb } from '../data/trainerDb';
+import { mapPresentationOptions, playGuessMapOptions, useMapPreferences } from '../services/mapPreferences';
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
@@ -21,6 +20,7 @@ interface GuessMapProps {
   timeRemaining: number | null; // null if unlimited
   elapsedTimeSeconds?: number;
   showCoverageControl?: boolean;
+  showRoadNamesControl?: boolean;
 }
 
 const visibleBounds = () => {
@@ -43,9 +43,14 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   timeRemaining,
   elapsedTimeSeconds,
   showCoverageControl = false,
+  showRoadNamesControl = false,
 }) => {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
+  const [coverageOverride, setCoverageOverride] = useState<boolean>();
+  const [roadNamesOverride, setRoadNamesOverride] = useState<boolean>();
+  const coverageEnabled = coverageOverride ?? mapPreferences.showPlayStreetViewCoverage === true;
+  const roadNamesEnabled = roadNamesOverride ?? mapPreferences.showPlayRoadLabels === true;
   const t = (key: string) => translate(ui, key);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
@@ -109,7 +114,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       zoomControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM,
       },
-      ...(showCoverageControl ? playGuessMapOptions(mapPreferences, document.documentElement.classList.contains('dark')) : mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))),
+      ...(showRoadNamesControl ? playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark')) : mapPresentationOptions(mapPreferences, document.documentElement.classList.contains('dark'))),
       // Solution attribution per skill guidelines
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
@@ -164,14 +169,14 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     };
   }, [mapsReady]);
 
-  useEffect(() => { mapInstanceRef.current?.setOptions((showCoverageControl ? playGuessMapOptions : mapPresentationOptions)(mapPreferences, document.documentElement.classList.contains('dark'))); }, [mapPreferences, showCoverageControl]);
+  useEffect(() => { mapInstanceRef.current?.setOptions((showRoadNamesControl ? playGuessMapOptions : mapPresentationOptions)({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled, showRoadNamesControl]);
 
   useEffect(() => {
-    if (!showCoverageControl || mapPreferences.showPlayStreetViewCoverage !== true || !mapInstanceRef.current) return;
+    if (!showCoverageControl || !coverageEnabled || !mapInstanceRef.current) return;
     const coverage = new google.maps.StreetViewCoverageLayer();
     coverage.setMap(mapInstanceRef.current);
     return () => coverage.setMap(null);
-  }, [mapsReady, showCoverageControl, mapPreferences.showPlayStreetViewCoverage]);
+  }, [mapsReady, showCoverageControl, coverageEnabled]);
 
   useEffect(() => {
     const container = mapContainerRef.current;
@@ -239,19 +244,19 @@ export const GuessMap: React.FC<GuessMapProps> = ({
         <div className="flex items-center space-x-2">
           {showCoverageControl && <button
             type="button"
-            aria-pressed={mapPreferences.showPlayStreetViewCoverage === true}
-            aria-label={t(mapPreferences.showPlayStreetViewCoverage === true ? 'Hide Street View coverage' : 'Show Street View coverage')}
-            title={t(mapPreferences.showPlayStreetViewCoverage === true ? 'Hide Street View coverage' : 'Show Street View coverage')}
-            onClick={() => { const next = { ...mapPreferences, showPlayStreetViewCoverage: mapPreferences.showPlayStreetViewCoverage !== true }; announceMapPreferences(next); void trainerDb.setSetting('mapPreferences', next); }}
-            className={`p-1 rounded transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 ${mapPreferences.showPlayStreetViewCoverage !== true ? 'text-stone-400 hover:text-stone-200 hover:bg-stone-800' : 'text-blue-400 hover:text-blue-300'}`}
+            aria-pressed={coverageEnabled}
+            aria-label={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')}
+            title={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')}
+            onClick={() => setCoverageOverride(!coverageEnabled)}
+            className={`p-1 rounded transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 ${!coverageEnabled ? 'text-stone-400 hover:text-stone-200 hover:bg-stone-800' : 'text-blue-400 hover:text-blue-300'}`}
           ><Layers3 className="w-3.5 h-3.5" /></button>}
-          {showCoverageControl && <button
+          {showRoadNamesControl && <button
             type="button"
-            aria-pressed={mapPreferences.showPlayRoadLabels === true}
-            aria-label={t(mapPreferences.showPlayRoadLabels === true ? 'Hide road names' : 'Show road names')}
-            title={t(mapPreferences.showPlayRoadLabels === true ? 'Hide road names' : 'Show road names')}
-            onClick={() => { const next = { ...mapPreferences, showPlayRoadLabels: mapPreferences.showPlayRoadLabels !== true }; announceMapPreferences(next); void trainerDb.setSetting('mapPreferences', next); }}
-            className={`p-1 rounded transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 ${mapPreferences.showPlayRoadLabels !== true ? 'text-stone-400 hover:text-stone-200 hover:bg-stone-800' : 'text-blue-400 hover:text-blue-300'}`}
+            aria-pressed={roadNamesEnabled}
+            aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')}
+            title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')}
+            onClick={() => setRoadNamesOverride(!roadNamesEnabled)}
+            className={`p-1 rounded transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 ${!roadNamesEnabled ? 'text-stone-400 hover:text-stone-200 hover:bg-stone-800' : 'text-blue-400 hover:text-blue-300'}`}
           ><Type className="w-3.5 h-3.5" /></button>}
           {/* Reset pin button */}
           {currentGuess && (

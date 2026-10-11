@@ -206,7 +206,7 @@ Place the marker on the map and submit it. The pinpoint map opens at the world v
 
 In Play and Review, the pinpointer’s expand button enlarges it as a floating map by default. Under **Settings → Display → Maps**, set **Pinpointer expand button** to **Fullscreen** if you prefer the whole pinpointer, including its guess controls, to fill the visible screen. In either mode, drag its header to move it or an edge or corner to resize it; restore it to return to the compact map. The map also has a separate fullscreen button for its map canvas. Your pin stays in place while the map changes size.
 
-In Play, the guess map keeps Street View coverage and road names off by default. Use the layers and text buttons in its header, or **Settings → Display → Maps**, to show either aid; the choice is saved. Blue coverage shows general Street View availability, but does not guarantee a panorama matching the imagery or indoor filters. When you enable blue coverage, it also appears on revealed location maps, including the saved location card.
+In Play, the guess map keeps Street View coverage and road names off by default. Use the layers and text buttons in its header for the current map, or **Settings → Display → Maps** to save the default. Blue coverage shows general Street View availability, but does not guarantee a panorama matching the imagery or indoor filters. The same controls appear on Review and revealed location maps, including the saved location card.
 
 Submitting a Play answer saves the current Street View image with that location for later coverage and history previews. This does not create a clue unless you explicitly save one.
 
@@ -225,6 +225,10 @@ The Games history list shows each total as **earned score / maximum possible sco
 ## Review mode
 
 Review presents scheduled locations when they are due. It is a real recall test, not a slideshow of past answers.
+
+When a nearby Study and Play attempt share one card, Review uses the Play round's movement rule: Standard, No Move, or NMPZ. The top bar shows this mode. The live panorama unlocks movement, panning, and zoom after the answer.
+
+Play and Review guess maps have subtle coverage and road-name buttons in their headers. The same buttons appear on revealed result maps, including saved location cards. Both Settings defaults start off; Settings saves those defaults, while a map button changes only the current view. Zoom in to see blue covered roads; the coverage guide does not guarantee a panorama matching imagery or indoor filters.
 
 ### Before the guess
 

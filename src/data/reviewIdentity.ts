@@ -15,6 +15,17 @@ export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCo
 
 export const hasStudyReviewSource = (attempts: Attempt[], panoId: string) => attempts.some((attempt) => attempt.source === 'study' && attempt.panoId === panoId);
 
+export function uniqueReviewSources(attempts: Attempt[], canonicalPano: (attempt: Attempt) => string): Attempt[] {
+  const priority = { play: 0, review: 1, study: 2 };
+  const selected = new Map<string, Attempt>();
+  for (const attempt of attempts) {
+    const key = canonicalPano(attempt);
+    const previous = selected.get(key);
+    if (!previous || priority[attempt.source] < priority[previous.source]) selected.set(key, attempt);
+  }
+  return attempts.filter((attempt) => selected.get(canonicalPano(attempt)) === attempt);
+}
+
 const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
   const gradingHistory = [...kept.gradingHistory, ...duplicate.gradingHistory]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)

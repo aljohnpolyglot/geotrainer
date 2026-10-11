@@ -14,7 +14,7 @@ import type {
 } from '../types';
 import { COUNTRIES } from './countries';
 import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
-import { coalesceNearbyReviews, nearbyReview } from './reviewIdentity';
+import { coalesceNearbyReviews, nearbyReview, uniqueReviewSources } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 import { nextGeneralizationLevel } from './reviewVariation';
 import { configuredCountryScoreFloor, intervalsFor, reviewGradeForPerformance } from './reviewGrading';
@@ -358,7 +358,7 @@ export const trainerDb = {
     const now = Date.now();
     const recentCutoff = now - (filters.recentDays || 30) * 864e5;
     const hasScoreFilter = filters.minScore !== undefined || filters.maxScore !== undefined;
-    const queue = attempts
+    const ranked = attempts
       .filter((attempt) => !filters.countryCodes?.length || filters.countryCodes.includes(attempt.countryCode))
       .filter((attempt) => !filters.environment || (attempt.environmentRequested ?? attempt.environment ?? 'mixed') === filters.environment)
       .filter((attempt) => {
@@ -372,8 +372,8 @@ export const trainerDb = {
       .filter((attempt) => !filters.due || (!!reviewByPano.get(attempt.panoId) && isReviewDue(reviewByPano.get(attempt.panoId)!, now, preferences)))
       .sort((a, b) => filters.due
         ? (reviewByPano.get(a.panoId)?.dueAt || 0) - (reviewByPano.get(b.panoId)?.dueAt || 0)
-        : a.score - b.score || b.createdAt - a.createdAt)
-      .filter((attempt, index, values) => values.findIndex((other) => (reviewByPano.get(other.panoId)?.panoId || other.panoId) === (reviewByPano.get(attempt.panoId)?.panoId || attempt.panoId)) === index);
+        : a.score - b.score || b.createdAt - a.createdAt);
+    const queue = uniqueReviewSources(ranked, (attempt) => reviewByPano.get(attempt.panoId)?.panoId || attempt.panoId);
     if (preferences.reviewOrder === 'random') shuffleInPlace(queue);
     if (!filters.due) return queue;
     const today = reviewDayStart(now, preferences); const nowForLimits = now;

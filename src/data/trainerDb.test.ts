@@ -280,3 +280,20 @@ test('Random order shuffles saved Meta cards in custom Review queues', async () 
     assert.deepEqual((await trainerDb.reviewQueue({})).map((item) => item.id), ['meta-2', 'meta-1', 'meta-0']);
   } finally { Math.random = originalRandom; }
 });
+
+test('nearby Review card keeps the Play movement rule over Study and Review sources', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  await initTrainerDb(); await clearTrainerDbForTesting();
+  const source = {
+    gameId: 'game', roundNumber: 1, actualLat: -33.87, actualLng: 151.21, countryCode: 'AU',
+    guessedLat: null, guessedLng: null, distanceKm: null, timeSpentSeconds: 0,
+    collectionId: 'world', createdAt: Date.now(),
+  };
+  await trainerDb.saveAttempt({ ...source, id: 'study', panoId: 'nearby-study', score: 0, source: 'study', canMove: true, canPan: true, canZoom: true });
+  await trainerDb.queueForReview('nearby-study', true);
+  await trainerDb.saveAttempt({ ...source, id: 'review', panoId: 'nearby-review', score: 1000, source: 'review', canMove: true, canPan: true, canZoom: true });
+  await trainerDb.saveAttempt({ ...source, id: 'nmpz', panoId: 'nearby-play', score: 3000, source: 'play', canMove: false, canPan: false, canZoom: false });
+  const queue = await trainerDb.reviewQueue({ due: true });
+  assert.deepEqual(queue.map((item) => item.id), ['nmpz']);
+  assert.deepEqual([queue[0].canMove, queue[0].canPan, queue[0].canZoom], [false, false, false]);
+});

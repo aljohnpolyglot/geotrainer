@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   AppMode,
+  Attempt,
   GameSettings,
   LearnSource,
   LocationResult,
@@ -45,7 +46,7 @@ export interface AppTopBarProps {
   currentTotalScore: number;
   timeRemaining: number | null;
   pastGamesCount: number;
-  reviewAttempt: { id: string } | null;
+  reviewAttempt: Pick<Attempt, 'id' | 'canMove' | 'canPan' | 'canZoom'> | null;
   reviewResultVisible: boolean;
   reviewStatsLength: number;
   reviewInitialTotal: number;
@@ -92,6 +93,7 @@ export function AppTopBar({
   const number = new Intl.NumberFormat(ui);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const reviewPosition = Math.max(1, reviewStatsLength + (reviewResultVisible ? 0 : 1));
+  const reviewMovement = reviewAttempt ? t(reviewAttempt.canMove ? 'Standard' : reviewAttempt.canPan || reviewAttempt.canZoom ? 'No Move' : 'NMPZ') : '';
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
   const studyActions = !showHome && appMode === 'study' && <div className={`study-viewport-actions${learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total ? ' uploaded-complete' : ''}`} role="group" aria-label={t('navLearn')}>
     {(learnSource === 'uploaded' || learnSource === 'meta') && <button type="button" onClick={onPreviousLocation} disabled={!canPreviousLocation || isLoading || studyReviewSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md bg-stone-100 enabled:hover:bg-white text-stone-950 disabled:bg-stone-700 disabled:text-stone-400 disabled:cursor-not-allowed"><ArrowLeft className="w-3.5 h-3.5" /><span>{t('Previous')}</span></button>}
@@ -107,6 +109,7 @@ export function AppTopBar({
         {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-mobile-context"><strong>{uploadedProgress.position}/{uploadedProgress.total}</strong><small>{t('Source')}</small></span>}
         {!showHome && appMode === 'study' && learnSource === 'meta' && metaProgress && <span className="study-mobile-context"><strong>{number.format(metaProgress.position)}/{number.format(metaProgress.total)}</strong><small>{t('Meta')}</small></span>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewPosition}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
+        {!showHome && appMode === 'review' && reviewAttempt && <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-300" title={t('Movement')}>{reviewMovement}</span>}
         <button type="button" className="mobile-menu-toggle" aria-expanded={mobileMenuOpen} aria-label={t('Navigation')} onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button>
         <button type="button" className="mobile-menu-backdrop" aria-label={t('close')} onClick={() => setMobileMenuOpen(false)} />
         <div className="mobile-drawer">

@@ -92,11 +92,15 @@ Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Ef
 
 I Spel och Repetition förstorar knappen gissningskartan som en flytande panel som standard. Under **Inställningar → Visning → Kartor** kan du välja **Helskärm** för **Knapp för att förstora gissningskartan** om hela panelen, inklusive gissningskontrollerna, ska fylla den synliga skärmen. I båda lägena kan du dra panelen i rubriken, ändra storlek från en kant eller ett hörn och återställa den kompakta kartan. Kartan har också en separat helskärmsknapp för själva kartytan. Markören ligger kvar.
 
-I Spel är Street View-täckning och vägnamn avstängda som standard på gissningskartan. Använd lager- och textknapparna i kartans rubrik eller **Inställningar → Visning → Kartor** för att slå på varje hjälpmedel; valet sparas. Blå täckning visar allmän tillgänglighet men garanterar inte en panorama som matchar bild- eller inomhusfiltren. När du slår på blå täckning visas den också på kartor över avslöjade platser, inklusive kortet för en sparad plats.
+I Spel är Street View-täckning och vägnamn avstängda som standard på gissningskartan. Använd lager- och textknapparna i kartans rubrik för den aktuella kartan, eller **Inställningar → Visning → Kartor** för att spara standardvalen. Blå täckning visar allmän tillgänglighet men garanterar inte en panorama som matchar bild- eller inomhusfiltren. Samma kontroller finns i Repetition och på kartor över avslöjade platser, inklusive kortet för en sparad plats.
 
 Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig även spara rätt besvarade platser. Den visas bara när den visade platsen saknar repetitionskort, inklusive platser i samma land inom 50 meter. Du kan också bläddra till och spara tidigare rundor. Ikonen försvinner efter sparandet och resultatet förblir öppet. Poäng och befintliga scheman ändras inte. Sparandet finns kvar efter omladdning och molnsynkronisering är fortfarande manuell. Om sparandet misslyckas kan du försöka igen. En kort bekräftelse visar att platsen har sparats för repetition.
 
 ## Repetition och schemaläggning
+
+När närliggande försök från Lär och Spela delar ett kort använder Repetition spelrundans rörelseregel: Standard, No Move eller NMPZ. Det läget visas i det övre fältet. Efter svaret går det att förflytta sig, rotera och zooma i panoramat.
+
+Gissningskartorna i Spel och Repetition har diskreta knappar för täckning och vägnamn. De finns även på avslöjade resultatkartor och kort för sparade platser. Standardinställningarna är av från början och sparas i Inställningar; knapparna ändrar bara den aktuella vyn. Zooma in för att se blåmarkerade vägar; guiden garanterar inte en panorama som matchar bild- eller inomhusfiltren.
 
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 

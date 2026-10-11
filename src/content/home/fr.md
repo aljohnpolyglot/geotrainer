@@ -96,11 +96,15 @@ Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 m
 
 Dans Jeu et Révision, le bouton d’agrandissement ouvre par défaut la carte de réponse en panneau flottant. Dans **Paramètres → Affichage → Cartes**, choisissez **Plein écran** pour le **Bouton d’agrandissement de la carte de réponse** si vous préférez que tout le panneau, commandes de réponse comprises, remplisse l’écran visible. Dans les deux modes, déplacez-le par son en-tête, redimensionnez-le depuis un bord ou un coin, puis restaurez la carte compacte. La carte possède aussi un bouton plein écran distinct pour sa zone cartographique. Le repère reste en place.
 
-En Jeu, la couverture Street View et les noms des rues sont désactivés par défaut sur la carte de réponse. Utilisez les boutons des couches et du texte dans l’en-tête, ou **Paramètres → Affichage → Cartes**, pour activer chaque aide ; le choix est enregistré. La couverture bleue indique une disponibilité générale, sans garantir un panorama conforme aux filtres d’images ou d’intérieurs. Lorsque vous activez la couverture bleue, elle apparaît aussi sur les cartes des lieux révélés, notamment la fiche du lieu enregistré.
+En Jeu, la couverture Street View et les noms des rues sont désactivés par défaut sur la carte de réponse. Utilisez les boutons des couches et du texte dans l’en-tête pour la carte actuelle, ou **Paramètres → Affichage → Cartes** pour enregistrer le réglage par défaut. La couverture bleue indique une disponibilité générale, sans garantir un panorama conforme aux filtres d’images ou d’intérieurs. Les mêmes commandes figurent en Révision et sur les cartes des lieux révélés, notamment la fiche du lieu enregistré.
 
 L’icône **Enregistrer ce lieu pour révision**, à côté de **Continuer la partie**, permet aussi de conserver une réponse correcte. Elle apparaît uniquement si le lieu affiché n’a pas de carte de révision, y compris les lieux du même pays à moins de 50 mètres. Elle fonctionne aussi pour les manches précédentes. L’enregistrement retire l’icône et garde le résultat ouvert, sans modifier le score ni une planification existante. Il reste enregistré après rechargement et la synchronisation reste manuelle. En cas d’échec, réessayez. Une brève notification confirme l’enregistrement pour révision.
 
 ## Révision et planification
+
+Quand des tentatives proches d’Étude et de Jeu partagent une carte, la Révision reprend la règle de déplacement de la manche de Jeu : Standard, No Move ou NMPZ. La barre supérieure affiche ce mode. Après la réponse, le panorama permet de se déplacer, de tourner et de zoomer.
+
+Les cartes de réponse du Jeu et de la Révision proposent des boutons discrets pour la couverture et les noms des rues. Ils figurent aussi sur les cartes de résultat révélées, y compris les fiches de lieux enregistrés. Les réglages par défaut sont désactivés et enregistrés dans Paramètres ; les boutons ne modifient que la vue actuelle. Zoomez pour voir les routes couvertes en bleu ; le guide ne garantit pas un panorama conforme aux filtres d’images ou d’intérieurs.
 
 ### Personnaliser la révision
 
