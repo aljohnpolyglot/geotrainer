@@ -26,7 +26,7 @@ test('captures the current map title, author, count, description, and preview HT
     setTimeout(callback) { queueMicrotask(callback); }, console: { log() {}, warn() {} },
   };
   runInNewContext(source, context);
-  const counts = await context.window.captureOpenGuessrCommunityHtml();
+  const counts = await context.window.__openGuessrHtmlTask;
   assert.equal(counts.captured, 1);
   assert.equal(counts.failed, 0);
   assert.equal(counts.found, 1);

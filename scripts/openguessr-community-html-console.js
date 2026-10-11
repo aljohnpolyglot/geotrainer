@@ -86,5 +86,6 @@
       return { captured: maps.length, failed: errors.length, found: urls.size };
     } finally { window.__openGuessrHtmlRunning = false; }
   };
-  console.log('Ready: captureOpenGuessrCommunityHtml() or captureOpenGuessrCommunityHtml([mapUrl, ...]).');
+  window.__openGuessrHtmlTask = window.captureOpenGuessrCommunityHtml();
+  window.__openGuessrHtmlTask.catch(error => console.error(`Map capture failed: ${error.message}`));
 })();
