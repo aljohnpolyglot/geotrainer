@@ -271,6 +271,8 @@ Aprender personalizado y Juego usan imágenes oficiales de Google de forma prede
 
 En **Configuración → Pantalla** puedes controlar nombres de calles, fecha de imagen, movimiento del teléfono, forma de desplazarte, tipo de mapa, gestos, lugares interactivos y colores de GeoTrainer. Los nombres de calles y los lugares interactivos vienen desactivados para evitar pistas accidentales.
 
+Activa los nombres de calles cuando quieras aprender cómo se nombran las calles y carreteras en distintos lugares. Esos nombres también pueden revelar dónde estás, así que vuelve a desactivarlos cuando quieras adivinar sin esa pista.
+
 La bombilla superior derecha abre o cierra la explicación. El aviso inicial puede cerrarse una vez u ocultarse para siempre sin eliminar lecciones. Un Meta entra en **Mis pistas** solo al guardar explícitamente su ubicación para repasar. En Repaso, el panel Meta está oculto de forma predeterminada; ábrelo para leer todo su contenido.
 
 En el Estudio Meta, cada panorama nuevo deja la explicación detrás de la bombilla superior derecha. Púlsala cuando quieras ver la imagen de referencia y las notas. En Configuración → Pantalla → Meta puedes activar la apertura automática de cada lección. En Repaso, el panel Meta sigue cerrado hasta que lo abras.

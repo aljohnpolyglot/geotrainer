@@ -681,6 +681,8 @@ Custom Learn and Play default to official Google imagery; the imagery selector c
 
 Map controls choose road, satellite, hybrid, or terrain views, touch behavior, clickable places, and Auto, Light, or Dark map colors. Road labels and clickable places default to off to reduce accidental clues.
 
+Turn on road labels when you want to learn how streets and roads are named in different places. The names can also reveal where you are, so turn them off again when you want to guess without that clue.
+
 In a Meta lesson, use the top-right lightbulb to toggle the explanation. The first-use advice can be dismissed once or hidden permanently without removing lessons. A Meta appears in **My Clues** only after you explicitly save its location for Review. In Review, its panel is hidden by default; open it to read the full Meta content.
 
 Meta Study opens each new panorama with its explanation behind the top-right lightbulb. Tap it when ready to inspect the reference image and notes. In Settings → Display → Meta, turn on automatic opening if you prefer every new lesson to show its panel immediately. Review Meta remains closed until opened.

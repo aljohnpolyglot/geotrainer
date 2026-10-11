@@ -268,6 +268,8 @@ I Utforska karta kan du klicka på blå täckning i kortets karta för att flytt
 
 Anpassat lärande och Spel använder officiella Google-bilder som standard; välj blandat för både officiella panoraman och bidragsgivarpanoraman eller välj endast bidragsgivare. **Tillåt inomhusmiljöer** är avstängt som standard i båda inställningarna; när det aktiveras kan Google visa Street View-täckning både inomhus och utomhus. Under **Inställningar → Visning** kan du styra gatunamn, bilddatum, telefonrörelse, förflyttning, karttyp, gester, klickbara platser och GeoTrainer-färger. Gatunamn och klickbara platser är avstängda som standard för att undvika oavsiktliga ledtrådar.
 
+Slå på gatunamn när du vill lära dig hur gator och vägar namnges på olika platser. Namnen kan också avslöja var du är, så stäng av dem igen när du vill gissa utan den ledtråden.
+
 Glödlampan uppe till höger öppnar och stänger förklaringen. Förstarådet kan stängas en gång eller döljas permanent utan att lektioner tas bort. Ett Meta visas i **Mina ledtrådar** först när platsen uttryckligen sparas för repetition. I Repetition är Meta-panelen dold som standard; öppna den för att läsa hela innehållet.
 
 I Meta-lärande ligger förklaringen till varje nytt panorama bakom glödlampan uppe till höger. Tryck på den när du vill se referensbilden och anteckningarna. Under Inställningar → Skärm → Meta kan du aktivera automatisk öppning för nya lektioner. I Repetition förblir Meta-panelen stängd tills du öppnar den.

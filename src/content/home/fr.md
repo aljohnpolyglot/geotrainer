@@ -275,6 +275,8 @@ Apprendre personnalisé et Jeu utilisent les images officielles Google par défa
 
 Dans **Paramètres → Affichage**, vous pouvez régler les noms de rues, la date des images, le mouvement du téléphone, le déplacement, le type de carte, les gestes, les lieux cliquables et les couleurs GeoTrainer. Les noms de rues et les lieux cliquables sont désactivés par défaut pour limiter les indices accidentels.
 
+Activez les noms de rues pour apprendre comment les rues et les routes sont nommées selon les lieux. Ces noms peuvent aussi révéler où vous êtes : désactivez-les de nouveau si vous voulez deviner sans cet indice.
+
 L’ampoule en haut à droite affiche ou masque l’explication. Le conseil initial peut être fermé une fois ou définitivement sans retirer les leçons. Une Méta rejoint **Mes indices** uniquement après l’enregistrement explicite de son lieu pour révision. En Révision, le panneau Méta est masqué par défaut ; ouvrez-le pour lire tout son contenu.
 
 Dans l’étude Méta, chaque nouveau panorama garde l’explication derrière l’ampoule en haut à droite. Touchez-la pour voir l’image de référence et les notes. Dans Paramètres → Affichage → Méta, activez l’ouverture automatique si vous préférez voir chaque nouvelle leçon immédiatement. En Révision, le panneau Méta reste fermé jusqu’à son ouverture.

@@ -609,6 +609,8 @@ Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google
 
 Unter **Einstellungen → Anzeige** lassen sich Straßennamen, Aufnahmedatum, Telefonbewegung, Bewegung, Kartentyp, Gesten, anklickbare Orte und GeoTrainer-Farben steuern. Straßennamen und anklickbare Orte sind standardmäßig aus, damit keine unbeabsichtigten Hinweise erscheinen.
 
+Schalte Straßennamen ein, wenn du lernen möchtest, wie Straßen in verschiedenen Ländern und Regionen benannt werden. Die Namen können auch deinen Standort verraten; schalte sie wieder aus, wenn du ohne diesen Hinweis raten möchtest.
+
 Die Glühbirne oben rechts öffnet und schließt die Erklärung. Der erste Hinweis kann einmalig oder dauerhaft geschlossen werden, ohne Lektionen zu entfernen. Ein Meta erscheint erst nach dem ausdrücklichen Speichern zur Wiederholung unter **Meine Hinweise**. In der Wiederholung ist das Meta-Feld standardmäßig ausgeblendet; öffne es, um den vollständigen Inhalt zu lesen.
 
 Im Meta-Lernen bleibt die Erklärung bei jedem neuen Panorama zunächst hinter der Glühbirne oben rechts. Öffne sie, wenn du das Referenzbild und die Hinweise ansehen möchtest. Unter Einstellungen → Anzeige → Meta kannst du das automatische Öffnen für neue Lektionen einschalten. In der Wiederholung bleibt das Meta-Feld bis zum Öffnen geschlossen.

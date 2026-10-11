@@ -267,6 +267,8 @@ Aprender personalizado e Jogo usam imagens oficiais do Google por padrão; o sel
 
 Em **Configurações → Exibição**, você pode controlar nomes de ruas, data da imagem, movimento do telefone, modo de deslocamento, tipo de mapa, gestos, locais clicáveis e cores do GeoTrainer. Nomes de ruas e locais clicáveis começam desativados para evitar pistas acidentais.
 
+Ative os nomes de ruas quando quiser aprender como ruas e estradas são nomeadas em lugares diferentes. Os nomes também podem revelar onde você está; desative-os novamente quando quiser adivinhar sem essa pista.
+
 A lâmpada no canto superior direito alterna a explicação. O aviso inicial pode ser fechado uma vez ou ocultado definitivamente sem remover lições. Um Meta só entra em **Minhas pistas** quando sua localização é salva explicitamente para revisão. Na Revisão, o painel Meta fica oculto por padrão; abra-o para ler todo o conteúdo.
 
 No Estudo Meta, cada novo panorama deixa a explicação atrás da lâmpada no canto superior direito. Toque nela para ver a imagem de referência e as notas. Em Configurações → Exibição → Meta, ative a abertura automática se quiser ver cada lição imediatamente. Na Revisão, o painel Meta continua fechado até você abri-lo.

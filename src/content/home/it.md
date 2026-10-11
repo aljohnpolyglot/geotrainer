@@ -269,6 +269,8 @@ Impara personalizzato e Gioco usano per impostazione predefinita immagini uffici
 
 In **Impostazioni → Aspetto** puoi controllare nomi delle strade, data delle immagini, movimento del telefono, spostamento, tipo di mappa, gesti, luoghi cliccabili e colori GeoTrainer. Nomi delle strade e luoghi cliccabili sono disattivati per impostazione predefinita per evitare indizi accidentali.
 
+Attiva i nomi delle strade quando vuoi imparare come vengono chiamate strade e vie in luoghi diversi. I nomi possono anche rivelare dove ti trovi: disattivali di nuovo quando vuoi indovinare senza questo indizio.
+
 La lampadina in alto a destra apre o chiude la spiegazione. Il consiglio iniziale può essere chiuso una volta o nascosto per sempre senza rimuovere lezioni. Un Meta appare in **I miei indizi** solo dopo averne salvato esplicitamente il luogo per il ripasso. Nel Ripasso, il pannello Meta è nascosto per impostazione predefinita; aprilo per leggere tutti i contenuti.
 
 Nello Studio Meta, ogni nuovo panorama lascia la spiegazione dietro la lampadina in alto a destra. Tocca la lampadina per vedere l’immagine di riferimento e le note. In Impostazioni → Schermo → Meta puoi attivare l’apertura automatica delle nuove lezioni. Nel Ripasso, il pannello Meta resta chiuso finché non lo apri.
