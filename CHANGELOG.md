@@ -2,7 +2,7 @@
 
 ## 2026-10-11
 
-- Add a DevTools console collector that downloads OpenGuessr community location responses as GeoTrainer-uploadable JSON with source attribution.
+- Collect unique OpenGuessr community locations across games in a DevTools console script and download them as GeoTrainer JSON with source attribution.
 - Explain in all eight Game Guide languages that road-name labels can help learners study naming patterns and can also reveal a location during guessing.
 - Make manual cloud sync write only new or changed records to the local database, avoiding needless rewrites of saved photos during a merge.
 - Open saved panoramas directly from History place rows with the existing learning aids and a return action, while keeping Google Maps and graded Review as separate actions.

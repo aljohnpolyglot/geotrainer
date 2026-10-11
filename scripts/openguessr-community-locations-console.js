@@ -1,5 +1,5 @@
-// Paste into DevTools on an OpenGuessr community map page, then click Play.
-// Downloads the locations returned to the page as GeoTrainer-uploadable JSON.
+// Paste into DevTools on an OpenGuessr community map page, then start games.
+// Run downloadOpenGuessrLocations() before reloading to save collected locations.
 (() => {
   if (location.hostname !== 'openguessr.com' || !/^\/maps\/community\/[^/]+\/?$/.test(location.pathname)) {
     throw new Error('Open an OpenGuessr community map page first.');
@@ -9,6 +9,8 @@
   const title = document.querySelector('.map-title')?.textContent?.trim() || location.pathname.split('/').pop();
   const listedCount = Number(document.querySelector('.location-amount-text')?.textContent?.replace(/[^\d]/g, '')) || null;
   const source = location.href;
+  // shortcut: random game batches cannot guarantee a full map; use a source export when available.
+  const collected = new Map();
   const pointsFrom = entries => entries.flatMap(entry => {
     const lat = Array.isArray(entry) ? entry[0] : entry?.lat;
     const lng = Array.isArray(entry) ? entry[1] : entry?.lng;
@@ -20,8 +22,9 @@
         typeof details?.panoId === 'string' ? { panoId: details.panoId } : {}),
     }];
   });
-  const download = locations => {
-    const json = { name: title, source, locations };
+  window.downloadOpenGuessrLocations = () => {
+    if (!collected.size) throw new Error('No locations captured yet. Start a game on this map first.');
+    const json = { name: title, source, locations: [...collected.values()] };
     const href = URL.createObjectURL(new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' }));
     const link = document.createElement('a');
     link.href = href;
@@ -30,6 +33,7 @@
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(href), 30_000);
+    console.log(`Downloaded ${collected.size}${listedCount ? ` of ${listedCount}` : ''} unique locations from ${title}.`);
   };
   window.stopOpenGuessrLocationCapture = () => {
     window.fetch = originalFetch;
@@ -46,11 +50,10 @@
       if (!Array.isArray(payload?.locations)) return response;
       const locations = pointsFrom(payload.locations);
       if (!locations.length) return response;
-      download(locations);
-      window.stopOpenGuessrLocationCapture();
-      console.log(`Downloaded ${locations.length}${listedCount ? ` of ${listedCount}` : ''} locations from ${title}.`);
+      for (const point of locations) collected.set(JSON.stringify(point), point);
+      console.log(`Captured ${collected.size}${listedCount ? ` of ${listedCount}` : ''} unique locations from ${title}. Run downloadOpenGuessrLocations() to save.`);
     } catch (error) { console.warn(`Could not export location response: ${error.message}`); }
     return response;
   };
-  console.log('Location capture ready. Click Play on this map; the JSON downloads when its locations arrive.');
+  console.log('Location capture ready. Start games on this map, then run downloadOpenGuessrLocations() before reloading.');
 })();
