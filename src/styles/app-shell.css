@@ -102,9 +102,7 @@
 .docs-search:focus-within { border-color: var(--blue); outline: 2px solid color-mix(in srgb, var(--blue) 18%, transparent); }
 .docs-search input { min-width: 0; padding: 0; color: var(--carbon); background: transparent; border: 0; outline: 0; font-size: 12px; }
 .docs-page nav { display: grid; }
-.docs-nav-group { display: grid; }
 .docs-page nav a { min-height: 34px; display: grid; grid-template-columns: 27px minmax(0, 1fr); align-items: center; padding: 5px 9px; color: #34454e; border-radius: 4px; font-size: 12px; line-height: 1.35; text-decoration: none; }
-.docs-page nav .docs-nav-sub { min-height: 29px; display: block; padding: 5px 9px 5px 36px; color: #69777c; font-size: 11px; }
 .docs-page nav a:hover, .docs-page nav a:focus-visible { color: var(--blue); background: #fff; }
 .docs-page nav b { color: #8a969a; font: 750 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .docs-no-results { margin: 8px 12px; color: var(--muted); font-size: 12px; }
@@ -116,7 +114,7 @@
 .docs-page article section { padding: 32px 0; border-top: 1px solid #d8ddda; scroll-margin-top: 20px; }.docs-page h2 { margin: 0 0 15px; color: var(--storm); font-size: 27px; }.docs-subsection { padding-top: 19px; scroll-margin-top: 20px; }.docs-page h3 { margin: 0 0 9px; color: #1d4558; font-size: 19px; }.docs-page section p, .docs-page ol, .docs-page ul { max-width: 72ch; color: #394a51; font-size: 15px; line-height: 1.75; }.docs-page section p { margin: 0 0 13px; }.docs-page ol, .docs-page ul { padding-left: 24px; }.docs-page li { padding: 4px 0 4px 6px; }
 .docs-page article section a { color: var(--blue); font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .docs-page code { padding: 1px 4px; color: var(--storm); background: var(--paper-2); border-radius: 3px; font: .9em ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
-.docs-page nav a { font-size: 13px; }.docs-page nav .docs-nav-sub { font-size: 12px; }
+.docs-page nav a { font-size: 13px; }
 .docs-page blockquote { margin: 14px 0; padding: 10px 14px; color: #294754; background: #f2f0e7; border-inline-start: 1px solid var(--blue); font-size: 14px; line-height: 1.65; }
 .docs-table { max-width: 100%; margin: 16px 0; overflow-x: auto; border: 1px solid var(--rule); border-radius: 5px; scrollbar-width: thin; }.docs-table table { width: 100%; min-width: 520px; border-collapse: collapse; color: #394a51; font-size: 13px; }.docs-table th,.docs-table td { padding: 10px 12px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }.docs-table th { color: var(--storm); background: #f2f0e7; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }.docs-table tr:last-child td { border-bottom: 0; }
 .language-settings-trigger { display: inline-flex; align-items: center; gap: 7px; margin-top: 14px; padding: 8px 10px; color: var(--muted); background: transparent; border: 1px solid var(--rule); border-radius: 4px; font-size: 11px; font-weight: 800; cursor: pointer; }

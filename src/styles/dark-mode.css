@@ -18,7 +18,7 @@
 .dark .docs-search, .dark .docs-page nav a:hover, .dark .docs-page nav a:focus-visible { background: var(--paper); }
 .dark .docs-page :is(.docs-home, h1, h2, h3, code, .docs-table th) { color: var(--carbon); }
 .dark .docs-page :is(.docs-search input, .docs-page nav a, .docs-page section p, .docs-page ol, .docs-page ul, .docs-table table, blockquote) { color: var(--carbon); }
-.dark .docs-page :is(header p, .docs-nav-sub, .docs-page nav b) { color: var(--muted); }
+.dark .docs-page :is(header p, .docs-page nav b) { color: var(--muted); }
 .dark .docs-page article section { border-color: var(--rule); }
 
 .dark :is(.stats-summary, .stats-card, .stats-trend, .activity-heatmap, .daily-review-block, .coach-card, .clue-drop, .clue-actions button, .clue-actions label, .round-history-nav button, .review-location-button, .account-entry, .account-identity) { background: #102b3b; }

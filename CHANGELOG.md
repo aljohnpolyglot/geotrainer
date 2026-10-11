@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Keep the Game Guide sidebar to one link per chapter while retaining searchable subsection content inside each chapter.
 - Open pasted Google Maps Street View panorama links from Learn's Explore Map search, preserving the linked heading and current imagery filters.
 - Correct the Beginner Meta red-soil lesson to identify its Pará example and explain that soil color alone does not identify a Brazilian state, in all eight languages.
 - Keep Space free for Street View movement in Learn and use N or the Next button to advance lessons.

@@ -54,7 +54,7 @@ export function DocsPage() {
     <aside>
       <a className="docs-home" href={import.meta.env.BASE_URL}><MapPinned size={20} /><strong>GeoTrainer</strong></a>
       <label className="docs-search"><Search size={15} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('Search guide')} aria-label={t('Search guide')} /></label>
-      <nav aria-label={t('Guide contents')}>{visibleSections.map((section) => <div className="docs-nav-group" key={section.id}><a href={`#${section.id}`}><b>{orderedSections.indexOf(section) + 1}.</b>{section.title}</a>{section.subsections.map((subsection) => <a className="docs-nav-sub" href={`#${subsection.id}`} key={subsection.id}>{subsection.title}</a>)}</div>)}</nav>
+      <nav aria-label={t('Guide contents')}>{visibleSections.map((section) => <a href={`#${section.id}`} key={section.id}><b>{orderedSections.indexOf(section) + 1}.</b>{section.title}</a>)}</nav>
       {!visibleSections.length && <p className="docs-no-results">{t('No matching chapters')}</p>}
     </aside>
     <article>
