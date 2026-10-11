@@ -2,7 +2,9 @@
 
 ## 2026-10-11
 
+- Compress manual cloud backups and portable `.geotrainer` exports without dropping progress, and read older plain backups and files.
 - Collect unique OpenGuessr community locations across games in a DevTools console script and download them as GeoTrainer JSON with source attribution.
+- Allow larger manual cloud backup merges to finish by raising the authenticated database query timeout to 60 seconds.
 - Explain in all eight Game Guide languages that road-name labels can help learners study naming patterns and can also reveal a location during guessing.
 - Make manual cloud sync write only new or changed records to the local database, avoiding needless rewrites of saved photos during a merge.
 - Open saved panoramas directly from History place rows with the existing learning aids and a return action, while keeping Google Maps and graded Review as separate actions.

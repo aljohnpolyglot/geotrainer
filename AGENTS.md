@@ -25,6 +25,7 @@ Never open or control the user's browser for QA unless the user explicitly asks.
 
 ## Security
 
+- When a task needs Supabase project administration, use the user's authenticated Supabase CLI account when available and the requested action is permitted. Verify the project and result; do not ask the user to run dashboard steps that the CLI can perform. Keep CLI credentials out of the repository, logs, and responses.
 - Gemini and Google API secrets stay server-side or in ignored environment files.
 - Load persisted language preferences before rendering or enabling Coach analysis, and require every natural-language Coach response value to use the selected AI language without translating JSON keys or ISO codes.
 - Reject and retry substantially mixed-language Coach output before displaying it; render candidate country names in the selected AI language and require each ranked country to explain a concrete visible feature that distinguishes it rather than merely claiming the scene is consistent, similar, common, or typical.
@@ -62,6 +63,7 @@ Never open or control the user's browser for QA unless the user explicitly asks.
 - Apply cloud imports to mounted screens without reloading the page or replacing the learner's active workspace.
 - Commit Study, Learn, Play, and Review progress to IndexedDB immediately and keep cloud sync manual; signing in, saving, focusing, reconnecting, backgrounding, and opening the app must not pull or upload progress.
 - Every manual sync must fetch the latest remote backup before deciding that nothing changed, merge Review grading history and unique records across devices, apply the merged data locally, and upload the same merged backup.
+- Cloud sync and portable `.geotrainer` exports may compress their payloads, but must read older plain backups, validate decompressed data before merging, and keep portable exports complete and independently importable.
 - Fetch and cache missing hosted clue images in IndexedDB only during manual sync; ordinary Clues, Available notes, Coverage, and history reads must never contact Supabase Storage.
 - Portable `.geotrainer` exports contain the complete local database and cached saved photos. Import must validate the file, warn before crossing account IDs, merge without deleting current-device progress, and apply to mounted screens without reloading.
 - Merge the latest remote backup before every whole-backup upload so localhost and deployed origins using the same account converge without replacing each other's unique records.

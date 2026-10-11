@@ -4,7 +4,7 @@ import { announceCloudImport } from './cloudSyncEvent';
 import { supabase } from './supabase';
 
 export const PORTABLE_BACKUP_EXTENSION = '.geotrainer';
-export const PORTABLE_BACKUP_MIME = 'application/vnd.geotrainer+json';
+export const PORTABLE_BACKUP_MIME = 'application/vnd.geotrainer+gzip';
 
 const recordCount = (backup: TrainerBackup) => STORE_NAMES.reduce((total, name) => total + (backup.data[name]?.length || 0), 0);
 export const portablePhotoCount = (backup: TrainerBackup) => ['locations', 'clues'].reduce((total, name) => total + ((backup.data[name as 'locations' | 'clues'] || []) as Array<{ imageDataUrl?: string }>).filter((item) => item.imageDataUrl?.startsWith('data:image/')).length, 0);
@@ -39,11 +39,18 @@ export const createPortableImportPlan = (incoming: TrainerBackup, local: Trainer
 
 const backupFileName = (date = new Date()) => `GeoTrainer-${date.toISOString().replace(/[:.]/g, '-').replace('T', '_')}${PORTABLE_BACKUP_EXTENSION}`;
 
+export async function encodePortableBackup(file: PortableBackupFile): Promise<Blob> {
+  const json = new Blob([JSON.stringify(file)]);
+  if (typeof CompressionStream === 'undefined') return json;
+  const compressed = new Blob([await new Response(json.stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()], { type: PORTABLE_BACKUP_MIME });
+  return compressed.size < json.size ? compressed : json;
+}
+
 export async function downloadPortableBackup(): Promise<PortableExportReceipt> {
   const backup = await createBackup();
   const owner = await currentPortableOwner();
   const file: PortableBackupFile = { format: 'geotrainer-portable', fileVersion: 1, ownerId: owner?.id, ownerEmail: owner?.email, createdAt: new Date().toISOString(), backup };
-  const blob = new Blob([JSON.stringify(file)], { type: PORTABLE_BACKUP_MIME });
+  const blob = await encodePortableBackup(file);
   const fileName = backupFileName();
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -55,7 +62,25 @@ export async function downloadPortableBackup(): Promise<PortableExportReceipt> {
 
 export async function readPortableBackup(file: File): Promise<PortableBackupFile> {
   if (!file.name.toLowerCase().endsWith(PORTABLE_BACKUP_EXTENSION)) throw new Error('Choose a .geotrainer backup file.');
-  return parsePortableBackup(await file.text());
+  const header = new Uint8Array(await file.slice(0, 2).arrayBuffer());
+  if (header[0] !== 0x1f || header[1] !== 0x8b) return parsePortableBackup(await file.text());
+  if (typeof DecompressionStream === 'undefined') throw new Error('This is not a valid GeoTrainer backup.');
+  try {
+    const reader = file.stream().pipeThrough(new DecompressionStream('gzip')).getReader();
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 1024 * 1024 * 1024) { await reader.cancel(); throw new Error('This is not a valid GeoTrainer backup.'); }
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+    return parsePortableBackup(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+  } catch { throw new Error('This is not a valid GeoTrainer backup.'); }
 }
 
 export async function applyPortableBackup(file: PortableBackupFile): Promise<PortableImportReceipt> {

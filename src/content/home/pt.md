@@ -210,6 +210,8 @@ A conta é opcional e o treino local funciona sem login. O progresso é salvo pr
 
 As imagens privadas ausentes são armazenadas neste navegador durante a sincronização manual. Abrir Pistas, Notas disponíveis, Cobertura ou o histórico usa essa cópia local e não consulta o armazenamento na nuvem.
 
+A sincronização usa menos dados sem perder o progresso salvo. Os arquivos `.geotrainer` exportados são compactados, mas continuam incluindo todos os registros locais e as fotos salvas. Arquivos antigos também podem ser importados.
+
 **Sincronizar e fazer backup** também oferece **Exportar** e **Importar** sem precisar da nuvem. Exportar baixa um arquivo `.geotrainer` com toda a base local e as fotos salvas neste dispositivo. Importar valida o arquivo e combina apenas informações ausentes ou mais recentes sem apagar o progresso local. O arquivo registra o identificador da conta exportadora; uma conta diferente ou a ausência de login exige confirmação. Mantenha o arquivo privado e transfira-o pelo Drive, OneDrive, USB ou outro local confiável.
 
 ## Solução de problemas

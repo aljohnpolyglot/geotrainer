@@ -453,6 +453,8 @@ Fortschritt wird zuerst in diesem Browser gespeichert und die Cloud-Synchronisie
 
 Fehlende private Hinweisbilder werden bei der manuellen Synchronisierung in diesem Browser gespeichert. Hinweise, Verfügbare Notizen, Abdeckung und Verlauf verwenden danach diese lokale Kopie, ohne den Cloud-Speicher abzufragen.
 
+Die Synchronisierung überträgt weniger Daten, ohne gespeicherten Fortschritt zu verlieren. Exportierte `.geotrainer`-Dateien werden komprimiert und enthalten weiterhin alle lokalen Einträge und gespeicherten Fotos. Ältere Dateien lassen sich ebenfalls importieren.
+
 **Synchronisieren & sichern** bietet außerdem **Exportieren** und **Importieren** ohne Cloud-Zugriff. Der Export lädt eine `.geotrainer`-Datei mit der vollständigen lokalen Datenbank und den auf diesem Gerät gespeicherten Fotos herunter. Der Import prüft die Datei und führt nur fehlende oder neuere Informationen zusammen, ohne lokalen Fortschritt zu löschen. Die Datei enthält die Kennung des exportierenden Kontos; bei einem anderen Konto oder ohne Anmeldung ist eine Bestätigung erforderlich. Bewahre die Datei privat auf und übertrage sie über Drive, OneDrive, USB oder einen anderen vertrauenswürdigen Ort.
 
 ### Offline arbeiten und abmelden

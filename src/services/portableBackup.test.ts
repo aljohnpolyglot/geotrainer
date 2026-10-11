@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { STORE_NAMES, type TrainerBackup } from '../data/trainerDb';
-import { createPortableImportPlan, parsePortableBackup, portableOwnerMismatch, type PortableBackupFile } from './portableBackup';
+import { createPortableImportPlan, encodePortableBackup, parsePortableBackup, portableOwnerMismatch, readPortableBackup, type PortableBackupFile } from './portableBackup';
 
 const backup = (data: Partial<TrainerBackup['data']>): TrainerBackup => ({ format: 'street-view-trainer', schemaVersion: 1, exportedAt: new Date(0).toISOString(), data: Object.fromEntries(STORE_NAMES.map((name) => [name, data[name] || []])) as TrainerBackup['data'] });
 
@@ -27,4 +27,13 @@ test('portable backup detects a different or signed-out account before import', 
   assert.equal(portableOwnerMismatch(file, { id: 'owner-a' }), false);
   assert.equal(portableOwnerMismatch(file, { id: 'owner-b' }), true);
   assert.equal(portableOwnerMismatch(file), true);
+});
+
+test('portable export shrinks without losing photos, and import still reads older JSON', async () => {
+  const saved = { format: 'geotrainer-portable', fileVersion: 1, createdAt: new Date(0).toISOString(), backup: backup({ locations: Array.from({ length: 100 }, (_, index) => ({ id: `place-${index}`, imageDataUrl: 'data:image/jpeg;base64,photo' })) }) } satisfies PortableBackupFile;
+  const compressed = await encodePortableBackup(saved);
+  assert.ok(compressed.size < JSON.stringify(saved).length);
+  assert.deepEqual(await readPortableBackup(new File([compressed], 'backup.geotrainer')), saved);
+  assert.deepEqual(await readPortableBackup(new File([JSON.stringify(saved)], 'old.geotrainer')), saved);
+  await assert.rejects(() => readPortableBackup(new File([new Uint8Array([0x1f, 0x8b, 0, 0])], 'broken.geotrainer')), /not a valid GeoTrainer backup/);
 });

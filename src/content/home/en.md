@@ -507,6 +507,8 @@ Study, Play, and Review progress is always saved to this browser first. Cloud sy
 
 One sync downloads the latest cloud backup, combines compatible visits, attempts, new cards, review schedules, grading history, saved games, collections, preferences, paused workspaces, and saved clues, applies that merged copy locally, caches missing private clue images in this browser, then uploads the merged backup.
 
+Sync uses less data while keeping the same saved progress. `.geotrainer` exports are compressed but still include all local records and saved photos. Import also accepts older files.
+
 The account panel reports each phase and retains a receipt with downloaded, local, merged, added, cached-image, Review-update, Review-event, and upload counts; a toast confirms completion. Opening Clues, Available notes, Coverage, or history uses the local cache and does not contact cloud storage. The most recently graded Review schedule wins while grading events and unique records from every device are retained.
 
 Signing in, saving, focusing, reconnecting, backgrounding, and opening the app do not transfer progress. For several devices, sync the device containing work that is not yet in the cloud first, then sync the others. Signed-out localhost and deployed-site data remain separate.

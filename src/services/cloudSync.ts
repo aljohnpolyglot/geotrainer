@@ -5,7 +5,6 @@ import {
   initTrainerDb,
   trainerDb,
   STORE_NAMES,
-  validateBackup,
   type StoreName,
   type TrainerBackup,
 } from '../data/trainerDb';
@@ -16,6 +15,7 @@ import { announceCloudImport } from './cloudSyncEvent';
 import { IMPORTED_MAP_PREFIX } from './importedMap';
 import { repairNotebookAssistance } from '../data/assistanceRepair';
 import { splitDuplicateClues } from '../data/clueDedup';
+import { decodeCloudBackup, encodeCloudBackup, isCompressedCloudBackup } from './cloudBackupCodec';
 
 type SyncPhase = 'disabled' | 'signed-out' | 'ready' | 'syncing' | 'synced' | 'error';
 type RemoteBackup = { backup?: unknown; updatedAt?: string };
@@ -226,26 +226,16 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: Rem
       if (hosted !== clue) { await trainerDb.saveClue(hosted); hostedImage = true; }
     }
     if (hostedImage) backup = await createBackup(false);
-    const localSignature = backupSignature({ ...backup, data: { ...backup.data,
-      clues: withoutEmbeddedHostedImages(backup.data.clues as ClueRecord[]),
-      locations: withoutEmbeddedLocationImages(backup.data.locations as Record<string, unknown>[]),
-      settings: withoutImportedMaps(backup.data.settings as Array<{ key: string }>),
-    } });
-    if (syncedUserId === userId && syncedBackup === localSignature) {
-      if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
-      return false;
-    }
     let remoteRecord = knownRemote;
     if (remoteRecord === undefined) {
       const { data, error } = await retryCloud(() => supabase.from('user_backups').select('backup,updated_at').eq('user_id', userId).maybeSingle());
       if (error) throw error;
       remoteRecord = data ? { backup: data.backup, updatedAt: data.updated_at } : {};
     }
-    const remote = remoteRecord.backup;
+    const remote = remoteRecord.backup ? await decodeCloudBackup(remoteRecord.backup) : undefined;
     if (remote) {
-      validateBackup(remote);
       const latestLocal = await createBackup(false);
-      const merged = mergeBackups(remote as TrainerBackup, latestLocal);
+      const merged = mergeBackups(remote, latestLocal);
       const changes = changedBackupRecords(merged, latestLocal);
       if (hasChangedRecords(changes)) {
         applyingCloud = true;
@@ -258,18 +248,25 @@ async function upload(userId = activeUserId, announce = false, knownRemote?: Rem
     backup.data.locations = withoutEmbeddedLocationImages(backup.data.locations as Record<string, unknown>[]);
     backup.data.settings = withoutImportedMaps(backup.data.settings as Array<{ key: string }>);
     const signature = backupSignature(backup);
-    if (syncedUserId === userId && syncedBackup === signature) {
+    const unchanged = !!remoteRecord.backup && syncedUserId === userId && syncedBackup === signature;
+    if (unchanged && isCompressedCloudBackup(remoteRecord.backup)) {
+      if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
+      if (importedCloud) announceCloudImport();
+      return false;
+    }
+    const encoded = await encodeCloudBackup(backup);
+    if (unchanged && !isCompressedCloudBackup(encoded)) {
       if (announce) update({ phase: 'synced', message: 'Progress backed up.' });
       if (importedCloud) announceCloudImport();
       return false;
     }
     const syncedAt = new Date().toISOString();
     if (remoteRecord.updatedAt) {
-      const { data, error } = await retryCloud(() => supabase.from('user_backups').update({ backup, updated_at: syncedAt }).eq('user_id', userId).eq('updated_at', remoteRecord.updatedAt!).select('updated_at').maybeSingle());
+      const { data, error } = await retryCloud(() => supabase.from('user_backups').update({ backup: encoded, updated_at: syncedAt }).eq('user_id', userId).eq('updated_at', remoteRecord.updatedAt!).select('updated_at').maybeSingle());
       if (error) throw error;
       if (!data) { uploadPending = true; return false; }
     } else {
-      const { error } = await retryCloud(() => supabase.from('user_backups').insert({ user_id: userId, backup, updated_at: syncedAt }));
+      const { error } = await retryCloud(() => supabase.from('user_backups').insert({ user_id: userId, backup: encoded, updated_at: syncedAt }));
       if (error) {
         if ((error as { code?: string }).code === '23505') { uploadPending = true; return false; }
         throw error;
@@ -313,10 +310,10 @@ async function syncSession(session: Session | null, announce = false): Promise<v
     syncedUserId = session.user.id;
     syncedBackup = '';
     let merged = local;
-    if (data?.backup) {
-      validateBackup(data.backup);
-      syncedBackup = backupSignature(data.backup);
-      merged = mergeBackups(data.backup, local);
+    const remote = data?.backup ? await decodeCloudBackup(data.backup) : undefined;
+    if (remote) {
+      syncedBackup = backupSignature(remote);
+      merged = mergeBackups(remote, local);
       const changes = changedBackupRecords(merged, local);
       if (hasChangedRecords(changes)) {
         applyingCloud = true;
@@ -324,7 +321,7 @@ async function syncSession(session: Session | null, announce = false): Promise<v
         importedCloud = true;
       }
     }
-    const receipt = buildSyncReceipt(data?.backup as TrainerBackup | undefined, local, merged);
+    const receipt = buildSyncReceipt(remote, local, merged);
     const missingImages = hostedCluePaths(await trainerDb.clues()).length;
     const uploadChanged = await upload(session.user.id, announce, data ? { backup: data.backup, updatedAt: data.updated_at } : {});
     const finalBackup = await createBackup(false);
