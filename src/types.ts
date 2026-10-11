@@ -94,6 +94,7 @@ export interface LanguagePreferences {
   ui: SupportedLanguage;
   game: SupportedLanguage;
   ai: SupportedLanguage;
+  wikipedia: SupportedLanguage;
 }
 export interface SchedulerPreferences {
   strictness: 'beginner' | 'balanced' | 'pro';

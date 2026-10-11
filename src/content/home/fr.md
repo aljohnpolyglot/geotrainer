@@ -181,6 +181,8 @@ Les frontières des pays sont visibles par défaut et peuvent être masquées ; 
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 
+La langue de Wikipédia se choisit séparément pour les liens des lieux révélés en Étude, Jeu et Révision. Si aucun article correspondant n’est trouvé dans cette langue, la recherche passe à Wikipédia en anglais. Sans résultat dans les deux langues, le nom reste sans lien. Les profils existants utilisent d’abord l’anglais.
+
 ### Objectifs de score par pays
 
 Ouvrez Réglages → Préférences → Objectifs de score par pays. Gardez le minimum par défaut pour conserver la rigueur actuelle de Révision. Choisissez un pays, saisissez un minimum sur 5 000, sélectionnez Ajouter un objectif puis Enregistrer. Le crayon modifie et × supprime l’objectif. Les noms et nombres suivent la langue de l’interface.
@@ -203,6 +205,8 @@ Le temps est enregistré lors d’un changement de section ou du retour à l’a
 
 Dans Statistiques → Révisions, **Équilibrer les dates** affiche un aperçu des 30 prochains jours. Survolez, sélectionnez ou touchez une barre pour voir le nombre exact. La confirmation déplace seulement les cartes futures dans une petite partie de leur intervalle. Les cartes dues aujourd’hui et les courtes étapes d’apprentissage restent en place. Les réponses et évaluations passées sont conservées.
  Le temps actif de Révision s’arrête pendant l’affichage du résultat et reprend lorsque vous le réduisez ou passez à la carte suivante. Coach propose Analyser lorsque le résultat est masqué et Expliquer lorsqu’il est affiché.
+
+Dans l’historique, sélectionnez une ligne de lieu pour rouvrir son panorama enregistré avec Coach, Carnet, Méta et Notes disponibles. Le bouton de retour ramène à l’historique. La flèche externe ouvre toujours Google Maps ; le bouton Révision lance une révision notée. Ouvrir un lieu ne modifie pas les tentatives précédentes.
 
 ## Synchronisation cloud
 

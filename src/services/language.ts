@@ -15,14 +15,14 @@ export const LANGUAGE_OPTIONS: Array<{ code: SupportedLanguage; label: string; n
   { code: 'sv', label: 'Swedish', nativeLabel: 'Svenska', flagCode: 'se' },
 ];
 
-export const DEFAULT_LANGUAGE_PREFERENCES: LanguagePreferences = { ui: 'en', game: 'en', ai: 'en' };
+export const DEFAULT_LANGUAGE_PREFERENCES: LanguagePreferences = { ui: 'en', game: 'en', ai: 'en', wikipedia: 'en' };
 
 export function normalizeLanguagePreferences(value: unknown): LanguagePreferences {
   const allowed = new Set(LANGUAGE_OPTIONS.map(({ code }) => code));
   const source = value && typeof value === 'object' ? value as Partial<LanguagePreferences> : {};
   const pick = (candidate: unknown) => typeof candidate === 'string' && allowed.has(candidate as SupportedLanguage)
     ? candidate as SupportedLanguage : 'en';
-  return { ui: pick(source.ui), game: pick(source.game), ai: pick(source.ai) };
+  return { ui: pick(source.ui), game: pick(source.game), ai: pick(source.ai), wikipedia: pick(source.wikipedia) };
 }
 
 export function languageLabel(code: SupportedLanguage): string {

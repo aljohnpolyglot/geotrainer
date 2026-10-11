@@ -177,6 +177,8 @@ I confini nazionali sono visibili per impostazione predefinita e si possono nasc
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 
+La lingua di Wikipedia si sceglie separatamente per i link dei luoghi rivelati in Impara, Gioca e Ripasso. Se non si trova un articolo corrispondente in quella lingua, la ricerca passa a Wikipedia in inglese. Se manca anche lì, il nome resta senza link. I profili esistenti partono dall’inglese.
+
 ### Obiettivi di punteggio per paese
 
 Apri Impostazioni → Preferenze → Obiettivi di punteggio per paese. Mantieni il minimo predefinito per conservare il rigore attuale del Ripasso. Scegli un paese, inserisci un minimo su 5.000, seleziona Aggiungi obiettivo e poi Salva. La matita modifica e × rimuove l’obiettivo. Nomi e numeri seguono la lingua dell’interfaccia.
@@ -199,6 +201,8 @@ Il tempo viene salvato cambiando sezione o tornando alla pagina iniziale; le ses
 
 In Statistiche → Ripassi, **Bilancia le date** mostra un’anteprima dei prossimi 30 giorni. Passa il cursore, seleziona o tocca una barra per vedere il numero esatto. La conferma sposta solo le carte future entro una piccola parte del loro intervallo. Le carte in scadenza oggi e i brevi passaggi di apprendimento restano invariati. Le risposte e i voti precedenti restano intatti.
  Il tempo attivo del Ripasso si ferma mentre il risultato è aperto e riprende quando lo riduci o passi alla scheda successiva. Coach offre Analizza con il risultato nascosto e Spiega quando è visibile.
+
+Nella Cronologia, seleziona la riga di un luogo per riaprire il panorama salvato con Coach, Taccuino, Meta e Note disponibili. Il pulsante Indietro riporta alla Cronologia. La freccia esterna apre ancora Google Maps; il pulsante Ripasso avvia un ripasso con punteggio. Aprire un luogo non modifica i tentativi precedenti.
 
 ## Sincronizzazione cloud
 

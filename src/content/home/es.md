@@ -179,6 +179,8 @@ Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo apare
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.
 
+El idioma de Wikipedia se elige por separado para los enlaces de lugares revelados en Aprender, Juego y Repaso. Si no se encuentra un artículo que coincida en ese idioma, se busca en la Wikipedia en inglés. Si tampoco aparece allí, el nombre queda sin enlace. Los perfiles existentes empiezan con inglés.
+
 ### Objetivos de puntuación por país
 
 Abre Ajustes → Preferencias → Objetivos de puntuación por país. Mantén el mínimo predeterminado para conservar la exigencia actual del Repaso. Elige un país en el desplegable, introduce un mínimo sobre 5.000, pulsa Añadir objetivo y luego Guardar. El lápiz permite editar y × elimina la regla. Los nombres y números siguen el idioma de la interfaz.
@@ -201,6 +203,8 @@ El tiempo se guarda al cambiar de sección o volver a Inicio; las sesiones sin v
 
 En Estadísticas → Repasos, **Equilibrar fechas** muestra una vista previa de los próximos 30 días. Pasa el cursor, enfoca o toca una barra para ver su cantidad exacta. Al confirmar, solo se mueven tarjetas futuras dentro de una pequeña parte de su intervalo. Las tarjetas pendientes hoy y los pasos cortos de aprendizaje no cambian. Las respuestas y calificaciones anteriores se conservan.
  El tiempo activo de Repaso se detiene mientras está abierto el resultado y continúa al minimizarlo o pasar a la siguiente tarjeta. Coach ofrece Analizar con el resultado oculto y Explicar cuando se muestra.
+
+En Historial, selecciona una fila de lugar para abrir su panorámica guardada con Coach, Cuaderno, Meta y Notas disponibles. El botón de volver regresa al Historial. La flecha externa sigue abriendo Google Maps; el botón de Repaso inicia un repaso con puntuación. Abrir un lugar no modifica los intentos anteriores.
 
 ## Sincronización en la nube
 

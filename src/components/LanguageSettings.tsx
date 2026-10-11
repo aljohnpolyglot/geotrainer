@@ -34,6 +34,16 @@ const AUTO_REVIEW_COPY: Record<SupportedLanguage, { title: string; description: 
   en: { wrongCountryHint: "When checked, wrong-country rounds are saved for Review even above the score threshold. They still count as wrong answers.", title: 'Add Play rounds to Review', description: 'Adds a card when either condition matches.' }, es: { wrongCountryHint: "Si está activado, las rondas con país incorrecto se guardan para repaso incluso por encima del umbral de puntuación. Siguen contando como respuestas incorrectas.", title: 'Añadir rondas de juego al repaso', description: 'Añade una tarjeta si se cumple cualquiera de las condiciones.' }, pt: { wrongCountryHint: "Quando ativado, rodadas com país errado são salvas para revisão mesmo acima do limite de pontuação. Continuam contando como respostas erradas.", title: 'Adicionar rodadas de jogo à revisão', description: 'Adiciona um cartão se qualquer condição corresponder.' }, fr: { wrongCountryHint: "Si cette option est cochée, les manches avec un mauvais pays sont enregistrées pour révision même au-dessus du seuil de score. Elles restent des réponses incorrectes.", title: 'Ajouter les manches de jeu à la révision', description: 'Ajoute une carte si l’une des conditions est remplie.' },
   de: { wrongCountryHint: "Wenn aktiviert, werden Runden mit falschem Land auch oberhalb der Punktegrenze zur Wiederholung gespeichert. Sie zählen weiterhin als falsche Antworten.", title: 'Spielrunden zur Wiederholung hinzufügen', description: 'Fügt eine Karte hinzu, wenn eine der Bedingungen zutrifft.' }, it: { wrongCountryHint: "Se attivato, i turni con paese errato vengono salvati per il ripasso anche sopra la soglia di punteggio. Restano risposte errate.", title: 'Aggiungi turni di gioco al ripasso', description: 'Aggiunge una carta se una delle condizioni corrisponde.' }, ru: { wrongCountryHint: "Если включено, раунды с неверной страной сохраняются для повторения даже при балле выше порога. Они по-прежнему считаются неверными ответами.", title: 'Добавлять игровые раунды в повторение', description: 'Добавляет карточку, если выполняется любое условие.' }, sv: { wrongCountryHint: "När detta är markerat sparas rundor med fel land för repetition även över poänggränsen. De räknas fortfarande som felaktiga svar.", title: 'Lägg till spelrundor för repetition', description: 'Lägger till ett kort när något av villkoren matchar.' },
 };
+const WIKIPEDIA_COPY: Record<SupportedLanguage, { label: string; fallback: string }> = {
+  en: { label: 'Wikipedia language', fallback: 'If an article is unavailable in that language, open the English Wikipedia article.' },
+  es: { label: 'Idioma de Wikipedia', fallback: 'Si no hay un artículo en ese idioma, abre el artículo de Wikipedia en inglés.' },
+  pt: { label: 'Idioma da Wikipédia', fallback: 'Se não houver um artigo nesse idioma, abre o artigo da Wikipédia em inglês.' },
+  fr: { label: 'Langue de Wikipédia', fallback: 'Si aucun article n’est disponible dans cette langue, ouvre l’article Wikipédia en anglais.' },
+  de: { label: 'Wikipedia-Sprache', fallback: 'Falls es in dieser Sprache keinen Artikel gibt, wird der englische Wikipedia-Artikel geöffnet.' },
+  it: { label: 'Lingua di Wikipedia', fallback: 'Se non è disponibile un articolo in questa lingua, apre quello di Wikipedia in inglese.' },
+  ru: { label: 'Язык Википедии', fallback: 'Если статьи на этом языке нет, откроется статья в английской Википедии.' },
+  sv: { label: 'Wikipedia-språk', fallback: 'Om artikeln saknas på det språket öppnas artikeln på engelska Wikipedia.' },
+};
 const META_OPEN_COPY: Record<SupportedLanguage, { title: string; description: string }> = {
   en: { title: 'Open Meta lessons automatically', description: 'Show each new lesson when its panorama opens. Off: tap the lightbulb to see it.' },
   es: { title: 'Abrir las lecciones Meta automáticamente', description: 'Muestra cada lección nueva al abrir su panorama. Si está desactivado, pulsa la bombilla para verla.' },
@@ -110,11 +120,12 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       <header><h2 id="preferences-title">{translate(languages.ui, 'preferences')}</h2><button type="button" onClick={onClose} aria-label={translate(languages.ui, 'close')}><X size={17} /></button></header>
       <nav className="settings-tabs" aria-label={translate(languages.ui, 'preferences')}>{(['language', 'coach', 'review', 'targets', 'display'] as const).map((item) => <button type="button" key={item} className={tab === item ? 'active' : ''} onClick={() => { setTab(item); void trainerDb.setSetting('preferences.tab', item); }}>{item === 'targets' ? COUNTRY_TARGET_COPY[languages.ui].tab : translate(languages.ui, item === 'coach' ? 'AI Coach' : item === 'language' ? 'Language' : item === 'review' ? 'Review' : 'Display')}</button>)}</nav>
       {tab === 'language' && <fieldset><legend>{translate(languages.ui, 'settings')}</legend><p>{translate(languages.ui, 'description')}</p>
-        {(['ui', 'game', 'ai'] as const).map((key) => <label key={key}>{translate(languages.ui, key)}
+        {(['ui', 'game', 'ai', 'wikipedia'] as const).map((key) => <label key={key}>{key === 'wikipedia' ? WIKIPEDIA_COPY[languages.ui].label : translate(languages.ui, key)}
           <span className="language-choice"><img src={`https://flagcdn.com/w40/${LANGUAGE_OPTIONS.find((option) => option.code === languages[key])!.flagCode}.png`} alt="" width="24" height="18" referrerPolicy="no-referrer" /><select value={languages[key]} onChange={(event) => language(key, event.target.value as SupportedLanguage)}>
             {LANGUAGE_OPTIONS.map((option) => <option key={option.code} value={option.code}>{option.nativeLabel} · {option.label}</option>)}
           </select></span>
         </label>)}
+        <p>{WIKIPEDIA_COPY[languages.ui].fallback}</p>
         <p>{NOTE_LANGUAGE_COPY[languages.ui]}</p>
       </fieldset>}
       {tab === 'targets' && <CountryTargetSettings scheduler={scheduler} language={languages.ui} onChange={setScheduler} />}

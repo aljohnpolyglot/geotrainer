@@ -179,6 +179,8 @@ Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett*
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
+Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Spela och Repetera. Om en matchande artikel saknas på det valda språket söker appen på engelska Wikipedia. Om den saknas även där visas namnet utan länk. Befintliga profiler börjar med engelska.
+
 ### Poängmål per land
 
 Öppna Inställningar → Preferenser → Poängmål per land. Behåll standardgränsen för att behålla repetitionens nuvarande svårighetsnivå. Välj ett land i menyn, ange lägsta poäng av 5 000, välj Lägg till mål och sedan Spara. Pennan redigerar och × tar bort målet. Namn och tal följer gränssnittsspråket.
@@ -200,6 +202,8 @@ Håll ned en stapel under **Kommande förfallna** på en pekskärm för att se d
 
 Under Statistik → Repetition visar **Jämna ut datum** en förhandsvisning av de kommande 30 dagarna. Håll muspekaren över, fokusera eller tryck på en stapel för att se exakt antal. När du bekräftar flyttas bara framtida kort inom en liten del av deras intervall. Kort som förfaller i dag och korta inlärningssteg ligger kvar. Tidigare svar och betyg påverkas inte.
  Aktiv tid i Repetition pausas när resultatet är öppet och fortsätter när du minimerar det eller går vidare. Coachen visar Analysera när resultatet är dolt och Förklara när det visas.
+
+Välj en platsrad i Historik för att öppna det sparade panoramat med AI-coach, Anteckningsbok, Meta och Tillgängliga anteckningar. Tillbaka-knappen återgår till Historik. Den externa pilen öppnar fortfarande Google Maps; repetitionsknappen startar en betygsatt repetition. Att öppna en plats ändrar inte tidigare försök.
 
 ## Molnsynkronisering
 

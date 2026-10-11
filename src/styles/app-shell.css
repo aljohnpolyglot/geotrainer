@@ -208,6 +208,9 @@
 }
 button.attempt-row { cursor: pointer; }
 button.attempt-row:hover { background: var(--panel); }
+.attempt-row[role="button"] { cursor: pointer; }
+.attempt-row[role="button"]:hover { background: var(--panel); }
+.attempt-row[role="button"]:focus-visible { outline: 2px solid var(--sky); outline-offset: -2px; }
 .attempt-row small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 450; }
 .attempt-row > span:nth-last-of-type(1) { color: var(--muted); font-size: 12px; }
 .attempt-row > strong { text-align: right; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; }

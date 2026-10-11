@@ -375,6 +375,8 @@ Street-View-Abdeckung ändert sich. Panoramen können verschwinden, ersetzt werd
 
 Oberflächensprache, geografische Spielbezeichnungen und KI-Antwortsprache sind unabhängig. Unterstützt werden Englisch, Spanisch, Portugiesisch, Französisch, Deutsch, Italienisch, Russisch und Schwedisch.
 
+Die Wikipedia-Sprache steuert die Ortslinks in aufgedeckten Ansichten von Lernen, Spielen und Wiederholen unabhängig von den anderen Spracheinstellungen. Fehlt dort ein passender Artikel, wird in der englischen Wikipedia gesucht. Wird auch dort kein Ort gefunden, bleibt der Name ohne Link. Bestehende Profile verwenden zunächst Englisch.
+
 ### Darstellung
 
 Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern nur die Anzeige. Optionale Klangeffekte und Ambient-Musik starten ausgeschaltet, speichern getrennte Lautstärken und beginnen erst nach einer Interaktion. Sie beeinflussen weder Punkte noch Planung.
@@ -433,7 +435,7 @@ Sortiere Gesehen, Gespielt, Wiederholt, Richtig, Falsch, Durchschnitt, Bestes, Z
 
 ### Verlauf
 
-Der Verlauf filtert Besuche, Spielversuche, Wiederholungsversuche und gespeicherte Spiele. Jeder Tab zeigt 10 Einträge pro Seite und springt nach Filteränderungen auf die erste Seite zurück. Wenn Google das Original entfernt hat, kann ein markierter Koordinaten-Ersatz in der Nähe geöffnet werden.
+Der Verlauf filtert Besuche, Spielversuche, Wiederholungsversuche und gespeicherte Spiele. Jeder Tab zeigt 10 Einträge pro Seite und springt nach Filteränderungen auf die erste Seite zurück. Wähle eine Ortszeile, um das gespeicherte Panorama mit Coach, Notizbuch, Meta und verfügbaren Notizen zu öffnen. Mit der Zurück-Schaltfläche kommst du zum Verlauf zurück. Der externe Pfeil öffnet weiter Google Maps; die eigene Wiederholen-Schaltfläche startet eine bewertete Wiederholung. Bloßes Öffnen ändert frühere Versuche nicht.
 
 ## Cloud-Synchronisierung
 

@@ -15,14 +15,14 @@ const COPY: Record<string, { open: string; missing: string }> = {
 };
 
 export function WikipediaPlaceLink({ name, place, region, className }: { name: string; place: string; region?: string; className?: string }) {
-  const { ui } = useLanguagePreferences();
+  const { ui, wikipedia } = useLanguagePreferences();
   const [url, setUrl] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
     let active = true;
     setUrl(null); setFailed(false);
-    if (place) void wikipediaPlaceUrl(place, region).then((result) => { if (active) { setUrl(result); setFailed(!result); } }).catch(() => { if (active) setFailed(true); });
+    if (place) void wikipediaPlaceUrl(place, region, wikipedia).then((result) => { if (active) { setUrl(result); setFailed(!result); } }).catch(() => { if (active) setFailed(true); });
     return () => { active = false; };
-  }, [place, region]);
+  }, [place, region, wikipedia]);
   return <span className={className}>{url ? <a className="location-wikipedia-link" href={url} target="_blank" rel="noopener noreferrer" title={COPY[ui].open} aria-label={`${COPY[ui].open}: ${name}`}>{name}<ExternalLink size={12} aria-hidden="true" /></a> : name}{failed && <small className="location-wikipedia-error" role="status">{COPY[ui].missing}</small>}</span>;
 }

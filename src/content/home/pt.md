@@ -175,6 +175,8 @@ As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 
+O idioma da Wikipédia é escolhido separadamente para os links de lugares revelados em Aprender, Jogar e Revisar. Se não houver um artigo correspondente nesse idioma, a busca usa a Wikipédia em inglês. Se também não houver resultado, o nome fica sem link. Perfis existentes começam com inglês.
+
 ### Metas de pontuação por país
 
 Abra Configurações → Preferências → Metas de pontuação por país. Mantenha o mínimo padrão para preservar a exigência atual da Revisão. Escolha um país no menu, informe um mínimo de até 5.000, selecione Adicionar meta e depois Salvar. O lápis edita e × remove a meta. Nomes e números seguem o idioma da interface.
@@ -197,6 +199,8 @@ Em uma tela sensível ao toque, mantenha pressionada uma barra de **Próximos pe
 
 Em Estatísticas → Revisões, **Equilibrar datas** mostra uma prévia dos próximos 30 dias. Passe o cursor, selecione ou toque numa barra para ver a quantidade exata. Ao confirmar, apenas cartões futuros mudam dentro de uma pequena parte do seu intervalo. Cartões pendentes hoje e etapas curtas de aprendizagem não mudam. Respostas e notas anteriores são preservadas.
  O tempo ativo da Revisão pausa enquanto o resultado está aberto e continua ao minimizá-lo ou avançar. O Coach oferece Analisar com o resultado oculto e Explicar quando ele aparece.
+
+No Histórico, selecione uma linha de lugar para abrir o panorama salvo com Coach, Caderno, Meta e Notas disponíveis. O botão de voltar retorna ao Histórico. A seta externa continua abrindo o Google Maps; o botão de Revisão inicia uma revisão com pontuação. Abrir um lugar não altera tentativas anteriores.
 
 ## Sincronização na nuvem
 

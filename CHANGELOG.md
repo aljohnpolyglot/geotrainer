@@ -2,6 +2,8 @@
 
 ## 2026-10-11
 
+- Open saved panoramas directly from History place rows with the existing learning aids and a return action, while keeping Google Maps and graded Review as separate actions.
+- Let learners choose the Wikipedia edition for revealed place links in Study, Play, and Review, with English lookup when the selected edition has no matching article.
 - Complete the GeoCoach Street View topic catalog in Meta with 21 more credited courses and 584 local lessons, bringing the total to 30 courses and 959 lessons. Add seven translated versions and matching course thumbnails without changing existing lesson progress IDs.
 - Add five credited GeoCoach Meta topic courses with 132 local Street View lessons: World Google Cars, the Baltics, Malaysia vs Indonesia, Languages of South Asia, and USA Bollards. Bundle eight-language lesson text and matching course thumbnails, with direct links to each source map.
 - Keep the Game Guide sidebar to one link per chapter while retaining searchable subsection content inside each chapter.

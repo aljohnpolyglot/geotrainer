@@ -410,6 +410,8 @@ Open Preferences from the settings control in the app header. Native dropdowns s
 
 Interface language changes buttons and navigation. Game language controls geographic labels. AI language controls Coach responses. These choices are independent and persist across reloads.
 
+Wikipedia language controls the place-name links on revealed Study, Play, and Review location views. Choose any supported language independently of the other language settings. If no matching article is found there, the link uses English Wikipedia; if neither lookup finds a place, the name stays plain. Existing profiles default to English.
+
 Supported languages are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish.
 
 ### Review
@@ -483,7 +485,7 @@ The country table separates unique saved panorama locations from scored attempts
 
 ### History
 
-History filters original visits, Play attempts, Review attempts, and saved games. Each tab shows 10 entries per page and returns to the first page when its filters change. Opening an item returns to its preserved context when the panorama remains available.
+History filters original visits, Play attempts, Review attempts, and saved games. Each tab shows 10 entries per page and returns to the first page when its filters change. Select a place row to reopen its saved panorama with Coach, Notebook, Meta, and Available notes; use the back button to return to History. The external arrow still opens Google Maps, and the separate Review button starts a graded review. Reopening a place alone does not grade or alter the earlier attempt.
 
 ### Missing panoramas
 

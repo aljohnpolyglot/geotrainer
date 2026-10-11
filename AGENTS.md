@@ -21,6 +21,8 @@
 
 Run type-check, tests, and build before handing off user-visible changes.
 
+Never open or control the user's browser for QA unless the user explicitly asks. Use terminal-based checks instead. A requirement to browser-check a feature does not authorize opening the browser; report that check as skipped when browser access was not requested.
+
 ## Security
 
 - Gemini and Google API secrets stay server-side or in ignored environment files.
