@@ -10,6 +10,7 @@ export function orderOpenGuessrDuels(data) {
     const myScore = Number.isFinite(round.myScore) ? round.myScore : null;
     const opponentScore = Number.isFinite(round.opponentScore) ? round.opponentScore : null;
     return [{ lat: round.lat, lng: round.lng, ...(Number.isFinite(round.heading) ? { heading: round.heading } : {}),
+      ...(round.panoId ? { panoId: round.panoId, panoIdSource: round.panoIdSource } : {}),
       matchNumber: game.matchNumber, round: round.round, multiplier, myScore, opponentScore,
       myBaseScore: myScore === null ? null : Math.round(myScore / multiplier),
       opponentBaseScore: opponentScore === null ? null : Math.round(opponentScore / multiplier),

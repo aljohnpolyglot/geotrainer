@@ -25,7 +25,23 @@
     const [lat, lng] = (url.searchParams.get('location') || '').split(',').map(Number);
     if (!Number.isFinite(lat) || Math.abs(lat) > 90 || !Number.isFinite(lng) || Math.abs(lng) > 180) return null;
     const heading = Number(url.searchParams.get('heading'));
-    return { lat, lng, ...(url.searchParams.has('heading') && Number.isFinite(heading) ? { heading } : {}) };
+    const panoId = url.searchParams.get('pano');
+    return { lat, lng, ...(url.searchParams.has('heading') && Number.isFinite(heading) ? { heading } : {}), ...(panoId ? { panoId, panoIdSource: 'embed' } : {}) };
+  };
+  const resolvePanoId = async point => {
+    if (point.panoId || !window.google?.maps?.StreetViewService) return point;
+    try {
+      const maps = window.google.maps;
+      const data = await Promise.race([
+        new Promise(resolve => new maps.StreetViewService().getPanorama(
+          { location: { lat: point.lat, lng: point.lng }, radius: 50 },
+          (result, status) => resolve(status === maps.StreetViewStatus.OK ? result : null),
+        )),
+        sleep(2000).then(() => null),
+      ]);
+      const panoId = data?.location?.pano;
+      return panoId ? { ...point, panoId, panoIdSource: 'coordinate lookup' } : point;
+    } catch { return point; }
   };
   const totalsFrom = overview => [...overview.querySelectorAll('.score-panel .score-row')].flatMap(row => {
     const name = row.querySelector('.score-name')?.textContent?.trim();
@@ -35,6 +51,7 @@
   const scoredLocation = (round, matchNumber) => {
     const multiplier = round.round >= 4 ? 1.5 : 1;
     return { lat: round.lat, lng: round.lng, ...(round.heading === undefined ? {} : { heading: round.heading }),
+      ...(round.panoId ? { panoId: round.panoId, panoIdSource: round.panoIdSource } : {}),
       matchNumber, round: round.round, multiplier, myScore: round.myScore, opponentScore: round.opponentScore,
       myBaseScore: round.myScore === null ? null : Math.round(round.myScore / multiplier),
       opponentBaseScore: round.opponentScore === null ? null : Math.round(round.opponentScore / multiplier),
@@ -114,6 +131,7 @@
             }
             await waitFor(() => pointFromFrame(popup('Overview')?.querySelector('iframe[src*="/maps/embed/v1/streetview"]')), 'match panorama');
             const tabs = [...overview.querySelectorAll('.tabs-row button')];
+            const panoLookups = [];
             const previousTotals = new Map();
             let priorTotalsKnown = true;
             for (let roundIndex = 0; roundIndex < tabs.length && !window.__duelExportStop; roundIndex++) {
@@ -145,11 +163,16 @@
                 const status = scoreGap === null ? null : scoreGap > 0 ? 'won' : scoreGap < 0 ? 'lost' : 'tied';
                 const round = { round: roundIndex + 1, ...point, scores, myScore: mine?.roundScore ?? null, opponentScore: opponent?.roundScore ?? null, scoreGap, status };
                 game.rounds.push(round);
-                locations.push(scoredLocation(round, matchNumber));
+                const location = scoredLocation(round, matchNumber);
+                locations.push(location);
+                if (!point.panoId) panoLookups.push(resolvePanoId(point).then(resolved => {
+                  if (resolved.panoId) { round.panoId = location.panoId = resolved.panoId; round.panoIdSource = location.panoIdSource = resolved.panoIdSource; }
+                }));
               } catch (error) {
                 errors.push({ matchNumber, round: roundIndex + 1, error: error.message });
               }
             }
+            await Promise.all(panoLookups);
           } catch (error) {
             errors.push({ matchNumber, error: error.message });
           } finally {
@@ -175,7 +198,7 @@
       const orderedLocations = locations.sort(weakestFirst);
       const reviewOrder = orderedLocations.filter(round => round.myBaseScore !== null);
       download({ name: 'My OpenGuessr duels', source: location.href, capturedAt: new Date().toISOString(), myName, locations: orderedLocations, games, reviewOrder, errors, stopped: window.__duelExportStop, nextMatchNumber: interrupted ? matchNumber - 2 : window.__duelExportStop ? matchNumber : null });
-      console.log(`Downloaded ${locations.length} rounds from ${games.length} duels; ${errors.length} errors.`);
+      console.log(`Downloaded ${locations.length} rounds from ${games.length} duels; ${locations.filter(item => item.panoId).length} panorama IDs; ${errors.length} errors.`);
     } finally {
       window.__duelExportRunning = false;
     }

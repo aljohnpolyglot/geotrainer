@@ -2,6 +2,7 @@
 
 ## 2026-10-12
 
+- Capture panorama IDs in the OpenGuessr Duel exporter when the embed supplies one or a Street View coordinate lookup is available, and label how each ID was obtained.
 - Add a Source order switch to uploaded JSON in Learn so locations can follow file order, including after resuming a paused session; Shuffle remains the default.
 - Add a DevTools exporter that visits every OpenGuessr Duel history match and round, records cumulative and per-round scores plus results, skips unavailable overviews, resumes from a partial export, and downloads a GeoTrainer JSON map ordered by the player's own standard score. Add a repair script for existing Duel exports.
 - Let correct-country Review guesses within 25 kilometres of isolated islands advance as Hard even below a 5,000-point target, while preserving earned points and the saved target.
