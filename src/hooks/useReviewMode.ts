@@ -53,7 +53,7 @@ export function useReviewMode(ctx: any) {
       if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
       const kind = plan.kind === 'spatial' && reopened.panoId !== attempt.panoId && !reopened.isFallback ? 'spatial' : plan.kind === 'heading' ? 'heading' : 'original';
       reviewVariationRef.current = { kind, level: kind === 'spatial' ? plan.generalizationLevel : 0, distanceM: kind === 'spatial' ? calculateDistanceKm(attempt.actualLat, attempt.actualLng, reopened.lat, reopened.lng) * 1000 : 0, shownPanoId: reopened.panoId, shownHeading: reopened.heading };
-      setCurrentLocation(reopened); roundStartTimeRef.current = Date.now();
+      setCurrentLocation(reopened); setIsLoading(false); roundStartTimeRef.current = Date.now();
       const intervals = await trainerDb.reviewIntervals(attempt.panoId);
       if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
       setReviewHistory(attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt)); setReviewIntervals(intervals);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-12
+
+- Clear Review's loading overlay when its panorama is opened, while keeping the guess map locked until the viewer verifies the requested imagery.
+
 ## 2026-10-11
 
 - Compress manual cloud backups and portable `.geotrainer` exports without dropping progress, and read older plain backups and files.
