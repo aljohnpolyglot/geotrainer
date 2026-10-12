@@ -189,7 +189,7 @@ På en karta med visat svar kan du använda hårkorset för att zooma in till r�
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
-Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Spela och Repetera. Om en matchande artikel saknas på det valda språket söker appen på engelska Wikipedia. Om den saknas även där visas namnet utan länk. Befintliga profiler börjar med engelska.
+Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Spela och Repetera. Om en matchande artikel saknas på det valda språket söker appen på engelska Wikipedia. Om den saknas även där visas namnet utan länk. Befintliga profiler börjar med engelska. Vägnamn i avslöjade vyer länkar också till en matchande artikel när en sådan finns; annars visas de som vanlig text.
 
 ### Poängmål per land
 

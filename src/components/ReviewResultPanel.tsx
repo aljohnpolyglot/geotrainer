@@ -61,7 +61,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
             <div className="review-location-details" aria-live="polite">
               {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
                 {locationDetails.primaryArea && <strong><Building size={13} /><WikipediaPlaceLink name={locationDetails.primaryArea} place={geocodeData?.locality || geocodeData?.adminArea || ''} region={geocodeData?.locality ? geocodeData.adminArea : undefined} /></strong>}
-                {locationDetails.route && <span><MapPin size={13} />{locationDetails.route}</span>}
+                {locationDetails.route && <span><MapPin size={13} /><WikipediaPlaceLink name={locationDetails.route} place={locationDetails.route} region={geocodeData?.locality || geocodeData?.adminArea} showUnavailable={false} /></span>}
                 {locationDetails.address && <small>{locationDetails.address}</small>}
               </>}
             </div>

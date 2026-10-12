@@ -14,7 +14,7 @@ const COPY: Record<string, { open: string; missing: string }> = {
   sv: { open: 'Öppna på Wikipedia', missing: 'Wikipedia-artikeln är inte tillgänglig.' },
 };
 
-export function WikipediaPlaceLink({ name, place, region, className }: { name: string; place: string; region?: string; className?: string }) {
+export function WikipediaPlaceLink({ name, place, region, className, showUnavailable = true }: { name: string; place: string; region?: string; className?: string; showUnavailable?: boolean }) {
   const { ui, wikipedia } = useLanguagePreferences();
   const [url, setUrl] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
@@ -24,5 +24,5 @@ export function WikipediaPlaceLink({ name, place, region, className }: { name: s
     if (place) void wikipediaPlaceUrl(place, region, wikipedia).then((result) => { if (active) { setUrl(result); setFailed(!result); } }).catch(() => { if (active) setFailed(true); });
     return () => { active = false; };
   }, [place, region, wikipedia]);
-  return <span className={className}>{url ? <a className="location-wikipedia-link" href={url} target="_blank" rel="noopener noreferrer" title={COPY[ui].open} aria-label={`${COPY[ui].open}: ${name}`}>{name}<ExternalLink size={12} aria-hidden="true" /></a> : name}{failed && <small className="location-wikipedia-error" role="status">{COPY[ui].missing}</small>}</span>;
+  return <span className={className}>{url ? <a className="location-wikipedia-link" href={url} target="_blank" rel="noopener noreferrer" title={COPY[ui].open} aria-label={`${COPY[ui].open}: ${name}`}>{name}<ExternalLink size={12} aria-hidden="true" /></a> : name}{failed && showUnavailable && <small className="location-wikipedia-error" role="status">{COPY[ui].missing}</small>}</span>;
 }

@@ -88,7 +88,7 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               <div className="review-location-details" aria-live="polite">
                 {isGeocoding ? <span><Compass className="spin" size={13} />{t('resolvingLocation')}</span> : <>
                   {placeHeadline && <strong><Building size={13} /><WikipediaPlaceLink name={placeHeadline} place={geocodeData?.locality || geocodeData?.adminArea || ''} region={geocodeData?.locality ? geocodeData.adminArea : undefined} /></strong>}
-                  {geocodeData?.route && <span><MapPin size={13} />{geocodeData.route}</span>}
+                  {geocodeData?.route && <span><MapPin size={13} /><WikipediaPlaceLink name={geocodeData.route} place={geocodeData.route} region={geocodeData.locality || geocodeData.adminArea} showUnavailable={false} /></span>}
                   <small>{geocodeData?.formattedAddress || t('addressUnavailable')}</small>
                 </>}
               </div>

@@ -187,7 +187,7 @@ I confini nazionali sono visibili per impostazione predefinita e si possono nasc
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
 
-La lingua di Wikipedia si sceglie separatamente per i link dei luoghi rivelati in Impara, Gioca e Ripasso. Se non si trova un articolo corrispondente in quella lingua, la ricerca passa a Wikipedia in inglese. Se manca anche lì, il nome resta senza link. I profili esistenti partono dall’inglese.
+La lingua di Wikipedia si sceglie separatamente per i link dei luoghi rivelati in Impara, Gioca e Ripasso. Se non si trova un articolo corrispondente in quella lingua, la ricerca passa a Wikipedia in inglese. Se manca anche lì, il nome resta senza link. I profili esistenti partono dall’inglese. Anche i nomi delle strade rivelate rimandano a un articolo corrispondente, se esiste; altrimenti restano testo semplice.
 
 ### Obiettivi di punteggio per paese
 

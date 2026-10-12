@@ -389,7 +389,7 @@ Street-View-Abdeckung ändert sich. Panoramen können verschwinden, ersetzt werd
 
 Oberflächensprache, geografische Spielbezeichnungen und KI-Antwortsprache sind unabhängig. Unterstützt werden Englisch, Spanisch, Portugiesisch, Französisch, Deutsch, Italienisch, Russisch und Schwedisch.
 
-Die Wikipedia-Sprache steuert die Ortslinks in aufgedeckten Ansichten von Lernen, Spielen und Wiederholen unabhängig von den anderen Spracheinstellungen. Fehlt dort ein passender Artikel, wird in der englischen Wikipedia gesucht. Wird auch dort kein Ort gefunden, bleibt der Name ohne Link. Bestehende Profile verwenden zunächst Englisch.
+Die Wikipedia-Sprache steuert die Ortslinks in aufgedeckten Ansichten von Lernen, Spielen und Wiederholen unabhängig von den anderen Spracheinstellungen. Fehlt dort ein passender Artikel, wird in der englischen Wikipedia gesucht. Wird auch dort kein Ort gefunden, bleibt der Name ohne Link. Bestehende Profile verwenden zunächst Englisch. Auch Straßennamen in aufgedeckten Ansichten verlinken auf passende Artikel; ohne passenden Artikel bleiben sie einfacher Text.
 
 ### Darstellung
 

@@ -418,7 +418,7 @@ Open Preferences from the settings control in the app header. Native dropdowns s
 
 Interface language changes buttons and navigation. Game language controls geographic labels. AI language controls Coach responses. These choices are independent and persist across reloads.
 
-Wikipedia language controls the place-name links on revealed Study, Play, and Review location views. Choose any supported language independently of the other language settings. If no matching article is found there, the link uses English Wikipedia; if neither lookup finds a place, the name stays plain. Existing profiles default to English.
+Wikipedia language controls the place-name links on revealed Study, Play, and Review location views. Choose any supported language independently of the other language settings. If no matching article is found there, the link uses English Wikipedia; if neither lookup finds a place, the name stays plain. Existing profiles default to English. Road names on revealed views also link when a matching article exists; otherwise they stay plain.
 
 Supported languages are English, Spanish, Portuguese, French, German, Italian, Russian, and Swedish.
 

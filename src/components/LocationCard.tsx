@@ -161,7 +161,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = f
             {geocodeData?.route && (
               <div className="flex items-center space-x-2 text-stone-300">
                 <MapPin className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
-                <span className="font-medium text-stone-300">{geocodeData.route}</span>
+                <WikipediaPlaceLink className="font-medium text-stone-300" name={geocodeData.route} place={geocodeData.route} region={geocodeData.locality || geocodeData.adminArea} showUnavailable={false} />
               </div>
             )}
 

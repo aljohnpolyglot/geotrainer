@@ -191,7 +191,7 @@ Les frontières des pays sont visibles par défaut et peuvent être masquées ; 
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
 
-La langue de Wikipédia se choisit séparément pour les liens des lieux révélés en Étude, Jeu et Révision. Si aucun article correspondant n’est trouvé dans cette langue, la recherche passe à Wikipédia en anglais. Sans résultat dans les deux langues, le nom reste sans lien. Les profils existants utilisent d’abord l’anglais.
+La langue de Wikipédia se choisit séparément pour les liens des lieux révélés en Étude, Jeu et Révision. Si aucun article correspondant n’est trouvé dans cette langue, la recherche passe à Wikipédia en anglais. Sans résultat dans les deux langues, le nom reste sans lien. Les profils existants utilisent d’abord l’anglais. Les noms de rues révélés mènent aussi à un article correspondant s’il existe ; sinon, ils restent en texte simple.
 
 ### Objectifs de score par pays
 

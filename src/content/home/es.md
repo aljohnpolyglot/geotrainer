@@ -189,7 +189,7 @@ Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo apare
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.
 
-El idioma de Wikipedia se elige por separado para los enlaces de lugares revelados en Aprender, Juego y Repaso. Si no se encuentra un artículo que coincida en ese idioma, se busca en la Wikipedia en inglés. Si tampoco aparece allí, el nombre queda sin enlace. Los perfiles existentes empiezan con inglés.
+El idioma de Wikipedia se elige por separado para los enlaces de lugares revelados en Aprender, Juego y Repaso. Si no se encuentra un artículo que coincida en ese idioma, se busca en la Wikipedia en inglés. Si tampoco aparece allí, el nombre queda sin enlace. Los perfiles existentes empiezan con inglés. Los nombres de calles revelados también enlazan a un artículo coincidente; si no lo hay, quedan como texto.
 
 ### Objetivos de puntuación por país
 

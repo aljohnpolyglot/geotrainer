@@ -185,7 +185,7 @@ As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
 
-O idioma da Wikipédia é escolhido separadamente para os links de lugares revelados em Aprender, Jogar e Revisar. Se não houver um artigo correspondente nesse idioma, a busca usa a Wikipédia em inglês. Se também não houver resultado, o nome fica sem link. Perfis existentes começam com inglês.
+O idioma da Wikipédia é escolhido separadamente para os links de lugares revelados em Aprender, Jogar e Revisar. Se não houver um artigo correspondente nesse idioma, a busca usa a Wikipédia em inglês. Se também não houver resultado, o nome fica sem link. Perfis existentes começam com inglês. Nomes de ruas revelados também recebem links quando existe um artigo correspondente; caso contrário, ficam como texto.
 
 ### Metas de pontuação por país
 
