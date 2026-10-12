@@ -387,6 +387,7 @@ export interface ReviewRecord {
   reviewCount: number;
   lastReviewedAt?: number;
   dueAdjustedAt?: number;
+  naturalDueAt?: number;
   generalizationLevel?: number;
   generalizationUpdatedAt?: number;
 }

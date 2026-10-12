@@ -5,7 +5,7 @@ import type { Attempt, ReviewGrade, ReviewRecord, StudyVisit, TrainerLocation } 
 import { ankiStatistics, calendarLevel, dayLabel } from '../analytics/anki';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
-import { planReviewRebalance } from '../data/reviewRebalance';
+import { planReviewRebalance, planReviewReset } from '../data/reviewRebalance';
 import { trainerDb } from '../data/trainerDb';
 
 type Props = { attempts: Attempt[]; reviews: ReviewRecord[]; visits: StudyVisit[]; locations: TrainerLocation[]; readyDueCount: number; onRebalanced: () => Promise<void> };
@@ -22,6 +22,8 @@ function DueBars({ days, label }: { days: Array<{ day: number; count: number }>;
 export function AnkiStatistics({ attempts, reviews, visits, locations, readyDueCount, onRebalanced }: Props) {
   const { ui } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [balanceStrength, setBalanceStrength] = useState(50);
+  const [previewMode, setPreviewMode] = useState<'balance' | 'reset'>('balance');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -32,14 +34,17 @@ export function AnkiStatistics({ attempts, reviews, visits, locations, readyDueC
   }, [previewOpen, saving]);
   const now = useMemo(() => Date.now(), [reviews]);
   const stats = useMemo(() => ankiStatistics(attempts, reviews, visits, locations, Date.now(), readyDueCount), [attempts, reviews, visits, locations, readyDueCount]);
-  const shifts = useMemo(() => planReviewRebalance(reviews, now), [reviews, now]);
+  const canBalance = useMemo(() => planReviewRebalance(reviews, now, 100).length > 0, [reviews, now]);
+  const resetShifts = useMemo(() => planReviewReset(reviews, attempts, now), [reviews, attempts, now]);
+  const balanceShifts = useMemo(() => planReviewRebalance(reviews, now, balanceStrength), [reviews, now, balanceStrength]);
+  const shifts = previewMode === 'reset' ? resetShifts : balanceShifts;
   const preview = useMemo(() => {
     const changed = new Map<string, number>(shifts.map((shift) => [shift.id, shift.toDueAt]));
     return ankiStatistics(attempts, reviews.map((review) => changed.has(review.id) ? { ...review, dueAt: changed.get(review.id)! } : review), visits, locations, now, readyDueCount).futureDue;
   }, [attempts, reviews, visits, locations, now, readyDueCount, shifts]);
   const confirm = async () => {
     setSaving(true); setError(false);
-    try { await trainerDb.rebalanceReviews(shifts); await onRebalanced(); setPreviewOpen(false); }
+    try { await trainerDb.rebalanceReviews(shifts); await onRebalanced(); setPreviewOpen(false); setPreviewMode('balance'); }
     catch { setError(true); }
     finally { setSaving(false); }
   };
@@ -58,16 +63,19 @@ export function AnkiStatistics({ attempts, reviews, visits, locations, readyDueC
       <section className="stats-card anki-card"><h3>{t('Card counts')}</h3><div className="anki-count-row"><span className="anki-dot new" />{t('New')} <b>{stats.cards.new}</b></div><div className="anki-count-row"><span className="anki-dot learning" />{t('Learning')} <b>{stats.cards.learning}</b></div><div className="anki-count-row"><span className="anki-dot relearning" />{t('Relearning')} <b>{stats.cards.relearning}</b></div><div className="anki-count-row"><span className="anki-dot young" />{t('Young')} <b>{stats.cards.young}</b></div><div className="anki-count-row"><span className="anki-dot mature" />{t('Mature')} <b>{stats.cards.mature}</b></div><div className="anki-count-total">{t('Total tracked locations')} <b>{stats.cards.total}</b></div><div className="anki-mastery"><strong>{t(stats.mastery.name)}</strong><span>{stats.cards.mature.toLocaleString()} {t('mature locations')}</span>{stats.mastery.next && <><progress value={stats.mastery.progress} max="1" /><small>{(stats.mastery.next - stats.cards.mature).toLocaleString()} {t('until next rank')}</small></>}</div></section>
       <section className="stats-card anki-card"><h3>{t('Review outcomes')}</h3>{grades.map((grade) => { const count = stats.grades[grade] ?? 0; return <div className="anki-outcome" key={grade}><span>{t(grade)}</span><i><em style={{ width: `${pct(count, gradeTotal)}` }} /></i><b>{count}</b></div>; })}{!gradeTotal && <p className="empty">{t('Review grades will appear after your first review.')}</p>}</section>
     </div>
-    <section className="stats-card anki-card"><div className="anki-due-heading"><h3>{t('Future due')}</h3><button type="button" className="anki-rebalance-button" disabled={!shifts.length} onClick={() => setPreviewOpen(true)} title={t('Balance review dates')}><CalendarRange size={15} />{t('Balance dates')}</button></div><p className="stats-note">{t('Cards scheduled from today through the next 30 days.')}</p><DueBars days={stats.futureDue} label={t('Future due review histogram')} /></section>
+    <section className="stats-card anki-card"><div className="anki-due-heading"><h3>{t('Future due')}</h3><button type="button" className="anki-rebalance-button" disabled={!canBalance && !resetShifts.length} onClick={() => { setPreviewMode('balance'); setPreviewOpen(true); }} title={t('Balance review dates')}><CalendarRange size={15} />{t('Balance dates')}</button></div><p className="stats-note">{t('Cards scheduled from today through the next 30 days.')}</p><DueBars days={stats.futureDue} label={t('Future due review histogram')} /></section>
     <section className="stats-card anki-card"><h3>{t('Review activity · 12 weeks')}</h3><div className="anki-calendar" aria-label={t('Review activity calendar')}>{stats.calendar.map((item) => <i key={item.day} className={`level-${calendarLevel(item.count, activityMax)}`} title={`${dayLabel(item.day)}: ${item.count} ${t('reviews')}`} />)}</div><div className="anki-calendar-label"><span>{t('Less')}</span><span className="level-0" /><span className="level-1" /><span className="level-2" /><span className="level-3" /><span className="level-4" /><span>{t('More')}</span></div></section>
     <div className="stats-ladders"><section className="stats-card anki-card"><h3>{t('Review intervals')}</h3>{stats.intervals.map((item) => <div className="anki-interval" key={item.label}><span>{item.label}</span><b>{item.count}</b></div>)}<p className="stats-note">{t('Based on recorded review intervals.')}</p></section><section className="stats-card anki-card"><h3>{t('Added / encountered · 30 days')}</h3><div className="anki-spark-bars">{stats.added.map((item) => <i key={item.day} style={{ height: `${item.count / addedMax * 100}%` }} title={`${dayLabel(item.day)}: ${item.count}`} />)}</div><p className="stats-note">{t('New locations first seen each day.')}</p></section></div>
     {previewOpen && createPortal(<div className="anki-rebalance-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !saving) setPreviewOpen(false); }}>
       <section className="anki-rebalance-dialog" role="dialog" aria-modal="true" aria-labelledby="anki-rebalance-title">
-        <header><h2 id="anki-rebalance-title">{t('Balance review dates?')}</h2><button type="button" className="icon-button" onClick={() => setPreviewOpen(false)} disabled={saving} aria-label={t('close')} title={t('close')}><X size={18} /></button></header>
-        <p>{t('Spread future reviews across nearby days while keeping today and short learning steps unchanged.')}</p><strong>{shifts.length.toLocaleString(ui)} {t('cards would move')}</strong>
-        <DueBars days={preview} label={t('Preview of balanced review dates')} />
+        <header><h2 id="anki-rebalance-title">{t(previewMode === 'reset' ? 'Reset review dates?' : 'Balance review dates?')}</h2><button type="button" className="icon-button" onClick={() => setPreviewOpen(false)} disabled={saving} aria-label={t('close')} title={t('close')}><X size={18} /></button></header>
+        <p>{t(previewMode === 'reset' ? 'Restore balanced cards to their original review dates.' : 'Spread future reviews across nearby days while keeping today and short learning steps unchanged.')}</p>
+        <label className="anki-balance-strength"><span>{t('Balance strength')} <output>{balanceStrength}%</output></span><input type="range" min="0" max="100" step="10" value={balanceStrength} disabled={saving} onChange={(event) => { setBalanceStrength(Number(event.target.value)); setPreviewMode('balance'); setError(false); }} /><small><span>{t('Less movement')}</span><span>{t('More even days')}</span></small></label>
+        <button type="button" className="anki-reset-button" disabled={saving || !resetShifts.length} onClick={() => { setPreviewMode('reset'); setError(false); }}>{t('Reset to original dates')}</button>
+        <strong>{shifts.length.toLocaleString(ui)} {t('cards would move')}</strong>
+        <DueBars days={preview} label={t(previewMode === 'reset' ? 'Preview of original review dates' : 'Preview of balanced review dates')} />
         {error && <p role="alert">{t('Review dates changed. Reopen the preview and try again.')}</p>}
-        <footer><button type="button" className="button secondary" onClick={() => setPreviewOpen(false)} disabled={saving} autoFocus>{t('cancel')}</button><button type="button" className="button primary" onClick={() => void confirm()} disabled={saving || !shifts.length}>{t('Confirm balance')}</button></footer>
+        <footer><button type="button" className="button secondary" onClick={() => setPreviewOpen(false)} disabled={saving} autoFocus>{t('cancel')}</button><button type="button" className="button primary" onClick={() => void confirm()} disabled={saving || !shifts.length}>{t(previewMode === 'reset' ? 'Confirm reset' : 'Confirm balance')}</button></footer>
       </section>
     </div>, document.body)}
   </div>;

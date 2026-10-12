@@ -3,6 +3,7 @@ import test from 'node:test';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ResultMap } from './ResultMap';
+import { LocationCard } from './LocationCard';
 
 test('revealed and selectable result maps show guide buttons', () => {
   const props = { actual: { lat: 0, lng: 0 }, guess: null };
@@ -16,4 +17,11 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(selectable, /result-map-guides/);
   assert.match(selectable, /aria-label="Hide Street View coverage"/);
   assert.match(selectable, /aria-label="Show road names"/);
+});
+
+test('Learn reveal card includes both map zoom shortcuts', () => {
+  const learn = renderToStaticMarkup(createElement(LocationCard, { location: { countryCode: 'SE', lat: 59.33, lng: 18.06, panoId: 'learn-view' } }));
+  assert.match(learn, /class="result-map-wrap study-result-map"/);
+  assert.match(learn, /aria-label="Zoom to answer"/);
+  assert.match(learn, /aria-label="Zoom to country"/);
 });

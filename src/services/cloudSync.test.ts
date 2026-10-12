@@ -144,10 +144,14 @@ test('manual sync keeps a later due-date balance until a newer review replaces i
   const cloud = backup('cloud', 10); const local = backup('local', 20);
   const base = { id: 'pano', panoId: 'pano', intervalDays: 14, lastReviewedAt: 100, gradingHistory: [{ grade: 'good', at: 100 }], reviewCount: 1, lapseCount: 0 };
   cloud.data.reviews.push({ ...base, dueAt: 500 });
-  local.data.reviews.push({ ...base, dueAt: 600, dueAdjustedAt: 200 });
+  local.data.reviews.push({ ...base, dueAt: 600, naturalDueAt: 500, dueAdjustedAt: 200 });
   assert.equal((mergeBackups(cloud, local).data.reviews[0] as { dueAt: number }).dueAt, 600);
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { naturalDueAt?: number }).naturalDueAt, 500);
+  cloud.data.reviews[0] = { ...base, dueAt: 500, naturalDueAt: 500, dueAdjustedAt: 300 };
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { dueAt: number }).dueAt, 500);
   cloud.data.reviews[0] = { ...base, dueAt: 800, lastReviewedAt: 300, gradingHistory: [...base.gradingHistory, { grade: 'good', at: 300 }] };
   assert.equal((mergeBackups(cloud, local).data.reviews[0] as { dueAt: number }).dueAt, 800);
+  assert.equal((mergeBackups(cloud, local).data.reviews[0] as { naturalDueAt?: number }).naturalDueAt, undefined);
 });
 
 test('manual device merge imports new cards and a review completed elsewhere', () => {

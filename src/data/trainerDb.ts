@@ -1,10 +1,7 @@
 import type {
   Attempt, BookmarkLocation, ClueRecord, Collection,
-  GameRecord, GameSettings,
-  LocationPoolTarget, LocationResult,
-  ReviewFilters,
-  ReviewGrade,
-  ReviewRecord,
+  GameRecord, GameSettings, LocationPoolTarget, LocationResult,
+  ReviewFilters, ReviewGrade, ReviewRecord,
   ReviewSessionKind,
   SettingRecord,
   SchedulerPreferences,
@@ -17,13 +14,15 @@ import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTim
 import { coalesceNearbyReviews, nearbyReview, uniqueReviewSources } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 import { nextGeneralizationLevel } from './reviewVariation';
-import { configuredCountryScoreFloor, intervalsFor, reviewGradeForPerformance } from './reviewGrading';
+import { intervalsFor } from './reviewGrading';
+import { rebalanceReviewDates, reconcileReviewAttempt } from './reviewSchedule';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore, shouldAutoSchedulePlayReview } from './reviewGrading';
+export { reconcileReviewAttempt } from './reviewSchedule';
 const DB_NAME = 'street-view-trainer';
 const DB_VERSION = 3;
 export const STORE_NAMES = [
@@ -73,14 +72,6 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
 };
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
-export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, preferences: SchedulerPreferences): ReviewRecord {
-  const at = attempt.reviewedAt || attempt.createdAt;
-  if (attempt.source !== 'review' || (review.lastReviewedAt || 0) > at) return review;
-  const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness, configuredCountryScoreFloor(attempt.countryCode, preferences));
-  const intervalDays = attempt.intervalDays ?? Math.min(preferences.maximumIntervalDays, intervalsFor(review.intervalDays, preferences)[grade]);
-  if (review.lastReviewedAt === at) return review.dueAdjustedAt && review.dueAdjustedAt >= at ? review : attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
-  return { ...review, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
-}
 let database: Promise<IDBDatabase> | undefined;
 let settingWrites = Promise.resolve();
 const request = <T>(value: IDBRequest<T>) =>
@@ -261,22 +252,7 @@ export const trainerDb = {
   },
   async rebalanceReviews(shifts: DueShift[]): Promise<void> {
     if (!shifts.length) return;
-    const db = await openDatabase();
-    const tx = db.transaction('reviews', 'readwrite');
-    const store = tx.objectStore('reviews');
-    const updates: ReviewRecord[] = [];
-    const adjustedAt = Date.now();
-    let pending = shifts.length;
-    for (const shift of shifts) {
-      const lookup = store.get(shift.id);
-      lookup.onsuccess = () => {
-        const review = lookup.result as ReviewRecord | undefined;
-        if (!review || review.dueAt !== shift.fromDueAt) { tx.abort(); return; }
-        updates.push({ ...review, dueAt: shift.toDueAt, dueAdjustedAt: adjustedAt });
-        if (--pending === 0) updates.forEach((item) => store.put(item));
-      };
-    }
-    await complete(tx);
+    await rebalanceReviewDates(shifts, openDatabase);
     notifyChange({ operation: 'rebalance:reviews' });
   },
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),

@@ -69,9 +69,11 @@ const mergeReviews = (left: ReviewRecord, right: ReviewRecord): ReviewRecord => 
   const gradingHistory = [...(left.gradingHistory || []), ...(right.gradingHistory || [])]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
     .sort((a, b) => a.at - b.at);
+  const { naturalDueAt: _naturalDueAt, dueAdjustedAt: _dueAdjustedAt, ...latestWithoutSchedule } = latest;
   return {
-    ...latest,
+    ...latestWithoutSchedule,
     dueAt: schedule.dueAt,
+    ...(schedule.naturalDueAt !== undefined ? { naturalDueAt: schedule.naturalDueAt } : {}),
     ...(schedule.dueAdjustedAt ? { dueAdjustedAt: schedule.dueAdjustedAt } : {}),
     gradingHistory,
     reviewCount: Math.max(left.reviewCount || 0, right.reviewCount || 0, gradingHistory.length),

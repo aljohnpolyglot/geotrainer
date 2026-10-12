@@ -12,19 +12,20 @@ export async function wikipediaPlaceUrl(place: string, region?: string, language
   };
   const normalized = place.toLocaleLowerCase().trim();
   for (const edition of language === 'en' ? ['en'] as const : [language, 'en'] as const) {
-    let titles: string[];
+    const matchingTitle = (titles: string[]) => {
+      const candidates = titles.filter((value) => value.toLocaleLowerCase().includes(normalized));
+      return candidates.find((value) => region && value.toLocaleLowerCase().includes(region.toLocaleLowerCase()))
+        || candidates.find((value) => value.toLocaleLowerCase() === normalized)
+        || (!region ? candidates[0] : undefined);
+    };
+    let title: string | undefined;
     try {
-      titles = await search(query, edition);
-      if (!titles.length && region) titles = await search(place, edition);
+      title = matchingTitle(await search(query, edition));
+      if (!title && region) title = matchingTitle(await search(place, edition));
     } catch (error) {
       if (edition === 'en') throw error;
       continue;
     }
-    if (!titles.length) continue;
-    const title = titles.find((value) => {
-      const candidate = value.toLocaleLowerCase();
-      return candidate.includes(normalized) && (!region || candidate.includes(region.toLocaleLowerCase()) || normalized.includes(' ') && candidate === normalized);
-    });
     if (title) {
       if (edition === 'en' && language !== 'en') {
         try {
@@ -40,7 +41,6 @@ export async function wikipediaPlaceUrl(place: string, region?: string, language
       }
       return `https://${edition}.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`;
     }
-    if (edition === 'en') return `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(query)}`;
   }
   return null;
 }

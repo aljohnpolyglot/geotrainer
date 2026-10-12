@@ -34,6 +34,7 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
   return {
     ...kept,
     dueAt: Math.min(kept.dueAt, duplicate.dueAt),
+    ...((kept.naturalDueAt ?? duplicate.naturalDueAt) !== undefined ? { naturalDueAt: kept.naturalDueAt ?? duplicate.naturalDueAt } : {}),
     intervalDays: Math.min(kept.intervalDays, duplicate.intervalDays),
     gradingHistory,
     lapseCount: kept.lapseCount + duplicate.lapseCount,

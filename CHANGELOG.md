@@ -2,6 +2,10 @@
 
 ## 2026-10-13
 
+- Link revealed places to matching Wikipedia articles, including exact place titles that omit their region; show unavailable text instead of opening a search page when no article matches.
+- Let Review date balancing preview and confirm a reset to each card’s saved natural due date, including recoverable older adjustments, while leaving today’s cards in place.
+- Add a strength slider to the Review date-balancing preview so learners can compare gentler and stronger smoothing before confirming, within the existing due-date limits.
+- Keep answer and country zoom shortcuts visible beside other map controls on Learn reveals and Play and Review results.
 - Add answer-close and country-scale buttons to revealed maps in Learn, Play, and Review; manual zoom and panning now stay in place while the map is open, with the saved zoom preset used as the opening view.
 - Add World Shuffle sampling to Custom Learn and Play. It blends the observed country mix of 215 OpenGuessr Duel locations across 53 countries with Natural weights, keeping every World country possible and Natural as the default.
 - Prepare the next eligible Custom Learn, uploaded-map Learn, and Play location while the current panorama is open. Reuse it on Next or Continue, search again when preparation fails, and keep uploaded-map progress unchanged until the learner advances.
