@@ -2,6 +2,8 @@
 
 ## 2026-10-12
 
+- Prepare up to five upcoming Review cards while the current panorama is open, one at a time during idle time, so continuing can reuse verified location metadata and saved history.
+- Reuse the Review state already loaded for each card when showing its interval choices, avoiding a second full local-history read.
 - Clear Review's loading overlay when its panorama is opened, while keeping the guess map locked until the viewer verifies the requested imagery.
 
 ## 2026-10-11

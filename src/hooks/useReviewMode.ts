@@ -1,10 +1,10 @@
-import { configuredCountryScoreFloor } from '../data/reviewGrading';
+import { configuredCountryScoreFloor, intervalsFor } from '../data/reviewGrading';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRound, LocationResult, ReviewGrade, ReviewSessionKind } from '../types';
 import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
-import { reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
+import { onTrainerDbChange, reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
 import { planReviewVariation } from '../data/reviewVariation';
 import { isLatestRequest } from '../services/requestIntegrity';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
@@ -17,6 +17,17 @@ export const restoredReviewProgress = (saved: Pick<SavedReviewSession, 'initialT
 };
 export const queueAfterReview = (queue: Attempt[], current: Attempt, grade: ReviewGrade) => grade === 'again' ? [...queue.slice(1), current] : queue.slice(1);
 export const failedEarlierInSession = (stats: ReviewStat[], attemptId: string) => stats.some((item) => item.attemptId === attemptId && item.grade === 'again');
+export const upcomingReviewCards = (queue: Attempt[], currentId: string) => queue.filter((item) => item.id !== currentId).slice(0, 5);
+
+async function prepareReviewCard(attempt: Attempt) {
+  const [preferences, review, attempts] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attempts()]);
+  const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
+  const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
+  const history = attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt);
+  const recentlyShown = new Set(history.filter((item) => item.source === 'review' && item.shownPanoId).slice(0, 3).map((item) => item.shownPanoId!));
+  const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown);
+  return { preferences, review, history, plan, reopened };
+}
 
 export function useReviewMode(ctx: any) {
   const { dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
@@ -38,29 +49,64 @@ export function useReviewMode(ctx: any) {
   const reviewRestoreAttemptedRef = useRef(false);
   const reviewVariationRef = useRef<{ kind: 'original' | 'heading' | 'spatial'; level: number; distanceM: number; shownPanoId: string; shownHeading?: number } | undefined>(undefined);
   const reviewOpenRequestRef = useRef(0);
+  const preparedCardsRef = useRef(new Map<string, Promise<Awaited<ReturnType<typeof prepareReviewCard>>>>());
+  const prefetchEpochRef = useRef(0);
   const roundPausedAtRef = useRef<number | null>(null);
+
+  useEffect(() => onTrainerDbChange(({ operation }) => {
+    if (operation.startsWith('backup:') || operation === 'reconcile:reviews') { prefetchEpochRef.current++; preparedCardsRef.current.clear(); }
+  }), []);
+
+  useEffect(() => {
+    if (!reviewAttempt || !currentLocation || reviewDisplayedPanoId !== currentLocation.panoId) return;
+    const upcoming = upcomingReviewCards(reviewQueue, reviewAttempt.id);
+    let cancelled = false;
+    let idleId: number | null = null;
+    let index = 0;
+    let preparing = false;
+    const epoch = prefetchEpochRef.current;
+    const schedule = () => {
+      if (cancelled || epoch !== prefetchEpochRef.current || document.hidden || preparing || idleId !== null || index >= upcoming.length) return;
+      const prepare = async () => {
+        idleId = null;
+        if (cancelled || epoch !== prefetchEpochRef.current || document.hidden) return;
+        preparing = true;
+        const attempt = upcoming[index++];
+        let pending = preparedCardsRef.current.get(attempt.id);
+        if (!pending) {
+          pending = prepareReviewCard(attempt);
+          preparedCardsRef.current.set(attempt.id, pending);
+        }
+        try { await pending; } catch { if (preparedCardsRef.current.get(attempt.id) === pending) preparedCardsRef.current.delete(attempt.id); }
+        preparing = false;
+        schedule();
+      };
+      idleId = window.requestIdleCallback ? window.requestIdleCallback(prepare, { timeout: 1500 }) : window.setTimeout(prepare, 750);
+    };
+    const onVisibility = () => { if (!document.hidden) schedule(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    schedule();
+    return () => { cancelled = true; if (idleId !== null) { if (window.cancelIdleCallback) window.cancelIdleCallback(idleId); else window.clearTimeout(idleId); } document.removeEventListener('visibilitychange', onVisibility); };
+  }, [reviewQueue, reviewAttempt?.id, currentLocation?.panoId, reviewDisplayedPanoId]);
 
   const openReviewAttempt = useCallback(async (attempt: Attempt) => {
     const requestId = ++reviewOpenRequestRef.current;
     reviewVariationRef.current = undefined;
     setReviewAttempt(attempt); setReviewResult(null); setReviewAttemptRecord(null); setReviewElapsed(0); setCurrentLocation(null); setCoachNote(null); setIsLoading(true); setErrorMessage(null);
     try {
-      const [preferences, review, attempts] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attempts()]);
-      const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
-      const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
-      const recentlyShown = new Set(attempts.filter((item) => item.source === 'review' && item.panoId === attempt.panoId && item.shownPanoId).sort((a, b) => b.createdAt - a.createdAt).slice(0, 3).map((item) => item.shownPanoId!));
-      const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown);
+      const cached = preparedCardsRef.current.get(attempt.id);
+      preparedCardsRef.current.delete(attempt.id);
+      const { preferences, review, history, plan, reopened } = await (cached ? cached.catch(() => prepareReviewCard(attempt)) : prepareReviewCard(attempt));
       if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
       const kind = plan.kind === 'spatial' && reopened.panoId !== attempt.panoId && !reopened.isFallback ? 'spatial' : plan.kind === 'heading' ? 'heading' : 'original';
       reviewVariationRef.current = { kind, level: kind === 'spatial' ? plan.generalizationLevel : 0, distanceM: kind === 'spatial' ? calculateDistanceKm(attempt.actualLat, attempt.actualLng, reopened.lat, reopened.lng) * 1000 : 0, shownPanoId: reopened.panoId, shownHeading: reopened.heading };
       setCurrentLocation(reopened); setIsLoading(false); roundStartTimeRef.current = Date.now();
-      const intervals = await trainerDb.reviewIntervals(attempt.panoId);
-      if (!isLatestRequest(requestId, reviewOpenRequestRef.current)) return;
-      setReviewHistory(attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt)); setReviewIntervals(intervals);
+      setReviewHistory(history); setReviewIntervals(intervalsFor(review?.intervalDays || 0, preferences));
     } catch (error) { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) { setErrorMessage(error instanceof Error ? error.message : 'Review location is unavailable.'); setReviewAttempt(null); } } finally { if (isLatestRequest(requestId, reviewOpenRequestRef.current)) setIsLoading(false); }
   }, [setCoachNote, setCurrentLocation, setErrorMessage, setIsLoading, setReviewAttempt, roundStartTimeRef]);
 
   const handleStartReview = useCallback(async (attempt: Attempt, queue: Attempt[] = [attempt], source = 'History', kind: ReviewSessionKind = 'practice') => {
+    prefetchEpochRef.current++; preparedCardsRef.current.clear();
     const compass = attempt.showCompass ?? compassPreference;
     ctx.setShowHome(false); ctx.setAppMode('review');
     setReviewQueue(queue); setReviewOriginalQueue(queue); setReviewInitialTotal(queue.length); setReviewStats([]); setReviewComplete(false); setReviewSource(source); setReviewKind(kind);
@@ -108,6 +154,7 @@ export function useReviewMode(ctx: any) {
       const schedule = scheduled ? await trainerDb.gradeReview(reviewAttempt.panoId, grade, reviewKind === 'correction' && grade !== 'again' ? 1 : undefined, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) : await trainerDb.updateReviewGeneralization(reviewAttempt.panoId, grade, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) || previous;
       const savedAttempt = { ...attempt, grade, reviewedAt: Date.now(), previousDueAt: previous?.dueAt, nextDueAt: schedule?.dueAt, intervalDays: schedule?.intervalDays };
       await trainerDb.saveAttempt(savedAttempt);
+      for (const item of reviewQueue) if (item.countryCode === reviewAttempt.countryCode && calculateDistanceKm(item.actualLat, item.actualLng, reviewAttempt.actualLat, reviewAttempt.actualLng) <= .05) preparedCardsRef.current.delete(item.id);
       const stats = [...reviewStats, { previous: reviewAttempt.score, current: score, grade, attemptId: reviewAttempt.id }];
       const remaining = queueAfterReview(reviewQueue, reviewAttempt, grade);
       await trainerDb.setSetting('review.active', remaining.length ? { attemptIds: remaining.map((item) => item.id), source: reviewSource, kind: reviewKind, initialTotal: reviewInitialTotal, compass: ctx.reviewCompass, stats } satisfies SavedReviewSession : null);
@@ -122,6 +169,6 @@ export function useReviewMode(ctx: any) {
     else await openReviewAttempt(reviewQueue[0]);
   }, [openReviewAttempt, reviewAttempt, reviewAttemptRecord, reviewQueue, reviewResult, setCurrentLocation, setReviewAttempt]);
 
-  const clearReviewSession = useCallback(() => { reviewOpenRequestRef.current += 1; setReviewAttempt(null); setReviewResult(null); setReviewAttemptRecord(null); setReviewQueue([]); setReviewComplete(false); void trainerDb.setSetting('review.active', null); }, [setReviewAttempt]);
+  const clearReviewSession = useCallback(() => { reviewOpenRequestRef.current += 1; prefetchEpochRef.current++; preparedCardsRef.current.clear(); setReviewAttempt(null); setReviewResult(null); setReviewAttemptRecord(null); setReviewQueue([]); setReviewComplete(false); void trainerDb.setSetting('review.active', null); }, [setReviewAttempt]);
   return { reviewResult, setReviewResult, reviewAttemptRecord, setReviewAttemptRecord, reviewQueue, setReviewQueue, reviewOriginalQueue, reviewSource, reviewKind, reviewHistory, reviewIntervals, reviewElapsed, reviewInitialTotal, reviewStats, reviewComplete, reviewGradingRef, handleStartReview, handleReviewGuess, handleReviewNext, clearReviewSession, openReviewAttempt };
 }
