@@ -89,6 +89,12 @@ Bei hochgeladenem JSON in Lernen ist **Reihenfolge der Quelle** standardmäßig 
 
 Das X rechts im Kopfbereich öffnet die Auswahl des Lernmodus. Die Karte bleibt auf diesem Gerät; lade sie auf anderen Geräten erneut hoch. Ortsvariation 0 behält die hochgeladene Ansicht; 100 sucht Street View bis zu 1 km entfernt und fällt bei Bedarf auf einen ursprünglichen Ort zurück. Minus minimiert die Ortskarte, Maximieren füllt den Bildschirm.
 
+
+Während du einen generierten Ort lernst oder spielst, kann GeoTrainer den nächsten passenden Ort im Hintergrund vorbereiten. Mit Weiter lässt er sich dann schneller öffnen. Die Street-View-Bilder werden erst beim Wechsel geladen; bei geänderten Einstellungen oder einem nicht verfügbaren Ort beginnt eine neue Suche.
+Wähle unter **Welt → Auswahl** den **Weltmix** mit der Priorität **Zufällig**, um der Länderhäufigkeit einer Stichprobe von 215 OpenGuessr-Duellorten zu folgen. Die Stichprobe umfasst 53 Länder: Die USA kamen 31-mal vor, Indien 14-mal, Brasilien 12-mal und Australien 11-mal. Das beeinflusst die Länderauswahl für neu erzeugte Orte im benutzerdefinierten Lernmodus und im Spiel, aber nicht Panoramaquelle oder Filter. Es bildet diese Stichprobe näherungsweise ab, nicht den privaten Spielalgorithmus; die tatsächliche Verfügbarkeit kann das Ergebnis verschieben.
+
+Der Weltmix verbindet die Länderhäufigkeit der Stichprobe (70 %) mit der natürlichen Gewichtung (30 %). So können auch Länder erscheinen, die in den Duellen fehlten. Natürlich bleibt die Voreinstellung.
+
 ### Lernpriorität wählen
 
 Das Lernen mit hochgeladener Karte kennzeichnet den Quellenfortschritt (zum Beispiel **Quelle: 1/50**). Jeder Eintrag wird nach der Prüfung als erledigt markiert, sodass **Weiter** ihn auch dann nicht erneut auswählt, wenn eine nahe Variation ein anderes Panorama öffnet; fehlerhafte Einträge werden ebenfalls nur einmal geprüft. Am Ende verschwindet **Weiter**, sodass nur **Zurück** bleibt. Auch im Spiel werden Quelleneinträge nicht wiederholt.

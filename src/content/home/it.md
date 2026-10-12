@@ -42,6 +42,12 @@ La mappa resta su questo dispositivo; caricala anche sugli altri dispositivi. La
 
 Il punto verde sulle mappe del luogo rivelato e del risultato indica la direzione della fotocamera di Street View. Ruota insieme alla vista; i risultati salvati usano la direzione registrata, se disponibile.
 
+Mentre studi o giochi in un luogo generato, GeoTrainer può preparare in background il prossimo luogo idoneo. Avanti o Continua può quindi aprirlo più rapidamente. Le immagini di Street View si caricano quando passi al luogo successivo; se cambi le impostazioni o il luogo non è disponibile, parte una nuova ricerca.
+
+In **Mondo → Campionamento**, scegli **Mix mondiale** con priorità **Casuale** per seguire la frequenza dei paesi in un campione di 215 luoghi dei duelli OpenGuessr. Il campione comprende 53 paesi: gli Stati Uniti compaiono 31 volte, l’India 14, il Brasile 12 e l’Australia 11. Cambia la scelta del paese nei luoghi generati per l’apprendimento personalizzato e il Gioco, non la fonte dei panorami o i filtri. Approssima questo campione, senza riprodurre l’algoritmo privato del gioco; la disponibilità può modificare i luoghi mostrati.
+
+Mix mondiale combina la frequenza del campione (70%) con la ponderazione Naturale (30%), quindi possono comparire anche paesi assenti dai duelli. Naturale resta l’impostazione predefinita.
+
 ### Scegliere una priorità di apprendimento
 
 L’apprendimento con una mappa caricata etichetta l’avanzamento della fonte (per esempio **Fonte: 1/50**). Ogni voce viene segnata come completata dopo il controllo, quindi **Avanti** non può sceglierla di nuovo anche se una variazione vicina apre un altro panorama; anche le voci non funzionanti vengono saltate una sola volta. Alla fine **Avanti** scompare e rimane **Precedente**. Anche il Gioco evita di ripetere le voci della fonte.

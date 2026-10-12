@@ -6,6 +6,7 @@
 import { CityPoolCity, EnvironmentSettings, LocationGenerator, LocationRequestContext, LocationResult, UrbanLevel } from '../types';
 import { COUNTRIES } from '../data/countries';
 import cityData from '../data/cities.json';
+import worldShuffle from '../data/worldShuffleWeights.json';
 import { reverseGeocodeLocation } from './geocoding';
 
 const devDiagnostics = typeof import.meta.env !== 'undefined' && import.meta.env.DEV;
@@ -45,6 +46,17 @@ export const worldSampleWeight = (countryCode: string) => {
 export const pickWorldCountry = (countryCodes: string[], random = Math.random) => {
   let pick = random() * countryCodes.reduce((total, code) => total + worldSampleWeight(code), 0);
   for (const code of countryCodes) { pick -= worldSampleWeight(code); if (pick <= 0) return code; }
+  return countryCodes.at(-1)!;
+};
+
+export const pickWorldShuffleCountry = (countryCodes: string[], random = Math.random) => {
+  const weights = worldShuffle.countries as Record<string, number>;
+  const observedTotal = countryCodes.reduce((total, code) => total + (weights[code] || 0), 0);
+  if (!observedTotal) return pickWorldCountry(countryCodes, random);
+  const naturalTotal = countryCodes.reduce((total, code) => total + worldSampleWeight(code), 0);
+  const weight = (code: string) => worldShuffle.naturalShare * worldSampleWeight(code) / naturalTotal + (1 - worldShuffle.naturalShare) * (weights[code] || 0) / observedTotal;
+  let pick = random();
+  for (const code of countryCodes) { pick -= weight(code); if (pick < 0) return code; }
   return countryCodes.at(-1)!;
 };
 
@@ -204,7 +216,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       const poolFocus = resolvedTargets.length ? pickLocationPoolFocus(resolvedTargets, countryCodes) : undefined;
       const focused = poolFocus?.kind === 'target' ? poolFocus : undefined;
       const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[(attempt - 1) % preferredCountryCodes.length] : undefined;
-      const randomCountryCode = poolFocus?.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
+      const randomCountryCode = poolFocus?.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode === 'shuffle' ? pickWorldShuffleCountry(eligibleCountries) : context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
       const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);

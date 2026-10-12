@@ -63,7 +63,7 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     aiCoachEnabled: typeof source.aiCoachEnabled === 'boolean' ? source.aiCoachEnabled : true,
     environment: source.environment === 'urban' || source.environment === 'suburban' || source.environment === 'rural' ? source.environment : 'mixed',
     urbanLevel: source.urbanLevel === 1 || source.urbanLevel === 2 ? source.urbanLevel : 3,
-    samplingMode: source.samplingMode === 'balanced' ? 'balanced' : 'natural',
+    samplingMode: source.samplingMode === 'balanced' || source.samplingMode === 'shuffle' ? source.samplingMode : 'natural',
     priority: source.priority === 'familiar' || source.priority === 'least-exposure' ? source.priority : 'random',
     panoramaSource,
     allowContributors: panoramaSource !== 'official',

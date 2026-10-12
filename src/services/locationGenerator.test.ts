@@ -276,6 +276,18 @@ test('Meta recovers expired panorama IDs only within 50 metres and preserves the
   await assert.rejects(new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true }), /unavailable/);
 });
 
+test('World Shuffle follows the observed duel country mix and falls back outside it', async () => {
+  const { pickWorldShuffleCountry } = await import('./locationGenerator');
+  const sample = (await import('../data/worldShuffleWeights.json')).default;
+  assert.equal(Object.values(sample.countries).reduce((sum, count) => sum + count, 0), sample.sampleSize);
+  assert.equal(sample.sampleSize, 215);
+  assert.equal(pickWorldShuffleCountry(['US', 'IN'], () => 0), 'US');
+  assert.equal(pickWorldShuffleCountry(['US', 'IN'], () => .65), 'IN');
+  assert.equal(pickWorldShuffleCountry(['AX', 'US'], () => 0), 'AX');
+  assert.equal(pickWorldShuffleCountry(['AX', 'US'], () => .02), 'US');
+  assert.equal(pickWorldShuffleCountry(['AX'], () => .5), 'AX');
+});
+
 test('review rejects a stale panorama id that resolves far from its saved answer', async () => {
   results = [
     { lat: 12.6, lng: -8, pano: 'wrong-mali', countryCode: 'ML' },

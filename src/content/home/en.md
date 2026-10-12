@@ -91,6 +91,8 @@ Study is an ungraded first encounter. It is the right mode for observation, comp
 
 Study differs from Review in intent: Study introduces or explores freely chosen places, while Review tests previously encountered places when their schedule says they are due. Study has no map guess or score.
 
+
+While you study or play a generated location, GeoTrainer can prepare the next eligible location in the background. Next or Continue can then open it sooner. Street View imagery still loads when you advance, and a changed setup or unavailable location triggers a fresh search.
 ### Study setup
 
 Meta lessons try their saved Street View panorama first. If Google has replaced that ID, the app can open a replacement within 50 metres, keeping the clue’s heading and pitch. The replacement may use newer imagery. If no view is available, the course skips the lesson without marking it seen or saving it for Review. Previous and Next also skip unavailable views. If no playable lesson remains in that direction, you return to setup.
@@ -132,6 +134,10 @@ For JSON maps, **Location order** defaults to Shuffle; choose Source order to pl
 **Describe a pool** sends your short learning request to Gemini, then opens the generated countries, regions, cities, environment, urban level, sampling, priority, imagery source, and indoor coverage in Custom so you can verify and edit them before starting. Farming and broad nature requests select Rural, architecture and city-street requests select Urban, and suburbs select Suburban unless your wording says otherwise. A second pass chooses only entries from the selected countries’ local region or city list, without an arbitrary region limit. Sports-league requests use unique home cities. You can write in any supported interface language and describe named places, landscape themes, or common confusers. It is an AI suggestion, not a geographic guarantee.
 
 While it works, the button reports the live country, region, and city stage.
+
+In **World → Sampling**, choose **World Shuffle** with **Random** priority to follow the country frequencies in a sample of 215 OpenGuessr Duel locations. The sample includes 53 countries; the United States appeared 31 times, India 14, Brazil 12, and Australia 11. This changes country selection for generated Custom Learn and Play locations, not the panorama source or the filters. It approximates this sample rather than reproducing a private game algorithm; availability can still shift the places you actually see.
+
+World Shuffle blends the sampled country mix (70%) with Natural weighting (30%), so countries absent from the duels can still appear. Natural remains the default.
 
 ### Choosing a learning priority
 

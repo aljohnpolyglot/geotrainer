@@ -10,6 +10,7 @@ import { captureStreetViewImage, getStreetViewSnapshot } from '../services/stree
 import { getImportedMap, importedMapPointCount, moveImportedHistory, pickImportedLocation, saveImportedMapProgress, type ImportedMapHistory } from '../services/importedMap';
 import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
+import { NextLocationPreparation } from '../services/nextLocationPreparation';
 
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
@@ -29,6 +30,7 @@ export function useStudyMode(ctx: any) {
   const uploadedCompletedRef = useRef(new Set<number>());
   const uploadedTotalRef = useRef(0);
   const skipUploadedSeedRef = useRef(false);
+  const preparedStudyRef = useRef(new NextLocationPreparation<{ result: LocationResult; completed: Set<number> }>());
   const [canPreviousUploaded, setCanPreviousUploaded] = useState(false);
   const [uploadedProgress, setUploadedProgress] = useState<{ position: number; total: number }>();
   const { appMode, showHome, dbReady, currentLocation, setCurrentLocation, isLoading, setIsLoading, setErrorMessage,
@@ -54,6 +56,7 @@ export function useStudyMode(ctx: any) {
   const handleStudyMetadata = useCallback((details: any) => { if (!currentVisitRef.current || !isCurrentPanorama(details.panoId, currentVisitRef.current.panoId) || !isCurrentPanorama(details.panoId, currentLocationRef.current?.panoId)) return; Object.assign(currentVisitRef.current, details); void trainerDb.saveVisit({ ...currentVisitRef.current }); }, [currentLocationRef, currentVisitRef]);
   const handleStudyPanoramaChanged = useCallback(async (location: LocationResult) => { if (generationPendingRef.current || currentLocationRef.current?.panoId === location.panoId) return; setIsRevealed(false); const syncId = ++latestPanoramaSyncRef.current; const generationId = latestGenerationRequestRef.current; const resolved = await reverseGeocodeLocation(location.lat, location.lng); if (syncId !== latestPanoramaSyncRef.current || !isLatestRequest(generationId, latestGenerationRequestRef.current)) return; if (!resolved?.countryCode) { setCurrentLocation(null); setErrorMessage('The moved panorama could not be geographically verified. Generate another location.'); return; } setCurrentLocation({ ...location, countryCode: resolved.countryCode }); recentStudyPanosRef.current = [location.panoId, ...recentStudyPanosRef.current.filter((id: string) => id !== location.panoId)].slice(0, 15); }, [currentLocationRef, generationPendingRef, latestGenerationRequestRef, latestPanoramaSyncRef, recentStudyPanosRef, setCurrentLocation, setErrorMessage, setIsRevealed]);
   const openUploadedHistory = (history: ImportedMapHistory) => {
+    preparedStudyRef.current.clear();
     ++latestGenerationRequestRef.current; ++latestPanoramaSyncRef.current;
     abortControllerRef.current?.abort(); generationPendingRef.current = false;
     uploadedHistoryRef.current = history; setCanPreviousUploaded(history.index > 0);
@@ -66,6 +69,38 @@ export function useStudyMode(ctx: any) {
     const history = moveImportedHistory(uploadedHistoryRef.current, 'previous');
     if (history !== uploadedHistoryRef.current) openUploadedHistory(history);
   };
+  const findStudyLocation = async (importedMapId: string | undefined, collection: Collection, signal: AbortSignal, requestId: number | undefined, completed: Set<number>, currentPanoId?: string) => {
+    let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };
+    let preferredCountryCodes: string[] | undefined;
+    const priorityCountryCodes = studyPriorityRef.current === 'least-exposure' && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
+    if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
+      const history = await trainerDb.locations();
+      target = learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
+      if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
+      if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
+    }
+    const result = importedMapId
+      ? await pickImportedLocation(importedMapId, new Set([...uploadedHistoryRef.current.locations.map((item) => item.panoId), currentPanoId].filter((id): id is string => !!id)), signal, false, ctx.studyImportedVariationRef.current, completed, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, ctx.studyImportedOrderRef.current)
+      : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, signal, (message) => { if (requestId !== undefined && isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set([...recentStudyPanosRef.current, currentPanoId].filter((id): id is string => !!id)), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
+    return { result, completed };
+  };
+
+  useEffect(() => {
+    if (!mapsReady || showHome || appMode !== 'study' || isStudySetupOpen || !currentLocation || isLoading || (ctx.learnSource !== 'custom' && ctx.learnSource !== 'uploaded')) { preparedStudyRef.current.clear(); return; }
+    if (ctx.learnSource === 'uploaded' && (!uploadedHistoryRef.current.locations.length || uploadedHistoryRef.current.index < uploadedHistoryRef.current.locations.length - 1 || uploadedTotalRef.current && uploadedCompletedRef.current.size >= uploadedTotalRef.current)) return;
+    const collection = activeCollectionRef.current;
+    if (!collection?.countryCodes.length && !ctx.studyImportedMapIdRef.current) return;
+    const key = [currentLocation.panoId, ctx.studyImportedMapIdRef.current, collection?.id, studyEnvironment, studyUrbanLevel, studySampling, studyPriority, studyPanoramaSource, studyAllowInteriors, JSON.stringify(studyLocationTargetsRef.current)].join(':');
+    let timer: number | null = null;
+    const onVisibility = () => {
+      if (timer !== null) window.clearTimeout(timer);
+      if (document.hidden) { preparedStudyRef.current.clear(); return; }
+      timer = window.setTimeout(() => preparedStudyRef.current.prepare(key, (signal) => findStudyLocation(ctx.studyImportedMapIdRef.current, collection, signal, undefined, new Set(uploadedCompletedRef.current), currentLocation.panoId)), 750);
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    onVisibility();
+    return () => { if (timer !== null) window.clearTimeout(timer); document.removeEventListener('visibilitychange', onVisibility); };
+  }, [mapsReady, showHome, appMode, isStudySetupOpen, currentLocation?.panoId, isLoading, ctx.learnSource, studyEnvironment, studyUrbanLevel, studySampling, studyPriority, studyPanoramaSource, studyAllowInteriors, ctx.studyLocationTargets]);
   const fetchNextLocation = useCallback(async () => {
     const importedMapId = ctx.studyImportedMapIdRef.current;
     const previousLocation = currentLocation;
@@ -87,19 +122,12 @@ export function useStudyMode(ctx: any) {
     setCurrentLocation(null); setCoachNote(null); setStudyReviewSaved(false); setIsLoading(true); setErrorMessage(null); setIsRevealed(false);
     ctx.setStatusMessage('Finding random Street View panorama...');
     try {
-      let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };
-      let preferredCountryCodes: string[] | undefined;
-      const priorityCountryCodes = studyPriorityRef.current === 'least-exposure' && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
-      if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
-        const history = await trainerDb.locations();
-        target = learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
-        if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
-        if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
-      }
-      const result = importedMapId
-        ? await pickImportedLocation(importedMapId, new Set(uploadedHistoryRef.current.locations.map((item) => item.panoId)), controller.signal, false, ctx.studyImportedVariationRef.current, uploadedCompletedRef.current, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, ctx.studyImportedOrderRef.current)
-        : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, controller.signal, (message) => { if (isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, { requestId, collectionId: collection.id, excludedPanoIds: new Set(recentStudyPanosRef.current), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
+      const key = [previousLocation?.panoId, importedMapId, collection?.id, studyEnvironmentRef.current, studyUrbanLevelRef.current, studySamplingRef.current, studyPriorityRef.current, studyPanoramaSourceRef.current, studyAllowInteriorsRef.current, JSON.stringify(studyLocationTargetsRef.current)].join(':');
+      const prepared = preparedStudyRef.current.take(key, controller.signal);
+      const location = await (prepared ? prepared.catch(() => findStudyLocation(importedMapId, collection, controller.signal, requestId, uploadedCompletedRef.current, previousLocation?.panoId)) : findStudyLocation(importedMapId, collection, controller.signal, requestId, uploadedCompletedRef.current, previousLocation?.panoId));
+      const result = location.result;
       if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
+      if (importedMapId) uploadedCompletedRef.current = location.completed;
       recentStudyPanosRef.current = [result.panoId, ...recentStudyPanosRef.current.filter((id: string) => id !== result.panoId)].slice(0, 15);
       if (importedMapId) { await saveImportedMapProgress(importedMapId, uploadedCompletedRef.current, result); uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', result); setCanPreviousUploaded(uploadedHistoryRef.current.index > 0); setUploadedProgress(uploadedTotalRef.current ? { position: result.importedMapProgress ?? uploadedHistoryRef.current.index + 1, total: uploadedTotalRef.current } : undefined); }
       setCurrentLocation(result);

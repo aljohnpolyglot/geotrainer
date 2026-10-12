@@ -238,6 +238,7 @@ test('saved game preferences are normalized before reuse', async () => {
     environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, importedMapOrder: 'shuffle', skipSeenImported: true, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ priority: 'least-exposure' }).priority, 'least-exposure');
+  assert.equal(normalizeGamePreferences({ samplingMode: 'shuffle' }).samplingMode, 'shuffle');
   assert.equal(normalizeGamePreferences({ priority: 'invalid' }).priority, 'random');
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');

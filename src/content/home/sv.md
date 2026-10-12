@@ -42,6 +42,12 @@ Kartan stannar på den här enheten; ladda upp den igen på andra enheter. Plats
 
 Den gröna punkten på kartan över den visade platsen och resultatkartan visar Street View-kamerans riktning. Den vrids när du vrider vyn; sparade resultat använder den registrerade riktningen när den finns.
 
+Medan du studerar eller spelar på en skapad plats kan GeoTrainer förbereda nästa lämpliga plats i bakgrunden. Nästa eller Fortsätt kan då öppna den snabbare. Street View-bilderna läses in först när du går vidare; ändrade inställningar eller en otillgänglig plats startar en ny sökning.
+
+Under **Världen → Urval** väljer du **Världsmix** med prioriteten **Slumpmässigt** för att följa ländernas frekvens i ett urval av 215 platser från OpenGuessr-dueller. Urvalet omfattar 53 länder: USA förekom 31 gånger, Indien 14, Brasilien 12 och Australien 11. Det påverkar landsvalet för nya platser i anpassat Lär och Spela, men inte panoramakällan eller filtren. Läget efterliknar urvalet ungefär, inte spelets privata algoritm; tillgänglig Street View kan ändra utfallet.
+
+Världsmix kombinerar ländernas frekvens i urvalet (70 %) med Naturlig viktning (30 %). Länder som saknas i duellerna kan därför fortfarande dyka upp. Naturlig är fortfarande standard.
+
 ### Välj prioritet för lärandet
 
 Lärande med en uppladdad karta märker källans förlopp, till exempel **Källa: 1/50**. Varje post markeras som klar efter kontrollen, så **Nästa** kan inte välja den igen även om en närliggande variation öppnar ett annat panorama; trasiga poster kontrolleras också bara en gång. När källan är klar döljs **Nästa** och bara **Föregående** återstår. Spel upprepar inte heller källposter.

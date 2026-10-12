@@ -42,6 +42,12 @@ La croix à droite de l’en-tête ouvre le choix du mode. La carte reste sur ce
 
 Le point vert des cartes du lieu révélé et du résultat indique la direction de la caméra Street View. Il tourne avec la vue ; les résultats enregistrés utilisent la direction mémorisée lorsqu’elle est disponible.
 
+Pendant que vous étudiez ou jouez dans un lieu généré, GeoTrainer peut préparer le prochain lieu admissible en arrière-plan. Suivant ou Continuer peut alors l’ouvrir plus vite. Les images Street View se chargent toujours au moment de passer au lieu suivant ; un changement de réglages ou un lieu indisponible lance une nouvelle recherche.
+
+Dans **Monde → Échantillonnage**, choisissez **Mélange mondial** avec la priorité **Aléatoire** pour suivre la fréquence des pays dans un échantillon de 215 lieux de duels OpenGuessr. Cet échantillon comprend 53 pays : les États-Unis apparaissent 31 fois, l’Inde 14, le Brésil 12 et l’Australie 11. Ce choix modifie le pays des lieux générés en apprentissage personnalisé et en jeu, mais pas la source des panoramas ni les filtres. Il reproduit approximativement cet échantillon, sans prétendre connaître l’algorithme privé du jeu ; la disponibilité peut modifier les lieux affichés.
+
+Mélange mondial combine la fréquence de l’échantillon (70 %) avec la pondération Naturel (30 %) : les pays absents des duels peuvent donc aussi apparaître. Naturel reste le choix par défaut.
+
 ### Choisir une priorité d’apprentissage
 
 L’apprentissage avec une carte importée identifie la progression de la source (par exemple **Source : 1/50**). Chaque entrée est marquée comme terminée après vérification : **Suivant** ne peut donc pas la reprendre même si une variation proche ouvre un autre panorama ; une entrée défectueuse n’est également testée qu’une fois. À la fin, **Suivant** disparaît et seul **Précédent** reste. Le Jeu évite aussi de répéter les entrées source.

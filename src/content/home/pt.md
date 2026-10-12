@@ -42,6 +42,12 @@ O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para conti
 
 O ponto verde nos mapas do local revelado e do resultado indica a direção da câmera do Street View. Ele gira com a vista; os resultados salvos usam a direção registrada quando disponível.
 
+Enquanto você estuda ou joga em um local gerado, o GeoTrainer pode preparar o próximo local válido em segundo plano. Assim, Próximo ou Continuar pode abri-lo mais rápido. As imagens do Street View só são carregadas quando você avança; uma configuração alterada ou um local indisponível inicia uma nova busca.
+
+Em **Mundo → Amostragem**, escolha **Mistura mundial** com prioridade **Aleatório** para seguir a frequência de países em uma amostra de 215 locais de duelos do OpenGuessr. A amostra inclui 53 países; os Estados Unidos apareceram 31 vezes, a Índia 14, o Brasil 12 e a Austrália 11. Isso altera a escolha do país no Aprendizado personalizado e no Jogo gerados, não a fonte dos panoramas nem os filtros. É uma aproximação da amostra, não do algoritmo privado do jogo; a disponibilidade pode alterar os locais exibidos.
+
+Mistura mundial combina a frequência da amostra (70%) com a amostragem Natural (30%), então países ausentes dos duelos ainda podem aparecer. Natural continua sendo o padrão.
+
 ### Escolher uma prioridade de aprendizagem
 
 O aprendizado com mapa enviado identifica o progresso da fonte (por exemplo, **Fonte: 1/50**). Cada entrada é marcada como concluída ao ser verificada, portanto **Próximo** não pode escolhê-la novamente mesmo que uma variação próxima abra outro panorama; entradas quebradas também são ignoradas uma única vez. Ao concluir, **Próximo** desaparece e resta **Anterior**. O Jogo também não repete entradas da fonte.

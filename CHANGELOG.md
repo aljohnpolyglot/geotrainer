@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-13
+
+- Add World Shuffle sampling to Custom Learn and Play. It blends the observed country mix of 215 OpenGuessr Duel locations across 53 countries with Natural weights, keeping every World country possible and Natural as the default.
+- Prepare the next eligible Custom Learn, uploaded-map Learn, and Play location while the current panorama is open. Reuse it on Next or Continue, search again when preparation fails, and keep uploaded-map progress unchanged until the learner advances.
+
 ## 2026-10-12
 
 - Capture panorama IDs in the OpenGuessr Duel exporter when the embed supplies one or a Street View coordinate lookup is available, and label how each ID was obtained.

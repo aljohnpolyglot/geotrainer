@@ -3,6 +3,7 @@ import type { SupportedLanguage } from '../types';
 export const EXTRA_UI: Record<string, Partial<Record<SupportedLanguage, string>>> = {
   'Location order': { en:'Location order', es:'Orden de lugares', pt:'Ordem dos locais', fr:'Ordre des lieux', de:'Reihenfolge der Orte', it:'Ordine dei luoghi', ru:'Порядок мест', sv:'Platsordning' },
   Shuffle: { en:'Shuffle', es:'Aleatorio', pt:'Aleatório', fr:'Aléatoire', de:'Zufällig', it:'Casuale', ru:'Случайный порядок', sv:'Blanda' },
+  'World Shuffle': { en:'World Shuffle', es:'Mezcla mundial', pt:'Mistura mundial', fr:'Mélange mondial', de:'Weltmix', it:'Mix mondiale', ru:'Мировая смесь', sv:'Världsmix' },
   'Source order': { en:'Source order', es:'Orden del archivo', pt:'Ordem do arquivo', fr:'Ordre du fichier', de:'Reihenfolge der Quelle', it:'Ordine del file', ru:'Порядок в файле', sv:'Källans ordning' },
   'Skip seen places': { en:'Skip seen places', es:'Omitir lugares ya vistos', pt:'Ignorar locais já vistos', fr:'Ignorer les lieux déjà vus', de:'Bereits gesehene Orte überspringen', it:'Salta i luoghi già visti', ru:'Пропускать просмотренные места', sv:'Hoppa över sedda platser' },
   'Continue saved map?': { en:'Continue saved map?', es:'¿Continuar el mapa guardado?', pt:'Continuar o mapa salvo?', fr:'Continuer la carte enregistrée ?', de:'Gespeicherte Karte fortsetzen?', it:'Continuare la mappa salvata?', ru:'Продолжить сохранённую карту?', sv:'Fortsätt med sparad karta?' },
