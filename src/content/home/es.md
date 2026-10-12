@@ -36,6 +36,8 @@ Solo exteriores se aplica junto con la fuente de imágenes: Solo oficiales tambi
 
 Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subido. En Mapa subido, selecciona un JSON de Map Maker con una lista de lugares o `customCoordinates`; cada lugar necesita latitud y longitud válidas. El archivo debe pesar menos de 20 MB. Anterior está antes de Revelar y se activa después de visitar dos lugares. Siguiente avanza por los lugares ya vistos antes de elegir uno nuevo. La X a la derecha de la cabecera abre la elección del modo.
 
+En Aprender con JSON importado, **Orden del archivo** está desactivado por defecto. Actívalo para seguir el orden del archivo; déjalo desactivado para mezclar los lugares. La elección se conserva al reanudar una sesión pausada.
+
 El mapa queda en este dispositivo; si continúas en otro, vuelve a subirlo allí. La variación 0 conserva la vista subida; 100 busca Street View hasta 1 km alrededor y vuelve a una ubicación original si hace falta. El botón menos minimiza la ficha del lugar y maximizar la amplía a toda la pantalla.
 
 El punto verde de los mapas del lugar revelado y del resultado tiene un indicador de la dirección de la cámara de Street View. Gira al cambiar la vista; los resultados guardados usan la dirección registrada cuando está disponible.

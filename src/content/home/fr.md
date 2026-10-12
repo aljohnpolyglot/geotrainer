@@ -36,6 +36,8 @@ Extérieur uniquement s’applique avec la source d’images : Officiel uniqueme
 
 Apprendre propose quatre choix : Personnalisé, Meta, Explorer la carte et Carte importée. Pour Carte importée, choisissez un JSON Map Maker contenant une liste de lieux ou `customCoordinates` ; chaque lieu doit avoir une latitude et une longitude valides. Le fichier doit faire moins de 20 Mo. Précédent se trouve avant Révéler et devient disponible après la visite de deux lieux. Suivant parcourt d’abord les lieux déjà vus avant d’en choisir un autre.
 
+Dans Apprendre avec un JSON importé, **Ordre du fichier** est désactivé par défaut. Activez-le pour suivre l’ordre du fichier ; laissez-le désactivé pour mélanger les lieux. Le choix est conservé lorsque vous reprenez une session en pause.
+
 La croix à droite de l’en-tête ouvre le choix du mode. La carte reste sur cet appareil ; importez-la aussi sur tout autre appareil utilisé. La variation 0 conserve la vue importée ; 100 cherche Street View jusqu’à 1 km autour et revient à un lieu initial si nécessaire. Le bouton moins réduit la fiche du lieu et agrandir la déploie sur tout l’écran.
 
 Le point vert des cartes du lieu révélé et du résultat indique la direction de la caméra Street View. Il tourne avec la vue ; les résultats enregistrés utilisent la direction mémorisée lorsqu’elle est disponible.

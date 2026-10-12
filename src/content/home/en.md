@@ -113,6 +113,8 @@ Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Upload
 
 The file must be under 20 MB and contain at least one valid location. **Location variation** runs from 0 to 100: 0 opens the uploaded panorama or its coordinate exactly, while higher values search for nearby Street View imagery up to 1 km away at 100. If no nearby imagery opens, the app uses an original map location. This applies only to Uploaded map Learn; uploaded Play rounds use the original map locations.
 
+For uploaded JSON in Learn, **Source order** is off by default. Turn it on to follow the file order; leave it off to shuffle. The choice is kept when you resume a paused Learn session.
+
 Choose **Start learning** to sample that map. **Previous** sits before Reveal and becomes available after you visit a second location; **Next** moves forward through places visited in this session before drawing another. The **X** on the right of the Learn header opens setup to choose another path. A completed uploaded-map run stops at its final unique panorama.
 
 Region and city names follow the interface language when a localized name is available. Use **Save geographic pool** beside the Learn or Play start action to download the current country, region, and city choices as JSON without Street View coordinates.

@@ -2,6 +2,8 @@
 
 ## 2026-10-12
 
+- Add a Source order switch to uploaded JSON in Learn so locations can follow file order, including after resuming a paused session; Shuffle remains the default.
+- Add a DevTools exporter that visits every OpenGuessr Duel history match and round, records cumulative and per-round scores plus results, skips unavailable overviews, resumes from a partial export, and downloads a GeoTrainer JSON map ordered by the player's own standard score. Add a repair script for existing Duel exports.
 - Let correct-country Review guesses within 25 kilometres of isolated islands advance as Hard even below a 5,000-point target, while preserving earned points and the saved target.
 - Credit close ocean guesses near small isolated islands to the intended country in Play and Review, without changing distance scores or existing attempts.
 - Prepare up to five upcoming Review cards while the current panorama is open, one at a time during idle time, so continuing can reuse verified location metadata and saved history.
