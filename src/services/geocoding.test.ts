@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { creditedGuessCountry, getFlagCdnUrl, normalizeReverseGeocodeCountry } from './geocoding';
+import { creditedGuessCountry, getFlagCdnUrl, nearbyIslandGuess, normalizeReverseGeocodeCountry } from './geocoding';
 
 test('flag URLs use the resolved ISO country code', () => {
   assert.equal(getFlagCdnUrl('AL', 40), 'https://flagcdn.com/w40/al.png');
@@ -21,4 +21,13 @@ test('nearby water misses credit isolated islands without changing distance or l
   assert.equal(creditedGuessCountry('FR', 'DE', 5), 'DE');
   assert.equal(creditedGuessCountry('GU', 'JP', 26), 'JP');
   assert.equal(creditedGuessCountry('GU', undefined, null), undefined);
+});
+
+test('nearby isolated-island Review guesses can advance without a perfect pin', () => {
+  assert.equal(nearbyIslandGuess('CX', 'CX', 23), true);
+  assert.equal(nearbyIslandGuess('GU', 'GU', 25), true);
+  assert.equal(nearbyIslandGuess('MP', 'GU', 10), false);
+  assert.equal(nearbyIslandGuess('FR', 'FR', 10), false);
+  assert.equal(nearbyIslandGuess('CX', 'CX', 25.01), false);
+  assert.equal(nearbyIslandGuess('CX', undefined, null), false);
 });

@@ -276,6 +276,8 @@ Ein falsches Land ist immer ein Trainingsfehler. Beim richtigen Land zählt auch
 
 In Spiel und Wiederholung wird ein Tipp im Wasser innerhalb von 25 km der Antwort dem richtigen Land zugeordnet, wenn die Karte kein Land erkennt. Bei abgelegenen Inseln wie Guam, den Nördlichen Marianen und der Weihnachtsinsel wird auch eine irreführende Zuordnung zu einem fernen Festland korrigiert. Entfernungspunkte und Punktziele gelten weiterhin; ein Tipp auf dem Land eines anderen Staates bleibt falsch.
 
+In der Wiederholung lässt ein Tipp im richtigen Land innerhalb von 25 km dieser Inseln die Karte mit der Bewertung Schwer weitergehen, auch wenn die Punktzahl unter dem Ziel liegt. Punkte und gespeichertes Ziel bleiben erhalten; die Karte kommt für genaueres Üben früher zurück.
+
 Spiel fügt Runden unter dem Ziel automatisch zur Wiederholung hinzu. Fehler üben nutzt die gespeicherten Ziele auch für ältere Spiele. Wiederholung und Fehlerkorrektur verlangen unter dem Ziel einen weiteren Versuch. Gespeicherte Ziele ändern keine Punkte, Antworten, Ländererkennungsstatistiken, ursprünglichen Versuche oder bestehenden Termine; neue Antworten verwenden die aktualisierten Ziele. Stadt- oder Regionsgrenzen werden nicht geprüft.
 
 

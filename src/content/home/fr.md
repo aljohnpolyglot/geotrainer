@@ -191,6 +191,8 @@ Un mauvais pays est toujours une erreur d’entraînement. Avec le bon pays, un 
 
 En Jeu et en Révision, un clic dans l’eau à moins de 25 km de la réponse est attribué au bon pays si la carte n’en identifie aucun. Près d’îles isolées comme Guam, les îles Mariannes du Nord et l’île Christmas, cela corrige aussi une étiquette continentale lointaine. Les points de distance et les seuils restent applicables ; un clic sur les terres d’un autre pays reste incorrect.
 
+En Révision, une réponse dans le bon pays à moins de 25 km de ces îles fait avancer la carte avec la note Difficile même si le score est inférieur à l’objectif. Les points et l’objectif enregistré ne changent pas ; la carte revient plus tôt pour travailler la précision.
+
 Jeu ajoute automatiquement à Révision les manches sous le seuil. Pratiquer les erreurs utilise les objectifs enregistrés, même pour une ancienne partie. Révision et correction des erreurs demandent un nouvel essai sous le seuil. Enregistrer les objectifs ne change ni points, ni réponses, ni statistiques de reconnaissance des pays, ni tentatives originales, ni calendriers existants ; les nouvelles réponses utilisent les objectifs actualisés. Aucune frontière de ville ou de région n’est vérifiée.
 
 

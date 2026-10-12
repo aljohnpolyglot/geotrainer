@@ -26,6 +26,7 @@ export const reviewGradeForPerformance = (score: number, timeSpentSeconds: numbe
   if (score < easyAt || timeSpentSeconds > maximumAnswerSeconds / 2) return 'good';
   return 'easy';
 };
+export const allowNearbyIslandReview = (grade: ReviewGrade, nearbyIsland: boolean): ReviewGrade => grade === 'again' && nearbyIsland ? 'hard' : grade;
 export const shouldAutoSchedulePlayReview = (score: number, countryCode: string, guessedCountryCode: string | undefined, preferences: SchedulerPreferences) => score < Math.max(preferences.autoReviewScore, configuredCountryScoreFloor(countryCode, preferences) ?? 0) || (preferences.autoReviewWrongCountry && guessedCountryCode !== countryCode);
 export const isCountryMistake = (score: number, countryCode: string, guessedCountryCode?: string, preferences: MistakePreferences = 'balanced') => guessedCountryCode !== countryCode || score < (typeof preferences === 'string' ? passingScoreFor(preferences) : countryScoreFloorFor(countryCode, preferences));
 export const gameMistakes = (attempts: Attempt[], gameId: string, preferences: MistakePreferences) => attempts.filter((attempt) => attempt.gameId === gameId && isCountryMistake(attempt.score, attempt.countryCode, attempt.guessedCountryCode, preferences)).sort((a, b) => a.roundNumber - b.roundNumber);

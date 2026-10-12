@@ -2,6 +2,7 @@
 
 ## 2026-10-12
 
+- Let correct-country Review guesses within 25 kilometres of isolated islands advance as Hard even below a 5,000-point target, while preserving earned points and the saved target.
 - Credit close ocean guesses near small isolated islands to the intended country in Play and Review, without changing distance scores or existing attempts.
 - Prepare up to five upcoming Review cards while the current panorama is open, one at a time during idle time, so continuing can reuse verified location metadata and saved history.
 - Reuse the Review state already loaded for each card when showing its interval choices, avoiding a second full local-history read.

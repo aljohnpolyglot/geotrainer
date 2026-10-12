@@ -189,6 +189,8 @@ Fel land räknas alltid som ett träningsmisstag. Med rätt land misslyckas äve
 
 I Spela och Repetera räknas en gissning i vattnet inom 25 km från svaret till rätt land om kartan inte hittar något land. Nära isolerade öar som Guam, Nordmarianerna och Julön rättas även en missvisande etikett från ett avlägset fastland. Avståndspoäng och poängmål gäller fortfarande; en gissning på ett annat lands mark är fortfarande fel.
 
+I Repetera går ett svar i rätt land inom 25 km från dessa öar vidare med betyget Svårt även om poängen ligger under målet. Poängen och det sparade målet ändras inte; kortet kommer tillbaka tidigare för noggrannare träning.
+
 Spel lägger automatiskt rundor under målet till Repetition. Öva misstag använder sparade mål även för äldre spel. Repetition och korrigering av misstag kräver ett nytt försök under gränsen. Sparade mål ändrar inte poäng, svar, statistik över igenkända länder, ursprungliga försök eller befintliga scheman; nya svar använder de uppdaterade målen. Stads- eller regiongränser kontrolleras inte.
 
 

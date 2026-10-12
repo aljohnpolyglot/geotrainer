@@ -2,10 +2,23 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { indexedDB, IDBKeyRange } from 'fake-indexeddb';
 import type { Attempt } from '../types';
+import { nearbyIslandGuess } from '../services/geocoding';
 import { normalizeSchedulerPreferences } from './reviewPreferences';
-import { configuredCountryScoreFloor, countryScoreFloorFor, gameMistakes, isCountryMistake, reviewGradeForCorrection, reviewGradeForPerformance, shouldAutoSchedulePlayReview } from './reviewGrading';
+import { allowNearbyIslandReview, configuredCountryScoreFloor, countryScoreFloorFor, gameMistakes, isCountryMistake, reviewGradeForCorrection, reviewGradeForPerformance, shouldAutoSchedulePlayReview } from './reviewGrading';
 
 Object.assign(globalThis, { indexedDB, IDBKeyRange });
+
+test('a nearby island Review answer advances without rewriting a 5,000-point target', () => {
+  const preferences = normalizeSchedulerPreferences({ defaultCountryScoreFloor: 5000 });
+  const score = 4917;
+  const strictGrade = reviewGradeForPerformance(score, 9, true, 60, preferences.strictness, configuredCountryScoreFloor('CX', preferences));
+  assert.equal(strictGrade, 'again');
+  assert.equal(allowNearbyIslandReview(strictGrade, nearbyIslandGuess('CX', 'CX', 23)), 'hard');
+  assert.equal(allowNearbyIslandReview(strictGrade, nearbyIslandGuess('CX', 'ID', 23)), 'again');
+  assert.equal(allowNearbyIslandReview(strictGrade, nearbyIslandGuess('FR', 'FR', 23)), 'again');
+  assert.equal(allowNearbyIslandReview(reviewGradeForCorrection(score, 'CX', 'CX', preferences), nearbyIslandGuess('CX', 'CX', 23)), 'hard');
+  assert.equal(configuredCountryScoreFloor('CX', preferences), 5000);
+});
 
 test('country specializations govern Play and Review without weakening untargeted countries or rewriting attempts', async () => {
   const baseline = normalizeSchedulerPreferences(undefined);

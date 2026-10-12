@@ -187,6 +187,8 @@ Un paese sbagliato è sempre un errore di allenamento. Con il paese corretto, an
 
 In Gioco e Ripasso, un clic in acqua entro 25 km dalla risposta viene attribuito al paese corretto se la mappa non ne identifica uno. Vicino a isole isolate come Guam, le Isole Marianne Settentrionali e l’Isola di Natale, viene corretta anche un’etichetta di terraferma lontana. Punti per la distanza e obiettivi di punteggio restano validi; un clic sulla terra di un altro paese rimane errato.
 
+Nel Ripasso, una risposta nel paese corretto entro 25 km da queste isole fa avanzare la carta con il voto Difficile anche se il punteggio è sotto l’obiettivo. I punti e l’obiettivo salvato restano invariati; la carta torna prima per esercitarsi con maggiore precisione.
+
 Gioco aggiunge automaticamente al Ripasso i turni sotto l’obiettivo. Pratica errori usa gli obiettivi salvati anche per partite precedenti. Ripasso e correzione degli errori richiedono un altro tentativo sotto il minimo. Salvare obiettivi non cambia punti, risposte, statistiche di riconoscimento del paese, tentativi originali o scadenze esistenti; le nuove risposte usano gli obiettivi aggiornati. Non vengono verificati confini di città o regioni.
 
 
