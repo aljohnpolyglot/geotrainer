@@ -254,6 +254,8 @@ Wähle **Speichern**, um Änderungen anzuwenden. Strenge und Intervalle beeinflu
 
 Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell verwendet Googles ursprüngliche Farben für Straßen- und Geländekarten, während Dunkel auch bei einem anderen App-Design eine dunkle Kartenpalette beibehält. Satellitenbilder behalten ihre Farben.
 
+Auf einer aufgedeckten Ergebniskarte zoomst du mit dem Fadenkreuz zum richtigen Ort und mit dem Globus zurück auf Landesebene. Danach kannst du weiter zoomen und die Karte verschieben; die Einstellung legt nur die Anfangsansicht fest.
+
 Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
 
 ### Strengegrad

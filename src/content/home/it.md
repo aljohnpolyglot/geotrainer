@@ -181,6 +181,8 @@ Le mappe si riaprono più rapidamente durante una sessione in Impara, Gioca, Rip
 
 In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro usa i colori originali di Google per le mappe stradali e del terreno, mentre Scuro mantiene una palette scura anche quando cambia il tema dell’app. Le immagini satellitari conservano i propri colori.
 
+Su una mappa con la risposta rivelata, usa il mirino per ingrandire il luogo corretto o il globo per tornare alla scala del paese. Puoi continuare a ingrandire e spostare la mappa; l’impostazione determina solo la vista iniziale.
+
 I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
 
 Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.

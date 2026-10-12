@@ -185,6 +185,8 @@ Les cartes se rouvrent plus rapidement pendant une session dans Apprendre, Jouer
 
 Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** propose Auto, Clair ou Sombre. Le **Zoom de la carte des résultats** propose Au plus près, Pays, Région du pays ou Monde ; Pays est le choix par défaut. Auto suit l’apparence de l’application ; Clair utilise les couleurs d’origine de Google pour les cartes routières et de relief, tandis que Sombre conserve une palette sombre même si le thème de l’application change. Les images satellite conservent leurs couleurs.
 
+Sur une carte dont la réponse est révélée, utilisez le bouton de visée pour zoomer sur le lieu exact ou celui du globe pour revenir à l’échelle du pays. Vous pouvez ensuite zoomer et déplacer la carte ; le réglage définit seulement la vue initiale.
+
 Les frontières des pays sont visibles par défaut et peuvent être masquées ; elles n’apparaissent que lorsqu’une frontière se trouve dans la zone affichée. L’épaisseur et la couleur des frontières sont réglables avec un aperçu en direct ; les frontières régionales sont désactivées par défaut et peuvent être activées séparément.
 
 Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.

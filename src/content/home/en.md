@@ -446,6 +446,8 @@ Display preferences include Light or Dark palette, compass visibility, compass s
 
 Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light uses Google's original road and terrain colors, while Dark uses a dark map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors.
 
+On a revealed map, use the crosshair button to zoom closely to the answer or the globe button to return to country scale. You can keep zooming and panning; the Settings choice only sets the opening view.
+
 Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
 
 ## Progress and statistics

@@ -179,6 +179,8 @@ Os mapas reabrem mais rapidamente durante uma sessão em Aprender, Jogar, Revisa
 
 Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro usa as cores originais do Google nos mapas rodoviários e de relevo, enquanto Escuro mantém uma paleta escura mesmo se o tema do aplicativo mudar. Imagens de satélite mantêm suas cores.
 
+Em um mapa com a resposta revelada, use o botão de mira para aproximar o local correto ou o botão de globo para voltar à escala do país. Você ainda pode ampliar e mover o mapa; a opção nas Configurações define apenas a vista inicial.
+
 As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
 
 Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.

@@ -46,6 +46,10 @@
 .result-map-guides button { display: grid; width: 28px; height: 28px; place-items: center; color: var(--muted); border: 0; border-radius: 3px; background: transparent; cursor: pointer; }
 .result-map-guides button:hover, .result-map-guides button[aria-pressed="true"] { color: var(--blue); background: var(--paper-2); }
 .result-map-guides button:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.result-map-zoom-actions { position: absolute; z-index: 2; bottom: 28px; left: 10px; display: grid; gap: 2px; padding: 3px; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(8,38,58,.18); }
+.result-map-zoom-actions button { display: grid; width: 32px; height: 32px; place-items: center; color: var(--carbon); background: transparent; border: 0; border-radius: 3px; cursor: pointer; }
+.result-map-zoom-actions button:hover { color: var(--blue); background: var(--paper-2); }
+.result-map-zoom-actions button:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
 .study-result-map.selectable .result-map-canvas { cursor: crosshair; }
 .dark .result-map-canvas .gm-control-active { background-color: #071c29 !important; }
 .review-result-panel .grade-actions { padding: 12px 20px; }

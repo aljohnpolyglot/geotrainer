@@ -185,6 +185,8 @@ Kartor öppnas snabbare igen under samma session i Lär, Spela, Repetition och p
 
 Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust använder Googles ursprungliga färger för väg- och terrängkartor, medan Mörkt behåller en mörk kartpalett även om appens tema ändras. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet. Gränsernas bredd och färg kan justeras med en direkt förhandsvisning; regiongränser är avstängda som standard och kan aktiveras separat.
 
+På en karta med visat svar kan du använda hårkorset för att zooma in till rätt plats eller jordgloben för att återgå till landsnivå. Du kan fortsätta zooma och flytta kartan; inställningen styr bara den första vyn.
+
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
 
 Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Spela och Repetera. Om en matchande artikel saknas på det valda språket söker appen på engelska Wikipedia. Om den saknas även där visas namnet utan länk. Befintliga profiler börjar med engelska.

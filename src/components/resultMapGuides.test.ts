@@ -10,6 +10,8 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(revealed, /class="result-map-guides"/);
   assert.match(revealed, /aria-label="Show Street View coverage"/);
   assert.match(revealed, /aria-label="Show road names"/);
+  assert.match(revealed, /aria-label="Zoom to answer"/);
+  assert.match(revealed, /aria-label="Zoom to country"/);
   const selectable = renderToStaticMarkup(createElement(ResultMap, { ...props, onSelect: () => {} }));
   assert.match(selectable, /result-map-guides/);
   assert.match(selectable, /aria-label="Hide Street View coverage"/);

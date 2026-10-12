@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- Add answer-close and country-scale buttons to revealed maps in Learn, Play, and Review; manual zoom and panning now stay in place while the map is open, with the saved zoom preset used as the opening view.
 - Add World Shuffle sampling to Custom Learn and Play. It blends the observed country mix of 215 OpenGuessr Duel locations across 53 countries with Natural weights, keeping every World country possible and Natural as the default.
 - Prepare the next eligible Custom Learn, uploaded-map Learn, and Play location while the current panorama is open. Reuse it on Next or Continue, search again when preparation fails, and keep uploaded-map progress unchanged until the learner advances.
 

@@ -55,4 +55,6 @@ test('result maps stay answer-centered while fitting every guess', () => {
   assert.equal(shouldRecenterResultMap(true, true), false);
   assert.equal(shouldRecenterResultMap(true, false), true);
   assert.equal(shouldRecenterResultMap(false, true), true);
+  assert.equal(shouldRecenterResultMap(false, true, true), false);
+  assert.equal(shouldRecenterResultMap(true, false, true), false);
 });

@@ -183,6 +183,8 @@ Los mapas se vuelven a abrir más rápido durante una sesión en Aprender, Jugar
 
 En Configuración → Pantalla → Mapas, **Paleta de colores del mapa** permite Automático, Claro u Oscuro. **Zoom del mapa de resultados** ofrece Más cercano, País, Región del país o Mundo; País es el valor predeterminado. Automático sigue la apariencia de la aplicación; Claro usa los colores originales de Google en los mapas de carreteras y relieve, mientras que Oscuro mantiene una paleta oscura aunque cambie el tema de la aplicación. Las imágenes de satélite conservan sus colores.
 
+En un mapa con la respuesta revelada, usa el botón de la mira para acercarte al lugar correcto o el del globo para volver a la escala de país. Puedes seguir ampliando y desplazando el mapa; la opción de Configuración solo determina la vista inicial.
+
 Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo aparecen cuando hay una frontera en el área visible del mapa. El grosor y el color de las fronteras se ajustan con una vista previa en vivo; las fronteras regionales están desactivadas por defecto y se pueden activar por separado.
 
 Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.

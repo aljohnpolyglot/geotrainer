@@ -1,15 +1,17 @@
 import { acquireMap } from '../services/mapResources';
 import { useEffect, useRef, useState } from 'react';
-import { Layers3, Type } from 'lucide-react';
+import { Crosshair, Globe2, Layers3, Type } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { centeredResultMapZoom, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
 import { getStreetViewSnapshot, subscribeStreetViewSnapshot } from '../services/streetViewSnapshot';
 
 type Point = { lat: number; lng: number };
-const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: Point, points: Point[], zoomPreference: Parameters<typeof resultMapZoomLimit>[0]) => {
+const positionResultMap = (map: google.maps.Map, element: HTMLElement, actual: Point, points: Point[], zoomPreference: Parameters<typeof resultMapZoomLimit>[0], automaticZoom: { current: number | undefined }) => {
   map.setCenter(actual);
-  map.setZoom(Math.min(resultMapZoomLimit(zoomPreference), centeredResultMapZoom(actual, points, element.clientWidth, element.clientHeight)));
+  const zoom = Math.min(resultMapZoomLimit(zoomPreference), centeredResultMapZoom(actual, points, element.clientWidth, element.clientHeight));
+  automaticZoom.current = zoom;
+  map.setZoom(zoom);
 };
 
 export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading, className = '', fullscreenControl = false, active = true, resizeKey, onSelect }: {
@@ -35,13 +37,17 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   const mapRef = useRef<google.maps.Map | null>(null);
   const pointsRef = useRef<Point[]>([]);
   const positionedRef = useRef(false);
+  const manuallyAdjustedRef = useRef(false);
+  const automaticZoomRef = useRef<number | undefined>(undefined);
   const selectable = !!onSelect;
   const previousGuessKey = previousGuesses.map((point) => `${point.lat},${point.lng}`).join('|');
 
   useEffect(() => {
     if (!element.current || typeof google === 'undefined') return;
+    const initialZoom = resultMapZoomLimit(mapPreferences.resultMapZoom);
+    automaticZoomRef.current = initialZoom;
     const resource = acquireMap('result', element.current, {
-      center: actual, zoom: resultMapZoomLimit(mapPreferences.resultMapZoom),
+      center: actual, zoom: initialZoom,
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
       ...playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
@@ -49,12 +55,20 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     const map = resource.map;
     positionedRef.current = false;
     mapRef.current = map;
+    const dragListener = map.addListener('dragstart', () => { manuallyAdjustedRef.current = true; });
+    const zoomListener = map.addListener('zoom_changed', () => {
+      if (map.getZoom() !== automaticZoomRef.current) manuallyAdjustedRef.current = true;
+    });
     return () => {
+      dragListener.remove();
+      zoomListener.remove();
       resource.release();
       if (mapRef.current === map) mapRef.current = null;
       pointsRef.current = [];
     };
   }, [fullscreenControl]);
+
+  useEffect(() => { manuallyAdjustedRef.current = false; positionedRef.current = false; }, [actual.lat, actual.lng, panoId]);
 
   useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled]);
 
@@ -99,7 +113,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
       lines.push(new google.maps.Polyline({ path: [guess, actual], geodesic: true, strokeColor: '#f59e0b', strokeOpacity: .9, strokeWeight: 3, map }));
     }
     previousGuesses.forEach((point) => addMarker(point, t('previousGuess'), '#2563eb', 6));
-    if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom);
+    if (shouldRecenterResultMap(selectable, positionedRef.current, manuallyAdjustedRef.current)) positionResultMap(map, element.current, actual, points, mapPreferences.resultMapZoom, automaticZoomRef);
     positionedRef.current = true;
     return () => {
       unsubscribe?.();
@@ -113,7 +127,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     if (!active || !mapRef.current || !element.current || !pointsRef.current.length) return;
     const frame = requestAnimationFrame(() => {
       google.maps.event.trigger(mapRef.current!, 'resize');
-      if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(mapRef.current!, element.current!, actual, pointsRef.current, mapPreferences.resultMapZoom);
+      if (shouldRecenterResultMap(selectable, positionedRef.current, manuallyAdjustedRef.current)) positionResultMap(mapRef.current!, element.current!, actual, pointsRef.current, mapPreferences.resultMapZoom, automaticZoomRef);
     });
     return () => cancelAnimationFrame(frame);
   }, [active, actual.lat, actual.lng, resizeKey, mapPreferences.resultMapZoom, selectable]);
@@ -125,16 +139,28 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(frame); frame = requestAnimationFrame(() => {
         google.maps.event.trigger(map, 'resize');
-        if (shouldRecenterResultMap(selectable, positionedRef.current)) positionResultMap(map, container, actual, pointsRef.current, mapPreferences.resultMapZoom);
+        if (shouldRecenterResultMap(selectable, positionedRef.current, manuallyAdjustedRef.current)) positionResultMap(map, container, actual, pointsRef.current, mapPreferences.resultMapZoom, automaticZoomRef);
       });
     });
     observer.observe(container);
     return () => { cancelAnimationFrame(frame); observer.disconnect(); };
   }, [actual.lat, actual.lng, mapPreferences.resultMapZoom, selectable]);
 
+  const zoomToAnswer = (zoom: number) => {
+    const map = mapRef.current;
+    if (!map) return;
+    manuallyAdjustedRef.current = true;
+    map.setCenter(actual);
+    map.setZoom(zoom);
+  };
+
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
+    <div className="result-map-zoom-actions" role="group" aria-label={t('Map zoom shortcuts')}>
+      <button type="button" aria-label={t('Zoom to answer')} title={t('Zoom to answer')} onClick={() => zoomToAnswer(18)}><Crosshair size={17} /></button>
+      <button type="button" aria-label={t('Zoom to country')} title={t('Zoom to country')} onClick={() => zoomToAnswer(5)}><Globe2 size={17} /></button>
+    </div>
     <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>
       <button type="button" aria-pressed={coverageEnabled} aria-label={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} title={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} onClick={() => setCoverageOverride(!coverageEnabled)}><Layers3 size={15} /></button>
       <button type="button" aria-pressed={roadNamesEnabled} aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} onClick={() => setRoadNamesOverride(!roadNamesEnabled)}><Type size={15} /></button>
