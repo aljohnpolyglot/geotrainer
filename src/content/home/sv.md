@@ -187,6 +187,8 @@ Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Sp
 
 Fel land räknas alltid som ett träningsmisstag. Med rätt land misslyckas även poäng under gränsen; exakt gränsen uppfyller målet. Landets mål ersätter standardmålet, men striktare regler för bedömning och automatisk repetition gäller fortfarande. Utan eget mål behåller landet standarden och befintliga regler. Ändrad standard påverkar länder utan egna mål; återställ den för att återgå till repetitionens nuvarande svårighetsnivå.
 
+I Spela och Repetera räknas en gissning i vattnet inom 25 km från svaret till rätt land om kartan inte hittar något land. Nära isolerade öar som Guam, Nordmarianerna och Julön rättas även en missvisande etikett från ett avlägset fastland. Avståndspoäng och poängmål gäller fortfarande; en gissning på ett annat lands mark är fortfarande fel.
+
 Spel lägger automatiskt rundor under målet till Repetition. Öva misstag använder sparade mål även för äldre spel. Repetition och korrigering av misstag kräver ett nytt försök under gränsen. Sparade mål ändrar inte poäng, svar, statistik över igenkända länder, ursprungliga försök eller befintliga scheman; nya svar använder de uppdaterade målen. Stads- eller regiongränser kontrolleras inte.
 
 

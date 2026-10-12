@@ -189,6 +189,8 @@ Ouvrez Réglages → Préférences → Objectifs de score par pays. Gardez le mi
 
 Un mauvais pays est toujours une erreur d’entraînement. Avec le bon pays, un score inférieur au seuil échoue aussi ; atteindre exactement le seuil remplit l’objectif. L’objectif du pays remplace celui par défaut, mais les règles plus strictes de notation et de révision automatique restent actives. Sans objectif particulier, le pays conserve le seuil par défaut et les règles existantes. Changer le défaut affecte les pays sans objectif ; réinitialisez-le pour retrouver la rigueur actuelle de Révision.
 
+En Jeu et en Révision, un clic dans l’eau à moins de 25 km de la réponse est attribué au bon pays si la carte n’en identifie aucun. Près d’îles isolées comme Guam, les îles Mariannes du Nord et l’île Christmas, cela corrige aussi une étiquette continentale lointaine. Les points de distance et les seuils restent applicables ; un clic sur les terres d’un autre pays reste incorrect.
+
 Jeu ajoute automatiquement à Révision les manches sous le seuil. Pratiquer les erreurs utilise les objectifs enregistrés, même pour une ancienne partie. Révision et correction des erreurs demandent un nouvel essai sous le seuil. Enregistrer les objectifs ne change ni points, ni réponses, ni statistiques de reconnaissance des pays, ni tentatives originales, ni calendriers existants ; les nouvelles réponses utilisent les objectifs actualisés. Aucune frontière de ville ou de région n’est vérifiée.
 
 

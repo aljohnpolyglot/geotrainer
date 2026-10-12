@@ -183,6 +183,8 @@ Abra Configurações → Preferências → Metas de pontuação por país. Mante
 
 Errar o país sempre conta como erro de treino. Com o país correto, pontuar abaixo do mínimo também falha; igualar o mínimo cumpre a meta. A meta do país substitui a meta padrão, mas regras mais exigentes de avaliação e revisão automática continuam valendo. Sem uma meta própria, os países mantêm o padrão e as regras existentes. Mudar o padrão afeta os países sem metas próprias; restaure-o para voltar à exigência atual da Revisão.
 
+No Jogo e na Revisão, um palpite na água a até 25 km da resposta é atribuído ao país correto quando o mapa não identifica nenhum país. Perto de ilhas isoladas como Guam, as Ilhas Marianas do Norte e a Ilha Christmas, isso também corrige um rótulo de território continental distante. Os pontos por distância e as metas de pontuação continuam valendo; um palpite em terra de outro país permanece incorreto.
+
 Jogo adiciona automaticamente à Revisão as rodadas abaixo da meta. Praticar erros usa as metas salvas também em jogos antigos. Revisão e correção de erros exigem outra tentativa abaixo do mínimo. Salvar metas não altera pontos, respostas, estatísticas de reconhecimento de países, tentativas originais ou agendamentos existentes; respostas novas usam as metas atualizadas. Não há verificação de limites de cidades ou regiões.
 
 

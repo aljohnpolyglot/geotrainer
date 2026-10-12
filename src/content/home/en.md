@@ -426,6 +426,8 @@ Open Settings → Preferences → Country score targets. Keep the default minimu
 
 A wrong-country guess is always a training mistake. For the correct country, a score below its floor also fails; a score equal to the floor meets the target. Country overrides replace the default target, while existing stricter grading and automatic Review rules still apply. Without an override, countries retain the default and their existing distance-sensitive score rules. Changing the default affects all countries without overrides; reset it to return to the current Review strictness.
 
+In Play and Review, a guess in the water within 25 km of the answer counts toward its country when the map cannot identify a country. Around isolated islands such as Guam, the Northern Mariana Islands, and Christmas Island, this also corrects a distant mainland label returned for nearby water. Distance points and score targets still apply; a guess on another country's land remains wrong.
+
 Play automatically adds below-target rounds to Review and Practice mistakes uses the saved targets, including when opening an older game. Both ordinary Review and mistake correction grade below-target answers as needing another try. Saving targets does not change earned points, guesses, country-recognition statistics, original attempts, or existing Review schedules; new answers use the updated targets. There are no city or region boundary checks.
 
 ### Display

@@ -185,6 +185,8 @@ Apri Impostazioni → Preferenze → Obiettivi di punteggio per paese. Mantieni 
 
 Un paese sbagliato è sempre un errore di allenamento. Con il paese corretto, anche un punteggio inferiore al minimo fallisce; raggiungere esattamente il minimo soddisfa l’obiettivo. L’obiettivo del paese sostituisce quello predefinito, ma le regole più rigorose di valutazione e ripasso automatico restano attive. Senza un obiettivo specifico restano il minimo predefinito e le regole esistenti. Cambiare il valore predefinito riguarda i paesi senza obiettivi; ripristinalo per tornare al rigore attuale del Ripasso.
 
+In Gioco e Ripasso, un clic in acqua entro 25 km dalla risposta viene attribuito al paese corretto se la mappa non ne identifica uno. Vicino a isole isolate come Guam, le Isole Marianne Settentrionali e l’Isola di Natale, viene corretta anche un’etichetta di terraferma lontana. Punti per la distanza e obiettivi di punteggio restano validi; un clic sulla terra di un altro paese rimane errato.
+
 Gioco aggiunge automaticamente al Ripasso i turni sotto l’obiettivo. Pratica errori usa gli obiettivi salvati anche per partite precedenti. Ripasso e correzione degli errori richiedono un altro tentativo sotto il minimo. Salvare obiettivi non cambia punti, risposte, statistiche di riconoscimento del paese, tentativi originali o scadenze esistenti; le nuove risposte usano gli obiettivi aggiornati. Non vengono verificati confini di città o regioni.
 
 

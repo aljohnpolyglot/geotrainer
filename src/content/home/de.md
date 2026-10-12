@@ -274,6 +274,8 @@ Maximale Antwortsekunden unterscheiden flüssiges Erinnern von langem Suchen. Ä
 
 Ein falsches Land ist immer ein Trainingsfehler. Beim richtigen Land zählt auch ein Wert unter der Mindestpunktzahl als Fehler; genau der Grenzwert erfüllt das Ziel. Ein Länderziel ersetzt das Standardziel, strengere Bewertungs- und automatische Wiederholungsregeln gelten weiterhin. Ohne eigenes Ziel bleiben Standard und bisherige Regeln erhalten. Ein geänderter Standard betrifft Länder ohne eigenes Ziel; Zurücksetzen stellt die aktuelle Wiederholungsstrenge wieder her.
 
+In Spiel und Wiederholung wird ein Tipp im Wasser innerhalb von 25 km der Antwort dem richtigen Land zugeordnet, wenn die Karte kein Land erkennt. Bei abgelegenen Inseln wie Guam, den Nördlichen Marianen und der Weihnachtsinsel wird auch eine irreführende Zuordnung zu einem fernen Festland korrigiert. Entfernungspunkte und Punktziele gelten weiterhin; ein Tipp auf dem Land eines anderen Staates bleibt falsch.
+
 Spiel fügt Runden unter dem Ziel automatisch zur Wiederholung hinzu. Fehler üben nutzt die gespeicherten Ziele auch für ältere Spiele. Wiederholung und Fehlerkorrektur verlangen unter dem Ziel einen weiteren Versuch. Gespeicherte Ziele ändern keine Punkte, Antworten, Ländererkennungsstatistiken, ursprünglichen Versuche oder bestehenden Termine; neue Antworten verwenden die aktualisierten Ziele. Stadt- oder Regionsgrenzen werden nicht geprüft.
 
 

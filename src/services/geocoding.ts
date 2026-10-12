@@ -22,6 +22,11 @@ let geocoderInstance: google.maps.Geocoder | null = null;
 export const normalizeReverseGeocodeCountry = (countryCode: string | undefined, lat: number, lng: number) => countryCode?.toUpperCase()
   || (COUNTRIES.XK.samplePoints.some((point) => calculateDistanceKm(lat, lng, point.lat, point.lng) <= 20) ? 'XK' : undefined);
 
+// These islands have no foreign land inside the nearby-water allowance.
+const ISOLATED_ISLANDS = new Set('AS BM CC CK CV CX FJ FK FM FO GU KI MH MP MU MV NC NF NR NU PF PN PW RE SC SH ST TO TV VU WF WS YT'.split(' '));
+export const creditedGuessCountry = (actualCode: string, geocodedCode: string | undefined, distanceKm: number | null) =>
+  distanceKm !== null && distanceKm <= 25 && (!geocodedCode || ISOLATED_ISLANDS.has(actualCode)) ? actualCode : geocodedCode;
+
 function getGeocoder(): google.maps.Geocoder {
   if (!geocoderInstance) {
     if (typeof google === 'undefined' || !google.maps || !google.maps.Geocoder) {

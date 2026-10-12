@@ -187,6 +187,8 @@ Abre Ajustes → Preferencias → Objetivos de puntuación por país. Mantén el
 
 Un país incorrecto siempre es un error de entrenamiento. Con el país correcto, una puntuación inferior al mínimo también falla; igualarlo cumple el objetivo. La regla del país sustituye el objetivo predeterminado, pero siguen aplicándose las reglas más estrictas de evaluación y repaso automático. Sin regla propia, se conserva el mínimo predeterminado y las reglas existentes. Cambiar el valor predeterminado afecta a los países sin reglas; restablécelo para volver a la exigencia actual del Repaso.
 
+En Juego y Repaso, un clic en el agua a menos de 25 km de la respuesta se atribuye a su país cuando el mapa no identifica ninguno. Cerca de islas aisladas como Guam, las Islas Marianas del Norte y la Isla de Navidad, también se corrige si el mapa devuelve el nombre de un territorio continental lejano. Se mantienen los puntos por distancia y los objetivos de puntuación; un clic en tierra de otro país sigue siendo incorrecto.
+
 Juego añade automáticamente al Repaso las rondas por debajo del objetivo. Practicar errores usa los objetivos guardados también en partidas antiguas. Repaso y corrección de errores requieren otro intento si no se alcanza el mínimo. Guardar objetivos no modifica puntos, respuestas, estadísticas de reconocimiento del país, intentos originales ni calendarios existentes; las respuestas nuevas usan los objetivos actualizados. No se comprueban límites de ciudades o regiones.
 
 
