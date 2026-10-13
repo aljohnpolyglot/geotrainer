@@ -242,6 +242,7 @@ export async function initTrainerDb(): Promise<void> {
   await repairSavedNotebookAssistance(trainerDb);
 }
 export const trainerDb = {
+  count: async (storeName: 'locations' | 'attempts') => request((await openDatabase()).transaction(storeName).objectStore(storeName).count()),
   locations: () => all<TrainerLocation>('locations'),
   attempts: () => all<Attempt>('attempts'),
   games: async () => (await all<GameRecord>('games')).sort((a, b) => b.createdAt - a.createdAt),

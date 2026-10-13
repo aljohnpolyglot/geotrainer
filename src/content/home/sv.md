@@ -206,6 +206,8 @@ Spel lägger automatiskt rundor under målet till Repetition. Öva misstag anvä
 
 ## Framsteg och statistik
 
+Startsidans antal panoraman, försök och aktiva tid hämtas från framsteg som sparats på den här enheten. Punkter visas medan uppgifterna läses in; kontot behöver inte synkroniseras för att visa dem.
+
 Statistik och Täckning formaterar landsnamn, datum och tal med det valda gränssnittsspråket i stället för webbläsarens standardlokal. Landstabellens **Unika platser** räknar panoraman i samma land inom 50 meter som en plats, medan kartan och historiken behåller varje panorama och försök. En uppladdad karta markerar inte platser som sedda förrän de öppnas. Försök, rätt, fel, noggrannhet och poäng kombinerar Spel och Repetition.
 
 Sparade Studieplatser är obedömda källor: de räknas som Studieaktivitet och nya kort, inte som ”Ingen gissning”-försök eller nollpoäng. En omladdning återupptar det aktuella besöket utan att lägga till en ny rad.

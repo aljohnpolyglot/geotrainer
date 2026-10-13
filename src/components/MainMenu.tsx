@@ -12,36 +12,47 @@ import { meaningfulSessions } from '../analytics/advanced';
 
 interface MainMenuProps {
   refreshKey: number;
+  dbReady: boolean;
   onStudy: () => void;
   onPlay: () => void;
   onReview: () => void;
 }
 
-export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProps) {
-  const [status, setStatus] = useState({ locations: 0, attempts: 0, clues: 0, due: 0, nextDue: null as number | null, scheduled: false, timeZone: undefined as string | undefined, minutes: 0, pausedStudy: false, pausedPlay: null as null | { complete: number; total: number } });
+export function MainMenu({ refreshKey, dbReady, onStudy, onPlay, onReview }: MainMenuProps) {
+  const [status, setStatus] = useState({ locations: null as number | null, attempts: null as number | null, clues: null as number | null, due: 0, nextDue: null as number | null, scheduled: false, timeZone: undefined as string | undefined, minutes: null as number | null, pausedStudy: false, pausedPlay: null as null | { complete: number; total: number } });
   const sync = useSyncExternalStore(cloudSync.subscribe, cloudSync.getSnapshot);
   const [accountOpen, setAccountOpen] = useState(false);
   const { ui } = useLanguagePreferences();
   const t = (key: string) => translate(ui, key);
 
   useEffect(() => {
+    if (!dbReady) return;
     let active = true;
-    void Promise.all([trainerDb.locations(), trainerDb.attempts(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.studyVisits(), trainerDb.schedulerPreferences(), trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.setting<{ mode?: string }>('workspace.paused.study'), trainerDb.setting<{ mode?: string; rounds?: unknown[]; settings?: { roundCount?: number } }>('workspace.paused.play'), trainerDb.reviewQueue({ due: true })])
-      .then(([locations, attempts, reviews, sessions, visits, scheduler, clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, pausedStudy, pausedPlay, readyReviews]) => { if (!active) return; setStatus({
-        locations: locations.length,
-        attempts: attempts.length,
-        clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes.filter((note) => !note.deletedAt)),
+    void trainerDb.count('locations').then((locations) => { if (active) setStatus((current) => ({ ...current, locations })); }).catch(() => {});
+    void trainerDb.count('attempts').then((attempts) => { if (active) setStatus((current) => ({ ...current, attempts })); }).catch(() => {});
+    const attemptsPromise = trainerDb.attempts();
+    void Promise.all([trainerDb.sessions(), attemptsPromise, trainerDb.studyVisits()]).then(([sessions, attempts, visits]) => {
+      if (active) setStatus((current) => ({ ...current, minutes: Math.round(meaningfulSessions(sessions, attempts, visits).reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60) }));
+    }).catch(() => {});
+    void Promise.all([trainerDb.reviews(), trainerDb.schedulerPreferences(), trainerDb.reviewQueue({ due: true })]).then(([reviews, scheduler, readyReviews]) => {
+      if (active) setStatus((current) => ({ ...current,
         due: readyReviews.length,
         nextDue: nextScheduledReviewAt(reviews, Date.now(), scheduler) ?? null,
         scheduled: reviews.length > 0,
         timeZone: scheduler.reviewTimeZone,
-        minutes: Math.round(meaningfulSessions(sessions, attempts, visits).reduce((sum, session) => sum + session.activeTimeSeconds, 0) / 60),
+      }));
+    }).catch(() => {});
+    void Promise.all([trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), attemptsPromise]).then(([clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, attempts]) => {
+      if (active) setStatus((current) => ({ ...current, clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes.filter((note) => !note.deletedAt)) }));
+    }).catch(() => {});
+    void Promise.all([trainerDb.setting<{ mode?: string }>('workspace.paused.study'), trainerDb.setting<{ mode?: string; rounds?: unknown[]; settings?: { roundCount?: number } }>('workspace.paused.play')]).then(([pausedStudy, pausedPlay]) => {
+      if (active) setStatus((current) => ({ ...current,
         pausedStudy: pausedStudy?.mode === 'study',
         pausedPlay: pausedPlay?.mode === 'play' ? { complete: pausedPlay.rounds?.length || 0, total: pausedPlay.settings?.roundCount || 0 } : null,
-      }); })
-      .catch(() => {});
+      }));
+    }).catch(() => {});
     return () => { active = false; };
-  }, [refreshKey, sync.lastSyncedAt, sync.phase]);
+  }, [dbReady, refreshKey]);
 
   const next = status.pausedPlay
     ? { action: onPlay, icon: <Gamepad2 size={18} />, title: t('continueGame'), detail: `${status.pausedPlay.complete} / ${status.pausedPlay.total} ${t('rounds')}` }
@@ -50,7 +61,7 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
       : status.due
         ? { action: onReview, icon: <Target size={18} />, title: t('Review weak places'), detail: `${status.due} ${t('reviewsDueToday')}` }
         : { action: onStudy, icon: <BookOpen size={18} />, title: t('Continue learning'), detail: t('Open a fresh panorama') };
-  const activeDuration = status.minutes < 60 ? `${status.minutes}m` : `${Math.floor(status.minutes / 60)}h ${status.minutes % 60}m`;
+  const activeDuration = status.minutes === null ? '…' : status.minutes < 60 ? `${status.minutes}m` : `${Math.floor(status.minutes / 60)}h ${status.minutes % 60}m`;
 
   return (
     <section className="main-menu">
@@ -70,10 +81,10 @@ export function MainMenu({ refreshKey, onStudy, onPlay, onReview }: MainMenuProp
         <button onClick={onReview}><span className="route-code">REV</span><span><strong>{t('Review weak places')}</strong><small>{status.due ? `${status.due} ${t('reviewsDueToday')}` : status.nextDue ? `${t('dailyReviewsComplete')} · ${t('tryAgainAt')}: ${new Date(status.nextDue).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(status.timeZone ? { timeZone: status.timeZone } : {}) })}` : status.scheduled ? t('dailyReviewsComplete') : t('noReviewsScheduled')}</small></span><Target size={19} /></button>
         <button onClick={() => window.open(`${import.meta.env.BASE_URL}docs/`, '_blank', 'noopener,noreferrer')}><span className="route-code">DOC</span><span><strong>{t('Guide')}</strong><small>{t('Learn how GeoTrainer builds durable recall')}</small></span><BookOpenText size={19} /></button>
         <div className="menu-status">
-          <span><strong>{status.locations.toLocaleString()}</strong> {t('places encountered')}</span>
-          <span><strong>{status.attempts.toLocaleString()}</strong> {t('attempts retained')}</span>
+          <span><strong>{status.locations?.toLocaleString(ui) ?? '…'}</strong> {t('places encountered')}</span>
+          <span><strong>{status.attempts?.toLocaleString(ui) ?? '…'}</strong> {t('attempts retained')}</span>
           <span><strong>{activeDuration}</strong> {t('active minutes')}</span>
-          <span><strong>{status.clues.toLocaleString()}</strong> {t('knownClues')}</span>
+          <span><strong>{status.clues?.toLocaleString(ui) ?? '…'}</strong> {t('knownClues')}</span>
         </div>
         <button type="button" className={`account-entry ${sync.email ? '' : 'signed-out'}`} onClick={() => setAccountOpen(true)}>
           <span className="account-entry-icon"><Cloud size={19} /></span>

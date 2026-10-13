@@ -401,6 +401,8 @@ Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern 
 
 ## Fortschritt und Statistik
 
+Die Panorama-, Versuchs- und Aktivzeitwerte auf der Startseite stammen aus dem auf diesem Gerät gespeicherten Fortschritt. Während des Ladens erscheinen Punkte; eine Kontosynchronisierung ist für die Anzeige nicht nötig.
+
 Statistik und Abdeckung formatieren Ländernamen, Daten und Zahlen in der gewählten Oberflächensprache statt nach der Standardsprache des Browsers. Die Ländertabelle trennt eindeutige Panoramaorte von bewerteten Versuchen; Versuche, richtig, falsch, Genauigkeit und Punkte kombinieren Spiel und Wiederholung.
  Die Spalte **Eindeutige Orte** fasst Panoramen desselben Landes innerhalb von 50 Metern zu einem Ort zusammen; Karte und Verlauf behalten jedes Panorama und jeden Versuch. Das Hochladen einer Karte markiert ihre Orte erst beim Öffnen als gesehen.
 

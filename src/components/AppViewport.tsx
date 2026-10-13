@@ -21,7 +21,7 @@ interface AppViewportProps {
   isGameActive: boolean; gameSettings: { roundCount: number } | null; activeRoundResult: GameRound | null;
   playElapsed: number; timeRemaining: number | null; isSubmittingGuess: boolean; reviewAttempt: { id: string } | null;
   reviewResult: GameRound | null; reviewElapsed: number; summaryRound: GameRound | null; onSummaryVisibilityChange: (visible: boolean) => void; summarySaveAvailable: boolean; pastGames: GameRecord[];
-  allCollections: Collection[]; trainerRefreshKey: number; trainerStartTab: HubTab; studyReviewSaving: boolean; studyReviewSaved: boolean;
+  allCollections: Collection[]; trainerRefreshKey: number; trainerStartTab: HubTab; studyReviewSaving: boolean; studyReviewSaved: boolean; dbReady: boolean;
   canMove: boolean; canPan: boolean; canZoom: boolean; coveragePreview?: TrainerLocation | null;
   onNextLocation: () => void; onMapsLoaded: () => void; onPanoramaChanged: (location: LocationResult) => void;
   onStudy: () => void; onPlay: () => void; onReview: () => void;
@@ -40,7 +40,7 @@ export function AppViewport({
   appMode, showHome, currentLocation, isLoading, statusMessage, errorMessage, mapsReady, activeCompass, compassStyle, restoredStreetView,
   isRevealed, learnSource, activeCountryTip, metaCourseId, metaProgress, isGameActive, gameSettings, activeRoundResult,
   playElapsed, timeRemaining, isSubmittingGuess, reviewAttempt, reviewResult, reviewElapsed, summaryRound, onSummaryVisibilityChange, summarySaveAvailable, pastGames,
-  allCollections, trainerRefreshKey, trainerStartTab, studyReviewSaving, studyReviewSaved,
+  allCollections, trainerRefreshKey, trainerStartTab, studyReviewSaving, studyReviewSaved, dbReady,
   canMove, canPan, canZoom, onNextLocation, onMapsLoaded, onPanoramaChanged,
   onStudy, onPlay, onReview, onOpenNewGame, onOpenHistory, onOpenReview, onOpenCoverage, onTrainCountries,
   onDataChanged, onSelectGame, onHideReveal, onMetadata, onSaveForReview, onOpenWorldMap, onOpenMapPoint, onReturnToSummary, onSaveSummaryLocation, onGuess, onStreetViewChanged,
@@ -61,7 +61,7 @@ export function AppViewport({
   }, [appMode, currentLocation, isLoading, isRevealed, showHome]);
   return <main className="flex-1 w-full h-[calc(100dvh-3.5rem)] relative overflow-hidden bg-black">
     <StreetViewContainer key={verifyingReview ? `review:${reviewAttempt.id}:${currentLocation?.panoId || "loading"}:${panoramaRetry}` : "workspace"} onPanoramaReady={verifyingReview ? onReviewPanoramaReady : undefined} onRetryPanorama={verifyingReview ? () => setPanoramaRetry((value) => value + 1) : undefined} currentLocation={currentLocation} isLoading={isLoading} onNextLocation={onNextLocation} statusMessage={statusMessage} errorMessage={errorMessage} onMapsLoaded={onMapsLoaded} showReturnToStart={!showHome && !summaryRound && ((appMode === 'play' && isGameActive) || (appMode === 'review' && !!reviewAttempt))} {...panoramaControls} showCompass={!showHome && activeCompass} compassStyle={compassStyle} restoredView={appMode === 'review' || appMode === 'study' && learnSource === 'meta' ? undefined : restoredStreetView} onViewChanged={onStreetViewChanged} onPanoramaChanged={!showHome && (appMode === 'study' || summaryRound) ? onPanoramaChanged : undefined} />
-    {showHome && <MainMenu refreshKey={trainerRefreshKey} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
+    {showHome && <MainMenu refreshKey={trainerRefreshKey} dbReady={dbReady} onStudy={onStudy} onPlay={onPlay} onReview={onReview} />}
     {!showHome && appMode === 'review' && !reviewAttempt && !summaryRound && <TrainerHub collections={allCollections} refreshKey={trainerRefreshKey} initialTab={trainerStartTab} onReview={(attempt, queue, source, kind) => onOpenReview(attempt, queue, source, kind)} onOpen={onOpenCoverage} onTrainCountries={onTrainCountries} onDataChanged={onDataChanged} onSelectGame={onSelectGame} />}
     {!showHome && appMode === 'study' && learnSource === 'map' && currentLocation && <button type="button" className="explore-world-map-button" onClick={onOpenWorldMap} aria-label={t('Back to world map')} title={t('Back to world map')}><Globe2 size={20} /></button>}
     {summaryRound && <button type="button" className="explore-world-map-button" onClick={onReturnToSummary} aria-label={t('viewGameSummary')} title={t('viewGameSummary')}><ArrowLeft size={20} /></button>}

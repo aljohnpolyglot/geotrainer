@@ -206,6 +206,8 @@ Juego añade automáticamente al Repaso las rondas por debajo del objetivo. Prac
 
 ## Progreso y estadísticas
 
+Los totales de panoramas, intentos y tiempo activo de la página inicial se cargan del progreso guardado en este dispositivo. Se muestran puntos durante la carga; no hace falta sincronizar la cuenta para verlos.
+
 Estadísticas y Cobertura muestran los nombres de países, las fechas y los números con el idioma de interfaz seleccionado, no con la configuración regional predeterminada del navegador. La tabla de países separa las ubicaciones panorámicas únicas de los intentos puntuados; intentos, aciertos, errores, precisión y puntuaciones combinan Juego y Repaso.
  La columna **Lugares únicos** agrupa como un lugar los panoramas del mismo país situados a menos de 50 metros; el mapa y el historial conservan cada panorama e intento. Subir un mapa no marca sus lugares como vistos hasta abrirlos.
 

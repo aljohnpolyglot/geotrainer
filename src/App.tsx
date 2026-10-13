@@ -433,7 +433,7 @@ export default function App() {
         playElapsed={playElapsed} timeRemaining={timeRemaining} isSubmittingGuess={isSubmittingGuess}
         reviewDisplayedPanoId={reviewDisplayedPanoId} onReviewPanoramaReady={setReviewDisplayedPanoId} reviewAttempt={reviewAttempt} reviewResult={reviewResult} reviewElapsed={reviewElapsed} summaryRound={summaryRound} onSummaryVisibilityChange={setSummaryResultVisible} summarySaveAvailable={!!summaryRound && !!currentLocation && (summaryRound.location.countryCode !== currentLocation.countryCode || calculateDistanceKm(summaryRound.location.lat, summaryRound.location.lng, currentLocation.lat, currentLocation.lng) > .05)}
         pastGames={pastGames} allCollections={allCollections}
-        trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab}
+        trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab} dbReady={dbReady}
         studyReviewSaving={studyReviewSaving} studyReviewSaved={studyReviewSaved}
         canMove={canMove} canPan={canPan} canZoom={canZoom}
         onNextLocation={appMode === 'play' && isGameActive && gameSettings ? () => void fetchLocationForRound(gameSettings) : handleNextLearn}

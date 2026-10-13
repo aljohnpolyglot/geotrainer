@@ -202,6 +202,8 @@ Jogo adiciona automaticamente à Revisão as rodadas abaixo da meta. Praticar er
 
 ## Progresso e estatísticas
 
+Os totais de panoramas, tentativas e tempo ativo da página inicial vêm do progresso salvo neste dispositivo. Pontos aparecem durante o carregamento; não é preciso sincronizar a conta para vê-los.
+
 Estatísticas e Cobertura formatam nomes de países, datas e números no idioma de interface selecionado, em vez da localidade padrão do navegador. A tabela de países separa locais panorâmicos únicos de tentativas pontuadas; tentativas, acertos, erros, precisão e pontuações combinam Jogo e Revisão.
  A coluna **Locais únicos** agrupa panoramas do mesmo país a até 50 metros como um único local; o mapa e o histórico mantêm todos os panoramas e tentativas. Enviar um mapa não marca seus locais como vistos até que sejam abertos.
 

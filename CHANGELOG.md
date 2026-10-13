@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- Load homepage panorama, attempt, and active-time totals independently from local progress after database migration, without waiting for Review queue or account state; show loading dots instead of temporary zeroes.
 - Link revealed road names to matching Wikipedia articles in Learn, Play, and Review; leave roads without an article as plain text.
 - Link revealed places to matching Wikipedia articles, including exact place titles that omit their region; show unavailable text instead of opening a search page when no article matches.
 - Let Review date balancing preview and confirm a reset to each card’s saved natural due date, including recoverable older adjustments, while leaving today’s cards in place.

@@ -208,6 +208,8 @@ Jeu ajoute automatiquement à Révision les manches sous le seuil. Pratiquer les
 
 ## Progression et statistiques
 
+Les totaux de panoramas, de tentatives et de temps actif sur l’accueil proviennent de la progression enregistrée sur cet appareil. Des points s’affichent pendant le chargement ; aucune synchronisation du compte n’est nécessaire pour les voir.
+
 Statistiques et Couverture affichent les noms de pays, les dates et les nombres selon la langue d’interface choisie plutôt que selon les paramètres régionaux du navigateur. Le tableau des pays sépare les panoramas uniques des tentatives notées ; tentatives, réussites, erreurs, précision et scores combinent Jeu et Révision.
  La colonne **Lieux uniques** regroupe les panoramas d’un même pays situés à moins de 50 mètres ; la carte et l’historique conservent chaque panorama et tentative. Importer une carte ne marque pas ses lieux comme vus avant leur ouverture.
 

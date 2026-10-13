@@ -204,6 +204,8 @@ Gioco aggiunge automaticamente al Ripasso i turni sotto l’obiettivo. Pratica e
 
 ## Progressi e statistiche
 
+I totali di panorami, tentativi e tempo attivo nella pagina iniziale provengono dai progressi salvati su questo dispositivo. Durante il caricamento compaiono dei puntini; non serve sincronizzare l’account per visualizzarli.
+
 Statistiche e Copertura formattano nomi dei paesi, date e numeri nella lingua dell’interfaccia selezionata anziché nelle impostazioni locali predefinite del browser. La tabella dei paesi separa i panorami unici dai tentativi con punteggio; tentativi, risposte corrette ed errate, precisione e punteggi combinano Gioco e Ripasso.
  La colonna **Luoghi unici** raggruppa i panorami dello stesso paese entro 50 metri in un solo luogo; mappa e cronologia conservano ogni panorama e tentativo. Caricare una mappa non segna i luoghi come visti finché non vengono aperti.
 

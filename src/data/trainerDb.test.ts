@@ -29,6 +29,8 @@ test('migration is idempotent and backup/import protects history', async () => {
   await initTrainerDb();
   assert.equal((await trainerDb.locations()).length, 1);
   assert.equal((await trainerDb.attempts()).length, 1);
+  assert.equal(await trainerDb.count('locations'), 1);
+  assert.equal(await trainerDb.count('attempts'), 1);
   assert.equal((await trainerDb.attempts())[0].showCompass, true);
   assert.equal((await trainerDb.games()).length, 1);
   assert.equal((await trainerDb.collections()).length, 1);
@@ -52,6 +54,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-a', guessedCountryCode: 'FR' });
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-b', roundNumber: 2, guessedCountryCode: 'DE' });
   assert.equal((await trainerDb.attempts()).length, 3);
+  assert.equal(await trainerDb.count('attempts'), 3);
   assert.equal((await trainerDb.reviewQueue({ maxScore: 4000 })).length, 2);
   assert.equal((await trainerDb.reviewQueue({ maxScore: 2000 })).length, 1);
   assert.equal((await trainerDb.reviewQueue({ minScore: 2000, maxScore: 4000 })).length, 1);

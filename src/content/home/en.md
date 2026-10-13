@@ -452,6 +452,8 @@ Country borders are shown by default and can be turned off; they appear only whe
 
 ## Progress and statistics
 
+Homepage panorama, attempt, and active-time totals load from progress saved on this device. They show dots while loading; you do not need to sync your account to see them.
+
 Statistics and Coverage format country names, dates, and numbers with the selected interface language instead of the browser’s default locale.
 
 Learn saves are ungraded sources, so they appear as Study activity and new Review cards—not as “No guess” attempts or zero scores. Reloading a paused Study workspace resumes its current visit rather than adding another Study row.
