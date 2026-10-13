@@ -36,6 +36,8 @@ Somente exteriores funciona junto com a fonte de imagens: Somente oficiais tamb�
 
 Aprender oferece quatro opções: Personalizado, Meta, Explorar mapa e Mapa enviado. Em Mapa enviado, selecione um JSON do Map Maker com uma lista de locais ou `customCoordinates`; cada local precisa de latitude e longitude válidas. O arquivo deve ter menos de 20 MB. Anterior fica antes de Revelar e é ativado depois de visitar dois locais. Próximo avança primeiro pelos locais já vistos e depois escolhe um novo. O X à direita do cabeçalho abre a escolha do modo.
 
+O menu de panoramas no cabeçalho mostra apenas as vistas abertas nesta sessão de Aprender, na ordem da visita. Escolha Panorama 1 ou outra vista já visitada para voltar sem selecionar uma nova entrada da fonte. Após recarregar, Retomar restaura os panoramas visitados e sua ordem. Sessões salvas antes desse recurso começam com o panorama reaberto. Se este panorama ou outro lugar no mesmo país a até 50 metros já tiver um cartão de Revisão, Salvar para revisão permanece oculto e o cartão e seu agendamento são mantidos.
+
 No Aprender com JSON enviado, **Ordem do arquivo** fica desativada por padrão. Ative-a para seguir a ordem do arquivo; deixe-a desativada para embaralhar os locais. A escolha é mantida ao retomar uma sessão pausada.
 
 O mapa fica neste dispositivo; envie-o novamente em outro dispositivo para continuar. A variação 0 mantém a vista enviada; 100 procura Street View até 1 km ao redor e volta a um local original quando necessário. O botão de menos minimiza a ficha do local e maximizar a expande para toda a tela.

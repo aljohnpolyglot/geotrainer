@@ -60,6 +60,7 @@ export interface AppTopBarProps {
   learnSource: LearnSource;
   mapPickerOpen?: boolean;
   uploadedProgress?: { position: number; total: number };
+  uploadedHistory?: { locations: LocationResult[]; index: number };
   metaProgress?: { position: number; total: number; completed: number };
   metaCourseId?: string;
   onHome: () => void;
@@ -73,6 +74,7 @@ export interface AppTopBarProps {
   onReveal: () => void;
   onNextLocation: () => void;
   onPreviousLocation: () => void;
+  onSelectUploaded: (index: number) => void;
   canPreviousLocation: boolean;
   onAbandonGame: () => void;
   onOpenHistory: () => void;
@@ -85,9 +87,9 @@ export function AppTopBar({
   appMode, showHome, isGameActive, currentLocation, isLoading, isRevealed,
   gameSettings, currentRoundIndex, currentTotalScore, timeRemaining,
   pastGamesCount, reviewAttempt, reviewResultVisible, reviewStatsLength, reviewInitialTotal,
-  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress, metaProgress, metaCourseId,
+  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress, uploadedHistory, metaProgress, metaCourseId,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
-  onReveal, onNextLocation, onPreviousLocation, canPreviousLocation, onAbandonGame,
+  onReveal, onNextLocation, onPreviousLocation, onSelectUploaded, canPreviousLocation, onAbandonGame,
   onOpenHistory, onOpenNewGame, onOpenPreferences, onToggleFullscreen,
 }: AppTopBarProps) {
   const { ui } = useLanguagePreferences();
@@ -98,7 +100,7 @@ export function AppTopBar({
   const reviewMovement = reviewAttempt ? t(reviewAttempt.canMove ? 'Standard' : reviewAttempt.canPan || reviewAttempt.canZoom ? 'No Move' : 'NMPZ') : '';
   const metaCourseLabel = !metaCourseId || metaCourseId === 'beginner' ? t('Beginner course') : metaCourseId.startsWith('geocoach-') ? metaCourseName(metaCourseId, ui) : countryDisplayName(metaCourseId, ui) || metaCourseName(metaCourseId, ui);
   const navigate = (action: () => void) => { setMobileMenuOpen(false); action(); };
-  const studyActions = !showHome && appMode === 'study' && <div className={`study-viewport-actions${learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total ? ' uploaded-complete' : ''}`} role="group" aria-label={t('navLearn')}>
+  const studyActions = !showHome && appMode === 'study' && <div className={`study-viewport-actions${learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total && uploadedHistory?.index === uploadedHistory.locations.length - 1 ? ' uploaded-complete' : ''}`} role="group" aria-label={t('navLearn')}>
     {(learnSource === 'uploaded' || learnSource === 'meta') && <button type="button" onClick={onPreviousLocation} disabled={!canPreviousLocation || isLoading || studyReviewSaving} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md bg-stone-100 enabled:hover:bg-white text-stone-950 disabled:bg-stone-700 disabled:text-stone-400 disabled:cursor-not-allowed"><ArrowLeft className="w-3.5 h-3.5" /><span>{t('Previous')}</span></button>}
     <button id="reveal-location-btn" onClick={onReveal} disabled={!currentLocation || isLoading} title={isRevealed ? t('Hide exact location (R)') : t('Reveal exact location (R)')} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${isRevealed ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30' : 'bg-stone-950 text-stone-300 border-stone-800 hover:border-stone-700 hover:text-stone-100'} disabled:opacity-50 disabled:cursor-not-allowed`}>
       {isRevealed && currentLocation ? <><img src={getFlagCdnUrl(currentLocation.countryCode, 40)} srcSet={`${getFlagCdnUrl(currentLocation.countryCode, 40)} 1x, ${getFlagCdnUrl(currentLocation.countryCode, 80)} 2x`} alt="" width="18" height="13" className="w-4.5 h-3 rounded-xs object-cover border border-stone-600/60 flex-shrink-0" referrerPolicy="no-referrer" /><span className="study-reveal-label font-semibold text-white">{countryDisplayName(currentLocation.countryCode, ui) || currentLocation.countryCode}</span><EyeOff className="w-3.5 h-3.5 text-amber-400 ml-0.5" /></> : <><Eye className="w-3.5 h-3.5 text-stone-400" /><span>{t('Reveal')}</span></>}
@@ -109,8 +111,8 @@ export function AppTopBar({
     <header id="app-topbar" className={`${mobileMenuOpen ? 'mobile-nav-open ' : ''}${isRevealed ? 'location-revealed ' : ''}mode-${appMode} h-14 px-3 sm:px-5 bg-stone-900 border-b border-stone-800 flex items-center justify-between z-30 flex-shrink-0 gap-2`}>
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
+        {!showHome && appMode === 'study' && learnSource === 'uploaded' && currentLocation && uploadedHistory && uploadedHistory.index >= 0 && <select className="uploaded-panorama-select" aria-label={t('Panorama')} title={t('Panorama')} value={uploadedHistory.index} disabled={isLoading || studyReviewSaving} onChange={(event) => onSelectUploaded(Number(event.target.value))}>{uploadedHistory.locations.map((_, index) => <option key={index} value={index}>{t('Panorama')} {number.format(index + 1)}</option>)}</select>}
         {!showHome && appMode === 'study' && learnSource === 'meta' && <span className="study-course-name" title={metaCourseLabel}>{metaCourseLabel}</span>}
-        {!showHome && appMode === 'study' && learnSource === 'uploaded' && uploadedProgress && <span className="study-mobile-context"><strong>{uploadedProgress.position}/{uploadedProgress.total}</strong><small>{t('Source')}</small></span>}
         {!showHome && appMode === 'study' && learnSource === 'meta' && metaProgress && <span className="study-mobile-context"><strong>{number.format(metaProgress.position)}/{number.format(metaProgress.total)}</strong><small title={metaCourseLabel}>{metaCourseLabel}</small></span>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewPosition}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-stone-800 text-stone-300" title={t('Movement')}>{reviewMovement}</span>}

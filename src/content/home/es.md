@@ -36,6 +36,8 @@ Solo exteriores se aplica junto con la fuente de imágenes: Solo oficiales tambi
 
 Aprender ofrece cuatro opciones: Personalizado, Meta, Explorar mapa y Mapa subido. En Mapa subido, selecciona un JSON de Map Maker con una lista de lugares o `customCoordinates`; cada lugar necesita latitud y longitud válidas. El archivo debe pesar menos de 20 MB. Anterior está antes de Revelar y se activa después de visitar dos lugares. Siguiente avanza por los lugares ya vistos antes de elegir uno nuevo. La X a la derecha de la cabecera abre la elección del modo.
 
+El menú de panoramas del encabezado muestra solo las vistas abiertas en esta sesión de aprendizaje, en el orden de visita. Elige Panorama 1 u otra vista ya visitada para volver sin elegir una nueva entrada de la fuente. Tras recargar, Reanudar restaura los panoramas visitados y su orden. Las sesiones guardadas antes de esta función comienzan con el panorama reabierto. Si este panorama u otro lugar del mismo país a menos de 50 metros ya tiene una tarjeta de Repaso, Guardar para repasar permanece oculto y se conservan la tarjeta y su calendario.
+
 En Aprender con JSON importado, **Orden del archivo** está desactivado por defecto. Actívalo para seguir el orden del archivo; déjalo desactivado para mezclar los lugares. La elección se conserva al reanudar una sesión pausada.
 
 El mapa queda en este dispositivo; si continúas en otro, vuelve a subirlo allí. La variación 0 conserva la vista subida; 100 busca Street View hasta 1 km alrededor y vuelve a una ubicación original si hace falta. El botón menos minimiza la ficha del lugar y maximizar la amplía a toda la pantalla.

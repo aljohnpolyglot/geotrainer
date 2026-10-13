@@ -13,11 +13,29 @@ test('downloads all duel rounds as GeoTrainer locations', async () => {
     classList: { contains: name => name === 'active' && round === index },
     click: () => { round = index; },
   }));
-  const frame = { get src() { return `https://www.google.com/maps/embed/v1/streetview?location=${round ? '33,-84' : '35,138'}&heading=${round ? '270' : '90'}${round ? '' : '&pano=exact-pano'}&key=ignored`; } };
+  const frame = { get src() { return `https://www.google.com/maps/embed/v1/streetview?location=${round ? '33,-84' : '35.699,138.45'}&heading=${round ? '270' : '90'}${round ? '' : '&pano=exact-pano'}&key=ignored`; } };
   const scoreRows = ['A', 'B'].map((name, index) => ({ querySelector: selector => ({ textContent: selector === '.score-name' ? name : String((round ? [3000, 2500] : [1000, 2000])[index]) }) }));
+  const svgMarkers = [
+    { getAttribute: name => name === 'transform' ? 'translate(384.0985678756,105.1196352561)' : null, querySelector: selector => selector === 'text' ? { textContent: 'A…' } : null },
+    { getAttribute: name => name === 'transform' ? 'translate(539,266)' : null, querySelector: () => ({ textContent: 'B…' }) },
+    { getAttribute: name => name === 'transform' ? 'translate(323.6046387635,293.5516561492)' : null, querySelector: selector => selector === 'g[transform*="scale"] path' ? {} : null },
+  ];
+  const featurePath = { getAttribute: name => name === 'd' ? 'M -21908.412,0 L 3224.329,0' : null };
+  const svg = {
+    getAttribute: name => name === 'viewBox' ? '0 0 700 400' : null,
+    querySelectorAll: selector => selector === 'g.marker-feature' ? svgMarkers : selector === 'path.feature-path' && round === 0 ? [featurePath] : [],
+    cloneNode: () => {
+      const attributes = {};
+      return {
+        setAttribute: (name, value) => { attributes[name] = value; },
+        get outerHTML() { return `<svg xmlns="${attributes.xmlns}" width="${attributes.width}" height="${attributes.height}" viewBox="0 0 700 400"><g class="marker-feature"></g><path fill="var(--box-color)"></path></svg>`; },
+      };
+    },
+  };
+  const svgFallback = `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="700" height="400" viewBox="0 0 700 400"><g class="marker-feature"></g><path fill="#243447"></path></svg>')}`;
   const overview = {
     querySelectorAll: selector => selector === '.tabs-row button' ? tabs : selector === '.score-panel .score-row' ? scoreRows : [],
-    querySelector: selector => selector.startsWith('iframe') ? frame : selector === '.close-popup-button' ? { click: () => { overviewOpen = false; } } : null,
+    querySelector: selector => selector.startsWith('iframe') ? frame : selector === '.map-container svg[viewBox]' ? svg : selector === '.close-popup-button' ? { click: () => { overviewOpen = false; } } : null,
   };
   const row = {
     querySelectorAll: selector => selector === '.player-name' ? [{ textContent: 'A' }, { textContent: 'B' }] : [],
@@ -32,20 +50,20 @@ test('downloads all duel rounds as GeoTrainer locations', async () => {
       { ...history, querySelector: selector => selector === 'h1' ? { textContent: 'Duel history' } : history.querySelector(selector) },
       ...(overviewOpen ? [{ querySelector: selector => selector === 'h1' ? { textContent: 'Overview' } : overview.querySelector(selector), querySelectorAll: overview.querySelectorAll }] : []),
     ] : [],
-    createElement: () => ({ click() {}, remove() {} }),
+    createElement: tag => tag === 'canvas' ? { getContext: () => ({ drawImage() {} }), toDataURL: () => { if (round) throw new Error('Canvas export blocked'); return 'data:image/png;base64,capture'; } } : ({ click() {}, remove() {} }),
     body: { append() {} },
   };
   const context = {
     location: { hostname: 'openguessr.com', pathname: '/multiplayer', href: 'https://openguessr.com/multiplayer' },
-    window: { google: { maps: { StreetViewService: class { getPanorama(_request, callback) { callback({ location: { pano: 'nearby-pano' } }, 'OK'); } }, StreetViewStatus: { OK: 'OK' } } } }, document, Blob, URL: Object.assign(class extends URL {}, { createObjectURL: blob => { downloaded = blob; return 'blob:test'; }, revokeObjectURL() {} }),
+    window: { google: { maps: { StreetViewService: class { getPanorama(_request, callback) { callback({ location: { pano: 'nearby-pano' } }, 'OK'); } }, StreetViewStatus: { OK: 'OK' } } } }, Image: class { set src(value) { assert.match(decodeURIComponent(value), /xmlns="http:\/\/www\.w3\.org\/2000\/svg"/); queueMicrotask(() => this.onload()); } }, document, Blob, URL: Object.assign(class extends URL {}, { createObjectURL: blob => { downloaded = blob; return 'blob:test'; }, revokeObjectURL() {} }),
     setTimeout: callback => { queueMicrotask(callback); }, console: { log() {}, error() {} },
   };
   runInNewContext(source, context);
   await context.window.__duelExportTask;
   const result = JSON.parse(await downloaded.text());
   assert.deepEqual(result.locations, [
-    { lat: 35, lng: 138, heading: 90, panoId: 'exact-pano', panoIdSource: 'embed', matchNumber: 1, round: 1, multiplier: 1, myScore: 1000, opponentScore: 2000, myBaseScore: 1000, opponentBaseScore: 2000, scoreGap: -1000, status: 'lost' },
-    { lat: 33, lng: -84, heading: 270, panoId: 'nearby-pano', panoIdSource: 'coordinate lookup', matchNumber: 1, round: 2, multiplier: 1, myScore: 2000, opponentScore: 500, myBaseScore: 2000, opponentBaseScore: 500, scoreGap: 1500, status: 'won' },
+    { lat: 35.699, lng: 138.45, heading: 90, panoId: 'exact-pano', panoIdSource: 'embed', guess: { x: 384.0985678756, y: 105.1196352561, label: 'A', lat: 37.86054510546842, lng: 139.3165117139573, viewBox: '0 0 700 400', source: 'OpenGuessr overview SVG', mapImage: 'data:image/png;base64,capture' }, matchNumber: 1, round: 1, multiplier: 1, myScore: 1000, opponentScore: 2000, myBaseScore: 1000, opponentBaseScore: 2000, scoreGap: -1000, status: 'lost' },
+    { lat: 33, lng: -84, heading: 270, panoId: 'nearby-pano', panoIdSource: 'coordinate lookup', guess: { x: 384.0985678756, y: 105.1196352561, label: 'A', viewBox: '0 0 700 400', source: 'OpenGuessr overview SVG', mapImage: svgFallback }, matchNumber: 1, round: 2, multiplier: 1, myScore: 2000, opponentScore: 500, myBaseScore: 2000, opponentBaseScore: 500, scoreGap: 1500, status: 'won' },
   ]);
   assert.equal(result.reviewOrder[0].round, 1);
   assert.deepEqual(result.games[0].rounds.map(item => item.panoId), ['exact-pano', 'nearby-pano']);

@@ -2,6 +2,10 @@
 
 ## 2026-10-13
 
+- Restore uploaded-map Learn's visited panoramas and position after Resume, including the Previous button and header selector; older saved workspaces reopen their current view.
+- Align revealed-map answer and country zoom shortcuts with the Street View coverage and road-name buttons in one toolbar.
+- Recognize an existing Review card when reopening an uploaded panorama or another view of the same place; hide Save for Review and preserve the existing Study source and review schedule.
+- Keep uploaded-map Learn Previous and Next aligned with visited views, and add a header panorama menu for jumping among views opened in the current session.
 - Load homepage panorama, attempt, and active-time totals independently from local progress after database migration, without waiting for Review queue or account state; show loading dots instead of temporary zeroes.
 - Link revealed road names to matching Wikipedia articles in Learn, Play, and Review; leave roads without an article as plain text.
 - Link revealed places to matching Wikipedia articles, including exact place titles that omit their region; show unavailable text instead of opening a search page when no article matches.
@@ -14,6 +18,7 @@
 
 ## 2026-10-12
 
+- Preserve OpenGuessr Duel guess pins as map coordinates and screenshots, with an SVG fallback when PNG capture fails.
 - Capture panorama IDs in the OpenGuessr Duel exporter when the embed supplies one or a Street View coordinate lookup is available, and label how each ID was obtained.
 - Add a Source order switch to uploaded JSON in Learn so locations can follow file order, including after resuming a paused session; Shuffle remains the default.
 - Add a DevTools exporter that visits every OpenGuessr Duel history match and round, records cumulative and per-round scores plus results, skips unavailable overviews, resumes from a partial export, and downloads a GeoTrainer JSON map ordered by the player's own standard score. Add a repair script for existing Duel exports.

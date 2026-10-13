@@ -85,6 +85,8 @@ Nur draußen gilt zusammen mit der Bildquelle: Nur offiziell fordert ebenfalls A
 
 Lernen bietet vier Wege: Benutzerdefiniert, Meta, Karte erkunden und Hochgeladene Karte. Für eine hochgeladene Karte wähle eine Map-Maker-JSON-Datei mit einer Ortsliste oder `customCoordinates`; jeder Ort braucht gültige Breiten- und Längengrade. Die Datei muss kleiner als 20 MB sein. Zurück steht vor Anzeigen und ist nach dem zweiten besuchten Ort verfügbar. Weiter geht zuerst durch bereits besuchte Orte voran und wählt danach einen neuen Ort.
 
+Das Panoramamenü in der Kopfzeile zeigt nur Ansichten, die in dieser Lernsitzung geöffnet wurden, in Besuchsreihenfolge. Wähle Panorama 1 oder eine andere besuchte Ansicht, um ohne neuen Quelleintrag zurückzuspringen. Nach dem Neuladen stellt Fortsetzen die besuchten Panoramen in ihrer Reihenfolge wieder her. Zuvor gespeicherte Sitzungen beginnen mit dem erneut geöffneten Panorama. Wenn dieses Panorama oder ein Ort im selben Land innerhalb von 50 Metern bereits eine Wiederholungskarte hat, bleibt Für Wiederholung speichern ausgeblendet; die Karte und ihr Zeitplan bleiben erhalten.
+
 Bei hochgeladenem JSON in Lernen ist **Reihenfolge der Quelle** standardmäßig ausgeschaltet. Schalte sie ein, um der Dateireihenfolge zu folgen; ausgeschaltet werden die Orte gemischt. Die Wahl bleibt beim Fortsetzen einer pausierten Lernsitzung erhalten.
 
 Das X rechts im Kopfbereich öffnet die Auswahl des Lernmodus. Die Karte bleibt auf diesem Gerät; lade sie auf anderen Geräten erneut hoch. Ortsvariation 0 behält die hochgeladene Ansicht; 100 sucht Street View bis zu 1 km entfernt und fällt bei Bedarf auf einen ursprünglichen Ort zurück. Minus minimiert die Ortskarte, Maximieren füllt den Bildschirm.

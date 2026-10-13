@@ -5,17 +5,25 @@ import { reverseGeocodeLocation } from './geocoding';
 import { calculateDistanceKm } from './gameLogic';
 import { defaultLocationGenerator } from './locationGenerator';
 import { nearbyReviewPoint } from '../data/reviewIdentity';
+import { isLocation } from './workspaceLocation';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
 export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
 export type ImportedMapHistory = { locations: LocationResult[]; index: number };
 export const MAX_IMPORTED_MAP_BYTES = 20_000_000;
 export const importedMapSizeAllowed = (bytes: number) => Number.isFinite(bytes) && bytes <= MAX_IMPORTED_MAP_BYTES;
-export const moveImportedHistory = (history: ImportedMapHistory, direction: 'previous' | 'next', location?: LocationResult): ImportedMapHistory => {
-  const index = history.index + (direction === 'next' ? 1 : -1);
-  if (index < 0) return history;
+export const moveImportedHistory = (history: ImportedMapHistory, direction: 'previous' | 'next' | number, location?: LocationResult): ImportedMapHistory => {
+  const index = typeof direction === 'number' ? direction : history.index + (direction === 'next' ? 1 : -1);
+  if (!Number.isInteger(index) || index < 0) return history;
   if (index < history.locations.length) return { ...history, index };
   return direction === 'next' && location ? { locations: [...history.locations, location], index } : history;
+};
+export const restoreImportedHistory = (value: unknown, current: LocationResult): ImportedMapHistory => {
+  if (value && typeof value === 'object') {
+    const history = value as Partial<ImportedMapHistory>;
+    if (Array.isArray(history.locations) && history.locations.every(isLocation) && Number.isInteger(history.index) && history.index! >= 0 && history.index! < history.locations.length && history.locations[history.index!].panoId === current.panoId) return history as ImportedMapHistory;
+  }
+  return { locations: [current], index: 0 };
 };
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
 export const importedMapPointCount = (map: ImportedMap) => map.kind === 'pool' ? undefined : map.points.length;

@@ -113,6 +113,8 @@ Outdoors only applies together with the imagery source: Official only still requ
 
 Learn offers four paths: Custom, Meta, Explore Map, and Uploaded map. For Uploaded map, select a Map Maker or GeoGuessr JSON export. A plain list of locations or a map with `customCoordinates` is accepted; each usable entry needs numeric latitude and longitude, while `panoId` and `heading` keep its exact view when available. Invalid entries are skipped.
 
+The header panorama menu lists only views opened in this Learn session, in visit order. Choose Panorama 1 or another visited view to jump back without drawing a new source entry. After a reload, Resume restores the visited panoramas and their order. Workspaces saved before this feature begin with the reopened panorama. If this panorama or a same-country place within 50 metres already has a Review card, Save for Review stays hidden and the existing card and schedule are kept.
+
 The file must be under 20 MB and contain at least one valid location. **Location variation** runs from 0 to 100: 0 opens the uploaded panorama or its coordinate exactly, while higher values search for nearby Street View imagery up to 1 km away at 100. If no nearby imagery opens, the app uses an original map location. This applies only to Uploaded map Learn; uploaded Play rounds use the original map locations.
 
 For uploaded JSON in Learn, **Source order** is off by default. Turn it on to follow the file order; leave it off to shuffle. The choice is kept when you resume a paused Learn session.

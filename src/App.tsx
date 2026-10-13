@@ -34,7 +34,6 @@ import {
   deleteCustomCollection,
 } from './data/collections';
 import { COUNTRIES } from './data/countries';
-import { hasStudyReviewSource } from './data/reviewIdentity';
 import { clueMarksPlayAssisted, saveCoachHistoryNote } from './services/coachHistory';
 import { CLOUD_IMPORT_EVENT } from './services/cloudSyncEvent';
 import {
@@ -117,7 +116,7 @@ export default function App() {
   const [temporaryCollection, setTemporaryCollection] = useState<Collection | null>(null);
   const [reviewAttempt, setReviewAttempt] = useState<Attempt | null>(null);
   const [studyReviewSaving, setStudyReviewSaving] = useState(false);
-  const [studyReviewSaved, setStudyReviewSaved] = useState(false);
+  const [studyReviewSaved, setStudyReviewSaved] = useState<boolean | null>(null);
   const [coachNote, setCoachNote] = useState<{ mode: CoachMode; model: string; generatedAt: number; analysis: CoachAnalysis } | null>(null);
   const currentVisitRef = useRef<StudyVisit | null>(null);
   const activeStartedAtRef = useRef<number | null>(null);
@@ -200,13 +199,13 @@ export default function App() {
     isRevealed, restoredStudyPanoRef, isStudySetupOpen, setIsStudySetupOpen, allCollections,
     learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true), studyImportedMapIdRef, studyImportedVariationRef, studyImportedOrderRef,
   });
-  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handlePreviousUploaded, canPreviousUploaded, uploadedProgress, handleMapsLoaded,
+  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handlePreviousUploaded, handleSelectUploaded, restoreUploadedHistory, canPreviousUploaded, uploadedHistory, uploadedProgress, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
   const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
   useActiveSession(dbReady && !showHome && (appMode === 'study' ? !!currentLocation && !isLoading : appMode === 'play' ? isGameActive : appMode === 'review' ? !summaryRound && reviewWorkActive(!!reviewAttempt, !!reviewResult, reviewResultVisible) : false), sessionRef, refreshTrainer);
-  useEffect(() => { const panoId = currentLocation?.panoId; let active = true; if (!dbReady || !panoId) { setStudyReviewSaved(false); return; } void trainerDb.attempts().then((attempts) => { if (active) setStudyReviewSaved(hasStudyReviewSource(attempts, panoId)); }); return () => { active = false; }; }, [currentLocation?.panoId, dbReady, trainerRefreshKey]);
-  const handleNextLearn = useCallback(() => { if (learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total) return; if (learnSource === 'meta') void nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen, uploadedProgress]);
+  useEffect(() => { const panoId = currentLocation?.panoId; let active = true; setStudyReviewSaved(null); if (!dbReady || !panoId) return; void trainerDb.reviewState(panoId, currentLocation).then((review) => { if (active) setStudyReviewSaved(!!review); }).catch(() => { if (active) setStudyReviewSaved(false); }); return () => { active = false; }; }, [currentLocation?.panoId, currentLocation?.lat, currentLocation?.lng, currentLocation?.countryCode, dbReady, trainerRefreshKey]);
+  const handleNextLearn = useCallback(() => { if (learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total && uploadedHistory.index >= uploadedHistory.locations.length - 1) return; if (learnSource === 'meta') void nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen, uploadedHistory, uploadedProgress]);
   const requestMode = (mode: 'study' | 'play') => {
     if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation || !!activeCountryTip : isGameActive)) return; setMapPickerOpen(false);
     if (mode !== 'play' && appMode === 'play') persistPlayWorkspace();
@@ -223,7 +222,7 @@ export default function App() {
   const resumePausedMode = () => {
     const workspace = resumePrompt && pausedWorkspaces[resumePrompt]; if (!workspace) return setResumePrompt(null);
     setResumePrompt(null); setShowHome(false);
-    if (workspace.mode === 'study') { const focused = workspace.countryCodes || []; const targets = normalizeLocationTargets(workspace.locationTargets); if (focused.length) { const collection = { id: `focus:${focused.join(',')}`, name: focused.map((code) => COUNTRIES[code]?.name || code).join(' + '), countryCodes: focused }; setTemporaryCollection(collection); setSelectedCollectionId(collection.id); activeCollectionRef.current = collection; } setStudyLocationTargets(targets); studyLocationTargetsRef.current = targets; studyImportedMapIdRef.current = workspace.importedMapId; studyImportedVariationRef.current = workspace.importedMapVariation ?? 0; studyImportedOrderRef.current = workspace.importedMapOrder === 'source' ? 'source' : 'shuffle'; restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId, workspace.metaCourseId, workspace.location); setAppMode('study'); setCurrentLocation(workspace.location); setIsRevealed(false); setIsStudySetupOpen(false); return; }
+    if (workspace.mode === 'study') { const focused = workspace.countryCodes || []; const targets = normalizeLocationTargets(workspace.locationTargets); if (focused.length) { const collection = { id: `focus:${focused.join(',')}`, name: focused.map((code) => COUNTRIES[code]?.name || code).join(' + '), countryCodes: focused }; setTemporaryCollection(collection); setSelectedCollectionId(collection.id); activeCollectionRef.current = collection; } setStudyLocationTargets(targets); studyLocationTargetsRef.current = targets; studyImportedMapIdRef.current = workspace.importedMapId; studyImportedVariationRef.current = workspace.importedMapVariation ?? 0; studyImportedOrderRef.current = workspace.importedMapOrder === 'source' ? 'source' : 'shuffle'; restoredStudyPanoRef.current = workspace.location.panoId; if (workspace.learnSource === 'uploaded' && workspace.importedMapId) restoreUploadedHistory(workspace.uploadedHistory, workspace.location, workspace.uploadedProgress); restoreLearnSource(workspace.learnSource, workspace.metaLessonId, workspace.metaCourseId, workspace.location); setAppMode('study'); setCurrentLocation(workspace.location); setIsRevealed(false); setIsStudySetupOpen(false); return; }
     if (workspace.mode === 'meta-course') { void startMeta(workspace.courseId, workspace.tipId); return; }
     if (workspace.mode === 'play') { setAppMode('play'); setIsGameActive(true); setGameSettings(workspace.settings); setGameRounds(workspace.rounds || []); setCurrentRoundIndex(workspace.currentRoundIndex || 0); setActiveRoundResult(workspace.activeRoundResult || null); gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult; setCurrentLocation(workspace.currentLocation); restoredPlayPanoRef.current = workspace.currentLocation?.panoId || null; const elapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds); roundStartTimeRef.current = Date.now() - elapsed * 1000; setPlayElapsed(elapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - elapsed) : null); }
   };
@@ -293,7 +292,7 @@ export default function App() {
           setPlayElapsed(restoredElapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - restoredElapsed) : null);
         } else if (workspace?.mode === 'study' && isLocation(workspace.location)) {
           const focused = workspace.countryCodes || []; const targets = normalizeLocationTargets(workspace.locationTargets); if (focused.length) { const collection = { id: `focus:${focused.join(',')}`, name: focused.map((code) => COUNTRIES[code]?.name || code).join(' + '), countryCodes: focused }; setTemporaryCollection(collection); setSelectedCollectionId(collection.id); activeCollectionRef.current = collection; } setStudyLocationTargets(targets); studyLocationTargetsRef.current = targets;
-          studyImportedMapIdRef.current = workspace.importedMapId; studyImportedVariationRef.current = workspace.importedMapVariation ?? 0; studyImportedOrderRef.current = workspace.importedMapOrder === 'source' ? 'source' : 'shuffle'; restoredStudyPanoRef.current = workspace.location.panoId; restoreLearnSource(workspace.learnSource, workspace.metaLessonId, workspace.metaCourseId, workspace.location); setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
+          studyImportedMapIdRef.current = workspace.importedMapId; studyImportedVariationRef.current = workspace.importedMapVariation ?? 0; studyImportedOrderRef.current = workspace.importedMapOrder === 'source' ? 'source' : 'shuffle'; restoredStudyPanoRef.current = workspace.location.panoId; if (workspace.learnSource === 'uploaded' && workspace.importedMapId) restoreUploadedHistory(workspace.uploadedHistory, workspace.location, workspace.uploadedProgress); restoreLearnSource(workspace.learnSource, workspace.metaLessonId, workspace.metaCourseId, workspace.location); setAppMode('study'); setShowHome(false); setCurrentLocation(workspace.location); setIsRevealed(false);
         } else if (workspace?.mode === 'meta-course') {
           void startMeta(workspace.courseId, workspace.tipId);
         }
@@ -327,11 +326,11 @@ export default function App() {
           : appMode === 'study' && learnSource === 'meta' && activeCountryTip && !currentLocation
             ? { mode: 'meta-course', courseId: metaCourseId, tipId: activeCountryTip.id }
           : appMode === 'study' && currentLocation
-            ? { mode: 'study', location: locationForWorkspace(currentLocation), learnSource, ...(activeCollectionRef.current.id.startsWith('focus:') ? { countryCodes: activeCollectionRef.current.countryCodes } : {}), ...(studyLocationTargets.length ? { locationTargets: studyLocationTargets } : {}), ...(learnSource === 'meta' ? { metaCourseId, metaLessonId: activeCountryTip?.id || activeMetaLesson?.id } : {}), ...(learnSource === 'uploaded' && studyImportedMapIdRef.current ? { importedMapId: studyImportedMapIdRef.current, importedMapVariation: studyImportedVariationRef.current, importedMapOrder: studyImportedOrderRef.current } : {}) }
+            ? { mode: 'study', location: locationForWorkspace(currentLocation), learnSource, ...(activeCollectionRef.current.id.startsWith('focus:') ? { countryCodes: activeCollectionRef.current.countryCodes } : {}), ...(studyLocationTargets.length ? { locationTargets: studyLocationTargets } : {}), ...(learnSource === 'meta' ? { metaCourseId, metaLessonId: activeCountryTip?.id || activeMetaLesson?.id } : {}), ...(learnSource === 'uploaded' && studyImportedMapIdRef.current ? { importedMapId: studyImportedMapIdRef.current, importedMapVariation: studyImportedVariationRef.current, importedMapOrder: studyImportedOrderRef.current, uploadedHistory: { locations: uploadedHistory.locations.map(locationForWorkspace), index: uploadedHistory.index }, uploadedProgress } : {}) }
             : { mode: 'home' };
     void trainerDb.setSetting('workspace.active', value);
     if (value.mode === 'study' || value.mode === 'play' || value.mode === 'meta-course') { const key = value.mode === 'meta-course' ? 'study' : value.mode; setPausedWorkspaces((saved) => ({ ...saved, [key]: value })); void trainerDb.setSetting(`workspace.paused.${key}`, value); }
-  }, [activeCountryTip?.id, activeMetaLesson?.id, appMode, currentLocation, currentRoundIndex, dbReady, gameRounds, gameSettings, isGameActive, activeRoundResult, learnSource, metaCourseId, showHome, studyLocationTargets, timeRemaining, trainerStartTab]);
+  }, [activeCountryTip?.id, activeMetaLesson?.id, appMode, currentLocation, currentRoundIndex, dbReady, gameRounds, gameSettings, isGameActive, activeRoundResult, learnSource, metaCourseId, showHome, studyLocationTargets, timeRemaining, trainerStartTab, uploadedHistory, uploadedProgress]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -410,7 +409,7 @@ export default function App() {
         pastGamesCount={pastGames.length} reviewAttempt={reviewAttempt}
         reviewResultVisible={!!reviewResult} reviewStatsLength={reviewStats.length} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource}
-        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} metaProgress={metaProgress} metaCourseId={metaCourseId}
+        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} uploadedHistory={uploadedHistory} metaProgress={metaProgress} metaCourseId={metaCourseId}
         mapPickerOpen={mapPickerOpen}
         onHome={() => { if (isGameActive && !window.confirm('Leave the active game and return home?')) return; persistPlayWorkspace(); abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setShowHome(true); }}
         onStudy={() => { if (isGameActive && !window.confirm('Pause active game and switch to Study mode?')) return; if (isGameActive) { abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); } clearReviewSession(); requestMode('study'); }}
@@ -420,7 +419,7 @@ export default function App() {
         onRestartLearn={() => startFreshMode('study')}
         onStatistics={() => { if (isGameActive && !window.confirm('Leave the active game and open Statistics?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setTrainerStartTab('statistics'); setShowHome(false); setAppMode('review'); }}
         onClues={() => { if (isGameActive && !window.confirm('Leave the active game and open Clues?')) return; abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setTrainerStartTab('clues'); setShowHome(false); setAppMode('review'); }}
-        onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn} onPreviousLocation={learnSource === 'meta' ? () => void previousMeta() : handlePreviousUploaded} canPreviousLocation={learnSource === 'meta' ? canPreviousMeta : canPreviousUploaded}
+        onReveal={() => setIsRevealed((previous) => !previous)} onNextLocation={handleNextLearn} onPreviousLocation={learnSource === 'meta' ? () => void previousMeta() : handlePreviousUploaded} onSelectUploaded={handleSelectUploaded} canPreviousLocation={learnSource === 'meta' ? canPreviousMeta : canPreviousUploaded}
         onAbandonGame={handleAbandonGame} onOpenHistory={() => setIsHistoryModalOpen(true)}
         onOpenNewGame={() => setIsNewGameModalOpen(true)} onOpenPreferences={() => setPreferencesOpen(true)}
         onToggleFullscreen={toggleFullscreen}

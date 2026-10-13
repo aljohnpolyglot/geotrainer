@@ -13,8 +13,6 @@ const pointsByPano = (locations: TrainerLocation[], attempts: Attempt[]) => {
 
 export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM;
 
-export const hasStudyReviewSource = (attempts: Attempt[], panoId: string) => attempts.some((attempt) => attempt.source === 'study' && attempt.panoId === panoId);
-
 export function uniqueReviewSources(attempts: Attempt[], canonicalPano: (attempt: Attempt) => string): Attempt[] {
   const priority = { play: 0, review: 1, study: 2 };
   const selected = new Map<string, Attempt>();

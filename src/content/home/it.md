@@ -36,6 +36,8 @@ Solo esterni si applica insieme alla fonte delle immagini: Solo ufficiali richie
 
 Impara offre quattro scelte: Personalizzato, Meta, Esplora mappa e Mappa caricata. Per Mappa caricata, scegli un JSON di Map Maker con un elenco di luoghi o `customCoordinates`; ogni luogo richiede latitudine e longitudine valide. Il file deve essere inferiore a 20 MB. Precedente si trova prima di Rivela e diventa disponibile dopo aver visitato due luoghi. Avanti ripercorre prima i luoghi già visitati, poi ne sceglie uno nuovo. La X a destra nell’intestazione apre la scelta della modalità.
 
+Il menu dei panorami nell’intestazione mostra solo le viste aperte in questa sessione di studio, nell’ordine di visita. Scegli Panorama 1 o un’altra vista già visitata per tornare indietro senza estrarre una nuova voce dalla fonte. Dopo una ricarica, Riprendi ripristina i panorami visitati nel loro ordine. Le sessioni salvate prima di questa funzione iniziano dal panorama riaperto. Se questo panorama o un luogo dello stesso paese entro 50 metri ha già una scheda di Ripasso, Salva per ripasso resta nascosto e la scheda con la sua programmazione viene conservata.
+
 In Impara con un JSON caricato, **Ordine del file** è disattivato per impostazione predefinita. Attivalo per seguire l’ordine del file; lascialo disattivato per mescolare i luoghi. La scelta resta salvata quando riprendi una sessione in pausa.
 
 La mappa resta su questo dispositivo; caricala anche sugli altri dispositivi. La variazione 0 mantiene la vista caricata; 100 cerca Street View entro 1 km e torna a un luogo originale se necessario. Il pulsante meno minimizza la scheda del luogo e ingrandisci la espande a tutto schermo.

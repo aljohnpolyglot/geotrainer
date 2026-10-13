@@ -403,7 +403,7 @@ export type ActiveWorkspace =
   | { mode: 'home' }
   | { mode: 'review'; surface?: 'review' | 'statistics' | 'clues' }
   | { mode: 'meta-course'; courseId: string; tipId: string }
-  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; metaCourseId?: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number; importedMapOrder?: 'shuffle' | 'source' }
+  | { mode: 'study'; location: LocationResult; learnSource?: LearnSource; metaLessonId?: string; metaCourseId?: string; countryCodes?: string[]; locationTargets?: LocationPoolTarget[]; importedMapId?: string; importedMapVariation?: number; importedMapOrder?: 'shuffle' | 'source'; uploadedHistory?: { locations: LocationResult[]; index: number }; uploadedProgress?: { position: number; total: number } }
   | { mode: 'play'; gameId: string; settings: GameSettings; rounds: GameRound[]; currentRoundIndex: number; currentLocation: LocationResult | null; activeRoundResult: GameRound | null; timeRemaining: number | null; roundStartedAt: number; roundElapsedSeconds?: number };
 
 export interface SettingRecord {

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, resumeImportedMap, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, restoreImportedHistory, resumeImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -61,6 +61,20 @@ test('uploaded Learn visits move backward and forward before drawing a new locat
   assert.equal(back.locations[back.index].panoId, 'first');
   assert.deepEqual(moveImportedHistory(back, 'next').locations, pair.locations);
   assert.equal(moveImportedHistory(back, 'next').index, 1);
+  assert.equal(moveImportedHistory(pair, 0).locations[0].panoId, 'first');
+  assert.equal(moveImportedHistory(pair, 0).index, 0);
+  assert.strictEqual(moveImportedHistory(pair, 2), pair);
+  assert.strictEqual(moveImportedHistory(pair, Number.NaN), pair);
+});
+
+test('resumed uploaded Learn restores visited views and rejects stale history', () => {
+  const first = { lat: 1, lng: 2, panoId: 'first', countryCode: 'SG' };
+  const second = { lat: 3, lng: 4, panoId: 'second', countryCode: 'SG' };
+  const saved = { locations: [first, second], index: 1 };
+  assert.deepEqual(moveImportedHistory(restoreImportedHistory(saved, second), 'previous'), { locations: saved.locations, index: 0 });
+  assert.deepEqual(restoreImportedHistory(saved, first), { locations: [first], index: 0 });
+  assert.deepEqual(restoreImportedHistory({ locations: [{ ...first, lat: NaN }], index: 0 }, first), { locations: [first], index: 0 });
+  assert.deepEqual(restoreImportedHistory(undefined, second), { locations: [second], index: 0 });
 });
 
 test('uploaded variation keeps zero exact and bounds nearby positions', () => {

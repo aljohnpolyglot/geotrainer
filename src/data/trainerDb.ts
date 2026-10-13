@@ -262,9 +262,9 @@ export const trainerDb = {
   clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
-  async reviewState(panoId: string): Promise<ReviewRecord | undefined> {
+  async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord | undefined> {
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
-    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
+    const target = location || locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : get<ReviewRecord>('reviews', panoId);
   },
   setSetting: (key: string, value: unknown) => {

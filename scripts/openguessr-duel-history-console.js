@@ -28,6 +28,73 @@
     const panoId = url.searchParams.get('pano');
     return { lat, lng, ...(url.searchParams.has('heading') && Number.isFinite(heading) ? { heading } : {}), ...(panoId ? { panoId, panoIdSource: 'embed' } : {}) };
   };
+  const coordinatesFromOverview = (svg, guess, answer) => {
+    if (!svg || !Number.isFinite(answer?.lat) || Math.abs(answer.lat) >= 90 || !Number.isFinite(answer?.lng)) return null;
+    const markers = [...svg.querySelectorAll('g.marker-feature')];
+    const flag = markers.filter(marker => !marker.querySelector('text') && marker.querySelector('g[transform*="scale"] path'));
+    const translate = element => {
+      const match = element?.getAttribute('transform')?.match(/^translate\(\s*([-+\d.e]+)[,\s]+([-+\d.e]+)\s*\)/i);
+      return match ? { x: Number(match[1]), y: Number(match[2]) } : null;
+    };
+    const answerMarker = flag.length === 1 ? translate(flag[0]) : null;
+    const guessMarker = translate(markers.find(marker => marker.querySelector('text')?.textContent?.trim().replace(/…$/, '').toLocaleLowerCase() === guess.label.toLocaleLowerCase()));
+    if (!answerMarker || !guessMarker) return null;
+
+    const number = '([-+]?(?:\\d+\\.?\\d*|\\.\\d+)(?:e[-+]?\\d+)?)';
+    let minX = Infinity, maxX = -Infinity, count = 0;
+    for (const path of svg.querySelectorAll('path.feature-path')) {
+      const data = path.getAttribute('d') || '';
+      for (const match of data.matchAll(new RegExp(`[ML]\\s*${number}[,\\s]+${number}`, 'gi'))) {
+        const x = Number(match[1]);
+        if (Number.isFinite(x)) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); count++; }
+      }
+    }
+    const span = maxX - minX;
+    const scale = span / (2 * Math.PI);
+    if (count < 2 || !Number.isFinite(scale) || scale <= 0 || ![answerMarker.x, answerMarker.y, guessMarker.x, guessMarker.y].every(Number.isFinite)) return null;
+    const tolerance = span * 0.01;
+    if ([answerMarker.x, guessMarker.x].some(x => x < minX - tolerance || x > maxX + tolerance)
+      || Math.abs(guessMarker.x - answerMarker.x) > Math.PI * scale
+      || Math.abs(guessMarker.y - answerMarker.y) > Math.PI * scale) return null;
+
+    const mercatorY = Math.log(Math.tan(Math.PI / 4 + answer.lat * Math.PI / 360)) - (guessMarker.y - answerMarker.y) / scale;
+    const lng = answer.lng + (guessMarker.x - answerMarker.x) / scale * 180 / Math.PI;
+    const lat = (2 * Math.atan(Math.exp(mercatorY)) - Math.PI / 2) * 180 / Math.PI;
+    return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90
+      ? { lat, lng: ((lng + 180) % 360 + 360) % 360 - 180 } : null;
+  };
+  const guessFromOverview = (overview, playerName, answer) => {
+    const svg = overview?.querySelector('.map-container svg[viewBox]');
+    if (!svg || !playerName) return null;
+    const candidates = [...svg.querySelectorAll('g.marker-feature')].flatMap(marker => {
+      const label = marker.querySelector('text')?.textContent?.trim().replace(/…$/, '');
+      const position = marker.getAttribute('transform')?.match(/^translate\(([+-]?[\d.]+),\s*([+-]?[\d.]+)\)$/);
+      return label && position && playerName.toLocaleLowerCase().startsWith(label.toLocaleLowerCase())
+        ? [{ x: Number(position[1]), y: Number(position[2]), label }] : [];
+    });
+    if (candidates.length !== 1) return null;
+    return { ...candidates[0], ...coordinatesFromOverview(svg, candidates[0], answer), viewBox: svg.getAttribute('viewBox'), source: 'OpenGuessr overview SVG' };
+  };
+  const mapImageFromOverview = async overview => {
+    const svg = overview?.querySelector('.map-container svg[viewBox]');
+    if (!svg) return null;
+    const clone = svg.cloneNode(true);
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.setAttribute('width', '700'); clone.setAttribute('height', '400');
+    const style = window.getComputedStyle?.(svg);
+    const palette = Object.fromEntries(['--box-color', '--overlay-color', '--brand-color'].map(name => [name, style?.getPropertyValue(name)?.trim() || '#243447']));
+    const markup = clone.outerHTML.replace(/var\((--[\w-]+)\)/g, (_match, name) => palette[name] || '#243447');
+    const svgDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+    try {
+      const image = await new Promise((resolve, reject) => {
+        const loaded = new Image(); loaded.onload = () => resolve(loaded); loaded.onerror = () => reject(new Error('Could not decode overview SVG.'));
+        loaded.src = svgDataUrl;
+      });
+      const canvas = document.createElement('canvas'); canvas.width = 700; canvas.height = 400;
+      canvas.getContext('2d').drawImage(image, 0, 0, 700, 400);
+      return canvas.toDataURL('image/png');
+    } catch { return svgDataUrl; }
+  };
   const resolvePanoId = async point => {
     if (point.panoId || !window.google?.maps?.StreetViewService) return point;
     try {
@@ -52,6 +119,7 @@
     const multiplier = round.round >= 4 ? 1.5 : 1;
     return { lat: round.lat, lng: round.lng, ...(round.heading === undefined ? {} : { heading: round.heading }),
       ...(round.panoId ? { panoId: round.panoId, panoIdSource: round.panoIdSource } : {}),
+      ...(round.guess ? { guess: round.guess } : {}),
       matchNumber, round: round.round, multiplier, myScore: round.myScore, opponentScore: round.opponentScore,
       myBaseScore: round.myScore === null ? null : Math.round(round.myScore / multiplier),
       opponentBaseScore: round.opponentScore === null ? null : Math.round(round.opponentScore / multiplier),
@@ -161,7 +229,12 @@
                 const opponent = scores.find(score => score.name !== myName);
                 const scoreGap = mine?.roundScore !== null && mine?.roundScore !== undefined && opponent?.roundScore !== null && opponent?.roundScore !== undefined ? mine.roundScore - opponent.roundScore : null;
                 const status = scoreGap === null ? null : scoreGap > 0 ? 'won' : scoreGap < 0 ? 'lost' : 'tied';
-                const round = { round: roundIndex + 1, ...point, scores, myScore: mine?.roundScore ?? null, opponentScore: opponent?.roundScore ?? null, scoreGap, status };
+                const guess = guessFromOverview(overview, myName, point);
+                if (guess) {
+                  try { guess.mapImage = await mapImageFromOverview(overview); }
+                  catch (error) { errors.push({ matchNumber, round: roundIndex + 1, error: `Could not save guess map image: ${error.message}` }); }
+                }
+                const round = { round: roundIndex + 1, ...point, ...(guess ? { guess } : {}), scores, myScore: mine?.roundScore ?? null, opponentScore: opponent?.roundScore ?? null, scoreGap, status };
                 game.rounds.push(round);
                 const location = scoredLocation(round, matchNumber);
                 locations.push(location);
@@ -198,7 +271,7 @@
       const orderedLocations = locations.sort(weakestFirst);
       const reviewOrder = orderedLocations.filter(round => round.myBaseScore !== null);
       download({ name: 'My OpenGuessr duels', source: location.href, capturedAt: new Date().toISOString(), myName, locations: orderedLocations, games, reviewOrder, errors, stopped: window.__duelExportStop, nextMatchNumber: interrupted ? matchNumber - 2 : window.__duelExportStop ? matchNumber : null });
-      console.log(`Downloaded ${locations.length} rounds from ${games.length} duels; ${locations.filter(item => item.panoId).length} panorama IDs; ${errors.length} errors.`);
+      console.log(`Downloaded ${locations.length} rounds from ${games.length} duels; ${locations.filter(item => item.panoId).length} panorama IDs; ${locations.filter(item => item.guess).length} guess pins; ${errors.length} errors.`);
     } finally {
       window.__duelExportRunning = false;
     }

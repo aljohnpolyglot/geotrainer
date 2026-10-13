@@ -157,13 +157,13 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   return <div className={`result-map-wrap ${className}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
-    <div className="result-map-zoom-actions" role="group" aria-label={t('Map zoom shortcuts')}>
-      <button type="button" aria-label={t('Zoom to answer')} title={t('Zoom to answer')} onClick={() => zoomToAnswer(18)}><Crosshair size={17} /></button>
-      <button type="button" aria-label={t('Zoom to country')} title={t('Zoom to country')} onClick={() => zoomToAnswer(5)}><Globe2 size={17} /></button>
-    </div>
     <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>
       <button type="button" aria-pressed={coverageEnabled} aria-label={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} title={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} onClick={() => setCoverageOverride(!coverageEnabled)}><Layers3 size={15} /></button>
       <button type="button" aria-pressed={roadNamesEnabled} aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} onClick={() => setRoadNamesOverride(!roadNamesEnabled)}><Type size={15} /></button>
+      <div className="result-map-zoom-actions" role="group" aria-label={t('Map zoom shortcuts')}>
+        <button type="button" aria-label={t('Zoom to answer')} title={t('Zoom to answer')} onClick={() => zoomToAnswer(18)}><Crosshair size={17} /></button>
+        <button type="button" aria-label={t('Zoom to country')} title={t('Zoom to country')} onClick={() => zoomToAnswer(5)}><Globe2 size={17} /></button>
+      </div>
     </div>
   </div>;
 }

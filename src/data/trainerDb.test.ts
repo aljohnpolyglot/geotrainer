@@ -118,6 +118,8 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal(manualReview.reviewCount, 0);
   assert.deepEqual((await trainerDb.attempts()).find((item) => item.id === correctRound.id), correctRound);
   assert.deepEqual(await trainerDb.queueForReview(correctRound.panoId), manualReview);
+  assert.deepEqual(await trainerDb.reviewState('reimported-nearby', { lat: 59.3301, lng: 18.06, countryCode: 'SE' }), manualReview);
+  assert.equal(await trainerDb.reviewState('reimported-other-country', { lat: 59.3301, lng: 18.06, countryCode: 'NO' }), undefined);
   await trainerDb.saveAttempt({ ...correctRound, id: 'attempt-manual-nearby', panoId: 'pano-manual-nearby', actualLat: 59.3301 });
   assert.deepEqual(await trainerDb.reviewState('pano-manual-nearby'), manualReview);
   assert.deepEqual(await trainerDb.queueForReview('pano-manual-nearby', false, { lat: 59.3301, lng: 18.06, countryCode: 'SE' }), manualReview);

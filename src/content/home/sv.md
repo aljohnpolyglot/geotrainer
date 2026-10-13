@@ -36,6 +36,8 @@ Endast utomhus gäller tillsammans med bildkällan: Endast officiella söker ock
 
 Lär har fyra val: Anpassat, Meta, Utforska karta och Uppladdad karta. Välj en JSON-fil från Map Maker med en lista över platser eller `customCoordinates`; varje plats behöver giltig latitud och longitud. Filen måste vara mindre än 20 MB. Föregående finns före Visa och blir tillgänglig när du har besökt två platser. Nästa går framåt genom platserna i den här lärsessionen innan en ny plats väljs. X till höger i sidhuvudet öppnar valet av lärläge igen.
 
+Panoramamenyn i sidhuvudet visar bara vyer som öppnats under den här lärsessionen, i besöksordning. Välj Panorama 1 eller en annan besökt vy för att gå tillbaka utan att välja en ny källpost. Efter en omladdning återställer Fortsätt de besökta panoramorna i samma ordning. Sessioner som sparats före den här funktionen börjar med det återöppnade panoramat. Om detta panorama eller en plats i samma land inom 50 meter redan har ett repetitionskort döljs Spara för repetition, och det befintliga kortet med sitt schema behålls.
+
 För uppladdad JSON i Lär är **Källans ordning** av som standard. Slå på den för att följa filens ordning; låt den vara av för att blanda platserna. Valet behålls när du återupptar en pausad lärsession.
 
 Kartan stannar på den här enheten; ladda upp den igen på andra enheter. Platsvariation 0 behåller den uppladdade vyn; 100 söker Street View upp till 1 km bort och faller tillbaka till en ursprunglig plats om det behövs. Minus minimerar platskortet och maximera fyller skärmen.
