@@ -4,6 +4,7 @@
 
 - Show every location in an uploaded JSON map immediately in Learn's panorama selector, including unvisited entries, and allow direct jumps while retaining visited-view navigation and Resume.
 - Give uploaded source points stable hashes so saved Learn and Play places remain recognizable when Google resolves another panorama; associate compatible older saved locations without changing their progress or Review schedules.
+- Keep saved Review status ready across uploaded panoramas and confirm a new Study card as soon as its records are saved, while its screenshot finishes separately.
 
 ## 2026-10-13
 

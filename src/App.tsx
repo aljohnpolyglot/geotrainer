@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Collection,
   LocationResult,
@@ -55,6 +55,7 @@ import { AppOverlays } from './components/AppOverlays';
 import { useReviewMode } from './hooks/useReviewMode';
 import { usePlayMode } from './hooks/usePlayMode';
 import { useStudyMode } from './hooks/useStudyMode';
+import { useSavedReviewMatcher } from './hooks/useSavedReviewMatcher';
 import { useLearnSources } from './hooks/useLearnSources';
 import { reviewWorkActive, useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
@@ -194,7 +195,7 @@ export default function App() {
     isMapsReadyRef, hasAutoFetchedRef, mapsReady, setMapsReady, currentVisitRef, activeStartedAtRef,
     setIsRevealed, setCoachNote, setEditingCollection, setIsModalOpen, temporaryCollection, setTemporaryCollection,
     compassPreference, setCompassPreference, reviewAttempt, reviewCompass, setReviewCompass, reviewQueue, reviewSource, reviewKind,
-    reviewInitialTotal, setStudyReviewSaving, studyReviewSaving, setStudyReviewSaved,
+    reviewInitialTotal, setStudyReviewSaving, studyReviewSaving, studyReviewSaved, setStudyReviewSaved,
     setAppMode, setShowHome, isGameActive, gameSettings, setCoveragePreview, setIsFullscreen, setStatusMessage,
     isRevealed, restoredStudyPanoRef, isStudySetupOpen, setIsStudySetupOpen, allCollections,
     learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true), studyImportedMapIdRef, studyImportedVariationRef, studyImportedOrderRef,
@@ -204,7 +205,8 @@ export default function App() {
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
   const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
   useActiveSession(dbReady && !showHome && (appMode === 'study' ? !!currentLocation && !isLoading : appMode === 'play' ? isGameActive : appMode === 'review' ? !summaryRound && reviewWorkActive(!!reviewAttempt, !!reviewResult, reviewResultVisible) : false), sessionRef, refreshTrainer);
-  useEffect(() => { const panoId = currentLocation?.panoId; let active = true; setStudyReviewSaved(null); if (!dbReady || !panoId) return; void trainerDb.reviewState(panoId, currentLocation).then((review) => { if (active) setStudyReviewSaved(!!review); }).catch(() => { if (active) setStudyReviewSaved(false); }); return () => { active = false; }; }, [currentLocation?.panoId, currentLocation?.lat, currentLocation?.lng, currentLocation?.countryCode, currentLocation?.sourcePointHash, dbReady, trainerRefreshKey]);
+  const savedReviewMatcher = useSavedReviewMatcher(dbReady && !isStudySetupOpen && !isNewGameModalOpen, appMode === 'study' ? studyImportedMapIdRef.current || learnSource : appMode === 'play' ? gameSettings?.importedMapId || 'play' : 'review');
+  useLayoutEffect(() => { setStudyReviewSaved(currentLocation && savedReviewMatcher ? savedReviewMatcher(currentLocation) : null); }, [currentLocation?.panoId, currentLocation?.lat, currentLocation?.lng, currentLocation?.countryCode, currentLocation?.sourcePointHash, savedReviewMatcher]);
   const handleNextLearn = useCallback(() => { if (learnSource === 'uploaded' && uploadedProgress && uploadedProgress.position >= uploadedProgress.total && uploadedHistory.index >= uploadedHistory.locations.length - 1) return; if (learnSource === 'meta') void nextMeta(); else if (learnSource === 'map') setMapPickerOpen(true); else void fetchNextLocation(); }, [fetchNextLocation, learnSource, nextMeta, setMapPickerOpen, uploadedHistory, uploadedProgress]);
   const requestMode = (mode: 'study' | 'play') => {
     if (!showHome && appMode === mode && (mode === 'study' ? !!currentLocation || !!activeCountryTip : isGameActive)) return; setMapPickerOpen(false);

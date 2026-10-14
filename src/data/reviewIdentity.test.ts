@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Attempt, ReviewRecord, TrainerLocation } from '../types';
-import { coalesceNearbyReviews, nearbyReviewPoint } from './reviewIdentity';
+import { coalesceNearbyReviews, nearbyReviewPoint, savedReviewMatcher } from './reviewIdentity';
 
 const review = (panoId: string, reviewCount: number): ReviewRecord => ({ id: panoId, panoId, dueAt: 100 + reviewCount, intervalDays: 2, gradingHistory: [], lapseCount: 0, reviewCount });
 const location = (panoId: string, lat: number): TrainerLocation => ({ id: panoId, panoId, lat, lng: 13.4, countryCode: 'DE', firstSeenAt: 1, lastSeenAt: 1, encounterCount: 1 });
@@ -28,4 +28,15 @@ test('one uploaded source point keeps a single Review card across distant panora
   const result = coalesceNearbyReviews([review('first', 2), review('second', 0)], [first, second], []);
   assert.equal(result.reviews.length, 1);
   assert.equal(result.aliases.get('second'), 'first');
+});
+
+test('one saved-card snapshot checks current and upcoming map panoramas without changing the records', () => {
+  const saved = { ...location('saved', 52.5), sourcePointHash: 'source-a' };
+  const records = [review('saved', 2)];
+  const isSaved = savedReviewMatcher(records, [saved], []);
+  const upcoming = Array.from({ length: 5 }, (_, index) => ({ ...location(`next-${index}`, 52.501 + index * .01), sourcePointHash: index === 3 ? 'source-a' : `source-${index}` }));
+  assert.deepEqual(upcoming.map(isSaved), [false, false, false, true, false]);
+  assert.equal(isSaved({ ...location('nearby', 52.5002), sourcePointHash: 'other' }), true);
+  assert.equal(isSaved({ ...location('foreign', 52.5), countryCode: 'AT' }), false);
+  assert.equal(records.length, 1);
 });

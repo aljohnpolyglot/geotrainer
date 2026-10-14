@@ -13,6 +13,13 @@ const pointsByPano = (locations: TrainerLocation[], attempts: Attempt[]) => {
 
 export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && (!!a.sourcePointHash && a.sourcePointHash === b.sourcePointHash || calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM);
 
+export function savedReviewMatcher(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[]) {
+  const points = pointsByPano(locations, attempts);
+  const exact = new Set(reviews.map((review) => review.panoId));
+  const anchors = reviews.flatMap((review) => { const point = points.get(review.panoId); return point ? [point] : []; });
+  return (target: ReviewPoint) => exact.has(target.panoId) || anchors.some((point) => nearbyReviewPoint(target, point));
+}
+
 export function uniqueReviewSources(attempts: Attempt[], canonicalPano: (attempt: Attempt) => string): Attempt[] {
   const priority = { play: 0, review: 1, study: 2 };
   const selected = new Map<string, Attempt>();
