@@ -69,6 +69,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   }, [fullscreenControl]);
 
   useEffect(() => { manuallyAdjustedRef.current = false; positionedRef.current = false; }, [actual.lat, actual.lng, panoId]);
+  useEffect(() => { setCoverageOverride(undefined); }, [actual.lat, actual.lng, panoId]);
 
   useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled]);
 
@@ -80,10 +81,10 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   }, [coverageEnabled]);
 
   useEffect(() => {
-    if (!onSelect || !mapRef.current) return;
+    if (!onSelect || !active || !coverageEnabled || !mapRef.current) return;
     const listener = mapRef.current.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); });
     return () => listener.remove();
-  }, [onSelect]);
+  }, [onSelect, active, coverageEnabled]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -154,7 +155,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     map.setZoom(zoom);
   };
 
-  return <div className={`result-map-wrap ${className}`}>
+  return <div className={`result-map-wrap ${className}${onSelect && coverageEnabled ? ' selectable' : ''}`}>
     <div ref={element} className="result-map-canvas" aria-label={t('resultMapAria')} />
     <div className="result-map-legend" aria-hidden="true"><span className="actual">{t('actual')}</span>{guess && <span className="current">{t('today')}</span>}{previousGuesses.length > 0 && <span className="previous">{t('previous')}</span>}</div>
     <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>

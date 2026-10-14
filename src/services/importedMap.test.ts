@@ -85,6 +85,16 @@ test('older uploaded workspace recovers visited source entries without adding sk
   assert.deepEqual(recoverImportedHistory({ locations: [current], index: 0 }, map, [{ ...first, lat: 10 }]), { locations: [current], index: 0 });
 });
 
+test('reopening saved uploaded source progress restores verified Previous views', () => {
+  const first = { lat: 1, lng: 2, panoId: 'first', countryCode: 'SG', importedMapPointIndex: 2 };
+  const second = { lat: 3, lng: 4, panoId: 'second', countryCode: 'SG', importedMapPointIndex: 0, importedMapProgress: 2 };
+  const map = { id: 'map', name: 'Map', points: [{ lat: 3, lng: 4 }, { lat: 9, lng: 9 }, { lat: 1, lng: 2 }], completedPointIndexes: [2, 0] };
+  const restored = recoverImportedHistory(moveImportedHistory({ locations: [], index: -1 }, 'next', second), map, [first, second]);
+  assert.equal(restored.index, 1);
+  assert.equal(moveImportedHistory(restored, 'previous').locations[0].panoId, 'first');
+  assert.equal(restored.locations[restored.index].importedMapPointIndex, 0);
+});
+
 test('uploaded variation keeps zero exact and bounds nearby positions', () => {
   const point = { lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 };
   assert.strictEqual(varyImportedPoint(point, 0), point);

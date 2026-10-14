@@ -19,9 +19,10 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(selectable, /aria-label="Show road names"/);
 });
 
-test('Learn reveal card includes both map zoom shortcuts', () => {
-  const learn = renderToStaticMarkup(createElement(LocationCard, { location: { countryCode: 'SE', lat: 59.33, lng: 18.06, panoId: 'learn-view' } }));
-  assert.match(learn, /class="result-map-wrap study-result-map"/);
+test('Learn reveal card defaults to selectable blue coverage and keeps map zoom shortcuts', () => {
+  const learn = renderToStaticMarkup(createElement(LocationCard, { location: { countryCode: 'SE', lat: 59.33, lng: 18.06, panoId: 'learn-view' }, onMapSelect: () => {} }));
+  assert.match(learn, /class="result-map-wrap study-result-map selectable"/);
+  assert.match(learn, /aria-label="Hide Street View coverage"/);
   assert.match(learn, /aria-label="Zoom to answer"/);
   assert.match(learn, /aria-label="Zoom to country"/);
 });

@@ -202,10 +202,20 @@ export function useLearnSources(ctx: LearnSourceContext) {
   }, [setCurrentLocation, setErrorMessage, setIsLoading]);
 
   const openMapPoint = useCallback(async (point: { lat: number; lng: number }, panoramaSource: PanoramaSource, allowInteriors: boolean) => {
+    const request = ++requestRef.current;
     setIsLoading(true); setErrorMessage(null);
-    try { await openMapLocation(await findExplorePanorama(point, { panoramaSource, allowInteriors })); }
-    catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Could not open that Street View location.'); setIsLoading(false); }
-  }, [openMapLocation, setErrorMessage, setIsLoading]);
+    try {
+      const location = await findExplorePanorama(point, { panoramaSource, allowInteriors });
+      const place = await reverseGeocodeLocation(location.lat, location.lng);
+      if (!place?.countryCode) throw new Error('This Street View location could not be identified. Choose another place.');
+      if (request !== requestRef.current) return;
+      setLearnSource('map'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined);
+      setMapPickerOpen(false); setIsRevealed(false);
+      setCurrentLocation({ ...location, countryCode: place.countryCode });
+    } catch (error) {
+      if (request === requestRef.current) setErrorMessage(error instanceof Error ? error.message : 'Could not open that Street View location.');
+    } finally { if (request === requestRef.current) setIsLoading(false); }
+  }, [setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
 
   const dismissMetaAdvice = useCallback((forever: boolean) => {
     setMetaAdviceOpen(false);
