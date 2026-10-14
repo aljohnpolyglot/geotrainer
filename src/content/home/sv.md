@@ -144,6 +144,8 @@ I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. K
 
 ## AI-coach och ledtrådar
 
+När uppskattningen för det ledande landet når 85 % söker coachen också en mer exakt plats. Två oberoende synliga ledtrådar kan stödja en region med medelhög eller hög säkerhet; en stad eller exakt plats kräver starkare bevis. En hög landsprocent avgör inte regionen på egen hand.
+
 Under **Inställningar → AI-coach** kan du välja Gemini, Anthropic eller en OpenAI-kompatibel leverantör, ange modell och klistra in din egen API-nyckel. Nyckeln är maskerad, finns bara i sidans minne och skickas via Coach-endpointen för varje analys; GeoTrainer sparar den inte. Välj **Glöm nyckeln** eller läs in sidan igen för att rensa den. Leverantören ansvarar för sina egna användningsgränser och avgifter. OpenAI-kompatibla webbadresser begränsas till offentliga leverantörer som stöds.
 
 Kort, Normal och Djup anpassar också Gemini 2.5:s tankebudget och den synliga förklaringsnivån; Gemini 3-modeller använder motsvarande tankenivåer.
@@ -189,7 +191,7 @@ Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett*
 
 På en karta med visat svar kan du använda hårkorset för att zooma in till rätt plats eller jordgloben för att återgå till landsnivå. Du kan fortsätta zooma och flytta kartan; inställningen styr bara den första vyn.
 
-Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer.
+Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer. Med ljudeffekter på hörs signaler under de sista tio sekunderna i tidsbegränsat Spela och när tiden är slut. Musiken växlar från lugn i Lär till en mer pressande rytm i Spela och pausas när sidan döljs.
 
 Wikipedia-språket väljs separat för platslänkar i avslöjade vyer i Lär, Spela och Repetera. Om en matchande artikel saknas på det valda språket söker appen på engelska Wikipedia. Om den saknas även där visas namnet utan länk. Befintliga profiler börjar med engelska. Vägnamn i avslöjade vyer länkar också till en matchande artikel när en sådan finns; annars visas de som vanlig text.
 

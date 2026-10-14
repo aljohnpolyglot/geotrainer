@@ -98,7 +98,7 @@ Never open or control the user's browser for QA unless the user explicitly asks.
 - Keep Play's panorama learning toolbar aligned with Study and expose the same Notebook and Available notes count; its existing AI Coach preference may still hide Coach only.
 - Append every completed Coach analysis immediately to the panorama's Available notes history. Keep that history scrollable and available in Review, but do not restore an old analysis as the active Coach result after reload.
 - Allow Available notes entries to be deleted in place, and automatically retain the richest duplicate when either its normalized caption or exact image matches another entry.
-- Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and only when multiple strong visible clues support them; omit them otherwise.
+- Show optional Coach region, city, landmark, or exact-place estimates only without answer metadata and with multiple independent visible clues. When the leading country estimate reaches 85%, assess a medium- or high-confidence region; city and narrower estimates still require high confidence from their own evidence. Omit unsupported estimates.
 - Supply country-specific external reference facts only during post-reveal Coach explanations, and mention a fact only when its feature is visibly present in the submitted imagery.
 - In pasted-clue analysis, prioritize an obvious foreground subject selected by the user and treat the surrounding scene as supporting or contradictory context; state when the subject is unreadable instead of misidentifying it.
 - AI Coach knows imagery is shown inside a GeoGuessr-style app and must ignore all app/browser chrome, controls, navigation arrows, attribution, cursors, and interface language as geographic evidence.
@@ -163,6 +163,7 @@ Never open or control the user's browser for QA unless the user explicitly asks.
 - Keep the same mobile pinpointer available in Play and Review, and anchor panorama controls to the dynamic visible viewport so browser chrome cannot cover them.
 - Let the shared Play and Review pinpointer enlarge as a floating panel by default, with a saved Settings → Display choice to fill the visible viewport instead. Keep header dragging, edge resizing, and the current guess in either mode.
 - Keep sound effects and ambient music opt-in, persist separate volume controls, pause music while hidden, and respect browser autoplay rules.
+- Use distinct Learn and active Play music when music is enabled; timed Play gives countdown and time-up cues only when sound effects are enabled.
 - Browser-check every new or changed interface in both light and dark modes; use theme tokens instead of fixed surface or text colors so contrast remains readable in either theme.
 - Browser-test Study-to-new-card, Play mistake correction, due SRS, custom practice, clue autosave, and quiet cloud sync before handoff.
 - For deployment handoffs, generate `.gz` copies of `dist` text assets with Node's built-in zlib after the build; add no compression dependency.

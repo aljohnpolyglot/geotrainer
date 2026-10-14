@@ -307,6 +307,8 @@ Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache R
 
 ## KI-Coach
 
+Wenn die Schätzung für das führende Land 85 % erreicht, prüft der Coach auch einen genaueren Ort. Zwei unabhängige sichtbare Hinweise können eine Region mit mittlerer oder hoher Sicherheit stützen; für eine Stadt oder einen genauen Ort braucht es stärkere Belege. Der Länderwert allein bestimmt keine Region.
+
 Unter **Einstellungen → KI-Coach** kannst du Gemini, Anthropic oder einen OpenAI-kompatiblen Anbieter wählen, das Modell angeben und deinen eigenen API-Schlüssel einfügen. Der Schlüssel wird maskiert, bleibt nur im Arbeitsspeicher der Seite und wird für jede Analyse über den Coach-Endpunkt gesendet; GeoTrainer speichert ihn nicht. Mit **Schlüssel vergessen** oder durch Neuladen der Seite wird er gelöscht. Für Nutzungslimits und Gebühren ist dein Anbieter zuständig. OpenAI-kompatible URLs sind auf unterstützte öffentliche Anbieter beschränkt.
 
 Kurz, Normal und Tief passen außerdem das Denkbudget von Gemini 2.5 und den sichtbaren Erklärungsumfang an; Gemini-3-Modelle verwenden die entsprechenden Denkstufen.
@@ -395,7 +397,7 @@ Die Wikipedia-Sprache steuert die Ortslinks in aufgedeckten Ansichten von Lernen
 
 ### Darstellung
 
-Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern nur die Anzeige. Optionale Klangeffekte und Ambient-Musik starten ausgeschaltet, speichern getrennte Lautstärken und beginnen erst nach einer Interaktion. Sie beeinflussen weder Punkte noch Planung.
+Helles oder dunkles Farbschema, Kompass-Sichtbarkeit und Kompassstil verändern nur die Anzeige. Optionale Klangeffekte und Ambient-Musik starten ausgeschaltet, speichern getrennte Lautstärken und beginnen erst nach einer Interaktion. Bei aktiviertem Ton erklingen im zeitbegrenzten Spiel während der letzten zehn Sekunden Signale und zum Ablauf ein eigener Ton. Die Musik wechselt von ruhig beim Lernen zu einem drängenderen Rhythmus im Spiel und pausiert bei ausgeblendeter Seite. Sie beeinflussen weder Punkte noch Planung.
 
 ### Einstellungen ändern
 

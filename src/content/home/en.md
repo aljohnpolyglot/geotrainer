@@ -322,6 +322,8 @@ After a game, Practice mistakes opens Review and repeats weak rounds until they 
 
 ## AI Coach
 
+When the leading country estimate reaches 85%, Coach checks for a narrower place. Two independent visible clues can support a medium or high confidence region; a city or exact place needs stronger evidence. A high country percentage alone does not identify a region.
+
 In **Settings → AI Coach**, you can choose Gemini, Anthropic, or an OpenAI-compatible provider, set its model, and paste your own API key. The key is masked, kept only in page memory, and sent through the Coach endpoint for each analysis; GeoTrainer does not save it. Use **Forget key** or reload the page to clear it. Your provider applies its own usage limits and billing. OpenAI-compatible URLs are limited to supported public providers.
 
 Short, Normal, and Deep also adjust Gemini 2.5’s reasoning budget and the visible explanation detail; Gemini 3 models use their corresponding reasoning levels.
@@ -444,7 +446,7 @@ Play automatically adds below-target rounds to Review and Practice mistakes uses
 
 ### Display
 
-Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page.
+Display preferences include Light or Dark palette, compass visibility, compass style, optional sound effects, and optional ambient music. During Learn and Review, the compass switch sits with the other panorama learning tools. Sound and music start disabled, have separate saved volumes, and music begins only after you interact with the page. Timed Play has ticks for the final ten seconds and a time-up cue when sound effects are on. Music switches from a calm Learn loop to a more urgent Play rhythm, and pauses while the page is hidden.
 
 Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light uses Google's original road and terrain colors, while Dark uses a dark map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors.
 

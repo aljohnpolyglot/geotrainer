@@ -209,7 +209,7 @@ test('pasted clue prompts prioritize an obvious foreground subject without disca
   assert.match(prompts[0], /where that specific variant is commonly found/);
   assert.match(prompts[0], /resolution is insufficient.*never invent specificity/);
   assert.doesNotMatch(prompts[1], /user-selected clue crop/);
-  assert.match(prompts[1], /overall analysis is high confidence.*district or quarter.*Most likely in/);
+  assert.match(prompts[1], /leading country estimate is at least 85%.*named region.*district, quarter.*Most likely in/);
 });
 
 test('specific location estimates require strong visual evidence and no answer metadata', () => {
@@ -221,6 +221,14 @@ test('specific location estimates require strong visual evidence and no answer m
   const explained = normalizeCoachAnalysis(input, 'explain', 'Liberia');
   assert.deepEqual(explained.candidates, []);
   assert.equal(explained.region, '');
+});
+
+test('a strong country lead permits a supported medium-confidence region, not a city', () => {
+  const input = { ...validAnalysis, confidence: 'medium', candidates: [{ countryCode: 'MX', confidence: .95, rationale: 'Visible local road details support Mexico.' }], locationEstimate: { level: 'region', label: 'Jalisco', confidence: 'medium', basis: ['Distinctive regional road marking', 'Readable local route number'] } };
+  assert.equal(normalizeCoachAnalysis(input, 'analyze').locationEstimate?.label, 'Jalisco');
+  assert.equal(normalizeCoachAnalysis({ ...input, candidates: [{ countryCode: 'MX', confidence: .84 }] }, 'analyze').locationEstimate, undefined);
+  assert.equal(normalizeCoachAnalysis({ ...input, locationEstimate: { ...input.locationEstimate, level: 'city' } }, 'analyze').locationEstimate, undefined);
+  assert.equal(normalizeCoachAnalysis({ ...input, locationEstimate: { ...input.locationEstimate, basis: ['Generic houses'] } }, 'analyze').locationEstimate, undefined);
 });
 
 test('ordinary analysis drops country-only location estimates and unsolicited cards', () => {

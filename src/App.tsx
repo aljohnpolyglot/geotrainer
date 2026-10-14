@@ -59,7 +59,7 @@ import { useSavedReviewMatcher } from './hooks/useSavedReviewMatcher';
 import { useLearnSources } from './hooks/useLearnSources';
 import { reviewWorkActive, useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
-import { installAudio, setAudioPreferences } from './services/audio';
+import { installAudio, setAudioMode, setAudioPreferences } from './services/audio';
 import { calculateDistanceKm, restoredRoundElapsed } from './services/gameLogic';
 import { isLocation, locationForWorkspace } from './services/workspaceLocation';
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
@@ -170,6 +170,7 @@ export default function App() {
     handleAbandonGame, gameIdRef, roundSubmittedRef } = play;
   const playWorkspaceRef = useRef<Extract<ActiveWorkspace, { mode: 'play' }> | null>(null);
   playWorkspaceRef.current = isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
+  useEffect(() => { setAudioMode(!showHome && appMode === 'play' && isGameActive && !summaryGameRecord ? 'play' : 'learn'); }, [appMode, isGameActive, showHome, summaryGameRecord]);
   const persistPlayWorkspace = useCallback(() => { const value = playWorkspaceRef.current; if (!value) return; setPausedWorkspaces((saved) => ({ ...saved, play: value })); void trainerDb.setSetting('workspace.paused.play', value); }, []);
   useEffect(() => { const save = () => { if (document.visibilityState === 'hidden') persistPlayWorkspace(); }; document.addEventListener('visibilitychange', save); window.addEventListener('pagehide', persistPlayWorkspace); return () => { document.removeEventListener('visibilitychange', save); window.removeEventListener('pagehide', persistPlayWorkspace); }; }, [persistPlayWorkspace]);
   const [reviewDisplayedPanoId, setReviewDisplayedPanoId] = useState<string | null>(null);

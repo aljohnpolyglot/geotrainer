@@ -2,6 +2,8 @@
 
 ## 2026-10-14
 
+- Let Coach show a supported regional estimate when the leading country reaches 85%, while keeping city and exact-place estimates stricter; label the estimate type in the result panel.
+- Give timed Play an audible final countdown and time-up cue under Sound effects, and use a more urgent Play music loop while Music is enabled.
 - Make blue Street View coverage on every revealed Learn map clickable and on by default, with a per-map off switch. Selecting a place opens it in Explore Map Learn without changing uploaded-map or Meta progress.
 - Restore verified earlier views when reopening an uploaded Learn map with saved source progress, so Previous works beyond the first view of the new session while the selector keeps file-order panorama numbers.
 - Show every location in an uploaded JSON map immediately in Learn's panorama selector, including unvisited entries, and allow direct jumps while retaining visited-view navigation and Resume.

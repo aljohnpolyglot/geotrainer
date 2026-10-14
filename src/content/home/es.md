@@ -142,6 +142,8 @@ Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afecta
 
 ## Entrenador de IA y pistas
 
+Cuando la estimación del país principal alcanza el 85 %, Coach busca un lugar más preciso. Dos pistas visibles independientes pueden respaldar una región con confianza media o alta; una ciudad o un lugar exacto exige pruebas más sólidas. Un porcentaje alto para el país no identifica por sí solo la región.
+
 En **Configuración → Entrenador de IA**, puedes elegir Gemini, Anthropic o un proveedor compatible con OpenAI, indicar el modelo y pegar tu propia clave de API. La clave se muestra oculta, solo permanece en la memoria de la página y se envía a través del servicio de Coach en cada análisis; GeoTrainer no la guarda. Usa **Olvidar clave** o recarga la página para borrarla. El proveedor aplica sus propios límites y cargos. Las URL compatibles con OpenAI se limitan a proveedores públicos admitidos.
 
 Breve, Normal y Profunda también ajustan el presupuesto de razonamiento de Gemini 2.5 y el nivel de detalle visible; los modelos Gemini 3 usan sus niveles de razonamiento correspondientes.
@@ -189,7 +191,7 @@ En un mapa con la respuesta revelada, usa el botón de la mira para acercarte al
 
 Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo aparecen cuando hay una frontera en el área visible del mapa. El grosor y el color de las fronteras se ajustan con una vista previa en vivo; las fronteras regionales están desactivadas por defecto y se pueden activar por separado.
 
-Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados.
+Los países, ciudades y entornos orientan la generación y no representan una cobertura completa. Las preferencias separan idioma de interfaz, juego e IA, además de límites de repaso, zona horaria, apariencia y ayudas del mapa. Los perfiles nuevos usan 50 tarjetas nuevas y 500 repasos diarios. Efectos y música ambiental son opcionales, empiezan apagados y guardan volúmenes separados. Con los efectos activados, Juego con temporizador emite sonidos durante los últimos diez segundos y al agotarse el tiempo. La música cambia de un ritmo tranquilo en Aprender a otro más urgente en Juego y se pausa al ocultar la página.
 
 El idioma de Wikipedia se elige por separado para los enlaces de lugares revelados en Aprender, Juego y Repaso. Si no se encuentra un artículo que coincida en ese idioma, se busca en la Wikipedia en inglés. Si tampoco aparece allí, el nombre queda sin enlace. Los perfiles existentes empiezan con inglés. Los nombres de calles revelados también enlazan a un artículo coincidente; si no lo hay, quedan como texto.
 

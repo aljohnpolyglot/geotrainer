@@ -142,6 +142,8 @@ Les manches terminées de Jeu et de Révision autorisent alors le déplacement, 
 
 ## Coach IA et indices
 
+Quand l’estimation du pays principal atteint 85 %, le Coach cherche un lieu plus précis. Deux indices visibles indépendants peuvent justifier une région avec une confiance moyenne ou élevée ; une ville ou un lieu exact exige des preuves plus solides. Le pourcentage du pays ne suffit pas à identifier la région.
+
 Dans **Paramètres → Coach IA**, vous pouvez choisir Gemini, Anthropic ou un fournisseur compatible avec OpenAI, indiquer le modèle et coller votre propre clé API. La clé est masquée, reste uniquement en mémoire dans la page et passe par le point de terminaison Coach pour chaque analyse ; GeoTrainer ne l’enregistre pas. Utilisez **Effacer la clé** ou rechargez la page pour la supprimer. Le fournisseur applique ses propres limites et frais. Les URL compatibles avec OpenAI sont limitées aux fournisseurs publics pris en charge.
 
 Les niveaux Court, Normal et Approfondi ajustent aussi le budget de raisonnement de Gemini 2.5 et le détail visible ; les modèles Gemini 3 utilisent leurs niveaux de raisonnement correspondants.
@@ -191,7 +193,7 @@ Sur une carte dont la réponse est révélée, utilisez le bouton de visée pour
 
 Les frontières des pays sont visibles par défaut et peuvent être masquées ; elles n’apparaissent que lorsqu’une frontière se trouve dans la zone affichée. L’épaisseur et la couleur des frontières sont réglables avec un aperçu en direct ; les frontières régionales sont désactivées par défaut et peuvent être activées séparément.
 
-Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés.
+Pays, villes et environnements orientent la génération sans garantir une couverture totale. Les préférences séparent langues de l’interface, du jeu et de l’IA, ainsi que révision, fuseau horaire, apparence et aides cartographiques. Un nouveau profil autorise 50 nouvelles cartes et 500 révisions par jour. Effets et musique d’ambiance sont facultatifs, désactivés au départ et disposent de volumes séparés. Avec les effets activés, le Jeu chronométré émet des sons pendant les dix dernières secondes et à la fin du temps. La musique passe d’un rythme calme en Apprendre à un rythme plus pressant en Jeu et s’arrête quand la page est masquée.
 
 La langue de Wikipédia se choisit séparément pour les liens des lieux révélés en Étude, Jeu et Révision. Si aucun article correspondant n’est trouvé dans cette langue, la recherche passe à Wikipédia en anglais. Sans résultat dans les deux langues, le nom reste sans lien. Les profils existants utilisent d’abord l’anglais. Les noms de rues révélés mènent aussi à un article correspondant s’il existe ; sinon, ils restent en texte simple.
 

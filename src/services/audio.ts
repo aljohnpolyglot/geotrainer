@@ -11,10 +11,25 @@ export const normalizeAudioPreferences = (value: unknown): AudioPreferences => {
 let preferences = DEFAULT_AUDIO_PREFERENCES;
 let context: AudioContext | undefined;
 let music: HTMLAudioElement | undefined;
+let audioMode: 'learn' | 'play' = 'learn';
+let pulseTimer: number | undefined;
+let pulseStep = 0;
 
 const ensureContext = () => context ??= new AudioContext();
+const stopPulse = () => { if (pulseTimer !== undefined) window.clearInterval(pulseTimer); pulseTimer = undefined; };
+const playPulse = () => {
+  if (!preferences.musicEnabled || document.hidden) return;
+  const audio = ensureContext(); void audio.resume().catch(() => {});
+  const now = audio.currentTime; const oscillator = audio.createOscillator(); const gain = audio.createGain();
+  oscillator.type = 'triangle'; oscillator.frequency.value = [110, 110, 130.81, 98, 110, 146.83, 130.81, 98][pulseStep++ % 8];
+  gain.gain.setValueAtTime(preferences.musicVolume * .045, now);
+  gain.gain.exponentialRampToValueAtTime(.0001, now + .24);
+  oscillator.connect(gain).connect(audio.destination); oscillator.start(now); oscillator.stop(now + .25);
+};
 const startMusic = () => {
   if (!preferences.musicEnabled || document.hidden) return;
+  if (audioMode === 'play') { music?.pause(); if (pulseTimer === undefined) { pulseStep = 0; playPulse(); pulseTimer = window.setInterval(playPulse, 360); } return; }
+  stopPulse();
   music ??= Object.assign(new Audio(`${import.meta.env.BASE_URL}assets/audio/ambient-relaxing-loop.mp3`), { loop: true });
   music.volume = preferences.musicVolume;
   void music.play().catch(() => {});
@@ -23,20 +38,24 @@ const startMusic = () => {
 export const setAudioPreferences = (value: unknown) => {
   preferences = normalizeAudioPreferences(value);
   if (music) music.volume = preferences.musicVolume;
-  if (preferences.musicEnabled) startMusic(); else music?.pause();
+  if (preferences.musicEnabled) startMusic(); else { music?.pause(); stopPulse(); }
 };
 
-export const playUiSound = (kind: 'click' | 'pin' = 'click') => {
+export const setAudioMode = (mode: 'learn' | 'play') => { audioMode = mode; if (mode === 'learn') stopPulse(); else music?.pause(); startMusic(); };
+
+export const playUiSound = (kind: 'click' | 'pin' | 'tick' | 'timeup' = 'click') => {
   if (!preferences.sfxEnabled) return;
   const audio = ensureContext();
   void audio.resume();
   const now = audio.currentTime;
-  (kind === 'pin' ? [[330, 0], [520, .055]] : [[540, 0]]).forEach(([frequency, delay]) => {
+  const notes = kind === 'pin' ? [[330, 0], [520, .055]] : kind === 'tick' ? [[880, 0]] : kind === 'timeup' ? [[660, 0], [440, .16], [330, .32]] : [[540, 0]];
+  notes.forEach(([frequency, delay]) => {
     const oscillator = audio.createOscillator(); const gain = audio.createGain();
-    oscillator.frequency.value = frequency; oscillator.type = 'sine';
+    oscillator.frequency.value = frequency; oscillator.type = kind === 'tick' ? 'triangle' : 'sine';
+    const duration = kind === 'timeup' ? .15 : kind === 'tick' ? .09 : .07;
     gain.gain.setValueAtTime(preferences.sfxVolume * .055, now + delay);
-    gain.gain.exponentialRampToValueAtTime(.0001, now + delay + .07);
-    oscillator.connect(gain).connect(audio.destination); oscillator.start(now + delay); oscillator.stop(now + delay + .075);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + delay + duration);
+    oscillator.connect(gain).connect(audio.destination); oscillator.start(now + delay); oscillator.stop(now + delay + duration + .005);
   });
 };
 
@@ -45,7 +64,7 @@ export const installAudio = () => {
     if ((event.target as Element | null)?.closest('button:not(:disabled), a[href], summary, input[type="checkbox"], select')) playUiSound();
     startMusic();
   };
-  const visibility = () => document.hidden ? music?.pause() : startMusic();
+  const visibility = () => { if (document.hidden) { music?.pause(); stopPulse(); } else startMusic(); };
   document.addEventListener('pointerdown', activate, true); document.addEventListener('visibilitychange', visibility);
-  return () => { document.removeEventListener('pointerdown', activate, true); document.removeEventListener('visibilitychange', visibility); music?.pause(); context?.close(); music = undefined; context = undefined; };
+  return () => { document.removeEventListener('pointerdown', activate, true); document.removeEventListener('visibilitychange', visibility); music?.pause(); stopPulse(); context?.close(); music = undefined; context = undefined; };
 };

@@ -138,6 +138,8 @@ Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem 
 
 ## Coach de IA e pistas
 
+Quando a estimativa do país principal chega a 85%, o Coach procura um local mais específico. Duas pistas visíveis independentes podem sustentar uma região com confiança média ou alta; uma cidade ou local exato exige provas mais fortes. Uma porcentagem alta para o país não identifica, por si só, a região.
+
 Em **Configurações → Coach de IA**, você pode escolher Gemini, Anthropic ou um provedor compatível com OpenAI, definir o modelo e colar sua própria chave de API. A chave fica oculta, permanece apenas na memória da página e é enviada pelo serviço do Coach em cada análise; o GeoTrainer não a salva. Use **Esquecer chave** ou recarregue a página para apagá-la. O provedor aplica os próprios limites de uso e cobranças. URLs compatíveis com OpenAI são limitadas a provedores públicos aceitos.
 
 Curta, Normal e Profunda também ajustam o orçamento de raciocínio do Gemini 2.5 e o nível de detalhe visível; os modelos Gemini 3 usam os níveis de raciocínio correspondentes.
@@ -185,7 +187,7 @@ Em um mapa com a resposta revelada, use o botão de mira para aproximar o local 
 
 As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
 
-Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados.
+Países, cidades e ambientes orientam a geração, sem prometer cobertura completa. Preferências separam idiomas da interface, jogo e IA, além de limites de revisão, fuso horário, aparência e auxílios do mapa. Perfis novos usam 50 cartões novos e 500 revisões por dia. Efeitos e música ambiente são opcionais, começam desligados e têm volumes separados. Com os efeitos ligados, o Jogo cronometrado toca nos últimos dez segundos e ao esgotar o tempo. A música muda de um ritmo calmo em Aprender para outro mais urgente no Jogo e pausa quando a página fica oculta.
 
 O idioma da Wikipédia é escolhido separadamente para os links de lugares revelados em Aprender, Jogar e Revisar. Se não houver um artigo correspondente nesse idioma, a busca usa a Wikipédia em inglês. Se também não houver resultado, o nome fica sem link. Perfis existentes começam com inglês. Nomes de ruas revelados também recebem links quando existe um artigo correspondente; caso contrário, ficam como texto.
 

@@ -140,6 +140,8 @@ Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazi
 
 ## Coach IA e indizi
 
+Quando la stima del paese principale raggiunge l’85%, il Coach cerca anche un luogo più preciso. Due indizi visibili indipendenti possono sostenere una regione con fiducia media o alta; una città o un luogo esatto richiede prove più forti. La percentuale del paese da sola non identifica la regione.
+
 In **Impostazioni → Coach IA** puoi scegliere Gemini, Anthropic o un provider compatibile con OpenAI, indicare il modello e incollare la tua chiave API. La chiave è nascosta, resta solo nella memoria della pagina e viene inviata tramite l’endpoint Coach per ogni analisi; GeoTrainer non la salva. Usa **Dimentica chiave** o ricarica la pagina per eliminarla. Il provider applica i propri limiti e costi. Gli URL compatibili con OpenAI sono limitati ai provider pubblici supportati.
 
 Breve, Normale e Approfondita regolano anche il budget di ragionamento di Gemini 2.5 e il livello di dettaglio visibile; i modelli Gemini 3 usano i livelli di ragionamento corrispondenti.
@@ -187,7 +189,7 @@ Su una mappa con la risposta rivelata, usa il mirino per ingrandire il luogo cor
 
 I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
 
-Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati.
+Paesi, città e ambienti guidano la generazione senza garantire copertura completa. Le preferenze separano lingua di interfaccia, gioco e IA, oltre a ripasso, fuso orario, aspetto e aiuti della mappa. I nuovi profili usano 50 nuove schede e 500 ripassi al giorno. Effetti e musica ambientale sono facoltativi, iniziano disattivati e hanno volumi separati. Con gli effetti attivi, il Gioco a tempo emette segnali negli ultimi dieci secondi e allo scadere. La musica passa da un ritmo calmo in Impara a uno più incalzante in Gioco e si interrompe quando la pagina è nascosta.
 
 La lingua di Wikipedia si sceglie separatamente per i link dei luoghi rivelati in Impara, Gioca e Ripasso. Se non si trova un articolo corrispondente in quella lingua, la ricerca passa a Wikipedia in inglese. Se manca anche lì, il nome resta senza link. I profili esistenti partono dall’inglese. Anche i nomi delle strade rivelate rimandano a un articolo corrispondente, se esiste; altrimenti restano testo semplice.
 
