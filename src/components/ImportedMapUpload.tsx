@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle, Play, RefreshCw, X } from 'lucide-react';
-import { getImportedMap, importedMapIdForSource, importedMapUrl, importedMapPointCount, importedMapSizeAllowed, parseImportedMap, resumeImportedMap, saveImportedMap, type ImportedMap } from '../services/importedMap';
+import { getImportedMap, importedMapIdForSource, importedMapUrl, importedMapPointCount, importedMapSizeAllowed, matchSavedImportedPoints, parseImportedMap, resumeImportedMap, saveImportedMap, type ImportedMap } from '../services/importedMap';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { trainerDb } from '../data/trainerDb';
@@ -31,12 +31,12 @@ export function ImportedMapUpload({ source, map, onChange }: { source: 'upload' 
     }
     if (current !== operation.current) return;
     if (previous && previous.kind !== 'pool') setRepeat({ previous, next: imported });
-    else { await saveImportedMap(imported); if (current === operation.current) { onChange(imported); setError(''); } }
+    else { await saveImportedMap(imported); await matchSavedImportedPoints(imported); if (current === operation.current) { onChange(imported); setError(''); } }
   };
   const chooseRepeat = async (resume: boolean) => {
     if (!repeat || repeatSaving) return;
     setRepeatSaving(true); setError('');
-    try { const next = resume ? resumeImportedMap(repeat.previous, repeat.next) : repeat.next; await saveImportedMap(next); onChange(next); setRepeat(undefined); }
+    try { const next = resume ? resumeImportedMap(repeat.previous, repeat.next) : repeat.next; await saveImportedMap(next); await matchSavedImportedPoints(next); onChange(next); setRepeat(undefined); }
     catch { setError(t('Could not import this map.')); }
     finally { setRepeatSaving(false); }
   };
@@ -64,6 +64,6 @@ export function ImportedMapUpload({ source, map, onChange }: { source: 'upload' 
     {loading && source === 'upload' && <small className="imported-map-loading" role="status" aria-live="polite"><LoaderCircle className="spin" size={15} />{t('Loading…')}</small>}
     {map && <small className="imported-map-current"><strong>{map.name}</strong> · {map.kind === 'pool' ? `${map.countryCodes.length} ${t('countries')} · ${map.locationTargets.length} ${t('areas')}` : `${importedMapPointCount(map)} ${t('locations')}`}</small>}
     {error && <p role="alert">{error}</p>}
-    {repeat && <div className="setup-backdrop imported-repeat-backdrop"><section className="resume-session" role="dialog" aria-modal="true" aria-labelledby="imported-repeat-title"><button type="button" className="icon-button resume-session-close" onClick={() => setRepeat(undefined)} aria-label={t('Back')} title={t('Back')}><X size={16} /></button><h2 id="imported-repeat-title">{t('Continue saved map?')}</h2><p>{t('This JSON source was loaded before.')} {repeat.previous.kind !== 'pool' ? repeat.previous.completedPointIndexes?.length || repeat.previous.lastLocation?.importedMapCompletedPointIndexes?.length || 0 : 0}/{importedMapPointCount(repeat.previous)} {t('Source progress')}. {t('Choose whether to resume or start over.')}</p>{error && <p role="alert">{error}</p>}<div><button type="button" className="button primary" autoFocus disabled={repeatSaving} onClick={() => void chooseRepeat(true)}><Play size={16} />{t('Resume')}</button><button type="button" className="button secondary" disabled={repeatSaving} onClick={() => void chooseRepeat(false)}><RefreshCw size={16} />{t('Start new')}</button></div></section></div>}
+    {repeat && <div className="setup-backdrop imported-repeat-backdrop"><section className="resume-session" role="dialog" aria-modal="true" aria-labelledby="imported-repeat-title"><button type="button" className="icon-button resume-session-close" onClick={() => setRepeat(undefined)} aria-label={t('Back')} title={t('Back')}><X size={16} /></button><h2 id="imported-repeat-title">{t('Continue saved map?')}</h2><p>{t('This JSON source was loaded before.')} {repeat.previous.kind !== 'pool' ? repeat.previous.completedPointIndexes?.length || repeat.previous.lastLocation?.importedMapCompletedPointIndexes?.length || 0 : 0}/{importedMapPointCount(repeat.previous)} {t('Source progress')}. {t('Resume keeps the saved order. Start new creates a new shuffle.')}</p>{error && <p role="alert">{error}</p>}<div><button type="button" className="button primary" autoFocus disabled={repeatSaving} onClick={() => void chooseRepeat(true)}><Play size={16} />{t('Resume')}</button><button type="button" className="button secondary" disabled={repeatSaving} onClick={() => void chooseRepeat(false)}><RefreshCw size={16} />{t('Start new')}</button></div></section></div>}
   </div>;
 }

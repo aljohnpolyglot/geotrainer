@@ -28,6 +28,8 @@ export interface LocationResult {
   lat: number;
   lng: number;
   panoId: string;
+  panoramaHash?: string;
+  sourcePointHash?: string;
   exactAddress?: string;
   locality?: string;
   adminArea?: string;
@@ -248,6 +250,8 @@ export interface Attempt {
   gameId: string;
   roundNumber: number;
   panoId: string;
+  panoramaHash?: string;
+  sourcePointHash?: string;
   actualLat: number;
   actualLng: number;
   countryCode: string;
@@ -380,6 +384,8 @@ export type ReviewGrade = 'again' | 'hard' | 'good' | 'easy';
 export interface ReviewRecord {
   id: string;
   panoId: string;
+  sourcePointHash?: string;
+  panoramaHash?: string;
   dueAt: number;
   intervalDays: number;
   gradingHistory: Array<{ grade: ReviewGrade; at: number }>;

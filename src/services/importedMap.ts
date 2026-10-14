@@ -6,9 +6,10 @@ import { calculateDistanceKm } from './gameLogic';
 import { defaultLocationGenerator } from './locationGenerator';
 import { nearbyReviewPoint } from '../data/reviewIdentity';
 import { isLocation } from './workspaceLocation';
+import { sourcePointHash } from './locationHash';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
-export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
+export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; pointOrder?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
 export type ImportedMapHistory = { locations: LocationResult[]; index: number };
 export const MAX_IMPORTED_MAP_BYTES = 20_000_000;
 export const importedMapSizeAllowed = (bytes: number) => Number.isFinite(bytes) && bytes <= MAX_IMPORTED_MAP_BYTES;
@@ -25,20 +26,38 @@ export const restoreImportedHistory = (value: unknown, current: LocationResult):
   }
   return { locations: [current], index: 0 };
 };
+export const recoverImportedHistory = (history: ImportedMapHistory, map: ImportedMap | undefined, known: LocationResult[]): ImportedMapHistory => {
+  if (!map || map.kind === 'pool' || !map.completedPointIndexes?.length) return history;
+  const first = history.locations[0];
+  const firstPosition = map.completedPointIndexes.indexOf(first.importedMapPointIndex ?? -1);
+  if (firstPosition <= 0) return history;
+  const byPoint = new Map(known.filter((location) => location.importedMapPointIndex !== undefined).map((location) => [location.importedMapPointIndex, location]));
+  const earlier = map.completedPointIndexes.slice(0, firstPosition).flatMap((index, position) => {
+    const point = map.points[index];
+    const location = byPoint.get(index);
+    const match = point && location && calculateDistanceKm(location.lat, location.lng, point.lat, point.lng) <= .25 && (!point.panoId || point.panoId === location.panoId) ? location : undefined;
+    return match ? [{ ...match, importedMapProgress: position + 1 }] : [];
+  });
+  return earlier.length ? { locations: [...earlier, ...history.locations], index: earlier.length + history.index } : history;
+};
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
 export const importedMapPointCount = (map: ImportedMap) => map.kind === 'pool' ? undefined : map.points.length;
 export const importedMapIdForSource = async (source: string) => `source:${Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)))).map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
 const pointKey = (point: MapPoint) => JSON.stringify([point.lat, point.lng, point.panoId || '']);
 export function resumeImportedMap(previous: ImportedMap, next: ImportedMap): ImportedMap {
   if (previous.kind === 'pool' || next.kind === 'pool') return next;
-  const completed = new Map<string, number>();
-  for (const index of previous.completedPointIndexes || previous.lastLocation?.importedMapCompletedPointIndexes || []) {
-    const point = previous.points[index]; if (point) { const key = pointKey(point); completed.set(key, (completed.get(key) || 0) + 1); }
-  }
-  const completedPointIndexes = next.points.flatMap((point, index) => { const key = pointKey(point); const count = completed.get(key) || 0; if (!count) return []; completed.set(key, count - 1); return [index]; });
-  const oldPoint = previous.lastLocation?.importedMapPointIndex === undefined ? undefined : previous.points[previous.lastLocation.importedMapPointIndex];
-  const lastIndex = oldPoint ? next.points.findIndex((point) => pointKey(point) === pointKey(oldPoint)) : -1;
-  return { ...next, completedPointIndexes, ...(lastIndex >= 0 && previous.lastLocation ? { lastLocation: { ...previous.lastLocation, importedMapPointIndex: lastIndex, importedMapProgress: completedPointIndexes.length, importedMapCompletedPointIndexes: completedPointIndexes } } : {}) };
+  const priorCompleted = previous.completedPointIndexes || previous.lastLocation?.importedMapCompletedPointIndexes || [];
+  const completedSet = new Set(priorCompleted);
+  const matched = new Map<string, number[]>();
+  next.points.forEach((point, index) => { const key = pointKey(point); const indexes = matched.get(key) || []; indexes.push(index); matched.set(key, indexes); });
+  const previousOrder = previous.pointOrder?.length === previous.points.length ? previous.pointOrder : [...priorCompleted, ...shuffleInPlace(previous.points.map((_, index) => index).filter((index) => !completedSet.has(index)))];
+  const remapped = new Map<number, number>();
+  const remappedOrder = previousOrder.flatMap((index) => { const point = previous.points[index]; const nextIndex = point && matched.get(pointKey(point))?.shift(); if (nextIndex === undefined) return []; remapped.set(index, nextIndex); return [nextIndex]; });
+  const used = new Set(remappedOrder);
+  const pointOrder = [...remappedOrder, ...shuffleInPlace(next.points.map((_, index) => index).filter((index) => !used.has(index)))];
+  const completedPointIndexes = priorCompleted.flatMap((index) => remapped.has(index) ? [remapped.get(index)!] : []);
+  const lastIndex = remapped.get(previous.lastLocation?.importedMapPointIndex ?? -1) ?? -1;
+  return { ...next, pointOrder, completedPointIndexes, ...(lastIndex >= 0 && previous.lastLocation ? { lastLocation: { ...previous.lastLocation, importedMapPointIndex: lastIndex, importedMapProgress: completedPointIndexes.length, importedMapCompletedPointIndexes: completedPointIndexes } } : {}) };
 }
 
 export function importedMapUrl(value: string): URL {
@@ -86,12 +105,27 @@ export function downloadGeographicPool(countryCodes: string[], locationTargets: 
 
 export const saveImportedMap = (map: ImportedMap) => trainerDb.setSetting(`${IMPORTED_MAP_PREFIX}${map.id}`, map);
 export const getImportedMap = (id: string) => trainerDb.setting<ImportedMap>(`${IMPORTED_MAP_PREFIX}${id}`);
+export async function withImportedSourceHash(location: LocationResult, map: ImportedMap | undefined): Promise<LocationResult> {
+  if (!map || map.kind === 'pool' || location.sourcePointHash) return location;
+  const point = map.points[location.importedMapPointIndex ?? -1];
+  if (!point || point.panoId && point.panoId !== location.panoId || calculateDistanceKm(location.lat, location.lng, point.lat, point.lng) > 1.01) return location;
+  return { ...location, sourcePointHash: await sourcePointHash(point) };
+}
+export async function matchSavedImportedPoints(map: ImportedMap): Promise<void> {
+  if (map.kind === 'pool') return;
+  const known = await trainerDb.locations();
+  await Promise.all(known.flatMap((location) => {
+    const point = map.points[location.importedMapPointIndex ?? -1];
+    if (!point || point.panoId && point.panoId !== location.panoId || calculateDistanceKm(location.lat, location.lng, point.lat, point.lng) > 1.01 || location.sourcePointHash) return [];
+    return [sourcePointHash(point).then((hash) => trainerDb.stampSourcePointHash(location.panoId, hash))];
+  }));
+}
 export async function saveImportedMapProgress(id: string, completed: Set<number>, lastLocation?: LocationResult) {
   const map = await getImportedMap(id);
   if (map && map.kind !== 'pool') await saveImportedMap({ ...map, completedPointIndexes: [...completed], ...(lastLocation ? { lastLocation } : {}) });
 }
 export const remainingImportedPoints = (points: MapPoint[], completed: Set<number>) => points.map((point, index) => ({ point, index })).filter(({ index }) => !completed.has(index));
-export const importedPointCandidates = (points: MapPoint[], completed: Set<number>, order: 'shuffle' | 'source') => order === 'source' ? remainingImportedPoints(points, completed) : shuffleInPlace(remainingImportedPoints(points, completed));
+export const importedPointCandidates = (points: MapPoint[], completed: Set<number>, order: 'shuffle' | 'source', pointOrder?: number[], targetPointIndex?: number) => targetPointIndex !== undefined ? [{ point: points[targetPointIndex], index: targetPointIndex }] : order === 'source' ? remainingImportedPoints(points, completed) : pointOrder ? pointOrder.filter((index) => !completed.has(index)).map((index) => ({ point: points[index], index })) : shuffleInPlace(remainingImportedPoints(points, completed));
 export const isKnownImportedLocation = (location: Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>, known: ReadonlyArray<Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>>) => known.some((item) => item.panoId === location.panoId || nearbyReviewPoint(item, location));
 
 export function varyImportedPoint(point: MapPoint, variation: number, random = Math.random): MapPoint {
@@ -104,17 +138,24 @@ export function varyImportedPoint(point: MapPoint, variation: number, random = M
   return { lat, lng, heading: point.heading };
 }
 
-export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false, variation = 0, completed = new Set<number>(), settings: EnvironmentSettings = { environment: 'mixed', urbanLevel: 3 }, order: 'shuffle' | 'source' = 'shuffle', known: ReadonlyArray<Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>> = []): Promise<LocationResult> {
-  const map = await getImportedMap(mapId);
+export async function pickImportedLocation(mapId: string, excluded = new Set<string>(), signal?: AbortSignal, requireNavigation = false, variation = 0, completed = new Set<number>(), settings: EnvironmentSettings = { environment: 'mixed', urbanLevel: 3 }, order: 'shuffle' | 'source' = 'shuffle', known: ReadonlyArray<Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'countryCode'>> = [], targetPointIndex?: number): Promise<LocationResult> {
+  let map = await getImportedMap(mapId);
   if (!map) throw new Error('Upload this map again on this device to continue.');
   if (map.kind === 'pool') return defaultLocationGenerator.findRandomLocation(map.countryCodes, signal, undefined, settings, { excludedPanoIds: excluded, requireNavigation, locationTargets: map.locationTargets });
   if (!map.points.length) throw new Error('Upload this map again on this device to continue.');
+  const points = map.points;
+  if (targetPointIndex !== undefined && (!Number.isInteger(targetPointIndex) || targetPointIndex < 0 || targetPointIndex >= points.length)) throw new Error('This panorama is not in the uploaded map.');
+  if (order === 'shuffle' && (map.pointOrder?.length !== points.length || new Set(map.pointOrder).size !== points.length || map.pointOrder.some((index) => !Number.isInteger(index) || index < 0 || index >= points.length))) {
+    map = { ...map, pointOrder: shuffleInPlace(points.map((_, index) => index)) };
+    await saveImportedMap(map);
+  }
   variation = Number.isFinite(variation) ? Math.min(100, Math.max(0, variation)) : 0;
   const service = new google.maps.StreetViewService();
   const knownPanos = new Set(known.map((item) => item.panoId));
-  for (const { point, index } of importedPointCandidates(map.points, completed, order)) {
+  const candidates = importedPointCandidates(points, completed, order, map.pointOrder, targetPointIndex);
+  for (const { point, index } of candidates) {
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-    if (!variation) completed.add(index);
+    if (!variation && targetPointIndex === undefined) completed.add(index);
     if (point.panoId && knownPanos.has(point.panoId)) { completed.add(index); continue; }
     if (point.panoId && excluded.has(point.panoId)) continue;
     const target = varyImportedPoint(point, variation);
@@ -124,8 +165,8 @@ export async function pickImportedLocation(mapId: string, excluded = new Set<str
     if (calculateDistanceKm(lat, lng, point.lat, point.lng) > (variation ? Math.max(.1, variation / 100) : .25)) continue;
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;
-    if (countryCode) { completed.add(index); if (isKnownImportedLocation({ lat, lng, panoId: data.location.pano, countryCode }, known)) continue; return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading, importedMapPointIndex: index, importedMapProgress: completed.size, importedMapCompletedPointIndexes: [...completed] }; }
+    if (countryCode) { completed.add(index); if (isKnownImportedLocation({ lat, lng, panoId: data.location.pano, countryCode }, known)) continue; return { lat, lng, panoId: data.location.pano, countryCode, heading: point.heading, sourcePointHash: await sourcePointHash(point), importedMapPointIndex: index, importedMapProgress: completed.size, importedMapCompletedPointIndexes: [...completed] }; }
   }
-  if (variation) return pickImportedLocation(mapId, excluded, signal, requireNavigation, 0, completed, settings, order, known);
+  if (variation) return pickImportedLocation(mapId, excluded, signal, requireNavigation, 0, completed, settings, order, known, targetPointIndex);
   throw new Error('No available Street View locations remain in this map.');
 }

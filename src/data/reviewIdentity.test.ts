@@ -18,3 +18,14 @@ test('nearby note identity includes same-country Street View nodes only within 5
   assert.equal(nearbyReviewPoint(current, { ...current, panoId: 'far', lat: 45.81 }), false);
   assert.equal(nearbyReviewPoint(current, { ...current, panoId: 'border', countryCode: 'SI' }), false);
 });
+
+test('one uploaded source point keeps a single Review card across distant panorama resolutions', () => {
+  const hash = 'source-point-hash';
+  const first = { ...location('first', 52.5), sourcePointHash: hash };
+  const second = { ...location('second', 52.501), sourcePointHash: hash };
+  assert.equal(nearbyReviewPoint(first, second), true);
+  assert.equal(nearbyReviewPoint(first, { ...second, sourcePointHash: 'another-point' }), false);
+  const result = coalesceNearbyReviews([review('first', 2), review('second', 0)], [first, second], []);
+  assert.equal(result.reviews.length, 1);
+  assert.equal(result.aliases.get('second'), 'first');
+});

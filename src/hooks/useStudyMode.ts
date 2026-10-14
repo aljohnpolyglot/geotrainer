@@ -7,7 +7,7 @@ import { defaultLocationGenerator } from '../services/locationGenerator';
 import { reverseGeocodeLocation } from '../services/geocoding';
 import { isCurrentPanorama, isLatestRequest } from '../services/requestIntegrity';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
-import { getImportedMap, importedMapPointCount, moveImportedHistory, pickImportedLocation, restoreImportedHistory, saveImportedMapProgress, type ImportedMapHistory } from '../services/importedMap';
+import { getImportedMap, importedMapPointCount, matchSavedImportedPoints, moveImportedHistory, pickImportedLocation, recoverImportedHistory, restoreImportedHistory, saveImportedMapProgress, withImportedSourceHash, type ImportedMapHistory } from '../services/importedMap';
 import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
 import { NextLocationPreparation } from '../services/nextLocationPreparation';
@@ -70,19 +70,58 @@ export function useStudyMode(ctx: any) {
     const history = moveImportedHistory(uploadedHistoryRef.current, 'previous');
     if (history !== uploadedHistoryRef.current) openUploadedHistory(history);
   };
-  const handleSelectUploaded = (index: number) => {
-    if (ctx.learnSource !== 'uploaded' || isLoading || studyReviewSaving) return;
-    const history = moveImportedHistory(uploadedHistoryRef.current, index);
-    if (history !== uploadedHistoryRef.current && history.index !== uploadedHistoryRef.current.index) openUploadedHistory(history);
+  const handleSelectUploaded = async (pointIndex: number) => {
+    const mapId = ctx.studyImportedMapIdRef.current;
+    if (ctx.learnSource !== 'uploaded' || !mapId || isLoading || studyReviewSaving || !Number.isInteger(pointIndex) || pointIndex < 0 || pointIndex >= uploadedTotalRef.current) return;
+    const visitedIndex = uploadedHistoryRef.current.locations.findIndex((item) => item.importedMapPointIndex === pointIndex);
+    if (visitedIndex >= 0) { if (visitedIndex !== uploadedHistoryRef.current.index) openUploadedHistory(moveImportedHistory(uploadedHistoryRef.current, visitedIndex)); return; }
+    const requestId = ++latestGenerationRequestRef.current;
+    preparedStudyRef.current.clear(); ++latestPanoramaSyncRef.current;
+    abortControllerRef.current?.abort(); const controller = new AbortController(); abortControllerRef.current = controller;
+    generationPendingRef.current = true; setIsLoading(true); setErrorMessage(null);
+    try {
+      const completed = new Set<number>(uploadedCompletedRef.current);
+      const location = await pickImportedLocation(mapId, new Set(), controller.signal, false, ctx.studyImportedVariationRef.current, completed, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, ctx.studyImportedOrderRef.current, [], pointIndex);
+      if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
+      await saveImportedMapProgress(mapId, completed, location);
+      if (!isLatestRequest(requestId, latestGenerationRequestRef.current)) return;
+      uploadedCompletedRef.current = completed;
+      const history = { locations: [...uploadedHistoryRef.current.locations, location], index: uploadedHistoryRef.current.locations.length };
+      uploadedHistoryRef.current = history; setUploadedHistory(history);
+      setUploadedProgress({ position: location.importedMapProgress ?? completed.size, total: uploadedTotalRef.current });
+      setCoachNote(null); setStudyReviewSaved(null); setIsRevealed(false); setCurrentLocation(location);
+    } catch (error) {
+      if (isLatestRequest(requestId, latestGenerationRequestRef.current) && !(error instanceof Error && error.name === 'AbortError')) setErrorMessage(error instanceof Error ? error.message : 'Could not open this panorama.');
+    } finally {
+      if (isLatestRequest(requestId, latestGenerationRequestRef.current)) { generationPendingRef.current = false; setIsLoading(false); }
+    }
   };
-  const restoreUploadedHistory = (value: unknown, location: LocationResult, progress?: { position: number; total: number }) => {
-    const history = value === undefined && uploadedHistoryRef.current.locations[uploadedHistoryRef.current.index]?.panoId === location.panoId
+  const restoreUploadedHistory = async (value: unknown, location: LocationResult, progress?: { position: number; total: number }, mapId?: string) => {
+    let history = value === undefined && uploadedHistoryRef.current.locations[uploadedHistoryRef.current.index]?.panoId === location.panoId
       ? uploadedHistoryRef.current : restoreImportedHistory(value, location);
     uploadedHistoryRef.current = history; setUploadedHistory(history);
     uploadedCompletedRef.current = new Set();
     const savedProgress = progress && Number.isInteger(progress.position) && Number.isInteger(progress.total) && progress.total > 0 && progress.position >= 0 && progress.position <= progress.total ? progress : undefined;
     uploadedTotalRef.current = savedProgress?.total || 0; setUploadedProgress(savedProgress);
     skipUploadedSeedRef.current = false;
+    if (mapId) {
+      const map = await getImportedMap(mapId);
+      if (map?.kind !== 'pool' && map) {
+        await matchSavedImportedPoints(map);
+        history = { ...history, locations: await Promise.all(history.locations.map((item) => withImportedSourceHash(item, map))) };
+        uploadedHistoryRef.current = history; setUploadedHistory(history);
+        uploadedTotalRef.current = map.points.length;
+        uploadedCompletedRef.current = new Set(map.completedPointIndexes || []);
+        setUploadedProgress({ position: savedProgress?.position ?? uploadedCompletedRef.current.size, total: map.points.length });
+      }
+    }
+    if (mapId && (history.locations[0]?.importedMapProgress ?? 0) > 1) {
+      const [map, known] = await Promise.all([getImportedMap(mapId), trainerDb.locations()]);
+      if (uploadedHistoryRef.current !== history) return;
+      const recovered = recoverImportedHistory(history, map, known);
+      uploadedHistoryRef.current = recovered; setUploadedHistory(recovered);
+    }
+    return history.locations[history.index];
   };
   const findStudyLocation = async (importedMapId: string | undefined, collection: Collection, signal: AbortSignal, requestId: number | undefined, completed: Set<number>, currentPanoId?: string) => {
     let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };

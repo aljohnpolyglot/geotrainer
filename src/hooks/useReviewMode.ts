@@ -153,6 +153,7 @@ export function useReviewMode(ctx: any) {
       const previous = await trainerDb.reviewState(reviewAttempt.panoId); const scheduled = failedEarlierInSession(reviewStats, reviewAttempt.id) || shouldScheduleReview(reviewKind, previous, Date.now(), scheduler);
       const schedule = scheduled ? await trainerDb.gradeReview(reviewAttempt.panoId, grade, reviewKind === 'correction' && grade !== 'again' ? 1 : undefined, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) : await trainerDb.updateReviewGeneralization(reviewAttempt.panoId, grade, { level: attempt.generalizationLevel, kind: attempt.reviewViewKind }) || previous;
       const savedAttempt = { ...attempt, grade, reviewedAt: Date.now(), previousDueAt: previous?.dueAt, nextDueAt: schedule?.dueAt, intervalDays: schedule?.intervalDays };
+      if (reviewAttempt.sourcePointHash) savedAttempt.sourcePointHash = reviewAttempt.sourcePointHash;
       await trainerDb.saveAttempt(savedAttempt);
       for (const item of reviewQueue) if (item.countryCode === reviewAttempt.countryCode && calculateDistanceKm(item.actualLat, item.actualLng, reviewAttempt.actualLat, reviewAttempt.actualLng) <= .05) preparedCardsRef.current.delete(item.id);
       const stats = [...reviewStats, { previous: reviewAttempt.score, current: score, grade, attemptId: reviewAttempt.id }];

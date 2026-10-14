@@ -8,6 +8,7 @@ export const isLocation = (value: unknown): value is LocationResult => {
 
 export const locationForWorkspace = (location: LocationResult): LocationResult => ({
   countryCode: location.countryCode, lat: location.lat, lng: location.lng, panoId: location.panoId,
+  ...(location.panoramaHash ? { panoramaHash: location.panoramaHash } : {}),
   ...(location.exactAddress ? { exactAddress: location.exactAddress } : {}),
   ...(location.locality ? { locality: location.locality } : {}),
   ...(location.adminArea ? { adminArea: location.adminArea } : {}),
@@ -19,6 +20,7 @@ export const locationForWorkspace = (location: LocationResult): LocationResult =
   ...(location.heading !== undefined ? { heading: location.heading } : {}),
   ...(location.pitch !== undefined ? { pitch: location.pitch } : {}),
   ...(location.importedMapPointIndex !== undefined ? { importedMapPointIndex: location.importedMapPointIndex } : {}),
+  ...(location.sourcePointHash ? { sourcePointHash: location.sourcePointHash } : {}),
   ...(location.importedMapProgress !== undefined ? { importedMapProgress: location.importedMapProgress } : {}),
   ...(location.importedMapCompletedPointIndexes?.length ? { importedMapCompletedPointIndexes: location.importedMapCompletedPointIndexes } : {}),
 });

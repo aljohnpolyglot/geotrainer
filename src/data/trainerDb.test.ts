@@ -116,7 +116,9 @@ test('migration is idempotent and backup/import protects history', async () => {
   const manualReview = await trainerDb.queueForReview(correctRound.panoId, false, { lat: 59.33, lng: 18.06, countryCode: 'SE' });
   assert.equal(manualReview.intervalDays, 0);
   assert.equal(manualReview.reviewCount, 0);
-  assert.deepEqual((await trainerDb.attempts()).find((item) => item.id === correctRound.id), correctRound);
+  const { panoramaHash, ...savedAttempt } = (await trainerDb.attempts()).find((item) => item.id === correctRound.id)!;
+  assert.match(panoramaHash!, /^[a-f0-9]{64}$/);
+  assert.deepEqual(savedAttempt, correctRound);
   assert.deepEqual(await trainerDb.queueForReview(correctRound.panoId), manualReview);
   assert.deepEqual(await trainerDb.reviewState('reimported-nearby', { lat: 59.3301, lng: 18.06, countryCode: 'SE' }), manualReview);
   assert.equal(await trainerDb.reviewState('reimported-other-country', { lat: 59.3301, lng: 18.06, countryCode: 'NO' }), undefined);
@@ -302,4 +304,19 @@ test('nearby Review card keeps the Play movement rule over Study and Review sour
   const queue = await trainerDb.reviewQueue({ due: true });
   assert.deepEqual(queue.map((item) => item.id), ['nmpz']);
   assert.deepEqual([queue[0].canMove, queue[0].canPan, queue[0].canZoom], [false, false, false]);
+});
+
+test('an older uploaded save matches its source point after Google resolves a farther panorama', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  const { matchSavedImportedPoints, withImportedSourceHash } = await import('../services/importedMap');
+  await initTrainerDb(); await clearTrainerDbForTesting();
+  const map = { id: 'map', name: 'Map', points: [{ lat: 52.5, lng: 13.4 }] };
+  const old = { panoId: 'old-view', lat: 52.5, lng: 13.4, countryCode: 'DE', importedMapPointIndex: 0 };
+  await trainerDb.encounter(old);
+  const card = await trainerDb.queueForReview(old.panoId, false, old);
+  const next = await withImportedSourceHash({ panoId: 'new-view', lat: 52.501, lng: 13.4, countryCode: 'DE', importedMapPointIndex: 0 }, map);
+  assert.equal(await trainerDb.reviewState(next.panoId, next), undefined);
+  await matchSavedImportedPoints(map);
+  assert.equal((await trainerDb.reviewState(next.panoId, next))?.id, card.id);
+  assert.equal((await trainerDb.locations())[0].encounterCount, 1);
 });

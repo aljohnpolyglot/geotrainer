@@ -18,6 +18,7 @@ import { intervalsFor } from './reviewGrading';
 import { rebalanceReviewDates, reconcileReviewAttempt } from './reviewSchedule';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
+import { panoramaHash } from '../services/locationHash';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
@@ -262,10 +263,10 @@ export const trainerDb = {
   clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
-  async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord | undefined> {
+  async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord | undefined> {
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
     const target = location || locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
-    return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : get<ReviewRecord>('reviews', panoId);
+    return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode, sourcePointHash: target.sourcePointHash }) : get<ReviewRecord>('reviews', panoId);
   },
   setSetting: (key: string, value: unknown) => {
     const write = settingWrites.then(async () => {
@@ -284,7 +285,10 @@ export const trainerDb = {
     await complete(tx);
     notifyChange({ operation: 'clear:games' });
   },
-  saveAttempt: (attempt: Attempt) => put('attempts', attempt),
+  saveAttempt: async (attempt: Attempt) => {
+    const sourceHash = attempt.sourcePointHash || (await get<TrainerLocation>('locations', attempt.panoId))?.sourcePointHash;
+    return put('attempts', { ...attempt, panoramaHash: await panoramaHash(attempt.panoId), ...(sourceHash ? { sourcePointHash: sourceHash } : {}) });
+  },
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
   saveSession: (session: TrainingSession) => put('sessions', session),
   saveClue: (clue: ClueRecord) => put('clues', { ...clue, imageFingerprint: clue.imageFingerprint || clueImageFingerprint(clue.imageDataUrl) || undefined }),
@@ -303,10 +307,12 @@ export const trainerDb = {
     const next: TrainerLocation = previous ? {
       ...previous,
       ...location,
+      panoramaHash: await panoramaHash(location.panoId),
       lastSeenAt: seenAt,
       encounterCount: previous.encounterCount + 1,
     } : {
       ...location,
+      panoramaHash: await panoramaHash(location.panoId),
       id: location.panoId,
       firstSeenAt: seenAt,
       lastSeenAt: seenAt,
@@ -314,6 +320,11 @@ export const trainerDb = {
     };
     await put('locations', next);
     return next;
+  },
+
+  async stampSourcePointHash(panoId: string, hash: string): Promise<void> {
+    const location = await get<TrainerLocation>('locations', panoId);
+    if (location && location.sourcePointHash !== hash) await put('locations', { ...location, sourcePointHash: hash });
   },
 
   async saveLocationImage(panoId: string, imageDataUrl: string): Promise<void> {
@@ -373,6 +384,7 @@ export const trainerDb = {
     const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(oldInterval, preferences)[grade]);
     const now = Date.now();
     const next: ReviewRecord = {
+      ...previous,
       id: previous?.panoId || panoId,
       panoId: previous?.panoId || panoId,
       dueAt: nextReviewAt(now, intervalDays, preferences),
@@ -396,7 +408,7 @@ export const trainerDb = {
     await put('reviews', next); return next;
   },
 
-  async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord> {
+  async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord> {
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
     const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) return existing;
@@ -404,12 +416,12 @@ export const trainerDb = {
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     const intervalDays: Record<ReviewGrade, number> = { again: preferences.firstReviewDays, hard: preferences.firstReviewDays, good: 7, easy: preferences.easyFirstIntervalDays };
     const days = Math.min(preferences.maximumIntervalDays, intervalDays[grade]);
-    const created: ReviewRecord = { id: panoId, panoId, dueAt: nextReviewAt(now, days, preferences), intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    const created: ReviewRecord = { id: panoId, panoId, panoramaHash: await panoramaHash(panoId), sourcePointHash: location?.sourcePointHash, dueAt: nextReviewAt(now, days, preferences), intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
     await put('reviews', created);
     return created;
   },
 
-  async queueForReview(panoId: string, dueNow = false, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode'>): Promise<ReviewRecord> {
+  async queueForReview(panoId: string, dueNow = false, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord> {
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
     const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) {
@@ -420,7 +432,7 @@ export const trainerDb = {
     }
     const now = Date.now();
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
-    const created: ReviewRecord = { id: panoId, panoId, dueAt: dueNow ? now : nextReviewAt(now, preferences.firstReviewDays, preferences), intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    const created: ReviewRecord = { id: panoId, panoId, panoramaHash: await panoramaHash(panoId), sourcePointHash: location?.sourcePointHash, dueAt: dueNow ? now : nextReviewAt(now, preferences.firstReviewDays, preferences), intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
     await put('reviews', created);
     return created;
   },

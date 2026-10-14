@@ -2,16 +2,16 @@ import type { Attempt, ReviewRecord, TrainerLocation } from '../types';
 import { calculateDistanceKm } from '../services/gameLogic';
 
 export const REVIEW_DUPLICATE_RADIUS_KM = .05;
-type ReviewPoint = { panoId: string; lat: number; lng: number; countryCode: string };
+type ReviewPoint = { panoId: string; lat: number; lng: number; countryCode: string; sourcePointHash?: string };
 
 const pointsByPano = (locations: TrainerLocation[], attempts: Attempt[]) => {
   const points = new Map<string, ReviewPoint>();
-  attempts.forEach((item) => points.set(item.panoId, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode }));
+  attempts.forEach((item) => points.set(item.panoId, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode, sourcePointHash: item.sourcePointHash }));
   locations.forEach((item) => points.set(item.panoId, item));
   return points;
 };
 
-export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM;
+export const nearbyReviewPoint = (a: ReviewPoint, b: ReviewPoint) => a.countryCode === b.countryCode && (!!a.sourcePointHash && a.sourcePointHash === b.sourcePointHash || calculateDistanceKm(a.lat, a.lng, b.lat, b.lng) <= REVIEW_DUPLICATE_RADIUS_KM);
 
 export function uniqueReviewSources(attempts: Attempt[], canonicalPano: (attempt: Attempt) => string): Attempt[] {
   const priority = { play: 0, review: 1, study: 2 };

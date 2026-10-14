@@ -61,5 +61,7 @@ test('country specializations govern Play and Review without weakening untargete
   await trainerDb.queueForReview(attempt.panoId, false, { lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode });
   await trainerDb.gradeReview(attempt.panoId, reviewGradeForCorrection(4700, 'FR', 'FR', preferences));
   assert.equal((await trainerDb.reviewState(attempt.panoId))?.gradingHistory.at(-1)?.grade, 'again');
-  assert.deepEqual((await trainerDb.attempts()).find(({ id }) => id === attempt.id), attempt);
+  const { panoramaHash, ...savedAttempt } = (await trainerDb.attempts()).find(({ id }) => id === attempt.id)!;
+  assert.match(panoramaHash!, /^[a-f0-9]{64}$/);
+  assert.deepEqual(savedAttempt, attempt);
 });

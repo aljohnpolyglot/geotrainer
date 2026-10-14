@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, remainingImportedPoints, restoreImportedHistory, resumeImportedMap, varyImportedPoint } from './importedMap';
+import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, recoverImportedHistory, remainingImportedPoints, restoreImportedHistory, resumeImportedMap, varyImportedPoint } from './importedMap';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -77,6 +77,14 @@ test('resumed uploaded Learn restores visited views and rejects stale history', 
   assert.deepEqual(restoreImportedHistory(undefined, second), { locations: [second], index: 0 });
 });
 
+test('older uploaded workspace recovers visited source entries without adding skipped points', () => {
+  const first = { lat: 1, lng: 2, panoId: 'first', countryCode: 'SG', importedMapPointIndex: 0 };
+  const current = { lat: 3, lng: 4, panoId: 'current', countryCode: 'SG', importedMapPointIndex: 2, importedMapProgress: 3 };
+  const map = { id: 'map', name: 'Map', points: [{ lat: 1, lng: 2 }, { lat: 2, lng: 3 }, { lat: 3, lng: 4 }], completedPointIndexes: [0, 1, 2] };
+  assert.deepEqual(recoverImportedHistory({ locations: [current], index: 0 }, map, [first, current]), { locations: [{ ...first, importedMapProgress: 1 }, current], index: 1 });
+  assert.deepEqual(recoverImportedHistory({ locations: [current], index: 0 }, map, [{ ...first, lat: 10 }]), { locations: [current], index: 0 });
+});
+
 test('uploaded variation keeps zero exact and bounds nearby positions', () => {
   const point = { lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 };
   assert.strictEqual(varyImportedPoint(point, 0), point);
@@ -103,6 +111,22 @@ test('source order skips completed entries and seen places use the same-country 
   assert.equal(isKnownImportedLocation({ panoId: 'new-node', lat: 1, lng: 1, countryCode: 'MY' }, known), false);
 });
 
+test('saved shuffle order remains stable for a large uploaded deck', () => {
+  const points = Array.from({ length: 5000 }, (_, index) => ({ lat: index / 1000, lng: 1 }));
+  const pointOrder = points.map((_, index) => points.length - 1 - index);
+  const completed = new Set([4999, 4998]);
+  assert.deepEqual(importedPointCandidates(points, completed, 'shuffle', pointOrder).slice(0, 3).map(({ index }) => index), [4997, 4996, 4995]);
+  assert.deepEqual(importedPointCandidates(points, completed, 'source', pointOrder).slice(0, 3).map(({ index }) => index), [0, 1, 2]);
+});
+
+test('direct panorama selection reaches any source entry, including one not visited yet', () => {
+  const points = Array.from({ length: 217 }, (_, index) => ({ lat: index / 1000, lng: 1 }));
+  const completed = new Set([0, 7]);
+  assert.deepEqual(importedPointCandidates(points, completed, 'shuffle', points.map((_, index) => 216 - index), 216), [{ point: points[216], index: 216 }]);
+  assert.deepEqual(importedPointCandidates(points, completed, 'source', undefined, 7), [{ point: points[7], index: 7 }]);
+  assert.deepEqual([...completed], [0, 7]);
+});
+
 test('reusing an updated JSON source keeps matching Learn progress and leaves new points available', async () => {
   assert.equal(await importedMapIdForSource('file:map.json'), await importedMapIdForSource('file:map.json'));
   assert.notEqual(await importedMapIdForSource('file:map.json'), await importedMapIdForSource('url:https://example.com/map.json'));
@@ -116,6 +140,15 @@ test('reusing an updated JSON source keeps matching Learn progress and leaves ne
   assert.deepEqual(resumed.completedPointIndexes, [1]);
   assert.equal(resumed.lastLocation?.importedMapPointIndex, 1);
   assert.deepEqual(remainingImportedPoints(resumed.points, new Set(resumed.completedPointIndexes)), [{ point: next.points[0], index: 0 }, { point: next.points[2], index: 2 }]);
+});
+
+test('reloading a revised JSON preserves shuffled draw and completion order', () => {
+  const previous = { id: 'map', name: 'Map', points: [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 3, lng: 3 }], pointOrder: [2, 0, 1], completedPointIndexes: [2, 0] };
+  const next = { id: 'map', name: 'Map', points: [{ lat: 3, lng: 3 }, { lat: 1, lng: 1 }, { lat: 2, lng: 2 }, { lat: 4, lng: 4 }] };
+  const resumed = resumeImportedMap(previous, next);
+  if (resumed.kind === 'pool') return;
+  assert.deepEqual(resumed.completedPointIndexes, [0, 1]);
+  assert.deepEqual(resumed.pointOrder?.slice(0, 3), [0, 1, 2]);
 });
 
 test('JSON URLs convert GitHub file pages while preserving raw and other endpoints', () => {
