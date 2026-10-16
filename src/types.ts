@@ -154,7 +154,7 @@ export interface MapPreferences {
   countryBorderWidth?: CountryBorderWidth;
   countryBorderColor?: CountryBorderColor;
 }
-export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; }
+export interface EnvironmentSettings { environment: Environment; urbanLevel: UrbanLevel; samplingMode?: SamplingMode; panoramaSource?: PanoramaSource; allowContributors?: boolean; allowInteriors?: boolean; includeWater?: boolean; }
 
 export interface GameSettings {
   roundCount: number;
@@ -178,6 +178,7 @@ export interface GameSettings {
   panoramaSource?: PanoramaSource; // Optional for backwards-compatible saved games
   allowContributors?: boolean; // Optional for backwards-compatible saved games
   allowInteriors?: boolean; // Optional for backwards-compatible saved games
+  includeWater?: boolean; // Optional for backwards-compatible saved games
   timeLimitSeconds: number; // 0 = unlimited; otherwise 1–3600 seconds
 }
 

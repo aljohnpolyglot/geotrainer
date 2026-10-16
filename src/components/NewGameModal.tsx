@@ -71,6 +71,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [priority, setPriority] = useState<LearnPriority>('random');
   const [panoramaSource, setPanoramaSource] = useState<PanoramaSource>('official');
   const [allowInteriors, setAllowInteriors] = useState(false);
+  const [includeWater, setIncludeWater] = useState(true);
   const [locationSource, setLocationSource] = useState<'generated' | 'uploaded' | 'url' | 'ai'>('generated');
   const [importedMap, setImportedMap] = useState<ImportedMap>();
   const [importedMapOrder, setImportedMapOrder] = useState<'shuffle' | 'source'>('shuffle');
@@ -86,7 +87,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]); setLocationTargets([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds); setCustomTime(![0, 30, 60, 90, 120].includes(value.timeLimitSeconds));
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setIncludeWater(value.includeWater !== false); setTimeLimitSeconds(value.timeLimitSeconds); setCustomTime(![0, 30, 60, 90, 120].includes(value.timeLimitSeconds));
       setImportedMapOrder(value.importedMapOrder ?? 'shuffle'); setSkipSeenImported(value.skipSeenImported !== false);
       setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
       void (value.importedMapId ? getImportedMap(value.importedMapId) : trainerDb.setting<string>('local.currentMapId').then((id) => id && getImportedMap(id))).then((map) => { if (active) setImportedMap(map || undefined); });
@@ -136,6 +137,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       panoramaSource,
       allowContributors: panoramaSource !== 'official',
       allowInteriors,
+      includeWater,
       timeLimitSeconds,
     };
     if (importedSource && !importedMap) return;
@@ -368,6 +370,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
           </div>
           <label className="panorama-source-setting">{t('Street View imagery')}<select value={panoramaSource} onChange={(event) => setPanoramaSource(event.target.value as PanoramaSource)}><option value="official">{t('Official only')}</option><option value="mixed">{t('Official + contributor')}</option><option value="contributor">{t('Contributor only')}</option></select></label>
           <label className="panorama-source-setting">{t('Indoor coverage')}<select value={allowInteriors ? 'mixed' : 'outdoor'} onChange={(event) => setAllowInteriors(event.target.value === 'mixed')}><option value="outdoor">{t('Outdoors only')}</option><option value="mixed">{t('Mixed indoors and outdoors')}</option></select></label>
+          {locationSource === 'generated' && <button type="button" role="switch" aria-checked={includeWater} onClick={() => setIncludeWater((value) => !value)} className="imported-map-skip"><span>{t('Occasional boat views')}</span><span className="imported-map-switch" aria-hidden="true" /></button>}
 
           {/* 5. Timer Option */}
           <div className="space-y-1.5">

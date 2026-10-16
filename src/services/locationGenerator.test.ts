@@ -276,6 +276,30 @@ test('Meta recovers expired panorama IDs only within 50 metres and preserves the
   await assert.rejects(new StreetViewLocationGenerator().reopenLocation(saved, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true }), /unavailable/);
 });
 
+test('optional boat view stays at its known panorama and falls back when unavailable or disabled', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const { WATER_VIEWS } = await import('../data/waterViews');
+  const boat = WATER_VIEWS.find((view) => view.countryCode === 'BM')!;
+  const originalRandom = Math.random;
+  Math.random = () => 0;
+  try {
+    currentResults = [{ ...boat, pano: boat.panoId, countryCode: 'BM', links: [{}] }]; results = [...currentResults]; panoramaRequests = [];
+    const found = await new StreetViewLocationGenerator().findRandomLocation(['BM'], undefined, undefined, { environment: 'mixed', urbanLevel: 3, includeWater: true }, { requireNavigation: true, maxAttempts: 1 });
+    assert.equal(found.panoId, boat.panoId);
+    assert.equal(panoramaRequests[0].radius, 50);
+    assert.deepEqual(panoramaRequests[0].sources, ['GOOGLE', 'OUTDOOR']);
+    currentResults = [{ ...boat, pano: 'replacement-on-land', countryCode: 'BM' }, { lat: 32.4, lng: -64.7, pano: 'normal', countryCode: 'BM' }]; results = [...currentResults]; panoramaRequests = [];
+    assert.equal((await new StreetViewLocationGenerator().findRandomLocation(['BM'], undefined, undefined, { environment: 'mixed', urbanLevel: 3, includeWater: true }, { maxAttempts: 2 })).panoId, 'normal');
+    assert.ok(panoramaRequests[1].radius! > 50);
+    currentResults = [{ lat: 32.5, lng: -64.8, pano: 'land-only', countryCode: 'BM' }]; results = [...currentResults]; panoramaRequests = [];
+    assert.equal((await new StreetViewLocationGenerator().findRandomLocation(['BM'], undefined, undefined, { environment: 'mixed', urbanLevel: 3, includeWater: false }, { maxAttempts: 1 })).panoId, 'land-only');
+    assert.ok(panoramaRequests[0].radius! > 50);
+    currentResults = [{ lat: 32.6, lng: -64.9, pano: 'pool-location', countryCode: 'BM' }]; results = [...currentResults]; panoramaRequests = [];
+    assert.equal((await new StreetViewLocationGenerator().findRandomLocation(['BM'], undefined, undefined, { environment: 'mixed', urbanLevel: 3 }, { maxAttempts: 1 })).panoId, 'pool-location');
+    assert.ok(panoramaRequests[0].radius! > 50);
+  } finally { Math.random = originalRandom; }
+});
+
 test('World Shuffle follows the observed duel country mix and falls back outside it', async () => {
   const { pickWorldShuffleCountry } = await import('./locationGenerator');
   const sample = (await import('../data/worldShuffleWeights.json')).default;

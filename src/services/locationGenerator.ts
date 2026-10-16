@@ -7,6 +7,7 @@ import { CityPoolCity, EnvironmentSettings, LocationGenerator, LocationRequestCo
 import { COUNTRIES } from '../data/countries';
 import cityData from '../data/cities.json';
 import worldShuffle from '../data/worldShuffleWeights.json';
+import { WATER_VIEWS } from '../data/waterViews';
 import { reverseGeocodeLocation } from './geocoding';
 
 const devDiagnostics = typeof import.meta.env !== 'undefined' && import.meta.env.DEV;
@@ -203,6 +204,9 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     const resolvedTargets = context.locationTargets?.length ? await resolveLocationTargets(context.locationTargets) : [];
     const preferredCountryCodes = context.preferredCountryCodes?.filter((code) => countryCodes.includes(code));
     if (context.locationTargets?.length && !resolvedTargets.length) throw new Error('The selected region or city pool is unavailable.');
+    const waterViews = options.includeWater === true && options.environment === 'mixed' && options.samplingMode !== 'balanced' && options.samplingMode !== 'shuffle' && !context.locationTargets?.length && !context.preferredCandidate && !preferredCountryCodes?.length
+      ? WATER_VIEWS.filter((view) => countryCodes.includes(view.countryCode)) : [];
+    const waterView = waterViews.length && Math.random() < (countryCodes.length === 1 ? .25 : .05) ? waterViews[Math.floor(Math.random() * waterViews.length)] : undefined;
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       if (signal?.aborted) {
@@ -216,12 +220,12 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       const poolFocus = resolvedTargets.length ? pickLocationPoolFocus(resolvedTargets, countryCodes) : undefined;
       const focused = poolFocus?.kind === 'target' ? poolFocus : undefined;
       const preferredCountryCode = preferredCountryCodes?.length ? preferredCountryCodes[(attempt - 1) % preferredCountryCodes.length] : undefined;
-      const randomCountryCode = poolFocus?.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode === 'shuffle' ? pickWorldShuffleCountry(eligibleCountries) : context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
+      const randomCountryCode = attempt === 1 && waterView ? waterView.countryCode : poolFocus?.countryCode || preferredCountryCode || (context.collectionId === 'world' && options.samplingMode === 'shuffle' ? pickWorldShuffleCountry(eligibleCountries) : context.collectionId === 'world' && options.samplingMode !== 'balanced' ? pickWorldCountry(eligibleCountries) : eligibleCountries[Math.floor(Math.random() * eligibleCountries.length)]);
       const strategyAttempt = (attempt - 1) % batchAttempts + 1;
-      const environment = options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
+      const environment = attempt === 1 && waterView ? 'mixed' : options.environment === 'mixed' ? focused ? (Math.random() < .65 ? 'urban' : 'suburban') : strategyAttempt > 10 ? 'mixed' : chooseMixedEnvironment(this.mixedHistory) : options.environment;
       this.mixedHistory = [...this.mixedHistory, environment].slice(-2);
       const preferred = context.preferredCandidate?.countryCode === randomCountryCode ? context.preferredCandidate : undefined;
-      const candidate: { lat: number; lng: number; city?: CitySeed } = focused ? sampleCityPoolCandidate(focused.city, environment === 'mixed' ? 'urban' : environment)
+      const candidate: { lat: number; lng: number; city?: CitySeed } = attempt === 1 && waterView ? waterView : focused ? sampleCityPoolCandidate(focused.city, environment === 'mixed' ? 'urban' : environment)
         : preferred ? around({ name: '', population: 0, class: 'local', urbanRadiusKm: 1, lat: preferred.lat, lng: preferred.lng }, preferred.minRadiusKm || 0, preferred.minRadiusKm ? preferred.radiusKm || 15 : Math.min(preferred.radiusKm ?? 15, strategyAttempt === 1 ? 0 : 2 ** (strategyAttempt - 2)), Math.random)
         : this.generateCandidate(randomCountryCode, environment === 'mixed' ? strategyAttempt - 10 : strategyAttempt, { ...options, environment });
 
@@ -232,7 +236,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
       try {
         // Query nearest official outdoor street view panorama within search radius
         const baseRadius = usesTightSeedSearch(randomCountryCode) ? 1000 : environment === 'urban' ? 8000 : environment === 'suburban' ? 12000 : 15000;
-        const radius = preferred ? Math.min(40000, Math.max(baseRadius, 8000 * 2 ** Math.max(0, strategyAttempt - 1))) : baseRadius;
+        const radius = attempt === 1 && waterView ? 50 : preferred ? Math.min(40000, Math.max(baseRadius, 8000 * 2 ** Math.max(0, strategyAttempt - 1))) : baseRadius;
 
         const data = await new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => {
           sv.getPanorama(
@@ -255,6 +259,7 @@ export class StreetViewLocationGenerator implements LocationGenerator {
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
         if (data && data.location && data.location.latLng && data.location.pano) {
+          if (attempt === 1 && waterView && (data.location.pano !== waterView.panoId || calculateDistanceKm(waterView.lat, waterView.lng, data.location.latLng.lat(), data.location.latLng.lng()) > .05)) continue;
           if (!acceptsPanoramaSource(isOfficialGooglePanorama(data), options.panoramaSource, options.allowContributors)) continue;
           if (context.requireNavigation && !data.links?.length) continue;
           const lat = data.location.latLng.lat();

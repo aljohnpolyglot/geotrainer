@@ -175,6 +175,8 @@ Diese Werte steuern die Suche, garantieren aber wegen begrenzter Street-View-Abd
 
 Wähle unter **Zeitlimit pro Runde** in den Spieleinstellungen Unbegrenzt, eine Vorgabe oder Eigene Zeit für 1 bis 3600 Sekunden. Die Auswahl bleibt für das nächste Spiel gespeichert; eine pausierte Runde läuft mit ihrer verbleibenden aktiven Zeit weiter.
 
+**Gelegentliche Bootsansichten** ist beim benutzerdefinierten Lernen und bei generierten Spielorten standardmäßig aktiviert. Mit Gemischter Umgebung, Zufallspriorität und Natürlicher Auswahl kann eine bekannte Bootsansicht in Madagaskar oder Bermuda erscheinen, wenn das Land im Pool enthalten ist. Bildquellen- und Bewegungsregeln gelten weiterhin; ist die Ansicht nicht verfügbar, läuft die normale Ortssuche weiter. Ausschalten entfernt diese zusätzlichen Kandidaten. Regionale oder städtische Pools, hochgeladene Karten, Meta und Wiederholung bleiben unverändert.
+
 Läuft die Zeit im Spiel ab, wird die zuletzt gesetzte Markierung auf der Karte automatisch als Antwort abgegeben, auch ohne Bestätigung. Ohne Markierung wird die Runde als nicht beantwortet gespeichert.
 
 Wähle in den Spieleinstellungen Generierte Orte oder Hochgeladene Karte. Die Runden verwenden Orte aus der Datei und können sie wiederholen, wenn es mehr Runden als Orte gibt.

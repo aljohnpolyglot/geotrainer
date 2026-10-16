@@ -100,6 +100,8 @@ Durante la creación, el botón indica la fase actual de países, regiones o ciu
 
 En **Límite por ronda** de la configuración del juego, elige Sin límite, un valor predefinido o Personalizado para introducir entre 1 y 3600 segundos. La elección se conserva para la siguiente partida; una ronda pausada se reanuda con el tiempo activo restante.
 
+**Vistas ocasionales desde barcos** está activado de forma predeterminada en Aprender personalizado y Juego con lugares generados. Con entorno Mixto, prioridad Aleatoria y muestreo Natural, puede elegir un panorama conocido desde un barco en Madagascar o Bermudas si ese país está en el grupo. Se respetan las reglas de origen de imágenes y movimiento; si la vista no está disponible, se busca un lugar normal. Al desactivarlo se eliminan estos candidatos adicionales. No afecta a grupos de regiones o ciudades, mapas importados, Meta ni Repaso.
+
 ### Moverse con teclado
 
 En una ronda con movimiento de Juego o Repaso, haz clic en una flecha de navegación de Street View y mantén pulsada la barra espaciadora para seguir en esa dirección. Suéltala para detenerte. La flecha debe tener el foco: si la barra espaciadora activa otro botón, vuelve a hacer clic en la flecha. Es el control normal del panorama, sin ajuste de velocidad aparte. No Move y NMPZ impiden desplazarse. En Estudio, usa N o el botón Siguiente para avanzar; la barra espaciadora queda libre para moverte en Street View. Puede continuar una ronda terminada si ese botón tiene el foco.

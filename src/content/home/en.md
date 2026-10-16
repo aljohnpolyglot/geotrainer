@@ -191,6 +191,8 @@ These controls guide generation. A panorama can still differ from the requested 
 
 Under **Time Limit Per Round** in game setup, choose Unlimited, a preset, or Custom to enter 1–3600 seconds. Your choice is remembered for the next game; a paused round resumes with its remaining active time.
 
+**Occasional boat views** starts on in Custom Learn and generated Play setup. With Mixed environment, Random priority, and Natural sampling, it may select a known boat panorama in Madagascar or Bermuda when that country is in your pool. The imagery-source and movement rules still apply; an unavailable boat view falls back to ordinary location search. Turning the switch off removes these extra boat candidates. Focused region or city pools, uploaded maps, Meta, and Review are unaffected.
+
 Play measures unaided recall in scored rounds. It supports short drills and longer games while keeping each round in History.
 
 ### Game setup

@@ -69,6 +69,7 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     panoramaSource,
     allowContributors: panoramaSource !== 'official',
     allowInteriors: source.allowInteriors === true,
+    includeWater: source.includeWater !== false,
     timeLimitSeconds: Number.isInteger(timeLimitSeconds) && timeLimitSeconds >= 0 && timeLimitSeconds <= 3600 ? timeLimitSeconds : 0,
   };
 };

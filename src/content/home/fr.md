@@ -100,6 +100,8 @@ Pendant la création, le bouton indique l’étape en cours pour les pays, régi
 
 Dans **Limite par manche** des réglages du jeu, choisissez Illimité, une durée prédéfinie ou Personnalisé pour saisir de 1 à 3 600 secondes. Ce choix est conservé pour la prochaine partie ; une manche en pause reprend avec le temps actif restant.
 
+**Vues occasionnelles depuis un bateau** est activé par défaut dans Apprendre personnalisé et le Jeu avec lieux générés. Avec l’environnement Mixte, la priorité Aléatoire et l’échantillonnage Naturel, un panorama connu depuis un bateau à Madagascar ou aux Bermudes peut être choisi si le pays figure dans le groupe. Les règles de source d’images et de déplacement restent appliquées ; si la vue est indisponible, la recherche reprend normalement. Désactiver l’option retire ces candidats supplémentaires. Les groupes de régions ou de villes, les cartes importées, Méta et Révision ne changent pas.
+
 ### Se déplacer au clavier
 
 Dans une manche avec déplacement en Jeu ou en Révision, cliquez sur une flèche de navigation Street View, puis maintenez la barre d’espace pour continuer dans cette direction. Relâchez-la pour vous arrêter. La flèche doit avoir le focus : si la barre d’espace active un autre bouton, cliquez à nouveau sur la flèche. C’est la commande habituelle du panorama, sans réglage de vitesse distinct. No Move et NMPZ empêchent le déplacement. En Étude, utilisez N ou le bouton Suivant pour avancer ; la barre d’espace reste disponible pour se déplacer dans Street View. Elle peut encore poursuivre une manche terminée si ce bouton a le focus.

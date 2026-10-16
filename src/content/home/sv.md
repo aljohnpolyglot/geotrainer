@@ -96,6 +96,8 @@ Under skapandet visar knappen den aktuella fasen för länder, regioner eller st
 
 Under **Tidsgräns per runda** i spelinställningarna väljer du Obegränsat, en förinställning eller Egen tid och anger 1–3600 sekunder. Valet sparas till nästa spel; en pausad runda fortsätter med återstående aktiv tid.
 
+**Enstaka båtvyer** är på som standard i anpassat Lär och i Spel med genererade platser. Med Blandad miljö, Slumpmässig prioritet och Naturligt urval kan ett känt båtpanorama från Madagaskar eller Bermuda visas om landet ingår i urvalet. Reglerna för bildkälla och förflyttning gäller fortfarande; om vyn saknas fortsätter den vanliga platssökningen. Stäng av reglaget för att ta bort dessa extra kandidater. Valda regioner eller städer, uppladdade kartor, Meta och Repetition påverkas inte.
+
 ### Förflytta dig med tangentbordet
 
 I en spel- eller repetitionsrunda där förflyttning är tillåten klickar du på en navigeringspil i Street View och håller sedan ned mellanslag för att fortsätta i den riktningen. Släpp tangenten för att stanna. Pilen måste ha fokus: om mellanslag aktiverar en annan knapp klickar du på pilen igen. Det är panoramats vanliga tangentbordsfunktion, utan separat hastighetsinställning. No Move och NMPZ tillåter inte förflyttning. I Lär går du vidare med N eller knappen Nästa; mellanslag är fritt för rörelse i Street View. Tangenten kan fortfarande fortsätta en avslutad runda om den knappen har fokus.

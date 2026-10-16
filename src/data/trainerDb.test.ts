@@ -242,7 +242,7 @@ test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: -1, environment: 'ocean' }, false), {
     roundCount: 5, collectionId: 'world', canMove: false, canPan: true, canZoom: true, showCompass: false, aiCoachEnabled: true,
-    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, importedMapOrder: 'shuffle', skipSeenImported: true, timeLimitSeconds: 0,
+    environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, includeWater: true, importedMapOrder: 'shuffle', skipSeenImported: true, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ priority: 'least-exposure' }).priority, 'least-exposure');
   assert.equal(normalizeGamePreferences({ samplingMode: 'shuffle' }).samplingMode, 'shuffle');
@@ -252,6 +252,7 @@ test('saved game preferences are normalized before reuse', async () => {
   assert.equal(normalizeGamePreferences({ timeLimitSeconds: 3600 }).timeLimitSeconds, 3600);
   assert.equal(normalizeGamePreferences({ timeLimitSeconds: 3601 }).timeLimitSeconds, 0);
   assert.equal(normalizeGamePreferences({ timeLimitSeconds: 1.5 }).timeLimitSeconds, 0);
+  assert.equal(normalizeGamePreferences({ includeWater: false }).includeWater, false);
   assert.equal(normalizeGamePreferences({ countryCode: 'DE' }).countryCode, 'DE');
   assert.equal(normalizeGamePreferences({ countryCode: 'ZZ' }).countryCode, undefined);
   assert.deepEqual(normalizeGamePreferences({ countryCodes: ['DE', 'FR', 'DE', 'ZZ'] }).countryCodes, ['DE', 'FR']);

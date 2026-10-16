@@ -98,6 +98,8 @@ Durante la creazione, il pulsante mostra la fase corrente di paesi, regioni o ci
 
 In **Limite per turno** nelle impostazioni di gioco, scegli Illimitato, un valore predefinito o Personalizzato per inserire da 1 a 3600 secondi. La scelta viene conservata per la partita successiva; un turno in pausa riprende con il tempo attivo rimanente.
 
+**Viste occasionali in barca** è attivo per impostazione predefinita in Impara personalizzato e nel Gioco con luoghi generati. Con ambiente Misto, priorità Casuale e campionamento Naturale, può comparire un panorama noto in barca in Madagascar o Bermuda se il paese è nel gruppo. Restano valide le regole sull’origine delle immagini e sul movimento; se la vista non è disponibile, la ricerca continua con i luoghi normali. Disattivare l’opzione elimina questi candidati aggiuntivi. Gruppi di regioni o città, mappe caricate, Meta e Ripasso non cambiano.
+
 ### Muoversi con la tastiera
 
 In un round con movimento in Gioco o Ripasso, fai clic su una freccia di navigazione di Street View e tieni premuta la barra spaziatrice per proseguire in quella direzione. Rilascia il tasto per fermarti. La freccia deve avere il focus: se la barra spaziatrice attiva un altro pulsante, fai di nuovo clic sulla freccia. È il normale controllo del panorama, senza un’impostazione di velocità separata. No Move e NMPZ impediscono lo spostamento. In Studio, usa N o il pulsante Avanti per proseguire; la barra spaziatrice resta libera per muoverti in Street View. Può ancora continuare un round concluso se quel pulsante ha il focus.

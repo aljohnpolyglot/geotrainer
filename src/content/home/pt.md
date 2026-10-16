@@ -98,6 +98,8 @@ Durante a criação, o botão mostra a etapa atual de países, regiões ou cidad
 
 Em **Limite por rodada** nas configurações do jogo, escolha Ilimitado, uma opção predefinida ou Personalizado para inserir de 1 a 3600 segundos. A escolha fica salva para o próximo jogo; uma rodada pausada retoma com o tempo ativo restante.
 
+**Vistas ocasionais de barco** vem ativado em Aprender personalizado e Jogo com locais gerados. Com ambiente Misto, prioridade Aleatória e amostragem Natural, pode escolher um panorama conhecido de barco em Madagascar ou Bermudas quando o país estiver no grupo. As regras de origem das imagens e movimento continuam valendo; se a vista não estiver disponível, a busca segue com locais normais. Desativar a opção remove esses candidatos extras. Grupos de regiões ou cidades, mapas carregados, Meta e Revisão não são afetados.
+
 ### Mover-se com o teclado
 
 Em uma rodada com movimento no Jogo ou na Revisão, clique em uma seta de navegação do Street View e mantenha a barra de espaço pressionada para continuar naquela direção. Solte a tecla para parar. A seta precisa estar em foco: se a barra de espaço ativar outro botão, clique novamente na seta. Esse é o controle normal do panorama; não há ajuste de velocidade separado. No Move e NMPZ impedem deslocamentos. No Estudo, use N ou o botão Seguinte para avançar; a barra de espaço fica livre para se mover no Street View. Ela ainda pode continuar uma rodada concluída se esse botão estiver em foco.

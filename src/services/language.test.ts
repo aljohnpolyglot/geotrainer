@@ -15,6 +15,7 @@ test('language preferences keep only supported community languages and migrate m
     assert.ok(translate(code, 'Seconds per round'));
     assert.notEqual(translate(code, 'Custom time'), 'Custom time');
     assert.notEqual(translate(code, 'Zoom to city'), 'Zoom to city');
+    if (code !== 'en') assert.notEqual(translate(code, 'Occasional boat views'), 'Occasional boat views');
   }
 });
 
