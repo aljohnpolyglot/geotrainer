@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- Reduce memory use by reading saved location metadata without screenshots during routine matching and hub loading, fetching a Coverage photo only when viewed, and hiding inactive Street View panoramas.
 - Add a regional-border toggle to revealed location maps, using the existing map border styling and saved Display preference as its default.
 
 ## 2026-10-16

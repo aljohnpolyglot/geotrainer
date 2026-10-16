@@ -137,7 +137,7 @@ export async function withImportedSourceHash(location: LocationResult, map: Impo
 }
 export async function matchSavedImportedPoints(map: ImportedMap): Promise<void> {
   if (map.kind === 'pool') return;
-  const known = await trainerDb.locations();
+  const known = await trainerDb.locationMetadata();
   await Promise.all(known.flatMap((location) => {
     const point = map.points[location.importedMapPointIndex ?? -1];
     if (!point || point.panoId && point.panoId !== location.panoId || calculateDistanceKm(location.lat, location.lng, point.lat, point.lng) > 1.01 || location.sourcePointHash) return [];

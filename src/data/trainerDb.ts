@@ -86,6 +86,20 @@ async function all<T>(storeName: StoreName): Promise<T[]> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).getAll()) as Promise<T[]>;
 }
+async function locationMetadata(): Promise<TrainerLocation[]> {
+  const db = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const locations: TrainerLocation[] = [];
+    const cursor = db.transaction('locations').objectStore('locations').openCursor();
+    cursor.onsuccess = () => {
+      if (!cursor.result) return resolve(locations);
+      const { imageDataUrl: _image, ...location } = cursor.result.value as TrainerLocation;
+      locations.push(location);
+      cursor.result.continue();
+    };
+    cursor.onerror = () => reject(cursor.error);
+  });
+}
 async function get<T>(storeName: StoreName, key: IDBValidKey): Promise<T | undefined> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).get(key)) as Promise<T | undefined>;
@@ -188,7 +202,7 @@ async function migrateLocalStorageV1(): Promise<void> {
 }
 
 async function reconcileSavedReviews() {
-  const [attempts, reviews, locations, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), get<SettingRecord>('settings', 'schedulerPreferences')]);
+  const [attempts, reviews, locations, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), locationMetadata(), get<SettingRecord>('settings', 'schedulerPreferences')]);
   const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
   const latest = new Map<string, Attempt>();
   attempts.filter((item) => item.source === 'review').forEach((item) => { if (!latest.get(item.panoId) || latest.get(item.panoId)!.createdAt < item.createdAt) latest.set(item.panoId, item); });
@@ -207,11 +221,13 @@ export async function initTrainerDb(): Promise<void> {
 export const trainerDb = {
   count: async (storeName: 'locations' | 'attempts') => request((await openDatabase()).transaction(storeName).objectStore(storeName).count()),
   locations: () => all<TrainerLocation>('locations'),
+  locationMetadata,
+  location: (panoId: string) => get<TrainerLocation>('locations', panoId),
   attempts: () => all<Attempt>('attempts'),
   games: async () => (await all<GameRecord>('games')).sort((a, b) => b.createdAt - a.createdAt),
   studyVisits: () => all<StudyVisit>('studyVisits'),
   reviews: async () => {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     return coalesceNearbyReviews(reviews, locations, attempts).reviews;
   },
   async rebalanceReviews(shifts: DueShift[]): Promise<void> {
@@ -228,7 +244,7 @@ export const trainerDb = {
   deleteSetting: (key: string) => remove('settings', key),
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord | undefined> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const target = location || locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode, sourcePointHash: target.sourcePointHash }) : get<ReviewRecord>('reviews', panoId);
   },
@@ -299,7 +315,7 @@ export const trainerDb = {
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {
     await reconcileSavedReviews();
     const [attempts, storedReviews, locations, bookmarks, storedPreferences] = await Promise.all([
-      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
+      all<Attempt>('attempts'), all<ReviewRecord>('reviews'), locationMetadata(), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
     ]);
     const { reviews, aliases } = coalesceNearbyReviews(storedReviews, locations, attempts);
     const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
@@ -340,7 +356,7 @@ export const trainerDb = {
   },
 
   async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord> {
-    const [storedReviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [storedReviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     const previous = target ? nearbyReview(coalesceNearbyReviews(storedReviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : await get<ReviewRecord>('reviews', panoId);
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
@@ -364,7 +380,7 @@ export const trainerDb = {
   },
 
   async updateReviewGeneralization(panoId: string, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord | undefined> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     const previous = target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : undefined;
     if (!previous || !variation.kind || variation.kind === 'original') return previous;
@@ -373,7 +389,7 @@ export const trainerDb = {
   },
 
   async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) return existing;
     const now = Date.now();
@@ -386,7 +402,7 @@ export const trainerDb = {
   },
 
   async queueForReview(panoId: string, dueNow = false, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) {
       if (!dueNow || existing.dueAt <= Date.now()) return existing;
@@ -402,7 +418,7 @@ export const trainerDb = {
   },
 
   async reviewIntervals(panoId: string): Promise<Record<ReviewGrade, number>> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), all<TrainerLocation>('locations'), all<Attempt>('attempts')]);
+    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     const review = target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : undefined;
     const oldInterval = review?.intervalDays || 0;

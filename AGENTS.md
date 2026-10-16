@@ -4,6 +4,7 @@
 
 - Preserve Study, Play, Review, IndexedDB history, bookmarks, coverage, and saved-game compatibility.
 - Prefer small changes that reuse existing components and services; do not redesign unrelated UI.
+- Keep routine reads and inactive map views memory efficient; load saved location photos only when a visible view needs them. Preserve bounded Play and Review prequeueing for fast transitions, and pause preparation when the page is hidden or the learner leaves. Keep cloud sync manual.
 - Keep Street View imagery transient. Never download or persist it unless the user explicitly asks.
 - Keep workspace 360° clipboard captures transient: combine four quarter-turn views in memory, copy one image, and never add it to IndexedDB, cloud storage, clues, or history.
 - Persist one current-view screenshot when the user explicitly saves a location or submits a Play answer; treat older records without screenshots as valid.

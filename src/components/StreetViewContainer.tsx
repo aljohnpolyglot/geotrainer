@@ -175,6 +175,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   // Initialize or update StreetViewPanorama
   useEffect(() => {
     if (!mapsLoaded || !containerRef.current) return;
+    if (!currentLocation) { panoInstanceRef.current?.setVisible(false); return; }
 
     // Create panorama if not already instantiated
     if (!panoInstanceRef.current) {

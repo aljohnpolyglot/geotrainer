@@ -12,7 +12,7 @@ export function useSavedReviewMatcher(ready: boolean, sourceId?: string) {
   useEffect(() => {
     if (!ready) { setSnapshot(undefined); return; }
     let active = true;
-    void Promise.all([trainerDb.reviews(), trainerDb.locations(), trainerDb.attempts()])
+    void Promise.all([trainerDb.reviews(), trainerDb.locationMetadata(), trainerDb.attempts()])
       .then(([reviews, locations, attempts]) => { if (active) setSnapshot({ key, matcher: savedReviewMatcher(reviews, locations, attempts) }); })
       .catch(() => { if (active) setSnapshot(undefined); });
     return () => { active = false; };

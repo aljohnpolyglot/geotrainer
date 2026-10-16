@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Eye, Lightbulb, MapPin, NotebookPen, Search, Sparkles, Trash2, X } from 'lucide-react';
-import type { ClueRecord, CoachHistoryNote, LearnedMeta, MetaLesson, NotebookNote, TrainerLocation } from '../types';
+import type { ClueRecord, CoachHistoryNote, LearnedMeta, MetaLesson, NotebookNote } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { CountryFlag } from './CountryFlag';
 import { ClueGallery } from './ClueGallery';
@@ -18,7 +18,7 @@ import { sortRows, type SortDirection } from '../analytics/tableSorting';
 type ClueView = 'library' | 'countries' | 'insights';
 type CountrySortKey = 'country' | 'count' | 'confidence' | 'latest';
 
-export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, locations, onDelete, onDeleteNote, onSaveNote, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; locations: TrainerLocation[]; onDelete: (id: string) => void; onDeleteNote: (note: NotebookNote) => void; onSaveNote: (note: NotebookNote) => Promise<void>; onTrainCountries: (codes: string[], name: string) => void }) {
+export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, onDelete, onDeleteNote, onSaveNote, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; onDelete: (id: string) => void; onDeleteNote: (note: NotebookNote) => void; onSaveNote: (note: NotebookNote) => Promise<void>; onTrainCountries: (codes: string[], name: string) => void }) {
   const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null); const [failedImages, setFailedImages] = useState(() => new Set<string>());
   const [countrySort, setCountrySort] = useState<{ key: CountrySortKey; direction: SortDirection }>({ key: 'count', direction: 'desc' });
   const [countryMeta, setCountryMeta] = useState<{ language: string; lessons: Map<string, MetaLesson>; loaded: boolean }>({ language: ui, lessons: new Map(), loaded: false });
@@ -49,7 +49,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (panoId: string) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(panoId)}`;
   const noteImage = (note: NotebookNote) => clues.find((clue) => clue.id === noteLinks.get(note))?.imageDataUrl;
-  const coachImage = (note: CoachHistoryNote) => (note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined) || locations.find((location) => location.panoId === note.panoId)?.imageDataUrl;
+  const coachImage = (note: CoachHistoryNote) => note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined;
   const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note), missingImage: missingPhotos.has(note) });
   const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: coachImage(note) });
   const openMeta = (learned: LearnedMeta, lesson: MetaLesson) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, category: lesson.section, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId || undefined, mapUrl: lesson.mapUrl, metaLessonId: lesson.id });

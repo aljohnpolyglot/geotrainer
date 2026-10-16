@@ -118,7 +118,7 @@ export function useStudyMode(ctx: any) {
       }
     }
     if (mapId && (history.locations[0]?.importedMapProgress ?? 0) > 1) {
-      const [map, known] = await Promise.all([getImportedMap(mapId), trainerDb.locations()]);
+      const [map, known] = await Promise.all([getImportedMap(mapId), trainerDb.locationMetadata()]);
       if (uploadedHistoryRef.current !== history) return;
       const recovered = recoverImportedHistory(history, map, known);
       uploadedHistoryRef.current = recovered; setUploadedHistory(recovered);
@@ -130,7 +130,7 @@ export function useStudyMode(ctx: any) {
     let preferredCountryCodes: string[] | undefined;
     const priorityCountryCodes = studyPriorityRef.current === 'least-exposure' && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
     if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
-      const history = await trainerDb.locations();
+      const history = await trainerDb.locationMetadata();
       target = learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
       if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
       if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
@@ -164,7 +164,7 @@ export function useStudyMode(ctx: any) {
       const importedMap = await getImportedMap(importedMapId); uploadedTotalRef.current = importedMap ? importedMapPointCount(importedMap) || 0 : 0;
       if (importedMap?.kind !== 'pool' && importedMap) uploadedCompletedRef.current = new Set([...uploadedCompletedRef.current, ...(importedMap.completedPointIndexes || [])]);
       if (!uploadedHistoryRef.current.locations.length && !currentLocation && importedMap?.kind !== 'pool' && importedMap) {
-        if (importedMap.lastLocation) { const history = recoverImportedHistory(moveImportedHistory(uploadedHistoryRef.current, 'next', importedMap.lastLocation), importedMap, await trainerDb.locations()); skipUploadedSeedRef.current = false; uploadedHistoryRef.current = history; setUploadedHistory(history); setUploadedProgress({ position: uploadedCompletedRef.current.size, total: uploadedTotalRef.current }); setCurrentLocation(importedMap.lastLocation); return; }
+        if (importedMap.lastLocation) { const history = recoverImportedHistory(moveImportedHistory(uploadedHistoryRef.current, 'next', importedMap.lastLocation), importedMap, await trainerDb.locationMetadata()); skipUploadedSeedRef.current = false; uploadedHistoryRef.current = history; setUploadedHistory(history); setUploadedProgress({ position: uploadedCompletedRef.current.size, total: uploadedTotalRef.current }); setCurrentLocation(importedMap.lastLocation); return; }
       }
       if (skipUploadedSeedRef.current) skipUploadedSeedRef.current = false;
       else if (!uploadedHistoryRef.current.locations.length && currentLocation) { uploadedHistoryRef.current = moveImportedHistory(uploadedHistoryRef.current, 'next', currentLocation); setUploadedHistory(uploadedHistoryRef.current); (currentLocation.importedMapCompletedPointIndexes || (currentLocation.importedMapPointIndex === undefined ? [] : [currentLocation.importedMapPointIndex])).forEach((index) => uploadedCompletedRef.current.add(index)); }

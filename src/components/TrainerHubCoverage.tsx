@@ -8,6 +8,7 @@ import { CoverageChoropleth } from "./CoverageChoropleth";
 import type { CoverageOverlay } from "./trainerHubUtils";
 import { mapPresentationOptions, useMapPreferences } from "../services/mapPreferences";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
+import { trainerDb } from '../data/trainerDb';
 
 interface CoverageMapProps {
   locations: TrainerLocation[];
@@ -73,14 +74,17 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
           content.className = "map-cluster-preview";
           const metric = overlay === "mastery" ? `${t("Mastery")}: ${groupReviews.length ? Math.round(mastery * 100) + "%" : "—"}` : overlay === "exposure" ? `${group.reduce((sum, item) => sum + item.encounterCount, 0).toLocaleString(ui)} ${t("encounters")}` : overlay === "score" ? `${t("averageScoreMap")}: ${averageScore === null ? "—" : Math.round(averageScore).toLocaleString(ui)} pts` : overlay === "due" ? `${reviews.filter((item) => panoIds.has(item.panoId) && item.dueAt <= Date.now()).length.toLocaleString(ui)} ${t("due")}` : `${accuracy === null ? "—" : Math.round(accuracy * 100) + "%"} ${t("accuracy")}`;
           const text = document.createElement("span"); text.textContent = `${group.length} ${group.length === 1 ? t("panorama") : t("panoramas")} · ${metric} · ${countries.slice(0, 4).join(", ")}${countries.length > 4 ? ` +${countries.length - 4}` : ""}`;
-          if (location.imageDataUrl) { const image = document.createElement("img"); image.src = location.imageDataUrl; image.alt = ""; content.append(image); }
           content.append(text);
           preview.current?.setContent(content);
           preview.current?.open({ map: map.current, anchor: marker });
+          void trainerDb.location(location.panoId).then((saved) => {
+            if (!content.isConnected || !saved?.imageDataUrl) return;
+            const image = document.createElement('img'); image.src = saved.imageDataUrl; image.alt = ''; content.prepend(image);
+          }, () => {});
         });
         marker.addListener("mouseout", () => preview.current?.close());
         marker.addListener("click", () => {
-          if (group.length === 1) return setSelected(location);
+          if (group.length === 1) { void trainerDb.location(location.panoId).then((saved) => setSelected(saved || location), () => setSelected(location)); return; }
           const bounds = new google.maps.LatLngBounds();
           group.forEach((item) => bounds.extend({ lat: item.lat, lng: item.lng }));
           map.current?.fitBounds(bounds, 70);
@@ -111,7 +115,7 @@ export function CoverageMap({ locations, attempts, reviews, onOpen }: CoverageMa
   useEffect(() => {
     if (!selected || !panoramaPreview.current || typeof google === 'undefined') return;
     const panorama = new google.maps.StreetViewPanorama(panoramaPreview.current, { pano: selected.panoId, addressControl: false, clickToGo: false, disableDefaultUI: true, linksControl: false, motionTracking: false, showRoadLabels: false });
-    return () => google.maps.event.clearInstanceListeners(panorama);
+    return () => { google.maps.event.clearInstanceListeners(panorama); panorama.setVisible(false); };
   }, [selected]);
 
   const selectedAttempts = selected ? attempts.filter((item) => item.panoId === selected.id) : [];

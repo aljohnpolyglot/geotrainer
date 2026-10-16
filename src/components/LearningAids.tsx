@@ -62,7 +62,7 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [capture360, setCapture360] = useState<'idle' | 'busy' | 'copied' | 'error'>('idle');
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
-  useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues(), trainerDb.locations()]).then(([personal = [], coach = [], attempts, visits, savedClues, locations]) => { if (!active) return;
+  useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clues(), trainerDb.locationMetadata()]).then(([personal = [], coach = [], attempts, visits, savedClues, locations]) => { if (!active) return;
     const current = { panoId, lat, lng, countryCode }; const relatedPanos = new Set([panoId]);
     locations.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
     visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });

@@ -325,3 +325,12 @@ test('an older uploaded save matches its source point after Google resolves a fa
   assert.equal((await trainerDb.reviewState(next.panoId, next))?.id, card.id);
   assert.equal((await trainerDb.locations())[0].encounterCount, 1);
 });
+
+test('location matching reads omit photos while full reads preserve them', async () => {
+  const { clearTrainerDbForTesting, initTrainerDb, trainerDb } = await import('./trainerDb');
+  await initTrainerDb(); await clearTrainerDbForTesting();
+  await trainerDb.encounter({ panoId: 'photo-view', lat: 52.5, lng: 13.4, countryCode: 'DE' });
+  await trainerDb.saveLocationImage('photo-view', 'data:image/jpeg;base64,AQ==');
+  assert.equal((await trainerDb.locationMetadata())[0].imageDataUrl, undefined);
+  assert.equal((await trainerDb.locations())[0].imageDataUrl, 'data:image/jpeg;base64,AQ==');
+});
