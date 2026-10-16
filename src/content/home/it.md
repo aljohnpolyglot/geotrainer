@@ -122,6 +122,8 @@ Quando tentativi vicini di Studio e Gioco condividono una scheda, il Ripasso usa
 
 Le mappe delle risposte di Gioco e Ripasso hanno pulsanti discreti per la copertura e i nomi delle strade. Sono presenti anche nelle mappe dei risultati rivelati e nelle schede dei luoghi salvati. Le impostazioni predefinite sono inizialmente disattivate e si salvano nelle Impostazioni; i pulsanti cambiano solo la vista attuale. Aumenta lo zoom per vedere le strade coperte in blu; la guida non garantisce un panorama conforme ai filtri delle immagini o degli interni.
 
+Le mappe dei luoghi rivelati hanno anche un pulsante per i confini regionali accanto a quello dei nomi delle strade. Cambia solo quella mappa; **Impostazioni → Visualizzazione → Mappe → Confini regionali** imposta il valore predefinito. I confini provengono da Google Maps e possono differire dalle regioni in Statistiche → Luoghi.
+
 La soluzione resta nascosta fino alla stima. Se un vecchio ID apre un panorama a più di 10 km dalla risposta salvata, Ripasso usa una vista valida vicino alle coordinate salvate oppure non apre la scheda. Dopo la risposta, il risultato mostra città, regione, strada, indirizzo completo e coordinate disponibili, come Rivela nello Studio. Riduci il risultato dall’angolo in alto a destra per studiare il panorama e usa Vedi risultato per riaprirlo.
 
 I turni completati di Gioco e Ripasso sbloccano movimento, rotazione e zoom durante questa ispezione, anche se il turno originale li limitava. La pratica personalizzata lascia invariate le schede future; completare una scheda già in scadenza ne avanza la pianificazione anche dopo il ricaricamento.

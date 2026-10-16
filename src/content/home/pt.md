@@ -122,6 +122,8 @@ Quando tentativas próximas de Estudo e Jogo compartilham um cartão, a Revisão
 
 Os mapas de palpites do Jogo e da Revisão têm botões discretos para cobertura e nomes de ruas. Eles também aparecem nos mapas de resultados revelados, incluindo cartões de locais salvos. Os padrões em Configurações começam desligados e são salvos ali; os botões alteram apenas a vista atual. Aproxime o zoom para ver as vias com cobertura azul; o guia não garante um panorama compatível com os filtros de imagens ou interiores.
 
+Os mapas de locais revelados também têm um botão de limites regionais ao lado do botão de nomes de ruas. Ele altera apenas esse mapa; **Configurações → Exibição → Mapas → Limites regionais** define o padrão. Os limites vêm do Google Maps e podem diferir das regiões em Estatísticas → Lugares.
+
 A resposta fica oculta até o palpite. Se um ID antigo abrir um panorama a mais de 10 km da resposta salva, a Revisão usa uma vista válida perto das coordenadas salvas ou não abre o cartão. Depois da resposta, o resultado mostra cidade, região, via, endereço completo e coordenadas disponíveis, como Revelar no Estudo. Minimize o resultado no canto superior direito para estudar o panorama e use Ver resultado para abri-lo novamente. Rodadas concluídas de Jogo e Revisão liberam movimento, rotação e zoom durante essa inspeção, mesmo quando a rodada original os restringia. A prática personalizada não altera cartões futuros; concluir um cartão já vencido avança sua data e persiste após recarregar.
 
 ### Personalizar a revisão

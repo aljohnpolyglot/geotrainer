@@ -222,6 +222,8 @@ Wenn nahe beieinanderliegende Lern- und Spielversuche eine Karte teilen, überni
 
 Die Tippkarten in Spiel und Wiederholung haben dezente Schaltflächen für Abdeckung und Straßennamen. Sie erscheinen auch auf aufgedeckten Ergebniskarten und gespeicherten Ortskarten. Die Vorgaben sind anfangs aus und werden in Einstellungen gespeichert; die Schaltflächen ändern nur die aktuelle Ansicht. Zoome näher heran, um blau markierte Straßen zu sehen. Die Abdeckung garantiert kein Panorama passend zu Bild- oder Innenraumfiltern.
 
+Aufgedeckte Ortskarten haben neben der Straßennamen-Schaltfläche auch eine für Regionengrenzen. Sie ändert nur diese Karte; **Einstellungen → Anzeige → Karten → Regionengrenzen** legt die Vorgabe fest. Die Grenzen stammen aus Google Maps und können von den Regionen unter Statistik → Orte abweichen.
+
 ### Vor der Antwort
 
 Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere verräterische Metadaten. Löst Google eine alte Panorama-ID mehr als 10 km vom gespeicherten Ziel entfernt auf, verwendet die Wiederholung stattdessen ein gültiges Panorama nahe den gespeicherten Koordinaten oder öffnet die Karte nicht. Du musst zuerst selbst tippen.

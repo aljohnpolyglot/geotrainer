@@ -11,6 +11,7 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(revealed, /class="result-map-guides"/);
   assert.match(revealed, /aria-label="Show Street View coverage"/);
   assert.match(revealed, /aria-label="Show road names"/);
+  assert.match(revealed, /aria-label="Show regional borders"/);
   assert.match(revealed, /aria-label="Zoom to answer"/);
   assert.match(revealed, /aria-label="Zoom to city scale"/);
   assert.match(revealed, /aria-label="Zoom to country"/);
@@ -18,6 +19,7 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(selectable, /result-map-guides/);
   assert.match(selectable, /aria-label="Hide Street View coverage"/);
   assert.match(selectable, /aria-label="Show road names"/);
+  assert.match(selectable, /aria-label="Show regional borders"/);
 });
 
 test('Learn reveal card defaults to selectable blue coverage and keeps map zoom shortcuts', () => {

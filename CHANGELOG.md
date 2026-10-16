@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-17
+
+- Add a regional-border toggle to revealed location maps, using the existing map border styling and saved Display preference as its default.
+
 ## 2026-10-16
 
 - Keep the revealed map's zoom and position after selecting Street View coverage, and let Explore Map return directly to the exact Custom, Meta, or uploaded panorama without losing lesson progress.

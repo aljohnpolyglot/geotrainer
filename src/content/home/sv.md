@@ -120,6 +120,8 @@ När närliggande försök från Lär och Spela delar ett kort använder Repetit
 
 Gissningskartorna i Spel och Repetition har diskreta knappar för täckning och vägnamn. De finns även på avslöjade resultatkartor och kort för sparade platser. Standardinställningarna är av från början och sparas i Inställningar; knapparna ändrar bara den aktuella vyn. Zooma in för att se blåmarkerade vägar; guiden garanterar inte en panorama som matchar bild- eller inomhusfiltren.
 
+Kartor över avslöjade platser har också en knapp för regiongränser bredvid vägnamnsknappen. Den ändrar bara den kartan; **Inställningar → Visning → Kartor → Regiongränser** anger standardvalet. Gränserna kommer från Google Maps och kan skilja sig från regionerna i Statistik → Platser.
+
 På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att du kan öppna gissningskartan utan att rulla. Under Repetition visas aktuellt kort, återstående kort och sparat förlopp i sidhuvudet. Resultatpanelen är kompakt och knappen för nästa repetition förblir nåbar när du rullar i detaljerna.
 
 ### Anpassa repetition

@@ -248,6 +248,8 @@ When a nearby Study and Play attempt share one card, Review uses the Play round'
 
 Play and Review guess maps have subtle coverage and road-name buttons in their headers. The same buttons appear on revealed result maps, including saved location cards. Both Settings defaults start off; Settings saves those defaults, while a map button changes only the current view. Zoom in to see blue covered roads; the coverage guide does not guarantee a panorama matching imagery or indoor filters.
 
+Revealed location maps also have a regional-border button beside the road-name button. It changes only that map; **Settings → Display → Maps → Regional borders** sets the default. The borders use Google Maps and may differ from the regional shapes in Statistics → Places.
+
 ### Before the guess
 
 The panorama appears without the current card’s persisted answer metadata. Review does not receive the original answer, previous guessed country, or score before you submit. If an old panorama ID now resolves more than 10 km from its saved answer, Review uses nearby imagery at the saved coordinates instead of showing the wrong scene; if no valid replacement exists, the card does not open.

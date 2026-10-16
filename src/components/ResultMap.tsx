@@ -1,6 +1,6 @@
 import { acquireMap } from '../services/mapResources';
 import { useEffect, useRef, useState } from 'react';
-import { Building2, Crosshair, Globe2, Layers3, Type } from 'lucide-react';
+import { Building2, Crosshair, Globe2, Layers3, Map, Type } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { centeredResultMapZoom, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
@@ -30,8 +30,10 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   const mapPreferences = useMapPreferences();
   const [coverageOverride, setCoverageOverride] = useState<boolean>();
   const [roadNamesOverride, setRoadNamesOverride] = useState<boolean>();
+  const [regionBordersOverride, setRegionBordersOverride] = useState<boolean>();
   const coverageEnabled = coverageOverride ?? (!!onSelect || mapPreferences.showPlayStreetViewCoverage === true);
   const roadNamesEnabled = roadNamesOverride ?? mapPreferences.showPlayRoadLabels === true;
+  const regionBordersEnabled = regionBordersOverride ?? mapPreferences.showRegionBorders === true;
   const t = (key: string) => translate(ui, key);
   const element = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -50,7 +52,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     const resource = acquireMap('result', element.current, {
       center: actual, zoom: initialZoom,
       mapTypeControl: false, streetViewControl: false, fullscreenControl, zoomControl: true,
-      ...playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark')),
+      ...playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled, showRegionBorders: regionBordersEnabled }, document.documentElement.classList.contains('dark')),
       internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
     } as google.maps.MapOptions);
     const map = resource.map;
@@ -70,9 +72,9 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   }, [fullscreenControl]);
 
   useEffect(() => { if (preserveViewAfterSelectRef.current) { preserveViewAfterSelectRef.current = false; manuallyAdjustedRef.current = true; } else { manuallyAdjustedRef.current = false; positionedRef.current = false; } }, [actual.lat, actual.lng, panoId]);
-  useEffect(() => { setCoverageOverride(undefined); }, [actual.lat, actual.lng, panoId]);
+  useEffect(() => { setCoverageOverride(undefined); setRegionBordersOverride(undefined); }, [actual.lat, actual.lng, panoId]);
 
-  useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled]);
+  useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled, showRegionBorders: regionBordersEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled, regionBordersEnabled]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -162,6 +164,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     <div className={`result-map-guides${fullscreenControl ? ' with-fullscreen' : ''}`} role="group" aria-label={t('Map guides')}>
       <button type="button" aria-pressed={coverageEnabled} aria-label={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} title={t(coverageEnabled ? 'Hide Street View coverage' : 'Show Street View coverage')} onClick={() => setCoverageOverride(!coverageEnabled)}><Layers3 size={15} /></button>
       <button type="button" aria-pressed={roadNamesEnabled} aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} onClick={() => setRoadNamesOverride(!roadNamesEnabled)}><Type size={15} /></button>
+      <button type="button" aria-pressed={regionBordersEnabled} aria-label={t(regionBordersEnabled ? 'Hide regional borders' : 'Show regional borders')} title={t(regionBordersEnabled ? 'Hide regional borders' : 'Show regional borders')} onClick={() => setRegionBordersOverride(!regionBordersEnabled)}><Map size={15} /></button>
       <div className="result-map-zoom-actions" role="group" aria-label={t('Map zoom shortcuts')}>
         <button type="button" aria-label={t('Zoom to answer')} title={t('Zoom to answer')} onClick={() => zoomToAnswer(18)}><Crosshair size={17} /></button>
         <button type="button" aria-label={t('Zoom to city')} title={t('Zoom to city')} onClick={() => zoomToAnswer(11)}><Building2 size={17} /></button>

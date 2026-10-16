@@ -124,6 +124,8 @@ Quand des tentatives proches d’Étude et de Jeu partagent une carte, la Révis
 
 Les cartes de réponse du Jeu et de la Révision proposent des boutons discrets pour la couverture et les noms des rues. Ils figurent aussi sur les cartes de résultat révélées, y compris les fiches de lieux enregistrés. Les réglages par défaut sont désactivés et enregistrés dans Paramètres ; les boutons ne modifient que la vue actuelle. Zoomez pour voir les routes couvertes en bleu ; le guide ne garantit pas un panorama conforme aux filtres d’images ou d’intérieurs.
 
+Les cartes des lieux révélés proposent aussi un bouton de frontières régionales à côté de celui des noms de rues. Il ne modifie que cette carte ; **Paramètres → Affichage → Cartes → Frontières régionales** définit le réglage par défaut. Les frontières viennent de Google Maps et peuvent différer des régions de Statistiques → Lieux.
+
 ### Personnaliser la révision
 
 - **Nouvelles cartes / jour** limite les cartes jamais révisées. **Révisions maximum / jour** limite toute la file prête, nouvelles cartes comprises. Les deux limites s’appliquent ensemble. Avec 50 nouvelles cartes et 500 révisions maximum, 110 cartes peuvent être dues mais seulement 108 prêtes si deux nouvelles cartes dépassent leur limite. Accueil et Révision affichent le nombre réellement disponible ; augmenter le maximum total ne contourne pas la limite des nouvelles cartes.

@@ -124,6 +124,8 @@ Si intentos cercanos de Estudio y Juego comparten una tarjeta, Repaso usa la reg
 
 Los mapas de respuestas de Juego y Repaso tienen botones discretos para la cobertura y los nombres de vías. También aparecen en los mapas de resultados revelados, incluidas las tarjetas de lugares guardados. Los valores predeterminados de Configuración empiezan apagados y se guardan allí; los botones cambian solo la vista actual. Acerca el zoom para ver las vías con cobertura azul; esta guía no garantiza un panorama que cumpla los filtros de imágenes o interiores.
 
+Los mapas de lugares revelados también tienen un botón de límites regionales junto al de nombres de vías. Solo cambia ese mapa; **Configuración → Pantalla → Mapas → Límites regionales** establece el valor predeterminado. Los límites proceden de Google Maps y pueden diferir de las regiones de Estadísticas → Lugares.
+
 Repaso oculta la respuesta hasta tu conjetura. Si un identificador antiguo abre un panorama a más de 10 km de la respuesta guardada, usa una vista válida cerca de las coordenadas guardadas o no abre la tarjeta. Después de responder, el resultado muestra la ciudad, región, vía, dirección completa y coordenadas disponibles, igual que Revelar en Estudio. Minimiza el resultado desde la esquina superior derecha para estudiar el panorama y usa Ver resultado para abrirlo de nuevo.
 
 Las rondas completadas de Juego y Repaso permiten moverse, girar y hacer zoom durante esta inspección, aunque la ronda original los restringiera. La práctica personalizada no cambia tarjetas futuras; al completar una tarjeta ya pendiente, su fecha avanza y persiste tras recargar.
