@@ -293,6 +293,8 @@ Aprender ofrece cuatro rutas. **Personalizado** conserva colecciones y entornos.
 
 En cualquier ruta de Aprender, el mapa de la tarjeta revelada muestra la cobertura azul de Street View de forma predeterminada. Pulsa una zona con cobertura para abrirla en Explorar mapa, o usa el botón de capas para ocultar la cobertura y desactivar la selección en esa vista. Esto no avanza el mapa subido ni una lección Meta. El mapa conserva su zoom y posición. Si Solo oficiales no encuentra nada, el mensaje indica elegir **Oficiales + colaboradores** abajo; nunca cambia ese filtro por ti. Un botón de globo en la esquina superior izquierda del panorama vuelve al mapa mundial sin ocupar el encabezado.
 
+El panorama abierto desde la cobertura se revela de inmediato y mantiene visible la tarjeta del lugar. Si venías de un mapa JSON subido, la flecha de volver arriba a la izquierda regresa directamente al panorama exacto de origen sin avanzar el progreso de la fuente; en los demás casos, el globo abre el mapa mundial.
+
 Aprender personalizado y Juego usan imágenes oficiales de Google de forma predeterminada; el selector permite mezclar panoramas oficiales y de colaboradores o solicitar solo panoramas de colaboradores. **Permitir interiores** está desactivado de forma predeterminada en ambas configuraciones; al activarlo, Google puede devolver cobertura de Street View tanto interior como exterior.
 
 En **Configuración → Pantalla** puedes controlar nombres de calles, fecha de imagen, movimiento del teléfono, forma de desplazarte, tipo de mapa, gestos, lugares interactivos y colores de GeoTrainer. Los nombres de calles y los lugares interactivos vienen desactivados para evitar pistas accidentales.

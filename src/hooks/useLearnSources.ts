@@ -26,6 +26,9 @@ type LearnSourceContext = {
   setIsRevealed: (revealed: boolean) => void;
 };
 
+export const uploadedCoverageOrigin = (source: LearnSource, history: { locations: LocationResult[]; index: number }) =>
+  source === 'uploaded' ? history.locations[history.index] : undefined;
+
 export function useLearnSources(ctx: LearnSourceContext) {
   const { setAppMode, setShowHome, setStudySetupOpen, setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed } = ctx;
   const { ui } = useLanguagePreferences();
@@ -43,6 +46,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
   useEffect(() => { if (ctx.showHome || ctx.appMode !== 'study') requestRef.current++; }, [ctx.appMode, ctx.showHome]);
   useEffect(() => { const refresh = () => { void readMetaSeen().then(setMetaSeen); }; window.addEventListener(CLOUD_IMPORT_EVENT, refresh); return () => window.removeEventListener(CLOUD_IMPORT_EVENT, refresh); }, []);
   const [mapPickerOpen, setMapPickerOpen] = useState(false);
+  const [mapReturnLocation, setMapReturnLocation] = useState<LocationResult | null>(null);
   const [metaAdviceOpen, setMetaAdviceOpen] = useState(false);
 
   const prepare = useCallback((source: LearnSource) => {
@@ -184,11 +188,12 @@ export function useLearnSources(ctx: LearnSourceContext) {
 
   const startMap = useCallback(() => {
     requestRef.current++;
+    setMapReturnLocation(null);
     prepare('map'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined); setMapPickerOpen(true);
   }, [prepare]);
 
-  const startCustom = useCallback(() => { requestRef.current++; setLearnSource('custom'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined); setMapPickerOpen(false); }, []);
-  const startUploaded = useCallback(() => { requestRef.current++; setLearnSource('uploaded'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined); setMapPickerOpen(false); }, []);
+  const startCustom = useCallback(() => { requestRef.current++; setMapReturnLocation(null); setLearnSource('custom'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined); setMapPickerOpen(false); }, []);
+  const startUploaded = useCallback(() => { requestRef.current++; setMapReturnLocation(null); setLearnSource('uploaded'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined); setMapPickerOpen(false); }, []);
 
   const openMapLocation = useCallback(async (location: Omit<LocationResult, 'countryCode'>) => {
     setIsLoading(true); setErrorMessage(null);
@@ -201,7 +206,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
     } finally { setIsLoading(false); }
   }, [setCurrentLocation, setErrorMessage, setIsLoading]);
 
-  const openMapPoint = useCallback(async (point: { lat: number; lng: number }, panoramaSource: PanoramaSource, allowInteriors: boolean) => {
+  const openMapPoint = useCallback(async (point: { lat: number; lng: number }, panoramaSource: PanoramaSource, allowInteriors: boolean, returnLocation?: LocationResult) => {
     const request = ++requestRef.current;
     setIsLoading(true); setErrorMessage(null);
     try {
@@ -209,13 +214,21 @@ export function useLearnSources(ctx: LearnSourceContext) {
       const place = await reverseGeocodeLocation(location.lat, location.lng);
       if (!place?.countryCode) throw new Error('This Street View location could not be identified. Choose another place.');
       if (request !== requestRef.current) return;
+      if (returnLocation) setMapReturnLocation(returnLocation);
       setLearnSource('map'); setActiveMetaLesson(undefined); setActiveCountryTip(undefined);
-      setMapPickerOpen(false); setIsRevealed(false);
+      setMapPickerOpen(false); setIsRevealed(true);
       setCurrentLocation({ ...location, countryCode: place.countryCode });
     } catch (error) {
       if (request === requestRef.current) setErrorMessage(error instanceof Error ? error.message : 'Could not open that Street View location.');
     } finally { if (request === requestRef.current) setIsLoading(false); }
   }, [setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
+
+  const returnToUploaded = useCallback(() => {
+    if (!mapReturnLocation) return;
+    requestRef.current++;
+    setLearnSource('uploaded'); setMapPickerOpen(false); setIsLoading(false); setErrorMessage(null); setIsRevealed(true);
+    setCurrentLocation(mapReturnLocation); setMapReturnLocation(null);
+  }, [mapReturnLocation, setCurrentLocation, setErrorMessage, setIsLoading, setIsRevealed]);
 
   const dismissMetaAdvice = useCallback((forever: boolean) => {
     setMetaAdviceOpen(false);
@@ -224,6 +237,7 @@ export function useLearnSources(ctx: LearnSourceContext) {
 
   const restoreLearnSource = useCallback((source?: LearnSource, metaLessonId?: string, courseId = 'beginner', location?: LocationResult) => {
     const request = ++requestRef.current;
+    setMapReturnLocation(null);
     const restored = source === 'meta' || source === 'map' || source === 'uploaded' ? source : 'custom';
     setLearnSource(restored); setMetaCourseId(courseId);
     setActiveMetaLesson(restored === 'meta' ? metaLessonById(metaLessonId) : undefined);
@@ -241,5 +255,5 @@ export function useLearnSources(ctx: LearnSourceContext) {
 
   return { learnSource, activeMetaLesson, activeCountryTip, metaCourseId, metaProgress: { position: metaPosition, total: metaTotal, completed: metaCompleted }, canPreviousMeta: metaIndex > 0,
     mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta, nextMeta, previousMeta, startMap,
-    openMapLocation, openMapPoint, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource };
+    openMapLocation, openMapPoint, mapReturnLocation, returnToUploaded, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource };
 }

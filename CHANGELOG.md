@@ -2,6 +2,7 @@
 
 ## 2026-10-16
 
+- Keep the revealed Learn location card open when selecting blue Street View coverage, and provide a direct return to the exact uploaded-map panorama.
 - Add a custom Play time limit of 1–3600 seconds per round, saved with game preferences alongside the existing presets.
 - Add a city-scale shortcut between the close answer and country views on revealed maps.
 - Give optional Play music a faster, layered bass-and-lead rhythm while keeping its saved volume and visibility behavior.

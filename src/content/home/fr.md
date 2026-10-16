@@ -297,6 +297,8 @@ Apprendre propose quatre parcours. **Personnalisé** conserve collections et env
 
 Dans chaque parcours d’Apprendre, la carte de la fiche révélée affiche la couverture Street View bleue par défaut. Cliquez sur une zone couverte pour l’ouvrir dans Explorer la carte, ou utilisez le bouton des couches pour masquer la couverture et désactiver la sélection dans cette vue. Cela ne fait avancer ni une carte importée ni une leçon Méta. La carte conserve son zoom et sa position. Si Officiels uniquement ne trouve rien, le message indique de choisir **Officielles + contributeurs** ci-dessous ; il ne modifie jamais ce filtre à votre place. Un bouton globe en haut à gauche du panorama revient à la carte du monde sans occuper l’en-tête.
 
+Le panorama ouvert depuis la couverture est révélé aussitôt, avec la fiche du lieu toujours visible. Depuis une carte JSON importée, la flèche de retour en haut à gauche ramène directement au panorama source exact sans faire avancer la progression ; sinon, le globe ouvre la carte du monde.
+
 Apprendre personnalisé et Jeu utilisent les images officielles Google par défaut ; le sélecteur permet de mélanger panoramas officiels et contributeurs ou de demander uniquement les panoramas de contributeurs. **Autoriser les intérieurs** est désactivé par défaut dans les deux configurations ; une fois activé, Google peut proposer une couverture Street View intérieure ou extérieure.
 
 Dans **Paramètres → Affichage**, vous pouvez régler les noms de rues, la date des images, le mouvement du téléphone, le déplacement, le type de carte, les gestes, les lieux cliquables et les couleurs GeoTrainer. Les noms de rues et les lieux cliquables sont désactivés par défaut pour limiter les indices accidentels.

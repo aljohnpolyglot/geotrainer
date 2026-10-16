@@ -292,6 +292,8 @@ Lär har fyra vägar. **Anpassad** behåller samlingar och miljöer. **Meta** ö
 
 I alla lärvägar visar det avslöjade platskortets karta blå Street View-täckning som standard. Klicka på ett täckt område för att öppna det i Utforska karta, eller använd lagerknappen för att dölja täckningen och stänga av valet i den här vyn. Det för inte en uppladdad karta eller Meta-lektion framåt. Kartan behåller zoom och position. Om Endast officiella inte hittar något säger meddelandet att du kan välja **Officiella + bidragsgivare** nedan; filtret ändras aldrig automatiskt. En globknapp uppe till vänster i panoramat går tillbaka till världskartan utan att ta plats i sidhuvudet.
 
+Panoramat som öppnas via den blå täckningen visas direkt med platskortet synligt. Om du kom från en uppladdad JSON-karta går tillbaka-pilen uppe till vänster direkt till exakt samma källpanorama utan att ändra källförloppet; annars öppnar globknappen världskartan.
+
 Anpassat lärande och Spel använder officiella Google-bilder som standard; välj blandat för både officiella panoraman och bidragsgivarpanoraman eller välj endast bidragsgivare. **Tillåt inomhusmiljöer** är avstängt som standard i båda inställningarna; när det aktiveras kan Google visa Street View-täckning både inomhus och utomhus. Under **Inställningar → Visning** kan du styra gatunamn, bilddatum, telefonrörelse, förflyttning, karttyp, gester, klickbara platser och GeoTrainer-färger. Gatunamn och klickbara platser är avstängda som standard för att undvika oavsiktliga ledtrådar.
 
 Slå på gatunamn när du vill lära dig hur gator och vägar namnges på olika platser. Namnen kan också avslöja var du är, så stäng av dem igen när du vill gissa utan den ledtråden.

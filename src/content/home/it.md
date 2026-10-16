@@ -291,6 +291,8 @@ Impara offre quattro percorsi. **Personalizzato** mantiene raccolte e ambienti. 
 
 In ogni percorso di Impara, la mappa della scheda rivelata mostra per impostazione predefinita la copertura blu di Street View. Fai clic su un’area coperta per aprirla in Esplora mappa, oppure usa il pulsante dei livelli per nascondere la copertura e disattivare la selezione in questa vista. Questo non fa avanzare una mappa caricata né una lezione Meta. La mappa mantiene zoom e posizione. Se Solo ufficiali non trova nulla, il messaggio indica di scegliere **Ufficiali + collaboratori** qui sotto; non cambia mai il filtro al posto tuo. Un pulsante con il globo in alto a sinistra nel panorama torna alla mappa mondiale senza occupare l’intestazione.
 
+Il panorama aperto dalla copertura viene rivelato subito e la scheda del luogo resta visibile. Se provieni da una mappa JSON caricata, la freccia indietro in alto a sinistra torna direttamente al panorama esatto di origine senza avanzare il progresso della fonte; negli altri casi, il globo apre la mappa mondiale.
+
 Impara personalizzato e Gioco usano per impostazione predefinita immagini ufficiali Google; il selettore può mescolare panorami ufficiali e dei collaboratori oppure richiedere solo quelli dei collaboratori. **Consenti interni** è disattivato per impostazione predefinita in entrambe le configurazioni; quando è attivo, Google può restituire copertura Street View sia interna sia esterna.
 
 In **Impostazioni → Aspetto** puoi controllare nomi delle strade, data delle immagini, movimento del telefono, spostamento, tipo di mappa, gesti, luoghi cliccabili e colori GeoTrainer. Nomi delle strade e luoghi cliccabili sono disattivati per impostazione predefinita per evitare indizi accidentali.

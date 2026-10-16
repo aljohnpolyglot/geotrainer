@@ -631,6 +631,8 @@ Lernen bietet vier Wege. **Benutzerdefiniert** behält Sammlungen und Umgebungen
 
 In jedem Lernweg zeigt die Karte des aufgedeckten Orts standardmäßig die blaue Street-View-Abdeckung. Klicke auf einen abgedeckten Bereich, um ihn in Karte erkunden zu öffnen, oder blende die Abdeckung mit der Ebenen-Schaltfläche aus und deaktiviere damit die Auswahl für diese Ansicht. Dadurch werden weder eine hochgeladene Karte noch eine Meta-Lektion weitergeschaltet. Die Karte behält Zoom und Position. Wenn Nur offiziell nichts findet, weist die Meldung auf **Offiziell + Beiträge** unten hin; sie ändert den Filter nie selbst. Eine Globus-Schaltfläche oben links im Panorama kehrt zur Weltkarte zurück, ohne den Kopfbereich zu belegen.
 
+Das über die Abdeckung geöffnete Panorama wird sofort aufgedeckt; die Ortskarte bleibt sichtbar. Wenn du von einer hochgeladenen JSON-Karte kommst, führt der Zurück-Pfeil oben links direkt zum genauen Quellpanorama, ohne den Quellenfortschritt zu verändern. Andernfalls öffnet der Globus die Weltkarte.
+
 Aufdecken und Weiter bleiben auch im Vollbild am unteren Rand des sichtbaren Bereichs; mobile Lernwerkzeuge stehen seitlich unter den Kartensteuerungen.
 
 Benutzerdefiniertes Lernen und Spiel verwenden standardmäßig offizielle Google-Bilder; die Auswahl kann offizielle und beigesteuerte Panoramen mischen oder nur beigesteuerte Panoramen anfordern. **Innenräume zulassen** ist in beiden Einstellungen standardmäßig ausgeschaltet; aktiviert kann Google Street-View-Abdeckung im Innen- und Außenbereich liefern.
