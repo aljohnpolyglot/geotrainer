@@ -24,7 +24,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   fullscreenControl?: boolean;
   active?: boolean;
   resizeKey?: boolean;
-  onSelect?: (point: Point) => void;
+  onSelect?: (point: Point) => boolean | Promise<boolean>;
 }) {
   const { ui } = useLanguagePreferences();
   const mapPreferences = useMapPreferences();
@@ -38,6 +38,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
   const pointsRef = useRef<Point[]>([]);
   const positionedRef = useRef(false);
   const manuallyAdjustedRef = useRef(false);
+  const preserveViewAfterSelectRef = useRef(false);
   const automaticZoomRef = useRef<number | undefined>(undefined);
   const selectable = !!onSelect;
   const previousGuessKey = previousGuesses.map((point) => `${point.lat},${point.lng}`).join('|');
@@ -68,7 +69,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     };
   }, [fullscreenControl]);
 
-  useEffect(() => { manuallyAdjustedRef.current = false; positionedRef.current = false; }, [actual.lat, actual.lng, panoId]);
+  useEffect(() => { if (preserveViewAfterSelectRef.current) { preserveViewAfterSelectRef.current = false; manuallyAdjustedRef.current = true; } else { manuallyAdjustedRef.current = false; positionedRef.current = false; } }, [actual.lat, actual.lng, panoId]);
   useEffect(() => { setCoverageOverride(undefined); }, [actual.lat, actual.lng, panoId]);
 
   useEffect(() => { mapRef.current?.setOptions(playGuessMapOptions({ ...mapPreferences, showPlayRoadLabels: roadNamesEnabled }, document.documentElement.classList.contains('dark'))); }, [mapPreferences, roadNamesEnabled]);
@@ -82,7 +83,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
 
   useEffect(() => {
     if (!onSelect || !active || !coverageEnabled || !mapRef.current) return;
-    const listener = mapRef.current.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() }); });
+    const listener = mapRef.current.addListener('click', (event: google.maps.MapMouseEvent) => { if (event.latLng) { preserveViewAfterSelectRef.current = true; void Promise.resolve(onSelect({ lat: event.latLng.lat(), lng: event.latLng.lng() })).then((opened) => { if (!opened) preserveViewAfterSelectRef.current = false; }, () => { preserveViewAfterSelectRef.current = false; }); } });
     return () => listener.remove();
   }, [onSelect, active, coverageEnabled]);
 

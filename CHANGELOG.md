@@ -2,6 +2,7 @@
 
 ## 2026-10-16
 
+- Keep the revealed map's zoom and position after selecting Street View coverage, and let Explore Map return directly to the exact Custom, Meta, or uploaded panorama without losing lesson progress.
 - Show supported AI Coach regional estimates when the leading country is strong even if the overall confidence is medium, and omit the regional line when no region is supported.
 - Add a paginated saved-map history to JSON upload and URL setup, with one-click Learn resume, map renaming, readable source names in the Learn header, and automatic cleanup beyond 30 maps while protecting active sources.
 - Keep the revealed Learn location card open when selecting blue Street View coverage, and provide a direct return to the exact uploaded-map panorama.

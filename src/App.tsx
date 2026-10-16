@@ -56,7 +56,7 @@ import { useReviewMode } from './hooks/useReviewMode';
 import { usePlayMode } from './hooks/usePlayMode';
 import { useStudyMode } from './hooks/useStudyMode';
 import { useSavedReviewMatcher } from './hooks/useSavedReviewMatcher';
-import { uploadedCoverageOrigin, useLearnSources } from './hooks/useLearnSources';
+import { coverageReturnOrigin, useLearnSources } from './hooks/useLearnSources';
 import { reviewWorkActive, useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioMode, setAudioPreferences } from './services/audio';
@@ -187,7 +187,7 @@ export default function App() {
   const learn = useLearnSources({ appMode, showHome, setAppMode, setShowHome, setStudySetupOpen: setIsStudySetupOpen,
     setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed });
   const { learnSource, activeMetaLesson, activeCountryTip, metaCourseId, metaProgress, canPreviousMeta, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta,
-    nextMeta, previousMeta, startMap, openMapLocation, openMapPoint, mapReturnLocation, returnToUploaded, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource } = learn;
+    nextMeta, previousMeta, startMap, openMapLocation, openMapPoint, mapReturnLocation, mapReturnSource, returnToSource, setMapPickerOpen, dismissMetaAdvice, restoreLearnSource } = learn;
   const study = useStudyMode({
     appMode, showHome, dbReady, currentLocation, setCurrentLocation, isLoading, setIsLoading, setErrorMessage,
     selectedCollectionId, setSelectedCollectionId, customCollections, setCustomCollections, bookmarks, setBookmarks,
@@ -452,7 +452,7 @@ export default function App() {
         onDataChanged={() => { void Promise.all([trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games()]).then(([collections, savedBookmarks, games]) => { setCustomCollections(collections); setBookmarks(savedBookmarks); setPastGames(games); setTrainerRefreshKey((key) => key + 1); }); }}
         onSelectGame={(game) => setSummaryGameRecord(game)}
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
-        onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => void openMapPoint(point, studyPanoramaSource, studyAllowInteriors, uploadedCoverageOrigin(learnSource, uploadedHistory))} canReturnToUploaded={!!mapReturnLocation} onReturnToUploaded={() => { restoredStudyPanoRef.current = mapReturnLocation?.panoId || null; returnToUploaded(); }} onReturnToSummary={() => { setSummaryRound(null); setCurrentLocation(null); }} onSaveSummaryLocation={() => void handleSaveStudyForReview()}
+        onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => openMapPoint(point, studyPanoramaSource, studyAllowInteriors, coverageReturnOrigin(learnSource, currentLocation, uploadedHistory), learnSource)} mapReturnSource={mapReturnSource} onReturnToSource={() => { restoredStudyPanoRef.current = mapReturnLocation?.panoId || null; returnToSource(); }} onReturnToSummary={() => { setSummaryRound(null); setCurrentLocation(null); }} onSaveSummaryLocation={() => void handleSaveStudyForReview()}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
         onPlayPinChange={setPlayGuess}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}

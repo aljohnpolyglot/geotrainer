@@ -25,7 +25,7 @@ interface LocationCardProps {
   onSaveForReview?: () => void;
   reviewSaving?: boolean;
   reviewSaved?: boolean;
-  onMapSelect?: (point: { lat: number; lng: number }) => void;
+  onMapSelect?: (point: { lat: number; lng: number }) => boolean | Promise<boolean>;
 }
 
 export const LocationCard: React.FC<LocationCardProps> = ({ location, hidden = false, onHide, onVisibilityChange, onMetadata, onSaveForReview, reviewSaving = false, reviewSaved = false, onMapSelect }) => {
