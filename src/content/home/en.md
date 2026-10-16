@@ -127,6 +127,8 @@ Play uses the same source tiles as Learn instead of hiding those choices in a dr
 
 Learn and Play JSON URL also accept GitHub file-page links containing /blob/; these load the raw JSON automatically. Existing raw JSON links still work. Loading the same URL or a file with the same name again opens a choice to resume saved Learn source progress or start over. The choice shows completed locations as x/total. Resume keeps matching locations when the JSON changes and reopens the last saved view if it is still listed. This map progress stays on this device.
 
+In **Upload JSON** and **JSON URL**, open **Saved maps** to browse 10 maps per page. Each entry shows its readable title, original file or URL filename, and Learn source progress. **Resume** in Learn opens the saved map at its last panorama; in Play, **Use map** selects it for a new game. Use the pencil to rename a map without changing its points or progress. The active Learn header shows that name above the panorama selector. File paths and download suffixes such as `(2).json` are cleaned up for display, and a JSON map title takes priority. GeoTrainer keeps the 30 most recent maps, retaining active and paused maps; older map files and their source progress are removed automatically, while saved attempts and Review cards remain. Reimport a removed file or URL to use it again.
+
 Sports-league pools verify the requested season and division, then select only participating clubs’ home municipalities. Without a season, use the current season; without a division, use the top division. Clubs sharing a city produce one city selection. An unverified or unmatched roster produces an error instead of expanding to unrelated cities; the result is a city pool, not exact stadium panoramas.
 
 Play setup offers four source tiles: Custom, Upload JSON, JSON URL, and Describe a pool. For JSON URL, paste a direct HTTP or HTTPS JSON link and choose Load URL. Coordinate maps keep their listed locations and limit the round count; geographic pools return to Custom for editing.
@@ -326,7 +328,7 @@ After a game, Practice mistakes opens Review and repeats weak rounds until they 
 
 ## AI Coach
 
-When the leading country estimate reaches 85%, Coach checks for a narrower place. Two independent visible clues can support a medium or high confidence region; a city or exact place needs stronger evidence. A high country percentage alone does not identify a region.
+When the leading country estimate reaches 85%, Coach checks for a narrower place. Two independent visible clues can support a broad geographic cluster (such as the Midwest) or a named region; a city or exact place needs stronger evidence. A high country percentage alone does not identify a region. When the imagery does not support one, Coach leaves the regional estimate out.
 
 In **Settings → AI Coach**, you can choose Gemini, Anthropic, or an OpenAI-compatible provider, set its model, and paste your own API key. The key is masked, kept only in page memory, and sent through the Coach endpoint for each analysis; GeoTrainer does not save it. Use **Forget key** or reload the page to clear it. Your provider applies its own usage limits and billing. OpenAI-compatible URLs are limited to supported public providers.
 

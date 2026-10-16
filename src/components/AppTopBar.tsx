@@ -61,6 +61,7 @@ export interface AppTopBarProps {
   mapPickerOpen?: boolean;
   uploadedProgress?: { position: number; total: number };
   uploadedHistory?: { locations: LocationResult[]; index: number };
+  uploadedMapName?: string;
   metaProgress?: { position: number; total: number; completed: number };
   metaCourseId?: string;
   onHome: () => void;
@@ -87,7 +88,7 @@ export function AppTopBar({
   appMode, showHome, isGameActive, currentLocation, isLoading, isRevealed,
   gameSettings, currentRoundIndex, currentTotalScore, timeRemaining,
   pastGamesCount, reviewAttempt, reviewResultVisible, reviewStatsLength, reviewInitialTotal,
-  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress, uploadedHistory, metaProgress, metaCourseId,
+  reviewQueueLength, reviewSource, isFullscreen, statisticsActive, cluesActive, studyReviewSaving, learnSource, mapPickerOpen, uploadedProgress, uploadedHistory, uploadedMapName, metaProgress, metaCourseId,
   onHome, onStudy, onPlay, onReview, onExitReview, onRestartLearn, onStatistics, onClues,
   onReveal, onNextLocation, onPreviousLocation, onSelectUploaded, canPreviousLocation, onAbandonGame,
   onOpenHistory, onOpenNewGame, onOpenPreferences, onToggleFullscreen,
@@ -111,7 +112,7 @@ export function AppTopBar({
     <header id="app-topbar" className={`${mobileMenuOpen ? 'mobile-nav-open ' : ''}${isRevealed ? 'location-revealed ' : ''}mode-${appMode} h-14 px-3 sm:px-5 bg-stone-900 border-b border-stone-800 flex items-center justify-between z-30 flex-shrink-0 gap-2`}>
       <div className="header-primary flex items-center space-x-2 sm:space-x-3">
         <button onClick={() => navigate(onHome)} className="home-button" aria-label={t('open')} title={t('open')}><House size={16} /></button>
-        {!showHome && appMode === 'study' && learnSource === 'uploaded' && currentLocation && uploadedProgress && uploadedProgress.total > 0 && <select className="uploaded-panorama-select" aria-label={t('Panorama')} title={t('Panorama')} value={currentLocation.importedMapPointIndex ?? uploadedHistory?.index ?? 0} disabled={isLoading || studyReviewSaving} onChange={(event) => onSelectUploaded(Number(event.target.value))}>{Array.from({ length: uploadedProgress.total }, (_, index) => <option key={index} value={index}>{t('Panorama')} {number.format(index + 1)}</option>)}</select>}
+        {!showHome && appMode === 'study' && learnSource === 'uploaded' && currentLocation && uploadedProgress && uploadedProgress.total > 0 && <div className="uploaded-map-context"><span title={uploadedMapName}>{uploadedMapName}</span><select className="uploaded-panorama-select" aria-label={t('Panorama')} title={t('Panorama')} value={currentLocation.importedMapPointIndex ?? uploadedHistory?.index ?? 0} disabled={isLoading || studyReviewSaving} onChange={(event) => onSelectUploaded(Number(event.target.value))}>{Array.from({ length: uploadedProgress.total }, (_, index) => <option key={index} value={index}>{t('Panorama')} {number.format(index + 1)}</option>)}</select></div>}
         {!showHome && appMode === 'study' && learnSource === 'meta' && <span className="study-course-name" title={metaCourseLabel}>{metaCourseLabel}</span>}
         {!showHome && appMode === 'study' && learnSource === 'meta' && metaProgress && <span className="study-mobile-context"><strong>{number.format(metaProgress.position)}/{number.format(metaProgress.total)}</strong><small title={metaCourseLabel}>{metaCourseLabel}</small></span>}
         {!showHome && appMode === 'review' && reviewAttempt && <span className="mobile-review-context"><strong>{reviewPosition}/{Math.max(reviewInitialTotal, reviewStatsLength + reviewQueueLength)} · {reviewQueueLength} {t('remaining')}</strong><small>{t('Progress saved')}</small></span>}

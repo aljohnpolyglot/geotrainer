@@ -84,6 +84,8 @@ Los nombres de las regiones y ciudades siguen el idioma de la interfaz cuando ha
 
 Se muestra el nombre del archivo o de la URL. El endpoint debe permitir acceso desde el navegador (CORS). URL JSON de Aprender y Juego también acepta enlaces a archivos de GitHub con /blob/; el JSON sin formato se carga automáticamente. Los enlaces directos al JSON siguen funcionando. Al volver a cargar la misma URL o un archivo con el mismo nombre, se puede continuar el progreso guardado de Aprender o empezar de nuevo. La elección muestra los lugares completados como x/total.
 
+En **Subir JSON** y **URL JSON**, abre **Mapas guardados** para ver 10 mapas por página. Cada entrada muestra el título legible, el nombre del archivo de origen y el progreso de Aprender. **Reanudar** en Aprender abre la última panorámica guardada; **Usar mapa** en Juego lo selecciona para una partida nueva. El lápiz cambia el nombre sin alterar lugares ni progreso. El nombre aparece sobre el selector de panorámicas. Las rutas y sufijos de descarga como `(2).json` se limpian para mostrar un título legible; el título del JSON tiene prioridad. Se conservan los 30 mapas más recientes y los activos o pausados. Los mapas antiguos y su progreso de origen se eliminan automáticamente, pero los intentos y tarjetas de Repaso permanecen. Vuelve a importar un mapa eliminado para usarlo otra vez.
+
 Continuar conserva los lugares coincidentes si cambia el JSON y vuelve a abrir la última vista guardada si sigue en la lista. Este progreso permanece en este dispositivo.
 
 Los grupos de ligas deportivas verifican la temporada y división solicitadas y seleccionan solo los municipios de los clubes participantes. Sin temporada se usa la actual; sin división, la principal. Los clubes de la misma ciudad generan una sola selección. Una lista no verificada o sin coincidencias produce un error, sin añadir ciudades ajenas; el resultado es un grupo de ciudades, no panoramas exactos de estadios.
@@ -146,7 +148,7 @@ Pulsa **Guardar** para aplicar los cambios. La exigencia y los intervalos afecta
 
 ## Entrenador de IA y pistas
 
-Cuando la estimación del país principal alcanza el 85 %, Coach busca un lugar más preciso. Dos pistas visibles independientes pueden respaldar una región con confianza media o alta; una ciudad o un lugar exacto exige pruebas más sólidas. Un porcentaje alto para el país no identifica por sí solo la región.
+Cuando la estimación del país principal alcanza el 85 %, Coach busca un lugar más preciso. Dos pistas visibles independientes pueden respaldar una zona geográfica amplia (como el Medio Oeste) o una región concreta; una ciudad o un lugar exacto exige pruebas más sólidas. Un porcentaje alto para el país no identifica por sí solo la región. Si la imagen no aporta pruebas suficientes, Coach omite la estimación regional.
 
 En **Configuración → Entrenador de IA**, puedes elegir Gemini, Anthropic o un proveedor compatible con OpenAI, indicar el modelo y pegar tu propia clave de API. La clave se muestra oculta, solo permanece en la memoria de la página y se envía a través del servicio de Coach en cada análisis; GeoTrainer no la guarda. Usa **Olvidar clave** o recarga la página para borrarla. El proveedor aplica sus propios límites y cargos. Las URL compatibles con OpenAI se limitan a proveedores públicos admitidos.
 

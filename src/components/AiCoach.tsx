@@ -105,7 +105,7 @@ export function AiCoach({ panoId, appMode, revealed, context, onSave, onSaveClue
         {!revealed && result.region && <h3>{result.region}<small>{result.confidence} {t('confidence')}</small></h3>}
         {!revealed && result.candidates.length > 0 && <><div className="coach-ranking-head"><strong>{t('candidates')}</strong><small>{t('Relative likelihood')}</small></div><ol>{result.candidates.map((candidate) => <li key={candidate.countryCode}><div><b><CountryFlag code={candidate.countryCode} />{countryDisplayName(candidate.countryCode, ai)}</b><span>{Math.round(candidate.confidence * 100)}%</span></div>{candidate.rationale && <small><CoachRichText text={candidate.rationale} /></small>}</li>)}</ol></>}
         {!revealed && <CoachLocationEstimate estimate={result.locationEstimate} />}
-        {!revealed && <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p><CoachRichText text={result.regionalRead ? `${result.regionalRead.label} — ${t(result.regionalRead.confidence)} ${t('confidence')}. ${result.regionalRead.reason}` : t('Insufficient evidence.')} /></p></section>}
+        {!revealed && result.regionalRead && <section className="coach-regional-read"><strong>{t('Regional read')}</strong><p><CoachRichText text={`${result.regionalRead.label} — ${t(result.regionalRead.confidence)} ${t('confidence')}. ${result.regionalRead.reason}`} /></p></section>}
         {list(t(outputLabels.strong), result.strongClues)}
         {list(t(outputLabels.weak), result.weakClues)}
         {list(t(outputLabels.contradictions), result.contradictions || [])}

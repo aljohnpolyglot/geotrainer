@@ -135,6 +135,8 @@ Regions- und Städtenamen folgen der Sprache der Benutzeroberfläche, sofern ein
 
 Der Datei- oder URL-Name wird angezeigt. Der Endpoint muss Browserzugriff per CORS erlauben. JSON-URL in Lernen und Spiel akzeptiert auch GitHub-Dateilinks mit /blob/; das rohe JSON wird automatisch geladen. Direkte JSON-Links funktionieren weiterhin. Wenn du dieselbe URL oder eine Datei mit demselben Namen erneut lädst, kannst du den gespeicherten Lernfortschritt fortsetzen oder neu beginnen. Die Auswahl zeigt abgeschlossene Orte als x/Gesamtzahl.
 
+Unter **JSON hochladen** und **JSON-URL** zeigt **Gespeicherte Karten** jeweils 10 Karten pro Seite. Jede Zeile enthält einen lesbaren Titel, den ursprünglichen Dateinamen und den Lernfortschritt. **Fortsetzen** öffnet im Lernen das zuletzt gespeicherte Panorama; **Karte verwenden** wählt sie im Spiel für eine neue Partie. Mit dem Stift änderst du nur den Anzeigenamen, nicht Orte oder Fortschritt. Der Name steht über der Panoramaauswahl. Dateipfade und Download-Zusätze wie `(2).json` werden bereinigt; ein Titel im JSON hat Vorrang. Die 30 neuesten sowie aktive und pausierte Karten bleiben erhalten. Ältere Karten und ihr Quellenfortschritt werden automatisch entfernt, Versuche und Wiederholungskarten bleiben bestehen. Eine entfernte Datei oder URL kannst du erneut importieren.
+
 Fortsetzen behält passende Orte auch bei geändertem JSON und öffnet die zuletzt gespeicherte Ansicht erneut, falls sie noch enthalten ist. Dieser Fortschritt bleibt auf diesem Gerät.
 
 Sportliga-Pools prüfen die gewünschte Saison und Spielklasse und wählen nur die Heimatgemeinden teilnehmender Vereine. Ohne Saison gilt die aktuelle, ohne Spielklasse die höchste. Vereine derselben Stadt erzeugen eine Stadtauswahl. Eine ungeprüfte oder nicht zuordenbare Liste führt zu einem Fehler statt zu zusätzlichen Städten; der Pool enthält Städte, keine exakten Stadionpanoramen.
@@ -313,7 +315,7 @@ Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache R
 
 ## KI-Coach
 
-Wenn die Schätzung für das führende Land 85 % erreicht, prüft der Coach auch einen genaueren Ort. Zwei unabhängige sichtbare Hinweise können eine Region mit mittlerer oder hoher Sicherheit stützen; für eine Stadt oder einen genauen Ort braucht es stärkere Belege. Der Länderwert allein bestimmt keine Region.
+Wenn die Schätzung für das führende Land 85 % erreicht, prüft der Coach auch einen genaueren Ort. Zwei unabhängige sichtbare Hinweise können einen großen geografischen Raum (etwa den Mittleren Westen) oder eine benannte Region stützen; für eine Stadt oder einen genauen Ort braucht es stärkere Belege. Der Länderwert allein bestimmt keine Region. Fehlen ausreichende Bildhinweise, zeigt der Coach keine regionale Schätzung.
 
 Unter **Einstellungen → KI-Coach** kannst du Gemini, Anthropic oder einen OpenAI-kompatiblen Anbieter wählen, das Modell angeben und deinen eigenen API-Schlüssel einfügen. Der Schlüssel wird maskiert, bleibt nur im Arbeitsspeicher der Seite und wird für jede Analyse über den Coach-Endpunkt gesendet; GeoTrainer speichert ihn nicht. Mit **Schlüssel vergessen** oder durch Neuladen der Seite wird er gelöscht. Für Nutzungslimits und Gebühren ist dein Anbieter zuständig. OpenAI-kompatible URLs sind auf unterstützte öffentliche Anbieter beschränkt.
 

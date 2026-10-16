@@ -82,6 +82,8 @@ I nomi delle regioni e delle città seguono la lingua dell’interfaccia quando 
 
 L’endpoint deve consentire l’accesso dal browser (CORS). URL JSON in Impara e Gioco accetta anche i link ai file GitHub con /blob/; il JSON grezzo viene caricato automaticamente. I link diretti al JSON continuano a funzionare. Se carichi di nuovo lo stesso URL o un file con lo stesso nome, puoi riprendere i progressi salvati in Impara oppure ricominciare. La scelta mostra i luoghi completati come x/totale.
 
+In **Carica JSON** e **URL JSON**, apri **Mappe salvate** per vedere 10 mappe per pagina. Ogni riga mostra un titolo leggibile, il nome del file originale e l’avanzamento di Impara. **Riprendi** in Impara apre l’ultimo panorama salvato; **Usa mappa** in Gioco la seleziona per una nuova partita. La matita cambia solo il nome, senza modificare luoghi o avanzamento. Il nome appare sopra il selettore dei panorami. Percorsi e suffissi come `(2).json` vengono semplificati; un titolo nel JSON ha la precedenza. Restano le 30 mappe più recenti e quelle attive o in pausa. Le mappe più vecchie e il loro avanzamento vengono rimossi automaticamente, ma tentativi e schede di Ripasso restano. Reimporta un file o URL rimosso per usarlo di nuovo.
+
 Riprendi conserva i luoghi corrispondenti se il JSON cambia e riapre l’ultima vista salvata se è ancora nell’elenco. Questi progressi restano su questo dispositivo.
 
 Gli insiemi delle leghe sportive verificano stagione e divisione richieste e selezionano solo i comuni dei club partecipanti. Senza stagione si usa quella attuale; senza divisione, la massima serie. Club nella stessa città producono una sola selezione. Un elenco non verificato o senza corrispondenze genera un errore senza aggiungere città estranee; il risultato è un insieme di città, non panorami esatti degli stadi.
@@ -144,7 +146,7 @@ Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazi
 
 ## Coach IA e indizi
 
-Quando la stima del paese principale raggiunge l’85%, il Coach cerca anche un luogo più preciso. Due indizi visibili indipendenti possono sostenere una regione con fiducia media o alta; una città o un luogo esatto richiede prove più forti. La percentuale del paese da sola non identifica la regione.
+Quando la stima del paese principale raggiunge l’85%, il Coach cerca anche un luogo più preciso. Due indizi visibili indipendenti possono sostenere un’ampia area geografica (come il Midwest) o una regione specifica; una città o un luogo esatto richiede prove più forti. La percentuale del paese da sola non identifica la regione. Senza indizi sufficienti nell’immagine, il Coach non mostra una stima regionale.
 
 In **Impostazioni → Coach IA** puoi scegliere Gemini, Anthropic o un provider compatibile con OpenAI, indicare il modello e incollare la tua chiave API. La chiave è nascosta, resta solo nella memoria della pagina e viene inviata tramite l’endpoint Coach per ogni analisi; GeoTrainer non la salva. Usa **Dimentica chiave** o ricarica la pagina per eliminarla. Il provider applica i propri limiti e costi. Gli URL compatibili con OpenAI sono limitati ai provider pubblici supportati.
 

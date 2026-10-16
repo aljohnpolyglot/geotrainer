@@ -201,7 +201,7 @@ export default function App() {
     isRevealed, restoredStudyPanoRef, isStudySetupOpen, setIsStudySetupOpen, allCollections,
     learnSource, activeMetaLesson, nextMeta, openMap: () => setMapPickerOpen(true), studyImportedMapIdRef, studyImportedVariationRef, studyImportedOrderRef,
   });
-  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handlePreviousUploaded, handleSelectUploaded, restoreUploadedHistory, canPreviousUploaded, uploadedHistory, uploadedProgress, handleMapsLoaded,
+  const { handleStudyMetadata, handleStudyPanoramaChanged, fetchNextLocation, handlePreviousUploaded, handleSelectUploaded, restoreUploadedHistory, canPreviousUploaded, uploadedHistory, uploadedProgress, uploadedMapName, handleMapsLoaded,
     handleSaveStudyForReview, handleTrainCountries, handleStartStudy,
     handleOpenCoverageLocation, toggleFullscreen, activeCompass, toggleCompass } = study;
   const refreshTrainer = useCallback(() => setTrainerRefreshKey((key) => key + 1), []);
@@ -413,7 +413,7 @@ export default function App() {
         pastGamesCount={pastGames.length} reviewAttempt={reviewAttempt}
         reviewResultVisible={!!reviewResult} reviewStatsLength={reviewStats.length} reviewInitialTotal={reviewInitialTotal}
         reviewQueueLength={reviewQueue.length} reviewSource={reviewSource}
-        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} uploadedHistory={uploadedHistory} metaProgress={metaProgress} metaCourseId={metaCourseId}
+        isFullscreen={isFullscreen} statisticsActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'statistics'} cluesActive={!showHome && appMode === 'review' && !reviewAttempt && trainerStartTab === 'clues'} studyReviewSaving={studyReviewSaving} learnSource={learnSource} uploadedProgress={uploadedProgress} uploadedHistory={uploadedHistory} uploadedMapName={uploadedMapName} metaProgress={metaProgress} metaCourseId={metaCourseId}
         mapPickerOpen={mapPickerOpen}
         onHome={() => { if (isGameActive && !window.confirm('Leave the active game and return home?')) return; persistPlayWorkspace(); abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); clearReviewSession(); setMapPickerOpen(false); setShowHome(true); }}
         onStudy={() => { if (isGameActive && !window.confirm('Pause active game and switch to Study mode?')) return; if (isGameActive) { abortControllerRef.current?.abort(); setIsGameActive(false); setTimeRemaining(null); setCurrentLocation(null); } clearReviewSession(); requestMode('study'); }}

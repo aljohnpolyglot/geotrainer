@@ -84,6 +84,8 @@ Les noms des régions et des villes suivent la langue de l’interface lorsqu’
 
 Le nom du fichier ou de l’URL est affiché. Le endpoint doit autoriser l’accès du navigateur (CORS). URL JSON dans Apprendre et Jeu accepte aussi les liens de fichiers GitHub contenant /blob/ ; le JSON brut est chargé automatiquement. Les liens directs vers le JSON restent valides. En rechargeant la même URL ou un fichier du même nom, vous pouvez reprendre la progression enregistrée dans Apprendre ou recommencer. Le choix affiche les lieux terminés sous la forme x/total.
 
+Dans **Importer un JSON** et **URL JSON**, ouvrez **Cartes enregistrées** pour parcourir 10 cartes par page. Chaque ligne affiche un titre lisible, le nom du fichier d’origine et la progression dans Apprendre. **Reprendre** dans Apprendre rouvre le dernier panorama enregistré ; **Utiliser la carte** dans Jeu la choisit pour une nouvelle partie. Le crayon renomme la carte sans toucher aux lieux ni à la progression. Ce nom figure au-dessus du sélecteur de panoramas. Les chemins et suffixes comme `(2).json` sont simplifiés ; un titre présent dans le JSON est prioritaire. Les 30 cartes les plus récentes, ainsi que les cartes actives ou en pause, sont conservées. Les anciennes cartes et leur progression source sont supprimées automatiquement, mais les tentatives et fiches de Révision restent. Réimportez une carte supprimée pour la réutiliser.
+
 Reprendre conserve les lieux correspondants si le JSON change et rouvre la dernière vue enregistrée si elle figure encore dans la liste. Cette progression reste sur cet appareil.
 
 Les groupes de ligues sportives vérifient la saison et la division demandées, puis sélectionnent uniquement les communes des clubs participants. Sans saison, la saison actuelle est utilisée ; sans division, la première division. Plusieurs clubs dans une ville donnent une seule sélection. Une liste non vérifiée ou sans correspondance produit une erreur au lieu d’ajouter des villes étrangères ; le groupe vise les villes, pas les panoramas exacts des stades.
@@ -146,7 +148,7 @@ Les manches terminées de Jeu et de Révision autorisent alors le déplacement, 
 
 ## Coach IA et indices
 
-Quand l’estimation du pays principal atteint 85 %, le Coach cherche un lieu plus précis. Deux indices visibles indépendants peuvent justifier une région avec une confiance moyenne ou élevée ; une ville ou un lieu exact exige des preuves plus solides. Le pourcentage du pays ne suffit pas à identifier la région.
+Quand l’estimation du pays principal atteint 85 %, le Coach cherche un lieu plus précis. Deux indices visibles indépendants peuvent justifier une vaste zone géographique (comme le Midwest) ou une région nommée ; une ville ou un lieu exact exige des preuves plus solides. Le pourcentage du pays ne suffit pas à identifier la région. Sans indices suffisants dans l’image, le Coach n’affiche pas d’estimation régionale.
 
 Dans **Paramètres → Coach IA**, vous pouvez choisir Gemini, Anthropic ou un fournisseur compatible avec OpenAI, indiquer le modèle et coller votre propre clé API. La clé est masquée, reste uniquement en mémoire dans la page et passe par le point de terminaison Coach pour chaque analyse ; GeoTrainer ne l’enregistre pas. Utilisez **Effacer la clé** ou rechargez la page pour la supprimer. Le fournisseur applique ses propres limites et frais. Les URL compatibles avec OpenAI sont limitées aux fournisseurs publics pris en charge.
 

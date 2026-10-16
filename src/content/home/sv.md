@@ -82,6 +82,8 @@ Namnen på regioner och städer följer gränssnittets språk när ett lokaliser
 
 JSON URL i Lär och Spela accepterar även GitHub-fillänkar med /blob/; rå JSON läses in automatiskt. Direkta JSON-länkar fungerar fortfarande. När du läser in samma URL eller en fil med samma namn igen kan du fortsätta sparade framsteg i Lär eller börja om. Valet visar färdiga platser som x/totalt. Fortsätt behåller matchande platser när JSON ändras och öppnar den senast sparade vyn igen om den fortfarande finns i listan. Dessa framsteg stannar på den här enheten.
 
+I **Ladda upp JSON** och **JSON-URL** kan du öppna **Sparade kartor** och se 10 kartor per sida. Varje rad visar ett läsbart namn, ursprungligt filnamn och framsteg i Lär. **Fortsätt** i Lär öppnar senast sparade panorama; **Använd karta** i Spela väljer kartan för ett nytt spel. Pennan ändrar bara namnet, inte platser eller framsteg. Namnet visas ovanför panoramaväljaren. Sökvägar och nedladdningssuffix som `(2).json` förenklas; ett namn i JSON-filen har företräde. De 30 senaste kartorna samt aktiva och pausade kartor sparas. Äldre kartor och deras källframsteg tas bort automatiskt, men försök och repetitionskort finns kvar. Importera en borttagen fil eller URL igen för att använda den.
+
 Pooler för sportligor kontrollerar angiven säsong och division och väljer bara deltagande klubbars hemkommuner. Utan säsong används den aktuella; utan division används högsta divisionen. Klubbar i samma stad ger ett stadsval. En obekräftad lista eller saknade matchningar ger ett fel i stället för orelaterade städer; poolen gäller städer, inte exakta stadionpanoraman.
 
 Spelinställningen har fyra källor: Anpassat, Ladda upp JSON, JSON-URL och Beskriv en pool. Klistra in en direkt HTTP- eller HTTPS-länk till JSON under JSON-URL och välj Ladda URL. Koordinatkartor behåller sina platser och begränsar antalet rundor; geografiska pooler öppnas i Anpassat för redigering.
@@ -148,7 +150,7 @@ I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. K
 
 ## AI-coach och ledtrådar
 
-När uppskattningen för det ledande landet når 85 % söker coachen också en mer exakt plats. Två oberoende synliga ledtrådar kan stödja en region med medelhög eller hög säkerhet; en stad eller exakt plats kräver starkare bevis. En hög landsprocent avgör inte regionen på egen hand.
+När uppskattningen för det ledande landet når 85 % söker coachen också en mer exakt plats. Två oberoende synliga ledtrådar kan stödja ett brett geografiskt område (som Mellanvästern) eller en namngiven region; en stad eller exakt plats kräver starkare bevis. En hög landsprocent avgör inte regionen på egen hand. Om bilden inte ger tillräckligt stöd visas ingen regional uppskattning.
 
 Under **Inställningar → AI-coach** kan du välja Gemini, Anthropic eller en OpenAI-kompatibel leverantör, ange modell och klistra in din egen API-nyckel. Nyckeln är maskerad, finns bara i sidans minne och skickas via Coach-endpointen för varje analys; GeoTrainer sparar den inte. Välj **Glöm nyckeln** eller läs in sidan igen för att rensa den. Leverantören ansvarar för sina egna användningsgränser och avgifter. OpenAI-kompatibla webbadresser begränsas till offentliga leverantörer som stöds.
 

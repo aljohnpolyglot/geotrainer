@@ -9,7 +9,7 @@ import { isLocation } from './workspaceLocation';
 import { sourcePointHash } from './locationHash';
 
 export type MapPoint = { lat: number; lng: number; panoId?: string; heading?: number };
-export type ImportedMap = { id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; pointOrder?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] };
+export type ImportedMap = ({ id: string; name: string; kind?: 'points'; points: MapPoint[]; completedPointIndexes?: number[]; pointOrder?: number[]; lastLocation?: LocationResult } | { id: string; name: string; kind: 'pool'; countryCodes: string[]; locationTargets: LocationPoolTarget[] }) & { sourceType?: 'upload' | 'url'; sourceLabel?: string; lastOpenedAt?: number };
 export type ImportedMapHistory = { locations: LocationResult[]; index: number };
 export const MAX_IMPORTED_MAP_BYTES = 20_000_000;
 export const importedMapSizeAllowed = (bytes: number) => Number.isFinite(bytes) && bytes <= MAX_IMPORTED_MAP_BYTES;
@@ -41,6 +41,7 @@ export const recoverImportedHistory = (history: ImportedMapHistory, map: Importe
   return earlier.length ? { locations: [...earlier, ...history.locations], index: earlier.length + history.index } : history;
 };
 export const IMPORTED_MAP_PREFIX = 'local.importedMap:';
+export const IMPORTED_MAP_HISTORY_LIMIT = 30;
 export const importedMapPointCount = (map: ImportedMap) => map.kind === 'pool' ? undefined : map.points.length;
 export const importedMapIdForSource = async (source: string) => `source:${Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)))).map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
 const pointKey = (point: MapPoint) => JSON.stringify([point.lat, point.lng, point.panoId || '']);
@@ -57,7 +58,7 @@ export function resumeImportedMap(previous: ImportedMap, next: ImportedMap): Imp
   const pointOrder = [...remappedOrder, ...shuffleInPlace(next.points.map((_, index) => index).filter((index) => !used.has(index)))];
   const completedPointIndexes = priorCompleted.flatMap((index) => remapped.has(index) ? [remapped.get(index)!] : []);
   const lastIndex = remapped.get(previous.lastLocation?.importedMapPointIndex ?? -1) ?? -1;
-  return { ...next, pointOrder, completedPointIndexes, ...(lastIndex >= 0 && previous.lastLocation ? { lastLocation: { ...previous.lastLocation, importedMapPointIndex: lastIndex, importedMapProgress: completedPointIndexes.length, importedMapCompletedPointIndexes: completedPointIndexes } } : {}) };
+  return { ...next, name: previous.name, pointOrder, completedPointIndexes, ...(lastIndex >= 0 && previous.lastLocation ? { lastLocation: { ...previous.lastLocation, importedMapPointIndex: lastIndex, importedMapProgress: completedPointIndexes.length, importedMapCompletedPointIndexes: completedPointIndexes } } : {}) };
 }
 
 export function importedMapUrl(value: string): URL {
@@ -70,16 +71,18 @@ export function importedMapUrl(value: string): URL {
   return url;
 }
 
-const mapName = (name: string) => name.replace(/\.json$/i, '').slice(0, 100) || 'Imported map';
+export const readableImportedMapName = (name: string) => name.replace(/\\/g, '/').split('/').at(-1)!.replace(/\.json$/i, '').replace(/\s*\(\d+\)$/u, '').replace(/^geotrainer[-_ ]+/i, '').replace(/[-_]+(?=\p{L}|\d{4}-\d{2}-\d{2})/gu, ' ').replace(/\bopenguessr\b/gi, 'OpenGuessr').replace(/(^|\s)\p{Ll}/gu, (match) => match.toLocaleUpperCase()).trim().slice(0, 100) || 'Imported map';
+const mapName = (name: string) => readableImportedMapName(name);
 
 export function parseImportedMap(json: string, name: string): ImportedMap {
   const parsed: unknown = JSON.parse(json);
+  const displayName = parsed && typeof parsed === 'object' && !Array.isArray(parsed) && typeof (parsed as { name?: unknown }).name === 'string' && (parsed as { name: string }).name.trim() ? (parsed as { name: string }).name.trim().slice(0, 100) : mapName(name);
   if (parsed && typeof parsed === 'object' && (parsed as { format?: unknown }).format === 'geotrainer-geographic-pool') {
     const source = parsed as { countryCodes?: unknown; locationTargets?: unknown };
     const countryCodes = Array.isArray(source.countryCodes) ? [...new Set(source.countryCodes.filter((code): code is string => typeof code === 'string' && code in COUNTRIES))] : [];
     const locationTargets = normalizeLocationTargets(source.locationTargets).filter((target) => countryCodes.includes(target.countryCode));
     if (!countryCodes.length) throw new Error('This geographic pool has no valid countries.');
-    return { id: crypto.randomUUID(), name: mapName(name), kind: 'pool', countryCodes, locationTargets };
+    return { id: crypto.randomUUID(), name: displayName, kind: 'pool', countryCodes, locationTargets };
   }
   const source = Array.isArray(parsed) ? parsed : parsed && typeof parsed === 'object' ? (parsed as { customCoordinates?: unknown; locations?: unknown }).customCoordinates ?? (parsed as { locations?: unknown }).locations : undefined;
   if (!Array.isArray(source)) throw new Error('Choose a Map Maker JSON list or a map with customCoordinates.');
@@ -90,7 +93,7 @@ export function parseImportedMap(json: string, name: string): ImportedMap {
     return [{ lat: item.lat, lng: item.lng, ...(typeof item.panoId === 'string' && item.panoId ? { panoId: item.panoId } : {}), ...(typeof item.heading === 'number' && Number.isFinite(item.heading) ? { heading: item.heading } : {}) }];
   });
   if (!points.length) throw new Error('This map has no valid latitude and longitude locations.');
-  return { id: crypto.randomUUID(), name: mapName(name), points };
+  return { id: crypto.randomUUID(), name: displayName, points };
 }
 
 export const geographicPoolJson = (countryCodes: string[], locationTargets: LocationPoolTarget[]) => JSON.stringify({ format: 'geotrainer-geographic-pool', version: 1, countryCodes, locationTargets }, null, 2);
@@ -104,7 +107,28 @@ export function downloadGeographicPool(countryCodes: string[], locationTargets: 
 }
 
 export const saveImportedMap = (map: ImportedMap) => trainerDb.setSetting(`${IMPORTED_MAP_PREFIX}${map.id}`, map);
-export const getImportedMap = (id: string) => trainerDb.setting<ImportedMap>(`${IMPORTED_MAP_PREFIX}${id}`);
+const readableSavedMap = (map: ImportedMap): ImportedMap => map.sourceType || map.sourceLabel ? map : { ...map, name: readableImportedMapName(map.name) };
+export const getImportedMap = async (id: string) => { const map = await trainerDb.setting<ImportedMap>(`${IMPORTED_MAP_PREFIX}${id}`); return map && readableSavedMap(map); };
+export type SavedImportedMap = { map: ImportedMap; updatedAt: number };
+export async function savedImportedMaps(): Promise<SavedImportedMap[]> {
+  const records = await trainerDb.settingsByPrefix(IMPORTED_MAP_PREFIX);
+  return records.flatMap((record): SavedImportedMap[] => {
+    const map = record.value as Partial<ImportedMap> | undefined;
+    return map && typeof map.id === 'string' && record.key === `${IMPORTED_MAP_PREFIX}${map.id}` && typeof map.name === 'string' && Array.isArray((map as { points?: unknown }).points) && (map as { points: unknown[] }).points.length > 0
+      ? [{ map: readableSavedMap(map as ImportedMap), updatedAt: record.updatedAt || 0 }] : [];
+  }).sort((a, b) => b.updatedAt - a.updatedAt);
+}
+export const importedMapsToPrune = (saved: SavedImportedMap[], protectedIds: ReadonlySet<string>, limit = IMPORTED_MAP_HISTORY_LIMIT) => {
+  const protectedCount = saved.filter(({ map }) => protectedIds.has(map.id)).length;
+  return saved.filter(({ map }) => !protectedIds.has(map.id)).slice(Math.max(0, limit - protectedCount)).map(({ map }) => map.id);
+};
+export async function pruneImportedMaps(): Promise<void> {
+  const [saved, currentId, active, pausedStudy, pausedPlay, gamePreferences] = await Promise.all([
+    savedImportedMaps(), trainerDb.setting<string>('local.currentMapId'), trainerDb.setting<{ importedMapId?: string; settings?: { importedMapId?: string } }>('workspace.active'), trainerDb.setting<{ importedMapId?: string }>('workspace.paused.study'), trainerDb.setting<{ settings?: { importedMapId?: string } }>('workspace.paused.play'), trainerDb.setting<{ importedMapId?: string }>('gamePreferences'),
+  ]);
+  const protectedIds = new Set([currentId, active?.importedMapId, active?.settings?.importedMapId, pausedStudy?.importedMapId, pausedPlay?.settings?.importedMapId, gamePreferences?.importedMapId].filter((id): id is string => !!id));
+  await Promise.all(importedMapsToPrune(saved, protectedIds).map((id) => trainerDb.deleteSetting(`${IMPORTED_MAP_PREFIX}${id}`)));
+}
 export async function withImportedSourceHash(location: LocationResult, map: ImportedMap | undefined): Promise<LocationResult> {
   if (!map || map.kind === 'pool' || location.sourcePointHash) return location;
   const point = map.points[location.importedMapPointIndex ?? -1];

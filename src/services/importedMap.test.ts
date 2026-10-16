@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, recoverImportedHistory, remainingImportedPoints, restoreImportedHistory, resumeImportedMap, varyImportedPoint } from './importedMap';
+import { IDBKeyRange, indexedDB } from 'fake-indexeddb';
+import { geographicPoolFilename, geographicPoolJson, importedMapIdForSource, importedMapSizeAllowed, importedMapUrl, importedMapsToPrune, importedPointCandidates, isKnownImportedLocation, MAX_IMPORTED_MAP_BYTES, moveImportedHistory, parseImportedMap, pruneImportedMaps, readableImportedMapName, recoverImportedHistory, remainingImportedPoints, restoreImportedHistory, resumeImportedMap, savedImportedMaps, saveImportedMap, varyImportedPoint } from './importedMap';
+import { clearTrainerDbForTesting, trainerDb } from '../data/trainerDb';
 import { withoutImportedMaps } from './cloudSync';
 
 test('Map Maker exports retain valid exact locations without adding the map to cloud backup', () => {
@@ -11,7 +13,7 @@ test('Map Maker exports retain valid exact locations without adding the map to c
     { lat: 999, lng: 1 },
     { lat: 40, lng: -3 },
   ] }), 'training.json');
-  assert.equal(map.name, 'training');
+  assert.equal(map.name, 'Training');
   assert.notEqual(map.kind, 'pool');
   if (map.kind === 'pool') return;
   assert.deepEqual(map.points, [{ lat: 42.615, lng: 1.538, panoId: 'exact-pano', heading: 123 }, { lat: 40, lng: -3 }]);
@@ -39,7 +41,7 @@ test('geographic pool exports round-trip as editable country and region selectio
   const map = parseImportedMap(geographicPoolJson(['IT', 'GR'], [target]), 'adriatic-family.json');
   assert.equal(map.kind, 'pool');
   if (map.kind !== 'pool') return;
-  assert.equal(map.name, 'adriatic-family');
+  assert.equal(map.name, 'Adriatic Family');
   assert.deepEqual(map.countryCodes, ['IT', 'GR']);
   assert.deepEqual(map.locationTargets, [target]);
   assert.throws(() => parseImportedMap('{"format":"geotrainer-geographic-pool","countryCodes":["XX"]}', 'bad.json'), /no valid countries/i);
@@ -65,6 +67,29 @@ test('uploaded Learn visits move backward and forward before drawing a new locat
   assert.equal(moveImportedHistory(pair, 0).index, 0);
   assert.strictEqual(moveImportedHistory(pair, 2), pair);
   assert.strictEqual(moveImportedHistory(pair, Number.NaN), pair);
+});
+
+test('saved map names use JSON titles or readable filenames and pruning protects active sources', () => {
+  assert.equal(readableImportedMapName('C:\\Users\\user-MSI\\Downloads\\geotrainer-openguessr-duels-2026-10-12 (2).json'), 'OpenGuessr Duels 2026-10-12');
+  assert.equal(parseImportedMap('{"name":"NBA Teams — City/Vicinity Meta","customCoordinates":[{"lat":1,"lng":2}]}', 'unreadable-file.json').name, 'NBA Teams — City/Vicinity Meta');
+  const original = parseImportedMap('[{"lat":1,"lng":2}]', 'first.json');
+  const next = parseImportedMap('[{"lat":1,"lng":2}]', 'first.json');
+  assert.equal(resumeImportedMap({ ...original, name: 'My practice map' }, next).name, 'My practice map');
+  const saved = ['new', 'active', 'older', 'oldest'].map((id, index) => ({ map: { ...original, id }, updatedAt: 4 - index }));
+  assert.deepEqual(importedMapsToPrune(saved, new Set(['oldest']), 2), ['active', 'older']);
+});
+
+test('map history keeps the newest 30 records and a paused source without changing its progress', async () => {
+  Object.assign(globalThis, { indexedDB, IDBKeyRange });
+  await clearTrainerDbForTesting();
+  const points = [{ lat: 1, lng: 2 }];
+  for (let index = 0; index < 32; index++) await saveImportedMap({ id: `map-${index}`, name: `Map ${index}`, points, completedPointIndexes: [0], lastOpenedAt: index });
+  await trainerDb.setSetting('workspace.paused.study', { importedMapId: 'map-0' });
+  await pruneImportedMaps();
+  const saved = await savedImportedMaps();
+  assert.equal(saved.length, 30);
+  assert.ok(saved.some(({ map }) => map.id === 'map-0' && map.kind !== 'pool' && map.completedPointIndexes?.[0] === 0));
+  assert.equal(await trainerDb.setting('local.importedMap:map-0') !== undefined, true);
 });
 
 test('resumed uploaded Learn restores visited views and rejects stale history', () => {

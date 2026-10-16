@@ -18,7 +18,9 @@
 .mobile-review-context { display: none; }
 .study-mobile-context { display: none; }
 .study-live-context { color: #d5e3e5; font: 700 11px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
-.uploaded-panorama-select { max-width: 150px; min-height: 34px; padding: 0 26px 0 9px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 5px; font-size: 12px; font-weight: 750; cursor: pointer; }
+.uploaded-map-context { display: grid; min-width: 0; max-width: 220px; gap: 2px; }
+.uploaded-map-context > span { overflow: hidden; color: #d5e3e5; font-size: 11px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+.uploaded-panorama-select { max-width: 180px; min-height: 30px; padding: 0 26px 0 9px; color: var(--carbon); background: var(--paper); border: 1px solid var(--rule); border-radius: 5px; font-size: 12px; font-weight: 750; cursor: pointer; }
 .uploaded-panorama-select:focus-visible { outline: 3px solid var(--lime); outline-offset: 2px; }
 .uploaded-panorama-select:disabled { opacity: .55; cursor: not-allowed; }
 .study-course-name { max-width: min(30vw, 260px); overflow: hidden; color: #d5e3e5; font-size: 12px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
@@ -377,7 +379,8 @@ tbody tr.never-seen { color: #74858e; }
   .mobile-review-context strong { overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; }
   .mobile-review-context small { color: var(--sky); font-size: 10px; }
   .study-mobile-context { grid-column: 2; grid-row: 1; display: grid; min-width: 0; justify-items: center; color: #fff; font-size: 11px; line-height: 1.3; text-align: center; }
-  .uploaded-panorama-select { grid-column: 2; grid-row: 1; justify-self: center; width: min(100%, 180px); min-height: 44px; }
+  .uploaded-map-context { grid-column: 2; grid-row: 1; justify-self: center; width: min(100%, 220px); text-align: center; }
+  .uploaded-panorama-select { width: 100%; max-width: none; min-height: 27px; }
   .study-mobile-context strong { font: 700 12px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
   .study-mobile-context small { color: var(--sky); font-size: 10px; }
   .study-mobile-context small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
