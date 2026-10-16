@@ -14,21 +14,31 @@ let music: HTMLAudioElement | undefined;
 let audioMode: 'learn' | 'play' = 'learn';
 let pulseTimer: number | undefined;
 let pulseStep = 0;
+const PLAY_PATTERN = [
+  [110, 0], [110, 261.63], [110, 0], [110, 329.63],
+  [98, 0], [98, 261.63], [98, 0], [98, 392],
+  [87.31, 0], [87.31, 220], [87.31, 0], [87.31, 261.63],
+  [98, 0], [98, 246.94], [98, 0], [98, 293.66],
+];
 
 const ensureContext = () => context ??= new AudioContext();
 const stopPulse = () => { if (pulseTimer !== undefined) window.clearInterval(pulseTimer); pulseTimer = undefined; };
 const playPulse = () => {
   if (!preferences.musicEnabled || document.hidden) return;
   const audio = ensureContext(); void audio.resume().catch(() => {});
-  const now = audio.currentTime; const oscillator = audio.createOscillator(); const gain = audio.createGain();
-  oscillator.type = 'triangle'; oscillator.frequency.value = [110, 110, 130.81, 98, 110, 146.83, 130.81, 98][pulseStep++ % 8];
-  gain.gain.setValueAtTime(preferences.musicVolume * .045, now);
-  gain.gain.exponentialRampToValueAtTime(.0001, now + .24);
-  oscillator.connect(gain).connect(audio.destination); oscillator.start(now); oscillator.stop(now + .25);
+  const now = audio.currentTime; const [bass, lead] = PLAY_PATTERN[pulseStep++ % PLAY_PATTERN.length];
+  for (const [frequency, type, level, duration] of [[bass, 'triangle', .065, .2], [lead, 'sawtooth', .025, .14]] as const) {
+    if (!frequency) continue;
+    const oscillator = audio.createOscillator(); const gain = audio.createGain();
+    oscillator.type = type; oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(preferences.musicVolume * level, now);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+    oscillator.connect(gain).connect(audio.destination); oscillator.start(now); oscillator.stop(now + duration + .01);
+  }
 };
 const startMusic = () => {
   if (!preferences.musicEnabled || document.hidden) return;
-  if (audioMode === 'play') { music?.pause(); if (pulseTimer === undefined) { pulseStep = 0; playPulse(); pulseTimer = window.setInterval(playPulse, 360); } return; }
+  if (audioMode === 'play') { music?.pause(); if (pulseTimer === undefined) { pulseStep = 0; playPulse(); pulseTimer = window.setInterval(playPulse, 240); } return; }
   stopPulse();
   music ??= Object.assign(new Audio(`${import.meta.env.BASE_URL}assets/audio/ambient-relaxing-loop.mp3`), { loop: true });
   music.volume = preferences.musicVolume;

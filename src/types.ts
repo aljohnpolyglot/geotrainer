@@ -178,7 +178,7 @@ export interface GameSettings {
   panoramaSource?: PanoramaSource; // Optional for backwards-compatible saved games
   allowContributors?: boolean; // Optional for backwards-compatible saved games
   allowInteriors?: boolean; // Optional for backwards-compatible saved games
-  timeLimitSeconds: number; // 0 = unlimited, or 30, 60, 90, 120, 180
+  timeLimitSeconds: number; // 0 = unlimited; otherwise 1–3600 seconds
 }
 
 export interface GameRound {

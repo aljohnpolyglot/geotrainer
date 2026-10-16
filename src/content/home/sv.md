@@ -94,13 +94,15 @@ Under skapandet visar knappen den aktuella fasen för länder, regioner eller st
 
 ## Spelläge
 
+Under **Tidsgräns per runda** i spelinställningarna väljer du Obegränsat, en förinställning eller Egen tid och anger 1–3600 sekunder. Valet sparas till nästa spel; en pausad runda fortsätter med återstående aktiv tid.
+
 ### Förflytta dig med tangentbordet
 
 I en spel- eller repetitionsrunda där förflyttning är tillåten klickar du på en navigeringspil i Street View och håller sedan ned mellanslag för att fortsätta i den riktningen. Släpp tangenten för att stanna. Pilen måste ha fokus: om mellanslag aktiverar en annan knapp klickar du på pilen igen. Det är panoramats vanliga tangentbordsfunktion, utan separat hastighetsinställning. No Move och NMPZ tillåter inte förflyttning. I Lär går du vidare med N eller knappen Nästa; mellanslag är fritt för rörelse i Street View. Tangenten kan fortfarande fortsätta en avslutad runda om den knappen har fokus.
 
 I spelinställningarna väljer du Genererade platser eller Uppladdad karta. Omgångarna använder filens platser utan att upprepa poster och begränsas till antalet tillgängliga platser.
 
-Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Efter svaret visar resultatet rätt land, tillgänglig stad, region och väg, fullständig adress, exakta koordinater, avstånd och poäng. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning.
+Spela använder samma landsmix och mäter fri återkallning i 1–100 rundor. Efter svaret visar resultatet rätt land, tillgänglig stad, region och väg, fullständig adress, exakta koordinater, avstånd och poäng. Varje svar blir ett nytt försök och sparar den aktuella vyn för förhandsvisning. När tiden går ut i Spela skickas markören som finns på kartan automatiskt som svar, även utan bekräftelse. Om ingen markör finns registreras rundan utan gissning.
 
 I Spel och Repetition förstorar knappen gissningskartan som en flytande panel som standard. Under **Inställningar → Visning → Kartor** kan du välja **Helskärm** för **Knapp för att förstora gissningskartan** om hela panelen, inklusive gissningskontrollerna, ska fylla den synliga skärmen. I båda lägena kan du dra panelen i rubriken, ändra storlek från en kant eller ett hörn och återställa den kompakta kartan. Kartan har också en separat helskärmsknapp för själva kartytan. Markören ligger kvar.
 
@@ -189,7 +191,7 @@ Kartor öppnas snabbare igen under samma session i Lär, Spela, Repetition och p
 
 Under Inställningar → Visning → Kartor kan du välja **Kartans färgpalett**: Automatiskt, Ljust eller Mörkt. **Zoom för resultatkarta** erbjuder Närmaste, Land, Landsregion eller Världen; Land är standard. Automatiskt följer appens utseende; Ljust använder Googles ursprungliga färger för väg- och terrängkartor, medan Mörkt behåller en mörk kartpalett även om appens tema ändras. Satellitbilder behåller sina färger. Landsgränser visas som standard och kan döljas; de syns bara när en gräns ligger i det visade kartområdet. Gränsernas bredd och färg kan justeras med en direkt förhandsvisning; regiongränser är avstängda som standard och kan aktiveras separat.
 
-På en karta med visat svar kan du använda hårkorset för att zooma in till rätt plats eller jordgloben för att återgå till landsnivå. Du kan fortsätta zooma och flytta kartan; inställningen styr bara den första vyn.
+På en karta med visat svar kan du använda hårkorset för att zooma in till rätt plats, byggnaden för stadsnivå eller jordgloben för att återgå till landsnivå. Du kan fortsätta zooma och flytta kartan; inställningen styr bara den första vyn.
 
 Länder, städer och miljöer styr genereringen utan att lova fullständig täckning. Inställningar skiljer gränssnitts-, spel- och AI-språk samt repetition, tidszon, utseende och karthjälp. Nya profiler får 50 nya kort och 500 repetitioner per dag. Ljudeffekter och bakgrundsmusik är valfria, börjar avstängda och har separata volymer. Med ljudeffekter på hörs signaler under de sista tio sekunderna i tidsbegränsat Spela och när tiden är slut. Musiken växlar från lugn i Lär till en mer pressande rytm i Spela och pausas när sidan döljs.
 

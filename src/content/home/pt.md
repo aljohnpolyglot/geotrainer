@@ -96,13 +96,15 @@ Durante a criação, o botão mostra a etapa atual de países, regiões ou cidad
 
 ## Modo Jogo
 
+Em **Limite por rodada** nas configurações do jogo, escolha Ilimitado, uma opção predefinida ou Personalizado para inserir de 1 a 3600 segundos. A escolha fica salva para o próximo jogo; uma rodada pausada retoma com o tempo ativo restante.
+
 ### Mover-se com o teclado
 
 Em uma rodada com movimento no Jogo ou na Revisão, clique em uma seta de navegação do Street View e mantenha a barra de espaço pressionada para continuar naquela direção. Solte a tecla para parar. A seta precisa estar em foco: se a barra de espaço ativar outro botão, clique novamente na seta. Esse é o controle normal do panorama; não há ajuste de velocidade separado. No Move e NMPZ impedem deslocamentos. No Estudo, use N ou o botão Seguinte para avançar; a barra de espaço fica livre para se mover no Street View. Ela ainda pode continuar uma rodada concluída se esse botão estiver em foco.
 
 Na configuração do Jogo, escolha Locais gerados ou Mapa enviado. As rodadas usam os locais do mapa sem repetir entradas, e o número de rodadas fica limitado aos locais disponíveis.
 
-Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Depois do palpite, o resultado mostra o país real, cidade, região e via disponíveis, o endereço completo, as coordenadas exatas, a distância e a pontuação. Cada palpite vira uma nova tentativa e salva a vista atual para prévias.
+Jogo usa a mesma mistura de países e mede a recordação sem ajuda em 1–100 rodadas. Depois do palpite, o resultado mostra o país real, cidade, região e via disponíveis, o endereço completo, as coordenadas exatas, a distância e a pontuação. Cada palpite vira uma nova tentativa e salva a vista atual para prévias. Quando o tempo acaba no Jogo, o marcador que estiver no mapa é enviado automaticamente, mesmo sem confirmação. Sem marcador, a rodada fica registrada sem palpite.
 
 No Jogo e na Revisão, o botão de ampliar abre o mapa de palpite como painel flutuante por padrão. Em **Configurações → Exibição → Mapas**, defina **Botão de ampliação do mapa de palpite** como **Tela cheia** se preferir que todo o painel, inclusive os controles de palpite, ocupe a tela visível. Em ambos os modos, arraste-o pelo cabeçalho, redimensione-o por uma borda ou canto e restaure o mapa compacto. O mapa também tem um botão de tela cheia separado para a área do mapa. O marcador permanece no lugar.
 
@@ -183,7 +185,7 @@ Os mapas reabrem mais rapidamente durante uma sessão em Aprender, Jogar, Revisa
 
 Em Configurações → Exibição → Mapas, **Paleta de cores do mapa** oferece Automático, Claro ou Escuro. **Zoom do mapa de resultados** oferece Mais próximo, País, Região do país ou Mundo; País é o padrão. Automático acompanha a aparência do aplicativo; Claro usa as cores originais do Google nos mapas rodoviários e de relevo, enquanto Escuro mantém uma paleta escura mesmo se o tema do aplicativo mudar. Imagens de satélite mantêm suas cores.
 
-Em um mapa com a resposta revelada, use o botão de mira para aproximar o local correto ou o botão de globo para voltar à escala do país. Você ainda pode ampliar e mover o mapa; a opção nas Configurações define apenas a vista inicial.
+Em um mapa com a resposta revelada, use o botão de mira para aproximar o local correto, o de edifício para ver a cidade ou o de globo para voltar à escala do país. Você ainda pode ampliar e mover o mapa; a opção nas Configurações define apenas a vista inicial.
 
 As fronteiras nacionais aparecem por padrão e podem ser ocultadas; só aparecem quando há uma fronteira na área visível do mapa. A espessura e a cor das fronteiras podem ser ajustadas com uma prévia ao vivo; as fronteiras regionais ficam desativadas por padrão e podem ser ativadas separadamente.
 

@@ -15,6 +15,7 @@ import { mapPresentationOptions, playGuessMapOptions, useMapPreferences } from '
 
 interface GuessMapProps {
   onGuess: (guess: { lat: number; lng: number } | null) => void;
+  onPinChange?: (guess: { lat: number; lng: number } | null) => void;
   isSubmitting: boolean;
   mapsReady: boolean;
   timeRemaining: number | null; // null if unlimited
@@ -38,6 +39,7 @@ export const expandedGuessMapRect = (bounds: ReturnType<typeof visibleBounds>, m
 
 export const GuessMap: React.FC<GuessMapProps> = ({
   onGuess,
+  onPinChange,
   isSubmitting,
   mapsReady,
   timeRemaining,
@@ -61,6 +63,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   const [expandedRect, setExpandedRect] = useState<PanelRect>();
   const interaction = useRef<{ pointerId: number; startX: number; startY: number; rect: PanelRect; direction: 'move' | PanelResizeDirection }>();
   const [currentGuess, setCurrentGuess] = useState<{ lat: number; lng: number } | null>(null);
+  const updateGuess = (guess: { lat: number; lng: number } | null) => { setCurrentGuess(guess); onPinChange?.(guess); };
+  useEffect(() => () => onPinChange?.(null), [onPinChange]);
 
   const toggleExpanded = () => {
     if (isExpanded) { setIsExpanded(false); setExpandedRect(undefined); return; }
@@ -124,7 +128,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     map.addListener('click', (e: google.maps.MapMouseEvent) => {
       if (!e.latLng) return;
       const coords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-      setCurrentGuess(coords);
+      updateGuess(coords);
       playUiSound('pin');
 
       if (!markerRef.current) {
@@ -146,7 +150,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
         markerRef.current.addListener('dragend', (dragEvent: google.maps.MapMouseEvent) => {
           if (dragEvent.latLng) {
             playUiSound('pin');
-            setCurrentGuess({
+            updateGuess({
               lat: dragEvent.latLng.lat(),
               lng: dragEvent.latLng.lng(),
             });
@@ -200,7 +204,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
       markerRef.current.setMap(null);
       markerRef.current = null;
     }
-    setCurrentGuess(null);
+    updateGuess(null);
   };
 
   const isUrgent = timeRemaining !== null && timeRemaining <= 10;

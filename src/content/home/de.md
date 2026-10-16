@@ -173,6 +173,10 @@ Diese Werte steuern die Suche, garantieren aber wegen begrenzter Street-View-Abd
 
 ## Spielmodus
 
+Wähle unter **Zeitlimit pro Runde** in den Spieleinstellungen Unbegrenzt, eine Vorgabe oder Eigene Zeit für 1 bis 3600 Sekunden. Die Auswahl bleibt für das nächste Spiel gespeichert; eine pausierte Runde läuft mit ihrer verbleibenden aktiven Zeit weiter.
+
+Läuft die Zeit im Spiel ab, wird die zuletzt gesetzte Markierung auf der Karte automatisch als Antwort abgegeben, auch ohne Bestätigung. Ohne Markierung wird die Runde als nicht beantwortet gespeichert.
+
 Wähle in den Spieleinstellungen Generierte Orte oder Hochgeladene Karte. Die Runden verwenden Orte aus der Datei und können sie wiederholen, wenn es mehr Runden als Orte gibt.
 
 ### Spieleinstellungen
@@ -256,7 +260,7 @@ Wähle **Speichern**, um Änderungen anzuwenden. Strenge und Intervalle beeinflu
 
 Unter Einstellungen → Anzeige → Karten bietet die **Kartenfarbpalette** Automatisch, Hell oder Dunkel. **Zoom der Ergebniskarte** bietet Nah, Land, Landesregion oder Welt; Land ist der Standard. Automatisch folgt dem App-Design; Hell verwendet Googles ursprüngliche Farben für Straßen- und Geländekarten, während Dunkel auch bei einem anderen App-Design eine dunkle Kartenpalette beibehält. Satellitenbilder behalten ihre Farben.
 
-Auf einer aufgedeckten Ergebniskarte zoomst du mit dem Fadenkreuz zum richtigen Ort und mit dem Globus zurück auf Landesebene. Danach kannst du weiter zoomen und die Karte verschieben; die Einstellung legt nur die Anfangsansicht fest.
+Auf einer aufgedeckten Ergebniskarte zoomst du mit dem Fadenkreuz zum richtigen Ort, mit dem Gebäude auf Stadtebene und mit dem Globus zurück auf Landesebene. Danach kannst du weiter zoomen und die Karte verschieben; die Einstellung legt nur die Anfangsansicht fest.
 
 Ländergrenzen sind standardmäßig sichtbar und können ausgeschaltet werden; sie erscheinen nur, wenn eine Grenze im sichtbaren Kartenausschnitt liegt. Breite und Farbe der Grenzen lassen sich mit einer Live-Vorschau anpassen; Regionsgrenzen sind standardmäßig aus und können separat aktiviert werden.
 

@@ -1,6 +1,6 @@
 import { acquireMap } from '../services/mapResources';
 import { useEffect, useRef, useState } from 'react';
-import { Crosshair, Globe2, Layers3, Type } from 'lucide-react';
+import { Building2, Crosshair, Globe2, Layers3, Type } from 'lucide-react';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { centeredResultMapZoom, playGuessMapOptions, resultMapZoomLimit, shouldRecenterResultMap, useMapPreferences } from '../services/mapPreferences';
@@ -163,6 +163,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
       <button type="button" aria-pressed={roadNamesEnabled} aria-label={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} title={t(roadNamesEnabled ? 'Hide road names' : 'Show road names')} onClick={() => setRoadNamesOverride(!roadNamesEnabled)}><Type size={15} /></button>
       <div className="result-map-zoom-actions" role="group" aria-label={t('Map zoom shortcuts')}>
         <button type="button" aria-label={t('Zoom to answer')} title={t('Zoom to answer')} onClick={() => zoomToAnswer(18)}><Crosshair size={17} /></button>
+        <button type="button" aria-label={t('Zoom to city')} title={t('Zoom to city')} onClick={() => zoomToAnswer(11)}><Building2 size={17} /></button>
         <button type="button" aria-label={t('Zoom to country')} title={t('Zoom to country')} onClick={() => zoomToAnswer(5)}><Globe2 size={17} /></button>
       </div>
     </div>

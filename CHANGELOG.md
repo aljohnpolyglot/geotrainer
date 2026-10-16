@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-16
+
+- Add a custom Play time limit of 1–3600 seconds per round, saved with game preferences alongside the existing presets.
+- Add a city-scale shortcut between the close answer and country views on revealed maps.
+- Give optional Play music a faster, layered bass-and-lead rhythm while keeping its saved volume and visibility behavior.
+
+## 2026-10-15
+
+- Submit the current Play map pin when a timed round expires, even if Confirm was not pressed; keep no-guess results for rounds without a pin.
+
 ## 2026-10-14
 
 - Let Coach show a supported regional estimate when the leading country reaches 85%, while keeping city and exact-place estimates stricter; label the estimate type in the result panel.

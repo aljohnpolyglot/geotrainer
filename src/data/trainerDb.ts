@@ -43,6 +43,7 @@ export const normalizeLocationTargets = (value: unknown) => Array.isArray(value)
 export const normalizeGamePreferences = (value: unknown, showCompass = true): GameSettings => {
   const source = value && typeof value === 'object' ? value as Partial<GameSettings> : {};
   const rounds = Number(source.roundCount);
+  const timeLimitSeconds = Number(source.timeLimitSeconds);
   const countryCodes = Array.isArray(source.countryCodes) ? [...new Set(source.countryCodes.filter((code): code is string => typeof code === 'string' && code in COUNTRIES))] : [];
   const locationTargets = normalizeLocationTargets(source.locationTargets);
   const panoramaSource = source.panoramaSource === 'mixed' || source.panoramaSource === 'contributor' ? source.panoramaSource : source.allowContributors === true ? 'mixed' : 'official';
@@ -68,7 +69,7 @@ export const normalizeGamePreferences = (value: unknown, showCompass = true): Ga
     panoramaSource,
     allowContributors: panoramaSource !== 'official',
     allowInteriors: source.allowInteriors === true,
-    timeLimitSeconds: [0, 30, 60, 90, 120].includes(Number(source.timeLimitSeconds)) ? Number(source.timeLimitSeconds) : 0,
+    timeLimitSeconds: Number.isInteger(timeLimitSeconds) && timeLimitSeconds >= 0 && timeLimitSeconds <= 3600 ? timeLimitSeconds : 0,
   };
 };
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);

@@ -96,13 +96,15 @@ Durante la creazione, il pulsante mostra la fase corrente di paesi, regioni o ci
 
 ## Modalità Gioco
 
+In **Limite per turno** nelle impostazioni di gioco, scegli Illimitato, un valore predefinito o Personalizzato per inserire da 1 a 3600 secondi. La scelta viene conservata per la partita successiva; un turno in pausa riprende con il tempo attivo rimanente.
+
 ### Muoversi con la tastiera
 
 In un round con movimento in Gioco o Ripasso, fai clic su una freccia di navigazione di Street View e tieni premuta la barra spaziatrice per proseguire in quella direzione. Rilascia il tasto per fermarti. La freccia deve avere il focus: se la barra spaziatrice attiva un altro pulsante, fai di nuovo clic sulla freccia. È il normale controllo del panorama, senza un’impostazione di velocità separata. No Move e NMPZ impediscono lo spostamento. In Studio, usa N o il pulsante Avanti per proseguire; la barra spaziatrice resta libera per muoverti in Street View. Può ancora continuare un round concluso se quel pulsante ha il focus.
 
 Nelle impostazioni di gioco, scegli Luoghi generati o Mappa caricata. I round usano luoghi unici del file e il loro numero viene limitato ai luoghi disponibili.
 
-Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Dopo la risposta, il risultato mostra il paese reale, città, regione e strada disponibili, l’indirizzo completo, le coordinate esatte, la distanza e il punteggio. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime.
+Gioco usa lo stesso gruppo di paesi e misura il richiamo senza aiuti in 1–100 turni. Dopo la risposta, il risultato mostra il paese reale, città, regione e strada disponibili, l’indirizzo completo, le coordinate esatte, la distanza e il punteggio. Ogni risposta crea un nuovo tentativo e conserva la vista corrente per le anteprime. Allo scadere del tempo in Gioco, il segnaposto presente sulla mappa viene inviato automaticamente, anche senza conferma. Se non c’è un segnaposto, il turno viene registrato senza risposta.
 
 In Gioco e Ripasso, il pulsante di espansione apre per impostazione predefinita la mappa della risposta come pannello mobile. In **Impostazioni → Visualizzazione → Mappe**, imposta il **Pulsante di espansione della mappa della risposta** su **Schermo intero** se preferisci che l’intero pannello, compresi i controlli della risposta, riempia lo schermo visibile. In entrambi i modi puoi trascinarlo dall’intestazione, ridimensionarlo da un bordo o angolo e ripristinare la mappa compatta. La mappa ha anche un pulsante a schermo intero separato per l’area cartografica. Il segnaposto resta dov’è.
 
@@ -185,7 +187,7 @@ Le mappe si riaprono più rapidamente durante una sessione in Impara, Gioca, Rip
 
 In Impostazioni → Schermo → Mappe, **Palette colori della mappa** offre Automatico, Chiaro o Scuro. **Zoom della mappa dei risultati** offre Più vicino, Paese, Regione del paese o Mondo; Paese è il valore predefinito. Automatico segue l’aspetto dell’app; Chiaro usa i colori originali di Google per le mappe stradali e del terreno, mentre Scuro mantiene una palette scura anche quando cambia il tema dell’app. Le immagini satellitari conservano i propri colori.
 
-Su una mappa con la risposta rivelata, usa il mirino per ingrandire il luogo corretto o il globo per tornare alla scala del paese. Puoi continuare a ingrandire e spostare la mappa; l’impostazione determina solo la vista iniziale.
+Su una mappa con la risposta rivelata, usa il mirino per ingrandire il luogo corretto, l’edificio per vedere la città o il globo per tornare alla scala del paese. Puoi continuare a ingrandire e spostare la mappa; l’impostazione determina solo la vista iniziale.
 
 I confini nazionali sono visibili per impostazione predefinita e si possono nascondere; compaiono solo quando un confine è nell’area mostrata. Spessore e colore dei confini sono regolabili con un’anteprima dal vivo; i confini regionali sono disattivati per impostazione predefinita e si possono attivare separatamente.
 

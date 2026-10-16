@@ -62,6 +62,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
   const [canPan, setCanPan] = useState<boolean>(true);
   const [canZoom, setCanZoom] = useState<boolean>(true);
   const [timeLimitSeconds, setTimeLimitSeconds] = useState<number>(0); // 0 = unlimited
+  const [customTime, setCustomTime] = useState(false);
   const [showCompass, setShowCompass] = useState(defaultShowCompass);
   const [aiCoachEnabled, setAiCoachEnabled] = useState(true);
   const [environment, setEnvironment] = useState<Environment>('mixed');
@@ -85,7 +86,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
       setRoundCount(value.roundCount); setCustomRounds(![3, 5, 10, 15].includes(value.roundCount)); setSelectedCollectionId(collections.some((item) => item.id === value.collectionId) ? value.collectionId : 'world');
       setCountryCodes([]); setLocationTargets([]);
       setCanMove(value.canMove); setCanPan(value.canPan); setCanZoom(value.canZoom); setShowCompass(value.showCompass ?? defaultShowCompass); setAiCoachEnabled(value.aiCoachEnabled ?? true);
-      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds);
+      setEnvironment(value.environment ?? 'mixed'); setUrbanLevel(value.urbanLevel ?? 3); setSamplingMode(value.samplingMode ?? 'natural'); setPriority(value.priority ?? 'random'); setPanoramaSource(value.panoramaSource ?? 'official'); setAllowInteriors(value.allowInteriors === true); setTimeLimitSeconds(value.timeLimitSeconds); setCustomTime(![0, 30, 60, 90, 120].includes(value.timeLimitSeconds));
       setImportedMapOrder(value.importedMapOrder ?? 'shuffle'); setSkipSeenImported(value.skipSeenImported !== false);
       setLocationSource(value.importedMapId ? 'uploaded' : 'generated');
       void (value.importedMapId ? getImportedMap(value.importedMapId) : trainerDb.setting<string>('local.currentMapId').then((id) => id && getImportedMap(id))).then((map) => { if (active) setImportedMap(map || undefined); });
@@ -374,7 +375,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               <Clock className="w-3.5 h-3.5 text-amber-400" />
               <span>{t('Time Limit Per Round')}</span>
             </label>
-            <div className="grid grid-cols-5 gap-1.5">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
               {[
                 { label: t('Unlimited'), seconds: 0 },
                 { label: '30s', seconds: 30 },
@@ -385,9 +386,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                 <button
                   key={opt.seconds}
                   type="button"
-                  onClick={() => setTimeLimitSeconds(opt.seconds)}
+                  onClick={() => { setTimeLimitSeconds(opt.seconds); setCustomTime(false); }}
                   className={`py-2 px-1 rounded-xl text-center font-medium transition-all cursor-pointer border text-[11px] ${
-                    timeLimitSeconds === opt.seconds
+                    !customTime && timeLimitSeconds === opt.seconds
                       ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold'
                       : 'bg-stone-950 text-stone-400 border-stone-800 hover:border-stone-700 hover:text-stone-200'
                   }`}
@@ -395,7 +396,9 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
                   {opt.label}
                 </button>
               ))}
+              <button type="button" onClick={() => { setCustomTime(true); if (!timeLimitSeconds) setTimeLimitSeconds(180); }} className={`py-2 px-1 rounded-xl text-center font-medium transition-all cursor-pointer border text-[11px] ${customTime ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold' : 'bg-stone-950 text-stone-400 border-stone-800 hover:border-stone-700 hover:text-stone-200'}`}>{t('Custom time')}</button>
             </div>
+            {customTime && <label className="flex items-center gap-2 text-xs text-stone-300">{t('Seconds per round')}<input type="number" min="1" max="3600" step="1" value={timeLimitSeconds} onChange={(event) => setTimeLimitSeconds(Math.min(3600, Math.max(1, Math.trunc(Number(event.target.value) || 1))))} className="w-24 bg-white border border-stone-300 rounded px-2 py-1.5 text-stone-900 text-base font-mono" /></label>}
           </div>
         </div>
 

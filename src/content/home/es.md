@@ -98,13 +98,15 @@ Durante la creación, el botón indica la fase actual de países, regiones o ciu
 
 ## Modo Juego
 
+En **Límite por ronda** de la configuración del juego, elige Sin límite, un valor predefinido o Personalizado para introducir entre 1 y 3600 segundos. La elección se conserva para la siguiente partida; una ronda pausada se reanuda con el tiempo activo restante.
+
 ### Moverse con teclado
 
 En una ronda con movimiento de Juego o Repaso, haz clic en una flecha de navegación de Street View y mantén pulsada la barra espaciadora para seguir en esa dirección. Suéltala para detenerte. La flecha debe tener el foco: si la barra espaciadora activa otro botón, vuelve a hacer clic en la flecha. Es el control normal del panorama, sin ajuste de velocidad aparte. No Move y NMPZ impiden desplazarse. En Estudio, usa N o el botón Siguiente para avanzar; la barra espaciadora queda libre para moverte en Street View. Puede continuar una ronda terminada si ese botón tiene el foco.
 
 En la configuración de Juego, elige Lugares generados o Mapa subido. Los turnos del mapa subido usan sus lugares sin repetir entradas y el número de turnos se limita a los lugares disponibles.
 
-Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 rondas. Tras responder, el resultado muestra el país real, la ciudad, región y vía disponibles, la dirección completa, las coordenadas exactas, la distancia y la puntuación. Cada respuesta crea un intento nuevo y guarda la vista actual para las previsualizaciones.
+Juego usa la misma mezcla de países y mide el recuerdo sin ayuda en 1–100 rondas. Tras responder, el resultado muestra el país real, la ciudad, región y vía disponibles, la dirección completa, las coordenadas exactas, la distancia y la puntuación. Cada respuesta crea un intento nuevo y guarda la vista actual para las previsualizaciones. Si se agota el tiempo en Juego, se envía automáticamente el marcador que esté en el mapa, aunque no hayas confirmado. Si no hay marcador, se registra el turno sin respuesta.
 
 En Juego y Repaso, el botón de ampliar abre el mapa de respuesta como panel flotante de forma predeterminada. En **Configuración → Pantalla → Mapas**, cambia **Botón para ampliar el mapa de respuesta** a **Pantalla completa** si prefieres que todo el panel, incluidos los controles de respuesta, ocupe la pantalla visible. En ambos modos puedes arrastrarlo por el encabezado, cambiar su tamaño desde un borde o esquina y restaurar el mapa compacto. El mapa también tiene un botón de pantalla completa independiente para el área del mapa. El marcador permanece en su lugar.
 
@@ -187,7 +189,7 @@ Los mapas se vuelven a abrir más rápido durante una sesión en Aprender, Jugar
 
 En Configuración → Pantalla → Mapas, **Paleta de colores del mapa** permite Automático, Claro u Oscuro. **Zoom del mapa de resultados** ofrece Más cercano, País, Región del país o Mundo; País es el valor predeterminado. Automático sigue la apariencia de la aplicación; Claro usa los colores originales de Google en los mapas de carreteras y relieve, mientras que Oscuro mantiene una paleta oscura aunque cambie el tema de la aplicación. Las imágenes de satélite conservan sus colores.
 
-En un mapa con la respuesta revelada, usa el botón de la mira para acercarte al lugar correcto o el del globo para volver a la escala de país. Puedes seguir ampliando y desplazando el mapa; la opción de Configuración solo determina la vista inicial.
+En un mapa con la respuesta revelada, usa el botón de la mira para acercarte al lugar correcto, el del edificio para ver la ciudad o el del globo para volver a la escala de país. Puedes seguir ampliando y desplazando el mapa; la opción de Configuración solo determina la vista inicial.
 
 Las fronteras nacionales se muestran por defecto y se pueden ocultar; solo aparecen cuando hay una frontera en el área visible del mapa. El grosor y el color de las fronteras se ajustan con una vista previa en vivo; las fronteras regionales están desactivadas por defecto y se pueden activar por separado.
 

@@ -12,6 +12,7 @@ test('revealed and selectable result maps show guide buttons', () => {
   assert.match(revealed, /aria-label="Show Street View coverage"/);
   assert.match(revealed, /aria-label="Show road names"/);
   assert.match(revealed, /aria-label="Zoom to answer"/);
+  assert.match(revealed, /aria-label="Zoom to city scale"/);
   assert.match(revealed, /aria-label="Zoom to country"/);
   const selectable = renderToStaticMarkup(createElement(ResultMap, { ...props, onSelect: () => {} }));
   assert.match(selectable, /result-map-guides/);
@@ -24,5 +25,6 @@ test('Learn reveal card defaults to selectable blue coverage and keeps map zoom 
   assert.match(learn, /class="result-map-wrap study-result-map selectable"/);
   assert.match(learn, /aria-label="Hide Street View coverage"/);
   assert.match(learn, /aria-label="Zoom to answer"/);
+  assert.match(learn, /aria-label="Zoom to city scale"/);
   assert.match(learn, /aria-label="Zoom to country"/);
 });

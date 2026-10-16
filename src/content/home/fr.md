@@ -98,13 +98,15 @@ Pendant la création, le bouton indique l’étape en cours pour les pays, régi
 
 ## Mode Jeu
 
+Dans **Limite par manche** des réglages du jeu, choisissez Illimité, une durée prédéfinie ou Personnalisé pour saisir de 1 à 3 600 secondes. Ce choix est conservé pour la prochaine partie ; une manche en pause reprend avec le temps actif restant.
+
 ### Se déplacer au clavier
 
 Dans une manche avec déplacement en Jeu ou en Révision, cliquez sur une flèche de navigation Street View, puis maintenez la barre d’espace pour continuer dans cette direction. Relâchez-la pour vous arrêter. La flèche doit avoir le focus : si la barre d’espace active un autre bouton, cliquez à nouveau sur la flèche. C’est la commande habituelle du panorama, sans réglage de vitesse distinct. No Move et NMPZ empêchent le déplacement. En Étude, utilisez N ou le bouton Suivant pour avancer ; la barre d’espace reste disponible pour se déplacer dans Street View. Elle peut encore poursuivre une manche terminée si ce bouton a le focus.
 
 Dans les réglages du jeu, choisissez Lieux générés ou Carte importée. Les manches utilisent les lieux de la carte sans répéter d’entrée, et leur nombre est limité aux lieux disponibles.
 
-Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Après la réponse, le résultat affiche le pays réel, les ville, région et voie disponibles, l’adresse complète, les coordonnées exactes, la distance et le score. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus.
+Jeu utilise le même groupe de pays et mesure le rappel sans aide sur 1 à 100 manches. Après la réponse, le résultat affiche le pays réel, les ville, région et voie disponibles, l’adresse complète, les coordonnées exactes, la distance et le score. Chaque réponse devient une nouvelle tentative et conserve la vue actuelle pour les aperçus. Quand le temps s’écoule en Jeu, le repère présent sur la carte est envoyé automatiquement, même sans confirmation. Sans repère, la manche est enregistrée sans réponse.
 
 Dans Jeu et Révision, le bouton d’agrandissement ouvre par défaut la carte de réponse en panneau flottant. Dans **Paramètres → Affichage → Cartes**, choisissez **Plein écran** pour le **Bouton d’agrandissement de la carte de réponse** si vous préférez que tout le panneau, commandes de réponse comprises, remplisse l’écran visible. Dans les deux modes, déplacez-le par son en-tête, redimensionnez-le depuis un bord ou un coin, puis restaurez la carte compacte. La carte possède aussi un bouton plein écran distinct pour sa zone cartographique. Le repère reste en place.
 
@@ -189,7 +191,7 @@ Les cartes se rouvrent plus rapidement pendant une session dans Apprendre, Jouer
 
 Dans Réglages → Affichage → Cartes, la **Palette de couleurs de la carte** propose Auto, Clair ou Sombre. Le **Zoom de la carte des résultats** propose Au plus près, Pays, Région du pays ou Monde ; Pays est le choix par défaut. Auto suit l’apparence de l’application ; Clair utilise les couleurs d’origine de Google pour les cartes routières et de relief, tandis que Sombre conserve une palette sombre même si le thème de l’application change. Les images satellite conservent leurs couleurs.
 
-Sur une carte dont la réponse est révélée, utilisez le bouton de visée pour zoomer sur le lieu exact ou celui du globe pour revenir à l’échelle du pays. Vous pouvez ensuite zoomer et déplacer la carte ; le réglage définit seulement la vue initiale.
+Sur une carte dont la réponse est révélée, utilisez le bouton de visée pour zoomer sur le lieu exact, celui du bâtiment pour voir la ville ou celui du globe pour revenir à l’échelle du pays. Vous pouvez ensuite zoomer et déplacer la carte ; le réglage définit seulement la vue initiale.
 
 Les frontières des pays sont visibles par défaut et peuvent être masquées ; elles n’apparaissent que lorsqu’une frontière se trouve dans la zone affichée. L’épaisseur et la couleur des frontières sont réglables avec un aperçu en direct ; les frontières régionales sont désactivées par défaut et peuvent être activées séparément.
 

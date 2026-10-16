@@ -11,6 +11,11 @@ test('language preferences keep only supported community languages and migrate m
   for (const { code } of LANGUAGE_OPTIONS) for (const key of preferenceKeys) assert.notEqual(translate(code, key), key);
   const visibleKeys = ['History', 'Relearning', 'Young', 'Mastery', 'Continue saved session?', 'Resume', 'Start new', 'Location order', 'Shuffle', 'Source order', 'Skip seen places', 'mature locations', 'until next rank', 'Coverage by continent', 'Study scenes', '1–100 scored rounds · Standard / No Move / NMPZ', 'Major Cities', 'Any environment', 'bestLocationEstimate', 'candidates', 'navLearn', 'navPlay', 'navReview', 'navClues', 'navProgress'];
   for (const { code } of LANGUAGE_OPTIONS.filter(({ code }) => code !== 'en')) for (const key of visibleKeys) assert.notEqual(translate(code, key), key);
+  for (const { code } of LANGUAGE_OPTIONS) {
+    assert.ok(translate(code, 'Seconds per round'));
+    assert.notEqual(translate(code, 'Custom time'), 'Custom time');
+    assert.notEqual(translate(code, 'Zoom to city'), 'Zoom to city');
+  }
 });
 
 test('country names follow the selected language', () => {

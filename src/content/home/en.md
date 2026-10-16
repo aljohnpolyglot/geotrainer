@@ -189,6 +189,8 @@ These controls guide generation. A panorama can still differ from the requested 
 
 ## Play mode
 
+Under **Time Limit Per Round** in game setup, choose Unlimited, a preset, or Custom to enter 1–3600 seconds. Your choice is remembered for the next game; a paused round resumes with its remaining active time.
+
 Play measures unaided recall in scored rounds. It supports short drills and longer games while keeping each round in History.
 
 ### Game setup
@@ -214,7 +216,7 @@ Movable games reject isolated panoramas that cannot support the chosen rule. Thi
 
 ### Making a guess
 
-Place the marker on the map and submit it. The pinpoint map opens at the world view for each new round. On phones, the Precision place control floats above the bottom of the visible screen; tap it to open the guess map without scrolling. The round result opens centered on the current answer and shows the actual country, available city, region, road, full formatted address, exact coordinates, distance, and score. A timer reaching zero submits according to the active game flow.
+Place the marker on the map and submit it. When a timed Play round runs out, the pin currently on the map is submitted automatically, even if you have not pressed Confirm. If there is no pin, the round is recorded as no guess. The pinpoint map opens at the world view for each new round. On phones, the Precision place control floats above the bottom of the visible screen; tap it to open the guess map without scrolling. The round result opens centered on the current answer and shows the actual country, available city, region, road, full formatted address, exact coordinates, distance, and score.
 
 In Play and Review, the pinpointer’s expand button enlarges it as a floating map by default. Under **Settings → Display → Maps**, set **Pinpointer expand button** to **Fullscreen** if you prefer the whole pinpointer, including its guess controls, to fill the visible screen. In either mode, drag its header to move it or an edge or corner to resize it; restore it to return to the compact map. The map also has a separate fullscreen button for its map canvas. Your pin stays in place while the map changes size.
 
@@ -450,7 +452,7 @@ Display preferences include Light or Dark palette, compass visibility, compass s
 
 Under **Maps**, choose a **Map color palette** of Auto, Light, or Dark. Auto follows the app appearance; Light uses Google's original road and terrain colors, while Dark uses a dark map palette even when the app theme differs. Choose **Result map zoom** to open revealed result maps at Closest, Country, Country region, or World scale; Country is the default. This applies to Learn, pinpointing, Review, results, and summaries. Satellite imagery keeps its own colors.
 
-On a revealed map, use the crosshair button to zoom closely to the answer or the globe button to return to country scale. You can keep zooming and panning; the Settings choice only sets the opening view.
+On a revealed map, use the crosshair button to zoom closely to the answer, the building button for a city-scale view, or the globe button to return to country scale. You can keep zooming and panning; the Settings choice only sets the opening view.
 
 Country borders are shown by default and can be turned off; they appear only where a national boundary is in the visible map area. Border width and color are adjustable with a live preview; regional borders are off by default and can be enabled separately.
 

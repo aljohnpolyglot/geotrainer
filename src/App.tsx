@@ -167,7 +167,7 @@ export default function App() {
   const { isGameActive, setIsGameActive, gameSettings, setGameSettings, gameRounds, setGameRounds, currentRoundIndex, setCurrentRoundIndex,
     timeRemaining, setTimeRemaining, playElapsed, setPlayElapsed, activeRoundResult, setActiveRoundResult, summaryGameRecord, summaryRound,
     setSummaryGameRecord, setSummaryRound, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound,
-    handleAbandonGame, gameIdRef, roundSubmittedRef } = play;
+    handleAbandonGame, setPlayGuess, gameIdRef, roundSubmittedRef } = play;
   const playWorkspaceRef = useRef<Extract<ActiveWorkspace, { mode: 'play' }> | null>(null);
   playWorkspaceRef.current = isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
   useEffect(() => { setAudioMode(!showHome && appMode === 'play' && isGameActive && !summaryGameRecord ? 'play' : 'learn'); }, [appMode, isGameActive, showHome, summaryGameRecord]);
@@ -453,6 +453,7 @@ export default function App() {
         onHideReveal={() => setIsRevealed(false)} onMetadata={handleStudyMetadata}
         onSaveForReview={() => void handleSaveStudyForReview()} onOpenWorldMap={() => setMapPickerOpen(true)} onOpenMapPoint={(point) => void openMapPoint(point, studyPanoramaSource, studyAllowInteriors)} onReturnToSummary={() => { setSummaryRound(null); setCurrentLocation(null); }} onSaveSummaryLocation={() => void handleSaveStudyForReview()}
         onGuess={(guess) => { if (appMode === 'play') void handleGuessSubmit(guess); else void handleReviewGuess(guess); }}
+        onPlayPinChange={setPlayGuess}
         onStreetViewChanged={(view) => { void trainerDb.setSetting('workspace.streetView', view); }}
       />
       <AppOverlays
