@@ -147,6 +147,7 @@ export interface MapPreferences {
   mapPalette?: MapPalettePreference;
   resultMapZoom?: ResultMapZoomPreference;
   pinpointerExpandMode?: 'enlarge' | 'fullscreen';
+  expandGuessMapOnHover?: boolean;
   showPlayStreetViewCoverage?: boolean;
   showPlayRoadLabels?: boolean;
   gestureHandling: MapGesturePreference;

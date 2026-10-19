@@ -30,11 +30,11 @@ const visibleBounds = () => {
   return { left, top, right: left + (viewport?.width || window.innerWidth), bottom: top + (viewport?.height || window.innerHeight) };
 };
 
-export const expandedGuessMapRect = (bounds: ReturnType<typeof visibleBounds>, mobile: boolean, mode: 'enlarge' | 'fullscreen'): PanelRect => {
+export const expandedGuessMapRect = (bounds: ReturnType<typeof visibleBounds>, mobile: boolean, mode: 'enlarge' | 'fullscreen', anchor?: PanelRect): PanelRect => {
   if (mode === 'fullscreen') return { left: bounds.left, top: bounds.top, width: bounds.right - bounds.left, height: bounds.bottom - bounds.top };
   const width = Math.min(672, bounds.right - bounds.left - 24);
   const height = Math.min(mobile ? 360 : 560, (bounds.bottom - bounds.top) * (mobile ? 0.52 : 0.65));
-  return { left: bounds.right - width - 12, top: bounds.bottom - height - 12, width, height };
+  return { left: anchor ? Math.max(bounds.left, Math.min(anchor.left + anchor.width - width, bounds.right - width)) : bounds.right - width - 12, top: anchor ? Math.max(bounds.top, Math.min(anchor.top + anchor.height - height, bounds.bottom - height)) : bounds.bottom - height - 12, width, height };
 };
 
 export const GuessMap: React.FC<GuessMapProps> = ({
@@ -60,6 +60,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLDivElement>();
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const hoverExpansion = useRef(false);
   const [expandedRect, setExpandedRect] = useState<PanelRect>();
   const interaction = useRef<{ pointerId: number; startX: number; startY: number; rect: PanelRect; direction: 'move' | PanelResizeDirection }>();
   const [currentGuess, setCurrentGuess] = useState<{ lat: number; lng: number } | null>(null);
@@ -67,13 +68,40 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   useEffect(() => () => onPinChange?.(null), [onPinChange]);
 
   const toggleExpanded = () => {
+    const wasHover = hoverExpansion.current;
+    hoverExpansion.current = false;
+    if (wasHover && mapPreferences.pinpointerExpandMode === 'fullscreen') { setExpandedRect(expandedGuessMapRect(visibleBounds(), false, 'fullscreen')); return; }
     if (isExpanded) { setIsExpanded(false); setExpandedRect(undefined); return; }
     setExpandedRect(expandedGuessMapRect(visibleBounds(), window.innerWidth <= 600, mapPreferences.pinpointerExpandMode ?? 'enlarge'));
     setIsExpanded(true);
   };
+  const collapseHover = () => {
+    if (!hoverExpansion.current) return;
+    hoverExpansion.current = false;
+    setIsExpanded(false); setExpandedRect(undefined);
+  };
+  const expandOnHover = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' || event.buttons || isExpanded || dragging || mapPreferences.expandGuessMapOnHover === false) return;
+    const anchor = panelRef.current?.getBoundingClientRect();
+    if (!anchor) return;
+    hoverExpansion.current = true;
+    setExpandedRect(expandedGuessMapRect(visibleBounds(), window.innerWidth <= 600, 'enlarge', anchor));
+    setIsExpanded(true);
+  };
+  useEffect(() => { if (mapPreferences.expandGuessMapOnHover === false) collapseHover(); }, [mapPreferences.expandGuessMapOnHover]);
+  useEffect(() => {
+    if (!isExpanded) return;
+    const release = (event: PointerEvent) => {
+      const rect = panelRef.current?.getBoundingClientRect();
+      if (rect && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) collapseHover();
+    };
+    window.addEventListener('pointerup', release);
+    return () => window.removeEventListener('pointerup', release);
+  }, [isExpanded]);
   const startInteraction = (event: ReactPointerEvent<HTMLElement>, direction: 'move' | PanelResizeDirection) => {
     if (!isExpanded || event.button !== 0 || direction === 'move' && (event.target as HTMLElement).closest('button')) return;
     const bounds = panelRef.current?.getBoundingClientRect(); if (!bounds) return;
+    hoverExpansion.current = false;
     event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId);
     interaction.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, rect: { left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height }, direction };
   };
@@ -231,8 +259,10 @@ export const GuessMap: React.FC<GuessMapProps> = ({
     <div
       ref={panelRef}
       id="guess-map-widget"
+      onPointerEnter={expandOnHover}
+      onPointerLeave={(event) => { if (!event.buttons) collapseHover(); }}
       style={isExpanded ? expandedStyle : dragStyle}
-      className={`absolute bottom-5 right-5 z-20 ${isExpanded ? 'expanded' : 'collapsed'} ${dragging || interaction.current ? '' : 'transition-[width,height] duration-300 ease-out'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
+      className={`absolute bottom-5 right-5 z-20 ${isExpanded ? 'expanded' : 'collapsed'} ${hoverExpansion.current || dragging || interaction.current ? '' : 'transition-[width,height] duration-300 ease-out motion-reduce:transition-none'} flex flex-col bg-stone-900/95 border border-stone-700/80 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ${
         isExpanded
           ? ''
           : 'w-72 sm:w-88 h-56 sm:h-64 opacity-90 hover:opacity-100'
@@ -277,8 +307,8 @@ export const GuessMap: React.FC<GuessMapProps> = ({
           <button
             onClick={toggleExpanded}
             aria-expanded={isExpanded}
-            aria-label={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
-            title={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
+            aria-label={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded && !hoverExpansion.current ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
+            title={mapPreferences.pinpointerExpandMode === 'fullscreen' ? t(isExpanded && !hoverExpansion.current ? 'Exit Fullscreen' : 'Enter Fullscreen') : t(isExpanded ? 'Restore guess map' : 'Enlarge guess map')}
             className="p-1 rounded text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors cursor-pointer"
           >
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

@@ -2,6 +2,8 @@
 
 ## 2026-10-20
 
+- Enlarge the Play and Review guess map automatically on mouse hover by default, preserving the same map and pin. Add a Display preference to disable it, retain touch and manual expansion controls, and document the behavior in all eight languages.
+
 - Start Review panorama lookup alongside saved-history reads, reuse the verified lookup for variation, and fetch panorama history through its database index. Keep the five-card prequeue bounded and stop starting background preparation after leaving Review.
 - Reduce repeated Review-card comparisons during panorama preparation and answer saving while preserving nearby-card identity, schedules, and imported source matching.
 

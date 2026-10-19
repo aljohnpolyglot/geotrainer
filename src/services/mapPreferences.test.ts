@@ -6,14 +6,16 @@ test('map preferences use safe defaults and normalize persisted choices', () => 
   assert.deepEqual(normalizeMapPreferences(undefined), {
     autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: false, motionTracking: false, movementStyle: 'click',
-    mapType: 'roadmap', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'auto', clickableIcons: false, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
+    mapType: 'roadmap', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', expandGuessMapOnHover: true, showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'auto', clickableIcons: false, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   assert.deepEqual(normalizeMapPreferences({ showRoadLabels: true, motionTracking: true, movementStyle: 'arrows', mapType: 'terrain', gestureHandling: 'cooperative', clickableIcons: true, geotrainerMapStyle: false }), {
     autoOpenMeta: false,
     showImageryDate: false, showRoadLabels: true, motionTracking: true, movementStyle: 'arrows',
-    mapType: 'terrain', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'cooperative', clickableIcons: true, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
+    mapType: 'terrain', mapPalette: 'auto', resultMapZoom: 'country', pinpointerExpandMode: 'enlarge', expandGuessMapOnHover: true, showPlayStreetViewCoverage: false, showPlayRoadLabels: false, gestureHandling: 'cooperative', clickableIcons: true, showCountryBorders: true, showRegionBorders: false, countryBorderWidth: 'thin', countryBorderColor: 'auto',
   });
   const preferences = normalizeMapPreferences({ mapPalette: 'dark' });
+  assert.equal(normalizeMapPreferences({}).expandGuessMapOnHover, true);
+  assert.equal(normalizeMapPreferences(JSON.parse(JSON.stringify({ expandGuessMapOnHover: false }))).expandGuessMapOnHover, false);
   assert.equal(normalizeMapPreferences({ pinpointerExpandMode: 'fullscreen' }).pinpointerExpandMode, 'fullscreen');
   assert.equal(normalizeMapPreferences({ showPlayStreetViewCoverage: true, showPlayRoadLabels: true }).showPlayStreetViewCoverage, true);
   assert.equal(normalizeMapPreferences({ showPlayRoadLabels: true }).showPlayRoadLabels, true);
