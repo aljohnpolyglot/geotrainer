@@ -175,6 +175,7 @@ export default function App() {
   useEffect(() => { const save = () => { if (document.visibilityState === 'hidden') persistPlayWorkspace(); }; document.addEventListener('visibilitychange', save); window.addEventListener('pagehide', persistPlayWorkspace); return () => { document.removeEventListener('visibilitychange', save); window.removeEventListener('pagehide', persistPlayWorkspace); }; }, [persistPlayWorkspace]);
   const [reviewDisplayedPanoId, setReviewDisplayedPanoId] = useState<string | null>(null);
   const review = useReviewMode({
+    appMode, showHome,
     reviewDisplayedPanoId,
     dbReady, mapsReady, reviewAttempt, setReviewAttempt, currentLocation, setCurrentLocation, setIsLoading,
     setErrorMessage, compassPreference, setTrainerRefreshKey, roundStartTimeRef, setIsSubmittingGuess,

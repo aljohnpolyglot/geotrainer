@@ -52,9 +52,30 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
 
 export function coalesceNearbyReviews(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[]) {
   const points = pointsByPano(locations, attempts); const aliases = new Map<string, string>(); const result: ReviewRecord[] = [];
+  const latitudeBands = new Map<string, number[]>();
+  const sourceHashes = new Map<string, number[]>();
+  const add = (index: Map<string, number[]>, key: string, value: number) => {
+    const entries = index.get(key);
+    if (entries) entries.push(value); else index.set(key, [value]);
+  };
   [...reviews].sort((a, b) => b.reviewCount - a.reviewCount || (b.lastReviewedAt || 0) - (a.lastReviewedAt || 0)).forEach((review) => {
-    const point = points.get(review.panoId); const index = point ? result.findIndex((item) => { const candidate = points.get(item.panoId); return !!candidate && nearbyReviewPoint(point, candidate); }) : -1;
-    if (index < 0) result.push(review);
+    const point = points.get(review.panoId);
+    // A 0.001-degree latitude band exceeds 50 m, including at the poles and date line.
+    const band = point ? Math.floor(point.lat * 1000) : 0;
+    const candidates = point ? [-1, 0, 1].flatMap((offset) => latitudeBands.get(`${point.countryCode}:${band + offset}`) || []) : [];
+    if (point?.sourcePointHash) candidates.push(...(sourceHashes.get(`${point.countryCode}:${point.sourcePointHash}`) || []));
+    let index = -1;
+    for (const candidate of candidates) {
+      if ((index < 0 || candidate < index) && nearbyReviewPoint(point!, points.get(result[candidate].panoId)!)) index = candidate;
+    }
+    if (index < 0) {
+      const next = result.length;
+      result.push(review);
+      if (point) {
+        add(latitudeBands, `${point.countryCode}:${band}`, next);
+        if (point.sourcePointHash) add(sourceHashes, `${point.countryCode}:${point.sourcePointHash}`, next);
+      }
+    }
     else { aliases.set(review.panoId, result[index].panoId); result[index] = merge(result[index], review); }
   });
   return { reviews: result, aliases };

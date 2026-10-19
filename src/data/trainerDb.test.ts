@@ -53,6 +53,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   };
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-a', guessedCountryCode: 'FR' });
   await trainerDb.saveAttempt({ ...baseAttempt, id: 'attempt-b', roundNumber: 2, guessedCountryCode: 'DE' });
+  assert.deepEqual((await trainerDb.attemptsForPano('pano-new')).map(({ id }) => id).sort(), ['attempt-a', 'attempt-b']);
   assert.equal((await trainerDb.attempts()).length, 3);
   assert.equal(await trainerDb.count('attempts'), 3);
   assert.equal((await trainerDb.reviewQueue({ maxScore: 4000 })).length, 2);

@@ -335,6 +335,10 @@ test('Review skips country lookup for an unchanged panorama but checks a moved r
   assert.equal((await generator.resolveReviewLocation(saved, plan)).panoId, saved.panoId);
   assert.equal(geocodeCalls, 0);
 
+  panoramaCalls = 0;
+  assert.equal((await generator.resolveReviewLocation(saved, plan, new Set(), { ...saved, isOfficialPanorama: true })).panoId, saved.panoId);
+  assert.equal(panoramaCalls, 0, 'reuse the anchor already verified while reading Review history');
+
   currentResults = [{ lat: 41.1235, lng: 12.12345, pano: 'moved-view', countryCode: 'FR' }];
   results = [{ lat: 0, lng: 0, pano: 'missing', countryCode: 'IT', status: 'ZERO_RESULTS' }, currentResults[0]];
   await assert.rejects(generator.resolveReviewLocation(saved, plan), /no longer matches/);

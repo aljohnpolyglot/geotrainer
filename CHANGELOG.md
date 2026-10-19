@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-20
+
+- Start Review panorama lookup alongside saved-history reads, reuse the verified lookup for variation, and fetch panorama history through its database index. Keep the five-card prequeue bounded and stop starting background preparation after leaving Review.
+- Reduce repeated Review-card comparisons during panorama preparation and answer saving while preserving nearby-card identity, schedules, and imported source matching.
+
 ## 2026-10-19
 
 - Add a default-on Review rollover that carries unfinished cards into the next review day and moves later due cards forward, plus a configurable daily minimum goal of 50 reviews.

@@ -339,8 +339,8 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     };
   }
 
-  async resolveReviewLocation(location: LocationResult, plan: ReviewVariationPlan, recentlyShown = new Set<string>()): Promise<LocationResult> {
-    const anchor = await this.reopenLocation(location, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true });
+  async resolveReviewLocation(location: LocationResult, plan: ReviewVariationPlan, recentlyShown = new Set<string>(), reopenedAnchor?: LocationResult): Promise<LocationResult> {
+    const anchor = reopenedAnchor ?? await this.reopenLocation(location, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true });
     const unchangedAnchor = !anchor.isFallback && anchor.panoId === location.panoId && calculateDistanceKm(anchor.lat, anchor.lng, location.lat, location.lng) <= .05;
     const resolvedAnchorCountry = unchangedAnchor ? location.countryCode : (await reverseGeocodeLocation(anchor.lat, anchor.lng))?.countryCode;
     if (resolvedAnchorCountry && resolvedAnchorCountry !== location.countryCode) throw new Error('The saved panorama no longer matches this Review location.');

@@ -12,6 +12,34 @@ test('review cards within 50 metres share the established card', () => {
   assert.equal(result.aliases.get('near-b'), 'near-a');
 });
 
+test('indexed matching preserves greedy card identity across bands, borders, poles, and imported sources', () => {
+  const places = Array.from({ length: 1000 }, (_, index) => ({
+    ...location(`place-${index}`, -60 + Math.floor(index / 2) * .24 + (index % 2 ? .0002 : 0)),
+    countryCode: index % 7 === 0 ? 'FR' : 'DE',
+    sourcePointHash: index % 29 === 0 ? 'shared-source' : undefined,
+  }));
+  places.push(
+    { ...location('band-a', -.0001), sourcePointHash: undefined },
+    { ...location('band-b', .0001), sourcePointHash: undefined },
+    { ...location('date-a', 0), lng: 179.9999, sourcePointHash: undefined },
+    { ...location('date-b', 0), lng: -179.9999, sourcePointHash: undefined },
+    { ...location('pole-a', 89.9999), lng: 90, sourcePointHash: undefined },
+    { ...location('pole-b', 89.9999), lng: -90, sourcePointHash: undefined },
+  );
+  const records = places.map((place, index) => review(place.panoId, index % 5));
+  const points = new Map(places.map((place) => [place.panoId, place]));
+  const kept: ReviewRecord[] = [];
+  const aliases = new Map<string, string>();
+  for (const record of [...records].sort((a, b) => b.reviewCount - a.reviewCount)) {
+    const match = kept.find((candidate) => nearbyReviewPoint(points.get(record.panoId)!, points.get(candidate.panoId)!));
+    if (match) { aliases.set(record.panoId, match.panoId); match.reviewCount += record.reviewCount; }
+    else kept.push({ ...record });
+  }
+  const actual = coalesceNearbyReviews(records, places, []);
+  assert.deepEqual(actual.aliases, aliases);
+  assert.deepEqual(actual.reviews.map(({ panoId, reviewCount }) => ({ panoId, reviewCount })), kept.map(({ panoId, reviewCount }) => ({ panoId, reviewCount })));
+});
+
 test('nearby note identity includes same-country Street View nodes only within 50 metres', () => {
   const current = { panoId: 'current', lat: 45.8, lng: 16, countryCode: 'HR' };
   assert.equal(nearbyReviewPoint(current, { ...current, panoId: 'next', lat: 45.8002 }), true);

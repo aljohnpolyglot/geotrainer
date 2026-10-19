@@ -3,8 +3,9 @@
 ## Scope
 
 - Preserve Study, Play, Review, IndexedDB history, bookmarks, coverage, and saved-game compatibility.
+- Prioritize fast panorama loading, answer reveal, and low memory use while preserving the existing user experience and every data rule below. Apply shared service optimizations across Study, Play, and Review wherever the same operation is used. Overlap independent work, reuse prepared lookups, and keep fast bounded prequeueing; never bypass panorama verification or sacrifice saved progress for speed.
 - Prefer small changes that reuse existing components and services; do not redesign unrelated UI.
-- Keep routine reads and inactive map views memory efficient; load saved location photos only when a visible view needs them. Preserve bounded Play and Review prequeueing for fast transitions, and pause preparation when the page is hidden or the learner leaves. Keep cloud sync manual.
+- Keep routine reads and inactive map views memory efficient; load saved location photos only when a visible view needs them. Preserve bounded Play and Review prequeueing for fast transitions, and pause preparation when the page is hidden or the learner leaves. Keep answer reveal responsive without weakening progress or scheduling guarantees; avoid materializing whole IndexedDB stores in interactive paths when indexed or targeted reads preserve the same behavior. Keep cloud sync manual.
 - Keep Street View imagery transient. Never download or persist it unless the user explicitly asks.
 - Keep workspace 360° clipboard captures transient: combine four quarter-turn views in memory, copy one image, and never add it to IndexedDB, cloud storage, clues, or history.
 - Persist one current-view screenshot when the user explicitly saves a location or submits a Play answer; treat older records without screenshots as valid.

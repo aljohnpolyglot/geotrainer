@@ -20,12 +20,12 @@ export const failedEarlierInSession = (stats: ReviewStat[], attemptId: string) =
 export const upcomingReviewCards = (queue: Attempt[], currentId: string) => queue.filter((item) => item.id !== currentId).slice(0, 5);
 
 async function prepareReviewCard(attempt: Attempt) {
-  const [preferences, review, attempts] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attempts()]);
   const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
+  const [preferences, review, history, reopenedAnchor] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attemptsForPano(attempt.panoId), defaultLocationGenerator.reopenLocation(anchor, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true })]);
   const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
-  const history = attempts.filter((item) => item.panoId === attempt.panoId).sort((a, b) => b.createdAt - a.createdAt);
+  history.sort((a, b) => b.createdAt - a.createdAt);
   const recentlyShown = new Set(history.filter((item) => item.source === 'review' && item.shownPanoId).slice(0, 3).map((item) => item.shownPanoId!));
-  const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown);
+  const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown, reopenedAnchor);
   return { preferences, review, history, plan, reopened };
 }
 
@@ -58,8 +58,11 @@ export function useReviewMode(ctx: any) {
   }), []);
 
   useEffect(() => {
-    if (!reviewAttempt || !currentLocation || reviewDisplayedPanoId !== currentLocation.panoId) return;
+    if (ctx.appMode !== 'review' || ctx.showHome || !reviewAttempt) { prefetchEpochRef.current++; preparedCardsRef.current.clear(); return; }
+    if (!currentLocation || reviewDisplayedPanoId !== currentLocation.panoId) return;
     const upcoming = upcomingReviewCards(reviewQueue, reviewAttempt.id);
+    const retained = new Set(upcoming.map((attempt) => attempt.id));
+    for (const id of preparedCardsRef.current.keys()) if (!retained.has(id)) preparedCardsRef.current.delete(id);
     let cancelled = false;
     let idleId: number | null = null;
     let index = 0;
@@ -87,7 +90,7 @@ export function useReviewMode(ctx: any) {
     document.addEventListener('visibilitychange', onVisibility);
     schedule();
     return () => { cancelled = true; if (idleId !== null) { if (window.cancelIdleCallback) window.cancelIdleCallback(idleId); else window.clearTimeout(idleId); } document.removeEventListener('visibilitychange', onVisibility); };
-  }, [reviewQueue, reviewAttempt?.id, currentLocation?.panoId, reviewDisplayedPanoId]);
+  }, [ctx.appMode, ctx.showHome, reviewQueue, reviewAttempt?.id, currentLocation?.panoId, reviewDisplayedPanoId]);
 
   const openReviewAttempt = useCallback(async (attempt: Attempt) => {
     const requestId = ++reviewOpenRequestRef.current;

@@ -20,6 +20,7 @@ import { planReviewRollover } from './reviewRollover';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import { panoramaHash } from '../services/locationHash';
+import { readLocationMetadata } from './locationMetadata';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
@@ -88,18 +89,7 @@ async function all<T>(storeName: StoreName): Promise<T[]> {
   return request(db.transaction(storeName).objectStore(storeName).getAll()) as Promise<T[]>;
 }
 async function locationMetadata(): Promise<TrainerLocation[]> {
-  const db = await openDatabase();
-  return new Promise((resolve, reject) => {
-    const locations: TrainerLocation[] = [];
-    const cursor = db.transaction('locations').objectStore('locations').openCursor();
-    cursor.onsuccess = () => {
-      if (!cursor.result) return resolve(locations);
-      const { imageDataUrl: _image, ...location } = cursor.result.value as TrainerLocation;
-      locations.push(location);
-      cursor.result.continue();
-    };
-    cursor.onerror = () => reject(cursor.error);
-  });
+  return readLocationMetadata(await openDatabase());
 }
 async function get<T>(storeName: StoreName, key: IDBValidKey): Promise<T | undefined> {
   const db = await openDatabase();
@@ -235,6 +225,10 @@ export const trainerDb = {
   locationMetadata,
   location: (panoId: string) => get<TrainerLocation>('locations', panoId),
   attempts: () => all<Attempt>('attempts'),
+  attemptsForPano: async (panoId: string) => {
+    const db = await openDatabase();
+    return request(db.transaction('attempts').objectStore('attempts').index('panoId').getAll(panoId)) as Promise<Attempt[]>;
+  },
   games: async () => (await all<GameRecord>('games')).sort((a, b) => b.createdAt - a.createdAt),
   studyVisits: () => all<StudyVisit>('studyVisits'),
   reviews: async () => {
