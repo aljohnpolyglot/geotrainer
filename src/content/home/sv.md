@@ -126,6 +126,8 @@ På mobilen ligger Precisionsplats längst ner på den synliga skärmen så att 
 
 ### Anpassa repetition
 
+Det **dagliga minimumet för repetitioner** är ett framstegsmål: det börjar på 50 och ändras i Inställningar → Repetition. **Flytta oavslutade repetitioner till nästa dag** är på från början. Vid dagens slut flyttas kvarvarande kort till nästa repetitionsdag och senare förfallodagar flyttas lika många dagar. Om 100 kort förfaller och du gör 20, följer de andra 80 med till morgondagen. Korta återinlärningssteg behåller sin tid. Om du stänger av valet stoppas framtida flyttar, men tidigare flyttar återställs inte. Målet begränsar inte kön; betyg, försök och intervall sparas.
+
 - **Nya kort / dag** begränsar kort som aldrig har repeterats. **Maximalt antal repetitioner / dag** begränsar hela kön, både nya och tidigare repeterade kort. Båda gränserna gäller samtidigt. Med 50 nya kort och högst 500 repetitioner kan 110 kort vara förfallna men bara 108 vara redo om två nya kort ligger över gränsen. Start och Repetition visar det antal som faktiskt kan göras; Repetition visar separat hur många som väntar bakom dagsgränserna. En högre totalgräns åsidosätter inte gränsen för nya kort.
 - **Bedömningsnivå** styr den automatiska bedömningen: Nybörjare tolererar större avstånd, Balanserad väger land och precision, och Proffs kräver starkare resultat. Land, avstånd, poäng och svarstid används; inga manuella Igen/Svårt/Bra/Lätt-knappar visas.
 - **Lägg till spelrundor för repetition** är skilt från bedömningen: en framtida spelrunda skapar ett kort om poängen ligger under den valda gränsen eller landet är fel. Ett aktiverat villkor räcker; nya profiler börjar vid den aktiva Svårt/Igen-gränsen (3 000 för Balanserad). När detta är markerat sparas rundor med fel land för repetition även över poänggränsen. De räknas fortfarande som felaktiga svar.
@@ -148,7 +150,7 @@ Slutförda Spel- och Repetitionsrundor låser upp förflyttning, panorering och 
 
 I **Inställningar → Repetition** kan du slå på **Variera repetitionsvy**. Kortet förblir samma repetitionskort med samma schema och framsteg, men GeoTrainer kan först ändra kamerans riktning och senare välja ett lämpligt panorama i samma närområde. Det tränar igenkänning av platsmiljön i stället för minnet av en enda skärmbild.
 
-**Variationssvårighet** går från 0 till 100. Vid 0 används exakt originalvyn. 100 tillåter den största säkra variationen för tillräckligt mogna kort; det betyder inte maximalt avstånd vid varje repetition. Nya eller svaga kort stannar vid originalet eller mycket nära, medan mogna kort gradvis kan visas längre bort. Om du missar en mer varierad vy blir kommande vyer försiktigare utan att skapa ett nytt kort. Hittar GeoTrainer inget lämpligt panorama, eller misslyckas sökningen, används originalvyn automatiskt.
+**Variationssvårighet** går från 0 till 100 och börjar på 0. Då öppnas det sparade panoramat med den sparade blickriktningen tills du väljer ett högre värde i Inställningar → Repetition. Redan sparade värden behålls. Vid 0 används exakt originalvyn. 100 tillåter den största säkra variationen för tillräckligt mogna kort; det betyder inte maximalt avstånd vid varje repetition. Nya eller svaga kort stannar vid originalet eller mycket nära, medan mogna kort gradvis kan visas längre bort. Om du missar en mer varierad vy blir kommande vyer försiktigare utan att skapa ett nytt kort. Hittar GeoTrainer inget lämpligt panorama, eller misslyckas sökningen, används originalvyn automatiskt.
 
 ## AI-coach och ledtrådar
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-19
+
+- Add a default-on Review rollover that carries unfinished cards into the next review day and moves later due cards forward, plus a configurable daily minimum goal of 50 reviews.
+
+## 2026-10-18
+
+- Default Review view variation difficulty to 0 so new and unset preferences show the saved panorama and heading; preserve explicitly saved variation values.
+
 ## 2026-10-17
 
 - Reduce memory use by reading saved location metadata without screenshots during routine matching and hub loading, fetching a Coverage photo only when viewed, and hiding inactive Street View panoramas.

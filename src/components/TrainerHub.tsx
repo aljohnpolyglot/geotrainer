@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { COUNTRIES } from "../data/countries";
-import { isReviewDue, nextScheduledReviewAt, trainerDb } from "../data/trainerDb";
+import { isReviewDue, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart, trainerDb } from "../data/trainerDb";
 import { savedMetaLessonIds } from "../data/metaLessons";
 import { meaningfulSessions } from "../analytics/advanced";
 import { performanceAttempts } from "../analytics/statistics";
@@ -93,11 +93,20 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   useEffect(() => { void load(); }, [refreshKey]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);
   useEffect(() => { void trainerDb.reviewQueue(effectiveFilters).then(setQueue); }, [effectiveFilters, refreshKey]);
+  useEffect(() => {
+    if (!scheduler) return;
+    let timer: number;
+    const refresh = () => { if (document.visibilityState === 'visible') { void load(); void trainerDb.reviewQueue(effectiveFilters).then(setQueue); } };
+    const schedule = () => { timer = window.setTimeout(() => { refresh(); schedule(); }, nextReviewDayBoundary(Date.now(), scheduler) - Date.now() + 100); };
+    schedule(); document.addEventListener('visibilitychange', refresh);
+    return () => { window.clearTimeout(timer); document.removeEventListener('visibilitychange', refresh); };
+  }, [scheduler?.reviewDayResetMinutes, scheduler?.reviewTimeZone, effectiveFilters]);
   const mistakeCriterion = [filters.wrongCountry && t("wrongCountry"), filters.minScore !== undefined || filters.maxScore !== undefined ? `${t("roundScore")} ${filters.minScore ?? 0}–${filters.maxScore ?? 5000}` : ''].filter(Boolean).join(" · ");
   const reviewCriterion = [filters.due && t("dueToday"), mistakeCriterion, filters.recent && t("recentlyMissed"), filters.recentDays && ([7, 30, 90].includes(filters.recentDays) ? t(`last${filters.recentDays}Days`) : `${t("lastDays")} ${filters.recentDays}`), filters.bookmarked && t("bookmarked")].filter(Boolean).join(" · ") || t("tabReview");
   const reviewSource = [filters.environment && t(filters.environment), reviewCriterion].filter(Boolean).join(" · ");
   const reviewKind: ReviewSessionKind = filters.due ? "due" : "practice";
   const dueCount = scheduler ? reviews.filter((review) => isReviewDue(review, Date.now(), scheduler)).length : 0;
+  const completedToday = scheduler ? reviews.reduce((count, review) => count + (review.gradingHistory?.filter(({ at }) => at >= reviewDayStart(Date.now(), scheduler)).length || (review.lastReviewedAt && review.lastReviewedAt >= reviewDayStart(Date.now(), scheduler) ? 1 : 0)), 0) : 0;
   const nextDueAt = scheduler ? nextScheduledReviewAt(reviews, Date.now(), scheduler) : undefined;
   const startReview = (attempt: Attempt) => onReview(attempt, [attempt, ...queue.filter((item) => item.id !== attempt.id)], reviewSource, reviewKind);
   const gradedAttempts = useMemo(() => performanceAttempts(attempts, true, true), [attempts]);
@@ -131,7 +140,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     {!loaded ? <div className="hub-loading"><RefreshCw className="spin" /> {t("loading")}</div> : <div className="hub-content">
       {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={gradedAttempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {visitedStatistics && <div hidden={tab !== "statistics"}><StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} readyDueCount={readyDueCount} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} onRebalanced={load} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} />} historyPanel={historyPanel} /></div>}
-      {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
+      {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} dailyMinimum={scheduler?.minimumReviewsPerDay} completedToday={completedToday} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
       {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onDeleteNote={(note) => { void deleteNotebookHistoryNote(note).then(load); }} onSaveNote={async (note) => { await saveNotebookHistoryNote(note); await load(); }} onTrainCountries={onTrainCountries} />}
       {visitedCoverage && <div hidden={tab !== "coverage"}><CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} /></div>}
       {tab === "history" && historyPanel}

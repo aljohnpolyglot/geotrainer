@@ -8,7 +8,7 @@ import { CollectionOptions } from "./CollectionOptions";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { countryDisplayName } from "../services/language";
 
-export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
+export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, dailyMinimum = 50, completedToday = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
   const { ui } = useLanguagePreferences();
   const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
@@ -18,7 +18,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
   const daysPreset = filters.recentDays === undefined ? 'any' : [7, 30, 90].includes(filters.recentDays) ? String(filters.recentDays) : 'custom';
   return <>
     <section className="daily-review-block" aria-labelledby="daily-review-title">
-      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p></div>
+      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p><p>{t('Daily minimum')}: {Math.min(completedToday, dailyMinimum).toLocaleString(ui)} / {dailyMinimum.toLocaleString(ui)}</p></div>
       <button className="button primary daily-review-action" disabled={!queue[0]} onClick={() => queue[0] && startReview(queue[0])}><Target size={20} /> {t("reviewAction")}</button>
     </section>
     <div className="filter-bar">

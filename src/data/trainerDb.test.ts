@@ -268,7 +268,9 @@ test('fresh review settings randomize with a deterministic Fisher-Yates shuffle'
   assert.deepEqual(shuffleInPlace([1, 2, 3, 4], () => 0), [2, 3, 4, 1]);
   assert.equal(normalizeSchedulerPreferences({ reviewOrder: 'due' }).reviewOrder, 'due');
   assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationEnabled, false);
-  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationDifficulty, 50);
+  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationDifficulty, 0);
+  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true }).reviewViewVariationDifficulty, 0);
+  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationDifficulty: 50 }).reviewViewVariationDifficulty, 50);
   assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 140 }).reviewViewVariationDifficulty, 100);
 });
 

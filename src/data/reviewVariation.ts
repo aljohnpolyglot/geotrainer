@@ -14,7 +14,7 @@ export type ReviewCandidate = Pick<LocationResult, 'panoId' | 'lat' | 'lng' | 'c
 
 export const clampReviewViewVariationDifficulty = (value: unknown) => {
   const number = Number(value);
-  return Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : 50;
+  return Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : 0;
 };
 
 export const reviewVariationCheckpoint = (value: unknown) => {

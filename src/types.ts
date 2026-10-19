@@ -102,6 +102,8 @@ export interface SchedulerPreferences {
   strictness: 'beginner' | 'balanced' | 'pro';
   newCardsPerDay: number;
   maximumReviewsPerDay: number;
+  minimumReviewsPerDay?: number;
+  rollOverMissedReviews?: boolean;
   firstReviewDays: number;
   relearningMinutes: number;
   easyFirstIntervalDays: number;

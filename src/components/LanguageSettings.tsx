@@ -54,6 +54,16 @@ const META_OPEN_COPY: Record<SupportedLanguage, { title: string; description: st
   ru: { title: 'Открывать уроки Meta автоматически', description: 'Показывает каждый новый урок при открытии панорамы. Если выключено, нажмите на лампочку.' },
   sv: { title: 'Öppna Meta-lektioner automatiskt', description: 'Visar varje ny lektion när panoramat öppnas. Annars trycker du på glödlampan för att se den.' },
 };
+const REVIEW_ROLLOVER_COPY: Record<SupportedLanguage, { minimum: string; title: string; description: string }> = {
+  en: { minimum: 'Daily review minimum', title: 'Move unfinished reviews to the next day', description: 'Unfinished cards carry forward; later due cards move back to keep review days separate.' },
+  es: { minimum: 'Mínimo diario de repasos', title: 'Pasar los repasos pendientes al día siguiente', description: 'Las tarjetas pendientes pasan al día siguiente; las posteriores se aplazan para mantener separados los días de repaso.' },
+  pt: { minimum: 'Mínimo diário de revisões', title: 'Passar revisões pendentes para o dia seguinte', description: 'Os cartões pendentes passam ao dia seguinte; os posteriores são adiados para manter os dias de revisão separados.' },
+  fr: { minimum: 'Minimum quotidien de révisions', title: 'Reporter les révisions inachevées au lendemain', description: 'Les cartes restantes sont reportées ; les échéances suivantes reculent pour séparer les journées de révision.' },
+  de: { minimum: 'Tägliches Wiederholungsminimum', title: 'Offene Wiederholungen auf morgen verschieben', description: 'Offene Karten rücken weiter; spätere Fälligkeiten werden verschoben, damit sich die Wiederholungstage nicht mischen.' },
+  it: { minimum: 'Minimo giornaliero di ripassi', title: 'Spostare i ripassi incompleti al giorno dopo', description: 'Le schede rimaste passano al giorno dopo; le scadenze successive slittano per tenere separati i giorni di ripasso.' },
+  ru: { minimum: 'Минимум повторений в день', title: 'Переносить незавершённые повторения на завтра', description: 'Оставшиеся карточки переносятся; более поздние сроки сдвигаются, чтобы дни повторения не смешивались.' },
+  sv: { minimum: 'Dagligt minimum för repetitioner', title: 'Flytta oavslutade repetitioner till nästa dag', description: 'Kvarvarande kort följer med; senare förfallodagar flyttas fram så att repetitionsdagarna hålls isär.' },
+};
 
 export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void }) {
   const [languages, setLanguages] = useState<LanguagePreferences>(DEFAULT_LANGUAGE_PREFERENCES);
@@ -165,6 +175,8 @@ export function LanguageSettings({ open, onClose, onChange }: { open: boolean; o
       {tab === 'review' && <><fieldset><legend>{translate(languages.ui, 'dailyLimits')}</legend>
         <label>{translate(languages.ui, 'newCardsDay')}<input type="number" min="1" max="500" value={Number.isNaN(scheduler.newCardsPerDay) ? '' : scheduler.newCardsPerDay} onChange={(event) => number('newCardsPerDay', event.target.value)} /></label>
         <label>{translate(languages.ui, 'maximumReviewsDay')}<input type="number" min="1" max="2000" value={Number.isNaN(scheduler.maximumReviewsPerDay) ? '' : scheduler.maximumReviewsPerDay} onChange={(event) => number('maximumReviewsPerDay', event.target.value)} /></label>
+        <label>{REVIEW_ROLLOVER_COPY[languages.ui].minimum}<input type="number" min="1" max="2000" value={Number.isNaN(scheduler.minimumReviewsPerDay) ? '' : scheduler.minimumReviewsPerDay} onChange={(event) => number('minimumReviewsPerDay', event.target.value)} /></label>
+        <label className="settings-checkbox"><input type="checkbox" checked={scheduler.rollOverMissedReviews !== false} onChange={(event) => setScheduler((current) => ({ ...current, rollOverMissedReviews: event.target.checked }))} /><span><strong>{REVIEW_ROLLOVER_COPY[languages.ui].title}</strong><small>{REVIEW_ROLLOVER_COPY[languages.ui].description}</small></span></label>
       </fieldset>
       <fieldset className="review-view-settings"><legend>{translate(languages.ui, 'Review view')}</legend>
         <label className="settings-checkbox"><input type="checkbox" checked={scheduler.reviewViewVariationEnabled === true} onChange={(event) => setScheduler((current) => ({ ...current, reviewViewVariationEnabled: event.target.checked }))} /><span><strong>{translate(languages.ui, 'Vary review view')}</strong><small>{translate(languages.ui, 'Test memory from other views in the same nearby area as a location becomes better learned.')}</small></span></label>

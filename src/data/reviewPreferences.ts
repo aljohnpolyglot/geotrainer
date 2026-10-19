@@ -7,11 +7,11 @@ export const passingScoreFor = (strictness: SchedulerPreferences['strictness']) 
 export const hardOrAgainScoreForStrictness = (strictness: SchedulerPreferences['strictness']) => ({ beginner: 2500, balanced: 3000, pro: 4900 })[strictness];
 
 export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = {
-  strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, firstReviewDays: 1,
+  strictness: 'balanced', newCardsPerDay: 50, maximumReviewsPerDay: 500, minimumReviewsPerDay: 50, rollOverMissedReviews: true, firstReviewDays: 1,
   relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650,
   maximumAnswerSeconds: 60, reviewOrder: 'random', autoReviewScore: 3000, autoReviewWrongCountry: true, reviewDayResetMinutes: 0,
   reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true,
-  reviewViewVariationEnabled: false, reviewViewVariationDifficulty: 50,
+  reviewViewVariationEnabled: false, reviewViewVariationDifficulty: 0,
 };
 
 export function shuffleInPlace<T>(items: T[], random = Math.random) {
@@ -38,6 +38,7 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
     ...(defaultFloor !== undefined ? { defaultCountryScoreFloor: defaultFloor } : {}),
     ...(Object.keys(countryFloors).length ? { countryScoreFloors: countryFloors } : {}),
     newCardsPerDay: number('newCardsPerDay', 1, 500), maximumReviewsPerDay: number('maximumReviewsPerDay', 1, 2000),
+    minimumReviewsPerDay: Math.min(2000, Math.max(1, Math.round(Number(source.minimumReviewsPerDay)) || 50)), rollOverMissedReviews: source.rollOverMissedReviews !== false,
     firstReviewDays: number('firstReviewDays', 1, 30), relearningMinutes: number('relearningMinutes', 1, 1440),
     easyFirstIntervalDays: number('easyFirstIntervalDays', 2, 365), maximumIntervalDays: number('maximumIntervalDays', 30, 36500),
     maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'due' ? 'due' : 'random',

@@ -1,6 +1,7 @@
 import type { SupportedLanguage } from '../types';
 
 export const EXTRA_UI: Record<string, Partial<Record<SupportedLanguage, string>>> = {
+  'Daily minimum': { en: 'Daily minimum', es: 'Mínimo diario', pt: 'Mínimo diário', fr: 'Minimum quotidien', de: 'Tägliches Minimum', it: 'Minimo giornaliero', ru: 'Минимум в день', sv: 'Dagligt minimum' },
   'Location order': { en:'Location order', es:'Orden de lugares', pt:'Ordem dos locais', fr:'Ordre des lieux', de:'Reihenfolge der Orte', it:'Ordine dei luoghi', ru:'Порядок мест', sv:'Platsordning' },
   Shuffle: { en:'Shuffle', es:'Aleatorio', pt:'Aleatório', fr:'Aléatoire', de:'Zufällig', it:'Casuale', ru:'Случайный порядок', sv:'Blanda' },
   'World Shuffle': { en:'World Shuffle', es:'Mezcla mundial', pt:'Mistura mundial', fr:'Mélange mondial', de:'Weltmix', it:'Mix mondiale', ru:'Мировая смесь', sv:'Världsmix' },

@@ -16,6 +16,7 @@ import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleIn
 import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor } from './reviewGrading';
 import { rebalanceReviewDates, reconcileReviewAttempt } from './reviewSchedule';
+import { planReviewRollover } from './reviewRollover';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import { panoramaHash } from '../services/locationHash';
@@ -212,10 +213,20 @@ async function reconcileSavedReviews() {
   const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
   await complete(tx); notifyChange({ operation: 'reconcile:reviews' });
 }
+let reviewMaintenance = Promise.resolve();
+function maintainReviews() {
+  const write = reviewMaintenance.then(async () => {
+    await reconcileSavedReviews();
+    const [reviews, storedPreferences] = await Promise.all([all<ReviewRecord>('reviews'), get<SettingRecord>('settings', 'schedulerPreferences')]);
+    const shifts = planReviewRollover(reviews, Date.now(), normalizeSchedulerPreferences(storedPreferences?.value));
+    if (shifts.length) { await rebalanceReviewDates(shifts, openDatabase); notifyChange({ operation: 'rollover:reviews' }); }
+  });
+  reviewMaintenance = write.catch(() => {}); return write;
+}
 export async function initTrainerDb(): Promise<void> {
   await openDatabase();
   await migrateLocalStorageV1();
-  await reconcileSavedReviews();
+  await maintainReviews();
   await repairSavedNotebookAssistance(trainerDb);
 }
 export const trainerDb = {
@@ -227,6 +238,7 @@ export const trainerDb = {
   games: async () => (await all<GameRecord>('games')).sort((a, b) => b.createdAt - a.createdAt),
   studyVisits: () => all<StudyVisit>('studyVisits'),
   reviews: async () => {
+    await maintainReviews();
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     return coalesceNearbyReviews(reviews, locations, attempts).reviews;
   },
@@ -313,7 +325,7 @@ export const trainerDb = {
   },
 
   async reviewQueue(filters: ReviewFilters): Promise<Attempt[]> {
-    await reconcileSavedReviews();
+    await maintainReviews();
     const [attempts, storedReviews, locations, bookmarks, storedPreferences] = await Promise.all([
       all<Attempt>('attempts'), all<ReviewRecord>('reviews'), locationMetadata(), all<BookmarkLocation>('bookmarks'), get<SettingRecord>('settings', 'schedulerPreferences'),
     ]);
@@ -433,7 +445,6 @@ export interface TrainerBackup {
   exportedAt: string;
   data: Record<StoreName, unknown[]>;
 }
-
 export async function createBackup(trackExport = true): Promise<TrainerBackup> {
   const exportedAt = new Date().toISOString();
   if (trackExport) await trainerDb.setSetting('lastExportAt', exportedAt);
@@ -446,7 +457,6 @@ export async function createBackup(trackExport = true): Promise<TrainerBackup> {
   };
   return backup;
 }
-
 export function validateBackup(value: unknown): asserts value is TrainerBackup {
   if (!value || typeof value !== 'object') throw new Error('Backup must be a JSON object.');
   const backup = value as Partial<TrainerBackup>;
@@ -469,7 +479,6 @@ export function validateBackup(value: unknown): asserts value is TrainerBackup {
     }
   }
 }
-
 export async function importBackup(value: unknown, mode: 'merge' | 'replace'): Promise<void> {
   validateBackup(value);
   const db = await openDatabase();
@@ -481,9 +490,8 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
   await complete(tx);
   await repairSavedNotebookAssistance(trainerDb);
   notifyChange({ operation: `backup:${mode}`, allowsSavedContentDecrease: mode === 'replace' });
-  await reconcileSavedReviews();
+  await maintainReviews();
 }
-
 export async function clearTrainerDbForTesting(): Promise<void> {
   const db = await openDatabase();
   const tx = db.transaction(STORE_NAMES, 'readwrite');

@@ -292,6 +292,8 @@ Strictness affects future grading; it does not rewrite old attempts.
 
 A card counts against the new-card limit only until its first completed Review. Reviews already completed during the current review day reduce the remaining total allowance. Locations within 50 metres in the same country share one Review card, including cards created by Save for Review, Notebook, Coach, or Play.
 
+**Daily review minimum** is a progress goal, defaulting to 50 completed reviews; change it in Settings → Review. **Move unfinished reviews to the next day** starts on. When a review day ends with cards unfinished, those cards move to the next review day and later due cards move back by the same number of missed days. For example, if 100 are due and you complete 20, the other 80 remain next day's work while later cards shift forward. Short same-day relearning steps keep their timed due dates. Turning this option off stops future rollovers; it does not undo dates already moved. Your completed grades, attempts, and review intervals stay saved. The minimum tracks your goal; it does not cap the queue or prevent unfinished cards from carrying forward.
+
 ### First review and relearning
 
 First review days controls the initial delay for a newly scheduled location. Relearning minutes controls how soon a failed review can return on the same day. Easy first interval allows an exceptionally strong first answer to wait longer.
@@ -305,6 +307,8 @@ Maximum interval caps how far a mature location can be scheduled into the future
 Maximum answer seconds helps distinguish fluent recall from a correct answer reached only after prolonged searching. It is a grading input, not necessarily a visible countdown.
 
 ### Review view variation
+
+Variation difficulty defaults to 0, so Review opens the saved panorama and heading unless you choose a higher value in Settings → Review. Existing saved variation choices remain in effect.
 
 Vary review view keeps one canonical card and schedule but may change its heading or use a nearby panorama as the location becomes well learned. Nearby variations use only official Google outdoor imagery. If no matching nearby panorama is available, Review keeps the saved view; the original panorama and heading-only changes retain their saved imagery. Variation difficulty controls how aggressively mature cards vary; 0 always uses the original view. New, weak, or recently failed cards stay close to the anchor. A failed varied view makes later variation more conservative, and lookup failure falls back to the saved view without creating a duplicate card.
 

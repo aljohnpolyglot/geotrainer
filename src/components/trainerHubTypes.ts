@@ -48,6 +48,8 @@ export interface ReviewPanelProps {
   dueCount?: number;
   nextDueAt?: number;
   reviewCount?: number;
+  dailyMinimum?: number;
+  completedToday?: number;
   reviewTimeZone?: string;
   startReview: (attempt: Attempt) => void;
   weakCountries: CountryStats[];

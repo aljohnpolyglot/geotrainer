@@ -31,6 +31,6 @@ test('failed generalized recall contracts without changing ordinary review data'
 });
 
 test('difficulty clamps and checkpoint copy changes at the defined ranges', () => {
-  assert.equal(clampReviewViewVariationDifficulty(-1), 0); assert.equal(clampReviewViewVariationDifficulty(101), 100); assert.equal(clampReviewViewVariationDifficulty('bad'), 50);
+  assert.equal(clampReviewViewVariationDifficulty(-1), 0); assert.equal(clampReviewViewVariationDifficulty(101), 100); assert.equal(clampReviewViewVariationDifficulty('bad'), 0);
   assert.deepEqual([0, 1, 24, 25, 49, 50, 74, 75, 99, 100].map(reviewVariationCheckpoint), [0, 1, 1, 25, 25, 50, 50, 75, 75, 100]);
 });
