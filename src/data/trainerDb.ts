@@ -33,6 +33,8 @@ const changeListeners = new Set<(change: TrainerDbChange) => void>(); const noti
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
 let settingWrites = Promise.resolve();
+let reviewIdentityRevision = 0;
+let reconciledReviewIdentityRevision = -1;
 async function all<T>(storeName: StoreName | typeof METADATA_STORES[number]): Promise<T[]> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).getAll()) as Promise<T[]>;
@@ -46,6 +48,7 @@ async function get<T>(storeName: StoreName | typeof METADATA_STORES[number], key
 }
 async function put<T>(storeName: StoreName, value: T): Promise<void> {
   const db = await openDatabase();
+  if (storeName === 'locations') reviewIdentityRevision++;
   const metadata = metadataStoreFor(storeName);
   const tx = db.transaction(metadata ? [storeName, metadata] : storeName, 'readwrite');
   tx.objectStore(storeName).put(value);
@@ -55,6 +58,7 @@ async function put<T>(storeName: StoreName, value: T): Promise<void> {
 }
 async function remove(storeName: StoreName, key: IDBValidKey): Promise<void> {
   const db = await openDatabase();
+  if (storeName === 'locations') reviewIdentityRevision++;
   const metadata = metadataStoreFor(storeName);
   const tx = db.transaction(metadata ? [storeName, metadata] : storeName, 'readwrite');
   tx.objectStore(storeName).delete(key);
@@ -146,15 +150,16 @@ async function migrateLocalStorageV1(): Promise<void> {
 }
 
 async function reconcileSavedReviews() {
+  const revision = reviewIdentityRevision;
   const [attempts, reviews, locations, storedPreferences] = await Promise.all([all<Attempt>('attempts'), all<ReviewRecord>('reviews'), locationMetadata(), get<SettingRecord>('settings', 'schedulerPreferences')]);
   const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
   const latest = new Map<string, Attempt>();
   attempts.filter((item) => item.source === 'review').forEach((item) => { if (!latest.get(item.panoId) || latest.get(item.panoId)!.createdAt < item.createdAt) latest.set(item.panoId, item); });
   const repaired = reviews.map((review) => reconcileReviewAttempt(review, latest.get(review.panoId) || {} as Attempt, preferences));
   const merged = coalesceNearbyReviews(repaired, locations, attempts).reviews;
-  if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index])) return;
+  if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index])) { reconciledReviewIdentityRevision = revision; return; }
   const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
-  await complete(tx); notifyChange({ operation: 'reconcile:reviews' });
+  await complete(tx); reconciledReviewIdentityRevision = revision; notifyChange({ operation: 'reconcile:reviews' });
 }
 let reviewMaintenance = Promise.resolve();
 function maintainReviews() {
@@ -205,6 +210,8 @@ export const trainerDb = {
   deleteSetting: (key: string) => remove('settings', key),
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord | undefined> {
+    const saved = reconciledReviewIdentityRevision === reviewIdentityRevision ? await get<ReviewRecord>('reviews', panoId) : undefined;
+    if (saved) return saved;
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const target = location || locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
     return target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode, sourcePointHash: target.sourcePointHash }) : get<ReviewRecord>('reviews', panoId);
@@ -227,7 +234,9 @@ export const trainerDb = {
     notifyChange({ operation: 'clear:games' });
   },
   saveAttempt: async (attempt: Attempt) => {
-    const sourceHash = attempt.sourcePointHash || (await get<TrainerLocation>('locationMetadata', attempt.panoId))?.sourcePointHash;
+    const location = await get<TrainerLocation>('locationMetadata', attempt.panoId);
+    if (!location) reviewIdentityRevision++;
+    const sourceHash = attempt.sourcePointHash || location?.sourcePointHash;
     return put('attempts', { ...attempt, panoramaHash: await panoramaHash(attempt.panoId), ...(sourceHash ? { sourcePointHash: sourceHash } : {}) });
   },
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
@@ -335,6 +344,7 @@ export const trainerDb = {
       lastReviewedAt: now,
       ...(variation?.kind && variation.kind !== 'original' ? { generalizationLevel: nextGeneralizationLevel(previous?.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: now } : {}),
     };
+    if (!previous) reviewIdentityRevision++;
     await put('reviews', next);
     return next;
   },
@@ -347,6 +357,8 @@ export const trainerDb = {
   },
 
   async scheduleFirstPlay(panoId: string, grade: ReviewGrade, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord> {
+    const saved = reconciledReviewIdentityRevision === reviewIdentityRevision ? await get<ReviewRecord>('reviews', panoId) : undefined;
+    if (saved) return saved;
     const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
     const existing = nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, ...(location || locations.find((item) => item.panoId === panoId) || { lat: NaN, lng: NaN, countryCode: '' }) });
     if (existing) return existing;
@@ -355,6 +367,7 @@ export const trainerDb = {
     const intervalDays: Record<ReviewGrade, number> = { again: preferences.firstReviewDays, hard: preferences.firstReviewDays, good: 7, easy: preferences.easyFirstIntervalDays };
     const days = Math.min(preferences.maximumIntervalDays, intervalDays[grade]);
     const created: ReviewRecord = { id: panoId, panoId, panoramaHash: await panoramaHash(panoId), sourcePointHash: location?.sourcePointHash, dueAt: nextReviewAt(now, days, preferences), intervalDays: days, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    reviewIdentityRevision++;
     await put('reviews', created);
     return created;
   },
@@ -371,6 +384,7 @@ export const trainerDb = {
     const now = Date.now();
     const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
     const created: ReviewRecord = { id: panoId, panoId, panoramaHash: await panoramaHash(panoId), sourcePointHash: location?.sourcePointHash, dueAt: dueNow ? now : nextReviewAt(now, preferences.firstReviewDays, preferences), intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0 };
+    reviewIdentityRevision++;
     await put('reviews', created);
     return created;
   },
@@ -429,6 +443,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
   validateBackup(value);
   const db = await openDatabase();
   const tx = db.transaction([...STORE_NAMES, ...METADATA_STORES], 'readwrite');
+  reviewIdentityRevision++;
   if (mode === 'replace') [...STORE_NAMES, ...METADATA_STORES].forEach((name) => tx.objectStore(name).clear());
   for (const name of STORE_NAMES) {
     for (const item of value.data[name] || []) { tx.objectStore(name).put(item); writeMetadata(tx, name, item); }
@@ -439,6 +454,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
   await maintainReviews();
 }
 export async function clearTrainerDbForTesting(): Promise<void> {
+  reviewIdentityRevision++;
   const db = await openDatabase();
   const tx = db.transaction([...STORE_NAMES, ...METADATA_STORES], 'readwrite');
   [...STORE_NAMES, ...METADATA_STORES].forEach((name) => tx.objectStore(name).clear());

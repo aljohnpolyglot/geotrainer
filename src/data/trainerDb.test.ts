@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
-import { IDBKeyRange, indexedDB } from 'fake-indexeddb';
+import test, { mock } from 'node:test';
+import { IDBKeyRange, IDBObjectStore, indexedDB } from 'fake-indexeddb';
 
 Object.assign(globalThis, { indexedDB, IDBKeyRange });
 const legacy = new Map<string, string>();
@@ -359,4 +359,31 @@ test('Review submission reuses its read context and prefix reads exclude image d
     assert.deepEqual(second.gradingHistory.map((item) => item.grade), ['good', 'easy']);
     assert.equal((await trainerDb.reviews())[0].dueAt, second.dueAt);
   } finally { trainerDb.reviewState = originalRead; }
+});
+
+
+test('existing Review cards use keyed reads while nearby aliases retain canonical scheduling', async () => {
+  const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  const anchor = { panoId: 'keyed-anchor', lat: 52.5, lng: 13.4, countryCode: 'DE' };
+  await trainerDb.encounter(anchor);
+  const saved = await trainerDb.queueForReview(anchor.panoId, false, anchor);
+  await trainerDb.reviews();
+  const reads = mock.method(IDBObjectStore.prototype, 'getAll');
+  try {
+    assert.deepEqual(await trainerDb.reviewState(anchor.panoId), saved);
+    assert.deepEqual(await trainerDb.scheduleFirstPlay(anchor.panoId, 'again', anchor), saved);
+    assert.equal(reads.mock.callCount(), 0, 'Exact cards must not materialize whole stores');
+    await trainerDb.stampSourcePointHash(anchor.panoId, 'new-source');
+    assert.equal((await trainerDb.reviewState(anchor.panoId))?.id, saved.id);
+    assert.ok(reads.mock.callCount() > 0, 'Identity changes must invalidate the exact-card shortcut');
+    const alias = { ...anchor, panoId: 'keyed-alias', lat: 52.5001 };
+    await trainerDb.encounter(alias);
+    assert.equal((await trainerDb.reviewState(alias.panoId))?.id, saved.id);
+    assert.ok(reads.mock.callCount() > 0, 'Unknown aliases still use the full nearby-card rules');
+    const graded = await trainerDb.gradeReview(alias.panoId, 'good');
+    assert.equal(graded.id, saved.id);
+    assert.equal(graded.reviewCount, 1);
+    assert.equal((await trainerDb.reviewState(anchor.panoId))?.dueAt, graded.dueAt);
+  } finally { reads.mock.restore(); }
 });

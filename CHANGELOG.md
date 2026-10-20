@@ -2,6 +2,8 @@
 
 ## 2026-10-20
 
+- Use keyed saved-card reads during Review preparation, grading, and repeat Play scheduling, avoiding whole-history allocations for existing canonical cards while retaining nearby-card and imported-source matching for aliases.
+
 - Keep saved screenshots out of routine startup, Review, Statistics, and location-matching reads using atomic, migration-safe metadata indexes; preserve complete photos in saved records and portable backups.
 - Load only the current panorama's clue photos for learning aids, and avoid full clue-photo reads in the homepage and non-photo training tabs.
 - Start shared, bounded country lookups at pin placement, reuse Review submission reads, and reveal Play results without waiting for the screenshot service. Keep Review grading and queue persistence ahead of its result.
