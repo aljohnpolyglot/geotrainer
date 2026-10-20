@@ -42,7 +42,7 @@ export function MainMenu({ refreshKey, dbReady, onStudy, onPlay, onReview }: Mai
         timeZone: scheduler.reviewTimeZone,
       }));
     }).catch(() => {});
-    void Promise.all([trainerDb.clues(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), attemptsPromise]).then(([clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, attempts]) => {
+    void Promise.all([trainerDb.clueMetadata(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), attemptsPromise]).then(([clues, metas = [], notes = [], coachNotes = [], savedOnlyMigrated, attempts]) => {
       if (active) setStatus((current) => ({ ...current, clues: savedClueCount(clues, notes, savedOnlyMigrated ? metas : metas.filter((meta) => savedMetaLessonIds(attempts).has(meta.id)), coachNotes.filter((note) => !note.deletedAt)) }));
     }).catch(() => {});
     void Promise.all([trainerDb.setting<{ mode?: string }>('workspace.paused.study'), trainerDb.setting<{ mode?: string; rounds?: unknown[]; settings?: { roundCount?: number } }>('workspace.paused.play')]).then(([pausedStudy, pausedPlay]) => {

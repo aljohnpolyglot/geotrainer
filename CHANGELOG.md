@@ -2,6 +2,11 @@
 
 ## 2026-10-20
 
+- Keep saved screenshots out of routine startup, Review, Statistics, and location-matching reads using atomic, migration-safe metadata indexes; preserve complete photos in saved records and portable backups.
+- Load only the current panorama's clue photos for learning aids, and avoid full clue-photo reads in the homepage and non-photo training tabs.
+- Start shared, bounded country lookups at pin placement, reuse Review submission reads, and reveal Play results without waiting for the screenshot service. Keep Review grading and queue persistence ahead of its result.
+- Reduce compass redraws while panning, stop hidden result maps following the camera, bound recent view snapshots, and avoid unrelated image drafts when reading imported-map settings.
+
 - Enlarge the Play and Review guess map automatically on mouse hover by default, preserving the same map and pin. Add a Display preference to disable it, retain touch and manual expansion controls, and document the behavior in all eight languages.
 
 - Start Review panorama lookup alongside saved-history reads, reuse the verified lookup for variation, and fetch panorama history through its database index. Keep the five-card prequeue bounded and stop starting background preparation after leaving Review.

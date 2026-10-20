@@ -98,6 +98,8 @@ Durante la creazione, il pulsante mostra la fase corrente di paesi, regioni o ci
 
 ## Modalità Gioco
 
+Dopo aver inviato una risposta in modalità Gioco, il risultato può apparire prima che la foto salvata abbia finito di caricarsi. La foto viene associata al luogo dello stesso tentativo appena è pronta; puoi continuare con il turno successivo.
+
 In **Limite per turno** nelle impostazioni di gioco, scegli Illimitato, un valore predefinito o Personalizzato per inserire da 1 a 3600 secondi. La scelta viene conservata per la partita successiva; un turno in pausa riprende con il tempo attivo rimanente.
 
 **Viste occasionali in barca** è attivo per impostazione predefinita in Impara personalizzato e nel Gioco con luoghi generati. Con ambiente Misto, priorità Casuale e campionamento Naturale, può comparire un panorama noto in barca in Madagascar o Bermuda se il paese è nel gruppo. Restano valide le regole sull’origine delle immagini e sul movimento; se la vista non è disponibile, la ricerca continua con i luoghi normali. Disattivare l’opzione elimina questi candidati aggiuntivi. Gruppi di regioni o città, mappe caricate, Meta e Ripasso non cambiano.

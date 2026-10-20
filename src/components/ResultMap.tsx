@@ -110,7 +110,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
       else { direction = new google.maps.Marker({ position: actual, map, icon, clickable: false, zIndex: 1 }); markers.push(direction); }
     };
     updateDirection((panoId && getStreetViewSnapshot(panoId)?.heading) ?? heading);
-    const unsubscribe = panoId ? subscribeStreetViewSnapshot((snapshot) => { if (snapshot.locationPanoId === panoId || snapshot.panoId === panoId) updateDirection(snapshot.heading); }) : undefined;
+    const unsubscribe = active && panoId ? subscribeStreetViewSnapshot((snapshot) => { if (snapshot.locationPanoId === panoId || snapshot.panoId === panoId) updateDirection(snapshot.heading); }) : undefined;
     addMarker(actual, t('originalLocation'), '#22c55e', 8);
     if (guess) {
       addMarker(guess, t('currentGuess'), '#ef4444');
@@ -125,7 +125,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
       lines.forEach((line) => line.setMap(null));
       if (pointsRef.current === points) pointsRef.current = [];
     };
-  }, [actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, panoId, heading, selectable, ui, mapPreferences.resultMapZoom]);
+  }, [active, actual.lat, actual.lng, fullscreenControl, guess?.lat, guess?.lng, previousGuessKey, panoId, heading, selectable, ui, mapPreferences.resultMapZoom]);
 
   useEffect(() => {
     if (!active || !mapRef.current || !element.current || !pointsRef.current.length) return;

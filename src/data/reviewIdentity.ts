@@ -81,7 +81,10 @@ export function coalesceNearbyReviews(reviews: ReviewRecord[], locations: Traine
   return { reviews: result, aliases };
 }
 
-export function nearbyReview(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[], target: ReviewPoint) {
+export function createReviewLookup(reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[]) {
   const points = pointsByPano(locations, attempts);
-  return reviews.find((review) => review.panoId === target.panoId) || reviews.find((review) => { const point = points.get(review.panoId); return !!point && nearbyReviewPoint(target, point); });
+  const exact = new Map(reviews.map((review) => [review.panoId, review]));
+  return (target: ReviewPoint) => exact.get(target.panoId) || reviews.find((review) => { const point = points.get(review.panoId); return !!point && nearbyReviewPoint(target, point); });
 }
+
+export const nearbyReview = (reviews: ReviewRecord[], locations: TrainerLocation[], attempts: Attempt[], target: ReviewPoint) => createReviewLookup(reviews, locations, attempts)(target);

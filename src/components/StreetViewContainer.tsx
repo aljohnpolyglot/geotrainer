@@ -81,6 +81,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const [loadError, setLoadError] = useState<string | null>(null);
   const [tileRateLimited, setTileRateLimited] = useState(false);
   const [heading, setHeading] = useState(0);
+  const headingFrameRef = useRef<number | null>(null);
   const [arrivedPano, setArrivedPano] = useState<string | null>(null);
   const awaitingPanorama = !!onPanoramaReady && !!currentLocation && arrivedPano !== currentLocation.panoId;
   const [viewPosition, setViewPosition] = useState<{ panoId: string; position: { lat: number; lng: number } } | null>(null);
@@ -212,7 +213,10 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
           setHeading(lockedPovRef.current.heading);
           return;
         }
-        setHeading(((current.getPov().heading % 360) + 360) % 360);
+        if (headingFrameRef.current === null) headingFrameRef.current = window.requestAnimationFrame(() => {
+          headingFrameRef.current = null;
+          if (panoInstanceRef.current) setHeading(Math.round(((panoInstanceRef.current.getPov().heading % 360) + 360) % 360));
+        });
         const panoId = current.getPano();
         const pov = current.getPov();
         if (panoId) setStreetViewSnapshot({ locationPanoId: currentLocationRef.current?.panoId, panoId, heading: pov.heading, pitch: pov.pitch, zoom: current.getZoom() ?? 1 });
@@ -314,6 +318,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   }, [mapsLoaded]);
 
   useEffect(() => () => {
+    if (headingFrameRef.current !== null) window.cancelAnimationFrame(headingFrameRef.current);
     if (viewSaveTimerRef.current !== null) window.clearTimeout(viewSaveTimerRef.current);
     if (panoInstanceRef.current) {
       google.maps.event.clearInstanceListeners(panoInstanceRef.current);

@@ -22,3 +22,11 @@ test('result maps receive live heading changes and stop after unmount', () => {
   setStreetViewSnapshot({ locationPanoId: 'result-origin', panoId: 'result-view', heading: 90, pitch: 0, zoom: 1 });
   assert.deepEqual(headings, [45]);
 });
+
+
+test('snapshot history stays bounded while retaining the active origin', () => {
+  for (let i = 0; i < 200; i++) setStreetViewSnapshot({ locationPanoId: 'active-origin', panoId: `bounded-${i}`, heading: i, pitch: 0, zoom: 1 });
+  assert.equal(getStreetViewSnapshot('bounded-0'), null);
+  assert.equal(getStreetViewSnapshot('active-origin')?.heading, 199);
+  assert.equal(getStreetViewSnapshot('bounded-199')?.heading, 199);
+});

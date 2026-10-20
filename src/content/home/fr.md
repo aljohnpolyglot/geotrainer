@@ -100,6 +100,8 @@ Pendant la création, le bouton indique l’étape en cours pour les pays, régi
 
 ## Mode Jeu
 
+Après avoir validé une réponse en mode Jeu, le résultat peut apparaître avant la fin du chargement de sa photo enregistrée. La photo est rattachée au lieu de la même tentative dès qu’elle est prête ; vous pouvez passer à la manche suivante.
+
 Dans **Limite par manche** des réglages du jeu, choisissez Illimité, une durée prédéfinie ou Personnalisé pour saisir de 1 à 3 600 secondes. Ce choix est conservé pour la prochaine partie ; une manche en pause reprend avec le temps actif restant.
 
 **Vues occasionnelles depuis un bateau** est activé par défaut dans Apprendre personnalisé et le Jeu avec lieux générés. Avec l’environnement Mixte, la priorité Aléatoire et l’échantillonnage Naturel, un panorama connu depuis un bateau à Madagascar ou aux Bermudes peut être choisi si le pays figure dans le groupe. Les règles de source d’images et de déplacement restent appliquées ; si la vue est indisponible, la recherche reprend normalement. Désactiver l’option retire ces candidats supplémentaires. Les groupes de régions ou de villes, les cartes importées, Méta et Révision ne changent pas.

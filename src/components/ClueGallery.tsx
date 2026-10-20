@@ -9,10 +9,17 @@ import { StreetViewContainer } from './StreetViewContainer';
 import { CoachLocationEstimate } from './CoachLocationEstimate';
 import { coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
+import { trainerDb } from '../data/trainerDb';
 
 export function ClueGallery({ country, clues, notes = [], initialSelectedId, onClose, onDelete, onSaveNote }: { country: string; clues: ClueRecord[]; notes?: NotebookNote[]; initialSelectedId?: string; onClose: () => void; onDelete: (id: string) => void; onSaveNote?: (note: NotebookNote) => Promise<void> }) {
   const { ui, ai } = useLanguagePreferences(); const t = (key: string) => translate(ui, key);
   const [selected, setSelected] = useState<ClueRecord | null>(() => clues.find((clue) => clue.id === initialSelectedId) || (clues.length === 1 ? clues[0] : null));
+  useEffect(() => {
+    if (!selected || selected.imageDataUrl) return;
+    let active = true;
+    void trainerDb.clue(selected.id).then((clue) => { if (active && clue) setSelected(clue); });
+    return () => { active = false; };
+  }, [selected?.id]);
   const selectedNote = selected ? notes.find((note) => !note.deletedAt && note.clueId === selected.id) : undefined;
   const [draft, setDraft] = useState(selectedNote?.text || ''); const [saving, setSaving] = useState(false); const [saved, setSaved] = useState(false); const [imageOpen, setImageOpen] = useState(false);
   useEffect(() => { setDraft(selectedNote?.text || ''); setSaved(false); setImageOpen(false); }, [selected?.id, selectedNote?.text]);

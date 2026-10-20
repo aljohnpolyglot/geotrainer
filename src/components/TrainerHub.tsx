@@ -81,16 +81,22 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
       restoredViewRef.current = true;
     });
   }, []);
+  const needsClueImages = tab === 'clues' || !!clueCountry;
+  const loadRequest = useRef(0);
+  useEffect(() => () => { loadRequest.current++; }, []);
   const load = async () => {
-    const [nextLocations, nextAttempts, nextGames, nextVisits, nextReviews, nextSessions, nextClues, nextScheduler, nextMetas, nextNotes, nextCoachNotes, savedOnlyMigrated, readyDue] = await Promise.all([trainerDb.locationMetadata(), trainerDb.attempts(), trainerDb.games(), trainerDb.studyVisits(), trainerDb.reviews(), trainerDb.sessions(), trainerDb.clues(), trainerDb.schedulerPreferences(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.reviewQueue({ due: true })]);
+    const requestId = ++loadRequest.current;
+    const [nextLocations, nextAttempts, nextGames, nextVisits, nextReviews, nextSessions, nextClues, nextScheduler, nextMetas, nextNotes, nextCoachNotes, savedOnlyMigrated, readyDue] = await Promise.all([trainerDb.locationMetadata(), trainerDb.attempts(), trainerDb.games(), trainerDb.studyVisits(), trainerDb.reviews(), trainerDb.sessions(), (needsClueImages ? trainerDb.clues() : trainerDb.clueMetadata()), trainerDb.schedulerPreferences(), trainerDb.setting<LearnedMeta[]>('meta.learned'), trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.setting<boolean>('meta.savedOnlyMigrated'), trainerDb.reviewQueue({ due: true })]);
+    if (requestId !== loadRequest.current) return;
     const savedMetaIds = savedMetaLessonIds(nextAttempts);
     const visibleMetas = savedOnlyMigrated ? nextMetas || [] : (nextMetas || []).filter((meta) => savedMetaIds.has(meta.id));
     const dedupedClues = splitDuplicateClues(nextClues, nextNotes || []);
     if (dedupedClues.duplicates.length) await Promise.all(dedupedClues.duplicates.map((clue) => trainerDb.deleteClue(clue.id)));
     if (!savedOnlyMigrated) void Promise.all([trainerDb.setSetting('meta.learned', visibleMetas), trainerDb.setSetting('meta.savedOnlyMigrated', true)]);
+    if (requestId !== loadRequest.current) return;
     setLocations(nextLocations); setAttempts(nextAttempts); setGames(nextGames); setVisits(nextVisits); setReviews(nextReviews); setReadyDueCount(readyDue.length); setSessions(meaningfulSessions(nextSessions, nextAttempts, nextVisits)); setClues(dedupedClues.unique); setScheduler(nextScheduler); setLearnedMetas(visibleMetas); setNotebookNotes(nextNotes || []); setCoachNotes((nextCoachNotes || []).filter((note) => !note.deletedAt)); setLoaded(true);
   };
-  useEffect(() => { void load(); }, [refreshKey]);
+  useEffect(() => { void load(); }, [refreshKey, needsClueImages]);
   const effectiveFilters = useMemo(() => ({ ...filters, countryCodes: reviewCollection === "all" ? filters.countryCodes : collections.find((item) => item.id === reviewCollection)?.countryCodes }), [filters, reviewCollection, collections]);
   useEffect(() => { void trainerDb.reviewQueue(effectiveFilters).then(setQueue); }, [effectiveFilters, refreshKey]);
   useEffect(() => {
@@ -100,7 +106,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     const schedule = () => { timer = window.setTimeout(() => { refresh(); schedule(); }, nextReviewDayBoundary(Date.now(), scheduler) - Date.now() + 100); };
     schedule(); document.addEventListener('visibilitychange', refresh);
     return () => { window.clearTimeout(timer); document.removeEventListener('visibilitychange', refresh); };
-  }, [scheduler?.reviewDayResetMinutes, scheduler?.reviewTimeZone, effectiveFilters]);
+  }, [scheduler?.reviewDayResetMinutes, scheduler?.reviewTimeZone, effectiveFilters, needsClueImages]);
   const mistakeCriterion = [filters.wrongCountry && t("wrongCountry"), filters.minScore !== undefined || filters.maxScore !== undefined ? `${t("roundScore")} ${filters.minScore ?? 0}–${filters.maxScore ?? 5000}` : ''].filter(Boolean).join(" · ");
   const reviewCriterion = [filters.due && t("dueToday"), mistakeCriterion, filters.recent && t("recentlyMissed"), filters.recentDays && ([7, 30, 90].includes(filters.recentDays) ? t(`last${filters.recentDays}Days`) : `${t("lastDays")} ${filters.recentDays}`), filters.bookmarked && t("bookmarked")].filter(Boolean).join(" · ") || t("tabReview");
   const reviewSource = [filters.environment && t(filters.environment), reviewCriterion].filter(Boolean).join(" · ");

@@ -175,6 +175,8 @@ Diese Werte steuern die Suche, garantieren aber wegen begrenzter Street-View-Abd
 
 ## Spielmodus
 
+Nach dem Abgeben eines Tipps im Spielmodus kann das Ergebnis erscheinen, bevor das gespeicherte Foto fertig geladen ist. Das Foto wird anschließend dem Ort desselben Versuchs zugeordnet; du kannst bereits mit der nächsten Runde fortfahren.
+
 Wähle unter **Zeitlimit pro Runde** in den Spieleinstellungen Unbegrenzt, eine Vorgabe oder Eigene Zeit für 1 bis 3600 Sekunden. Die Auswahl bleibt für das nächste Spiel gespeichert; eine pausierte Runde läuft mit ihrer verbleibenden aktiven Zeit weiter.
 
 **Gelegentliche Bootsansichten** ist beim benutzerdefinierten Lernen und bei generierten Spielorten standardmäßig aktiviert. Mit Gemischter Umgebung, Zufallspriorität und Natürlicher Auswahl kann eine bekannte Bootsansicht in Madagaskar oder Bermuda erscheinen, wenn das Land im Pool enthalten ist. Bildquellen- und Bewegungsregeln gelten weiterhin; ist die Ansicht nicht verfügbar, läuft die normale Ortssuche weiter. Ausschalten entfernt diese zusätzlichen Kandidaten. Regionale oder städtische Pools, hochgeladene Karten, Meta und Wiederholung bleiben unverändert.

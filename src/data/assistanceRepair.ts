@@ -24,12 +24,15 @@ export function repairNotebookAssistance(attempts: Attempt[], clues: ClueRecord[
 type RepairDb = {
   attempts: () => Promise<Attempt[]>;
   clues: () => Promise<ClueRecord[]>;
+  clueMetadata?: () => Promise<ClueRecord[]>;
   setting: <T>(key: string) => Promise<T | undefined>;
   saveAttempt: (attempt: Attempt) => Promise<void>;
 };
 
 export async function repairSavedNotebookAssistance(db: RepairDb) {
-  const [attempts, clues, notes = []] = await Promise.all([db.attempts(), db.clues(), db.setting<CoachHistoryNote[]>('coach.notes')]);
+  const attempts = await db.attempts();
+  if (!attempts.some((attempt) => attempt.source === 'play' && attempt.aiAssisted && !attempt.coachUsed && !attempt.coachAnalysis && !attempt.coachGeneratedAt)) return;
+  const [clues, notes = []] = await Promise.all([(db.clueMetadata || db.clues)(), db.setting<CoachHistoryNote[]>('coach.notes')]);
   const repaired = repairNotebookAssistance(attempts, clues, notes);
   await Promise.all(repaired.filter((attempt, index) => attempt !== attempts[index]).map((attempt) => db.saveAttempt(attempt)));
 }

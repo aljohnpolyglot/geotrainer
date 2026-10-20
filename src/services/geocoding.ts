@@ -17,6 +17,7 @@ export interface ReverseGeocodeResult {
 }
 
 const geocodeCache = new Map<string, ReverseGeocodeResult>();
+const geocodePending = new Map<string, Promise<ReverseGeocodeResult | null>>();
 let geocoderInstance: google.maps.Geocoder | null = null;
 
 export const normalizeReverseGeocodeCountry = (countryCode: string | undefined, lat: number, lng: number) => countryCode?.toUpperCase()
@@ -58,9 +59,19 @@ export function getFlagCdnUrl(countryCode: string, width: 20 | 40 | 80 | 160 = 4
 export async function reverseGeocodeLocation(lat: number, lng: number): Promise<ReverseGeocodeResult | null> {
   const cacheKey = `${lat.toFixed(5)},${lng.toFixed(5)}`;
   if (geocodeCache.has(cacheKey)) {
-    return geocodeCache.get(cacheKey)!;
+    const cached = geocodeCache.get(cacheKey)!;
+    geocodeCache.delete(cacheKey); geocodeCache.set(cacheKey, cached);
+    return cached;
   }
 
+  const existing = geocodePending.get(cacheKey);
+  if (existing) return existing;
+  const pending = lookupLocation(lat, lng, cacheKey);
+  geocodePending.set(cacheKey, pending);
+  try { return await pending; } finally { geocodePending.delete(cacheKey); }
+}
+
+async function lookupLocation(lat: number, lng: number, cacheKey: string): Promise<ReverseGeocodeResult | null> {
   try {
     const geocoder = getGeocoder();
     const response = await geocoder.geocode({
@@ -114,6 +125,7 @@ export async function reverseGeocodeLocation(lat: number, lng: number): Promise<
     };
 
     geocodeCache.set(cacheKey, parsed);
+    if (geocodeCache.size > 256) geocodeCache.delete(geocodeCache.keys().next().value!);
     return parsed;
   } catch (err) {
     console.warn('Reverse geocoding error:', err);

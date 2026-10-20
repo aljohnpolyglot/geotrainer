@@ -11,7 +11,7 @@ import type {
 } from '../types';
 export { normalizeGamePreferences, normalizeLocationTargets } from './trainerPreferences';
 import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
-import { coalesceNearbyReviews, nearbyReview, uniqueReviewSources } from './reviewIdentity';
+import { coalesceNearbyReviews, nearbyReview, createReviewLookup, uniqueReviewSources } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor } from './reviewGrading';
@@ -20,92 +20,45 @@ import { planReviewRollover } from './reviewRollover';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import { panoramaHash } from '../services/locationHash';
-import { readLocationMetadata } from './locationMetadata';
+import { readLocationMetadata, METADATA_STORES, metadataStoreFor, writeMetadata } from './locationMetadata';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
 export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore, shouldAutoSchedulePlayReview } from './reviewGrading';
 export { reconcileReviewAttempt } from './reviewSchedule';
-const DB_NAME = 'street-view-trainer';
-const DB_VERSION = 3;
-export const STORE_NAMES = [
-  'locations', 'attempts', 'games', 'studyVisits', 'reviews',
-  'bookmarks', 'collections', 'settings', 'sessions', 'clues',
-] as const;
-export type StoreName = (typeof STORE_NAMES)[number];
+import { openDatabase, request, complete, STORE_NAMES, type StoreName } from './trainerDatabase';
+export { STORE_NAMES, type StoreName } from './trainerDatabase';
 export type TrainerDbChange = { operation: string; allowsSavedContentDecrease?: boolean };
 const changeListeners = new Set<(change: TrainerDbChange) => void>(); const notifyChange = (change: TrainerDbChange) => changeListeners.forEach((listener) => listener(change));
 export const isReviewDue = (review: ReviewRecord, now: number, preferences: SchedulerPreferences) => review.intervalDays < 1 ? review.dueAt <= now : reviewDayStart(review.dueAt, preferences) <= reviewDayStart(now, preferences);
 export const shouldScheduleReview = (kind: ReviewSessionKind, review: ReviewRecord | undefined, now: number, preferences: SchedulerPreferences) => kind !== 'practice' || (!!review && isReviewDue(review, now, preferences));
-let database: Promise<IDBDatabase> | undefined;
 let settingWrites = Promise.resolve();
-const request = <T>(value: IDBRequest<T>) =>
-  new Promise<T>((resolve, reject) => {
-    value.onsuccess = () => resolve(value.result);
-    value.onerror = () => reject(value.error);
-  });
-const complete = (transaction: IDBTransaction) =>
-  new Promise<void>((resolve, reject) => {
-    transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject(transaction.error);
-    transaction.onabort = () => reject(transaction.error || new Error('Database transaction aborted'));
-  });
-function openDatabase(): Promise<IDBDatabase> {
-  if (database) return database;
-  database = new Promise((resolve, reject) => {
-    const opening = indexedDB.open(DB_NAME, DB_VERSION);
-    opening.onupgradeneeded = () => {
-      const db = opening.result;
-      const create = (name: StoreName, keyPath: string) =>
-        db.objectStoreNames.contains(name) ? opening.transaction!.objectStore(name) : db.createObjectStore(name, { keyPath });
-      const index = (store: IDBObjectStore, name: string, keyPath: string) => {
-        if (!store.indexNames.contains(name)) store.createIndex(name, keyPath);
-      };
-      const locations = create('locations', 'id');
-      const attempts = create('attempts', 'id');
-      const games = create('games', 'id');
-      const visits = create('studyVisits', 'id');
-      const reviews = create('reviews', 'id');
-      create('bookmarks', 'panoId');
-      create('collections', 'id');
-      create('settings', 'key');
-      create('sessions', 'id');
-      const clues = create('clues', 'id');
-      index(locations, 'countryCode', 'countryCode');
-      for (const [name, key] of [['panoId', 'panoId'], ['countryCode', 'countryCode'], ['createdAt', 'createdAt'], ['source', 'source'], ['collectionId', 'collectionId'], ['environmentRequested', 'environmentRequested'], ['gameId', 'gameId']]) index(attempts, name, key);
-      index(games, 'createdAt', 'createdAt');
-      for (const [name, key] of [['panoId', 'panoId'], ['openedAt', 'openedAt'], ['countryCode', 'countryCode'], ['collectionId', 'collectionId'], ['environmentRequested', 'environmentRequested']]) index(visits, name, key);
-      index(reviews, 'dueAt', 'dueAt');
-      index(clues, 'countryCode', 'countryCode');
-    };
-    opening.onsuccess = () => resolve(opening.result);
-    opening.onerror = () => reject(opening.error);
-    opening.onblocked = () => reject(new Error('Close other app tabs to upgrade the training database.'));
-  });
-  return database;
-}
-async function all<T>(storeName: StoreName): Promise<T[]> {
+async function all<T>(storeName: StoreName | typeof METADATA_STORES[number]): Promise<T[]> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).getAll()) as Promise<T[]>;
 }
 async function locationMetadata(): Promise<TrainerLocation[]> {
   return readLocationMetadata(await openDatabase());
 }
-async function get<T>(storeName: StoreName, key: IDBValidKey): Promise<T | undefined> {
+async function get<T>(storeName: StoreName | typeof METADATA_STORES[number], key: IDBValidKey): Promise<T | undefined> {
   const db = await openDatabase();
   return request(db.transaction(storeName).objectStore(storeName).get(key)) as Promise<T | undefined>;
 }
 async function put<T>(storeName: StoreName, value: T): Promise<void> {
   const db = await openDatabase();
-  const tx = db.transaction(storeName, 'readwrite');
+  const metadata = metadataStoreFor(storeName);
+  const tx = db.transaction(metadata ? [storeName, metadata] : storeName, 'readwrite');
   tx.objectStore(storeName).put(value);
+  writeMetadata(tx, storeName, value);
   await complete(tx);
   notifyChange({ operation: `put:${storeName}` });
 }
 async function remove(storeName: StoreName, key: IDBValidKey): Promise<void> {
   const db = await openDatabase();
-  const tx = db.transaction(storeName, 'readwrite');
+  const metadata = metadataStoreFor(storeName);
+  const tx = db.transaction(metadata ? [storeName, metadata] : storeName, 'readwrite');
   tx.objectStore(storeName).delete(key);
+  if (metadata) tx.objectStore(metadata).delete(key);
   await complete(tx);
   notifyChange({ operation: `delete:${storeName}`, allowsSavedContentDecrease: true });
 }
@@ -180,8 +133,8 @@ async function migrateLocalStorageV1(): Promise<void> {
   }
 
   const db = await openDatabase();
-  const tx = db.transaction(STORE_NAMES, 'readwrite');
-  const writeAll = (name: StoreName, values: unknown[]) => values.forEach((value) => tx.objectStore(name).put(value));
+  const tx = db.transaction([...STORE_NAMES, ...METADATA_STORES], 'readwrite');
+  const writeAll = (name: StoreName, values: unknown[]) => values.forEach((value) => { tx.objectStore(name).put(value); writeMetadata(tx, name, value); });
   writeAll('locations', [...locations.values()]);
   writeAll('attempts', attempts);
   writeAll('games', games);
@@ -245,8 +198,10 @@ export const trainerDb = {
   collections: () => all<Collection>('collections'),
   sessions: () => all<TrainingSession>('sessions'),
   clues: async () => (await all<ClueRecord>('clues')).sort((a, b) => b.createdAt - a.createdAt),
+  clueMetadata: async () => (await all<ClueRecord>('clueMetadata')).sort((a, b) => b.createdAt - a.createdAt),
+  clue: (id: string) => get<ClueRecord>('clues', id),
   setting: async <T>(key: string) => (await get<SettingRecord>('settings', key))?.value as T | undefined,
-  settingsByPrefix: async (prefix: string) => (await all<SettingRecord>('settings')).filter((record) => record.key.startsWith(prefix)),
+  settingsByPrefix: async (prefix: string) => request((await openDatabase()).transaction('settings').objectStore('settings').getAll(IDBKeyRange.bound(prefix, prefix + '\uffff'))) as Promise<SettingRecord[]>,
   deleteSetting: (key: string) => remove('settings', key),
   schedulerPreferences: async () => normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value),
   async reviewState(panoId: string, location?: Pick<LocationResult, 'lat' | 'lng' | 'countryCode' | 'sourcePointHash'>): Promise<ReviewRecord | undefined> {
@@ -272,7 +227,7 @@ export const trainerDb = {
     notifyChange({ operation: 'clear:games' });
   },
   saveAttempt: async (attempt: Attempt) => {
-    const sourceHash = attempt.sourcePointHash || (await get<TrainerLocation>('locations', attempt.panoId))?.sourcePointHash;
+    const sourceHash = attempt.sourcePointHash || (await get<TrainerLocation>('locationMetadata', attempt.panoId))?.sourcePointHash;
     return put('attempts', { ...attempt, panoramaHash: await panoramaHash(attempt.panoId), ...(sourceHash ? { sourcePointHash: sourceHash } : {}) });
   },
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
@@ -326,8 +281,9 @@ export const trainerDb = {
     const { reviews, aliases } = coalesceNearbyReviews(storedReviews, locations, attempts);
     const preferences = normalizeSchedulerPreferences(storedPreferences?.value);
     const reviewByPano = new Map(reviews.map((item) => [item.panoId, item]));
+    const lookup = createReviewLookup(reviews, locations, attempts);
     aliases.forEach((canonical, alias) => reviewByPano.set(alias, reviewByPano.get(canonical)!));
-    attempts.forEach((attempt) => { if (!reviewByPano.has(attempt.panoId)) { const match = nearbyReview(reviews, locations, attempts, { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode }); if (match) reviewByPano.set(attempt.panoId, match); } });
+    attempts.forEach((attempt) => { if (!reviewByPano.has(attempt.panoId)) { const match = lookup({ panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode }); if (match) reviewByPano.set(attempt.panoId, match); } });
     const bookmarked = new Set(bookmarks.map((item) => item.panoId));
     const now = Date.now();
     const recentCutoff = now - (filters.recentDays || 30) * 864e5;
@@ -361,11 +317,9 @@ export const trainerDb = {
     return queue.filter((attempt) => reviewByPano.get(attempt.panoId)?.reviewCount || newIds.has(attempt.id)).slice(0, Math.max(0, preferences.maximumReviewsPerDay - reviewsToday));
   },
 
-  async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord> {
-    const [storedReviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
-    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
-    const previous = target ? nearbyReview(coalesceNearbyReviews(storedReviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : await get<ReviewRecord>('reviews', panoId);
-    const preferences = normalizeSchedulerPreferences((await get<SettingRecord>('settings', 'schedulerPreferences'))?.value);
+  async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, context?: { previous?: ReviewRecord; preferences: SchedulerPreferences }): Promise<ReviewRecord> {
+    const previous = context ? context.previous : await trainerDb.reviewState(panoId);
+    const preferences = context?.preferences || await trainerDb.schedulerPreferences();
     const oldInterval = previous?.intervalDays || 0;
     const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(oldInterval, preferences)[grade]);
     const now = Date.now();
@@ -385,10 +339,8 @@ export const trainerDb = {
     return next;
   },
 
-  async updateReviewGeneralization(panoId: string, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }): Promise<ReviewRecord | undefined> {
-    const [reviews, locations, attempts] = await Promise.all([all<ReviewRecord>('reviews'), locationMetadata(), all<Attempt>('attempts')]);
-    const target = locations.find((item) => item.panoId === panoId) || attempts.find((item) => item.panoId === panoId);
-    const previous = target ? nearbyReview(coalesceNearbyReviews(reviews, locations, attempts).reviews, locations, attempts, { panoId, lat: 'actualLat' in target ? target.actualLat : target.lat, lng: 'actualLng' in target ? target.actualLng : target.lng, countryCode: target.countryCode }) : undefined;
+  async updateReviewGeneralization(panoId: string, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, context?: { previous?: ReviewRecord }): Promise<ReviewRecord | undefined> {
+    const previous = context ? context.previous : await trainerDb.reviewState(panoId);
     if (!previous || !variation.kind || variation.kind === 'original') return previous;
     const next = { ...previous, generalizationLevel: nextGeneralizationLevel(previous.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: Date.now() };
     await put('reviews', next); return next;
@@ -476,10 +428,10 @@ export function validateBackup(value: unknown): asserts value is TrainerBackup {
 export async function importBackup(value: unknown, mode: 'merge' | 'replace'): Promise<void> {
   validateBackup(value);
   const db = await openDatabase();
-  const tx = db.transaction(STORE_NAMES, 'readwrite');
-  if (mode === 'replace') STORE_NAMES.forEach((name) => tx.objectStore(name).clear());
+  const tx = db.transaction([...STORE_NAMES, ...METADATA_STORES], 'readwrite');
+  if (mode === 'replace') [...STORE_NAMES, ...METADATA_STORES].forEach((name) => tx.objectStore(name).clear());
   for (const name of STORE_NAMES) {
-    for (const item of value.data[name] || []) tx.objectStore(name).put(item);
+    for (const item of value.data[name] || []) { tx.objectStore(name).put(item); writeMetadata(tx, name, item); }
   }
   await complete(tx);
   await repairSavedNotebookAssistance(trainerDb);
@@ -488,7 +440,7 @@ export async function importBackup(value: unknown, mode: 'merge' | 'replace'): P
 }
 export async function clearTrainerDbForTesting(): Promise<void> {
   const db = await openDatabase();
-  const tx = db.transaction(STORE_NAMES, 'readwrite');
-  STORE_NAMES.forEach((name) => tx.objectStore(name).clear());
+  const tx = db.transaction([...STORE_NAMES, ...METADATA_STORES], 'readwrite');
+  [...STORE_NAMES, ...METADATA_STORES].forEach((name) => tx.objectStore(name).clear());
   await complete(tx);
 }

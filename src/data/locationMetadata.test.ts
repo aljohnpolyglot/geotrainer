@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { indexedDB } from 'fake-indexeddb';
+import { readLocationMetadata, upgradeMetadataStores, writeMetadata } from './locationMetadata';
+import { complete, request } from './trainerDatabase';
+
+test('metadata upgrade and atomic writes preserve photos without reading them for lists', async () => {
+  const name = `metadata-${Date.now()}`;
+  const opening = indexedDB.open(name, 3);
+  opening.onupgradeneeded = () => {
+    opening.result.createObjectStore('locations', { keyPath: 'id' });
+    opening.result.createObjectStore('clues', { keyPath: 'id' });
+  };
+  const old = await request(opening);
+  const photo = `data:image/png;base64,${'a'.repeat(1024 * 1024)}`;
+  const tx = old.transaction(['locations', 'clues'], 'readwrite');
+  tx.objectStore('locations').put({ id: 'p', panoId: 'p', lat: 1, lng: 2, imageDataUrl: photo });
+  tx.objectStore('clues').put({ id: 'c', panoId: 'p', imageDataUrl: photo });
+  await complete(tx);
+  old.close();
+  const upgrade = indexedDB.open(name, 4);
+  upgrade.onupgradeneeded = () => upgradeMetadataStores(upgrade.result, upgrade.transaction!);
+  const db = await request(upgrade);
+  const metadata = await readLocationMetadata(db);
+  assert.equal(metadata.length, 1);
+  assert.equal(metadata[0].imageDataUrl, undefined);
+  assert.ok(JSON.stringify(metadata).length < 100);
+  const clue = await request(db.transaction('clueMetadata').objectStore('clueMetadata').get('c'));
+  assert.equal(clue.imageDataUrl, '');
+  assert.ok(clue.imageFingerprint);
+  assert.equal((await request(db.transaction('locations').objectStore('locations').get('p'))).imageDataUrl, photo);
+  const update = db.transaction(['clues', 'clueMetadata'], 'readwrite');
+  const hosted = { id: 'c', panoId: 'p', imageDataUrl: 'https://example.test/exact-clue.jpg' };
+  update.objectStore('clues').put(hosted);
+  writeMetadata(update, 'clues', hosted);
+  await complete(update);
+  assert.deepEqual(await request(db.transaction('clueMetadata').objectStore('clueMetadata').get('c')), { ...hosted, imageFingerprint: undefined });
+  const aborted = db.transaction(['clues', 'clueMetadata'], 'readwrite');
+  aborted.objectStore('clues').put({ ...hosted, panoId: 'wrong' });
+  writeMetadata(aborted, 'clues', { ...hosted, panoId: 'wrong' });
+  const done = complete(aborted);
+  aborted.abort();
+  await assert.rejects(done);
+  assert.equal((await request(db.transaction('clueMetadata').objectStore('clueMetadata').get('c'))).panoId, 'p');
+  db.close();
+  await request(indexedDB.deleteDatabase(name));
+});

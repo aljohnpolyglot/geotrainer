@@ -100,6 +100,8 @@ Durante la creación, el botón indica la fase actual de países, regiones o ciu
 
 ## Modo Juego
 
+Después de enviar una respuesta en Juego, el resultado puede aparecer antes de que termine de cargar su foto guardada. La foto se añade a la ubicación del mismo intento cuando está lista; puedes continuar con la siguiente ronda.
+
 En **Límite por ronda** de la configuración del juego, elige Sin límite, un valor predefinido o Personalizado para introducir entre 1 y 3600 segundos. La elección se conserva para la siguiente partida; una ronda pausada se reanuda con el tiempo activo restante.
 
 **Vistas ocasionales desde barcos** está activado de forma predeterminada en Aprender personalizado y Juego con lugares generados. Con entorno Mixto, prioridad Aleatoria y muestreo Natural, puede elegir un panorama conocido desde un barco en Madagascar o Bermudas si ese país está en el grupo. Se respetan las reglas de origen de imágenes y movimiento; si la vista no está disponible, se busca un lugar normal. Al desactivarlo se eliminan estos candidatos adicionales. No afecta a grupos de regiones o ciudades, mapas importados, Meta ni Repaso.

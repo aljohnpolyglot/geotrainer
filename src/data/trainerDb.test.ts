@@ -151,6 +151,8 @@ test('migration is idempotent and backup/import protects history', async () => {
   const expected = Object.fromEntries(await Promise.all(['locations', 'attempts', 'games', 'studyVisits', 'reviews', 'bookmarks', 'collections', 'sessions'].map(async (name) => [name, backup.data[name as keyof typeof backup.data].length])));
   await clearTrainerDbForTesting();
   await importBackup(backup, 'replace');
+  assert.equal((await trainerDb.locationMetadata()).some((location) => !!location.imageDataUrl), false);
+  assert.equal((await trainerDb.clueMetadata()).some((clue) => clue.imageDataUrl.startsWith('data:')), false);
   assert.equal((await trainerDb.locations()).length, expected.locations);
   assert.equal((await trainerDb.attempts()).length, expected.attempts);
   assert.equal((await trainerDb.studyVisits()).length, expected.studyVisits);
@@ -235,6 +237,8 @@ test('due queue enforces same-day limits and persists review session kind', asyn
   assert.equal(active?.value?.kind, 'due');
   await clearTrainerDbForTesting();
   await importBackup(backup, 'replace');
+  assert.equal((await trainerDb.locationMetadata()).some((location) => !!location.imageDataUrl), false);
+  assert.equal((await trainerDb.clueMetadata()).some((clue) => clue.imageDataUrl.startsWith('data:')), false);
   const restored = await trainerDb.setting<{ kind?: string }>('review.active');
   assert.equal(restored?.kind, 'due');
 });
@@ -336,4 +340,23 @@ test('location matching reads omit photos while full reads preserve them', async
   await trainerDb.saveLocationImage('photo-view', 'data:image/jpeg;base64,AQ==');
   assert.equal((await trainerDb.locationMetadata())[0].imageDataUrl, undefined);
   assert.equal((await trainerDb.locations())[0].imageDataUrl, 'data:image/jpeg;base64,AQ==');
+});
+
+
+test('Review submission reuses its read context and prefix reads exclude image drafts', async () => {
+  const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  await trainerDb.setSetting('map.history.a', { id: 'a' });
+  await trainerDb.setSetting('coach.draft', { imageDataUrl: 'data:image/png;base64,large' });
+  assert.deepEqual((await trainerDb.settingsByPrefix('map.history.')).map((item) => item.key), ['map.history.a']);
+  const preferences = await trainerDb.schedulerPreferences();
+  const originalRead = trainerDb.reviewState;
+  trainerDb.reviewState = async () => { throw new Error('Submission must reuse its saved-card lookup'); };
+  try {
+    const first = await trainerDb.gradeReview('context-view', 'good', undefined, undefined, { preferences });
+    const second = await trainerDb.gradeReview('context-view', 'easy', undefined, undefined, { previous: first, preferences });
+    assert.equal(second.reviewCount, 2);
+    assert.deepEqual(second.gradingHistory.map((item) => item.grade), ['good', 'easy']);
+    assert.equal((await trainerDb.reviews())[0].dueAt, second.dueAt);
+  } finally { trainerDb.reviewState = originalRead; }
 });

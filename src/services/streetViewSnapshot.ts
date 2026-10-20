@@ -10,8 +10,10 @@ const snapshots = new Map<string, StreetViewSnapshot>();
 const listeners = new Set<(snapshot: StreetViewSnapshot) => void>();
 
 export const setStreetViewSnapshot = (snapshot: StreetViewSnapshot) => {
+  snapshots.delete(snapshot.panoId);
   snapshots.set(snapshot.panoId, snapshot);
-  if (snapshot.locationPanoId) snapshots.set(snapshot.locationPanoId, snapshot);
+  if (snapshot.locationPanoId) { snapshots.delete(snapshot.locationPanoId); snapshots.set(snapshot.locationPanoId, snapshot); }
+  while (snapshots.size > 128) snapshots.delete(snapshots.keys().next().value!);
   listeners.forEach((listener) => listener(snapshot));
 };
 export const getStreetViewSnapshot = (panoId: string) => snapshots.get(panoId) || null;

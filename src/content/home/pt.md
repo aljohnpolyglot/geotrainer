@@ -98,6 +98,8 @@ Durante a criação, o botão mostra a etapa atual de países, regiões ou cidad
 
 ## Modo Jogo
 
+Depois de enviar um palpite no Jogo, o resultado pode aparecer antes de a foto salva terminar de carregar. A foto é adicionada ao local da mesma tentativa quando estiver pronta; você pode continuar para a próxima rodada.
+
 Em **Limite por rodada** nas configurações do jogo, escolha Ilimitado, uma opção predefinida ou Personalizado para inserir de 1 a 3600 segundos. A escolha fica salva para o próximo jogo; uma rodada pausada retoma com o tempo ativo restante.
 
 **Vistas ocasionais de barco** vem ativado em Aprender personalizado e Jogo com locais gerados. Com ambiente Misto, prioridade Aleatória e amostragem Natural, pode escolher um panorama conhecido de barco em Madagascar ou Bermudas quando o país estiver no grupo. As regras de origem das imagens e movimento continuam valendo; se a vista não estiver disponível, a busca segue com locais normais. Desativar a opção remove esses candidatos extras. Grupos de regiões ou cidades, mapas carregados, Meta e Revisão não são afetados.

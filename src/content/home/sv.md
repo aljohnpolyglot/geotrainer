@@ -96,6 +96,8 @@ Under skapandet visar knappen den aktuella fasen för länder, regioner eller st
 
 ## Spelläge
 
+När du har bekräftat en gissning i spelläget kan resultatet visas innan det sparade fotot har laddats klart. Fotot kopplas till platsen för samma försök när det är klart; du kan fortsätta till nästa omgång.
+
 Under **Tidsgräns per runda** i spelinställningarna väljer du Obegränsat, en förinställning eller Egen tid och anger 1–3600 sekunder. Valet sparas till nästa spel; en pausad runda fortsätter med återstående aktiv tid.
 
 **Enstaka båtvyer** är på som standard i anpassat Lär och i Spel med genererade platser. Med Blandad miljö, Slumpmässig prioritet och Naturligt urval kan ett känt båtpanorama från Madagaskar eller Bermuda visas om landet ingår i urvalet. Reglerna för bildkälla och förflyttning gäller fortfarande; om vyn saknas fortsätter den vanliga platssökningen. Stäng av reglaget för att ta bort dessa extra kandidater. Valda regioner eller städer, uppladdade kartor, Meta och Repetition påverkas inte.
