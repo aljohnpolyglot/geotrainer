@@ -387,3 +387,28 @@ test('existing Review cards use keyed reads while nearby aliases retain canonica
     assert.equal((await trainerDb.reviewState(anchor.panoId))?.dueAt, graded.dueAt);
   } finally { reads.mock.restore(); }
 });
+
+
+test('homepage and hub readers share concurrent Review maintenance', async () => {
+  const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  const reads = mock.method(IDBObjectStore.prototype, 'getAll');
+  try {
+    const [reviews, queue] = await Promise.all([trainerDb.reviews(), trainerDb.reviewQueue({ due: true })]);
+    assert.deepEqual(reviews, []); assert.deepEqual(queue, []);
+    const attemptReads = reads.mock.calls.filter((call) => (call.this as IDBObjectStore).name === 'attempts');
+    assert.equal(attemptReads.length, 3, 'One maintenance scan plus one scan per result');
+  } finally { reads.mock.restore(); }
+});
+
+
+test('shared Review maintenance can retry after a database read fails', async () => {
+  const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  const reads = mock.method(IDBObjectStore.prototype, 'getAll', () => { throw new Error('Read unavailable'); });
+  try {
+    const results = await Promise.allSettled([trainerDb.reviews(), trainerDb.reviewQueue({ due: true })]);
+    assert.ok(results.every((result) => result.status === 'rejected'));
+  } finally { reads.mock.restore(); }
+  assert.deepEqual(await trainerDb.reviews(), []);
+});

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Attempt, Collection, ReviewRecord, StudyVisit, SupportedLanguage, TrainerLocation, TrainingSession } from "../types";
-import { activeSeconds, beginnerSummary, breakdown, continentBreakdown, countryBalancedAccuracy, environmentOf, filterByRange, metrics, movementMode, performanceAttempts, rangeBounds, regionBreakdown, reviewAnalytics, rollingBest, sampleLabel, type RangeKey } from "../analytics/statistics";
+import { activeSeconds, beginnerSummary, breakdown, continentBreakdown, countryBalancedAccuracy, environmentOf, filterByRange, metrics, movementMode, performanceAttempts, rangeBounds, regionBreakdown, recognition, reviewAnalytics, rollingBest, sampleLabel, type RangeKey } from "../analytics/statistics";
 import { ConfusionStatistics, CoverageStatistics, ReviewStatistics, SessionStatistics } from "./StatisticsLearning";
 import { CountryStatistics } from "./StatisticsGeography";
 import { StatisticsProgress } from "./StatisticsProgress";
@@ -125,13 +125,15 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
   const bounds = rangeBounds(range, Date.now(), custom);
   const play = useMemo(() => performanceAttempts(attempts, true, includeAiAssisted), [attempts, includeAiAssisted]);
   const ranged = useMemo(() => filterByRange<Attempt>(play, (item) => item.createdAt, bounds).filter((item) => (!environment || environmentOf(item) === environment) && (!movement || movementMode(item) === movement) && (!collection || item.collectionId === collection)), [play, bounds.from, bounds.to, environment, movement, collection]);
-  const all = metrics(play);
+  const all = useMemo(() => metrics(play), [play]);
+  const best20 = useMemo(() => rollingBest(play, 20, (items) => recognition(items).country.rate), [play]);
+  const best50 = useMemo(() => rollingBest(play, 50, (items) => recognition(items).country.rate), [play]);
   const thirtyBounds = rangeBounds("30d");
-  const thirtyAttempts = filterByRange<Attempt>(play, (item) => item.createdAt, thirtyBounds);
-  const thirty = metrics(thirtyAttempts);
-  const previousThirty = metrics(play.filter((item) => item.createdAt >= thirtyBounds.from - 30 * 86400000 && item.createdAt < thirtyBounds.from));
+  const thirtyAttempts = useMemo(() => filterByRange<Attempt>(play, (item) => item.createdAt, thirtyBounds), [play, thirtyBounds.from, thirtyBounds.to]);
+  const thirty = useMemo(() => metrics(thirtyAttempts), [thirtyAttempts]);
+  const previousThirty = useMemo(() => metrics(play.filter((item) => item.createdAt >= thirtyBounds.from - 30 * 86400000 && item.createdAt < thirtyBounds.from)), [play, thirtyBounds.from]);
   const reviewsData = reviewAnalytics(attempts, reviews);
-  const balanced = countryBalancedAccuracy(ranged);
+  const balanced = useMemo(() => countryBalancedAccuracy(ranged), [ranged]);
   const active = activeSeconds(sessions, bounds);
   const todayBounds = rangeBounds("today");
   const todayPlay = filterByRange<Attempt>(play.filter((item) => item.source === 'play'), (item) => item.createdAt, todayBounds);
@@ -254,10 +256,10 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
               {t('30-day country change')} <b>{thirty.ladder.country.rate === null || previousThirty.ladder.country.rate === null ? "—" : signedPp(thirty.ladder.country.rate - previousThirty.ladder.country.rate)}</b>
             </span>
             <span>
-              {t('Best rolling 20')} <b>{percent(rollingBest(play, 20, (items) => metrics(items).ladder.country.rate))}</b>
+              {t('Best rolling 20')} <b>{percent(best20)}</b>
             </span>
             <span>
-              {t('Best rolling 50')} <b>{percent(rollingBest(play, 50, (items) => metrics(items).ladder.country.rate))}</b>
+              {t('Best rolling 50')} <b>{percent(best50)}</b>
             </span>
           </div>
         </>

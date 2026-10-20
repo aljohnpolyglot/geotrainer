@@ -2,6 +2,9 @@
 
 ## 2026-10-20
 
+- Read learning-aid history through panorama and geographic indexes across Study, Play, and Review instead of materializing world-wide history on every panorama change; retain 50-metre notes, legacy analysis, and exact-panorama matching.
+- Keep clue-photo loading separate from the hub history so switching photo panels does not reload every attempt and visit. Share overlapping Review-maintenance work on the homepage and training hub. Reuse Statistics summaries when switching sections, avoid repeated distance sorting for rolling country accuracy, and group statistics without repeatedly copying growing arrays.
+
 - Use keyed saved-card reads during Review preparation, grading, and repeat Play scheduling, avoiding whole-history allocations for existing canonical cards while retaining nearby-card and imported-source matching for aliases.
 
 - Keep saved screenshots out of routine startup, Review, Statistics, and location-matching reads using atomic, migration-safe metadata indexes; preserve complete photos in saved records and portable backups.

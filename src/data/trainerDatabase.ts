@@ -1,7 +1,8 @@
 import { upgradeMetadataStores } from './locationMetadata';
+import { upgradePanoramaHistoryIndexes } from './panoramaHistory';
 
 const DB_NAME = 'street-view-trainer';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 export const STORE_NAMES = [
   'locations', 'attempts', 'games', 'studyVisits', 'reviews',
   'bookmarks', 'collections', 'settings', 'sessions', 'clues',
@@ -47,6 +48,7 @@ export function openDatabase(): Promise<IDBDatabase> {
       index(reviews, 'dueAt', 'dueAt');
       index(clues, 'countryCode', 'countryCode');
       upgradeMetadataStores(db, opening.transaction!);
+      upgradePanoramaHistoryIndexes(opening.transaction!);
     };
     opening.onsuccess = () => { const db = opening.result; db.onversionchange = () => { db.close(); database = undefined; }; resolve(db); };
     opening.onerror = () => reject(opening.error);

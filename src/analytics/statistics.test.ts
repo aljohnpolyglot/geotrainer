@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Attempt } from '../types';
-import { breakdown, confusions, environmentOf, filterByRange, metrics, performanceAttempts, rangeBounds, reviewAnalytics } from './statistics';
+import { breakdown, confusions, environmentOf, filterByRange, metrics, performanceAttempts, rangeBounds, recognition, rollingBest, reviewAnalytics } from './statistics';
 import { sessionStatistics } from './advanced';
 
 let serial = 0;
@@ -94,4 +94,20 @@ test('session statistics ignore empty reload and HMR records', () => {
     { id: 'empty-b', startedAt: 14, endedAt: 80, activeTimeSeconds: 60 },
   ], [], [{ openedAt: 5, countryCode: 'DE' }] as never).rows;
   assert.deepEqual(rows.map((item) => item.id), ['real']);
+});
+
+
+test('lighter rolling accuracy preserves unknown-country denominators and grouped statistics', () => {
+  const rows = Array.from({ length: 85 }, (_, index) => attempt(index % 3 ? 'FR' : 'DE', index % 7 ? index % 2 ? 'FR' : 'DE' : undefined, { createdAt: 1000 + index }));
+  rows.push(attempt('UNKNOWN', 'FR', { createdAt: 2000 }));
+  const originalOrder = rows.map((item) => item.id);
+  for (const size of [20, 50, 100]) assert.equal(rollingBest(rows, size, (items) => recognition(items).country.rate), rollingBest(rows, size, (items) => metrics(items).ladder.country.rate));
+  const groups = breakdown(rows, (item) => item.countryCode);
+  for (const group of groups) {
+    const expected = metrics(rows.filter((item) => item.countryCode === group.key));
+    assert.deepEqual(group.country, expected.ladder.country);
+    assert.equal(group.averageScore, expected.averageScore);
+    assert.equal(group.medianDistance, expected.medianDistance);
+  }
+  assert.deepEqual(rows.map((item) => item.id), originalOrder);
 });

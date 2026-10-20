@@ -21,6 +21,7 @@ import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import { panoramaHash } from '../services/locationHash';
 import { readLocationMetadata, METADATA_STORES, metadataStoreFor, writeMetadata } from './locationMetadata';
+import { readPanoramaHistory } from './panoramaHistory';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
 export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
@@ -161,15 +162,15 @@ async function reconcileSavedReviews() {
   const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
   await complete(tx); reconciledReviewIdentityRevision = revision; notifyChange({ operation: 'reconcile:reviews' });
 }
-let reviewMaintenance = Promise.resolve();
-function maintainReviews() {
-  const write = reviewMaintenance.then(async () => {
+let reviewMaintenance: Promise<void> | undefined;
+function maintainReviews(): Promise<void> {
+  reviewMaintenance ||= (async () => {
     await reconcileSavedReviews();
     const [reviews, storedPreferences] = await Promise.all([all<ReviewRecord>('reviews'), get<SettingRecord>('settings', 'schedulerPreferences')]);
     const shifts = planReviewRollover(reviews, Date.now(), normalizeSchedulerPreferences(storedPreferences?.value));
     if (shifts.length) { await rebalanceReviewDates(shifts, openDatabase); notifyChange({ operation: 'rollover:reviews' }); }
-  });
-  reviewMaintenance = write.catch(() => {}); return write;
+  })().finally(() => { reviewMaintenance = undefined; });
+  return reviewMaintenance.then(() => { if (reconciledReviewIdentityRevision !== reviewIdentityRevision) return maintainReviews(); });
 }
 export async function initTrainerDb(): Promise<void> {
   await openDatabase();
@@ -181,6 +182,7 @@ export const trainerDb = {
   count: async (storeName: 'locations' | 'attempts') => request((await openDatabase()).transaction(storeName).objectStore(storeName).count()),
   locations: () => all<TrainerLocation>('locations'),
   locationMetadata,
+  panoramaHistory: async (point: Parameters<typeof readPanoramaHistory>[1]) => readPanoramaHistory(await openDatabase(), point),
   location: (panoId: string) => get<TrainerLocation>('locations', panoId),
   attempts: () => all<Attempt>('attempts'),
   attemptsForPano: async (panoId: string) => {

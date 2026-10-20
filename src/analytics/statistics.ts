@@ -58,7 +58,7 @@ export function metrics(attempts: Attempt[]) {
 export type Breakdown = { key: string; attempts: number; country: Accuracy; region: Accuracy; continent: Accuracy; averageScore: number | null; medianDistance: number | null; averageDistance: number | null; averageTime: number | null };
 export function breakdown(attempts: Attempt[], key: (attempt: Attempt) => string | undefined): Breakdown[] {
   const groups = new Map<string, Attempt[]>();
-  attempts.forEach((item) => { const value = key(item); if (value) groups.set(value, [...(groups.get(value) || []), item]); });
+  attempts.forEach((item) => { const value = key(item); if (value) { const group = groups.get(value); if (group) group.push(item); else groups.set(value, [item]); } });
   return [...groups].map(([name, items]) => { const value = metrics(items); return { key: name, attempts: items.length, ...value.ladder, averageScore: value.averageScore, medianDistance: value.medianDistance, averageDistance: value.averageDistance, averageTime: value.averageTime }; });
 }
 

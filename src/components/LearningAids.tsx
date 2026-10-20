@@ -62,11 +62,9 @@ export function LearningAids({ lesson, panoId, lat, lng, countryCode, adviceOpen
   const [capture360, setCapture360] = useState<'idle' | 'busy' | 'copied' | 'error'>('idle');
   const { panelRef, dragHandleProps, dragStyle, dragging } = useDraggablePanel<HTMLElement>();
 
-  useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.attempts(), trainerDb.studyVisits(), trainerDb.clueMetadata(), trainerDb.locationMetadata()]).then(async ([personal = [], coach = [], attempts, visits, savedClues, locations]) => { if (!active) return;
-    const current = { panoId, lat, lng, countryCode }; const relatedPanos = new Set([panoId]);
-    locations.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
-    visits.forEach((item) => { if (nearbyReviewPoint(current, item)) relatedPanos.add(item.panoId); });
-    attempts.forEach((item) => { if (nearbyReviewPoint(current, { panoId: item.panoId, lat: item.actualLat, lng: item.actualLng, countryCode: item.countryCode })) relatedPanos.add(item.panoId); });
+  useEffect(() => { let active = true; void Promise.all([trainerDb.setting<NotebookNote[]>('notebook.notes'), trainerDb.setting<CoachHistoryNote[]>('coach.notes'), trainerDb.panoramaHistory({ panoId, lat, lng, countryCode })]).then(async ([personal = [], coach = [], history]) => { if (!active) return;
+    const { relatedPanos, attempts, visits, clues: savedClues } = history;
+    const current = { panoId, lat, lng, countryCode };
     const nearbyClues = (await Promise.all(cluesForPanorama(savedClues, relatedPanos, current).map((clue) => trainerDb.clue(clue.id)))).filter((clue): clue is ClueRecord => !!clue);
     if (!active) return;
     const deletedCoachRuns = new Set(coach.filter((item) => item.deletedAt).map((item) => `${item.generatedAt}:${item.mode}:${item.model}`));
