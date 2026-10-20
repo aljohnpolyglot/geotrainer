@@ -5,6 +5,11 @@
 
 export const formatScorePercentage = (score: number, maximum: number, locale: string) => maximum > 0 ? (score / maximum).toLocaleString(locale, { style: 'percent', maximumFractionDigits: 1 }) : '—';
 
+export function activeRoundClock(startedAt: number, limitSeconds: number, now = Date.now()) {
+  const seconds = Math.max(0, (now - startedAt) / 1000);
+  return { elapsed: Math.round(seconds), remaining: limitSeconds > 0 ? Math.max(0, Math.ceil(limitSeconds - seconds)) : null };
+}
+
 /**
  * Calculates distance between two coordinates in kilometers using Haversine formula
  */

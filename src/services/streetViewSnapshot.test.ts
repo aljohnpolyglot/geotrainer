@@ -30,3 +30,17 @@ test('snapshot history stays bounded while retaining the active origin', () => {
   assert.equal(getStreetViewSnapshot('active-origin')?.heading, 199);
   assert.equal(getStreetViewSnapshot('bounded-199')?.heading, 199);
 });
+
+test('duplicate camera events do not notify maps, but returning to an earlier view restores its origin', () => {
+  let notifications = 0;
+  const unsubscribe = subscribeStreetViewSnapshot(() => notifications++);
+  const view = { locationPanoId: 'dedup-origin', panoId: 'dedup-view', heading: 90, pitch: 0, zoom: 1 };
+  setStreetViewSnapshot(view);
+  for (let i = 0; i < 100; i++) setStreetViewSnapshot({ ...view });
+  assert.equal(notifications, 1);
+  setStreetViewSnapshot({ ...view, panoId: 'other-view' });
+  setStreetViewSnapshot(view);
+  assert.equal(getStreetViewSnapshot('dedup-origin')?.panoId, 'dedup-view');
+  assert.equal(notifications, 3);
+  unsubscribe();
+});

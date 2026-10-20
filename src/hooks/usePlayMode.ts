@@ -1,7 +1,7 @@
 import { configuredCountryScoreFloor } from '../data/reviewGrading';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRecord, GameRound, GameSettings, LocationResult } from '../types';
-import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
+import { activeRoundClock, calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
 import { creditedGuessCountry, reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { isLatestRequest } from '../services/requestIntegrity';
@@ -126,14 +126,28 @@ export function usePlayMode(ctx: any) {
     setGameRounds((rounds) => [...rounds, roundRecord]); setActiveRoundResult(roundRecord); setSubmitting(false); setTrainerRefreshKey((key: number) => key + 1);
   }, [activeRoundResult, coachNote, currentLocation, currentRoundIndex, gameSettings, playAiAssistedRef, roundStartTimeRef, setTrainerRefreshKey]);
 
-  useEffect(() => { if (!isGameActive || activeRoundResult || summaryGameRecord || !currentLocation) return; const timer = window.setInterval(() => setPlayElapsed(Math.max(0, Math.round((Date.now() - roundStartTimeRef.current) / 1000))), 1000); return () => window.clearInterval(timer); }, [activeRoundResult, currentLocation, isGameActive, roundStartTimeRef, summaryGameRecord]);
+  useEffect(() => {
+    if (!isGameActive || appMode !== 'play' || showHome || activeRoundResult || summaryGameRecord || !currentLocation || !gameSettings) return;
+    let timer: number | undefined;
+    const visibility = () => {
+      window.clearInterval(timer);
+      if (document.hidden) return;
+      timer = window.setInterval(() => {
+        const clock = activeRoundClock(roundStartTimeRef.current, gameSettings.timeLimitSeconds);
+        setPlayElapsed(clock.elapsed); setTimeRemaining(clock.remaining);
+      }, 1000);
+    };
+    visibility();
+    document.addEventListener('visibilitychange', visibility);
+    return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', visibility); };
+  }, [activeRoundResult, appMode, currentLocation, gameSettings, isGameActive, roundStartTimeRef, showHome, summaryGameRecord]);
   useEffect(() => { if (!isGameActive || activeRoundResult || summaryGameRecord || !currentLocation) { roundPausedAtRef.current = null; return; } const visibility = () => { if (document.visibilityState === 'hidden') roundPausedAtRef.current ??= Date.now(); else { roundStartTimeRef.current = resumeRoundStartedAt(roundStartTimeRef.current, roundPausedAtRef.current, Date.now()); roundPausedAtRef.current = null; } }; visibility(); document.addEventListener('visibilitychange', visibility); return () => document.removeEventListener('visibilitychange', visibility); }, [activeRoundResult, currentLocation, isGameActive, roundStartTimeRef, summaryGameRecord]);
   useEffect(() => {
     const previous = lastTimerCueRef.current; lastTimerCueRef.current = timeRemaining;
     if (timeRemaining === null || previous === null || timeRemaining >= previous || timeRemaining > 10 || !isGameActive || activeRoundResult || summaryGameRecord || !currentLocation || appMode !== 'play' || showHome || document.hidden || roundSubmittedRef.current) return;
     playUiSound(timeRemaining === 0 ? 'timeup' : 'tick');
   }, [activeRoundResult, appMode, currentLocation, isGameActive, showHome, summaryGameRecord, timeRemaining]);
-  useEffect(() => { if (!isGameActive || timeRemaining === null || activeRoundResult || summaryGameRecord) return; if (timeRemaining <= 0) { void handleGuessSubmit(playGuessRef.current); return; } const timer = window.setInterval(() => { if (document.visibilityState === 'visible') setTimeRemaining((prev) => prev !== null && prev > 0 ? prev - 1 : 0); }, 1000); return () => window.clearInterval(timer); }, [activeRoundResult, handleGuessSubmit, isGameActive, summaryGameRecord, timeRemaining]);
+  useEffect(() => { if (isGameActive && appMode === 'play' && !showHome && timeRemaining === 0 && !activeRoundResult && !summaryGameRecord) void handleGuessSubmit(playGuessRef.current); }, [activeRoundResult, appMode, handleGuessSubmit, isGameActive, showHome, summaryGameRecord, timeRemaining]);
 
   const handleNextRound = useCallback(() => {
     if (!gameSettings) return;

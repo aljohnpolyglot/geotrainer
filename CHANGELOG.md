@@ -2,6 +2,8 @@
 
 ## 2026-10-20
 
+- Use one foreground Play clock for the countdown and elapsed time, stop its interval while hidden, and catch up accurately after delayed frames. Ignore duplicate Street View camera snapshots across all modes so unchanged events do not redraw following maps.
+
 - Read learning-aid history through panorama and geographic indexes across Study, Play, and Review instead of materializing world-wide history on every panorama change; retain 50-metre notes, legacy analysis, and exact-panorama matching.
 - Keep clue-photo loading separate from the hub history so switching photo panels does not reload every attempt and visit. Share overlapping Review-maintenance work on the homepage and training hub. Reuse Statistics summaries when switching sections, avoid repeated distance sorting for rolling country accuracy, and group statistics without repeatedly copying growing arrays.
 
