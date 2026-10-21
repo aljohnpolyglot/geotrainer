@@ -1,4 +1,5 @@
-import type { LocationResult } from '../types';
+import { restoredRoundElapsed } from './gameLogic';
+import type { ActiveWorkspace, LocationResult } from '../types';
 
 export const isLocation = (value: unknown): value is LocationResult => {
   if (!value || typeof value !== 'object') return false;
@@ -24,3 +25,10 @@ export const locationForWorkspace = (location: LocationResult): LocationResult =
   ...(location.importedMapProgress !== undefined ? { importedMapProgress: location.importedMapProgress } : {}),
   ...(location.importedMapCompletedPointIndexes?.length ? { importedMapCompletedPointIndexes: location.importedMapCompletedPointIndexes } : {}),
 });
+
+export type PlayClockCheckpoint = { gameId: string; roundIndex: number; elapsedSeconds: number };
+export function workspacePlayElapsed(workspace: Extract<ActiveWorkspace, { mode: 'play' }>, clock?: PlayClockCheckpoint | null) {
+  const elapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds);
+  return clock?.gameId === workspace.gameId && clock.roundIndex === workspace.currentRoundIndex && Number.isFinite(clock.elapsedSeconds)
+    ? Math.max(elapsed, clock.elapsedSeconds) : elapsed;
+}

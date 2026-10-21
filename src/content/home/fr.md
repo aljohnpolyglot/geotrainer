@@ -154,6 +154,8 @@ La réponse reste cachée jusqu’à votre estimation. Si un ancien identifiant 
 
 Les manches terminées de Jeu et de Révision autorisent alors le déplacement, la rotation et le zoom, même si la manche d’origine les limitait. La pratique personnalisée laisse les cartes futures inchangées ; terminer une carte déjà due avance son échéance et persiste après rechargement.
 
+Révision enregistre la réponse, le calendrier, la file restante, les statistiques des cartes terminées et le résultat avant de l’afficher. Rouvrir le même site dans le même profil du navigateur restaure votre position (par exemple, carte 90 sur 150), y compris un résultat ouvert. Continuer avance sans noter à nouveau. Jeu enregistre aussi le temps actif pendant la manche, même sans limite ; le temps passé application fermée ne compte pas. Une coupure internet conserve la progression enregistrée, mais Street View nécessite internet. Si un panorama échoue, vous pouvez réessayer la carte. La synchronisation reste manuelle. Effacer les données du site ou utiliser un profil temporaire peut supprimer la progression locale ; gardez une sauvegarde portable pour la récupérer.
+
 ## Coach IA et indices
 
 Quand l’estimation du pays principal atteint 85 %, le Coach cherche un lieu plus précis. Deux indices visibles indépendants peuvent justifier une vaste zone géographique (comme le Midwest) ou une région nommée ; une ville ou un lieu exact exige des preuves plus solides. Le pourcentage du pays ne suffit pas à identifier la région. Sans indices suffisants dans l’image, le Coach n’affiche pas d’estimation régionale.
@@ -365,4 +367,4 @@ Dans **Paramètres → Coach IA**, choisissez **Toujours demander avant l’anal
 Tous partent des mêmes observations et séparent observation, inférence et spéculation. Chaque candidat explique le détail concret, sa portée nationale ou régionale, la confusion principale, ce qui les distingue et l’indice qui augmenterait le plus la confiance. Aucun sigle, organisme, culture, fait historique, cause géologique, industrie ou règle n’est inventé.
 Pendant une Révision active, l’en-tête indique la carte actuelle, les cartes restantes et que la progression est enregistrée. Un rechargement conserve le nombre de cartes déjà terminées.
 
-La carte du résultat affiche en bleu toutes les estimations précédentes avec coordonnées, en rouge celle du jour et en vert la réponse. La note et la prochaine file sont enregistrées avant l’affichage du résultat ; recharger après une réussite passe donc à la carte suivante.
+La carte du résultat affiche en bleu toutes les estimations précédentes avec coordonnées, en rouge celle du jour et en vert la réponse.

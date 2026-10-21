@@ -268,7 +268,9 @@ The result compares your current pinpoint with the actual location and may show 
 
 On phones, Review progress stays in the top bar and the result panel keeps Next review visible as you scroll its details. The new answer is stored as its own Review attempt. Coach, Meta, saved clues, Notebook, and Available notes remain accessible until you choose Next review.
 
-The result map keeps the answer centered in green, then zooms out enough to show today’s guess in red and every saved prior guess with coordinates in blue. The selected result-map zoom remains the closest allowed scale. The grade and next queue are saved before the result appears, so reloading after a passed result continues to the next card rather than reopening it unanswered.
+The result map keeps the answer centered in green, then zooms out enough to show today’s guess in red and every saved prior guess with coordinates in blue. The selected result-map zoom remains the closest allowed scale.
+
+Review saves your answer, schedule, remaining queue, completed-card statistics, and visible result before showing the result. Reopening the same site in the same browser profile restores your position (for example, card 90 of 150), including an open result. Continue advances to the next card without grading again. Play also saves elapsed active time during the round, including games without a time limit; time spent closed does not count. Saved progress survives an internet interruption, but Street View still needs internet access. A failed panorama load keeps the Review card available for retry. Cloud sync remains manual. Clearing site data or using a temporary browser profile can remove local progress; use a portable backup for recovery.
 
 ### Automatic grading
 

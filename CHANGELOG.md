@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-22
+
+- Save Review answers, schedules, queues, completed-card statistics, and open results atomically for reliable same-device resume. Keep failed panorama loads retryable and restore only the saved queue's attempts.
+- Save Play timers in small checkpoints, including untimed rounds, instead of rewriting full workspaces every second. Preserve elapsed active time across reopening without counting time spent closed.
+- Document local resume and recovery limits in all eight Guide languages; make efficient, memory-conscious persistence a contributor requirement.
+
 ## 2026-10-21
 
 - Reuse bounded Review time-zone formatters and day-boundary calculations across the homepage, training hub, scheduling, and Statistics instead of constructing formatters for every card and grading-history entry.

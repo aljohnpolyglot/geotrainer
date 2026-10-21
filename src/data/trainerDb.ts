@@ -13,9 +13,9 @@ export { normalizeGamePreferences, normalizeLocationTargets } from './trainerPre
 import { nextReviewAt, nextReviewDayBoundary, reviewDayStart } from './reviewTiming';
 import { coalesceNearbyReviews, nearbyReview, createReviewLookup, uniqueReviewSources } from './reviewIdentity';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
-import { nextGeneralizationLevel } from './reviewVariation';
 import { intervalsFor } from './reviewGrading';
-import { rebalanceReviewDates, reconcileReviewAttempt } from './reviewSchedule';
+import { rebalanceReviewDates, reconcileReviewAttempt, gradedReviewRecord, generalizedReviewRecord } from './reviewSchedule';
+import { commitReviewProgress, type SavedReviewSession } from './reviewProgress';
 import { planReviewRollover } from './reviewRollover';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
@@ -185,6 +185,7 @@ export const trainerDb = {
   panoramaHistory: async (point: Parameters<typeof readPanoramaHistory>[1]) => readPanoramaHistory(await openDatabase(), point),
   location: (panoId: string) => get<TrainerLocation>('locations', panoId),
   attempts: () => all<Attempt>('attempts'),
+  attempt: (id: string) => get<Attempt>('attempts', id),
   attemptsForPano: async (panoId: string) => {
     const db = await openDatabase();
     return request(db.transaction('attempts').objectStore('attempts').index('panoId').getAll(panoId)) as Promise<Attempt[]>;
@@ -240,6 +241,20 @@ export const trainerDb = {
     if (!location) reviewIdentityRevision++;
     const sourceHash = attempt.sourcePointHash || location?.sourcePointHash;
     return put('attempts', { ...attempt, panoramaHash: await panoramaHash(attempt.panoId), ...(sourceHash ? { sourcePointHash: sourceHash } : {}) });
+  },
+  saveReviewProgress: (attempt: Attempt, review: ReviewRecord | undefined, session: SavedReviewSession) => {
+    const write = settingWrites.then(async () => {
+      const [location, existingReview] = await Promise.all([get<TrainerLocation>('locationMetadata', attempt.panoId), review ? get<ReviewRecord>('reviews', review.id) : undefined]);
+      const sourcePointHash = attempt.sourcePointHash || location?.sourcePointHash;
+      const saved = { ...attempt, panoramaHash: await panoramaHash(attempt.panoId), ...(sourcePointHash ? { sourcePointHash } : {}) };
+      await commitReviewProgress(saved, review, session);
+      if (!location || review && !existingReview) reviewIdentityRevision++;
+      notifyChange({ operation: 'put:attempts' });
+      if (review) notifyChange({ operation: 'put:reviews' });
+      return saved;
+    });
+    settingWrites = write.then(() => {}, () => {});
+    return write;
   },
   saveVisit: (visit: StudyVisit) => put('studyVisits', visit),
   saveSession: (session: TrainingSession) => put('sessions', session),
@@ -331,21 +346,7 @@ export const trainerDb = {
   async gradeReview(panoId: string, grade: ReviewGrade, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, context?: { previous?: ReviewRecord; preferences: SchedulerPreferences }): Promise<ReviewRecord> {
     const previous = context ? context.previous : await trainerDb.reviewState(panoId);
     const preferences = context?.preferences || await trainerDb.schedulerPreferences();
-    const oldInterval = previous?.intervalDays || 0;
-    const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(oldInterval, preferences)[grade]);
-    const now = Date.now();
-    const next: ReviewRecord = {
-      ...previous,
-      id: previous?.panoId || panoId,
-      panoId: previous?.panoId || panoId,
-      dueAt: nextReviewAt(now, intervalDays, preferences),
-      intervalDays,
-      gradingHistory: [...(previous?.gradingHistory || []), { grade, at: now }],
-      lapseCount: (previous?.lapseCount || 0) + (grade === 'again' ? 1 : 0),
-      reviewCount: (previous?.reviewCount || 0) + 1,
-      lastReviewedAt: now,
-      ...(variation?.kind && variation.kind !== 'original' ? { generalizationLevel: nextGeneralizationLevel(previous?.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: now } : {}),
-    };
+    const next = gradedReviewRecord(panoId, grade, previous, preferences, intervalOverride, variation);
     if (!previous) reviewIdentityRevision++;
     await put('reviews', next);
     return next;
@@ -354,7 +355,7 @@ export const trainerDb = {
   async updateReviewGeneralization(panoId: string, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, context?: { previous?: ReviewRecord }): Promise<ReviewRecord | undefined> {
     const previous = context ? context.previous : await trainerDb.reviewState(panoId);
     if (!previous || !variation.kind || variation.kind === 'original') return previous;
-    const next = { ...previous, generalizationLevel: nextGeneralizationLevel(previous.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: Date.now() };
+    const next = generalizedReviewRecord(previous, grade, variation)!;
     await put('reviews', next); return next;
   },
 

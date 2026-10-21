@@ -236,7 +236,8 @@ Das Panorama erscheint ohne Lösung, frühere Antwort, Punktzahl oder andere ver
 
 Das Ergebnis vergleicht deinen aktuellen Tipp mit dem echten Ort und kann ältere Versuche zeigen. Es zeigt außerdem verfügbare Stadt-, Regions-, Straßen- und Adressangaben sowie die genauen Koordinaten – wie Aufdecken im Lernen. Minimiere das Ergebnis oben rechts, um das Panorama zu untersuchen, und öffne es mit Ergebnis ansehen wieder. Abgeschlossene Spiel- und Wiederholungsrunden erlauben dabei Bewegung, Drehen und Zoomen, auch wenn diese im ursprünglichen Durchgang eingeschränkt waren. Die neue Antwort wird als eigener Wiederholungsversuch gespeichert. Coach, Meta, gespeicherte Hinweise, Notizbuch und verfügbare Notizen bleiben zugänglich, bis du die nächste Wiederholung auswählst.
 
-Die Ergebniskarte hält die Lösung grün in der Mitte und zoomt so weit heraus, dass der heutige Tipp in Rot und alle gespeicherten früheren Tipps mit Koordinaten in Blau sichtbar bleiben. Der gewählte Ergebniszoom ist dabei die engste erlaubte Ansicht. Bewertung und nächste Warteschlange werden vor dem Ergebnis gespeichert; nach einem bestandenen Ergebnis lädt die Seite daher mit der nächsten Karte weiter.
+Die Ergebniskarte hält die Lösung grün in der Mitte und zoomt so weit heraus, dass der heutige Tipp in Rot und alle gespeicherten früheren Tipps mit Koordinaten in Blau sichtbar bleiben. Der gewählte Ergebniszoom ist dabei die engste erlaubte Ansicht.
+
 
 ### Automatische Bewertung
 
@@ -320,6 +321,8 @@ Benutzerdefinierte Übung lässt zukünftige Karten unverändert. Wird eine bere
 ### Fehlerkorrektur
 
 Nach einem Spiel öffnet Fehler üben die Wiederholung und wiederholt schwache Runden, bis sie gelöst werden. Die Aktion erscheint nur, wenn für das gespeicherte Spiel noch geeignete Versuchsdaten vorhanden sind. Jeder schwache Spielort bleibt eine neue Wiederholungskarte; Korrekturversuche werden separat gespeichert und verändern die ursprünglichen Spieldaten nie.
+
+Wiederholung speichert Antwort, Zeitplan, verbleibende Warteschlange, Statistik abgeschlossener Karten und Ergebnis, bevor es angezeigt wird. Beim erneuten Öffnen derselben Website im selben Browserprofil kehrst du an dieselbe Stelle zurück (zum Beispiel Karte 90 von 150), einschließlich eines offenen Ergebnisses. Weiter öffnet die nächste Karte ohne erneute Bewertung. Spielen speichert auch die aktive Rundenzeit, selbst ohne Zeitlimit; die Zeit bei geschlossener App zählt nicht. Gespeicherter Fortschritt bleibt bei einer Internetunterbrechung erhalten, Street View benötigt jedoch Internet. Wenn ein Panorama nicht lädt, kannst du die Karte erneut öffnen. Die Synchronisierung bleibt manuell. Das Löschen der Websitedaten oder ein temporäres Browserprofil kann lokalen Fortschritt entfernen; bewahre zur Wiederherstellung eine portable Sicherung auf.
 
 ## KI-Coach
 

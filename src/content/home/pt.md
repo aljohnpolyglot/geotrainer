@@ -150,6 +150,8 @@ A Revisão verifica o ID, a localização e o estado do panorama antes de libera
 
 Use **Salvar** para aplicar. Rigor e intervalos afetam o agendamento futuro sem reescrever tentativas salvas; limites e ordem entram no próximo cálculo da fila.
 
+Revisão salva a resposta, o agendamento, a fila restante, as estatísticas dos cartões concluídos e o resultado antes de exibi-lo. Ao reabrir o mesmo site no mesmo perfil do navegador, você retoma a posição (por exemplo, cartão 90 de 150), incluindo um resultado aberto. Continuar avança sem avaliar novamente. Jogo também salva o tempo ativo durante a rodada, inclusive sem limite de tempo; o tempo com o aplicativo fechado não conta. O progresso salvo permanece após uma desconexão, mas o Street View precisa de internet. Se uma panorâmica falhar, o cartão continua disponível para tentar novamente. A sincronização permanece manual. Apagar os dados do site ou usar um perfil temporário pode remover o progresso local; mantenha um backup portátil para recuperá-lo.
+
 ## Coach de IA e pistas
 
 Quando a estimativa do país principal chega a 85%, o Coach procura um local mais específico. Duas pistas visíveis independentes podem sustentar uma área geográfica ampla (como o Meio-Oeste) ou uma região definida; uma cidade ou local exato exige provas mais fortes. Uma porcentagem alta para o país não identifica, por si só, a região. Sem provas suficientes na imagem, o Coach omite a estimativa regional.
@@ -353,4 +355,4 @@ Em **Configurações → Coach de IA**, escolha **Sempre perguntar antes da aná
 Todos usam as mesmas observações e separam observado, inferido e especulativo. Cada candidato explica a característica concreta, se é nacional ou regional, o principal confusor, o que os separa e qual pista aumentaria mais a confiança. Siglas, organizações, cultivos, história, geologia, indústrias e regras não são inventados.
 Durante uma Revisão ativa, o cabeçalho mostra o cartão atual, os cartões restantes e que o progresso foi salvo. Recarregar preserva a contagem de cartões já concluídos.
 
-O mapa do resultado mantém a resposta verde centralizada e afasta o zoom até mostrar o palpite vermelho de hoje e todos os palpites anteriores com coordenadas em azul. O zoom escolhido é a escala mais próxima permitida. A nota e a próxima fila são salvas antes de o resultado aparecer; recarregar após uma aprovação segue para o próximo cartão.
+O mapa do resultado mantém a resposta verde centralizada e afasta o zoom até mostrar o palpite vermelho de hoje e todos os palpites anteriores com coordenadas em azul. O zoom escolhido é a escala mais próxima permitida.

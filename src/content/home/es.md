@@ -345,6 +345,8 @@ Una sesión de Estudio o Juego sin terminar se conserva. Al volver puedes elegir
 
 En Cobertura, arrastra el mapa de calor por países y usa la rueda, el deslizador o los botones para cambiar el zoom. En Exposición, los colores distinguen mejor los recuentos bajos de encuentros y mantienen una referencia superior fija. Haz clic en un país para abrir su mapa regional con la misma capa. Las regiones se asignan con los datos guardados del lugar o con Google Maps al abrirlo. Algunos países no tienen mapa regional; los lugares cuya región no pueda identificarse quedan sin colorear.
 
+Repaso guarda la respuesta, la programación, la cola restante, las estadísticas completadas y el resultado antes de mostrarlo. Reabrir el mismo sitio en el mismo perfil del navegador restaura la posición (por ejemplo, tarjeta 90 de 150) y el resultado abierto. Continuar avanza sin volver a calificar. Juego guarda el tiempo activo durante la ronda, incluso sin límite de tiempo; el tiempo con la aplicación cerrada no cuenta. El progreso guardado sobrevive a una desconexión, pero Street View necesita internet. Si falla una panorámica, puedes reintentar la tarjeta. La sincronización sigue siendo manual. Borrar los datos del sitio o usar un perfil temporal puede eliminar el progreso local; conserva una copia portátil para recuperarlo.
+
 ## Estilos y profundidad del Coach de IA
 
 En **Ajustes → Coach de IA** puedes elegir **Preguntar siempre antes del análisis** o un estilo preferido. La profundidad Corta, Normal o Profunda es independiente y cambia el detalle, no el método. No existe modo Adaptive ni cambio automático.
@@ -359,4 +361,4 @@ En **Ajustes → Coach de IA** puedes elegir **Preguntar siempre antes del anál
 Todos parten de las mismas observaciones visibles y separan lo observado de la inferencia y la especulación. Cada candidato debe explicar la característica concreta, su alcance nacional o regional, el principal confusor, qué los separa y qué pista aumentaría más la confianza. No se inventan siglas, organizaciones, cultivos, historia, geología, industrias ni normas.
 Durante un Repaso activo, la cabecera indica la tarjeta actual, las tarjetas restantes y que el progreso está guardado. Al recargar, se conserva el número de tarjetas ya completadas.
 
-El mapa del resultado muestra en azul todas las respuestas anteriores con coordenadas, en rojo la de hoy y en verde la respuesta correcta. La calificación y la cola siguiente se guardan antes de mostrar el resultado, por lo que recargar después de aprobar continúa con la tarjeta siguiente.
+El mapa del resultado muestra en azul todas las respuestas anteriores con coordenadas, en rojo la de hoy y en verde la respuesta correcta.

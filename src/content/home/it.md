@@ -152,6 +152,8 @@ Ripasso verifica l’ID, la posizione e lo stato del panorama prima di abilitare
 
 Premi **Salva** per applicare. Severità e intervalli influenzano la pianificazione futura senza riscrivere i tentativi; limiti e ordine valgono al prossimo calcolo della coda.
 
+Ripasso salva la risposta, la pianificazione, la coda restante, le statistiche delle schede completate e il risultato prima di mostrarlo. Riaprendo lo stesso sito nello stesso profilo del browser ritrovi la tua posizione (per esempio, scheda 90 di 150), incluso un risultato aperto. Continua avanza senza assegnare un altro voto. Gioco salva anche il tempo attivo durante il turno, persino senza limite; il tempo con l’app chiusa non conta. I progressi salvati restano dopo una disconnessione, ma Street View richiede internet. Se una panoramica non si carica, puoi riprovare la scheda. La sincronizzazione rimane manuale. Cancellare i dati del sito o usare un profilo temporaneo può eliminare i progressi locali; conserva un backup portatile per recuperarli.
+
 ## Coach IA e indizi
 
 Quando la stima del paese principale raggiunge l’85%, il Coach cerca anche un luogo più preciso. Due indizi visibili indipendenti possono sostenere un’ampia area geografica (come il Midwest) o una regione specifica; una città o un luogo esatto richiede prove più forti. La percentuale del paese da sola non identifica la regione. Senza indizi sufficienti nell’immagine, il Coach non mostra una stima regionale.
@@ -361,4 +363,4 @@ In **Impostazioni → Coach IA** scegli **Chiedi sempre prima dell’analisi** o
 Tutti partono dalle stesse osservazioni e separano osservato, inferito e speculativo. Ogni candidato spiega la caratteristica concreta, il valore nazionale o regionale, il confusore principale, cosa li separa e l’indizio che aumenterebbe di più la confidenza. Sigle, organizzazioni, colture, storia, geologia, industrie e regole non vengono inventate.
 Durante un Ripasso attivo, l’intestazione mostra la scheda corrente, quelle rimanenti e che i progressi sono salvati. Dopo il ricaricamento resta corretto il numero delle schede già completate.
 
-La mappa del risultato mostra in blu tutti i tentativi precedenti con coordinate, in rosso quello di oggi e in verde la risposta. Il voto e la coda successiva vengono salvati prima di mostrare il risultato; dopo un esito positivo, ricaricare passa quindi alla scheda seguente.
+La mappa del risultato mostra in blu tutti i tentativi precedenti con coordinate, in rosso quello di oggi e in verde la risposta.

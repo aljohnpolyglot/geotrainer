@@ -60,8 +60,8 @@ import { coverageReturnOrigin, useLearnSources } from './hooks/useLearnSources';
 import { reviewWorkActive, useActiveSession } from './hooks/useActiveSession';
 import { ResumeSessionDialog } from './components/ResumeSessionDialog';
 import { installAudio, setAudioMode, setAudioPreferences } from './services/audio';
-import { calculateDistanceKm, restoredRoundElapsed } from './services/gameLogic';
-import { isLocation, locationForWorkspace } from './services/workspaceLocation';
+import { calculateDistanceKm } from './services/gameLogic';
+import { isLocation, locationForWorkspace, workspacePlayElapsed, type PlayClockCheckpoint } from './services/workspaceLocation';
 const LAST_COLLECTION_STORAGE_KEY = 'sv_last_selected_collection_id';
 const COMPASS_STORAGE_KEY = 'sv_show_compass';
 const ENVIRONMENT_STORAGE_KEY = 'sv_environment';
@@ -169,9 +169,9 @@ export default function App() {
     setSummaryGameRecord, setSummaryRound, fetchLocationForRound, handleStartGame, handleGuessSubmit, handleNextRound,
     handleAbandonGame, setPlayGuess, gameIdRef, roundSubmittedRef } = play;
   const playWorkspaceRef = useRef<Extract<ActiveWorkspace, { mode: 'play' }> | null>(null);
-  playWorkspaceRef.current = isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
+  playWorkspaceRef.current = appMode === 'play' && !showHome && isGameActive && gameSettings ? { mode: 'play', gameId: gameIdRef.current, settings: gameSettings, rounds: gameRounds, currentRoundIndex, currentLocation: currentLocation ? locationForWorkspace(currentLocation) : null, activeRoundResult, timeRemaining, roundStartedAt: roundStartTimeRef.current, roundElapsedSeconds: playElapsed } : null;
   useEffect(() => { setAudioMode(!showHome && appMode === 'play' && isGameActive && !summaryGameRecord ? 'play' : 'learn'); }, [appMode, isGameActive, showHome, summaryGameRecord]);
-  const persistPlayWorkspace = useCallback(() => { const value = playWorkspaceRef.current; if (!value) return; setPausedWorkspaces((saved) => ({ ...saved, play: value })); void trainerDb.setSetting('workspace.paused.play', value); }, []);
+  const persistPlayWorkspace = useCallback(() => { const value = playWorkspaceRef.current; if (!value) return; setPausedWorkspaces((saved) => ({ ...saved, play: value })); void Promise.all([trainerDb.setSetting('workspace.active', value), trainerDb.setSetting('workspace.paused.play', value)]); }, []);
   useEffect(() => { const save = () => { if (document.visibilityState === 'hidden') persistPlayWorkspace(); }; document.addEventListener('visibilitychange', save); window.addEventListener('pagehide', persistPlayWorkspace); return () => { document.removeEventListener('visibilitychange', save); window.removeEventListener('pagehide', persistPlayWorkspace); }; }, [persistPlayWorkspace]);
   const [reviewDisplayedPanoId, setReviewDisplayedPanoId] = useState<string | null>(null);
   const review = useReviewMode({
@@ -184,7 +184,7 @@ export default function App() {
   const { reviewResult, setReviewResult, reviewAttemptRecord, setReviewAttemptRecord, reviewQueue,
     reviewOriginalQueue, reviewSource, reviewKind, reviewHistory, reviewIntervals, reviewElapsed, reviewInitialTotal,
     reviewStats, reviewComplete, reviewGradingRef, handleStartReview, handleReviewGuess, handleReviewNext,
-    clearReviewSession } = review;
+    clearReviewSession, openReviewAttempt } = review;
   const learn = useLearnSources({ appMode, showHome, setAppMode, setShowHome, setStudySetupOpen: setIsStudySetupOpen,
     setCurrentLocation, setIsLoading, setErrorMessage, setIsRevealed });
   const { learnSource, activeMetaLesson, activeCountryTip, metaCourseId, metaProgress, canPreviousMeta, mapPickerOpen, metaAdviceOpen, startCustom, startUploaded, startMeta,
@@ -225,10 +225,11 @@ export default function App() {
   };
   const resumePausedMode = async () => {
     const workspace = resumePrompt && pausedWorkspaces[resumePrompt]; if (!workspace) return setResumePrompt(null);
+    const savedClock = workspace.mode === 'play' ? await trainerDb.setting<PlayClockCheckpoint>('workspace.playClock') : undefined;
     setResumePrompt(null); setShowHome(false);
     if (workspace.mode === 'study') { const focused = workspace.countryCodes || []; const targets = normalizeLocationTargets(workspace.locationTargets); if (focused.length) { const collection = { id: `focus:${focused.join(',')}`, name: focused.map((code) => COUNTRIES[code]?.name || code).join(' + '), countryCodes: focused }; setTemporaryCollection(collection); setSelectedCollectionId(collection.id); activeCollectionRef.current = collection; } setStudyLocationTargets(targets); studyLocationTargetsRef.current = targets; studyImportedMapIdRef.current = workspace.importedMapId; studyImportedVariationRef.current = workspace.importedMapVariation ?? 0; studyImportedOrderRef.current = workspace.importedMapOrder === 'source' ? 'source' : 'shuffle'; restoredStudyPanoRef.current = workspace.location.panoId; const location = workspace.learnSource === 'uploaded' && workspace.importedMapId ? await restoreUploadedHistory(workspace.uploadedHistory, workspace.location, workspace.uploadedProgress, workspace.importedMapId) : workspace.location; restoreLearnSource(workspace.learnSource, workspace.metaLessonId, workspace.metaCourseId, location); setAppMode('study'); setCurrentLocation(location); setIsRevealed(false); setIsStudySetupOpen(false); return; }
     if (workspace.mode === 'meta-course') { void startMeta(workspace.courseId, workspace.tipId); return; }
-    if (workspace.mode === 'play') { setAppMode('play'); setIsGameActive(true); setGameSettings(workspace.settings); setGameRounds(workspace.rounds || []); setCurrentRoundIndex(workspace.currentRoundIndex || 0); setActiveRoundResult(workspace.activeRoundResult || null); gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult; setCurrentLocation(workspace.currentLocation); restoredPlayPanoRef.current = workspace.currentLocation?.panoId || null; const elapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds); roundStartTimeRef.current = Date.now() - elapsed * 1000; setPlayElapsed(elapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - elapsed) : null); }
+    if (workspace.mode === 'play') { setAppMode('play'); setIsGameActive(true); setGameSettings(workspace.settings); setGameRounds(workspace.rounds || []); setCurrentRoundIndex(workspace.currentRoundIndex || 0); setActiveRoundResult(workspace.activeRoundResult || null); gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult; setCurrentLocation(workspace.currentLocation); restoredPlayPanoRef.current = workspace.currentLocation?.panoId || null; const elapsed = workspacePlayElapsed(workspace, savedClock); roundStartTimeRef.current = Date.now() - elapsed * 1000; setPlayElapsed(elapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - elapsed) : null); }
   };
 
   // Load custom collections, bookmarks, and past games on mount
@@ -254,12 +255,12 @@ export default function App() {
     if (navigator.storage?.persist) void navigator.storage.persist().catch(() => {});
     void initTrainerDb()
       .then(async () => {
-        const [dbCollections, dbBookmarks, dbGames, dbSelected, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPriority, savedPanoramaSource, savedContributors, savedInteriors, savedWater, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay] = await Promise.all([
+        const [dbCollections, dbBookmarks, dbGames, dbSelected, savedCompass, savedEnvironment, savedUrbanLevel, savedSampling, savedPriority, savedPanoramaSource, savedContributors, savedInteriors, savedWater, workspace, savedReview, savedCompassStyle, savedStreetView, savedDarkMode, savedAudio, pausedStudy, pausedPlay, savedPlayClock] = await Promise.all([
           trainerDb.collections(), trainerDb.bookmarks(), trainerDb.games(), trainerDb.setting<string>('selectedCollectionId'),
           trainerDb.setting<boolean>('preference.compass'),
           trainerDb.setting<Environment>('preference.environment'), trainerDb.setting<UrbanLevel>('preference.urbanLevel'), trainerDb.setting<SamplingMode>('preference.sampling'), trainerDb.setting<LearnPriority>('preference.learnPriority'),
           trainerDb.setting<PanoramaSource>('preference.panoramaSource'), trainerDb.setting<boolean>('preference.allowContributors'), trainerDb.setting<boolean>('preference.allowInteriors'), trainerDb.setting<boolean>('preference.includeWater'),
-          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[] }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting('preference.audio'), trainerDb.setting<ActiveWorkspace>('workspace.paused.study'), trainerDb.setting<ActiveWorkspace>('workspace.paused.play'),
+          trainerDb.setting<ActiveWorkspace>('workspace.active'), trainerDb.setting<{ attemptIds?: string[]; result?: unknown }>('review.active'), trainerDb.setting<CompassStyle>('preference.compassStyle'), trainerDb.setting<StreetViewState>('workspace.streetView'), trainerDb.setting<boolean>('preference.darkMode'), trainerDb.setting('preference.audio'), trainerDb.setting<ActiveWorkspace>('workspace.paused.study'), trainerDb.setting<ActiveWorkspace>('workspace.paused.play'), trainerDb.setting<PlayClockCheckpoint>('workspace.playClock'),
         ]);
         setPausedWorkspaces({ ...(pausedStudy?.mode === 'study' || pausedStudy?.mode === 'meta-course' ? { study: pausedStudy } : {}), ...(pausedPlay?.mode === 'play' ? { play: pausedPlay } : {}) });
         setCustomCollections(dbCollections);
@@ -284,7 +285,7 @@ export default function App() {
           savedSampling === undefined && localStorage.getItem(SAMPLING_STORAGE_KEY) !== null && trainerDb.setSetting('preference.sampling', studySampling),
         ]);
         if (dbSelected) setSelectedCollectionId(dbSelected);
-        const savedMode = savedReview?.attemptIds?.length ? 'review' : workspace?.mode;
+        const savedMode = savedReview?.attemptIds?.length || savedReview?.result ? 'review' : workspace?.mode;
         if (savedMode === 'review') { setTrainerStartTab(savedReview?.attemptIds?.length ? 'review' : workspace?.mode === 'review' && (workspace.surface === 'statistics' || workspace.surface === 'clues') ? workspace.surface : 'review'); setAppMode('review'); setShowHome(false); }
         else if (workspace?.mode === 'play' && workspace.gameId && workspace.settings) {
           setAppMode('play'); setShowHome(false); setIsGameActive(true); setGameSettings(workspace.settings);
@@ -293,7 +294,7 @@ export default function App() {
           gameIdRef.current = workspace.gameId; roundSubmittedRef.current = !!workspace.activeRoundResult;
           const restoredLocation = workspace.currentLocation && isLocation(workspace.currentLocation) ? workspace.currentLocation : null;
           setCurrentLocation(restoredLocation); restoredPlayPanoRef.current = restoredLocation?.panoId || null;
-          const restoredElapsed = restoredRoundElapsed(workspace.roundElapsedSeconds, workspace.timeRemaining, workspace.settings.timeLimitSeconds); roundStartTimeRef.current = Date.now() - restoredElapsed * 1000;
+          const restoredElapsed = workspacePlayElapsed(workspace, savedPlayClock); roundStartTimeRef.current = Date.now() - restoredElapsed * 1000;
           setPlayElapsed(restoredElapsed); setTimeRemaining(workspace.settings.timeLimitSeconds > 0 ? Math.max(0, workspace.settings.timeLimitSeconds - restoredElapsed) : null);
         } else if (workspace?.mode === 'study' && isLocation(workspace.location)) {
           const focused = workspace.countryCodes || []; const targets = normalizeLocationTargets(workspace.locationTargets); if (focused.length) { const collection = { id: `focus:${focused.join(',')}`, name: focused.map((code) => COUNTRIES[code]?.name || code).join(' + '), countryCodes: focused }; setTemporaryCollection(collection); setSelectedCollectionId(collection.id); activeCollectionRef.current = collection; } setStudyLocationTargets(targets); studyLocationTargetsRef.current = targets;
@@ -335,7 +336,12 @@ export default function App() {
             : { mode: 'home' };
     void trainerDb.setSetting('workspace.active', value);
     if (value.mode === 'study' || value.mode === 'play' || value.mode === 'meta-course') { const key = value.mode === 'meta-course' ? 'study' : value.mode; setPausedWorkspaces((saved) => ({ ...saved, [key]: value })); void trainerDb.setSetting(`workspace.paused.${key}`, value); }
-  }, [activeCountryTip?.id, activeMetaLesson?.id, appMode, currentLocation, currentRoundIndex, dbReady, gameRounds, gameSettings, isGameActive, activeRoundResult, learnSource, metaCourseId, showHome, studyLocationTargets, timeRemaining, trainerStartTab, uploadedHistory, uploadedProgress]);
+  }, [activeCountryTip?.id, activeMetaLesson?.id, appMode, currentLocation, currentRoundIndex, dbReady, gameRounds, gameSettings, isGameActive, activeRoundResult, learnSource, metaCourseId, showHome, studyLocationTargets, trainerStartTab, uploadedHistory, uploadedProgress]);
+
+  useEffect(() => {
+    if (!dbReady || !isGameActive || appMode !== 'play' || showHome || activeRoundResult) return;
+    void trainerDb.setSetting('workspace.playClock', { gameId: gameIdRef.current, roundIndex: currentRoundIndex, elapsedSeconds: playElapsed } satisfies PlayClockCheckpoint);
+  }, [dbReady, isGameActive, appMode, showHome, activeRoundResult, currentRoundIndex, playElapsed]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -440,7 +446,7 @@ export default function App() {
         trainerRefreshKey={trainerRefreshKey} trainerStartTab={trainerStartTab} dbReady={dbReady}
         studyReviewSaving={studyReviewSaving} studyReviewSaved={studyReviewSaved}
         canMove={canMove} canPan={canPan} canZoom={canZoom}
-        onNextLocation={appMode === 'play' && isGameActive && gameSettings ? () => void fetchLocationForRound(gameSettings) : handleNextLearn}
+        onNextLocation={appMode === 'review' && reviewAttempt ? () => void openReviewAttempt(reviewAttempt) : appMode === 'play' && isGameActive && gameSettings ? () => void fetchLocationForRound(gameSettings) : handleNextLearn}
         onMapsLoaded={handleMapsLoaded}
         onPanoramaChanged={(location) => { if (summaryRound) setStudyReviewSaved(false); void handleStudyPanoramaChanged(location); }}
         onStudy={() => requestMode('study')}

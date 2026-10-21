@@ -1,7 +1,23 @@
-import type { Attempt, ReviewRecord, SchedulerPreferences } from '../types';
+import type { Attempt, ReviewGrade, ReviewRecord, SchedulerPreferences } from '../types';
+import { nextGeneralizationLevel } from './reviewVariation';
 import { configuredCountryScoreFloor, intervalsFor, reviewGradeForPerformance } from './reviewGrading';
 import { nextReviewAt } from './reviewTiming';
 import type { DueShift } from './reviewRebalance';
+
+export function gradedReviewRecord(panoId: string, grade: ReviewGrade, previous: ReviewRecord | undefined, preferences: SchedulerPreferences, intervalOverride?: number, variation?: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, now = Date.now()): ReviewRecord {
+  const intervalDays = Math.min(preferences.maximumIntervalDays, intervalOverride ?? intervalsFor(previous?.intervalDays || 0, preferences)[grade]);
+  const { naturalDueAt: _naturalDueAt, dueAdjustedAt: _dueAdjustedAt, ...base } = previous || {};
+  return { ...base, id: previous?.panoId || panoId, panoId: previous?.panoId || panoId,
+    dueAt: nextReviewAt(now, intervalDays, preferences), intervalDays,
+    gradingHistory: [...(previous?.gradingHistory || []), { grade, at: now }],
+    lapseCount: (previous?.lapseCount || 0) + (grade === 'again' ? 1 : 0), reviewCount: (previous?.reviewCount || 0) + 1, lastReviewedAt: now,
+    ...(variation?.kind && variation.kind !== 'original' ? { generalizationLevel: nextGeneralizationLevel(previous?.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: now } : {}),
+  };
+}
+
+export function generalizedReviewRecord(previous: ReviewRecord | undefined, grade: ReviewGrade, variation: { level?: number; kind?: 'original' | 'heading' | 'spatial' }, now = Date.now()) {
+  return !previous || !variation.kind || variation.kind === 'original' ? previous : { ...previous, generalizationLevel: nextGeneralizationLevel(previous.generalizationLevel ?? variation.level, variation.level, variation.kind, grade), generalizationUpdatedAt: now };
+}
 
 export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, preferences: SchedulerPreferences): ReviewRecord {
   const at = attempt.reviewedAt || attempt.createdAt;

@@ -66,7 +66,7 @@ export function usePlayMode(ctx: any) {
   const fetchLocationForRound = useCallback(async (settings: GameSettings, roundIndex = currentRoundIndex) => {
     const requestId = ++latestGenerationRequestRef.current; generationPendingRef.current = true; abortControllerRef.current?.abort();
     const abortController = new AbortController(); abortControllerRef.current = abortController;
-    setCurrentLocation(null); setIsLoading(true); setErrorMessage(null); setIsRevealed(false); ctx.setStatusMessage('Finding round location...');
+    setCurrentLocation(null); setPlayElapsed(0); setTimeRemaining(settings.timeLimitSeconds > 0 ? settings.timeLimitSeconds : null); setIsLoading(true); setErrorMessage(null); setIsRevealed(false); ctx.setStatusMessage('Finding round location...');
     try {
       const key = gameIdRef.current + ':' + roundIndex + ':' + settings.collectionId;
       const prepared = preparedRoundRef.current.take(key, abortController.signal);
