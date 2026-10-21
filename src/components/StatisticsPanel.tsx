@@ -132,7 +132,7 @@ export function StatisticsPanel({ attempts, visits, locations, reviews, readyDue
   const thirtyAttempts = useMemo(() => filterByRange<Attempt>(play, (item) => item.createdAt, thirtyBounds), [play, thirtyBounds.from, thirtyBounds.to]);
   const thirty = useMemo(() => metrics(thirtyAttempts), [thirtyAttempts]);
   const previousThirty = useMemo(() => metrics(play.filter((item) => item.createdAt >= thirtyBounds.from - 30 * 86400000 && item.createdAt < thirtyBounds.from)), [play, thirtyBounds.from]);
-  const reviewsData = reviewAnalytics(attempts, reviews);
+  const reviewsData = useMemo(() => reviewAnalytics(attempts, reviews), [attempts, reviews]);
   const balanced = useMemo(() => countryBalancedAccuracy(ranged), [ranged]);
   const active = activeSeconds(sessions, bounds);
   const todayBounds = rangeBounds("today");

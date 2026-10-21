@@ -83,16 +83,16 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
       restoredViewRef.current = true;
     });
   }, []);
-  const needsClueImages = tab === 'clues' || !!clueCountry;
+  const needsClueImages = !!clueCountry && (tab === 'coverage' || tab === 'statistics' && statisticsSection === 'locations');
   useEffect(() => {
     let active = true;
     if (!needsClueImages) { setCluePhotos(new Map()); return; }
-    const visible = tab === 'clues' ? clueMetadata : clueMetadata.filter((clue) => clue.countryCode === clueCountry);
+    const visible = clueMetadata.filter((clue) => clue.countryCode === clueCountry);
     void Promise.all(visible.filter((clue) => !clue.imageDataUrl).map((clue) => trainerDb.clue(clue.id))).then((rows) => {
       if (active) setCluePhotos(new Map(rows.flatMap((clue) => clue ? [[clue.id, clue.imageDataUrl] as const] : [])));
     });
     return () => { active = false; };
-  }, [needsClueImages, tab === 'clues', clueCountry, clueMetadata]);
+  }, [needsClueImages, clueCountry, clueMetadata]);
   const loadRequest = useRef(0);
   useEffect(() => () => { loadRequest.current++; }, []);
   const load = async () => {
@@ -123,7 +123,8 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   const reviewSource = [filters.environment && t(filters.environment), reviewCriterion].filter(Boolean).join(" · ");
   const reviewKind: ReviewSessionKind = filters.due ? "due" : "practice";
   const dueCount = scheduler ? reviews.filter((review) => isReviewDue(review, Date.now(), scheduler)).length : 0;
-  const completedToday = scheduler ? reviews.reduce((count, review) => count + (review.gradingHistory?.filter(({ at }) => at >= reviewDayStart(Date.now(), scheduler)).length || (review.lastReviewedAt && review.lastReviewedAt >= reviewDayStart(Date.now(), scheduler) ? 1 : 0)), 0) : 0;
+  const reviewToday = scheduler ? reviewDayStart(Date.now(), scheduler) : 0;
+  const completedToday = scheduler ? reviews.reduce((count, review) => count + (review.gradingHistory?.filter(({ at }) => at >= reviewToday).length || (review.lastReviewedAt && review.lastReviewedAt >= reviewToday ? 1 : 0)), 0) : 0;
   const nextDueAt = scheduler ? nextScheduledReviewAt(reviews, Date.now(), scheduler) : undefined;
   const startReview = (attempt: Attempt) => onReview(attempt, [attempt, ...queue.filter((item) => item.id !== attempt.id)], reviewSource, reviewKind);
   const gradedAttempts = useMemo(() => performanceAttempts(attempts, true, true), [attempts]);

@@ -1,7 +1,17 @@
 import type { ReviewRecord, SchedulerPreferences } from '../types';
 
 export const detectedTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-const zonedParts = (value: number, timeZone: string) => Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
+const formatters = new Map<string, Intl.DateTimeFormat>();
+const dayStarts = new Map<string, number>();
+const zonedParts = (value: number, timeZone: string) => {
+  let formatter = formatters.get(timeZone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    formatters.set(timeZone, formatter);
+    if (formatters.size > 8) formatters.delete(formatters.keys().next().value!);
+  }
+  return Object.fromEntries(formatter.formatToParts(new Date(value)).filter(({ type }) => type !== 'literal').map(({ type, value: part }) => [type, Number(part)])) as Record<string, number>;
+};
 const utcForZonedDateTime = (parts: Record<string, number>, timeZone: string) => {
   let candidate = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -13,10 +23,16 @@ const utcForZonedDateTime = (parts: Record<string, number>, timeZone: string) =>
 export const reviewDayStart = (value: number, preferences: SchedulerPreferences) => {
   const timeZone = preferences.reviewTimeZone || detectedTimeZone();
   const reset = preferences.reviewDayResetMinutes ?? 0;
+  const key = `${timeZone}:${reset}:${Math.floor(value / 60000)}`;
+  const cached = dayStarts.get(key);
+  if (cached !== undefined) return cached;
   const current = zonedParts(value, timeZone);
   const beforeReset = current.hour * 60 + current.minute < reset;
   const date = new Date(Date.UTC(current.year, current.month - 1, current.day - (beforeReset ? 1 : 0)));
-  return utcForZonedDateTime({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: Math.floor(reset / 60), minute: reset % 60 }, timeZone);
+  const start = utcForZonedDateTime({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), hour: Math.floor(reset / 60), minute: reset % 60 }, timeZone);
+  dayStarts.set(key, start);
+  if (dayStarts.size > 512) dayStarts.delete(dayStarts.keys().next().value!);
+  return start;
 };
 export const nextReviewDayBoundary = (value: number, preferences: SchedulerPreferences) => nextReviewAt(value, 1, preferences);
 export const nextReviewAt = (value: number, intervalDays: number, preferences: SchedulerPreferences) => {

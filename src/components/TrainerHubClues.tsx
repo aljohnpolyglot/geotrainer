@@ -14,18 +14,25 @@ import { coachStyleLabel } from '../services/coachPreferences';
 import { CoachRichText } from './CoachRichText';
 import { metaReferenceContent } from './MetaReferenceText';
 import { sortRows, type SortDirection } from '../analytics/tableSorting';
+import { trainerDb } from '../data/trainerDb';
+import { readCluePhotos } from '../services/cluePhotos';
 
 type ClueView = 'library' | 'countries' | 'insights';
 type CountrySortKey = 'country' | 'count' | 'confidence' | 'latest';
 
 export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes, onDelete, onDeleteNote, onSaveNote, onTrainCountries }: { clues: ClueRecord[]; learnedMetas: LearnedMeta[]; notebookNotes: NotebookNote[]; coachNotes: CoachHistoryNote[]; onDelete: (id: string) => void; onDeleteNote: (note: NotebookNote) => void; onSaveNote: (note: NotebookNote) => Promise<void>; onTrainCountries: (codes: string[], name: string) => void }) {
-  const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<LearningNoteDetail | null>(null); const [failedImages, setFailedImages] = useState(() => new Set<string>());
+  const t = useHubTranslate(); const { ui } = useLanguagePreferences(); const [view, setView] = useState<ClueView>('library'); const [query, setQuery] = useState(''); const [country, setCountry] = useState(''); const [source, setSource] = useState<'all' | 'personal' | 'coach' | 'meta'>('all'); const [page, setPage] = useState(1); const [gallery, setGallery] = useState<{ country: string; clueId?: string } | null>(null); const [detail, setDetail] = useState<(LearningNoteDetail & { clueId?: string }) | null>(null); const [failedImages, setFailedImages] = useState(() => new Set<string>());
   const [countrySort, setCountrySort] = useState<{ key: CountrySortKey; direction: SortDirection }>({ key: 'count', direction: 'desc' });
   const [countryMeta, setCountryMeta] = useState<{ language: string; lessons: Map<string, MetaLesson>; loaded: boolean }>({ language: ui, lessons: new Map(), loaded: false });
   const noteLinks = useMemo(() => notebookClueLinks(clues, notebookNotes), [clues, notebookNotes]);
   const displayNotes = useMemo(() => visibleNotebookNotes(notebookNotes, noteLinks), [notebookNotes, noteLinks]);
   const activeNotes = useMemo(() => notebookNotes.filter((note) => !note.deletedAt), [notebookNotes]);
-  const missingPhotos = useMemo(() => new Set(missingNotebookPhotoNotes(clues, notebookNotes, failedImages)), [clues, failedImages, notebookNotes]);
+  const [photos, setPhotos] = useState<Map<string, string>>(new Map());
+  const availableClues = useMemo(() => clues.map((clue) => ({ ...clue, imageDataUrl: clue.imageDataUrl || photos.get(clue.id) || '' })), [clues, photos]);
+  const missingPhotos = useMemo(() => {
+    const pending = new Set(clues.filter((clue) => !clue.imageDataUrl && !photos.has(clue.id)).map((clue) => clue.id));
+    return new Set(missingNotebookPhotoNotes(availableClues, notebookNotes, failedImages).filter((note) => !pending.has(note.clueId!)));
+  }, [availableClues, clues, failedImages, notebookNotes, photos]);
   useEffect(() => {
     let active = true;
     const codes = [...new Set(learnedMetas.flatMap(({ id }) => { const code = metaCourseForLesson(id)?.code; return code ? [code] : []; }))];
@@ -42,17 +49,31 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
   const filteredCoach = useMemo(() => (source === 'all' || source === 'coach' ? coachNotes : []).filter((note) => (!country || note.countryCode === country) && (!query || `${countryName(note.countryCode)} ${note.analysis.description || ''} ${note.analysis.strongClues.join(' ')}`.toLowerCase().includes(query.toLowerCase()))).sort((a, b) => b.generatedAt - a.generatedAt), [coachNotes, country, query, source]);
   useEffect(() => setPage(1), [country, query, source]);
   const timeline = useMemo(() => [...filtered.map((value) => ({ kind: 'clue' as const, value, at: value.createdAt })), ...filteredCoach.map((value) => ({ kind: 'coach' as const, value, at: value.generatedAt })), ...filteredNotes.map((value) => ({ kind: 'note' as const, value, at: value.updatedAt })), ...filteredMetas.map((value) => ({ kind: 'meta' as const, value, at: value.learned.learnedAt }))].sort((a, b) => b.at - a.at), [filtered, filteredCoach, filteredMetas, filteredNotes]);
-  const totalFiltered = timeline.length; const paging = pageBounds(totalFiltered, page); const pageRows = timeline.slice(paging.start, paging.end);
+  const totalFiltered = timeline.length; const paging = pageBounds(totalFiltered, page); const pageRows = useMemo(() => timeline.slice(paging.start, paging.end), [timeline, paging.start, paging.end]);
+  const photoIds = useMemo(() => gallery ? clues.filter((clue) => clue.countryCode === gallery.country).map((clue) => clue.id) : view === 'library' ? pageRows.flatMap((row) => {
+    const id = row.kind === 'clue' ? row.value.id : row.kind === 'coach' ? row.value.clueId : row.kind === 'note' ? noteLinks.get(row.value) : undefined;
+    return id ? [id] : [];
+  }) : [], [clues, gallery, noteLinks, pageRows, view]);
+  useEffect(() => {
+    let active = true;
+    void readCluePhotos(clues, photoIds, trainerDb.clue).then((next) => { if (active) setPhotos(next); }).catch(() => { if (active) setPhotos(new Map(photoIds.map((id) => [id, '']))); });
+    return () => { active = false; };
+  }, [clues, photoIds]);
   const groups = useMemo(() => [...new Set([...clues.map((clue) => clue.countryCode), ...learnedMetas.map((meta) => meta.countryCode), ...activeNotes.map((note) => note.countryCode), ...coachNotes.map((note) => note.countryCode)])].map((code) => { const rows = clues.filter((clue) => clue.countryCode === code); const metas = learnedMetas.filter((meta) => meta.countryCode === code); const notes = notebookNotes.filter((note) => note.countryCode === code); const visibleNotes = activeNotes.filter((note) => note.countryCode === code); const coaches = coachNotes.filter((note) => note.countryCode === code); const analyzed = [...rows.map((row) => row.analysis), ...coaches.map((row) => row.analysis)].filter((analysis) => analysis.candidates.length); return { code, count: savedClueCount(rows, notes, metas, coaches), latest: Math.max(0, ...rows.map((row) => row.createdAt), ...metas.map((row) => row.learnedAt), ...visibleNotes.map((row) => row.updatedAt), ...coaches.map((row) => row.generatedAt)), confidence: analyzed.length ? analyzed.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed.length : 0 }; }).filter((group) => group.count > 0).sort((a, b) => b.count - a.count || countryName(a.code).localeCompare(countryName(b.code))), [activeNotes, clues, coachNotes, learnedMetas, notebookNotes]);
   const sortedGroups = useMemo(() => sortRows(groups, (group: (typeof groups)[number]) => ({ country: countryName(group.code, ui), count: group.count, confidence: group.confidence, latest: group.latest })[countrySort.key], countrySort.direction, ui), [countrySort, groups, ui]);
   const countryHeader = (key: CountrySortKey, label: string) => <th aria-sort={countrySort.key === key ? countrySort.direction === 'asc' ? 'ascending' : 'descending' : 'none'}><button type="button" className="sortable-heading" onClick={() => setCountrySort((current) => ({ key, direction: current.key === key ? current.direction === 'asc' ? 'desc' : 'asc' : key === 'country' ? 'asc' : 'desc' }))} aria-label={`${t('Sort by')}: ${label}`}>{label}<span aria-hidden="true">{countrySort.key === key ? countrySort.direction === 'asc' ? ' ↑' : ' ↓' : ' ↕'}</span></button></th>;
   const analyses = [...clues.map((clue) => clue.analysis), ...coachNotes.map((note) => note.analysis)].filter((analysis) => analysis.candidates.length); const analyzed = analyses.length; const averageConfidence = analyzed ? analyses.reduce((sum, analysis) => sum + (analysis.candidates[0]?.confidence || 0), 0) / analyzed : 0;
   const streetViewUrl = (panoId: string) => `https://www.google.com/maps/@?api=1&map_action=pano&pano=${encodeURIComponent(panoId)}`;
-  const noteImage = (note: NotebookNote) => clues.find((clue) => clue.id === noteLinks.get(note))?.imageDataUrl;
-  const coachImage = (note: CoachHistoryNote) => note.clueId ? clues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined;
-  const openNote = (note: NotebookNote) => setDetail({ countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note), missingImage: missingPhotos.has(note) });
-  const openCoach = (note: CoachHistoryNote) => setDetail({ countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: coachImage(note) });
+  const noteImage = (note: NotebookNote) => availableClues.find((clue) => clue.id === noteLinks.get(note))?.imageDataUrl;
+  const coachImage = (note: CoachHistoryNote) => note.clueId ? availableClues.find((clue) => clue.id === note.clueId)?.imageDataUrl : undefined;
+  const openNote = (note: NotebookNote) => setDetail({ clueId: noteLinks.get(note), countryCode: note.countryCode, source: t('Personal'), text: note.text, at: note.updatedAt, category: note.category, panoId: note.panoId, imageUrl: noteImage(note), missingImage: missingPhotos.has(note) });
+  const openCoach = (note: CoachHistoryNote) => setDetail({ clueId: note.clueId, countryCode: note.countryCode, source: `${t('AI-assisted')}${note.analysis.style ? ` · ${coachStyleLabel(note.analysis.style)}` : ''}`, text: note.analysis.description || '', analysis: note.analysis, at: note.generatedAt, panoId: note.panoId, imageUrl: coachImage(note) });
   const openMeta = (learned: LearnedMeta, lesson: MetaLesson) => setDetail({ countryCode: learned.countryCode, source: t('Meta lessons'), text: lesson.text, at: learned.learnedAt, note: lesson.note, category: lesson.section, temporallySensitive: lesson.temporallySensitive, imageUrl: lesson.imageUrl, panoId: lesson.panoId || undefined, mapUrl: lesson.mapUrl, metaLessonId: lesson.id });
+  useEffect(() => {
+    const id = detail?.clueId;
+    if (!id || !photos.has(id)) return;
+    setDetail((current) => current?.clueId === id ? { ...current, imageUrl: photos.get(id) || undefined, missingImage: !photos.get(id) } : current);
+  }, [detail?.clueId, photos]);
   return <section className="clues-panel">
     <div className="statistics-title">
 <div>
@@ -98,7 +119,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 </button>}</div>
 </div>
 <div className="clue-library">{pageRows.map((row, index) => row.kind === 'clue' ? (() => { const clue = row.value; return <article className={`coach-output-${clue.analysis.style || 'quick'}`} key={clue.id} role="button" tabIndex={0} onClick={() => setGallery({ country: clue.countryCode, clueId: clue.id })} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setGallery({ country: clue.countryCode, clueId: clue.id }); } }}>
-<img src={clue.imageDataUrl} alt={t('savedVisualClue')} />
+<img src={clue.imageDataUrl || photos.get(clue.id) || undefined} alt={t('savedVisualClue')} />
 <div>
 <h3>
 <CountryFlag code={clue.countryCode} />{countryName(clue.countryCode)}</h3>
@@ -171,7 +192,7 @@ export function TrainerHubClues({ clues, learnedMetas, notebookNotes, coachNotes
 <CountryFlag code={group.code} />{countryName(group.code)}</span>
 <strong>{group.count}</strong>
 </button>)}</div>}
-    {gallery && <ClueGallery country={countryName(gallery.country)} clues={clues.filter((clue) => clue.countryCode === gallery.country)} notes={notebookNotes} initialSelectedId={gallery.clueId} onClose={() => setGallery(null)} onDelete={onDelete} onSaveNote={onSaveNote} />}
+    {gallery && <ClueGallery country={countryName(gallery.country)} clues={availableClues.filter((clue) => clue.countryCode === gallery.country)} notes={notebookNotes} initialSelectedId={gallery.clueId} onClose={() => setGallery(null)} onDelete={onDelete} onSaveNote={onSaveNote} />}
     {detail && <LearningNoteModal detail={detail} onClose={() => setDetail(null)} />}
   </section>;
 }

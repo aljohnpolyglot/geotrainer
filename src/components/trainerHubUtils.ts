@@ -50,12 +50,17 @@ export const pageBounds = (total: number, page: number, size = 20) => { const pa
 export type CoverageOverlay = "exposure" | "accuracy" | "score" | "weakness" | "due" | "mastery";
 
 export function coveragePlaceCounts(locations: TrainerLocation[]): Record<string, number> {
-  // ponytail: compare anchors directly; use a spatial index if large histories make Coverage slow.
-  const anchors: TrainerLocation[] = [];
+  const bands = new Map<string, TrainerLocation[]>();
+  const sourceHashes = new Set<string>();
   const counts: Record<string, number> = {};
   for (const location of [...locations].sort((a, b) => a.firstSeenAt - b.firstSeenAt || a.id.localeCompare(b.id))) {
-    if (anchors.some((anchor) => nearbyReviewPoint(anchor, location))) continue;
-    anchors.push(location);
+    const band = Math.floor(location.lat * 1000);
+    const source = location.sourcePointHash ? `${location.countryCode}:${location.sourcePointHash}` : undefined;
+    if (source && sourceHashes.has(source) || [-1, 0, 1].some((offset) => bands.get(`${location.countryCode}:${band + offset}`)?.some((anchor) => nearbyReviewPoint(anchor, location)))) continue;
+    const key = `${location.countryCode}:${band}`;
+    const anchors = bands.get(key);
+    if (anchors) anchors.push(location); else bands.set(key, [location]);
+    if (source) sourceHashes.add(source);
     counts[location.countryCode] = (counts[location.countryCode] || 0) + 1;
   }
   return counts;

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-21
+
+- Reuse bounded Review time-zone formatters and day-boundary calculations across the homepage, training hub, scheduling, and Statistics instead of constructing formatters for every card and grading-history entry.
+- Load local My Clues photos for the filtered visible page and opened gallery, preserving exact hosted previews and note details while avoiding a full photo-library read on entry.
+- Index Coverage unique-place comparisons by country and latitude while preserving ordered 50-metre and imported-source matching; reuse Review analytics when switching Statistics sections.
+
 ## 2026-10-20
 
 - Use one foreground Play clock for the countdown and elapsed time, stop its interval while hidden, and catch up accurately after delayed frames. Ignore duplicate Street View camera snapshots across all modes so unchanged events do not redraw following maps.
