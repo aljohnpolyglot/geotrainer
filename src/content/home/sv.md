@@ -320,7 +320,7 @@ Meta-panelen i Repetition är dold som standard; öppna den för att läsa hela 
 
 Du kan söka efter länder och sortera alfabetiskt, efter antal lektioner eller efter förlopp. Starta nytt öppnar valet av lärväg medan Återuppta behåller den sparade lektionen. Meta används för att studera ledtrådar, utan loop med två gissningar eller automatisk Repetitionspost baserad på avstånd. Varje landslektion visar nu sin referensbild från den här webbplatsen.
 
-De 30 GeoCoach-temakurserna innehåller 959 lektioner om skyltar, vägmarkeringar, bilar, språk och regionala ledtrådar. Förklaringar och länkar till valda panoramavyer finns lokalt i GeoTrainer, så lektionerna behöver inte GeoCoachs API under studierna. Varje lektion länkar till ursprungskartan och anger skaparen. Otillgängliga vyer hoppas över enligt samma Meta-regel. En laddningsplatshållare visas medan en Meta-referensbild hämtas.
+De 29 GeoCoach-temakurserna innehåller 947 lektioner om skyltar, vägmarkeringar, bilar, språk och regionala ledtrådar. Förklaringar och länkar till valda panoramavyer finns lokalt i GeoTrainer, så lektionerna behöver inte GeoCoachs API under studierna. Varje lektion länkar till ursprungskartan och anger skaparen. Otillgängliga vyer hoppas över enligt samma Meta-regel. En laddningsplatshållare visas medan en Meta-referensbild hämtas.
 
 När GeoCoach har ett ledtrådsfoto visas det i lektionen, lektionslistan och de sparade detaljerna. Lektioner utan källfoto visar fortfarande panorama och förklaring.
 

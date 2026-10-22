@@ -325,7 +325,7 @@ Méta propose un cours Débutant et 131 cours par pays. Les leçons ouvrent le p
 
 Le panneau Méta de Révision est masqué par défaut ; ouvrez-le pour lire tout le contenu. Suivant marque la leçon comme vue et met à jour la progression même sans Enregistrer pour révision. Précédent revient à la leçon précédente et le compteur affiche 1/N. Méta sert à étudier les indices, sans cycle de deux essais ni carte de Révision automatique selon la distance.
 
-Les 30 cours thématiques de GeoCoach réunissent 959 leçons sur les panneaux, les marquages routiers, les voitures, les langues et les indices régionaux. Les explications et les liens vers les panoramas choisis sont intégrés à GeoTrainer : les leçons ne dépendent pas de l’API GeoCoach pendant leur utilisation. Chaque leçon renvoie à sa carte d’origine et cite son créateur. Les vues indisponibles sont ignorées selon la même règle Méta. Un espace de chargement s’affiche pendant l’arrivée d’une image de référence Méta.
+Les 29 cours thématiques de GeoCoach réunissent 947 leçons sur les panneaux, les marquages routiers, les voitures, les langues et les indices régionaux. Les explications et les liens vers les panoramas choisis sont intégrés à GeoTrainer : les leçons ne dépendent pas de l’API GeoCoach pendant leur utilisation. Chaque leçon renvoie à sa carte d’origine et cite son créateur. Les vues indisponibles sont ignorées selon la même règle Méta. Un espace de chargement s’affiche pendant l’arrivée d’une image de référence Méta.
 
 Quand GeoCoach fournit une photo de l’indice, elle apparaît dans la leçon, la liste des leçons et le détail enregistré. Les leçons sans photo d’origine affichent toujours leur panorama et leur explication.
 

@@ -662,7 +662,7 @@ Meta bietet einen Anfängerkurs und 131 Länderkurse. Lektionen öffnen das Pano
 
 Das Meta-Feld in Wiederholung ist standardmäßig ausgeblendet; öffne es, um den vollständigen Inhalt zu lesen. Weiter markiert die Lektion als gesehen und aktualisiert den Fortschritt, auch ohne Für Wiederholung speichern. Zurück führt zur vorherigen Lektion; der Zähler zeigt 1/N. Meta dient zum Lernen von Hinweisen, ohne Runde mit zwei Tipps oder automatische Wiederholungskarte anhand der Entfernung.
 
-Die 30 GeoCoach-Themenkurse umfassen 959 Lektionen über Schilder, Straßenmarkierungen, Autos, Sprachen und regionale Hinweise. Erklärungen und Links zu den ausgewählten Panoramen liegen lokal in GeoTrainer; die Lektionen benötigen während des Lernens keine GeoCoach-API. Jede Lektion verlinkt ihre Ursprungskarte und nennt deren Ersteller. Nicht verfügbare Ansichten werden nach derselben Meta-Regel übersprungen. Während ein Meta-Referenzbild lädt, erscheint ein Platzhalter.
+Die 29 GeoCoach-Themenkurse umfassen 947 Lektionen über Schilder, Straßenmarkierungen, Autos, Sprachen und regionale Hinweise. Erklärungen und Links zu den ausgewählten Panoramen liegen lokal in GeoTrainer; die Lektionen benötigen während des Lernens keine GeoCoach-API. Jede Lektion verlinkt ihre Ursprungskarte und nennt deren Ersteller. Nicht verfügbare Ansichten werden nach derselben Meta-Regel übersprungen. Während ein Meta-Referenzbild lädt, erscheint ein Platzhalter.
 
 Wenn GeoCoach ein Hinweisfoto bereitstellt, erscheint es in der Lektion, der Lektionsübersicht und den gespeicherten Details. Lektionen ohne Quellfoto zeigen weiterhin ihr Panorama und ihre Erklärung.
 

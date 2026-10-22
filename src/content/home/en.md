@@ -733,7 +733,7 @@ Meta Study offers a Beginner course and 131 country courses. Lessons open with a
 
 Next marks a lesson seen and updates progress even without Save for Review. In Beginner, Next opens another unfinished lesson; Previous returns to a previously visited lesson, including after reload. When none remain, you return to setup. In country courses, Next advances within that country; Previous returns to the prior lesson, and the counter shows 1/N. Meta is for clue study, with no two-guess loop or automatic distance-threshold Review card. Every country lesson now displays its reference image from this site.
 
-The 30 GeoCoach topic courses contain 959 lessons on signs, road markings, cars, languages, and regional clues. Their explanations and chosen panorama links are bundled with GeoTrainer, so lessons do not depend on the GeoCoach API while playing. Each lesson links its original map and credits its creator. Unavailable views are skipped by the same Meta rule. A loading placeholder appears while a Meta reference image is arriving.
+The 29 GeoCoach topic courses contain 947 lessons on signs, road markings, cars, languages, and regional clues. Their explanations and chosen panorama links are bundled with GeoTrainer, so lessons do not depend on the GeoCoach API while playing. Each lesson links its original map and credits its creator. Unavailable views are skipped by the same Meta rule. A loading placeholder appears while a Meta reference image is arriving.
 
 When GeoCoach provides a clue photo, it appears in the lesson, lesson browser, and saved detail. Lessons without a source photo still show their panorama and explanation.
 

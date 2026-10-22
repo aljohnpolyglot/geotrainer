@@ -21,6 +21,12 @@ test('Meta course setup shows selected country progress and a lesson without a h
   assert.match(chooser, /US license plates/);
   assert.match(chooser, /European pedestrian signs/);
   assert.match(chooser, /Canada clues/);
+  assert.match(chooser, /Bangladesh districts in Bengali/);
+  assert.doesNotMatch(chooser, /Georgia Google car clues/);
+  const savedGeorgianCourse = renderToStaticMarkup(createElement(MetaCourseSelector, {
+    selectedCourseId: 'geocoach-georgian-car-metas', onSelect: () => {}, completedByCourse: {}, beginnerTotal: 359,
+  }));
+  assert.match(savedGeorgianCourse, /Georgia Google car clues/);
   const lesson = renderToStaticMarkup(createElement(MetaCourseCard, {
     tip: { id: 'BW-test', section: 'Regional clues', mapUrl: 'https://goo.gl/maps/example', text: 'Look for **white sand**.', note: 'Compare the nearby hills.' },
     courseId: 'BW', position: 2, total: 32,

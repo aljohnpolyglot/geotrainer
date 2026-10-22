@@ -30,7 +30,7 @@ export function MetaCourseSelector({ selectedCourseId, onSelect, completedByCour
   const [sort, setSort] = useState<'name' | 'total' | 'progress'>('name');
   const search = query.trim().toLocaleLowerCase(ui);
   const beginnerMatches = copy.beginner.toLocaleLowerCase(ui).includes(search);
-  const topics = META_TOPIC_COURSES.filter((course) => `${metaCourseName(course.code, ui)} ${course.name}`.toLocaleLowerCase(ui).includes(search));
+  const topics = META_TOPIC_COURSES.filter((course) => (course.code !== 'geocoach-georgian-car-metas' || selectedCourseId === course.code) && `${metaCourseName(course.code, ui)} ${course.name}`.toLocaleLowerCase(ui).includes(search));
   const courses = useMemo(() => META_COUNTRY_COURSES.map((course) => ({
     ...course,
     localizedName: countryDisplayName(course.code, ui) || course.name,

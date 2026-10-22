@@ -319,7 +319,7 @@ Meta ofrece un curso para principiantes y 131 cursos por país. Las lecciones ab
 
 Siguiente marca la lección como vista y actualiza el progreso aunque no elijas Guardar para repasar. Anterior vuelve a la lección previa y el contador muestra 1/N. Meta sirve para estudiar pistas: no hay un ciclo de dos intentos ni tarjetas de Repaso automáticas por distancia.
 
-Los 30 cursos temáticos de GeoCoach reúnen 959 lecciones sobre señales, marcas viales, coches, idiomas y pistas regionales. Las explicaciones y los enlaces a las panorámicas elegidas se guardan en GeoTrainer, así que las lecciones no dependen de la API de GeoCoach durante el juego. Cada lección enlaza el mapa original y acredita a su creador. Si una vista no está disponible, se omite igual que en los demás cursos Meta. Mientras se carga una imagen de referencia Meta, aparece un marcador de carga.
+Los 29 cursos temáticos de GeoCoach reúnen 947 lecciones sobre señales, marcas viales, coches, idiomas y pistas regionales. Las explicaciones y los enlaces a las panorámicas elegidas se guardan en GeoTrainer, así que las lecciones no dependen de la API de GeoCoach durante el juego. Cada lección enlaza el mapa original y acredita a su creador. Si una vista no está disponible, se omite igual que en los demás cursos Meta. Mientras se carga una imagen de referencia Meta, aparece un marcador de carga.
 
 Cuando GeoCoach proporciona una foto de la pista, aparece en la lección, el explorador de lecciones y el detalle guardado. Las lecciones sin foto de origen siguen mostrando su panorama y explicación.
 

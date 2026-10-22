@@ -319,7 +319,7 @@ Meta offre un corso per principianti e 131 corsi per paese. Le lezioni aprono il
 
 Il pannello Meta nel Ripasso è nascosto per impostazione predefinita; aprilo per leggere tutti i contenuti. Avanti segna la lezione come vista e aggiorna i progressi anche senza Salva per il ripasso. Precedente torna alla lezione precedente e il contatore mostra 1/N. Meta serve a studiare gli indizi, senza ciclo di due tentativi né scheda di Ripasso automatica in base alla distanza.
 
-I 30 corsi tematici di GeoCoach raccolgono 959 lezioni su segnali, segnaletica orizzontale, auto, lingue e indizi regionali. Le spiegazioni e i collegamenti ai panorami scelti sono inclusi in GeoTrainer, quindi le lezioni non dipendono dall’API di GeoCoach durante l’uso. Ogni lezione collega la mappa originale e ne attribuisce il creatore. Le viste non disponibili vengono saltate secondo la stessa regola Meta. Durante il caricamento di un’immagine di riferimento Meta compare un segnaposto.
+I 29 corsi tematici di GeoCoach raccolgono 947 lezioni su segnali, segnaletica orizzontale, auto, lingue e indizi regionali. Le spiegazioni e i collegamenti ai panorami scelti sono inclusi in GeoTrainer, quindi le lezioni non dipendono dall’API di GeoCoach durante l’uso. Ogni lezione collega la mappa originale e ne attribuisce il creatore. Le viste non disponibili vengono saltate secondo la stessa regola Meta. Durante il caricamento di un’immagine di riferimento Meta compare un segnaposto.
 
 Quando GeoCoach fornisce una foto dell’indizio, appare nella lezione, nell’elenco delle lezioni e nei dettagli salvati. Le lezioni senza foto originale mostrano comunque il panorama e la spiegazione.
 

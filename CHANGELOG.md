@@ -2,6 +2,7 @@
 
 ## 2026-10-22
 
+- Keep the Bengali Bangladesh district course available while hiding the photo-less Georgian car course from new Meta selections; preserve access to a previously selected Georgian course.
 - Bundle GeoCoach clue photos with Meta topic lessons where the source provides them, including the lesson browser and saved details. Keep lessons without source photos playable.
 - Save Review answers, schedules, queues, completed-card statistics, and open results atomically for reliable same-device resume. Keep failed panorama loads retryable and restore only the saved queue's attempts.
 - Save Play timers in small checkpoints, including untimed rounds, instead of rewriting full workspaces every second. Preserve elapsed active time across reopening without counting time spent closed.
