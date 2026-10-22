@@ -317,6 +317,8 @@ Meta oferece um curso para iniciantes e 131 cursos por país. As lições abrem 
 
 Os 30 cursos temáticos do GeoCoach reúnem 959 lições sobre placas, marcas viárias, carros, idiomas e pistas regionais. As explicações e os links dos panoramas escolhidos ficam incluídos no GeoTrainer; durante a lição, não é preciso acessar a API do GeoCoach. Cada lição liga ao mapa original e credita seu criador. Vistas indisponíveis são ignoradas pela mesma regra do Meta. Um espaço de carregamento aparece enquanto uma imagem de referência Meta é aberta.
 
+Quando o GeoCoach fornece uma foto da pista, ela aparece na lição, na lista de lições e nos detalhes salvos. Lições sem foto de origem continuam mostrando o panorama e a explicação.
+
 Os cursos para iniciantes e por tema têm miniaturas locais, e o nome do curso ativo aparece na barra de Aprender. Selecione uma imagem de referência Meta para ampliá-la; feche com X ou Escape. No cartão de localização revelada, o nome do lugar abre a Wikipédia quando a pesquisa encontra resultados; caso contrário, permanece como texto e aparece um aviso.
 
  No curso para iniciantes, Avançar abre outra lição pendente e Anterior volta a uma lição visitada anteriormente, mesmo após recarregar; quando não restam lições, você volta à escolha do curso; nos cursos por país, avança dentro do país.  Pesquise cursos temáticos e por país; ordene os cursos por país pelo nome, número de lições ou progresso. Começar de novo abre a escolha do modo de estudo; Retomar mantém a lição salva. Todas as lições por país agora mostram sua imagem de referência deste site.

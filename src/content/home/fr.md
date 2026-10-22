@@ -327,6 +327,8 @@ Le panneau Méta de Révision est masqué par défaut ; ouvrez-le pour lire tout
 
 Les 30 cours thématiques de GeoCoach réunissent 959 leçons sur les panneaux, les marquages routiers, les voitures, les langues et les indices régionaux. Les explications et les liens vers les panoramas choisis sont intégrés à GeoTrainer : les leçons ne dépendent pas de l’API GeoCoach pendant leur utilisation. Chaque leçon renvoie à sa carte d’origine et cite son créateur. Les vues indisponibles sont ignorées selon la même règle Méta. Un espace de chargement s’affiche pendant l’arrivée d’une image de référence Méta.
 
+Quand GeoCoach fournit une photo de l’indice, elle apparaît dans la leçon, la liste des leçons et le détail enregistré. Les leçons sans photo d’origine affichent toujours leur panorama et leur explication.
+
 Les cours pour débutants et thématiques ont des vignettes locales, et le nom du cours actif apparaît dans la barre Apprendre. Sélectionnez une image de référence Méta pour l’agrandir ; fermez-la avec X ou Échap. Sur la fiche de lieu révélé, le nom du lieu mène à Wikipédia si la recherche trouve un résultat ; sinon, il reste en texte et un message s’affiche.
 
  Dans le cours débutant, Suivant ouvre une autre leçon inachevée et Précédent revient à une leçon déjà visitée, même après un rechargement ; quand toutes les leçons sont terminées, vous revenez au choix du cours ; dans les cours par pays, il avance dans ce pays.  Recherchez parmi les cours thématiques et par pays ; triez les cours par pays selon le nom, le nombre de leçons ou la progression. Recommencer ouvre le choix du parcours d’étude ; Reprendre conserve la leçon enregistrée. Chaque leçon par pays affiche désormais son image de référence depuis ce site.

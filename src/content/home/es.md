@@ -321,6 +321,8 @@ Siguiente marca la lección como vista y actualiza el progreso aunque no elijas 
 
 Los 30 cursos temáticos de GeoCoach reúnen 959 lecciones sobre señales, marcas viales, coches, idiomas y pistas regionales. Las explicaciones y los enlaces a las panorámicas elegidas se guardan en GeoTrainer, así que las lecciones no dependen de la API de GeoCoach durante el juego. Cada lección enlaza el mapa original y acredita a su creador. Si una vista no está disponible, se omite igual que en los demás cursos Meta. Mientras se carga una imagen de referencia Meta, aparece un marcador de carga.
 
+Cuando GeoCoach proporciona una foto de la pista, aparece en la lección, el explorador de lecciones y el detalle guardado. Las lecciones sin foto de origen siguen mostrando su panorama y explicación.
+
 Los cursos para principiantes y por tema tienen miniaturas locales, y el nombre del curso activo aparece en la barra de Aprender. Selecciona una imagen de referencia Meta para ampliarla; ciérrala con X o Escape. En la tarjeta de ubicación revelada, el nombre del lugar enlaza a Wikipedia si la búsqueda encuentra resultados; si no, queda como texto y aparece un aviso.
 
  En el curso para principiantes, Siguiente abre otra lección pendiente y Anterior vuelve a una lección visitada anteriormente, incluso después de recargar; al terminar, vuelves a la selección del curso; en los cursos por país avanza dentro de ese país.  Puedes buscar cursos temáticos y por país; los cursos por país se ordenan alfabéticamente, por cantidad de lecciones o por progreso. Empezar de nuevo abre las opciones de Estudio; Reanudar conserva la lección guardada. Todas las lecciones por país muestran ahora su imagen de referencia desde este sitio.

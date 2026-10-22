@@ -321,6 +321,8 @@ Il pannello Meta nel Ripasso è nascosto per impostazione predefinita; aprilo pe
 
 I 30 corsi tematici di GeoCoach raccolgono 959 lezioni su segnali, segnaletica orizzontale, auto, lingue e indizi regionali. Le spiegazioni e i collegamenti ai panorami scelti sono inclusi in GeoTrainer, quindi le lezioni non dipendono dall’API di GeoCoach durante l’uso. Ogni lezione collega la mappa originale e ne attribuisce il creatore. Le viste non disponibili vengono saltate secondo la stessa regola Meta. Durante il caricamento di un’immagine di riferimento Meta compare un segnaposto.
 
+Quando GeoCoach fornisce una foto dell’indizio, appare nella lezione, nell’elenco delle lezioni e nei dettagli salvati. Le lezioni senza foto originale mostrano comunque il panorama e la spiegazione.
+
 I corsi per principianti e tematici hanno miniature locali e il nome del corso attivo appare nella barra Impara. Seleziona un’immagine di riferimento Meta per ingrandirla; chiudila con X o Esc. Nella scheda della posizione rivelata, il nome del luogo apre Wikipedia se la ricerca trova un risultato; altrimenti resta testo e appare un avviso.
 
 Nel corso per principianti, Avanti apre un’altra lezione incompleta e Precedente torna a una lezione già visitata, anche dopo aver ricaricato; quando non ne restano, torni alla scelta del corso; nei corsi per paese prosegue nello stesso paese. Puoi cercare corsi tematici e per paese; i corsi per paese si ordinano alfabeticamente, per numero di lezioni o per avanzamento.

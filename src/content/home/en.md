@@ -735,6 +735,8 @@ Next marks a lesson seen and updates progress even without Save for Review. In B
 
 The 30 GeoCoach topic courses contain 959 lessons on signs, road markings, cars, languages, and regional clues. Their explanations and chosen panorama links are bundled with GeoTrainer, so lessons do not depend on the GeoCoach API while playing. Each lesson links its original map and credits its creator. Unavailable views are skipped by the same Meta rule. A loading placeholder appears while a Meta reference image is arriving.
 
+When GeoCoach provides a clue photo, it appears in the lesson, lesson browser, and saved detail. Lessons without a source photo still show their panorama and explanation.
+
 The Beginner and topic courses have local thumbnails, and the active course name appears in the Learn header. Select a Meta reference image to enlarge it; use X or Escape to close. On a revealed location card, a found place name links to Wikipedia when its lookup returns a result; otherwise the name stays plain and an unavailable message appears.
 
 Choose Beginner, a topic, or a country in the course selector; each course shows completion percentage. Search both topic and country courses; sort country courses alphabetically, by lesson count, or by completion. **Start learning** opens an unfinished lesson in the selected course, using saved progress when available. **Browse Meta lessons** opens the searchable list if you want a specific lesson; filter by all, unfinished, or completed, then choose any lesson and use **Start selected lesson**.

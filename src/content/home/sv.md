@@ -322,6 +322,8 @@ Du kan söka efter länder och sortera alfabetiskt, efter antal lektioner eller 
 
 De 30 GeoCoach-temakurserna innehåller 959 lektioner om skyltar, vägmarkeringar, bilar, språk och regionala ledtrådar. Förklaringar och länkar till valda panoramavyer finns lokalt i GeoTrainer, så lektionerna behöver inte GeoCoachs API under studierna. Varje lektion länkar till ursprungskartan och anger skaparen. Otillgängliga vyer hoppas över enligt samma Meta-regel. En laddningsplatshållare visas medan en Meta-referensbild hämtas.
 
+När GeoCoach har ett ledtrådsfoto visas det i lektionen, lektionslistan och de sparade detaljerna. Lektioner utan källfoto visar fortfarande panorama och förklaring.
+
 Nybörjar- och temakurserna har lokala miniatyrbilder, och namnet på den aktiva kursen visas i Lär-fältet. Välj en Meta-referensbild för att förstora den; stäng med X eller Escape. På kortet för en avslöjad plats länkar platsnamnet till Wikipedia när sökningen ger ett resultat; annars är namnet vanlig text och ett meddelande visas.
 
 Välj Nybörjarkursen, ett tema eller ett land i kursväljaren; varje kurs visar slutförande i procent. Sök bland tema- och landskurser; landskurser kan sorteras efter namn, antal lektioner eller framsteg. **Börja lära** öppnar en oavslutad lektion i den valda kursen med hänsyn till sparade framsteg. **Bläddra bland Meta-lektioner** öppnar listan om du vill välja en viss lektion; sök i lektionstexten och filtrera mellan alla, oavslutade och slutförda. Välj vilken lektion som helst, även en slutförd, och öppna den med **Starta vald lektion**. Att öppna en slutförd lektion igen behåller dess status och schemalägger inget repetitionskort. Kurslektioner och förklaringar följer det valda gränssnittsspråket, oberoende av spel- och AI-språken.

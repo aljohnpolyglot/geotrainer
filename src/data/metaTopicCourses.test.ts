@@ -9,6 +9,7 @@ import { viewFromGoogleMapsUrl } from './metaCountryViews';
 test('all GeoCoach topic lessons and their eight-language snapshots are local and playable', () => {
   assert.equal(META_TOPIC_COURSES.length, 30);
   assert.equal(META_TOPIC_COURSES.reduce((count, course) => count + course.lessonCount, 0), 959);
+  let picturedLessons = 0;
   for (const course of META_TOPIC_COURSES) {
     assert.match(course.sourceUrl || '', /^https:\/\/www\.geocoach\.me\/maps\//);
     assert.ok(course.creator);
@@ -24,6 +25,10 @@ test('all GeoCoach topic lessons and their eight-language snapshots are local an
       assert.equal(metaCourseForLesson(tip.id)?.code, course.code);
       assert.ok(viewFromGoogleMapsUrl(tip.mapUrl), `${tip.id}: missing panorama view`);
       assert.doesNotMatch(`${tip.section} ${tip.text}`, /�|<[^>]+>|https?:\/\/|\*\*/);
+      if (tip.image) {
+        assert.ok(existsSync(`public/${tip.image}`), `${tip.id}: missing bundled clue photo`);
+        picturedLessons++;
+      }
     }
     for (const { code } of LANGUAGE_OPTIONS) {
       if (code === 'en') continue;
@@ -41,4 +46,5 @@ test('all GeoCoach topic lessons and their eight-language snapshots are local an
       }
     }
   }
+  assert.equal(picturedLessons, 883);
 });
