@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateDistanceKm, calculateRoundScore, compassDirection, formatScorePercentage, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt, sameStreetViewPov } from './gameLogic';
+import { calculateDistanceKm, calculateRoundScore, compassDirection, formatScorePercentage, isNmpz, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt, sameStreetViewPov } from './gameLogic';
 
 test('game percentages use the saved maximum and interface locale without dividing by zero', () => {
   assert.equal(formatScorePercentage(43121, 75000, 'en'), '57.5%');
@@ -38,6 +38,8 @@ test('completed rounds unlock panorama controls without changing active-round re
 });
 
 test('NMPZ camera lock recognizes an already restored POV', () => {
+  assert.equal(isNmpz(false, false, false), true);
+  assert.equal(isNmpz(false, true, true), false);
   assert.equal(sameStreetViewPov({ heading: 0, pitch: 0 }, { heading: 360, pitch: 0 }), true);
   assert.equal(sameStreetViewPov({ heading: 1, pitch: 0 }, { heading: 0, pitch: 0 }), false);
 });

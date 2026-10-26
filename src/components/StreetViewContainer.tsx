@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 import { CompassStyle, LocationResult, StreetViewState } from '../types';
 import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucide-react';
-import { compassDirection, sameStreetViewPov } from '../services/gameLogic';
+import { compassDirection, isNmpz, sameStreetViewPov } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { ReturnToStartControl } from './ReturnToStartControl';
 import { returnToStart, viewPositionFromPano } from '../services/returnToStart';
@@ -88,6 +88,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const [viewPosition, setViewPosition] = useState<{ panoId: string; position: { lat: number; lng: number } } | null>(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
+  const nmpz = isNmpz(canMove, canPan, canZoom);
 
   // Listen for Google Maps Authentication failures (invalid key, unactivated API, referrer block)
   useEffect(() => {
@@ -382,13 +383,14 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   }
 
   return (
-    <div className="relative flex-1 w-full h-full overflow-hidden bg-black select-none">
+    <div className="relative flex-1 w-full h-full overflow-hidden bg-black select-none" onKeyDownCapture={nmpz ? (event) => { event.preventDefault(); event.stopPropagation(); } : undefined}>
       {/* Street View Container Element */}
       <div
         ref={containerRef}
         className="w-full h-full absolute inset-0"
         style={{ width: '100%', height: '100%', visibility: awaitingPanorama ? 'hidden' : 'visible' }}
       />
+      {nmpz && <div className="absolute inset-0 z-10 cursor-default" style={{ touchAction: 'none' }} aria-hidden="true" />}
 
       {showReturnToStart && canMove && currentLocation && mapsLoaded && !isLoading && <ReturnToStartControl start={currentLocation} position={viewPosition?.panoId === currentLocation.panoId ? viewPosition.position : currentLocation} heading={heading} onReturn={() => returnToStart(panoInstanceRef.current, currentLocation.panoId, canMove)} />}
 
