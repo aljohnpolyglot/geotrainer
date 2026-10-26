@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateDistanceKm, calculateRoundScore, compassDirection, formatScorePercentage, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt } from './gameLogic';
+import { calculateDistanceKm, calculateRoundScore, compassDirection, formatScorePercentage, restoredRoundElapsed, resultReviewControls, resumeRoundStartedAt, sameStreetViewPov } from './gameLogic';
 
 test('game percentages use the saved maximum and interface locale without dividing by zero', () => {
   assert.equal(formatScorePercentage(43121, 75000, 'en'), '57.5%');
@@ -35,4 +35,9 @@ test('resuming Play keeps active round time without counting closed hours', () =
 test('completed rounds unlock panorama controls without changing active-round restrictions', () => {
   assert.deepEqual(resultReviewControls(false, false, false, false), { canMove: false, canPan: false, canZoom: false });
   assert.deepEqual(resultReviewControls(true, false, false, false), { canMove: true, canPan: true, canZoom: true });
+});
+
+test('NMPZ camera lock recognizes an already restored POV', () => {
+  assert.equal(sameStreetViewPov({ heading: 0, pitch: 0 }, { heading: 360, pitch: 0 }), true);
+  assert.equal(sameStreetViewPov({ heading: 1, pitch: 0 }, { heading: 0, pitch: 0 }), false);
 });

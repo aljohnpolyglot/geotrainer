@@ -83,6 +83,8 @@ export const resumeRoundStartedAt = (startedAt: number, pausedAt: number | null,
 
 export const resultReviewControls = (hasResult: boolean, canMove: boolean, canPan: boolean, canZoom: boolean) => hasResult ? { canMove: true, canPan: true, canZoom: true } : { canMove, canPan, canZoom };
 
+export const sameStreetViewPov = (current: { heading: number; pitch: number }, locked: { heading: number; pitch: number }) => Math.abs(((current.heading - locked.heading + 540) % 360) - 180) < 0.01 && Math.abs(current.pitch - locked.pitch) < 0.01;
+
 export function compassDirection(heading: number): string {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round((((heading % 360) + 360) % 360) / 45) % 8];
 }

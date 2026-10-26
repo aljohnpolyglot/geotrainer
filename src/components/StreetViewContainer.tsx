@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 import { CompassStyle, LocationResult, StreetViewState } from '../types';
 import { RefreshCw, KeyRound, ExternalLink, AlertCircle, RotateCcw } from 'lucide-react';
-import { compassDirection } from '../services/gameLogic';
+import { compassDirection, sameStreetViewPov } from '../services/gameLogic';
 import { setStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { ReturnToStartControl } from './ReturnToStartControl';
 import { returnToStart, viewPositionFromPano } from '../services/returnToStart';
@@ -65,6 +65,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
   const panoInstanceRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const lockedPovRef = useRef<{ heading: number; pitch: number }>({ heading: 0, pitch: 0 });
   const isLockingPovRef = useRef<boolean>(false);
+  const restoringLockedPovRef = useRef(false);
   const currentLocationRef = useRef(currentLocation);
   const onPanoramaChangedRef = useRef(onPanoramaChanged);
   const onViewChangedRef = useRef(onViewChanged);
@@ -209,7 +210,11 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
         const current = panoInstanceRef.current;
         if (!current) return;
         if (isLockingPovRef.current) {
-          current.setPov(lockedPovRef.current);
+          const pov = current.getPov();
+          if (!restoringLockedPovRef.current && !sameStreetViewPov(pov, lockedPovRef.current)) {
+            restoringLockedPovRef.current = true;
+            try { current.setPov(lockedPovRef.current); } finally { restoringLockedPovRef.current = false; }
+          }
           setHeading(lockedPovRef.current.heading);
           return;
         }
