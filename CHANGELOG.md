@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-27
+
+- Start NMPZ rounds with a wider panorama view while keeping movement, panning, and zoom locked.
+
 ## 2026-10-22
 
 - Keep the Bengali Bangladesh district course available while hiding the photo-less Georgian car course from new Meta selections; preserve access to a previously selected Georgian course.

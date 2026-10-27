@@ -280,6 +280,7 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       isLockingPovRef.current = !canPan;
       const savedView = restoredView?.locationPanoId === currentLocation.panoId ? restoredView : undefined;
       const targetPano = savedView?.panoId || currentLocation.panoId;
+      const initialZoom = nmpz ? 0 : savedView?.zoom ?? 1;
       panorama.setVisible(true);
       google.maps.event.trigger(panorama, 'resize');
       const initialPov = {
@@ -290,13 +291,13 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       if (panorama.getPano() === targetPano) {
         pendingPanoRef.current = '';
         // Walking already moved the live viewer here; keep its camera direction.
-        if (currentLocation.heading !== undefined || savedView) { panorama.setPov(initialPov); panorama.setZoom(savedView?.zoom ?? 1); }
+        if (currentLocation.heading !== undefined || savedView || nmpz) { panorama.setPov(initialPov); panorama.setZoom(initialZoom); }
         return;
       }
       pendingPanoRef.current = targetPano;
       panorama.setPano(targetPano);
       panorama.setPov(initialPov);
-      panorama.setZoom(savedView?.zoom ?? 1);
+      panorama.setZoom(initialZoom);
       panorama.setVisible(true);
     }
   }, [mapsLoaded, currentLocation, canMove, canPan, canZoom, restoredView, mapPreferences.showRoadLabels, mapPreferences.showImageryDate, mapPreferences.motionTracking, mapPreferences.movementStyle]);
