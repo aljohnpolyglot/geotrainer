@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-28
+
+- Keep NMPZ Review cards on their saved panorama and camera direction even when Review view variation is enabled.
+
 ## 2026-10-27
 
 - Start NMPZ rounds with a wider panorama view while keeping movement, panning, and zoom locked.

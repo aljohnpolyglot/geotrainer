@@ -1,7 +1,7 @@
 import { allowNearbyIslandReview, configuredCountryScoreFloor, intervalsFor } from '../data/reviewGrading';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRound, LocationResult, ReviewGrade, ReviewSessionKind } from '../types';
-import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
+import { calculateDistanceKm, calculateRoundScore, isNmpz, resumeRoundStartedAt } from '../services/gameLogic';
 import { creditedGuessCountry, nearbyIslandGuess, reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { onTrainerDbChange, reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
@@ -22,7 +22,7 @@ export const upcomingReviewCards = (queue: Attempt[], currentId: string) => queu
 async function prepareReviewCard(attempt: Attempt) {
   const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
   const [preferences, review, history, reopenedAnchor] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attemptsForPano(attempt.panoId), defaultLocationGenerator.reopenLocation(anchor, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true })]);
-  const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment);
+  const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment, isNmpz(attempt.canMove, attempt.canPan, attempt.canZoom));
   history.sort((a, b) => b.createdAt - a.createdAt);
   const recentlyShown = new Set(history.filter((item) => item.source === 'review' && item.shownPanoId).slice(0, 3).map((item) => item.shownPanoId!));
   const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown, reopenedAnchor);
