@@ -24,7 +24,7 @@ import { readLocationMetadata, METADATA_STORES, metadataStoreFor, writeMetadata 
 import { readPanoramaHistory } from './panoramaHistory';
 import type { DueShift } from './reviewRebalance';
 export { effectiveReviewDueAt, nextReviewAt, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart } from './reviewTiming';
-export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, shuffleInPlace } from './reviewPreferences';
+export { DEFAULT_SCHEDULER_PREFERENCES, hardOrAgainScoreForStrictness, normalizeSchedulerPreferences, reviewViewVariationDifficultyFor, shuffleInPlace } from './reviewPreferences';
 export { gameMistakes, isCountryMistake, passingScoreFor, reviewGradeForCorrection, reviewGradeForPerformance, reviewGradeForScore, shouldAutoSchedulePlayReview } from './reviewGrading';
 export { reconcileReviewAttempt } from './reviewSchedule';
 import { openDatabase, request, complete, STORE_NAMES, type StoreName } from './trainerDatabase';

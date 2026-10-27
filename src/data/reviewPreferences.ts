@@ -11,8 +11,10 @@ export const DEFAULT_SCHEDULER_PREFERENCES: SchedulerPreferences = {
   relearningMinutes: 10, easyFirstIntervalDays: 21, maximumIntervalDays: 3650,
   maximumAnswerSeconds: 60, reviewOrder: 'random', autoReviewScore: 3000, autoReviewWrongCountry: true, reviewDayResetMinutes: 0,
   reviewTimeZone: detectedTimeZone(), reviewTimeZoneAuto: true,
-  reviewViewVariationEnabled: false, reviewViewVariationDifficulty: 0,
+  reviewViewVariationStandardDifficulty: 0, reviewViewVariationNoMoveDifficulty: 0, reviewViewVariationNmpzDifficulty: 0,
 };
+
+export const reviewViewVariationDifficultyFor = (preferences: SchedulerPreferences, canMove: boolean, canPan: boolean, canZoom: boolean) => clampReviewViewVariationDifficulty(canMove ? preferences.reviewViewVariationStandardDifficulty : canPan || canZoom ? preferences.reviewViewVariationNoMoveDifficulty : preferences.reviewViewVariationNmpzDifficulty);
 
 export function shuffleInPlace<T>(items: T[], random = Math.random) {
   for (let index = items.length - 1; index > 0; index--) {
@@ -33,6 +35,8 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
   const floor = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.min(5000, Math.max(passingScoreFor(strictness), Math.round(value))) : undefined;
   const defaultFloor = floor(source.defaultCountryScoreFloor);
   const countryFloors = Object.fromEntries(Object.entries(source.countryScoreFloors && typeof source.countryScoreFloors === 'object' ? source.countryScoreFloors : {}).flatMap(([code, value]) => { const score = floor(value); return Object.hasOwn(COUNTRIES, code) && score !== undefined ? [[code, score]] : []; }));
+  const legacyVariation = source.reviewViewVariationEnabled === true ? clampReviewViewVariationDifficulty(source.reviewViewVariationDifficulty) : 0;
+  const variation = (key: 'reviewViewVariationStandardDifficulty' | 'reviewViewVariationNoMoveDifficulty' | 'reviewViewVariationNmpzDifficulty') => source[key] === undefined ? legacyVariation : clampReviewViewVariationDifficulty(source[key]);
   return {
     strictness,
     ...(defaultFloor !== undefined ? { defaultCountryScoreFloor: defaultFloor } : {}),
@@ -44,7 +48,8 @@ export const normalizeSchedulerPreferences = (value: unknown): SchedulerPreferen
     maximumAnswerSeconds: number('maximumAnswerSeconds', 10, 600), reviewOrder: source.reviewOrder === 'due' ? 'due' : 'random',
     autoReviewScore: Number.isFinite(autoReviewScore) ? Math.min(5000, Math.max(0, autoReviewScore)) : hardOrAgainScoreForStrictness(strictness), autoReviewWrongCountry: source.autoReviewWrongCountry !== false,
     reviewDayResetMinutes: number('reviewDayResetMinutes', 0, 1439), reviewTimeZone: auto ? detectedTimeZone() : (timeZone || detectedTimeZone()), reviewTimeZoneAuto: auto,
-    reviewViewVariationEnabled: source.reviewViewVariationEnabled === true,
-    reviewViewVariationDifficulty: clampReviewViewVariationDifficulty(source.reviewViewVariationDifficulty),
+    reviewViewVariationStandardDifficulty: variation('reviewViewVariationStandardDifficulty'),
+    reviewViewVariationNoMoveDifficulty: variation('reviewViewVariationNoMoveDifficulty'),
+    reviewViewVariationNmpzDifficulty: variation('reviewViewVariationNmpzDifficulty'),
   };
 };

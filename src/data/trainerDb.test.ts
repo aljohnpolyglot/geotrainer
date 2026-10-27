@@ -132,7 +132,7 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.scheduleFirstPlay('pano-first-play', 'again')).intervalDays, 21);
   await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), maximumIntervalDays: 30, easyFirstIntervalDays: 90 });
   assert.equal((await trainerDb.scheduleFirstPlay('pano-clamped-play', 'easy')).intervalDays, 30);
-  await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), strictness: 'pro', maximumAnswerSeconds: 45, reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 73 });
+  await trainerDb.setSetting('schedulerPreferences', { ...(await trainerDb.schedulerPreferences()), strictness: 'pro', maximumAnswerSeconds: 45, reviewViewVariationStandardDifficulty: 73, reviewViewVariationNoMoveDifficulty: 73, reviewViewVariationNmpzDifficulty: 73 });
   assert.equal((await trainerDb.schedulerPreferences()).strictness, 'pro');
 
   await trainerDb.saveVisit({ id: 'visit-1', panoId: 'pano-new', lat: 52.5, lng: 13.4, countryCode: 'DE', collectionId: 'world', openedAt: 1, closedAt: 2, activeTimeSeconds: 1, wasRevealed: false, bookmarked: false });
@@ -160,8 +160,11 @@ test('migration is idempotent and backup/import protects history', async () => {
   assert.equal((await trainerDb.reviews()).length, expected.reviews);
   assert.equal((await trainerDb.clues()).length, 1);
   assert.equal((await trainerDb.schedulerPreferences()).maximumAnswerSeconds, 45);
-  assert.equal((await trainerDb.schedulerPreferences()).reviewViewVariationEnabled, true);
-  assert.equal((await trainerDb.schedulerPreferences()).reviewViewVariationDifficulty, 73);
+  assert.deepEqual([
+    (await trainerDb.schedulerPreferences()).reviewViewVariationStandardDifficulty,
+    (await trainerDb.schedulerPreferences()).reviewViewVariationNoMoveDifficulty,
+    (await trainerDb.schedulerPreferences()).reviewViewVariationNmpzDifficulty,
+  ], [73, 73, 73]);
   await importBackup(backup, 'merge');
   assert.equal((await trainerDb.locations()).length, expected.locations);
   assert.equal((await trainerDb.attempts()).length, expected.attempts);
@@ -268,15 +271,16 @@ test('saved game preferences are normalized before reuse', async () => {
 });
 
 test('fresh review settings randomize with a deterministic Fisher-Yates shuffle', async () => {
-  const { normalizeSchedulerPreferences, shuffleInPlace } = await import('./trainerDb');
+  const { normalizeSchedulerPreferences, reviewViewVariationDifficultyFor, shuffleInPlace } = await import('./trainerDb');
   assert.equal(normalizeSchedulerPreferences(undefined).reviewOrder, 'random');
   assert.deepEqual(shuffleInPlace([1, 2, 3, 4], () => 0), [2, 3, 4, 1]);
   assert.equal(normalizeSchedulerPreferences({ reviewOrder: 'due' }).reviewOrder, 'due');
-  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationEnabled, false);
-  assert.equal(normalizeSchedulerPreferences(undefined).reviewViewVariationDifficulty, 0);
-  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true }).reviewViewVariationDifficulty, 0);
-  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationDifficulty: 50 }).reviewViewVariationDifficulty, 50);
-  assert.equal(normalizeSchedulerPreferences({ reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 140 }).reviewViewVariationDifficulty, 100);
+  const defaults = normalizeSchedulerPreferences(undefined);
+  assert.deepEqual([defaults.reviewViewVariationStandardDifficulty, defaults.reviewViewVariationNoMoveDifficulty, defaults.reviewViewVariationNmpzDifficulty], [0, 0, 0]);
+  const migrated = normalizeSchedulerPreferences({ reviewViewVariationEnabled: true, reviewViewVariationDifficulty: 73 });
+  assert.deepEqual([migrated.reviewViewVariationStandardDifficulty, migrated.reviewViewVariationNoMoveDifficulty, migrated.reviewViewVariationNmpzDifficulty], [73, 73, 73]);
+  const split = normalizeSchedulerPreferences({ reviewViewVariationStandardDifficulty: 10, reviewViewVariationNoMoveDifficulty: 50, reviewViewVariationNmpzDifficulty: 140 });
+  assert.deepEqual([reviewViewVariationDifficultyFor(split, true, true, true), reviewViewVariationDifficultyFor(split, false, true, true), reviewViewVariationDifficultyFor(split, false, false, false)], [10, 50, 100]);
 });
 
 test('Random order shuffles saved Meta cards in custom Review queues', async () => {

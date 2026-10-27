@@ -1,7 +1,7 @@
 import { allowNearbyIslandReview, configuredCountryScoreFloor, intervalsFor } from '../data/reviewGrading';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Attempt, GameRound, LocationResult, ReviewGrade, ReviewSessionKind } from '../types';
-import { calculateDistanceKm, calculateRoundScore, isNmpz, resumeRoundStartedAt } from '../services/gameLogic';
+import { calculateDistanceKm, calculateRoundScore, resumeRoundStartedAt } from '../services/gameLogic';
 import { creditedGuessCountry, nearbyIslandGuess, reverseGeocodeLocation } from '../services/geocoding';
 import { defaultLocationGenerator } from '../services/locationGenerator';
 import { onTrainerDbChange, reviewGradeForCorrection, reviewGradeForPerformance, shouldScheduleReview, trainerDb } from '../data/trainerDb';
@@ -10,6 +10,7 @@ import { isLatestRequest } from '../services/requestIntegrity';
 import { getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { gradedReviewRecord, generalizedReviewRecord } from '../data/reviewSchedule';
 import type { ReviewStat, SavedReviewSession } from '../data/reviewProgress';
+import { reviewViewVariationDifficultyFor } from '../data/reviewPreferences';
 
 export const restoredReviewProgress = (saved: Pick<SavedReviewSession, 'initialTotal' | 'stats'>, remaining: number) => {
   const stats = Array.isArray(saved.stats) ? saved.stats : [];
@@ -22,7 +23,8 @@ export const upcomingReviewCards = (queue: Attempt[], currentId: string) => queu
 async function prepareReviewCard(attempt: Attempt) {
   const anchor = { panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, heading: attempt.heading, environment: attempt.environment };
   const [preferences, review, history, reopenedAnchor] = await Promise.all([trainerDb.schedulerPreferences(), trainerDb.reviewState(attempt.panoId), trainerDb.attemptsForPano(attempt.panoId), defaultLocationGenerator.reopenLocation(anchor, { fallbackRadiusM: 50, maxOriginalDistanceKm: .05, officialFallback: true })]);
-  const plan = planReviewVariation(!!preferences.reviewViewVariationEnabled, preferences.reviewViewVariationDifficulty, review, attempt.heading, attempt.environment, isNmpz(attempt.canMove, attempt.canPan, attempt.canZoom));
+  const difficulty = reviewViewVariationDifficultyFor(preferences, attempt.canMove, attempt.canPan, attempt.canZoom);
+  const plan = planReviewVariation(difficulty > 0, difficulty, review, attempt.heading, attempt.environment);
   history.sort((a, b) => b.createdAt - a.createdAt);
   const recentlyShown = new Set(history.filter((item) => item.source === 'review' && item.shownPanoId).slice(0, 3).map((item) => item.shownPanoId!));
   const reopened = await defaultLocationGenerator.resolveReviewLocation(anchor, plan, recentlyShown, reopenedAnchor);

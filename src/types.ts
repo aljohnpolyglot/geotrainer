@@ -118,8 +118,12 @@ export interface SchedulerPreferences {
   reviewDayResetMinutes?: number;
   reviewTimeZone?: string;
   reviewTimeZoneAuto?: boolean;
+  /** Legacy single-slider settings retained for backup migration. */
   reviewViewVariationEnabled?: boolean;
   reviewViewVariationDifficulty?: number;
+  reviewViewVariationStandardDifficulty?: number;
+  reviewViewVariationNoMoveDifficulty?: number;
+  reviewViewVariationNmpzDifficulty?: number;
 }
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;

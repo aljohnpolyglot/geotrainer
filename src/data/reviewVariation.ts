@@ -50,11 +50,10 @@ const distanceFor = (level: GeneralizationLevel, difficulty: number, environment
   return Math.round((minimum + (maximum - minimum) * difficulty / 100) * safety);
 };
 
-export function planReviewVariation(enabled: boolean, difficultyValue: unknown, review: ReviewRecord | undefined, anchorHeading: number | undefined, environment: Environment = 'mixed', preserveView = false): ReviewVariationPlan {
+export function planReviewVariation(enabled: boolean, difficultyValue: unknown, review: ReviewRecord | undefined, anchorHeading: number | undefined, environment: Environment = 'mixed'): ReviewVariationPlan {
   const difficulty = clampReviewViewVariationDifficulty(difficultyValue);
   const seed = reviewVariationSeed(`${review?.panoId || 'new'}:${review?.reviewCount || 0}:${review?.lapseCount || 0}`);
-  if (preserveView) return { kind: 'original', generalizationLevel: 0, heading: anchorHeading ?? 0, maxDistanceM: 0, seed };
-  if (!enabled || difficulty === 0) return { kind: 'original', generalizationLevel: 0, heading: anchorHeading, maxDistanceM: 0, seed };
+  if (!enabled || difficulty === 0) return { kind: 'original', generalizationLevel: 0, heading: anchorHeading ?? 0, maxDistanceM: 0, seed };
   const level = derivedGeneralizationLevel(review);
   if (seed % 7 === 0) return { kind: 'original', generalizationLevel: level, heading: anchorHeading, maxDistanceM: 0, seed };
   const variedHeading = ((anchorHeading ?? seed % 360) + 70 + seed % 111) % 360;

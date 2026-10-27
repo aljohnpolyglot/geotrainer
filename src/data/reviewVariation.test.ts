@@ -1,18 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { ReviewRecord } from '../types';
-import { chooseReviewCandidate, clampReviewViewVariationDifficulty, nextGeneralizationLevel, planReviewVariation, reviewVariationCheckpoint, reviewVariationSeed } from './reviewVariation';
+import { chooseReviewCandidate, clampReviewViewVariationDifficulty, nextGeneralizationLevel, planReviewVariation, reviewVariationCheckpoint } from './reviewVariation';
 
 const review = (extra: Partial<ReviewRecord> = {}): ReviewRecord => ({ id: 'card', panoId: 'card', dueAt: 0, intervalDays: 0, gradingHistory: [], lapseCount: 0, reviewCount: 0, ...extra });
 
 test('disabled or zero-difficulty variation preserves the original view', () => {
   assert.deepEqual(planReviewVariation(false, 100, review({ reviewCount: 20, intervalDays: 365 }), 42, 'rural').kind, 'original');
   assert.deepEqual(planReviewVariation(true, 0, review({ reviewCount: 20, intervalDays: 365 }), 42, 'rural').kind, 'original');
-});
-
-test('NMPZ review preserves its saved panorama and camera direction', () => {
-  assert.deepEqual(planReviewVariation(true, 100, review({ reviewCount: 20, intervalDays: 365 }), 42, 'rural', true), { kind: 'original', generalizationLevel: 0, heading: 42, maxDistanceM: 0, seed: reviewVariationSeed('card:20:0') });
-  assert.equal(planReviewVariation(true, 100, review(), undefined, 'mixed', true).heading, 0);
+  assert.equal(planReviewVariation(false, 0, review(), undefined).heading, 0);
 });
 
 test('view variation progresses from heading changes to broad mature movement', () => {

@@ -2,7 +2,7 @@
 
 ## 2026-10-28
 
-- Keep NMPZ Review cards on their saved panorama and camera direction even when Review view variation is enabled.
+- Give Standard, No Move, and NMPZ Review cards independent view-variation sliders that default to the original saved view.
 
 ## 2026-10-27
 
