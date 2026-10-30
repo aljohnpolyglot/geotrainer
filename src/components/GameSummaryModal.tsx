@@ -149,7 +149,7 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
       id="game-summary-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200"
     >
-      <div className="w-full max-w-5xl h-[92vh] max-h-[780px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
+      <div className="w-full max-w-5xl h-[92dvh] max-h-[780px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
         {/* Top Summary Banner */}
         <div className="p-4 sm:p-6 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-3.5">
@@ -193,12 +193,12 @@ export const GameSummaryModal: React.FC<GameSummaryModalProps> = ({
         </div>
 
         {/* Center: Map + Round breakdown columns */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <div className="min-h-0 flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Map showing all rounds */}
-          <div ref={mapContainerRef} className="flex-1 h-64 md:h-full relative bg-stone-950" />
+          <div ref={mapContainerRef} className="h-[34dvh] max-h-72 flex-none md:h-full md:max-h-none md:flex-1 relative bg-stone-950" />
 
           {/* Round-by-round breakdown sidebar */}
-          <div className="w-full md:w-80 bg-stone-900/95 border-t md:border-t-0 md:border-l border-stone-800 flex flex-col overflow-y-auto">
+          <div className="min-h-0 flex-1 w-full md:w-80 md:flex-none bg-stone-900/95 border-t md:border-t-0 md:border-l border-stone-800 flex flex-col overflow-y-auto">
             <div className="px-4 py-3 bg-stone-950/60 border-b border-stone-800 flex items-center justify-between">
               <div>
                 <span className="text-xs font-semibold text-stone-300 uppercase tracking-wider block">
