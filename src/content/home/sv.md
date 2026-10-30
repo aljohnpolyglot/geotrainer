@@ -63,6 +63,7 @@ Prioritet styr hur **nya platser i Anpassat lärande och genererade spelrundor**
 - **Slumpmässigt** (standard) väljer ur det möjliga urvalet utan att använda din historik. I Världen tonas mycket små territorier ned så att de inte dominerar. Använd det för variation eller en bred rundtur i samlingen.
 - **Bekanta platser** väljer en tidigare mött möjlig plats som utgångspunkt och söker ungefär 1–12 km runt den. Det tränar omgivningen och närliggande vyer i stället för att upprepa exakt samma panorama.
 - **Minst erfarenhet** väljer först ett osynligt eller minst besökt möjligt land, fyller inkluderade regioner som fortfarande är grå i Täckning och siktar sedan på den största återstående geografiska luckan. Regionsteget gäller även samlingar med ett enda land; regioner utan en användbar lokal punkt faller tillbaka till den landsomfattande lucksökningen.
+- **Svaga områden** börjar med Minst erfarenhet när det finns få poängsatta gissningar och prioriterar sedan gradvis länder där misstag upprepas i Spela utan AI-hjälp eller i bedömda repetitioner. Fel land skiljs från avstånd inom rätt land, och landets storlek räknas med. När det finns tillräckligt med resultat kan ett svagare område eller en stadsmiljö eller landsbygd prioriteras. Andra platser fortsätter att dyka upp, och samma land upprepas inte direkt. Läget antar inte vilken visuell ledtråd som orsakade misstaget.
 
 Om det inte finns någon möjlig historik börjar Bekanta platser och Minst erfarenhet från det valda urvalet som Slumpmässigt. Vid en sökning med Minst erfarenhet och flera länder provar GeoTrainer först det valda grå eller minst besökta landet och dess regionala mål. Varje sökning utan ett giltigt panorama, även när panoramat ligger utanför det begärda landet, går vidare direkt.
 
@@ -119,6 +120,8 @@ I Spel är Street View-täckning och vägnamn avstängda som standard på gissni
 Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig även spara rätt besvarade platser. Den visas bara när den visade platsen saknar repetitionskort, inklusive platser i samma land inom 50 meter. Du kan också bläddra till och spara tidigare rundor. Ikonen försvinner efter sparandet och resultatet förblir öppet. Poäng och befintliga scheman ändras inte. Sparandet finns kvar efter omladdning och molnsynkronisering är fortfarande manuell. Om sparandet misslyckas kan du försöka igen. En kort bekräftelse visar att platsen har sparats för repetition.
 
 ## Repetition och schemaläggning
+
+Repetitionslistan visar 10 platser per sida. Datum, avstånd och poäng i en rad hör till ett sparat försök och kan vara äldre än kortets senaste repetition. Antalet förfallna kort följer det sparade schemat. **Skjut upp förfallna repetitioner till imorgon** flyttar alla kort som förfaller nu till nästa repetitionsdag utan att ändra försök, betyg eller intervall. Synkronisera varje enhet manuellt för att dela ändringen.
 
 När närliggande försök från Lär och Spela delar ett kort använder Repetition spelrundans rörelseregel: Standard, No Move eller NMPZ. Det läget visas i det övre fältet. Efter svaret går det att förflytta sig, rotera och zooma i panoramat.
 

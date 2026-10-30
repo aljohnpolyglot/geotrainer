@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { COUNTRIES } from "../data/countries";
 import { isReviewDue, nextReviewDayBoundary, nextScheduledReviewAt, reviewDayStart, trainerDb } from "../data/trainerDb";
+import { createReviewLookup } from "../data/reviewIdentity";
 import { savedMetaLessonIds } from "../data/metaLessons";
 import { meaningfulSessions } from "../analytics/advanced";
 import { performanceAttempts } from "../analytics/statistics";
@@ -22,7 +23,7 @@ const dayStart = () => new Date().setHours(0, 0, 0, 0);
 
 export type { HubTab } from "./trainerHubTypes";
 
-export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainCountries, onSelectGame, initialTab = "review", initialHistoryKind = "games", initialStatisticsSection = "overview", onViewStateChange }: TrainerHubProps) {
+export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainCountries, onDataChanged, onSelectGame, initialTab = "review", initialHistoryKind = "games", initialStatisticsSection = "overview", onViewStateChange }: TrainerHubProps) {
   const t = useHubTranslate();
   const { ui } = useLanguagePreferences();
   const [tab, setTab] = useState<HubTab>(initialTab);
@@ -127,6 +128,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
   const completedToday = scheduler ? reviews.reduce((count, review) => count + (review.gradingHistory?.filter(({ at }) => at >= reviewToday).length || (review.lastReviewedAt && review.lastReviewedAt >= reviewToday ? 1 : 0)), 0) : 0;
   const nextDueAt = scheduler ? nextScheduledReviewAt(reviews, Date.now(), scheduler) : undefined;
   const startReview = (attempt: Attempt) => onReview(attempt, [attempt, ...queue.filter((item) => item.id !== attempt.id)], reviewSource, reviewKind);
+  const reviewLookup = useMemo(() => createReviewLookup(reviews, locations, attempts), [reviews, locations, attempts]);
   const gradedAttempts = useMemo(() => performanceAttempts(attempts, true, true), [attempts]);
   const today = dayStart();
   const todayVisits = visits.filter((item) => item.openedAt >= today);
@@ -158,7 +160,7 @@ export function TrainerHub({ collections, refreshKey, onReview, onOpen, onTrainC
     {!loaded ? <div className="hub-loading"><RefreshCw className="spin" /> {t("loading")}</div> : <div className="hub-content">
       {tab === "progress" && <ProgressPanel todayVisits={todayVisits} todayAttempts={todayAttempts} todayActive={todayActive} allActive={allActive} locationsCount={locations.length} countryCount={countryCodesSeen.size} attempts={gradedAttempts} correctCount={correct.length} weakCountries={weakCountries} confusions={confusions} dueCount={reviews.filter((item) => item.dueAt <= Date.now()).length} setFilters={setFilters} setTab={(next) => persistView({ tab: next })} onTrainCountries={onTrainCountries} />}
       {visitedStatistics && <div hidden={tab !== "statistics"}><StatisticsPanel attempts={attempts} visits={visits} locations={locations} reviews={reviews} readyDueCount={readyDueCount} sessions={sessions} collections={collections} onTrainCountries={onTrainCountries} onRebalanced={load} initialSection={statisticsSection} onSectionChange={(next) => persistView({ statisticsSection: next })} locationsPanel={<CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} />} historyPanel={historyPanel} /></div>}
-      {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} dailyMinimum={scheduler?.minimumReviewsPerDay} completedToday={completedToday} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
+      {tab === "review" && <ReviewPanel collections={collections} reviewCollection={reviewCollection} setReviewCollection={setReviewCollection} filters={filters} setFilters={setFilters} customMin={customMin} setCustomMin={setCustomMin} customMax={customMax} setCustomMax={setCustomMax} queue={queue} dueCount={dueCount} reviewCount={reviews.length} dailyMinimum={scheduler?.minimumReviewsPerDay} completedToday={completedToday} nextDueAt={nextDueAt} reviewTimeZone={scheduler?.reviewTimeZone} startReview={startReview} reviewForAttempt={(attempt) => reviewLookup({ panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, sourcePointHash: attempt.sourcePointHash })} postponeDueReviews={async () => { await trainerDb.postponeDueReviewsOneDay(); await load(); setQueue(await trainerDb.reviewQueue(effectiveFilters)); onDataChanged(); }} weakCountries={weakCountries} unseen={unseen} confusions={confusions} onTrainCountries={onTrainCountries} />}
       {tab === "clues" && <TrainerHubClues clues={clues} learnedMetas={learnedMetas} notebookNotes={notebookNotes} coachNotes={coachNotes} onDelete={(id) => { void trainerDb.deleteClue(id).then(load); }} onDeleteNote={(note) => { void deleteNotebookHistoryNote(note).then(load); }} onSaveNote={async (note) => { await saveNotebookHistoryNote(note); await load(); }} onTrainCountries={onTrainCountries} />}
       {visitedCoverage && <div hidden={tab !== "coverage"}><CoveragePanel locations={locations} attempts={attempts} reviews={reviews} countries={countries} unseen={unseen} clues={clues} countryFilter={countryFilter} setCountryFilter={setCountryFilter} clueCountry={clueCountry} setClueCountry={setClueCountry} load={load} onOpen={onOpen} /></div>}
       {tab === "history" && historyPanel}

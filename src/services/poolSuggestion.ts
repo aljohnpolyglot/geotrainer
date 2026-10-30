@@ -18,7 +18,7 @@ export async function suggestLocationPool(description: string, language: Support
     environment: pick<Environment>(body.pool.environment, ['mixed', 'urban', 'suburban', 'rural']),
     urbanLevel: [1, 2, 3].includes(Number(body.pool.urbanLevel)) ? Number(body.pool.urbanLevel) as UrbanLevel : undefined,
     samplingMode: pick<SamplingMode>(body.pool.samplingMode, ['natural', 'balanced']),
-    priority: pick<LearnPriority>(body.pool.priority, ['random', 'familiar', 'least-exposure']),
+    priority: pick<LearnPriority>(body.pool.priority, ['random', 'familiar', 'least-exposure', 'weak-spots']),
     panoramaSource: pick<PanoramaSource>(body.pool.panoramaSource, ['official', 'mixed', 'contributor']),
     allowInteriors: typeof body.pool.allowInteriors === 'boolean' ? body.pool.allowInteriors : undefined,
   };

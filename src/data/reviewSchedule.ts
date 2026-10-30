@@ -24,7 +24,12 @@ export function reconcileReviewAttempt(review: ReviewRecord, attempt: Attempt, p
   if (attempt.source !== 'review' || (review.lastReviewedAt || 0) > at) return review;
   const grade = attempt.grade || reviewGradeForPerformance(attempt.score, attempt.timeSpentSeconds, attempt.guessedCountryCode === attempt.countryCode, preferences.maximumAnswerSeconds, preferences.strictness, configuredCountryScoreFloor(attempt.countryCode, preferences));
   const intervalDays = attempt.intervalDays ?? Math.min(preferences.maximumIntervalDays, intervalsFor(review.intervalDays, preferences)[grade]);
-  if (review.lastReviewedAt === at) return review.dueAdjustedAt && review.dueAdjustedAt >= at ? review : attempt.nextDueAt !== undefined && (review.dueAt !== attempt.nextDueAt || review.intervalDays !== intervalDays) ? { ...review, dueAt: attempt.nextDueAt, intervalDays } : review;
+  if (review.lastReviewedAt === at) {
+    if (review.dueAdjustedAt && review.dueAdjustedAt >= at && (attempt.nextDueAt === undefined || review.naturalDueAt === undefined || review.naturalDueAt === attempt.nextDueAt)) return review;
+    if (attempt.nextDueAt === undefined || review.dueAt === attempt.nextDueAt && review.intervalDays === intervalDays && !review.dueAdjustedAt) return review;
+    const { dueAdjustedAt: _dueAdjustedAt, naturalDueAt: _naturalDueAt, ...unadjusted } = review;
+    return { ...unadjusted, dueAt: attempt.nextDueAt, intervalDays };
+  }
   const { dueAdjustedAt: _dueAdjustedAt, naturalDueAt: _naturalDueAt, ...unadjusted } = review;
   return { ...unadjusted, dueAt: attempt.nextDueAt ?? nextReviewAt(at, intervalDays, preferences), intervalDays, gradingHistory: [...(review.gradingHistory || []), { grade, at }], lapseCount: review.lapseCount + (grade === 'again' ? 1 : 0), reviewCount: review.reviewCount + 1, lastReviewedAt: at };
 }

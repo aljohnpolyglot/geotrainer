@@ -194,6 +194,22 @@ export const trainerDb = {
   panoramaHistory: async (point: Parameters<typeof readPanoramaHistory>[1]) => readPanoramaHistory(await openDatabase(), point),
   location: (panoId: string) => get<TrainerLocation>('locations', panoId),
   attempts: () => all<Attempt>('attempts'),
+  recentAttempts: async (limit = 500): Promise<Attempt[]> => {
+    const db = await openDatabase();
+    const tx = db.transaction('attempts');
+    const values: Attempt[] = [];
+    await new Promise<void>((resolve, reject) => {
+      const cursor = tx.objectStore('attempts').index('createdAt').openCursor(null, 'prev');
+      cursor.onsuccess = () => {
+        const item = cursor.result;
+        if (!item || values.length >= limit) { resolve(); return; }
+        values.push(item.value as Attempt);
+        item.continue();
+      };
+      cursor.onerror = () => reject(cursor.error);
+    });
+    return values;
+  },
   attempt: (id: string) => get<Attempt>('attempts', id),
   attemptsForPano: async (panoId: string) => {
     const db = await openDatabase();
@@ -210,6 +226,16 @@ export const trainerDb = {
     if (!shifts.length) return;
     await rebalanceReviewDates(shifts, openDatabase);
     notifyChange({ operation: 'rebalance:reviews' });
+  },
+  async postponeDueReviewsOneDay(): Promise<number> {
+    await maintainReviews();
+    const [reviews, preferences] = await Promise.all([all<ReviewRecord>('reviews'), trainerDb.schedulerPreferences()]);
+    const now = Date.now();
+    const tomorrow = nextReviewAt(now, 1, preferences);
+    const shifts = reviews.filter((review) => isReviewDue(review, now, preferences)).map((review) => ({ id: review.id, fromDueAt: review.dueAt, toDueAt: tomorrow }));
+    await rebalanceReviewDates(shifts, openDatabase);
+    if (shifts.length) notifyChange({ operation: 'postpone:reviews' });
+    return shifts.length;
   },
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),
   collections: () => all<Collection>('collections'),

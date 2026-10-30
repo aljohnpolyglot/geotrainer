@@ -76,7 +76,7 @@ const poolResponseSchema = { type: 'OBJECT', properties: {
   environment: { type: 'STRING', enum: ['mixed', 'urban', 'suburban', 'rural'] },
   urbanLevel: { type: 'STRING', enum: ['1', '2', '3'] },
   samplingMode: { type: 'STRING', enum: ['natural', 'balanced'] },
-  priority: { type: 'STRING', enum: ['random', 'familiar', 'least-exposure'] },
+  priority: { type: 'STRING', enum: ['random', 'familiar', 'least-exposure', 'weak-spots'] },
   panoramaSource: { type: 'STRING', enum: ['official', 'mixed', 'contributor'] },
   allowInteriors: { type: 'BOOLEAN' },
 }, required: ['countryCodes', 'placeMode', 'placeSelection', 'environment', 'urbanLevel', 'samplingMode', 'priority', 'panoramaSource', 'allowInteriors'] };
@@ -89,7 +89,7 @@ export function normalizePoolSuggestion(value: unknown) {
   const countryCodes = [...new Set(Array.isArray(source.countryCodes) ? source.countryCodes.map(String).map((code) => code.toUpperCase()).filter((code) => code in countryCatalog) : [])].slice(0, 40);
   if (!countryCodes.length) throw new Error('Gemini returned no valid countries.');
   const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T) => allowed.includes(value as T) ? value as T : fallback;
-  return { countryCodes, placeMode: pick(source.placeMode, ['none', 'regions', 'cities'], 'none'), placeSelection: pick(source.placeSelection, ['all', 'representative', 'league', 'capital'], 'all'), environment: pick(source.environment, ['mixed', 'urban', 'suburban', 'rural'], 'mixed'), urbanLevel: [1, 2, 3].includes(Number(source.urbanLevel)) ? Number(source.urbanLevel) as 1 | 2 | 3 : 3, samplingMode: pick(source.samplingMode, ['natural', 'balanced'], 'natural'), priority: pick(source.priority, ['random', 'familiar', 'least-exposure'], 'random'), panoramaSource: pick(source.panoramaSource, ['official', 'mixed', 'contributor'], 'official'), allowInteriors: source.allowInteriors === true };
+  return { countryCodes, placeMode: pick(source.placeMode, ['none', 'regions', 'cities'], 'none'), placeSelection: pick(source.placeSelection, ['all', 'representative', 'league', 'capital'], 'all'), environment: pick(source.environment, ['mixed', 'urban', 'suburban', 'rural'], 'mixed'), urbanLevel: [1, 2, 3].includes(Number(source.urbanLevel)) ? Number(source.urbanLevel) as 1 | 2 | 3 : 3, samplingMode: pick(source.samplingMode, ['natural', 'balanced'], 'natural'), priority: pick(source.priority, ['random', 'familiar', 'least-exposure', 'weak-spots'], 'random'), panoramaSource: pick(source.panoramaSource, ['official', 'mixed', 'contributor'], 'official'), allowInteriors: source.allowInteriors === true };
 }
 
 export async function callGeminiPool(carousel: GeminiKeyCarousel, description: string, fetcher: typeof fetch = fetch) {

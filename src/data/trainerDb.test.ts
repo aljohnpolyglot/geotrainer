@@ -253,7 +253,7 @@ test('an already merged nearby Review card recovers the newest saved due date', 
   const place = (panoId: string, lat: number) => ({ id: panoId, panoId, lat, lng: 13.4, countryCode: 'DE', firstSeenAt: now, lastSeenAt: now, encounterCount: 1 });
   const backup = await createBackup(false);
   backup.data.locations.push(place('phone', 52.5), place('pc', 52.5002));
-  backup.data.reviews.push({ id: 'phone', panoId: 'phone', dueAt: now - 1000, intervalDays: 1, gradingHistory: [{ grade: 'good', at: reviewedAt }], lapseCount: 0, reviewCount: 1, lastReviewedAt: reviewedAt });
+  backup.data.reviews.push({ id: 'phone', panoId: 'phone', dueAt: now - 1000, naturalDueAt: now - 2 * 864e5, dueAdjustedAt: now - 600e3, intervalDays: 1, gradingHistory: [{ grade: 'good', at: reviewedAt }], lapseCount: 0, reviewCount: 1, lastReviewedAt: reviewedAt });
   const attempt = { gameId: 'sync', roundNumber: 1, actualLat: 52.5002, actualLng: 13.4, countryCode: 'DE', guessedLat: 52.5002, guessedLng: 13.4, guessedCountryCode: 'DE', distanceKm: 0, score: 5000, timeSpentSeconds: 10, collectionId: 'world', canMove: true, canPan: true, canZoom: true, createdAt: reviewedAt };
   backup.data.attempts.push({ ...attempt, id: 'source', panoId: 'phone', source: 'play' }, { ...attempt, id: 'grade', panoId: 'pc', source: 'review', reviewedAt, grade: 'good', nextDueAt, intervalDays: 3 });
   await importBackup(backup, 'replace');
@@ -268,6 +268,7 @@ test('saved game preferences are normalized before reuse', async () => {
     environment: 'mixed', urbanLevel: 3, samplingMode: 'natural', priority: 'random', panoramaSource: 'official', allowContributors: false, allowInteriors: false, includeWater: true, importedMapOrder: 'shuffle', skipSeenImported: true, timeLimitSeconds: 0,
   });
   assert.equal(normalizeGamePreferences({ priority: 'least-exposure' }).priority, 'least-exposure');
+  assert.equal(normalizeGamePreferences({ priority: 'weak-spots' }).priority, 'weak-spots');
   assert.equal(normalizeGamePreferences({ samplingMode: 'shuffle' }).samplingMode, 'shuffle');
   assert.equal(normalizeGamePreferences({ priority: 'invalid' }).priority, 'random');
   assert.equal(normalizeGamePreferences({ roundCount: 37 }).roundCount, 37);
@@ -359,6 +360,30 @@ test('location matching reads omit photos while full reads preserve them', async
   await trainerDb.saveLocationImage('photo-view', 'data:image/jpeg;base64,AQ==');
   assert.equal((await trainerDb.locationMetadata())[0].imageDataUrl, undefined);
   assert.equal((await trainerDb.locations())[0].imageDataUrl, 'data:image/jpeg;base64,AQ==');
+});
+
+test('recent attempts are newest first and bounded for adaptive location searches', async () => {
+  const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  for (let index = 0; index < 3; index++) await trainerDb.saveAttempt({ id: `recent-${index}`, gameId: 'recent', roundNumber: index, panoId: `recent-${index}`, actualLat: 50, actualLng: 10, countryCode: 'DE', guessedLat: 50, guessedLng: 10, distanceKm: 0, score: 5000, timeSpentSeconds: 1, collectionId: 'world', canMove: true, canPan: true, canZoom: true, createdAt: 1000 + index, source: 'play' });
+  assert.deepEqual((await trainerDb.recentAttempts(2)).map((item) => item.id), ['recent-2', 'recent-1']);
+});
+
+test('postponing due reviews moves schedules one day without changing grades or attempts', async () => {
+  const { clearTrainerDbForTesting, trainerDb, reviewDayStart } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  const source = { id: 'pause-source', gameId: 'study', roundNumber: 1, panoId: 'pause-pano', actualLat: 50, actualLng: 10, countryCode: 'DE', guessedLat: null, guessedLng: null, distanceKm: null, score: 0, timeSpentSeconds: 0, collectionId: 'world', canMove: true, canPan: true, canZoom: true, createdAt: Date.now(), source: 'study' as const };
+  await trainerDb.saveAttempt(source);
+  await trainerDb.queueForReview(source.panoId, true);
+  const before = (await trainerDb.reviews())[0];
+  assert.equal(await trainerDb.postponeDueReviewsOneDay(), 1);
+  const after = (await trainerDb.reviews())[0];
+  const preferences = await trainerDb.schedulerPreferences();
+  assert.ok(reviewDayStart(after.dueAt, preferences) > reviewDayStart(Date.now(), preferences));
+  assert.equal(after.naturalDueAt, before.dueAt);
+  assert.ok(after.dueAdjustedAt);
+  assert.deepEqual([after.reviewCount, after.gradingHistory, (await trainerDb.attempts()).length], [before.reviewCount, before.gradingHistory, 1]);
+  assert.equal(await trainerDb.postponeDueReviewsOneDay(), 0);
 });
 
 

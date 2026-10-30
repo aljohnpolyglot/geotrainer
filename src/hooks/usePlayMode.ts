@@ -9,7 +9,7 @@ import { reviewGradeForPerformance, shouldAutoSchedulePlayReview, trainerDb } fr
 import { COUNTRIES } from '../data/countries';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { pickImportedLocation } from '../services/importedMap';
-import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries, weakSpotsTarget } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
 import { NextLocationPreparation } from '../services/nextLocationPreparation';
 import { playUiSound } from '../services/audio';
@@ -44,23 +44,23 @@ export function usePlayMode(ctx: any) {
     const countryCodes = settings.countryCodes?.length ? settings.countryCodes : settings.countryCode ? [settings.countryCode] : col?.countryCodes;
     if (!settings.importedMapId && (!col || !countryCodes?.length)) throw new Error('Game collection has no valid countries.');
     let priorityCountryCodes = countryCodes;
-    let priorityTarget: ReturnType<typeof learningPriorityTarget> = { countryCodes: countryCodes || [] };
+    let priorityTarget: ReturnType<typeof weakSpotsTarget> = { countryCodes: countryCodes || [] };
     let preferredCountryCodes: string[] | undefined;
     const priority = settings.priority ?? 'random';
     if (!settings.importedMapId && !settings.locationTargets?.length && countryCodes?.length && priority !== 'random') {
-      const history = await trainerDb.locationMetadata();
+      const [history, attempts] = await Promise.all([trainerDb.locationMetadata(), priority === 'weak-spots' ? trainerDb.recentAttempts() : Promise.resolve([])]);
       const wholeWorld = col?.id === 'world' && !settings.countryCodes?.length && !settings.countryCode;
-      priorityCountryCodes = priority === 'least-exposure' && wholeWorld ? trainedWorldCountries(countryCodes) : countryCodes;
+      priorityCountryCodes = (priority === 'least-exposure' || priority === 'weak-spots') && wholeWorld ? trainedWorldCountries(countryCodes) : countryCodes;
       if (!priorityCountryCodes.length) priorityCountryCodes = countryCodes;
-      priorityTarget = learningPriorityTarget(priority, priorityCountryCodes, history);
-      if (priority === 'least-exposure' && priorityTarget.countryCodes.length === 1) priorityTarget = learningPriorityTarget(priority, priorityTarget.countryCodes, history, Math.random, await loadCityPools(priorityTarget.countryCodes[0]));
-      if (priorityTarget.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = priority === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, priorityTarget.countryCodes[0]) : [priorityTarget.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== priorityTarget.countryCodes[0])];
+      priorityTarget = priority === 'weak-spots' ? weakSpotsTarget(priorityCountryCodes, history, attempts, settings.environment ?? 'mixed') : learningPriorityTarget(priority, priorityCountryCodes, history);
+      if ((priority === 'least-exposure' || priority === 'weak-spots') && priorityTarget.countryCodes.length === 1) priorityTarget = priority === 'weak-spots' ? weakSpotsTarget(priorityTarget.countryCodes, history, attempts, settings.environment ?? 'mixed', Math.random, await loadCityPools(priorityTarget.countryCodes[0])) : learningPriorityTarget(priority, priorityTarget.countryCodes, history, Math.random, await loadCityPools(priorityTarget.countryCodes[0]));
+      if (priorityTarget.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = priority === 'least-exposure' || priority === 'weak-spots' ? leastExposureCountryOrder(priorityCountryCodes, history, priorityTarget.countryCodes[0]) : [priorityTarget.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== priorityTarget.countryCodes[0])];
     }
     const known = settings.importedMapId && settings.skipSeenImported === true ? await Promise.all([trainerDb.locationMetadata(), trainerDb.bookmarks(), trainerDb.attempts()]).then(([locations, bookmarks, attempts]) => [...locations, ...bookmarks, ...attempts.map((attempt) => ({ panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode }))]) : [];
     const excluded = new Set([...previousRounds.map((round) => round.location.panoId), currentPanoId].filter((id): id is string => !!id));
     return settings.importedMapId
       ? pickImportedLocation(settings.importedMapId, excluded, signal, settings.canMove, 0, new Set(previousRounds.flatMap((round) => round.location.importedMapPointIndex === undefined ? [] : [round.location.importedMapPointIndex])), { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true }, settings.importedMapOrder ?? 'shuffle', known)
-      : defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : priorityTarget.countryCodes, signal, (msg) => { if (requestId !== undefined && isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: settings.environment ?? 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true, includeWater: settings.includeWater !== false && priority === 'random' }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, preferredCandidate: priorityTarget.preferredCandidate, preferredCountryCodes, requireNavigation: settings.canMove, locationTargets: settings.locationTargets, excludedPanoIds: excluded });
+      : defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : priorityTarget.countryCodes, signal, (msg) => { if (requestId !== undefined && isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(msg); }, { environment: priorityTarget.environment || settings.environment || 'mixed', urbanLevel: settings.urbanLevel ?? 3, samplingMode: settings.samplingMode ?? 'natural', panoramaSource: settings.panoramaSource || (settings.allowContributors === true ? 'mixed' : 'official'), allowInteriors: settings.allowInteriors === true, includeWater: settings.includeWater !== false && priority === 'random' }, { requestId, collectionId: settings.countryCodes?.length || settings.countryCode ? `focus:${countryCodes.join(',')}` : col.id, preferredCandidate: priorityTarget.preferredCandidate, preferredCountryCodes, requireNavigation: settings.canMove, locationTargets: settings.locationTargets, excludedPanoIds: excluded });
   };
 
   const fetchLocationForRound = useCallback(async (settings: GameSettings, roundIndex = currentRoundIndex) => {

@@ -64,7 +64,7 @@ const mergeNotes = (left: unknown, right: unknown) => {
 const reviewedAt = (record: ReviewRecord) => Math.max(record.lastReviewedAt || 0, ...(record.gradingHistory || []).map((item) => item.at));
 const mergeReviews = (left: ReviewRecord, right: ReviewRecord): ReviewRecord => {
   const latest = reviewedAt(right) >= reviewedAt(left) ? right : left;
-  const schedule = Math.max(right.dueAdjustedAt || 0, reviewedAt(right)) >= Math.max(left.dueAdjustedAt || 0, reviewedAt(left)) ? right : left;
+  const schedule = reviewedAt(right) > reviewedAt(left) || reviewedAt(right) === reviewedAt(left) && (right.dueAdjustedAt || 0) >= (left.dueAdjustedAt || 0) ? right : left;
   const generalization = (right.generalizationUpdatedAt || (right.generalizationLevel !== undefined ? reviewedAt(right) : 0)) >= (left.generalizationUpdatedAt || (left.generalizationLevel !== undefined ? reviewedAt(left) : 0)) ? right : left;
   const gradingHistory = [...(left.gradingHistory || []), ...(right.gradingHistory || [])]
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)

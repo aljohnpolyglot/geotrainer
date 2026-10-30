@@ -63,6 +63,7 @@ A prioridade muda como os **novos locais do Aprendizado personalizado e as rodad
 - **Aleatório** (padrão) seleciona no conjunto elegível sem usar seu histórico. No Mundo, reduz o peso de territórios muito pequenos para que não dominem. Use para obter variedade ou percorrer amplamente a coleção.
 - **Locais familiares** escolhe um local elegível já encontrado como ponto de partida e procura aproximadamente entre 1 e 12 km ao redor dele. Use para aprender os arredores e reconhecer vistas próximas sem repetir o panorama exato.
 - **Menor exposição** escolhe primeiro um país elegível ainda não visto ou com menos encontros, preenche as regiões incluídas que ainda aparecem em cinza na Cobertura e depois mira a maior lacuna geográfica restante. Essa etapa regional também vale para coleções de um único país; regiões sem um ponto local utilizável voltam à busca de lacunas no país inteiro.
+- **Pontos fracos** começa com Menor exposição quando há poucos palpites pontuados e passa gradualmente a favorecer países com erros repetidos no Jogo sem ajuda de IA ou em Revisões avaliadas. Separa erros de país da distância dentro do país correto e considera o tamanho do país. Pode focar uma região ou ambiente urbano ou rural mais difícil quando há resultados suficientes, mas continua explorando outros lugares e evita repetir imediatamente o mesmo país. Não deduz qual pista visual causou o erro.
 
 Quando não há histórico elegível, Locais familiares e Menor exposição começam no conjunto selecionado como Aleatório. Em uma busca de Menor exposição com vários países, o GeoTrainer tenta primeiro o país cinza ou menos visitado escolhido e seu alvo regional. Cada busca sem um panorama válido, inclusive quando ele aparece fora do país solicitado, avança imediatamente.
 
@@ -121,6 +122,8 @@ No Jogo, a cobertura do Street View e os nomes de ruas ficam desativados por pad
 O ícone **Salvar este local para revisão**, ao lado de **Continuar jogo**, permite guardar também respostas corretas. Ele só aparece se o local exibido ainda não tiver um cartão de revisão, incluindo locais do mesmo país a até 50 metros. Também funciona nas rodadas anteriores. Ao salvar, o ícone desaparece e o resultado continua aberto, sem alterar a pontuação ou agendamentos existentes. O estado salvo permanece após recarregar e a sincronização continua manual. Se falhar, tente novamente. Uma breve notificação confirma o salvamento para revisão.
 
 ## Revisão e agendamento
+
+A lista de Revisão mostra 10 locais por página. A data, a distância e os pontos de uma linha descrevem uma tentativa salva; podem ser anteriores à última revisão do cartão. A quantidade pendente segue a programação salva. **Adiar revisões pendentes até amanhã** move todos os cartões pendentes para o próximo dia de revisão sem alterar tentativas, avaliações ou intervalos. Sincronize manualmente cada dispositivo para compartilhar a mudança.
 
 Quando tentativas próximas de Estudo e Jogo compartilham um cartão, a Revisão usa a regra de movimento da rodada de Jogo: Padrão, No Move ou NMPZ. A barra superior mostra esse modo. Após a resposta, o panorama permite deslocamento, rotação e zoom.
 

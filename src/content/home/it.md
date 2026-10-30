@@ -63,6 +63,7 @@ La priorità cambia il modo in cui vengono scelte le **nuove località di Appren
 - **Casuale** (predefinito) seleziona dal gruppo idoneo senza usare la cronologia. In Mondo riduce il peso dei territori molto piccoli, così non dominano. Usalo per ottenere varietà o visitare ampiamente la raccolta.
 - **Luoghi familiari** sceglie come punto di partenza una località idonea già incontrata e cerca approssimativamente entro 1–12 km. Serve a imparare i dintorni e riconoscere viste vicine senza ripetere esattamente lo stesso panorama.
 - **Minore esposizione** sceglie prima un paese idoneo mai visto o con meno incontri, riempie le regioni incluse ancora grigie in Copertura e poi punta alla maggiore lacuna geografica rimasta. Questo passaggio regionale vale anche per le raccolte di un solo paese; le regioni senza un punto locale utilizzabile tornano alla ricerca nell’intero paese.
+- **Punti deboli** parte da Minore esposizione quando ci sono poche risposte con punteggio, poi favorisce gradualmente i paesi con errori ripetuti nel Gioco senza aiuto dell’IA o nei Ripassi valutati. Distingue il paese sbagliato dalla distanza all’interno del paese giusto e considera le dimensioni del paese. Può mirare a una regione o a un ambiente urbano o rurale più difficile quando i risultati sono sufficienti, continuando però a esplorare altri luoghi ed evitando di ripetere subito lo stesso paese. Non deduce quale indizio visivo abbia causato l’errore.
 
 Quando non esiste una cronologia idonea, Luoghi familiari e Minore esposizione iniziano dal gruppo selezionato come Casuale. In una ricerca con Minore esposizione e più paesi, GeoTrainer prova prima il paese grigio o meno visitato scelto e il relativo obiettivo regionale. Ogni ricerca senza un panorama valido, compreso un panorama fuori dal paese richiesto, avanza subito.
 
@@ -121,6 +122,8 @@ Nel Gioco, la copertura Street View e i nomi delle strade sono disattivati per i
 L’icona **Salva questo luogo per il ripasso**, accanto a **Continua partita**, permette di conservare anche risposte corrette. Compare solo se il luogo visualizzato non ha già una scheda di ripasso, inclusi luoghi dello stesso paese entro 50 metri. Funziona anche per i turni precedenti. Dopo il salvataggio l’icona scompare e il risultato resta aperto, senza cambiare punteggio o scadenze esistenti. Il salvataggio resta dopo il ricaricamento e la sincronizzazione rimane manuale. In caso di errore, riprova. Una breve notifica conferma il salvataggio per il ripasso.
 
 ## Ripasso e programmazione
+
+L’elenco Ripasso mostra 10 luoghi per pagina. Data, distanza e punti di una riga descrivono un tentativo salvato; possono precedere l’ultimo ripasso della scheda. Il numero di schede in scadenza segue il programma salvato. **Rimanda a domani i ripassi in scadenza** sposta tutte le schede attualmente dovute al prossimo giorno di ripasso senza cambiare tentativi, valutazioni o intervalli. Sincronizza manualmente ogni dispositivo per condividere la modifica.
 
 Quando tentativi vicini di Studio e Gioco condividono una scheda, il Ripasso usa la regola di movimento del turno di Gioco: Standard, No Move o NMPZ. La barra superiore mostra questa modalità. Dopo la risposta, il panorama consente movimento, rotazione e zoom.
 

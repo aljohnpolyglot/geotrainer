@@ -154,6 +154,16 @@ test('manual sync keeps a later due-date balance until a newer review replaces i
   assert.equal((mergeBackups(cloud, local).data.reviews[0] as { naturalDueAt?: number }).naturalDueAt, undefined);
 });
 
+test('a stale phone rollover cannot undo a later PC grade during manual sync', () => {
+  const phone = backup('phone', 10); const pc = backup('pc', 20);
+  phone.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 300, naturalDueAt: 200, dueAdjustedAt: 250, intervalDays: 1, lastReviewedAt: 100, gradingHistory: [{ grade: 'hard', at: 100 }], reviewCount: 1, lapseCount: 0 });
+  pc.data.reviews.push({ id: 'pano', panoId: 'pano', dueAt: 1000, intervalDays: 7, lastReviewedAt: 200, gradingHistory: [{ grade: 'good', at: 200 }], reviewCount: 2, lapseCount: 0 });
+  for (const [left, right] of [[phone, pc], [pc, phone]]) {
+    const review = mergeBackups(left, right).data.reviews[0] as { dueAt: number; intervalDays: number; gradingHistory: unknown[] };
+    assert.deepEqual([review.dueAt, review.intervalDays, review.gradingHistory.length], [1000, 7, 2]);
+  }
+});
+
 test('manual device merge imports new cards and a review completed elsewhere', () => {
   const phone = backup('phone-card', 10); const pc = backup('pc-card', 20);
   phone.data.reviews.push({ id: 'shared', panoId: 'shared', dueAt: 500, intervalDays: 5, lastReviewedAt: 400, gradingHistory: [{ grade: 'good', at: 400 }], reviewCount: 2, lapseCount: 0 });

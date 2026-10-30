@@ -156,6 +156,7 @@ Priority changes how **new Custom Learn and generated Play locations** are chose
 - **Random** (default) samples the eligible pool without using your history. In World, it reduces the weight of tiny territories so they do not dominate. Use it for variety or a broad tour of the selected collection.
 - **Familiar places** chooses a previously encountered eligible location as an anchor and searches roughly 1–12 km around it. Use it to learn the surroundings and recognize nearby views rather than repeat the exact panorama.
 - **Least exposure** first chooses an unseen or least-encountered eligible country, fills bundled regions that are still grey on Coverage, then targets the largest remaining geographic blind spot. Country-size normalization keeps large countries from winning every tie. This regional pass also applies to one-country collections; regions without a usable local seed fall back to the country-wide gap search.
+- **Weak spots** begins with Least exposure when there are few scored guesses, then gradually favors countries with repeated unassisted Play or graded Review mistakes. It separates wrong-country guesses from distance within the right country and accounts for country size. It can target a weaker region or urban/rural environment when enough matching results exist, while still exploring other places and avoiding an immediate country repeat. It does not infer which visual clue caused a mistake.
 
 When no eligible history exists, Familiar places and Least exposure begin from the selected pool like Random. In a multi-country Least exposure search, GeoTrainer tries the chosen grey or least-exposed country and its regional target first. Every unsuccessful lookup, including a panorama identified outside the requested country, advances immediately.
 
@@ -245,6 +246,8 @@ Completed and interrupted games remain in Past Games. A summary preserves round 
 The Games history list shows each total as **earned score / maximum possible score**, followed by a separate percentage column. The percentage is the share of available points, not country accuracy; a 43,121-point game out of 75,000 is 57.5%. Numbers and percentages follow your interface language, and both remain visible on phones.
 
 ## Review mode
+
+The Review list shows 10 places per page. A row’s date, distance, and score describe a saved attempt; they may be older than the card’s latest review. The due count follows the saved card schedule. **Postpone due reviews until tomorrow** moves every currently due card to the next review day without changing its attempts, grades, or review interval. Sync manually on each device to carry that change across devices.
 
 Review presents scheduled locations when they are due. It is a real recall test, not a slideshow of past answers.
 

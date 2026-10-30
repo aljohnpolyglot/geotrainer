@@ -24,6 +24,15 @@ test('review balancing lowers a future peak without moving due, short-step, or f
   assert.equal(reconcileReviewAttempt(changed, attempt, DEFAULT_SCHEDULER_PREFERENCES).dueAt, changed.dueAt);
 });
 
+test('a previously corrupted rollover schedule is repaired from the latest graded attempt', () => {
+  const review: ReviewRecord = { id: 'pano', panoId: 'pano', dueAt: 300, naturalDueAt: 200, dueAdjustedAt: 250, intervalDays: 1, lastReviewedAt: 200, gradingHistory: [{ grade: 'good', at: 200 }], reviewCount: 2, lapseCount: 0 };
+  const attempt = { source: 'review', panoId: 'pano', reviewedAt: 200, createdAt: 200, grade: 'good', nextDueAt: 1000, intervalDays: 7 } as Attempt;
+  const repaired = reconcileReviewAttempt(review, attempt, DEFAULT_SCHEDULER_PREFERENCES);
+  assert.deepEqual([repaired.dueAt, repaired.intervalDays, repaired.dueAdjustedAt, repaired.naturalDueAt], [1000, 7, undefined, undefined]);
+  const legitimate = { ...review, dueAt: 1100, naturalDueAt: 1000 };
+  assert.equal(reconcileReviewAttempt(legitimate, attempt, DEFAULT_SCHEDULER_PREFERENCES).dueAt, 1100);
+});
+
 test('balance strength changes the proposed schedule without expanding card date limits', () => {
   const now = new Date(2026, 9, 7, 12).getTime();
   const dueAt = new Date(2026, 9, 20).getTime();

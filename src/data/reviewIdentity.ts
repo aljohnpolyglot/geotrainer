@@ -36,9 +36,9 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
     .sort((a, b) => a.at - b.at);
   const generalization = (duplicate.generalizationUpdatedAt || 0) > (kept.generalizationUpdatedAt || 0) ? duplicate : kept;
-  const keptScheduleAt = Math.max(kept.lastReviewedAt || 0, kept.dueAdjustedAt || 0);
-  const duplicateScheduleAt = Math.max(duplicate.lastReviewedAt || 0, duplicate.dueAdjustedAt || 0);
-  const schedule = duplicateScheduleAt > keptScheduleAt || duplicateScheduleAt === keptScheduleAt && duplicate.dueAt < kept.dueAt ? duplicate : kept;
+  const keptReviewedAt = Math.max(kept.lastReviewedAt || 0, ...kept.gradingHistory.map((item) => item.at));
+  const duplicateReviewedAt = Math.max(duplicate.lastReviewedAt || 0, ...duplicate.gradingHistory.map((item) => item.at));
+  const schedule = duplicateReviewedAt > keptReviewedAt || duplicateReviewedAt === keptReviewedAt && ((duplicate.dueAdjustedAt || 0) > (kept.dueAdjustedAt || 0) || (duplicate.dueAdjustedAt || 0) === (kept.dueAdjustedAt || 0) && duplicate.dueAt < kept.dueAt) ? duplicate : kept;
   const { naturalDueAt: _naturalDueAt, dueAdjustedAt: _dueAdjustedAt, ...base } = kept;
   return {
     ...base,

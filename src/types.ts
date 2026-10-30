@@ -128,7 +128,7 @@ export interface SchedulerPreferences {
 export type Environment = 'mixed' | 'urban' | 'suburban' | 'rural';
 export type UrbanLevel = 1 | 2 | 3;
 export type SamplingMode = 'natural' | 'balanced' | 'shuffle';
-export type LearnPriority = 'random' | 'familiar' | 'least-exposure';
+export type LearnPriority = 'random' | 'familiar' | 'least-exposure' | 'weak-spots';
 export type PanoramaSource = 'mixed' | 'official' | 'contributor';
 export interface CityPoolCity { name: string; names?: Partial<Record<SupportedLanguage, string>>; lat: number; lng: number; population: number; class: 'major' | 'regional' | 'local'; urbanRadiusKm: number; }
 export interface CityPoolRegion { id: string; name: string; names?: Partial<Record<SupportedLanguage, string>>; cities: CityPoolCity[]; }

@@ -224,7 +224,7 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({
               </select>
             </label>}
             <label>{t('Sampling')}<select value={effectiveSamplingMode} onChange={(event) => setSamplingMode(event.target.value as SamplingMode)}><option value="natural">{t('Natural')}</option><option value="balanced">{t('Balanced')}</option>{worldShuffleAvailable && <option value="shuffle">{t('World Shuffle')}</option>}</select></label>
-            <label>{t('Priority')}<select value={priority} onChange={(event) => setPriority(event.target.value as LearnPriority)}><option value="random">{t('Random')}</option><option value="familiar">{t('Familiar places')}</option><option value="least-exposure">{t('Least exposure')}</option></select></label>
+            <label>{t('Priority')}<select value={priority} onChange={(event) => setPriority(event.target.value as LearnPriority)}><option value="random">{t('Random')}</option><option value="familiar">{t('Familiar places')}</option><option value="least-exposure">{t('Least exposure')}</option><option value="weak-spots">{t('Weak spots')}</option></select></label>
           </div>
           <div className="preset-list" aria-label={t('Training presets')}>{TRAINING_PRESETS.map((preset) => <button key={preset.name} type="button" onClick={() => { setSelectedCollectionId(preset.collectionId); setCountryCodes([]); setLocationTargets([]); setEnvironment(preset.environment); setUrbanLevel('urbanLevel' in preset ? preset.urbanLevel : 3); setSamplingMode(preset.samplingMode); }}>{preset.name}</button>)}</div>
           </>}

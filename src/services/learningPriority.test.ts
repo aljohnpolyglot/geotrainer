@@ -1,10 +1,38 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import type { TrainerLocation } from '../types';
+import type { Attempt, TrainerLocation } from '../types';
 import { COUNTRIES } from '../data/countries';
-import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from './learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries, weakSpotsTarget } from './learningPriority';
 
 const location = (countryCode: string, lat: number, lng: number, encounterCount = 1): TrainerLocation => ({ id: `${countryCode}-${lat}-${lng}`, panoId: `${countryCode}-${lat}-${lng}`, countryCode, lat, lng, encounterCount, firstSeenAt: 1, lastSeenAt: 1 });
+const attempt = (countryCode: string, index: number, guessedCountryCode: string, distanceKm: number, environment: 'urban' | 'rural' = 'urban'): Attempt => ({ id: `${countryCode}-${index}`, gameId: 'game', roundNumber: index, panoId: `${countryCode}-${index}`, actualLat: 60, actualLng: 15, countryCode, guessedLat: 60, guessedLng: 15, guessedCountryCode, distanceKm, score: 1000, timeSpentSeconds: 20, collectionId: 'world', canMove: true, canPan: true, canZoom: true, environment, createdAt: 1000 - index, source: 'play' });
+
+test('weak spots begins with least exposure and ignores assisted results', () => {
+  const known = [location('SE', 59, 18, 5)];
+  assert.deepEqual(weakSpotsTarget(['SE', 'FI'], known, [], 'mixed', () => 0).countryCodes, ['FI']);
+  assert.deepEqual(weakSpotsTarget(['SE', 'FI'], known, [{ ...attempt('SE', 1, 'NO', 1000), aiAssisted: true }], 'mixed', () => 0).countryCodes, ['FI']);
+});
+
+test('weak spots favors repeated mistakes but leaves exploration and recent-country variety', () => {
+  const misses = Array.from({ length: 12 }, (_, index) => attempt('SE', index, 'NO', 1000));
+  const hits = Array.from({ length: 12 }, (_, index) => attempt('NO', index, 'NO', 5));
+  assert.deepEqual(weakSpotsTarget(['SE', 'NO'], [], [...misses, ...hits], 'mixed', () => 0.5).countryCodes, ['SE']);
+  assert.deepEqual(weakSpotsTarget(['SE', 'FI'], [location('SE', 59, 18, 12)], misses, 'mixed', () => 0).countryCodes, ['FI']);
+  assert.deepEqual(weakSpotsTarget(['SE', 'NO'], [{ ...location('SE', 59, 18), lastSeenAt: 2000 }], [...misses, ...hits], 'mixed', () => 0.5).countryCodes, ['NO']);
+});
+
+test('weak spots can target a weak region and environment only with enough results', () => {
+  const regions = [
+    { id: 'south', name: 'South', cities: [{ name: 'South', lat: 55.6, lng: 13, population: 1, class: 'local' as const, urbanRadiusKm: 8 }] },
+    { id: 'north', name: 'North', cities: [{ name: 'North', lat: 65.6, lng: 22, population: 1, class: 'local' as const, urbanRadiusKm: 8 }] },
+  ];
+  const attempts = [...Array.from({ length: 4 }, (_, index) => attempt('SE', index, 'SE', 5)), ...Array.from({ length: 4 }, (_, index) => attempt('SE', index + 4, 'NO', 1000, 'rural'))];
+  const known = attempts.map((item) => ({ ...location('SE', item.actualLat, item.actualLng), panoId: item.panoId, adminArea: item.environment === 'rural' ? 'North County' : 'South County' }));
+  const target = weakSpotsTarget(['SE'], known, attempts, 'mixed', () => 0.9, regions);
+  assert.equal(target.preferredCandidate?.lat, 65.6);
+  assert.equal(target.environment, 'rural');
+  assert.equal(weakSpotsTarget(['SE'], known, attempts.slice(0, 5), 'urban', () => 0.9, regions).environment, undefined);
+});
 
 test('World least exposure ignores countries that failed coverage training', () => {
   assert.deepEqual(trainedWorldCountries(['AF', 'US']), ['US']);

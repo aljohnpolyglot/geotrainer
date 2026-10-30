@@ -63,6 +63,7 @@ La prioridad cambia cómo se eligen las **nuevas ubicaciones de Aprendizaje pers
 - **Aleatorio** (predeterminado) toma muestras del conjunto apto sin usar tu historial. En Mundo reduce el peso de territorios diminutos para que no dominen. Úsalo para obtener variedad o recorrer ampliamente la colección.
 - **Lugares conocidos** elige como punto de partida una ubicación apta que ya encontraste y busca aproximadamente entre 1 y 12 km a su alrededor. Sirve para aprender los alrededores y reconocer vistas cercanas sin repetir el panorama exacto.
 - **Menor exposición** elige primero un país apto nunca visto o con menos encuentros, rellena las regiones incluidas que aún aparecen grises en Cobertura y después apunta al mayor hueco geográfico restante. Este paso regional también se aplica a colecciones de un solo país; si una región no tiene un punto local utilizable, se vuelve a la búsqueda de huecos de todo el país.
+- **Puntos débiles** empieza con Menor exposición cuando hay pocas respuestas puntuadas y luego favorece gradualmente los países con errores repetidos en Juego sin ayuda de IA o en Repaso calificado. Distingue los países equivocados de la distancia dentro del país correcto y tiene en cuenta el tamaño del país. Puede centrarse en una región o un entorno urbano o rural más difícil cuando hay suficientes resultados, pero sigue explorando otros lugares y evita repetir enseguida el mismo país. No deduce qué pista visual causó el error.
 
 Si no existe historial apto, Lugares conocidos y Menor exposición empiezan desde el conjunto seleccionado como Aleatorio. En una búsqueda de Menor exposición con varios países, GeoTrainer prueba primero el país gris o menos visitado elegido y su objetivo regional. Cada búsqueda sin un panorama válido, incluso si aparece fuera del país solicitado, avanza de inmediato.
 
@@ -123,6 +124,8 @@ En Juego, la cobertura de Street View y los nombres de vías están desactivados
 El icono **Guardar este lugar para repasar**, junto a **Continuar partida**, permite guardar también respuestas correctas. Solo aparece si el lugar mostrado no tiene una tarjeta de repaso, incluidos lugares del mismo país a menos de 50 metros. Funciona al consultar rondas anteriores. Al guardar, el icono desaparece y el resultado sigue abierto; la puntuación y los calendarios existentes se conservan. El guardado persiste tras recargar y la sincronización sigue siendo manual. Si falla, puedes volver a intentarlo. Una breve notificación confirma el guardado para repasar.
 
 ## Repaso y programación
+
+La lista de Repaso muestra 10 lugares por página. La fecha, la distancia y los puntos de una fila describen un intento guardado; pueden ser anteriores al último repaso de esa tarjeta. El total pendiente sigue la programación guardada. **Posponer los repasos pendientes hasta mañana** traslada todas las tarjetas pendientes al siguiente día de repaso sin cambiar intentos, calificaciones ni intervalos. Sincroniza manualmente cada dispositivo para compartir el cambio.
 
 Si intentos cercanos de Estudio y Juego comparten una tarjeta, Repaso usa la regla de movimiento de la ronda de Juego: Estándar, No Move o NMPZ. La barra superior muestra ese modo. Tras responder, el panorama permite moverse, girar y hacer zoom.
 

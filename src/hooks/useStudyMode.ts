@@ -8,7 +8,7 @@ import { reverseGeocodeLocation } from '../services/geocoding';
 import { isCurrentPanorama, isLatestRequest } from '../services/requestIntegrity';
 import { captureStreetViewImage, getStreetViewSnapshot } from '../services/streetViewSnapshot';
 import { getImportedMap, importedMapPointCount, matchSavedImportedPoints, moveImportedHistory, pickImportedLocation, recoverImportedHistory, restoreImportedHistory, saveImportedMapProgress, withImportedSourceHash, type ImportedMapHistory } from '../services/importedMap';
-import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries } from '../services/learningPriority';
+import { learningPriorityTarget, leastExposureCountryOrder, trainedWorldCountries, weakSpotsTarget } from '../services/learningPriority';
 import { loadCityPools } from '../services/cityPools';
 import { NextLocationPreparation } from '../services/nextLocationPreparation';
 
@@ -126,18 +126,18 @@ export function useStudyMode(ctx: any) {
     return history.locations[history.index];
   };
   const findStudyLocation = async (importedMapId: string | undefined, collection: Collection, signal: AbortSignal, requestId: number | undefined, completed: Set<number>, currentPanoId?: string) => {
-    let target: ReturnType<typeof learningPriorityTarget> = { countryCodes: collection.countryCodes };
+    let target: ReturnType<typeof weakSpotsTarget> = { countryCodes: collection.countryCodes };
     let preferredCountryCodes: string[] | undefined;
-    const priorityCountryCodes = studyPriorityRef.current === 'least-exposure' && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
+    const priorityCountryCodes = (studyPriorityRef.current === 'least-exposure' || studyPriorityRef.current === 'weak-spots') && collection.id === 'world' ? trainedWorldCountries(collection.countryCodes) : collection.countryCodes;
     if (!importedMapId && !studyLocationTargetsRef.current.length && studyPriorityRef.current !== 'random') {
-      const history = await trainerDb.locationMetadata();
-      target = learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
-      if (studyPriorityRef.current === 'least-exposure' && target.countryCodes.length === 1) target = learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
-      if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
+      const [history, attempts] = await Promise.all([trainerDb.locationMetadata(), studyPriorityRef.current === 'weak-spots' ? trainerDb.recentAttempts() : Promise.resolve([])]);
+      target = studyPriorityRef.current === 'weak-spots' ? weakSpotsTarget(priorityCountryCodes, history, attempts, studyEnvironmentRef.current) : learningPriorityTarget(studyPriorityRef.current, priorityCountryCodes, history);
+      if ((studyPriorityRef.current === 'least-exposure' || studyPriorityRef.current === 'weak-spots') && target.countryCodes.length === 1) target = studyPriorityRef.current === 'weak-spots' ? weakSpotsTarget(target.countryCodes, history, attempts, studyEnvironmentRef.current, Math.random, await loadCityPools(target.countryCodes[0])) : learningPriorityTarget(studyPriorityRef.current, target.countryCodes, history, Math.random, await loadCityPools(target.countryCodes[0]));
+      if (target.countryCodes.length === 1 && priorityCountryCodes.length > 1) preferredCountryCodes = studyPriorityRef.current === 'least-exposure' || studyPriorityRef.current === 'weak-spots' ? leastExposureCountryOrder(priorityCountryCodes, history, target.countryCodes[0]) : [target.countryCodes[0], ...priorityCountryCodes.filter((code: string) => code !== target.countryCodes[0])];
     }
     const result = importedMapId
       ? await pickImportedLocation(importedMapId, new Set([...uploadedHistoryRef.current.locations.map((item) => item.panoId), currentPanoId].filter((id): id is string => !!id)), signal, false, ctx.studyImportedVariationRef.current, completed, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current }, ctx.studyImportedOrderRef.current)
-      : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, signal, (message) => { if (requestId !== undefined && isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current, includeWater: studyIncludeWaterRef.current && studyPriorityRef.current === 'random' }, { requestId, collectionId: collection.id, excludedPanoIds: new Set([...recentStudyPanosRef.current, currentPanoId].filter((id): id is string => !!id)), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
+      : await defaultLocationGenerator.findRandomLocation(preferredCountryCodes ? priorityCountryCodes : target.countryCodes, signal, (message) => { if (requestId !== undefined && isLatestRequest(requestId, latestGenerationRequestRef.current)) ctx.setStatusMessage(message); }, { environment: target.environment || studyEnvironmentRef.current, urbanLevel: studyUrbanLevelRef.current, samplingMode: studySamplingRef.current, panoramaSource: studyPanoramaSourceRef.current, allowInteriors: studyAllowInteriorsRef.current, includeWater: studyIncludeWaterRef.current && studyPriorityRef.current === 'random' }, { requestId, collectionId: collection.id, excludedPanoIds: new Set([...recentStudyPanosRef.current, currentPanoId].filter((id): id is string => !!id)), requireNavigation: true, preferredCandidate: target.preferredCandidate, preferredCountryCodes, locationTargets: studyLocationTargetsRef.current });
     return { result, completed };
   };
 

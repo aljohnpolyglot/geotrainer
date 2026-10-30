@@ -1,16 +1,28 @@
+import { useEffect, useState } from "react";
 import { ArrowUpRight, Target } from "lucide-react";
 import type { Environment } from "../types";
 import { formatDistance } from "../services/gameLogic";
 import type { ReviewPanelProps } from "./trainerHubTypes";
-import { countryName, date, useHubTranslate } from "./trainerHubUtils";
+import { countryName, date, pageBounds, useHubTranslate } from "./trainerHubUtils";
 import { CountryFlag } from "./CountryFlag";
 import { CollectionOptions } from "./CollectionOptions";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { countryDisplayName } from "../services/language";
 
-export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, dailyMinimum = 50, completedToday = 0, nextDueAt, reviewTimeZone, startReview, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
+export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, dailyMinimum = 50, completedToday = 0, nextDueAt, reviewTimeZone, startReview, reviewForAttempt, postponeDueReviews, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
   const { ui } = useLanguagePreferences();
+  const [page, setPage] = useState(1);
+  const [postponing, setPostponing] = useState(false);
+  const [postponeMessage, setPostponeMessage] = useState('');
+  const paging = pageBounds(queue.length, page, 10);
+  useEffect(() => setPage(1), [filters, reviewCollection]);
+  const postpone = async () => {
+    setPostponing(true); setPostponeMessage('');
+    try { await postponeDueReviews(); setPostponeMessage(t('Due reviews moved to tomorrow')); }
+    catch { setPostponeMessage(t('Could not postpone reviews')); }
+    finally { setPostponing(false); }
+  };
   const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
   const heldByDailyLimits = filters.due && reviewCollection === 'all' && !filters.environment ? Math.max(0, dueCount - queue.length) : 0;
   const dailyLimitReached = !queue.length && heldByDailyLimits > 0;
@@ -18,7 +30,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
   const daysPreset = filters.recentDays === undefined ? 'any' : [7, 30, 90].includes(filters.recentDays) ? String(filters.recentDays) : 'custom';
   return <>
     <section className="daily-review-block" aria-labelledby="daily-review-title">
-      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p><p>{t('Daily minimum')}: {Math.min(completedToday, dailyMinimum).toLocaleString(ui)} / {dailyMinimum.toLocaleString(ui)}</p></div>
+      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p><p>{t('Daily minimum')}: {Math.min(completedToday, dailyMinimum).toLocaleString(ui)} / {dailyMinimum.toLocaleString(ui)}</p>{dueCount > 0 && <button type="button" className="button" disabled={postponing} onClick={() => void postpone()}>{t('Postpone due reviews until tomorrow')}</button>}{postponeMessage && <p role="status">{postponeMessage}</p>}</div>
       <button className="button primary daily-review-action" disabled={!queue[0]} onClick={() => queue[0] && startReview(queue[0])}><Target size={20} /> {t("reviewAction")}</button>
     </section>
     <div className="filter-bar">
@@ -37,7 +49,8 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
       {(filters.wrongCountry && scorePreset !== 'any') && <p className="filter-match-note">{t("mistakeFiltersUseOr")}</p>}
     </div>
     <div className="queue-head"><div><h2>{queue.length} {t("locationsReady")}</h2><p>{filters.due ? t("reviewsReadyDescription") : t("customDescription")}</p></div>{queue[0] && <button className="button primary" onClick={() => startReview(queue[0])}><Target size={16} /> {t("reviewAction")}</button>}</div>
-    <div className="attempt-list">{queue.slice(0, 30).map((item) => { const isNewCard = item.source === "study"; return <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code"><CountryFlag code={item.countryCode} /></span><span><strong>{countryDisplayName(item.countryCode, ui) || countryName(item.countryCode, ui)}</strong><small>{date(item.createdAt, ui)} · {isNewCard ? t("study") : item.source === "play" ? t("play") : t("review")}</small></span><span>{isNewCard ? t("New card") : item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{isNewCard ? "—" : item.score.toLocaleString(ui)}</strong><ArrowUpRight size={15} /></button>; })}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t(dailyLimitReached ? "Daily review limit reached" : "dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t(dailyLimitReached ? "Daily review limit reached" : "dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
+    <div className="attempt-list">{queue.slice(paging.start, paging.end).map((item) => { const isNewCard = item.source === "study"; const review = reviewForAttempt(item); return <button className="attempt-row" key={item.id} onClick={() => startReview(item)}><span className="country-code"><CountryFlag code={item.countryCode} /></span><span><strong>{countryDisplayName(item.countryCode, ui) || countryName(item.countryCode, ui)}</strong><small>{t('Saved attempt')}: {date(item.createdAt, ui)} · {isNewCard ? t("study") : item.source === "play" ? t("play") : t("review")}</small>{review?.lastReviewedAt && <small>{t('Last reviewed')}: {date(review.lastReviewedAt, ui)} · {t('due')}: {date(review.dueAt, ui)}</small>}</span><span>{isNewCard ? t("New card") : item.distanceKm === null ? t("noGuess") : formatDistance(item.distanceKm)}</span><strong>{isNewCard ? "—" : item.score.toLocaleString(ui)}</strong><ArrowUpRight size={15} /></button>; })}{!queue.length && <p className="empty">{filters.due ? (nextDueAt ? `${t(dailyLimitReached ? "Daily review limit reached" : "dailyReviewsComplete")} · ${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t(dailyLimitReached ? "Daily review limit reached" : "dailyReviewsComplete") : t("noReviewsScheduled")) : t("emptyQueue")}</p>}</div>
+    {paging.pages > 1 && <nav className="clue-pagination" aria-label={t('review')}><button type="button" disabled={paging.current === 1} onClick={() => setPage(paging.current - 1)}>{t('Previous')}</button><span aria-live="polite">{paging.current} / {paging.pages}</span><button type="button" disabled={paging.current === paging.pages} onClick={() => setPage(paging.current + 1)}>{t('Next')}</button></nav>}
     <section className="smart-collections"><h2>{t("smartCollections")}</h2><p className="smart-collection-note">{t("smartCollectionDescription")}</p><div className="preset-list">
       <button onClick={() => onTrainCountries(weakCountries.map((item) => item.code), t("weakCountriesAction"))}>{t("weakCountriesAction")}</button>
       <button onClick={() => onTrainCountries([...new Set<string>(confusions.flatMap((item) => item.codes))], t("mostConfused"))}>{t("mostConfused")}</button>

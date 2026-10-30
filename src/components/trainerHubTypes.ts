@@ -52,6 +52,8 @@ export interface ReviewPanelProps {
   completedToday?: number;
   reviewTimeZone?: string;
   startReview: (attempt: Attempt) => void;
+  reviewForAttempt: (attempt: Attempt) => ReviewRecord | undefined;
+  postponeDueReviews: () => Promise<void>;
   weakCountries: CountryStats[];
   unseen: CountryStats[];
   confusions: Array<{ codes: string[]; count: number }>;

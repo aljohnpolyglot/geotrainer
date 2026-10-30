@@ -269,7 +269,7 @@ export default function App() {
         if (typeof savedCompass === 'boolean') setCompassPreference(savedCompass);
         if (savedEnvironment === 'mixed' || savedEnvironment === 'urban' || savedEnvironment === 'suburban' || savedEnvironment === 'rural') setStudyEnvironment(savedEnvironment);
         if (savedUrbanLevel === 1 || savedUrbanLevel === 2 || savedUrbanLevel === 3) setStudyUrbanLevel(savedUrbanLevel);
-        if (savedSampling === 'natural' || savedSampling === 'balanced') setStudySampling(savedSampling); if (savedPriority === 'random' || savedPriority === 'familiar' || savedPriority === 'least-exposure') setStudyPriority(savedPriority);
+        if (savedSampling === 'natural' || savedSampling === 'balanced') setStudySampling(savedSampling); if (savedPriority === 'random' || savedPriority === 'familiar' || savedPriority === 'least-exposure' || savedPriority === 'weak-spots') setStudyPriority(savedPriority);
         if (savedPanoramaSource === 'mixed' || savedPanoramaSource === 'official' || savedPanoramaSource === 'contributor') setStudyPanoramaSource(savedPanoramaSource);
         else if (savedContributors === true) setStudyPanoramaSource('mixed');
         if (savedInteriors === true) setStudyAllowInteriors(true);
