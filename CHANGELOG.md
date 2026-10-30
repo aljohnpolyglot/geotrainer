@@ -9,6 +9,10 @@
 - Match regional Coverage places against locally bundled translated names, including Russian and Swedish variants.
 - Keep all Learn source choices visible in a compact two-column mobile picker and fit the finished-game map and round list to phone screens.
 
+## 2026-10-29
+
+- Preserve the exact played NMPZ heading when saving a Play attempt so Review can reopen the same locked, level view without pointing into the sky or ground.
+
 ## 2026-10-28
 
 - Give Standard, No Move, and NMPZ Review cards independent view-variation sliders that default to the original saved view.

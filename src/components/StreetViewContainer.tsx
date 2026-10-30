@@ -285,9 +285,10 @@ export const StreetViewContainer: React.FC<StreetViewContainerProps> = ({
       google.maps.event.trigger(panorama, 'resize');
       const initialPov = {
         heading: savedView?.heading ?? currentLocation.heading ?? Math.floor(Math.random() * 360),
-          pitch: savedView?.pitch ?? currentLocation.pitch ?? 0,
+          pitch: nmpz ? 0 : savedView?.pitch ?? currentLocation.pitch ?? 0,
       };
       lockedPovRef.current = initialPov;
+      setStreetViewSnapshot({ locationPanoId: currentLocation.panoId, panoId: targetPano, ...initialPov, zoom: initialZoom });
       if (panorama.getPano() === targetPano) {
         pendingPanoRef.current = '';
         // Walking already moved the live viewer here; keep its camera direction.
