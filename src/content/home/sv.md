@@ -341,7 +341,7 @@ Ett svagt repetitionsresultat flyttas automatiskt till slutet av den aktuella se
 
 En oavslutad Studie- eller Spelsession sparas. När du återvänder kan du välja **Återuppta**, **Starta nytt** eller **Tillbaka**. Täckningen har ett kontinuerligt värmelager för **Behärskning**: många lyckade repetitioner och långa intervall gör länder och platser gradvis ljusare, medan missar sänker intensiteten. Ett panorama som öppnas från Täckning har AI Coach, Anteckningsbok, länkad Meta och Tillgängliga anteckningar; en sparning skapar eller återanvänder dess repetitionskort. Bildberoende Meta-ledtrådar visar en varning eftersom Street View-uppdateringar kan göra dem inaktuella.
 
-I Täckning kan du dra ländernas värmekarta och zooma med mushjulet, reglaget eller knapparna. I exponeringslagret skiljer färgerna tydligare mellan låga antal möten, medan den övre referensen förblir fast. Klicka på ett land för att öppna dess regionkarta med samma lager. Regionerna bestäms utifrån sparade platsuppgifter eller via Google Maps när kartan öppnas. Vissa länder saknar regionkarta; platser vars region inte kan avgöras förblir ofärgade.
+I Täckning kan du dra ländernas värmekarta och zooma med mushjulet, reglaget eller knapparna. I exponeringslagret skiljer färgerna tydligare mellan låga antal möten, medan den övre referensen förblir fast. Klicka på ett land för att öppna dess regionkarta med samma lager. Regionerna bestäms utifrån sparade platsuppgifter eller via Google Maps när kartan öppnas. Sparade regionnamn och namn från Google matchas mot lokala översättningar, även ryska och svenska varianter. Vissa länder saknar regionkarta; platser vars region inte kan avgöras förblir ofärgade.
 
 ## AI-coachstilar och förklaringsdjup
 

@@ -246,6 +246,21 @@ test('due queue enforces same-day limits and persists review session kind', asyn
   assert.equal(restored?.kind, 'due');
 });
 
+test('an already merged nearby Review card recovers the newest saved due date', async () => {
+  const { clearTrainerDbForTesting, createBackup, importBackup, trainerDb } = await import('./trainerDb');
+  await clearTrainerDbForTesting();
+  const now = Date.now(); const reviewedAt = now - 3600e3; const nextDueAt = now + 3 * 864e5;
+  const place = (panoId: string, lat: number) => ({ id: panoId, panoId, lat, lng: 13.4, countryCode: 'DE', firstSeenAt: now, lastSeenAt: now, encounterCount: 1 });
+  const backup = await createBackup(false);
+  backup.data.locations.push(place('phone', 52.5), place('pc', 52.5002));
+  backup.data.reviews.push({ id: 'phone', panoId: 'phone', dueAt: now - 1000, intervalDays: 1, gradingHistory: [{ grade: 'good', at: reviewedAt }], lapseCount: 0, reviewCount: 1, lastReviewedAt: reviewedAt });
+  const attempt = { gameId: 'sync', roundNumber: 1, actualLat: 52.5002, actualLng: 13.4, countryCode: 'DE', guessedLat: 52.5002, guessedLng: 13.4, guessedCountryCode: 'DE', distanceKm: 0, score: 5000, timeSpentSeconds: 10, collectionId: 'world', canMove: true, canPan: true, canZoom: true, createdAt: reviewedAt };
+  backup.data.attempts.push({ ...attempt, id: 'source', panoId: 'phone', source: 'play' }, { ...attempt, id: 'grade', panoId: 'pc', source: 'review', reviewedAt, grade: 'good', nextDueAt, intervalDays: 3 });
+  await importBackup(backup, 'replace');
+  assert.equal((await trainerDb.reviews())[0].dueAt, nextDueAt);
+  assert.equal((await trainerDb.reviewQueue({ due: true })).length, 0);
+});
+
 test('saved game preferences are normalized before reuse', async () => {
   const { normalizeGamePreferences } = await import('./trainerDb');
   assert.deepEqual(normalizeGamePreferences({ roundCount: 999, collectionId: 7, canMove: false, timeLimitSeconds: -1, environment: 'ocean' }, false), {

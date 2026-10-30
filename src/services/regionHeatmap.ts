@@ -1,5 +1,8 @@
-export const normalizeRegionName = (name: string) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-  .replace(/\b(county|province|region|state|prefecture|department|departement|oblast|republic|l[aä]n)\b/g, '')
+const cyrillic: Record<string, string> = { а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'yo', ж:'zh', з:'z', и:'i', й:'y', к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r', с:'s', т:'t', у:'u', ф:'f', х:'kh', ц:'ts', ч:'ch', ш:'sh', щ:'shch', ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya', і:'i', ї:'yi', є:'ye', ґ:'g' };
+const latinize = (name: string) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[а-яёіїєґ]/g, (letter) => cyrillic[letter]);
+const plainName = (name: string) => latinize(name).replace(/[^a-z0-9]/g, '');
+export const normalizeRegionName = (name: string) => latinize(name)
+  .replace(/\b(county|province|region|state|prefecture|department|departement|oblast|republic|respublika|krai|kray|okrug|autonomous|avtonomnaya|l[aä]n|city|of)\b/g, '')
   .replace(/[^a-z0-9]/g, '');
 
 const aliases: Record<string, string> = {
@@ -8,14 +11,45 @@ const aliases: Record<string, string> = {
   saxony: 'sachsen', saxonyanhalt: 'sachsenanhalt', thuringia: 'thuringen',
 };
 
-export function findRegionId(countryCode: string, regions: Record<string, string>, name?: string, shortCode?: string): string | undefined {
+const russianAliases: Record<string, string> = {
+  adygeyarepublic:'RUAD', altai:'RUAL', altairepublic:'RUAL', altaikrai:'RUALT', altaykrai:'RUALT',
+  arkhangelskaya:'RUARK', buryatiyarepublic:'RUBU', chukotka:'RUCHU', ingushetiyarepublic:'RUIN',
+  jewishautonomousoblast:'RUYEV', kabardinobalkariyarepublic:'RUKB', kalmykiyarepublic:'RUKL',
+  karachayevocherkesiyarepublic:'RUKC', khakasiyarepublic:'RUKK', khantymansia:'RUKHM',
+  kuzbass:'RUKEM', leningradskayaoblast:'RULEN', magadanoblast:'RUMAG', mordoviyarepublic:'RUMO',
+  moscow:'RUMOS', moscowoblast:'RUMOW', moscowregion:'RUMOW', nizhnynovgorodoblast:'RUNIZ',
+  northossetiaalania:'RUSE', oryoloblast:'RUORL', republicoftyva:'RUTY', sakha:'RUSA',
+  stpetersburg:'RUSPE', saintpetersburg:'RUSPE', udmurtiyarepublic:'RUUD', yamalonenets:'RUYAN',
+  zabaykalskiytransbaikalkray:'RUZAB', transbaikalkrai:'RUZAB',
+};
+
+export function findRegionId(countryCode: string, regions: Record<string, string>, name?: string, shortCode?: string, alternateNames?: Record<string, string>): string | undefined {
   const country = countryCode.toUpperCase();
   const code = shortCode?.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
   if (code && regions[`${country}${code}`]) return `${country}${code}`;
+  const key = plainName(name || '');
+  const alias = country === 'RU' && russianAliases[key] || alternateNames?.[key];
+  if (alias && regions[alias]) return alias;
   const normalized = normalizeRegionName(name || '');
   if (!normalized) return undefined;
   const target = aliases[normalized] || normalized;
-  return Object.keys(regions).find((id) => normalizeRegionName(regions[id]) === target);
+  return Object.keys(regions).find((id) => { const candidate = normalizeRegionName(regions[id]); return candidate === target || country === 'SE' && target === `${candidate}s`; });
+}
+
+export function regionNameAliases(countryCode: string, regions: Record<string, string>, pools: Array<{ name: string; names?: Record<string, string> }>) {
+  const aliases: Record<string, string> = {};
+  const ambiguous = new Set<string>();
+  for (const pool of pools) {
+    const id = findRegionId(countryCode, regions, pool.name);
+    if (!id) continue;
+    for (const name of [pool.name, ...Object.values(pool.names || {})]) {
+      const key = plainName(name);
+      if (!key || ambiguous.has(key)) continue;
+      if (aliases[key] && aliases[key] !== id) { delete aliases[key]; ambiguous.add(key); }
+      else aliases[key] = id;
+    }
+  }
+  return aliases;
 }
 
 export function regionSvgMarkup(source: string, regions: Record<string, string>, values: Record<string, number | null>, colors: readonly string[], emptyLabel: string, label: string) {

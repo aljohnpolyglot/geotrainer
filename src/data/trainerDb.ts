@@ -158,8 +158,17 @@ async function reconcileSavedReviews() {
   attempts.filter((item) => item.source === 'review').forEach((item) => { if (!latest.get(item.panoId) || latest.get(item.panoId)!.createdAt < item.createdAt) latest.set(item.panoId, item); });
   const repaired = reviews.map((review) => reconcileReviewAttempt(review, latest.get(review.panoId) || {} as Attempt, preferences));
   const merged = coalesceNearbyReviews(repaired, locations, attempts).reviews;
-  if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index])) { reconciledReviewIdentityRevision = revision; return; }
-  const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); merged.forEach((review) => tx.objectStore('reviews').put(review));
+  const lookup = createReviewLookup(merged, locations, attempts);
+  const canonicalIds = new Set(merged.map((review) => review.panoId));
+  const nearbyAttempts = new Map<string, Attempt>();
+  for (const attempt of latest.values()) {
+    if (canonicalIds.has(attempt.panoId) || attempt.nextDueAt === undefined) continue;
+    const review = lookup({ panoId: attempt.panoId, lat: attempt.actualLat, lng: attempt.actualLng, countryCode: attempt.countryCode, sourcePointHash: attempt.sourcePointHash });
+    if (review?.lastReviewedAt === (attempt.reviewedAt || attempt.createdAt)) nearbyAttempts.set(review.panoId, attempt);
+  }
+  const reconciled = merged.map((review) => reconcileReviewAttempt(review, nearbyAttempts.get(review.panoId) || {} as Attempt, preferences));
+  if (merged.length === reviews.length && !repaired.some((review, index) => review !== reviews[index]) && !reconciled.some((review, index) => review !== merged[index])) { reconciledReviewIdentityRevision = revision; return; }
+  const db = await openDatabase(); const tx = db.transaction('reviews', 'readwrite'); tx.objectStore('reviews').clear(); reconciled.forEach((review) => tx.objectStore('reviews').put(review));
   await complete(tx); reconciledReviewIdentityRevision = revision; notifyChange({ operation: 'reconcile:reviews' });
 }
 let reviewMaintenance: Promise<void> | undefined;

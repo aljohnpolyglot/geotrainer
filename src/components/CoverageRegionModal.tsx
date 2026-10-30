@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import type { Attempt, ReviewRecord, TrainerLocation } from '../types';
 import { reverseGeocodeLocation } from '../services/geocoding';
-import { findRegionId, regionSvgMarkup } from '../services/regionHeatmap';
+import { findRegionId, regionNameAliases, regionSvgMarkup } from '../services/regionHeatmap';
+import { loadCityPools } from '../services/cityPools';
 import { countryName, coverageRegionValues, useHubTranslate, type CoverageOverlay } from './trainerHubUtils';
 import { CountryFlag } from './CountryFlag';
 import { ZoomableSvgMap } from './ZoomableSvgMap';
@@ -33,14 +34,15 @@ export function CoverageRegionModal({ countryCode, locations, attempts, reviews,
     const load = async () => {
       const prefix = `${import.meta.env.BASE_URL}admin1-regions/${countryCode.toLowerCase()}`;
       try {
-        const [svgResponse, regionsResponse] = await Promise.all([fetch(`${prefix}/${countryCode.toLowerCase()}.svg`), fetch(`${prefix}/regions.json`)]);
+        const [svgResponse, regionsResponse, pools] = await Promise.all([fetch(`${prefix}/${countryCode.toLowerCase()}.svg`), fetch(`${prefix}/regions.json`), loadCityPools(countryCode)]);
         if (!svgResponse.ok || !regionsResponse.ok) throw new Error('regional map unavailable');
         const [svg, regions] = await Promise.all([svgResponse.text(), regionsResponse.json() as Promise<Record<string, string>>]);
         if (!active) return;
+        const alternateNames = regionNameAliases(countryCode, regions, pools);
         const known: Record<string, string> = {};
         const cities: Record<string, string> = {};
         for (const item of countryLocations) {
-          const id = findRegionId(countryCode, regions, item.adminArea);
+          const id = findRegionId(countryCode, regions, item.adminArea, undefined, alternateNames);
           if (id) known[item.panoId] = id;
           if (item.locality) cities[item.panoId] = item.locality;
         }
@@ -53,7 +55,7 @@ export function CoverageRegionModal({ countryCode, locations, attempts, reviews,
             if (!active) return;
             batch.forEach((item, offset) => {
               const result = results[offset];
-              const id = result?.countryCode === countryCode ? findRegionId(countryCode, regions, result.adminArea, result.adminAreaCode) : undefined;
+              const id = result?.countryCode === countryCode ? findRegionId(countryCode, regions, result.adminArea, result.adminAreaCode, alternateNames) : undefined;
               if (id) known[item.panoId] = id;
               if (result?.countryCode === countryCode && result.locality) cities[item.panoId] = result.locality;
             });

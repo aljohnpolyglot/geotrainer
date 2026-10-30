@@ -36,11 +36,16 @@ const merge = (kept: ReviewRecord, duplicate: ReviewRecord): ReviewRecord => {
     .filter((item, index, values) => values.findIndex((other) => other.at === item.at && other.grade === item.grade) === index)
     .sort((a, b) => a.at - b.at);
   const generalization = (duplicate.generalizationUpdatedAt || 0) > (kept.generalizationUpdatedAt || 0) ? duplicate : kept;
+  const keptScheduleAt = Math.max(kept.lastReviewedAt || 0, kept.dueAdjustedAt || 0);
+  const duplicateScheduleAt = Math.max(duplicate.lastReviewedAt || 0, duplicate.dueAdjustedAt || 0);
+  const schedule = duplicateScheduleAt > keptScheduleAt || duplicateScheduleAt === keptScheduleAt && duplicate.dueAt < kept.dueAt ? duplicate : kept;
+  const { naturalDueAt: _naturalDueAt, dueAdjustedAt: _dueAdjustedAt, ...base } = kept;
   return {
-    ...kept,
-    dueAt: Math.min(kept.dueAt, duplicate.dueAt),
-    ...((kept.naturalDueAt ?? duplicate.naturalDueAt) !== undefined ? { naturalDueAt: kept.naturalDueAt ?? duplicate.naturalDueAt } : {}),
-    intervalDays: Math.min(kept.intervalDays, duplicate.intervalDays),
+    ...base,
+    dueAt: schedule.dueAt,
+    ...(schedule.naturalDueAt !== undefined ? { naturalDueAt: schedule.naturalDueAt } : {}),
+    ...(schedule.dueAdjustedAt !== undefined ? { dueAdjustedAt: schedule.dueAdjustedAt } : {}),
+    intervalDays: schedule.intervalDays,
     gradingHistory,
     lapseCount: kept.lapseCount + duplicate.lapseCount,
     reviewCount: kept.reviewCount + duplicate.reviewCount,

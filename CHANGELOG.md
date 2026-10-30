@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-31
+
+- Keep the latest graded Review schedule when cloud merge combines nearby cards, and repair previously merged due dates from saved Review attempts.
+- Match regional Coverage places against locally bundled translated names, including Russian and Swedish variants.
+- Keep all Learn source choices visible in a compact two-column mobile picker and fit the finished-game map and round list to phone screens.
+
 ## 2026-10-28
 
 - Give Standard, No Move, and NMPZ Review cards independent view-variation sliders that default to the original saved view.

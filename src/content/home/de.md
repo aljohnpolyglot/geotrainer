@@ -460,7 +460,7 @@ Eine schlechte Sitzung bedeutet keinen dauerhaften Rückschritt. Suche nach wied
 
 Die Karte zeigt nur Panoramen, denen du in Lernen, Spiel oder Wiederholung begegnet bist. Ebenen können Begegnungen, Genauigkeit, Durchschnitt, Schwäche, fällige Wiederholungen oder Meisterschaft hervorheben. Eine detaillierte SVG-Länder-Heatmap überträgt dieselbe Ebene auf Länderflächen; ihre warme, blaue, grüne oder violette Palette lässt sich unabhängig von den Daten wählen. Du kannst die Heatmap ziehen und mit Mausrad, Schieberegler oder Tasten zoomen.
 
-In der Begegnungsebene unterscheiden die Farben auch niedrige Begegnungszahlen deutlicher; der obere Bezugswert bleibt fest. Ein Klick auf ein Land öffnet die regionale Heatmap mit derselben Ebene. Regionen werden anhand gespeicherter Ortsangaben oder beim Öffnen über Google Maps zugeordnet. Für manche Länder fehlen regionale Kartendaten; Orte ohne eindeutige Region bleiben ungefärbt. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl.
+In der Begegnungsebene unterscheiden die Farben auch niedrige Begegnungszahlen deutlicher; der obere Bezugswert bleibt fest. Ein Klick auf ein Land öffnet die regionale Heatmap mit derselben Ebene. Regionen werden anhand gespeicherter Ortsangaben oder beim Öffnen über Google Maps zugeordnet. Gespeicherte und von Google gelieferte Regionsnamen werden mit lokalen Übersetzungen abgeglichen, auch bei russischen und schwedischen Varianten. Für manche Länder fehlen regionale Kartendaten; Orte ohne eindeutige Region bleiben ungefärbt. In der Begegnungsebene zeigt das Darüberfahren die genaue Anzahl.
 
 Die neutrale Farbe bedeutet je nach Ebene „noch nicht begegnet“, „keine gewerteten Versuche“ oder „kein Wiederholungsverlauf“—nicht fehlende Google-Maps-Abdeckung.
 

@@ -511,7 +511,7 @@ Saving a Study location and submitting a Play answer also saves the current view
 
 Map layers can emphasize exposure, accuracy, average score, weakness, due reviews, or mastery. Clusters summarize nearby encountered locations. A detailed SVG country heatmap applies the same selected layer to country shapes; choose its warm, blue, green, or purple palette without changing the data. Exposure colors spread out low encounter counts so differences between less-visited places are easier to see; the scale still uses a fixed upper reference.
 
-Drag the heatmap and use the mouse wheel, slider, or zoom buttons to explore it. Click a country to open its regional heatmap. Regional colors use the same selected layer and assign encountered places to regions using saved location details or Google Maps geocoding when opened. Some countries have no regional map in the bundled data, and locations whose region cannot be identified remain unshaded. On Exposure, hover a country for its exact encounter count.
+Drag the heatmap and use the mouse wheel, slider, or zoom buttons to explore it. Click a country to open its regional heatmap. Regional colors use the same selected layer and assign encountered places to regions using saved location details or Google Maps geocoding when opened. Saved and Google region names are matched with local translated names, including Russian and Swedish variants. Some countries have no regional map in the bundled data, and locations whose region cannot be identified remain unshaded. On Exposure, hover a country for its exact encounter count.
 
 The neutral map color means not encountered, no scored attempts, or no Review history according to the selected layer; it does not describe Google Maps availability.
 

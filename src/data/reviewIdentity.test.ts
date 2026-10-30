@@ -12,6 +12,14 @@ test('review cards within 50 metres share the established card', () => {
   assert.equal(result.aliases.get('near-b'), 'near-a');
 });
 
+test('a newer grade on another device replaces the earlier due date of a nearby card', () => {
+  const phone = { ...review('phone', 2), dueAt: 100, lastReviewedAt: 20, gradingHistory: [{ grade: 'hard' as const, at: 20 }] };
+  const pc = { ...review('pc', 1), dueAt: 500, lastReviewedAt: 200, gradingHistory: [{ grade: 'good' as const, at: 200 }] };
+  const merged = coalesceNearbyReviews([phone, pc], [location('phone', 52.5), location('pc', 52.5002)], []);
+  assert.equal(merged.reviews[0].dueAt, 500);
+  assert.deepEqual(merged.reviews[0].gradingHistory, [...phone.gradingHistory, ...pc.gradingHistory]);
+});
+
 test('indexed matching preserves greedy card identity across bands, borders, poles, and imported sources', () => {
   const places = Array.from({ length: 1000 }, (_, index) => ({
     ...location(`place-${index}`, -60 + Math.floor(index / 2) * .24 + (index % 2 ? .0002 : 0)),
