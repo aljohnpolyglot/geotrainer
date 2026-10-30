@@ -9,20 +9,12 @@ import { CollectionOptions } from "./CollectionOptions";
 import { useLanguagePreferences } from "../services/useLanguagePreferences";
 import { countryDisplayName } from "../services/language";
 
-export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, dailyMinimum = 50, completedToday = 0, nextDueAt, reviewTimeZone, startReview, reviewForAttempt, postponeDueReviews, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
+export function ReviewPanel({ collections, reviewCollection, setReviewCollection, filters, setFilters, customMin, setCustomMin, customMax, setCustomMax, queue, dueCount = 0, reviewCount = 0, dailyMinimum = 50, completedToday = 0, nextDueAt, reviewTimeZone, startReview, reviewForAttempt, weakCountries, unseen, confusions, onTrainCountries }: ReviewPanelProps) {
   const t = useHubTranslate();
   const { ui } = useLanguagePreferences();
   const [page, setPage] = useState(1);
-  const [postponing, setPostponing] = useState(false);
-  const [postponeMessage, setPostponeMessage] = useState('');
   const paging = pageBounds(queue.length, page, 10);
   useEffect(() => setPage(1), [filters, reviewCollection]);
-  const postpone = async () => {
-    setPostponing(true); setPostponeMessage('');
-    try { await postponeDueReviews(); setPostponeMessage(t('Due reviews moved to tomorrow')); }
-    catch { setPostponeMessage(t('Could not postpone reviews')); }
-    finally { setPostponing(false); }
-  };
   const nextDueLabel = nextDueAt ? new Date(nextDueAt).toLocaleString(ui, { dateStyle: 'medium', timeStyle: 'short', ...(reviewTimeZone ? { timeZone: reviewTimeZone } : {}) }) : '';
   const heldByDailyLimits = filters.due && reviewCollection === 'all' && !filters.environment ? Math.max(0, dueCount - queue.length) : 0;
   const dailyLimitReached = !queue.length && heldByDailyLimits > 0;
@@ -30,7 +22,7 @@ export function ReviewPanel({ collections, reviewCollection, setReviewCollection
   const daysPreset = filters.recentDays === undefined ? 'any' : [7, 30, 90].includes(filters.recentDays) ? String(filters.recentDays) : 'custom';
   return <>
     <section className="daily-review-block" aria-labelledby="daily-review-title">
-      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p><p>{t('Daily minimum')}: {Math.min(completedToday, dailyMinimum).toLocaleString(ui)} / {dailyMinimum.toLocaleString(ui)}</p>{dueCount > 0 && <button type="button" className="button" disabled={postponing} onClick={() => void postpone()}>{t('Postpone due reviews until tomorrow')}</button>}{postponeMessage && <p role="status">{postponeMessage}</p>}</div>
+      <div><span className="daily-review-kicker">{t("dueToday")}</span><h2 id="daily-review-title">{queue.length ? `${queue.length} ${t("locationsReady")}` : dailyLimitReached ? t("Daily review limit reached") : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</h2><p>{queue.length ? `${t("reviewsReadyDescription")}${heldByDailyLimits ? ` ${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : ''}` : heldByDailyLimits ? `${heldByDailyLimits} ${t("waitingBehindDailyLimits")}` : nextDueAt ? `${t("tryAgainAt")}: ${nextDueLabel}` : reviewCount ? t("dailyReviewsComplete") : t("noReviewsScheduled")}</p><p>{t('Daily minimum')}: {Math.min(completedToday, dailyMinimum).toLocaleString(ui)} / {dailyMinimum.toLocaleString(ui)}</p></div>
       <button className="button primary daily-review-action" disabled={!queue[0]} onClick={() => queue[0] && startReview(queue[0])}><Target size={20} /> {t("reviewAction")}</button>
     </section>
     <div className="filter-bar">

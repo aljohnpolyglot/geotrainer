@@ -125,7 +125,7 @@ El icono **Guardar este lugar para repasar**, junto a **Continuar partida**, per
 
 ## Repaso y programación
 
-La lista de Repaso muestra 10 lugares por página. La fecha, la distancia y los puntos de una fila describen un intento guardado; pueden ser anteriores al último repaso de esa tarjeta. El total pendiente sigue la programación guardada. **Posponer los repasos pendientes hasta mañana** traslada todas las tarjetas pendientes al siguiente día de repaso sin cambiar intentos, calificaciones ni intervalos. Sincroniza manualmente cada dispositivo para compartir el cambio.
+La lista de Repaso muestra 10 lugares por página. La fecha, la distancia y los puntos de una fila describen un intento guardado; pueden ser anteriores al último repaso de esa tarjeta. El total pendiente sigue la programación guardada. Las tarjetas no repasadas se trasladan automáticamente cuando está activada esa preferencia de Repaso.
 
 Si intentos cercanos de Estudio y Juego comparten una tarjeta, Repaso usa la regla de movimiento de la ronda de Juego: Estándar, No Move o NMPZ. La barra superior muestra ese modo. Tras responder, el panorama permite moverse, girar y hacer zoom.
 

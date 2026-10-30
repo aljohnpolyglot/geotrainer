@@ -247,7 +247,7 @@ The Games history list shows each total as **earned score / maximum possible sco
 
 ## Review mode
 
-The Review list shows 10 places per page. A row’s date, distance, and score describe a saved attempt; they may be older than the card’s latest review. The due count follows the saved card schedule. **Postpone due reviews until tomorrow** moves every currently due card to the next review day without changing its attempts, grades, or review interval. Sync manually on each device to carry that change across devices.
+The Review list shows 10 places per page. A row’s date, distance, and score describe a saved attempt; they may be older than the card’s latest review. The due count follows the saved card schedule. Missed cards continue to roll forward automatically when that Review preference is enabled.
 
 Review presents scheduled locations when they are due. It is a real recall test, not a slideshow of past answers.
 

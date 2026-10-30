@@ -123,7 +123,7 @@ L’icona **Salva questo luogo per il ripasso**, accanto a **Continua partita**,
 
 ## Ripasso e programmazione
 
-L’elenco Ripasso mostra 10 luoghi per pagina. Data, distanza e punti di una riga descrivono un tentativo salvato; possono precedere l’ultimo ripasso della scheda. Il numero di schede in scadenza segue il programma salvato. **Rimanda a domani i ripassi in scadenza** sposta tutte le schede attualmente dovute al prossimo giorno di ripasso senza cambiare tentativi, valutazioni o intervalli. Sincronizza manualmente ogni dispositivo per condividere la modifica.
+L’elenco Ripasso mostra 10 luoghi per pagina. Data, distanza e punti di una riga descrivono un tentativo salvato; possono precedere l’ultimo ripasso della scheda. Il numero di schede in scadenza segue il programma salvato. Le schede non ripassate continuano a slittare automaticamente quando questa preferenza di Ripasso è attiva.
 
 Quando tentativi vicini di Studio e Gioco condividono una scheda, il Ripasso usa la regola di movimento del turno di Gioco: Standard, No Move o NMPZ. La barra superiore mostra questa modalità. Dopo la risposta, il panorama consente movimento, rotazione e zoom.
 

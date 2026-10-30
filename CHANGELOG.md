@@ -3,7 +3,7 @@
 ## 2026-10-31
 
 - Add Weak spots priority to generated Learn and Play locations, beginning with broad exposure and gradually practicing repeated country, regional, and environment mistakes.
-- Paginate the Review place list and let learners move all currently due reviews to tomorrow while preserving grades, attempts, and intervals.
+- Paginate the Review place list and distinguish each saved attempt from its latest review and due dates while keeping missed-review rollover automatic.
 - Keep a newer graded Review schedule ahead of an older device's later automatic rollover during manual sync, and repair affected local schedules from saved graded attempts.
 - Keep the latest graded Review schedule when cloud merge combines nearby cards, and repair previously merged due dates from saved Review attempts.
 - Match regional Coverage places against locally bundled translated names, including Russian and Swedish variants.

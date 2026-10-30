@@ -369,24 +369,6 @@ test('recent attempts are newest first and bounded for adaptive location searche
   assert.deepEqual((await trainerDb.recentAttempts(2)).map((item) => item.id), ['recent-2', 'recent-1']);
 });
 
-test('postponing due reviews moves schedules one day without changing grades or attempts', async () => {
-  const { clearTrainerDbForTesting, trainerDb, reviewDayStart } = await import('./trainerDb');
-  await clearTrainerDbForTesting();
-  const source = { id: 'pause-source', gameId: 'study', roundNumber: 1, panoId: 'pause-pano', actualLat: 50, actualLng: 10, countryCode: 'DE', guessedLat: null, guessedLng: null, distanceKm: null, score: 0, timeSpentSeconds: 0, collectionId: 'world', canMove: true, canPan: true, canZoom: true, createdAt: Date.now(), source: 'study' as const };
-  await trainerDb.saveAttempt(source);
-  await trainerDb.queueForReview(source.panoId, true);
-  const before = (await trainerDb.reviews())[0];
-  assert.equal(await trainerDb.postponeDueReviewsOneDay(), 1);
-  const after = (await trainerDb.reviews())[0];
-  const preferences = await trainerDb.schedulerPreferences();
-  assert.ok(reviewDayStart(after.dueAt, preferences) > reviewDayStart(Date.now(), preferences));
-  assert.equal(after.naturalDueAt, before.dueAt);
-  assert.ok(after.dueAdjustedAt);
-  assert.deepEqual([after.reviewCount, after.gradingHistory, (await trainerDb.attempts()).length], [before.reviewCount, before.gradingHistory, 1]);
-  assert.equal(await trainerDb.postponeDueReviewsOneDay(), 0);
-});
-
-
 test('Review submission reuses its read context and prefix reads exclude image drafts', async () => {
   const { clearTrainerDbForTesting, trainerDb } = await import('./trainerDb');
   await clearTrainerDbForTesting();

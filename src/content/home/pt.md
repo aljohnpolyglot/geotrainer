@@ -123,7 +123,7 @@ O ícone **Salvar este local para revisão**, ao lado de **Continuar jogo**, per
 
 ## Revisão e agendamento
 
-A lista de Revisão mostra 10 locais por página. A data, a distância e os pontos de uma linha descrevem uma tentativa salva; podem ser anteriores à última revisão do cartão. A quantidade pendente segue a programação salva. **Adiar revisões pendentes até amanhã** move todos os cartões pendentes para o próximo dia de revisão sem alterar tentativas, avaliações ou intervalos. Sincronize manualmente cada dispositivo para compartilhar a mudança.
+A lista de Revisão mostra 10 locais por página. A data, a distância e os pontos de uma linha descrevem uma tentativa salva; podem ser anteriores à última revisão do cartão. A quantidade pendente segue a programação salva. Os cartões não revisados continuam a ser adiados automaticamente quando essa preferência de Revisão está ativa.
 
 Quando tentativas próximas de Estudo e Jogo compartilham um cartão, a Revisão usa a regra de movimento da rodada de Jogo: Padrão, No Move ou NMPZ. A barra superior mostra esse modo. Após a resposta, o panorama permite deslocamento, rotação e zoom.
 

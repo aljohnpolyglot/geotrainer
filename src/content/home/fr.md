@@ -125,7 +125,7 @@ L’icône **Enregistrer ce lieu pour révision**, à côté de **Continuer la p
 
 ## Révision et planification
 
-La liste de Révision affiche 10 lieux par page. La date, la distance et le score d’une ligne décrivent une tentative enregistrée ; ils peuvent précéder la dernière révision de la fiche. Le nombre de fiches dues suit le calendrier enregistré. **Reporter les révisions dues à demain** déplace toutes les fiches actuellement dues au prochain jour de révision sans modifier les tentatives, les notes ni les intervalles. Synchronisez manuellement chaque appareil pour partager ce changement.
+La liste de Révision affiche 10 lieux par page. La date, la distance et le score d’une ligne décrivent une tentative enregistrée ; ils peuvent précéder la dernière révision de la fiche. Le nombre de fiches dues suit le calendrier enregistré. Les fiches non révisées continuent d’être reportées automatiquement lorsque cette préférence de Révision est activée.
 
 Quand des tentatives proches d’Étude et de Jeu partagent une carte, la Révision reprend la règle de déplacement de la manche de Jeu : Standard, No Move ou NMPZ. La barre supérieure affiche ce mode. Après la réponse, le panorama permet de se déplacer, de tourner et de zoomer.
 

@@ -121,7 +121,7 @@ Ikonen **Spara platsen för repetition** bredvid **Fortsätt spela** låter dig 
 
 ## Repetition och schemaläggning
 
-Repetitionslistan visar 10 platser per sida. Datum, avstånd och poäng i en rad hör till ett sparat försök och kan vara äldre än kortets senaste repetition. Antalet förfallna kort följer det sparade schemat. **Skjut upp förfallna repetitioner till imorgon** flyttar alla kort som förfaller nu till nästa repetitionsdag utan att ändra försök, betyg eller intervall. Synkronisera varje enhet manuellt för att dela ändringen.
+Repetitionslistan visar 10 platser per sida. Datum, avstånd och poäng i en rad hör till ett sparat försök och kan vara äldre än kortets senaste repetition. Antalet förfallna kort följer det sparade schemat. Missade kort flyttas fortfarande fram automatiskt när den repetitionsinställningen är aktiverad.
 
 När närliggande försök från Lär och Spela delar ett kort använder Repetition spelrundans rörelseregel: Standard, No Move eller NMPZ. Det läget visas i det övre fältet. Efter svaret går det att förflytta sig, rotera och zooma i panoramat.
 

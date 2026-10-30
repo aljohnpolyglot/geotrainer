@@ -223,7 +223,7 @@ Das Symbol **Diesen Ort zur Wiederholung speichern** neben **Spiel fortsetzen** 
 
 ## Wiederholungsmodus
 
-Die Wiederholungsliste zeigt 10 Orte pro Seite. Datum, Entfernung und Punkte einer Zeile stammen aus einem gespeicherten Versuch und können älter sein als die letzte Wiederholung der Karte. Die Zahl fälliger Karten folgt dem gespeicherten Zeitplan. **Fällige Wiederholungen auf morgen verschieben** legt alle aktuell fälligen Karten auf den nächsten Wiederholungstag, ohne Versuche, Bewertungen oder Intervalle zu ändern. Synchronisiere jedes Gerät manuell, damit die Änderung auf beiden ankommt.
+Die Wiederholungsliste zeigt 10 Orte pro Seite. Datum, Entfernung und Punkte einer Zeile stammen aus einem gespeicherten Versuch und können älter sein als die letzte Wiederholung der Karte. Die Zahl fälliger Karten folgt dem gespeicherten Zeitplan. Nicht bearbeitete Karten werden weiterhin automatisch verschoben, wenn diese Wiederholungseinstellung aktiviert ist.
 
 Wenn nahe beieinanderliegende Lern- und Spielversuche eine Karte teilen, übernimmt die Wiederholung die Bewegungsregel der Spielrunde: Standard, No Move oder NMPZ. Die obere Leiste zeigt diesen Modus. Nach der Antwort sind Bewegung, Drehen und Zoomen im Panorama möglich.
 

@@ -227,16 +227,6 @@ export const trainerDb = {
     await rebalanceReviewDates(shifts, openDatabase);
     notifyChange({ operation: 'rebalance:reviews' });
   },
-  async postponeDueReviewsOneDay(): Promise<number> {
-    await maintainReviews();
-    const [reviews, preferences] = await Promise.all([all<ReviewRecord>('reviews'), trainerDb.schedulerPreferences()]);
-    const now = Date.now();
-    const tomorrow = nextReviewAt(now, 1, preferences);
-    const shifts = reviews.filter((review) => isReviewDue(review, now, preferences)).map((review) => ({ id: review.id, fromDueAt: review.dueAt, toDueAt: tomorrow }));
-    await rebalanceReviewDates(shifts, openDatabase);
-    if (shifts.length) notifyChange({ operation: 'postpone:reviews' });
-    return shifts.length;
-  },
   bookmarks: async () => (await all<BookmarkLocation>('bookmarks')).sort((a, b) => b.savedAt - a.savedAt),
   collections: () => all<Collection>('collections'),
   sessions: () => all<TrainingSession>('sessions'),
