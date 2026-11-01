@@ -16,7 +16,7 @@ import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences, shuffleIn
 import { intervalsFor } from './reviewGrading';
 import { rebalanceReviewDates, reconcileReviewAttempt, gradedReviewRecord, generalizedReviewRecord } from './reviewSchedule';
 import { commitReviewProgress, type SavedReviewSession } from './reviewProgress';
-import { planReviewRollover } from './reviewRollover';
+import { planLegacyRolloverRepair, planReviewRollover } from './reviewRollover';
 import { clueImageFingerprint } from './clueDedup';
 import { repairSavedNotebookAssistance } from './assistanceRepair';
 import { panoramaHash } from '../services/locationHash';
@@ -176,7 +176,9 @@ function maintainReviews(): Promise<void> {
   reviewMaintenance ||= (async () => {
     await reconcileSavedReviews();
     const [reviews, storedPreferences] = await Promise.all([all<ReviewRecord>('reviews'), get<SettingRecord>('settings', 'schedulerPreferences')]);
-    const shifts = planReviewRollover(reviews, Date.now(), normalizeSchedulerPreferences(storedPreferences?.value));
+    const repairs = planLegacyRolloverRepair(reviews, Date.now());
+    if (repairs.length) { await rebalanceReviewDates(repairs, openDatabase); notifyChange({ operation: 'repair:review-rollover' }); }
+    const shifts = planReviewRollover(repairs.length ? await all<ReviewRecord>('reviews') : reviews, Date.now(), normalizeSchedulerPreferences(storedPreferences?.value));
     if (shifts.length) { await rebalanceReviewDates(shifts, openDatabase); notifyChange({ operation: 'rollover:reviews' }); }
   })().finally(() => { reviewMaintenance = undefined; });
   return reviewMaintenance.then(() => { if (reconciledReviewIdentityRevision !== reviewIdentityRevision) return maintainReviews(); });

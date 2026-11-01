@@ -2,6 +2,7 @@
 
 ## 2026-11-01
 
+- Restore legacy Review dates shifted more than seven days by the old mass rollover when the local database opens, moving dates already passed to today while preserving grades and attempts before manual sync.
 - Carry only overdue unfinished Review cards to today. Preserve future schedules when new cards arrive from another device during manual sync, let Reset to original dates bring previously shifted cards with past original dates back to today, and show all overdue cards in today's due-date bar.
 
 ## 2026-10-31
