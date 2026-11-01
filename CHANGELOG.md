@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-01
+
+- Carry only overdue unfinished Review cards to today. Preserve future schedules when new cards arrive from another device during manual sync, let Reset to original dates bring previously shifted cards with past original dates back to today, and show all overdue cards in today's due-date bar.
+
 ## 2026-10-31
 
 - Add Weak spots priority to generated Learn and Play locations, beginning with broad exposure and gradually practicing repeated country, regional, and environment mistakes.

@@ -56,3 +56,11 @@ test('reset uses saved original dates or matching Review attempts and leaves tod
   assert.deepEqual(shifts.map(({ id }) => id), ['saved', 'legacy']);
   assert.ok(shifts.every((shift) => shift.toDueAt === naturalDueAt && shift.reset));
 });
+
+test('reset brings previously rolled future cards with past natural dates back to today', () => {
+  const now = new Date(2026, 10, 1, 12).getTime();
+  const original = new Date(2026, 9, 20, 8).getTime();
+  const moved = new Date(2026, 10, 12, 8).getTime();
+  const review: ReviewRecord = { id: 'rolled', panoId: 'rolled', dueAt: moved, naturalDueAt: original, dueAdjustedAt: now - 1000, intervalDays: 14, reviewCount: 1, lapseCount: 0, gradingHistory: [] };
+  assert.deepEqual(planReviewReset([review], [], now), [{ id: 'rolled', fromDueAt: moved, toDueAt: new Date(2026, 10, 1, 8).getTime(), reset: true }]);
+});

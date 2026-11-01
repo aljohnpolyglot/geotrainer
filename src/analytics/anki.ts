@@ -42,7 +42,7 @@ export function ankiStatistics(attempts: Attempt[], reviews: ReviewRecord[], vis
   completedEvents.forEach((event) => { grades[event.grade] = (grades[event.grade] || 0) + 1; });
   const futureDue = Array.from({ length: 31 }, (_, offset) => {
     const day = localDay(now, offset);
-    return { day, count: offset === 0 && readyDueCount !== undefined ? readyDueCount : reviews.filter((review) => startOfDay(review.dueAt) === day).length };
+    return { day, count: reviews.filter((review) => offset === 0 ? startOfDay(review.dueAt) <= day : startOfDay(review.dueAt) === day).length };
   });
   const calendar = Array.from({ length: 84 }, (_, offset) => {
     const day = localDay(now, offset - 83);

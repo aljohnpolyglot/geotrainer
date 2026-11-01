@@ -47,9 +47,10 @@ test('Anki statistics aggregate review history, maturity, due days, and activity
   assert.deepEqual(masteryTier(1000), { name: 'Atlas', current: 1000, next: 2500, progress: 0 });
 });
 
-test('Anki today counts use the daily-limited ready queue when provided', () => {
+test('Anki due-now metric respects the ready queue while the chart shows all overdue cards', () => {
   const reviews = Array.from({ length: 5 }, (_, index) => review(`due-${index}`, 1, [], now));
+  reviews[0].dueAt = new Date(2026, 8, 10, 12).getTime();
   const stats = ankiStatistics([], reviews, [], [], now, 3);
   assert.equal(stats.due, 3);
-  assert.equal(stats.futureDue[0].count, 3);
+  assert.equal(stats.futureDue[0].count, 5);
 });

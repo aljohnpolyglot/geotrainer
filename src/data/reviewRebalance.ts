@@ -40,6 +40,7 @@ export function planReviewReset(reviews: ReviewRecord[], attempts: Attempt[] = [
     if (!review.dueAdjustedAt || dayStart(review.dueAt) <= today) return [];
     const recordedDue = originalByReview.get(`${review.panoId}:${review.lastReviewedAt}:${review.intervalDays}`);
     const naturalDueAt = review.naturalDueAt ?? recordedDue;
-    return naturalDueAt !== undefined && dayStart(naturalDueAt) > today && naturalDueAt !== review.dueAt ? [{ id: review.id, fromDueAt: review.dueAt, toDueAt: naturalDueAt, reset: true }] : [];
+    const restoredDueAt = naturalDueAt === undefined ? undefined : Math.max(naturalDueAt, today + naturalDueAt - dayStart(naturalDueAt));
+    return restoredDueAt !== undefined && restoredDueAt !== review.dueAt ? [{ id: review.id, fromDueAt: review.dueAt, toDueAt: restoredDueAt, reset: true }] : [];
   });
 }
