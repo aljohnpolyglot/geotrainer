@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { ReviewRecord } from '../types';
 import { DEFAULT_SCHEDULER_PREFERENCES, normalizeSchedulerPreferences } from './reviewPreferences';
-import { planLegacyRolloverRepair, planReviewRollover } from './reviewRollover';
+import { planReviewRollover } from './reviewRollover';
 
 test('unfinished reviews carry forward without moving later schedules', () => {
   assert.equal(normalizeSchedulerPreferences(undefined).minimumReviewsPerDay, 50);
@@ -15,11 +15,4 @@ test('unfinished reviews carry forward without moving later schedules', () => {
     ['unfinished', '2026-10-19T00:00:00.000Z'], ['older', '2026-10-19T00:00:00.000Z'],
   ]);
   assert.deepEqual(planReviewRollover(reviews, now, { ...preferences, rollOverMissedReviews: false }), []);
-});
-
-test('old mass rollover is repaired without changing balancing or newer grades', () => {
-  const today = new Date(2026, 10, 1).getTime();
-  const card = (id: string, naturalDay: number, shiftedDay: number): ReviewRecord => ({ id, panoId: id, dueAt: today + shiftedDay * 864e5, naturalDueAt: today + naturalDay * 864e5, dueAdjustedAt: today - 1000, intervalDays: 14, gradingHistory: [], lapseCount: 0, reviewCount: 1 });
-  const repairs = planLegacyRolloverRepair([card('future', 2, 19), card('overdue', -3, 14), card('balanced', 2, 4), { ...card('graded', 2, 19), dueAdjustedAt: undefined, naturalDueAt: undefined }, card('today', -17, 0)], today + 3600e3);
-  assert.deepEqual(repairs.map(({ id, toDueAt }) => [id, toDueAt]), [['future', today + 2 * 864e5], ['overdue', today]]);
 });

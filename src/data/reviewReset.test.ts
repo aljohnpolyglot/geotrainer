@@ -22,13 +22,14 @@ test('balancing saves the natural due date and reset restores it in IndexedDB', 
   assert.ok(restored.dueAdjustedAt! >= balanced.dueAdjustedAt!);
 });
 
-test('opening saved reviews repairs a legacy rollover without changing the grade', async () => {
+test('opening saved reviews preserves accumulated balancing beyond seven days', async () => {
   const { initTrainerDb, trainerDb } = await import('./trainerDb');
   await initTrainerDb();
-  const original = await trainerDb.scheduleFirstPlay('legacy-rollover-card', 'good');
-  await trainerDb.rebalanceReviews([{ id: original.id, fromDueAt: original.dueAt, toDueAt: original.dueAt + 17 * 864e5 }]);
+  const original = await trainerDb.scheduleFirstPlay('repeated-balance-card', 'good');
+  for (let day = 0; day < 8; day++) await trainerDb.rebalanceReviews([{ id: original.id, fromDueAt: original.dueAt + day * 864e5, toDueAt: original.dueAt + (day + 1) * 864e5 }]);
   const repaired = (await trainerDb.reviews()).find((review) => review.id === original.id)!;
-  assert.equal(repaired.dueAt, original.dueAt);
+  assert.equal(repaired.dueAt, original.dueAt + 8 * 864e5);
+  assert.equal(repaired.naturalDueAt, original.dueAt);
   assert.deepEqual(repaired.gradingHistory, original.gradingHistory);
   assert.equal(repaired.reviewCount, original.reviewCount);
 });
