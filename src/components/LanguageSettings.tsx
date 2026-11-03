@@ -60,14 +60,14 @@ const META_OPEN_COPY: Record<SupportedLanguage, { title: string; description: st
   sv: { title: 'Öppna Meta-lektioner automatiskt', description: 'Visar varje ny lektion när panoramat öppnas. Annars trycker du på glödlampan för att se den.' },
 };
 const REVIEW_ROLLOVER_COPY: Record<SupportedLanguage, { minimum: string; title: string; description: string }> = {
-  en: { minimum: 'Daily review minimum', title: 'Move unfinished reviews to the next day', description: 'Overdue cards move to today; future due dates stay as scheduled.' },
-  es: { minimum: 'Mínimo diario de repasos', title: 'Pasar los repasos pendientes al día siguiente', description: 'Las tarjetas vencidas pasan a hoy; las fechas futuras no cambian.' },
-  pt: { minimum: 'Mínimo diário de revisões', title: 'Passar revisões pendentes para o dia seguinte', description: 'Os cartões vencidos passam para hoje; as datas futuras não mudam.' },
-  fr: { minimum: 'Minimum quotidien de révisions', title: 'Reporter les révisions inachevées au lendemain', description: 'Les cartes en retard passent à aujourd’hui ; les échéances futures restent inchangées.' },
-  de: { minimum: 'Tägliches Wiederholungsminimum', title: 'Offene Wiederholungen auf morgen verschieben', description: 'Überfällige Karten werden auf heute verschoben; künftige Fälligkeiten bleiben unverändert.' },
-  it: { minimum: 'Minimo giornaliero di ripassi', title: 'Spostare i ripassi incompleti al giorno dopo', description: 'Le schede scadute passano a oggi; le scadenze future restano invariate.' },
-  ru: { minimum: 'Минимум повторений в день', title: 'Переносить незавершённые повторения на завтра', description: 'Просроченные карточки переносятся на сегодня; будущие сроки не меняются.' },
-  sv: { minimum: 'Dagligt minimum för repetitioner', title: 'Flytta oavslutade repetitioner till nästa dag', description: 'Förfallna kort flyttas till i dag; framtida förfallodagar ändras inte.' },
+  en: { minimum: 'Daily review minimum', title: 'Carry forward unfinished reviews', description: 'Missed cards fill days below this minimum, starting today. Scheduled cards keep their dates.' },
+  es: { minimum: 'Mínimo diario de repasos', title: 'Pasar los repasos pendientes', description: 'Las tarjetas pendientes llenan los días por debajo de este mínimo, empezando hoy. Las demás conservan sus fechas.' },
+  pt: { minimum: 'Mínimo diário de revisões', title: 'Passar revisões pendentes', description: 'Os cartões pendentes preenchem os dias abaixo deste mínimo, a partir de hoje. Os demais mantêm suas datas.' },
+  fr: { minimum: 'Minimum quotidien de révisions', title: 'Reporter les révisions inachevées', description: 'Les cartes en retard complètent les jours sous ce minimum, à partir d’aujourd’hui. Les autres gardent leurs dates.' },
+  de: { minimum: 'Tägliches Wiederholungsminimum', title: 'Offene Wiederholungen übertragen', description: 'Überfällige Karten füllen Tage unter diesem Minimum, beginnend heute. Andere Termine bleiben bestehen.' },
+  it: { minimum: 'Minimo giornaliero di ripassi', title: 'Riportare i ripassi incompleti', description: 'Le schede scadute riempiono i giorni sotto questo minimo, a partire da oggi. Le altre date restano invariate.' },
+  ru: { minimum: 'Минимум повторений в день', title: 'Переносить незавершённые повторения', description: 'Просроченные карточки заполняют дни ниже этого минимума, начиная с сегодняшнего дня. Остальные даты не меняются.' },
+  sv: { minimum: 'Dagligt minimum för repetitioner', title: 'Flytta oavslutade repetitioner vidare', description: 'Förfallna kort fyller dagar under detta minimum, från och med i dag. Andra datum ändras inte.' },
 };
 
 export function LanguageSettings({ open, onClose, onChange }: { open: boolean; onClose: () => void; onChange?: (value: LanguagePreferences, compassStyle: CompassStyle, darkMode: boolean) => void }) {

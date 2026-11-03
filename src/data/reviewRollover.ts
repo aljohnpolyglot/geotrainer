@@ -5,10 +5,25 @@ import { nextReviewAt, reviewDayStart } from './reviewTiming';
 export function planReviewRollover(reviews: ReviewRecord[], now: number, preferences: SchedulerPreferences): DueShift[] {
   if (preferences.rollOverMissedReviews === false) return [];
   const today = reviewDayStart(now, preferences);
-  const eligible = reviews.filter((review) => (review.intervalDays >= 1 || review.reviewCount === 0) && (!review.lastReviewedAt || review.lastReviewedAt < today));
-  return eligible.filter((review) => reviewDayStart(review.dueAt, preferences) < today).map((review) => {
+  const missed = reviews.filter((review) => {
     const dueDay = reviewDayStart(review.dueAt, preferences);
-    const missedDays = Math.round((today - dueDay) / 864e5);
-    return { id: review.id, fromDueAt: review.dueAt, toDueAt: review.dueAt + nextReviewAt(review.dueAt, missedDays, preferences) - dueDay };
-  });
+    return (review.intervalDays >= 1 || review.reviewCount === 0) && (!review.lastReviewedAt || review.lastReviewedAt < today)
+      && (dueDay < today || dueDay === today && !!review.dueAdjustedAt && review.dueAdjustedAt >= today && review.dueAdjustedAt <= now);
+  }).sort((a, b) => (a.naturalDueAt ?? a.dueAt) - (b.naturalDueAt ?? b.dueAt) || a.id.localeCompare(b.id));
+  const missedIds = new Set(missed.map((review) => review.id));
+  const counts = new Map<number, number>();
+  for (const review of reviews) {
+    if (missedIds.has(review.id)) continue;
+    const day = Math.max(today, reviewDayStart(review.dueAt, preferences));
+    counts.set(day, (counts.get(day) || 0) + 1);
+  }
+  const shifts: DueShift[] = [];
+  let day = today;
+  for (const review of missed) {
+    while ((counts.get(day) || 0) >= preferences.minimumReviewsPerDay) day = nextReviewAt(day, 1, preferences);
+    counts.set(day, (counts.get(day) || 0) + 1);
+    const toDueAt = day + review.dueAt - reviewDayStart(review.dueAt, preferences);
+    if (toDueAt !== review.dueAt) shifts.push({ id: review.id, fromDueAt: review.dueAt, toDueAt });
+  }
+  return shifts;
 }
