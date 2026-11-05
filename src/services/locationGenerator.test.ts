@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; status?: string; links?: unknown[]; copyright?: string };
+type Result = { lat: number; lng: number; pano: string; countryCode: string; delay?: number; geocodeDelay?: number; status?: string; links?: unknown[]; copyright?: string };
 let results: Result[] = [];
 let panoramaCalls = 0;
 let geocodeCalls = 0;
@@ -27,6 +27,7 @@ class Geocoder {
   async geocode({ location }: { location: { lat: number } }) {
     geocodeCalls++;
     const result = currentResults.find((item) => item.lat === location.lat)!;
+    if (result.geocodeDelay) await new Promise((resolve) => setTimeout(resolve, result.geocodeDelay));
     return { results: [{ formatted_address: 'Test', address_components: [{ long_name: result.countryCode, short_name: result.countryCode, types: ['country'] }] }] };
   }
 }
@@ -389,6 +390,51 @@ test('nearby Review variation requires Google outdoor searches, rejects contribu
     assert.equal(panoramaRequests.length, 5);
     for (const request of panoramaRequests.slice(1)) assert.deepEqual(request.sources, ['GOOGLE', 'OUTDOOR']);
   }
+});
+
+test('nearby Review variation does not geocode the anchor or out-of-range candidates', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const anchor = { lat: 43.071, lng: 12.071, pano: 'review-anchor', countryCode: 'IT' };
+  const nearby = { lat: 43.0712, lng: 12.071, pano: 'review-nearby', countryCode: 'IT' };
+  const distant = { lat: 43.081, lng: 12.071, pano: 'review-distant', countryCode: 'IT' };
+  const plan = { kind: 'spatial', generalizationLevel: 1, maxDistanceM: 100, seed: 1 } as const;
+  currentResults = [anchor, nearby, distant];
+  results = [anchor, anchor, distant, nearby, anchor];
+  geocodeCalls = 0;
+  const found = await new StreetViewLocationGenerator().resolveReviewLocation({ panoId: anchor.pano, lat: anchor.lat, lng: anchor.lng, countryCode: anchor.countryCode }, plan);
+  assert.equal(found.panoId, nearby.pano);
+  assert.equal(geocodeCalls, 1);
+});
+
+test('Review verifies candidates in preference order and stops at the first valid country', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const plan = { kind: 'spatial', generalizationLevel: 1, maxDistanceM: 100, seed: 1, heading: 120 } as const;
+  for (const [index, scenario] of ['valid', 'border', 'recent', 'none'].entries()) {
+    const anchor = { lat: 44.271 + index * .01, lng: 12.071, pano: `ordered-anchor-${index}`, countryCode: 'IT', heading: 30 };
+    const candidates = [.0003, .0007, .0005, .0001].map((offset, candidateIndex) => ({ lat: anchor.lat + offset, lng: anchor.lng, pano: `ordered-${index}-${candidateIndex}`, countryCode: scenario === 'none' || scenario === 'border' && candidateIndex === 1 ? 'FR' : 'IT' }));
+    currentResults = [anchor, ...candidates];
+    results = [...currentResults];
+    geocodeCalls = 0;
+    panoramaRequests = [];
+    const recent = new Set(scenario === 'recent' ? [candidates[1].pano] : []);
+    const found = await new StreetViewLocationGenerator().resolveReviewLocation({ panoId: anchor.pano, lat: anchor.lat, lng: anchor.lng, countryCode: anchor.countryCode, heading: anchor.heading }, plan, recent);
+    assert.equal(found.panoId, scenario === 'none' ? anchor.pano : candidates[scenario === 'valid' ? 1 : 2].pano, scenario);
+    assert.equal(found.heading, scenario === 'none' ? anchor.heading : plan.heading);
+    assert.equal(geocodeCalls, scenario === 'valid' || scenario === 'recent' ? 1 : scenario === 'border' ? 2 : 4, scenario);
+    assert.equal(panoramaRequests.length, 5, 'keep the anchor verification and all four parallel searches');
+  }
+});
+
+test('timed-out Review verification falls back without starting more geocoding requests', async () => {
+  const { StreetViewLocationGenerator } = await import('./locationGenerator');
+  const anchor = { lat: 45.271, lng: 12.071, pano: 'timeout-anchor', countryCode: 'IT' };
+  currentResults = [anchor, ...[.0007, .0005, .0003, .0001].map((offset, index) => ({ lat: anchor.lat + offset, lng: anchor.lng, pano: `timeout-${index}`, countryCode: 'FR', geocodeDelay: index === 0 ? 3100 : 0 }))];
+  results = [...currentResults];
+  geocodeCalls = 0;
+  const found = await new StreetViewLocationGenerator().resolveReviewLocation({ panoId: anchor.pano, lat: anchor.lat, lng: anchor.lng, countryCode: anchor.countryCode }, { kind: 'spatial', generalizationLevel: 1, maxDistanceM: 100, seed: 1 });
+  assert.equal(found.panoId, anchor.pano);
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  assert.equal(geocodeCalls, 1);
 });
 
 test('Review keeps available contributor originals and recovers expired views only with nearby official imagery', async () => {

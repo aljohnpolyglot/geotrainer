@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GameRound } from "../types";
 import { formatDistance } from "../services/gameLogic";
 import { reverseGeocodeLocation, getFlagCdnUrl, ReverseGeocodeResult } from "../services/geocoding";
@@ -34,6 +34,8 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
   const [minimized, setMinimized] = useState(false);
+  const minimizeButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => { if (!minimized) minimizeButton.current?.focus(); }, [minimized]);
 
   const country = COUNTRIES[viewedRound.location.countryCode];
   const countryName = geocodeData?.countryName || country?.name || viewedRound.location.countryCode;
@@ -71,10 +73,10 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
   const lat = `${Math.abs(viewedRound.location.lat).toFixed(5)}° ${viewedRound.location.lat >= 0 ? 'N' : 'S'}`;
   const lng = `${Math.abs(viewedRound.location.lng).toFixed(5)}° ${viewedRound.location.lng >= 0 ? 'E' : 'W'}`;
 
-  if (minimized) return <button type="button" className="review-result-resume" onClick={() => { setMinimized(false); onVisibilityChange?.(true); }} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
-
   return (
-    <div id="round-result-modal" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200">
+    <>
+    {minimized && <button type="button" className="review-result-resume" onClick={() => { setMinimized(false); onVisibilityChange?.(true); }} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>}
+    <div id="round-result-modal" style={{ display: minimized ? 'none' : undefined }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-3 sm:p-6 select-none animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl h-[90vh] max-h-[720px] bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-stone-100">
         {/* Top Header Card */}
         <div className="relative p-4 pr-16 sm:p-5 sm:pr-16 bg-stone-950/90 border-b border-stone-800 flex flex-wrap items-center justify-between gap-4">
@@ -120,11 +122,11 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
               </span>
             </div>
           </div>
-          <button type="button" className="round-result-minimize" onClick={() => { setMinimized(true); onVisibilityChange?.(false); }} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
+          <button ref={minimizeButton} type="button" className="round-result-minimize" onClick={() => { setMinimized(true); onVisibilityChange?.(false); }} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         </div>
 
         {/* Interactive Map Visualizer */}
-        <ResultMap actual={viewedRound.location} guess={viewedRound.guess} panoId={viewedRound.location.panoId} heading={viewedRound.location.heading} className="flex-1 w-full h-full relative bg-stone-950" />
+        <ResultMap actual={viewedRound.location} guess={viewedRound.guess} panoId={viewedRound.location.panoId} heading={viewedRound.location.heading} className="flex-1 w-full h-full relative bg-stone-950" active={!minimized} />
 
         {/* Footer Action Bar */}
         <div className="round-result-footer bg-stone-950 border-t border-stone-800">
@@ -154,5 +156,6 @@ export const RoundResultModal: React.FC<RoundResultModalProps> = ({ round, total
         </div>
       </div>
     </div>
+    </>
   );
 };

@@ -78,10 +78,10 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !coverageEnabled) return;
+    if (!map || !active || !coverageEnabled) return;
     const coverage = new google.maps.StreetViewCoverageLayer(); coverage.setMap(map);
     return () => coverage.setMap(null);
-  }, [coverageEnabled]);
+  }, [active, coverageEnabled]);
 
   useEffect(() => {
     if (!onSelect || !active || !coverageEnabled || !mapRef.current) return;
@@ -91,7 +91,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !element.current) return;
+    if (!map || !active || !element.current) return;
     const points = [actual, ...(guess ? [guess] : []), ...previousGuesses];
     pointsRef.current = points;
     const markers: google.maps.Marker[] = [];
@@ -138,7 +138,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
 
   useEffect(() => {
     const map = mapRef.current; const container = element.current;
-    if (!map || !container || typeof ResizeObserver === 'undefined') return;
+    if (!map || !active || !container || typeof ResizeObserver === 'undefined') return;
     let frame = 0;
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(frame); frame = requestAnimationFrame(() => {
@@ -148,7 +148,7 @@ export function ResultMap({ actual, guess, previousGuesses = [], panoId, heading
     });
     observer.observe(container);
     return () => { cancelAnimationFrame(frame); observer.disconnect(); };
-  }, [actual.lat, actual.lng, mapPreferences.resultMapZoom, selectable]);
+  }, [active, actual.lat, actual.lng, mapPreferences.resultMapZoom, selectable]);
 
   const zoomToAnswer = (zoom: number) => {
     const map = mapRef.current;

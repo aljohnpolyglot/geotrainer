@@ -12,7 +12,7 @@ import { reverseGeocodeLocation } from './geocoding';
 
 const devDiagnostics = typeof import.meta.env !== 'undefined' && import.meta.env.DEV;
 import { calculateDistanceKm } from './gameLogic';
-import { chooseReviewCandidate, type ReviewCandidate, type ReviewVariationPlan } from '../data/reviewVariation';
+import { orderedReviewCandidates, type ReviewCandidate, type ReviewVariationPlan } from '../data/reviewVariation';
 import { pickLocationPoolFocus, resolveLocationTargets } from './cityPools';
 
 export interface CitySeed {
@@ -354,12 +354,20 @@ export class StreetViewLocationGenerator implements LocationGenerator {
     const radius = Math.max(40, Math.min(300, plan.maxDistanceM * .2));
     const lookups = Promise.all(targets.map((target) => new Promise<google.maps.StreetViewPanoramaData | null>((resolve) => sv.getPanorama({ location: target, radius, preference: google.maps.StreetViewPreference.NEAREST, sources: streetViewSearchSources({ panoramaSource: 'official', allowInteriors: false }) }, (data, status) => resolve(status === google.maps.StreetViewStatus.OK && data?.location?.pano && data.location.latLng && isOfficialGooglePanorama(data) ? data : null)))));
     const found = await Promise.race([lookups, new Promise<Array<google.maps.StreetViewPanoramaData | null>>((resolve) => setTimeout(() => resolve([]), 3000))]);
-    const resolving = Promise.all(found.filter((item): item is google.maps.StreetViewPanoramaData => !!item).map(async (item) => {
-      const lat = item.location!.latLng!.lat(); const lng = item.location!.latLng!.lng(); const countryCode = (await reverseGeocodeLocation(lat, lng))?.countryCode;
-      return countryCode ? { panoId: item.location!.pano!, lat, lng, countryCode, heading: plan.heading } satisfies ReviewCandidate : null;
-    }));
-    const candidates = (await Promise.race([resolving, new Promise<Array<ReviewCandidate | null>>((resolve) => setTimeout(() => resolve([]), 3000))])).filter(Boolean) as ReviewCandidate[];
-    return chooseReviewCandidate(anchor, candidates, plan, recentlyShown);
+    const candidates = orderedReviewCandidates(anchor, found.flatMap((item) => item ? [{ panoId: item.location!.pano!, lat: item.location!.latLng!.lat(), lng: item.location!.latLng!.lng() }] : []), plan, recentlyShown);
+    let expired = false;
+    const resolveCandidate = async (): Promise<ReviewCandidate> => {
+      for (const candidate of candidates) {
+        if (expired) break;
+        const countryCode = (await reverseGeocodeLocation(candidate.lat, candidate.lng))?.countryCode;
+        if (countryCode === anchor.countryCode) return { ...candidate, countryCode, heading: plan.heading };
+      }
+      return anchor;
+    };
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([resolveCandidate(), new Promise<ReviewCandidate>((resolve) => { timeout = setTimeout(() => { expired = true; resolve(anchor); }, 3000); })]);
+    } finally { expired = true; clearTimeout(timeout); }
   }
 }
 

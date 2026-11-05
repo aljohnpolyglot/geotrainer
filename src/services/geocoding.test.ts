@@ -33,7 +33,7 @@ test('nearby isolated-island Review guesses can advance without a perfect pin', 
 });
 
 
-test('pin preparation and submission share a lookup, with bounded caching and retryable empty results', async () => {
+test('concurrent lookups share requests and long sessions retain a bounded LRU cache with retryable empty results', async () => {
   let calls = 0;
   let empty = false;
   Object.assign(globalThis, { google: { maps: { Geocoder: class {
@@ -53,8 +53,14 @@ test('pin preparation and submission share a lookup, with bounded caching and re
   empty = false;
   assert.equal((await reverseGeocodeLocation(2, 2))?.countryCode, 'FR');
   assert.equal(calls, 3);
-  for (let i = 0; i < 256; i++) await reverseGeocodeLocation(10 + i / 1000, 3);
+  for (let index = 0; index < 512; index++) await reverseGeocodeLocation(10 + index / 1000, 3);
+  const beforeReuse = calls;
+  await reverseGeocodeLocation(1, 1);
+  assert.equal(calls, beforeReuse, 'repeated answers survive a long session');
+  for (let index = 512; index < 2048; index++) await reverseGeocodeLocation(10 + index / 1000, 3);
   const before = calls;
   await reverseGeocodeLocation(1, 1);
+  assert.equal(calls, before, 'recently reused answers stay cached');
+  await reverseGeocodeLocation(2, 2);
   assert.equal(calls, before + 1);
 });

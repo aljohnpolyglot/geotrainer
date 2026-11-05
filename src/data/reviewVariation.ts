@@ -61,12 +61,17 @@ export function planReviewVariation(enabled: boolean, difficultyValue: unknown, 
   return { kind: 'spatial', generalizationLevel: level, heading: variedHeading, maxDistanceM: distanceFor(level, difficulty, environment), seed };
 }
 
+export function orderedReviewCandidates<Candidate extends Pick<ReviewCandidate, 'panoId' | 'lat' | 'lng'>>(anchor: ReviewCandidate, candidates: Candidate[], plan: ReviewVariationPlan, recentlyShown = new Set<string>()): Candidate[] {
+  return candidates.map((candidate) => ({ candidate, distanceM: calculateDistanceKm(anchor.lat, anchor.lng, candidate.lat, candidate.lng) * 1000 }))
+    .filter(({ candidate, distanceM }) => candidate.panoId !== anchor.panoId && distanceM <= plan.maxDistanceM * 1.2)
+    .sort((a, b) => Number(recentlyShown.has(a.candidate.panoId)) - Number(recentlyShown.has(b.candidate.panoId)) || Math.abs(a.distanceM - plan.maxDistanceM * .75) - Math.abs(b.distanceM - plan.maxDistanceM * .75))
+    .map(({ candidate }) => candidate);
+}
+
 export function chooseReviewCandidate(anchor: ReviewCandidate, candidates: ReviewCandidate[], plan: ReviewVariationPlan, recentlyShown = new Set<string>()): ReviewCandidate {
   if (plan.kind !== 'spatial' || !plan.maxDistanceM) return { ...anchor, heading: plan.heading ?? anchor.heading };
-  const eligible = candidates.map((candidate) => ({ candidate, distanceM: calculateDistanceKm(anchor.lat, anchor.lng, candidate.lat, candidate.lng) * 1000 }))
-    .filter(({ candidate, distanceM }) => candidate.panoId !== anchor.panoId && candidate.countryCode === anchor.countryCode && distanceM <= plan.maxDistanceM * 1.2)
-    .sort((a, b) => Number(recentlyShown.has(a.candidate.panoId)) - Number(recentlyShown.has(b.candidate.panoId)) || Math.abs(a.distanceM - plan.maxDistanceM * .75) - Math.abs(b.distanceM - plan.maxDistanceM * .75));
-  return eligible[0]?.candidate ? { ...eligible[0].candidate, heading: eligible[0].candidate.heading ?? plan.heading } : { ...anchor, heading: anchor.heading };
+  const eligible = orderedReviewCandidates(anchor, candidates.filter((candidate) => candidate.countryCode === anchor.countryCode), plan, recentlyShown);
+  return eligible[0] ? { ...eligible[0], heading: eligible[0].heading ?? plan.heading } : { ...anchor, heading: anchor.heading };
 }
 
 export function nextGeneralizationLevel(current: number | undefined, shown: number | undefined, kind: ReviewVariationPlan['kind'] | undefined, grade: ReviewGrade): GeneralizationLevel {

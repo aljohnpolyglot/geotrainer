@@ -1,6 +1,6 @@
 import { AlertTriangle, Building, Compass, Eye, MapPin, Minus } from 'lucide-react';
 import { WikipediaPlaceLink } from './WikipediaPlaceLink';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { COUNTRIES } from '../data/countries';
 import { formatDistance, formatTime } from '../services/gameLogic';
 import type { Attempt, GameRound, ReviewGrade } from '../types';
@@ -37,6 +37,8 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   const [geocodeData, setGeocodeData] = useState<ReverseGeocodeResult | null>(null);
   const [isGeocoding, setIsGeocoding] = useState(true);
   const [minimized, setMinimized] = useState(false);
+  const minimizeButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => { if (!minimized) minimizeButton.current?.focus(); }, [minimized]);
   useEffect(() => { onVisibilityChange?.(!minimized); }, [minimized, sourceAttempt.id, onVisibilityChange]);
   useEffect(() => {
     let active = true;
@@ -48,12 +50,12 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
   }, [sourceAttempt.id, sourceAttempt.actualLat, sourceAttempt.actualLng]);
   const locationDetails = reviewLocationDetails(geocodeData, t('addressUnavailable'));
 
-  if (minimized) return <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>;
-
   return (
-    <div className="review-result-backdrop" role="dialog" aria-labelledby="review-result-title">
+    <>
+    {minimized && <button type="button" className="review-result-resume" onClick={() => setMinimized(false)} aria-haspopup="dialog" autoFocus><Eye size={17} />{t('View review result')}</button>}
+    <div className="review-result-backdrop" style={{ display: minimized ? 'none' : undefined }} role="dialog" aria-labelledby="review-result-title">
       <section className="review-result-panel">
-        <button type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
+        <button ref={minimizeButton} type="button" className="review-result-minimize" onClick={() => setMinimized(true)} aria-label={t('Minimize review result')} title={t('Minimize review result')} autoFocus><Minus size={18} /></button>
         <header className="review-result-header">
           <div>
             <span className="review-context">{position} / {total} · {reviewSourceDisplayName(ui, sourceLabel)}</span>
@@ -75,7 +77,7 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         </header>
 
         {round.location.isFallback && <p className="review-fallback"><AlertTriangle size={14} /> {t('fallbackReview')}</p>}
-        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} panoId={round.location.panoId} heading={round.location.heading ?? sourceAttempt.heading} className="review-result-map" />
+        <ResultMap actual={{ lat: sourceAttempt.actualLat, lng: sourceAttempt.actualLng }} guess={round.guess} previousGuesses={previousGuesses} panoId={round.location.panoId} heading={round.location.heading ?? sourceAttempt.heading} className="review-result-map" active={!minimized} />
 
         <div className="review-next-action">
           <span>{grade === 'again' ? t('This card will return later in this session.') : t('schedulingFromScore')}</span>
@@ -88,5 +90,6 @@ export function ReviewResultPanel({ round, sourceAttempt, history, position, tot
         </details>
       </section>
     </div>
+    </>
   );
 }

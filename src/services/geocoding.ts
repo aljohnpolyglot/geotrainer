@@ -125,7 +125,7 @@ async function lookupLocation(lat: number, lng: number, cacheKey: string): Promi
     };
 
     geocodeCache.set(cacheKey, parsed);
-    if (geocodeCache.size > 256) geocodeCache.delete(geocodeCache.keys().next().value!);
+    if (geocodeCache.size > 2048) geocodeCache.delete(geocodeCache.keys().next().value!);
     return parsed;
   } catch (err) {
     console.warn('Reverse geocoding error:', err);

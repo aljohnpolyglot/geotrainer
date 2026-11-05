@@ -10,7 +10,6 @@ import { formatTime } from '../services/gameLogic';
 import { translate } from '../services/language';
 import { useLanguagePreferences } from '../services/useLanguagePreferences';
 import { movePanelRect, resizePanelRect, useDraggablePanel, type PanelRect, type PanelResizeDirection } from '../hooks/useDraggablePanel';
-import { reverseGeocodeLocation } from '../services/geocoding';
 import { playUiSound } from '../services/audio';
 import { mapPresentationOptions, playGuessMapOptions, useMapPreferences } from '../services/mapPreferences';
 
@@ -65,7 +64,7 @@ export const GuessMap: React.FC<GuessMapProps> = ({
   const [expandedRect, setExpandedRect] = useState<PanelRect>();
   const interaction = useRef<{ pointerId: number; startX: number; startY: number; rect: PanelRect; direction: 'move' | PanelResizeDirection }>();
   const [currentGuess, setCurrentGuess] = useState<{ lat: number; lng: number } | null>(null);
-  const updateGuess = (guess: { lat: number; lng: number } | null) => { setCurrentGuess(guess); onPinChange?.(guess); if (guess) void reverseGeocodeLocation(guess.lat, guess.lng); };
+  const updateGuess = (guess: { lat: number; lng: number } | null) => { setCurrentGuess(guess); onPinChange?.(guess); };
   useEffect(() => () => onPinChange?.(null), [onPinChange]);
 
   const toggleExpanded = () => {
